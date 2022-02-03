@@ -10,7 +10,7 @@ import {
     leggTil,
     serializeIso8601String,
 } from '../../../../../utils/kalender';
-import { validerSettPåVentFrist } from './settPåVentUtils';
+import { hentAlleÅrsaker, validerSettPåVentFrist } from './settPåVentUtils';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
@@ -18,6 +18,8 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
     const standardfrist = serializeIso8601String(
         leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
     );
+    const årsaker = hentAlleÅrsaker();
+
     const settPåVentSkjema = useSkjema<
         {
             frist: FamilieIsoDate | undefined;
@@ -33,13 +35,16 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
             årsak: useFelt<SettPåVentÅrsak | undefined>({
                 verdi: settPåVent?.årsak ?? undefined,
                 valideringsfunksjon: felt =>
-                    felt.verdi === undefined ? feil(felt, 'Du må velge en årsak') : ok(felt),
+                    felt.verdi === undefined || !årsaker.includes(felt.verdi)
+                        ? feil(felt, 'Du må velge en årsak')
+                        : ok(felt),
             }),
         },
         skjemanavn: 'Sett behandling på vent',
     });
 
     const fyllInnStandardverdier = () => {
+        settPåVentSkjema.nullstillSkjema();
         settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(standardfrist);
         settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(undefined);
     };
