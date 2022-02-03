@@ -58,7 +58,7 @@ const hentDatoHeader = (opplysningstype: Registeropplysning) => {
     if (opplysningstype === Registeropplysning.SIVILSTAND) {
         return 'Dato';
     } else if (opplysningstype === Registeropplysning.DØDSBOADRESSE) {
-        return 'Død';
+        return 'Dødsdato';
     } else {
         return 'Periode';
     }
