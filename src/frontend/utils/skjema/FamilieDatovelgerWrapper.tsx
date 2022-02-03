@@ -13,13 +13,31 @@ const StyledFamilieDatovelgerForSkjema = styled(FamilieDatovelger)<{
     feil: ReactNode | undefined;
 }>`
     .nav-datovelger__input {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navGra60)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
+
+        &:focus {
+            border-color: ${navFarger.navBlaDarken60};
+            box-shadow: 0 0 0 3px ${navFarger.navBlaDarken60};
+        }
+
+        &:hover {
+            border-color: ${navFarger.navBla};
+        }
     }
 
     .nav-datovelger__kalenderknapp {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navGra60)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
+
+        &:focus {
+            border-color: ${navFarger.navBlaDarken60};
+            box-shadow: 0 0 0 3px ${navFarger.navBlaDarken60};
+        }
+
+        &:hover {
+            border-color: ${navFarger.navBla};
+        }
     }
 
     margin-bottom: ${({ feil }) => (feil ? '.125rem' : '0')};

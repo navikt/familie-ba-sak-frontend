@@ -1,5 +1,6 @@
 import { feil, FeltState, ok } from '@navikt/familie-skjema';
 
+import { SettPåVentÅrsak } from '../../../../../typer/behandling';
 import {
     erEtter,
     erIsoStringGyldig,
@@ -19,3 +20,6 @@ export const validerSettPåVentFrist = (
         return feil(felt, 'Du må sette en frist.');
     }
 };
+
+export const hentAlleÅrsaker = () =>
+    Object.keys(SettPåVentÅrsak).filter(key => isNaN(Number(key))) as SettPåVentÅrsak[];
