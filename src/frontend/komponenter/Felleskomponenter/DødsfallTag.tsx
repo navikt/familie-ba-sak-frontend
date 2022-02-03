@@ -10,6 +10,7 @@ import { Tag } from '@navikt/ds-react';
 const StyletTag = styled(Tag)`
     color: white;
     background-color: ${navFarger.navMorkGra};
+    border-color: ${navFarger.navMorkGra};
 `;
 
 interface IDødsfallTagProps {
