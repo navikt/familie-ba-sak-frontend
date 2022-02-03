@@ -2444,12 +2444,12 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/familie-backend@^5.0.31":
-  version "5.0.31"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.31.tgz#0df920748b75a70c4753e8abdc0fd53fccd672cf"
-  integrity sha512-KCbLhiQhu+x1bYaa+LpGpAlAO4XGD9WM0Miku+1TdoWRv32itgGWf/B6pX6hG0UgW/eBPCn+FzGBvu+i2LjGUQ==
+"@navikt/familie-backend@6.0.0":
+  version "6.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/6.0.0/818d71f1a1698f316316605a4089947bdb87e6bae2f4fd04385c8dd8534b838f#4f9a7e4116eacc334172f6f6cb10821815e05445"
+  integrity sha512-NkekTSPIGrefEQGH+X1AnNwQfbFd9uiG4LH06DhAjSK9fQeFeiWEyceHDxQF38Qy4/4m1kPfp1p5AH+g4Uwf9w==
   dependencies:
-    "@navikt/familie-logging" "^1.0.5"
+    "@navikt/familie-logging" "^2.0.0"
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.11"
     "@types/express-session" "^1.17.3"
@@ -2473,10 +2473,10 @@
     request-promise "^4.2.5"
     snyk "^1.473.0"
 
-"@navikt/familie-clipboard@^3.1.6":
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.1.6.tgz#02765eced172abeeda2cb35a623a99a6ee111903"
-  integrity sha512-d0TtnhJ6ICBkRDvmX9TjYhzDzkxABru39Eh7/9NssxHhxzWa8LnehG7SZj5TcxzQCCPTEXc7+m0GckH2W1YPDg==
+"@navikt/familie-clipboard@^4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-clipboard/4.0.0/88cedc3d83c8b01cf5c4e5caa5d8373bdb7e9e9b1f726aa711b4885c6fc5845d#6fb1750b94a8f6d3de710c13a5dc44f2140604da"
+  integrity sha512-q8Gugxfq6X7OBh5yC9KAomg8z+pWJEg5Md+9FPRGPu71ww4358G1rX22R8TpqeuEZkglgVIAD15C/7F+qvvT0A==
   dependencies:
     "@types/react-tooltip" "^4.2.4"
     framer-motion "^3.10.0"
@@ -2485,10 +2485,10 @@
     nav-frontend-knapper-style "^1.1.2"
     react-tooltip "^4.2.15"
 
-"@navikt/familie-endringslogg@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-endringslogg/-/familie-endringslogg-1.2.1.tgz#fd6be3b53af2a7d49a58d41c78f0765c8477fca5"
-  integrity sha512-s2U/J2+/Iu3+yANCPKjXnqTghkeonuo0M4XhtdbQBbJbfrMJEtQoKbcM3X0MHsa0o5qSd+/mwgAXyHKGEiJOhQ==
+"@navikt/familie-endringslogg@^2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/2.0.0/f28b2b49d37e82e6e6896a331c3f49803e05d23c6273c416eaabf1486f19e6f9#c8230761f5831e56093aba5c709e294759f03ee5"
+  integrity sha512-nujVUi+ISCVJPhEDs0iCPllpG4Le1YavRGRQUupvRK+ouo8GxnpLGh5d8avOQcG4xzLjH3mGyrLhP72SrcgPyg==
   dependencies:
     "@sanity/block-content-to-react" "^3.0.0"
     "@types/react-modal" "^3.13.1"
@@ -2511,10 +2511,10 @@
     react-modal "^3.14.4"
     react-transition-group "^4.4.2"
 
-"@navikt/familie-form-elements@^3.2.2", "@navikt/familie-form-elements@^3.2.3":
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-3.2.3.tgz#4aede31e7eb443bf6049ccc4106058aa466f609d"
-  integrity sha512-Y1fb6XFAA4DBVhG4A1KTX6+7kb5I3OiZ9gn8roRNO79t+pLl0VE3jwbp3dFQQYujcCePoB2jPoiOsmy4oepCAg==
+"@navikt/familie-form-elements@^4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/4.0.0/44e15ff850b4ca2df6988e039dc6e8ea6fb8b648c387967809106e1a47e3afa5#f96574d6b605865138426afb87f96c9bd33d325f"
+  integrity sha512-LvrE8yE+h+c+OREOxDvsI6FsZKew01/UGyrF67HW4NOkCw1kKMvpiFns+vblvJFDeG+2Mh/+6P1vrQHsIWyj+A==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.3"
     "@types/classnames" "^2.2.10"
@@ -2536,18 +2536,18 @@
     nav-frontend-typografi-style "^2.0.1"
     react-select "^4.0.13"
 
-"@navikt/familie-header@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-3.2.0.tgz#18998edf5414200b53f3b29c29f7de040c95604a"
-  integrity sha512-IOpxEZRmxvBZpk9oFKKVskmPRulA3b12wsQbSO15Fjqqv3frE+DRpjGCB0yJpPJnWndoNhdVCi/l/IbFb51KlQ==
+"@navikt/familie-header@^4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/4.0.0/478f43b7d9b062d1c05f3bf718a71e453b500a28cb0aa870c924bd3cfaf571a7#e84a11c55e2ad5d8f102b2e3e73d62b7baeaaf9e"
+  integrity sha512-t4qguHBSCyhlWWFAE/zsgCufccpFIuUNgauPz/gATr4TI+JDxXzxkcU/KiJ1lJ605KYfb2ivTElYLfNVLSDFlA==
   dependencies:
     "@babel/preset-typescript" "^7.15.0"
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/ds-icons" "^0.2.1"
-    "@navikt/familie-form-elements" "^3.2.3"
-    "@navikt/familie-ikoner" "^3.1.12"
-    "@navikt/familie-typer" "^3.0.14"
-    "@navikt/familie-validering" "^1.0.1"
+    "@navikt/familie-form-elements" "^4.0.0"
+    "@navikt/familie-ikoner" "^4.0.0"
+    "@navikt/familie-typer" "^4.0.0"
+    "@navikt/familie-validering" "^2.0.0"
     "@navikt/nap-user-panel" "^1.1.0"
     "@types/jest" "^27.0.1"
     classnames "^2.2.6"
@@ -2571,49 +2571,49 @@
     styled-components "^5.2.1"
     ts-jest "^26.5.6"
 
-"@navikt/familie-http@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.1.0.tgz#965978738c411244e6d6e21bbe83731fa55498e8"
-  integrity sha512-B4Fvn5VYb/IbeEJhzS1yx7CxdiSigHgn7bdUKv2gHaiJqDGBqSDnYblH0RtO5T/fOBkbIWJiCsX8AHYkGGSbgQ==
+"@navikt/familie-http@^2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/2.0.0/e39c0092f8bc540cee2dd29c6ea6b0112f945b58e477420929a295a9a4c7f652#842f1c975d46d27f01f687bc9e0dc825e1d02f5d"
+  integrity sha512-iy7Y5csLsk9YFeriTUZ7XpjVmUM1e5Tww/UzmeGm8Ij7xpoCt0J6BZqqoAAYVFu2uOn88U+puk1hfttNXwblMw==
   dependencies:
-    "@navikt/familie-typer" "^3.0.13"
+    "@navikt/familie-typer" "^4.0.0"
     "@sentry/core" "^6.2.1"
     constate "^3.2.0"
 
-"@navikt/familie-ikoner@^3.1.11", "@navikt/familie-ikoner@^3.1.12":
-  version "3.1.12"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.12.tgz#27c065c6db36aa2c7d00e5424b98d13223a3140f"
-  integrity sha512-hZxaCRwSoTHAx9NSqXIcdTzAPMaVWDHfqFRJi+E5w72V7eO0qm5FLfL9Lpmxv84cejGHE2HlgYcI5gaTR/sIGw==
+"@navikt/familie-ikoner@^4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/4.0.0/18361c23dc026f7daf514fd3a82e6ffeac6fab878a64a223e55165ed0869f501#2c3d968c951ff21c141f33f42f17e4ba128c856f"
+  integrity sha512-YcRRdUF0F0npDOUC+AUaKgp4h4XQJ2WDnYXcUoVyhaMpEgzkJq38rc69bV3CJEQlO5WaCaNk/nypwmFAc9Mkww==
   dependencies:
-    "@navikt/familie-typer" "^3.0.14"
+    "@navikt/familie-typer" "^4.0.0"
 
-"@navikt/familie-logging@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-logging/-/familie-logging-1.0.5.tgz#546ff5855ac10e14a23b28b53d2b27970965b64f"
-  integrity sha512-/MLIRqVHG6ihqciquOh9nFtUA4sk3l8eVzbAa/a2E+2QMlOqbDoaC3zZeACFB6PkVEAWzGJQ7rYPlbpKz5QxBA==
+"@navikt/familie-logging@^2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/2.0.0/a36fbf16e65ba0de20254fa372d59c57f7f59590580e84b40be8a182fca4a106#a6b041899d45671529d5565a75ecdc9bab68063a"
+  integrity sha512-Odl6NqiqYUgnsxW0uf4jQlXJe/aPMBbLOK1D8fltU2iBvR9dz6ZY/Wh5+itItIr/403TePeelc33LkvwhrudUg==
   dependencies:
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.8.tgz#a97ad7df45bdd11d73d094ffd81f161e832ffcd1"
-  integrity sha512-nDN+Hm1GG48ltcQV8IQUIiQIlup92JL0o/30XCC6L1czjn/ffNZmfG+Sr+RvG8MsZnzmXJktok9gLOUQMdlpnQ==
+"@navikt/familie-skjema@^2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/2.0.0/7d6bf6b58b21930a4af672e16c5e5c248a19ba0f14ed06aa6a39a34e64923095#30171c1685faeb6d99030508d7b90f827f5cabb8"
+  integrity sha512-oWuFSe82dbfr5XFe931lpYm78+0UBJlv/kf4LVG5GmUwEl4xj5326KLyhKtaneK6pkAf7gUSUkJjiYeEq3bhsw==
   dependencies:
-    "@navikt/familie-http" "^1.1.0"
-    "@navikt/familie-typer" "^3.0.13"
+    "@navikt/familie-http" "^2.0.0"
+    "@navikt/familie-typer" "^4.0.0"
     "@types/deep-equal" "^1.0.1"
     deep-equal "^2.0.5"
     hashids "^2.2.8"
 
-"@navikt/familie-typer@^3.0.13", "@navikt/familie-typer@^3.0.14":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.14.tgz#f6a78ca686383e4e2c55d2363ee33b1abf662be9"
-  integrity sha512-c3a+WyHPXwQSJfDZnNS6LbbjeHf9wjN8eQ8PKKM7K3VMbrRWC5lFeltV21J70aU9QWvqApTWXUgS5R4qlKqErA==
+"@navikt/familie-typer@^4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/4.0.0/adda0a9283e562ad0b509d1e3a0bc5e6dfffecb2250ed4cb45d8325d35bc58ab#d74b795678bd5c5d80e5e662dd2c4989b300cfd0"
+  integrity sha512-GxXL7TcUa/XTOSG5AEhP/U7rVcENFZRLw9AQlOqnByb3HYX0EeFSRdruXvR/km/NCpVmGC6wOVoiKZk7A4WjAw==
 
-"@navikt/familie-validering@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-validering/-/familie-validering-1.0.1.tgz#560958a6ea6571a550b959cb465a42b624f771dd"
-  integrity sha512-6WnHsrW/JLn/9LpWpYxzSEPxYgqzIO+Wpsce0LSewB+JwBqnfaRNB/jafjFuqwwV4M6P3bVJKcX2zsCvQ3jSxw==
+"@navikt/familie-validering@^2.0.0":
+  version "2.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/2.0.0/edf88ae84439d37addf00f35b5b1d67159562491a70e7f1f4ac70c2ac21a8106#67b0d1e071e402f6a7ada7dcd1ebcbea355b2ef2"
+  integrity sha512-ainQRUeWTsd14vwcJtcB971qsxLDK91OymjrHkfKr2yIyzeLEKxOkLgb0MDvi4QAvUZORCY6OErt27pwZF36PQ==
   dependencies:
     "@babel/preset-typescript" "^7.15.0"
     "@types/jest" "^27.0.1"
@@ -2621,14 +2621,14 @@
     jest "^26.6.0"
     ts-jest "^26.5.6"
 
-"@navikt/familie-visittkort@^2.1.26":
-  version "2.1.26"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.26.tgz#a9eb7d4c1c704641dd808c1de77f7f941ccab0a8"
-  integrity sha512-gmbToupoKSUMEyekXwsmc74sMZ6JQEE3rQH3riK3YXKAOaaXcc2pIBZXUE92Owo/3+GGHsdj1lbW5LLWKmE5vA==
+"@navikt/familie-visittkort@^3.0.0":
+  version "3.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/3.0.0/c09469b36894e307c35a94a21451ea6f0747db6ef912cd0a270e9560bf09e4e4#1d06a91ae8a059c38f38c3f0cfb540a3311d1b28"
+  integrity sha512-5lZwCtik6KDrslMvcE0J5KRgaBhZeV/IOrY6rHl8H+hUaGag2HDow1XpgSum58wdi5yAJxocT5vsjNfFicJNuw==
   dependencies:
-    "@navikt/familie-clipboard" "^3.1.6"
-    "@navikt/familie-ikoner" "^3.1.11"
-    "@navikt/familie-typer" "^3.0.13"
+    "@navikt/familie-clipboard" "^4.0.0"
+    "@navikt/familie-ikoner" "^4.0.0"
+    "@navikt/familie-typer" "^4.0.0"
     classnames "^2.2.6"
     nav-frontend-core "^5.1.1"
     nav-frontend-knapper "^2.1.2"
@@ -2637,10 +2637,10 @@
     nav-frontend-typografi-style "^1.1.1"
     prop-types "^15.7.2"
 
-"@navikt/fnrvalidator@^1.1.3", "@navikt/fnrvalidator@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.1.4.tgz#22a776ba05a90c1ba5316a4f7567f9a45abcda04"
-  integrity sha512-IroYFqa8PpzVxtIk6ifeEQBFzsI2QJX/FSIQyBtJvpp2D8Cb5Z9+hGNFppCILWR+QYbY8Dkk48la7K5fPGXeWQ==
+"@navikt/fnrvalidator@^1.1.3", "@navikt/fnrvalidator@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.2.0.tgz#41799586c418bb98bc6b45a62bedbcb5869792a3"
+  integrity sha512-WMK+Y+BLw/4qbdKRQCo2TZQDiELidnXNU+GZ3bpk9DdfOi6UbxBDrNYU/s5QOKyzX/Duws1QCnYKm4nz9lq+xw==
 
 "@navikt/helse-frontend-tidslinje@^3.1.0":
   version "3.1.0"
@@ -5789,10 +5789,10 @@ dot-case@^3.0.4:
     no-case "^3.0.4"
     tslib "^2.0.3"
 
-dotenv@^14.3.0:
-  version "14.3.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-14.3.0.tgz#40f537fe90e229d35361c66cf432903e0db49001"
-  integrity sha512-PCTcOQSXVo9FI1dB7AichJXMEvmiGCq0gnCpjfDUc8505uR+2MeLXWe+Ue4PN5UXa2isHSa78sr7L59fk+2mnQ==
+dotenv@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.0.tgz#c619001253be89ebb638d027b609c75c26e47411"
+  integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"

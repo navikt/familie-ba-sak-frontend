@@ -1,3 +1,5 @@
+import { ISODateString } from '@navikt/familie-form-elements';
+
 import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
@@ -228,6 +230,7 @@ export interface IBehandling {
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
     tilbakekreving?: ITilbakekreving;
+    aktivSettPåVent?: ISettPåVent;
 }
 
 export interface IArbeidsfordelingPåBehandling {
@@ -331,4 +334,17 @@ export const behandlingsstatuser: Record<BehandlingStatus, string> = {
     FATTER_VEDTAK: 'Fatter vedtak',
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
+};
+
+export interface ISettPåVent {
+    frist: ISODateString;
+    årsak: SettPåVentÅrsak;
+}
+
+export enum SettPåVentÅrsak {
+    AVVENTER_DOKUMENTASJON = 'AVVENTER_DOKUMENTASJON',
+}
+
+export const settPåVentÅrsaker: Record<SettPåVentÅrsak, string> = {
+    AVVENTER_DOKUMENTASJON: 'Avventer dokumentasjon',
 };

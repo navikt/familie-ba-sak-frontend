@@ -11,7 +11,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
 import { ITilbakekreving } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
@@ -87,6 +87,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             skalViseNesteKnapp={
                 !erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger
             }
+            steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
