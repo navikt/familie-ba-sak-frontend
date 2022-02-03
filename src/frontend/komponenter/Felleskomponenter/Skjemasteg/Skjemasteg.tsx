@@ -4,10 +4,16 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
 
+import { hentDataFraRessurs } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { behandlingErEtterSteg } from '../../../utils/steg';
 import { ISide, sider } from '../Venstremeny/sider';
 
 interface IProps {
@@ -22,6 +28,7 @@ interface IProps {
     skalViseNesteKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;
     feilmelding?: string;
+    steg: BehandlingSteg;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -35,6 +42,11 @@ const StyledInnholdstittel = styled(Innholdstittel)`
 
 const StyledFeilmelding = styled(Feilmelding)`
     margin-top: 1rem;
+`;
+
+const StyledAlertStripe = styled(AlertStripe)`
+    margin: 2rem 2rem 0 2rem;
+    width: fit-content;
 `;
 
 const Navigering = styled.div`
@@ -62,7 +74,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     feilmelding = '',
 }) => {
     const history = useHistory();
-    const { forrigeÅpneSide } = useBehandling();
+    const { forrigeÅpneSide, åpenBehandling, erLesevisning } = useBehandling();
+    const settPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
         const element = document.getElementById('skjemasteg');
@@ -77,40 +90,55 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
         }
     }, [forrigeÅpneSide]);
 
+    const kanGåVidereILesevisning = behandlingErEtterSteg(
+        BehandlingSteg.VURDER_TILBAKEKREVING,
+        hentDataFraRessurs(åpenBehandling)
+    );
     return (
-        <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
-            <StyledInnholdstittel children={tittel} />
+        <>
+            {settPåVent && (
+                <StyledAlertStripe type="info">
+                    Behandlingen er satt på vent. Årsak: {settPåVentÅrsaker[settPåVent.årsak]}.
+                    Frist: {formaterIsoDato(settPåVent.frist, datoformat.DATO)}. Fortsett behandling
+                    via menyen.
+                </StyledAlertStripe>
+            )}
+            <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
+                <StyledInnholdstittel children={tittel} />
 
-            {children}
+                {children}
 
-            {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
+                {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
 
-            <Navigering>
-                {nesteOnClick && skalViseNesteKnapp && (
-                    <Knapp
-                        type={'hoved'}
-                        spinner={senderInn}
-                        disabled={senderInn}
-                        onClick={() => {
-                            if (!senderInn) {
-                                nesteOnClick();
-                            }
-                        }}
-                        mini={true}
-                        children={nesteKnappTittel ?? 'Neste'}
-                    />
-                )}
-                {forrigeOnClick && skalViseForrigeKnapp && (
-                    <Knapp
-                        onClick={() => {
-                            forrigeOnClick();
-                        }}
-                        mini={true}
-                        children={forrigeKnappTittel ?? 'Forrige'}
-                    />
-                )}
-            </Navigering>
-        </Container>
+                <Navigering>
+                    {nesteOnClick &&
+                        skalViseNesteKnapp &&
+                        (!erLesevisning() || kanGåVidereILesevisning) && (
+                            <Knapp
+                                type={'hoved'}
+                                spinner={senderInn}
+                                disabled={senderInn}
+                                onClick={() => {
+                                    if (!senderInn) {
+                                        nesteOnClick();
+                                    }
+                                }}
+                                mini={true}
+                                children={nesteKnappTittel ?? 'Neste'}
+                            />
+                        )}
+                    {forrigeOnClick && skalViseForrigeKnapp && (
+                        <Knapp
+                            onClick={() => {
+                                forrigeOnClick();
+                            }}
+                            mini={true}
+                            children={forrigeKnappTittel ?? 'Forrige'}
+                        />
+                    )}
+                </Navigering>
+            </Container>
+        </>
     );
 };
 
