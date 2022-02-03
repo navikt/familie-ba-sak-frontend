@@ -7,7 +7,6 @@ import { useHistory, useParams } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
-    byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
@@ -17,6 +16,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import useForhåndsvisning from '../hooks/useForhåndsvisning';
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { IBehandlingstema, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
@@ -40,7 +40,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
-    const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
+    const { hentForhåndsvisning, nullstillHentetForhåndsvisning, hentetForhåndsvisning } =
+        useForhåndsvisning();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
@@ -50,7 +51,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
-            settDokumentData(byggTomRessurs());
+            nullstillHentetForhåndsvisning();
         }
     }, [oppgaveId]);
 
@@ -266,32 +267,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             return;
         }
 
-        settDokumentData(byggHenterRessurs());
-        return request<void, string>({
+        hentForhåndsvisning({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
             påvirkerSystemLaster: false,
-        })
-            .then((hentetDokumentData: Ressurs<string>) => {
-                if (hentetDokumentData.status === RessursStatus.SUKSESS) {
-                    settDokumentData(
-                        byggDataRessurs(`data:application/pdf;base64,${hentetDokumentData.data}`)
-                    );
-                } else if (
-                    hentetDokumentData.status === RessursStatus.FEILET ||
-                    hentetDokumentData.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    hentetDokumentData.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settDokumentData(hentetDokumentData);
-                } else {
-                    settDokumentData(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                    );
-                }
-            })
-            .catch((_error: AxiosError) => {
-                settDokumentData(byggFeiletRessurs('Ukjent feil ved henting av dokument'));
-            });
+        });
     };
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
@@ -445,7 +425,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     return {
         dataForManuellJournalføring,
-        dokumentData,
+        hentetForhåndsvisning,
         endreBruker,
         erLesevisning,
         minimalFagsak,

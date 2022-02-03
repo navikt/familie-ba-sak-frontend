@@ -27,15 +27,28 @@ const useForhåndsvisning = () => {
         settHentetForhåndsvisning(byggTomRessurs);
     };
 
+    const base64ToArrayBuffer = (base64: string) => {
+        const binaryString = window.atob(base64);
+        const binaryLen = binaryString.length;
+        const bytes = new Uint8Array(binaryLen);
+        for (let i = 0; i < binaryLen; i++) {
+            const ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
+    };
+
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetForhåndsvisning(byggHenterRessurs());
         request<D, string>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
                 settVisForhåndsviningModal(true);
                 if (response.status === RessursStatus.SUKSESS) {
-                    settHentetForhåndsvisning(
-                        byggDataRessurs(`data:application/pdf;base64,${response.data}`)
-                    );
+                    const blob = new Blob([base64ToArrayBuffer(response.data)], {
+                        type: 'application/pdf',
+                    });
+
+                    settHentetForhåndsvisning(byggDataRessurs(window.URL.createObjectURL(blob)));
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||

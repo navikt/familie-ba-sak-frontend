@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
-import { useHttp } from '@navikt/familie-http';
-import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
 
 const SpinnerWrapper = styled.div`
     width: 100%;
@@ -32,22 +33,20 @@ interface IProps {
 }
 
 export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IProps) => {
-    const [dokumentRessurs, settDokumentRessurs] = useState<Ressurs<string>>(byggTomRessurs());
-    const { request } = useHttp();
+    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
 
     useEffect(() => {
-        settDokumentRessurs(byggHenterRessurs());
-        request<void, string>({
+        hentForhåndsvisning({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
-        }).then(dokumentRessurs => settDokumentRessurs(dokumentRessurs));
+        });
     }, [dokumentInfoId, journalpostId]);
 
-    switch (dokumentRessurs.status) {
+    switch (hentetForhåndsvisning.status) {
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
-            return <DokumentDataAlert children={dokumentRessurs.frontendFeilmelding} />;
+            return <DokumentDataAlert children={hentetForhåndsvisning.frontendFeilmelding} />;
         case RessursStatus.HENTER:
             return (
                 <SpinnerWrapper>
@@ -59,7 +58,7 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
                 <DokumentDiv>
                     <iframe
                         title={'dokument'}
-                        src={`data:application/pdf;base64,${dokumentRessurs.data}`}
+                        src={hentetForhåndsvisning.data}
                         width={'100%'}
                         height={'100%'}
                     />
