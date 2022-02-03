@@ -20,7 +20,7 @@ import {
 
 import 'nav-frontend-tabell-style';
 
-import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
+import useDokument from '../../../hooks/useDokument';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
@@ -123,12 +123,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
-    const {
-        hentForhåndsvisning,
-        visForhåndsvisningModal,
-        hentetForhåndsvisning,
-        settVisForhåndsviningModal,
-    } = useForhåndsvisning();
+    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
+        useDokument();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -339,9 +335,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     </tbody>
                 </StyledTabell>
                 <PdfVisningModal
-                    åpen={visForhåndsvisningModal}
-                    onRequestClose={() => settVisForhåndsviningModal(false)}
-                    pdfdata={hentetForhåndsvisning}
+                    åpen={visDokumentModal}
+                    onRequestClose={() => settVisDokumentModal(false)}
+                    pdfdata={hentetDokument}
                 />
             </Container>
         );

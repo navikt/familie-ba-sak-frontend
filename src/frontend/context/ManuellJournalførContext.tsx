@@ -16,7 +16,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import useForhåndsvisning from '../hooks/useForhåndsvisning';
+import useDokument from '../hooks/useDokument';
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { IBehandlingstema, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
@@ -40,8 +40,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
-    const { hentForhåndsvisning, nullstillHentetForhåndsvisning, hentetForhåndsvisning } =
-        useForhåndsvisning();
+    const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
@@ -51,7 +50,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
-            nullstillHentetForhåndsvisning();
+            nullstillDokument();
         }
     }, [oppgaveId]);
 
@@ -425,7 +424,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     return {
         dataForManuellJournalføring,
-        hentetForhåndsvisning,
+        hentetForhåndsvisning: hentetDokument,
         endreBruker,
         erLesevisning,
         minimalFagsak,

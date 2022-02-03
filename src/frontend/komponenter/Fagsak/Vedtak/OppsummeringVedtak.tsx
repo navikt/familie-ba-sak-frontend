@@ -11,7 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
+import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
@@ -52,11 +52,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const {
         hentForhåndsvisning,
-        nullstillHentetForhåndsvisning,
-        visForhåndsvisningModal,
-        hentetForhåndsvisning,
-        settVisForhåndsviningModal,
-    } = useForhåndsvisning();
+        nullstillDokument,
+        visDokumentModal,
+        hentetDokument,
+        settVisDokumentModal,
+    } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
@@ -111,16 +111,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 <>
                     <PdfVisningModal
                         onRequestOpen={() => {
-                            if (hentetForhåndsvisning.status !== RessursStatus.HENTER) {
+                            if (hentetDokument.status !== RessursStatus.HENTER) {
                                 hentVedtaksbrev();
                             }
                         }}
-                        åpen={visForhåndsvisningModal}
+                        åpen={visDokumentModal}
                         onRequestClose={() => {
-                            settVisForhåndsviningModal(false);
-                            nullstillHentetForhåndsvisning();
+                            settVisDokumentModal(false);
+                            nullstillDokument();
                         }}
-                        pdfdata={hentetForhåndsvisning}
+                        pdfdata={hentetDokument}
                     />
                     <Container>
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
@@ -150,8 +150,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             erLesevisning={false}
                             label={'Vis vedtaksbrev'}
                             ikon={<DokumentIkon />}
-                            onClick={() => settVisForhåndsviningModal(!visForhåndsvisningModal)}
-                            spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
+                            onClick={() => settVisDokumentModal(!visDokumentModal)}
+                            spinner={hentetDokument.status === RessursStatus.HENTER}
                             ikonPosisjon={IkonPosisjon.VENSTRE}
                             mini={true}
                         />

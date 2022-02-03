@@ -7,7 +7,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
+import useDokument from '../../../hooks/useDokument';
 
 const SpinnerWrapper = styled.div`
     width: 100%;
@@ -33,7 +33,7 @@ interface IProps {
 }
 
 export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IProps) => {
-    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
+    const { hentForhåndsvisning, hentetDokument } = useDokument();
 
     useEffect(() => {
         hentForhåndsvisning({
@@ -42,11 +42,11 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
         });
     }, [dokumentInfoId, journalpostId]);
 
-    switch (hentetForhåndsvisning.status) {
+    switch (hentetDokument.status) {
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
-            return <DokumentDataAlert children={hentetForhåndsvisning.frontendFeilmelding} />;
+            return <DokumentDataAlert children={hentetDokument.frontendFeilmelding} />;
         case RessursStatus.HENTER:
             return (
                 <SpinnerWrapper>
@@ -58,7 +58,7 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
                 <DokumentDiv>
                     <iframe
                         title={'dokument'}
-                        src={hentetForhåndsvisning.data}
+                        src={hentetDokument.data}
                         width={'100%'}
                         height={'100%'}
                     />
