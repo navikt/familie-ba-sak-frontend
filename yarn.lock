@@ -2544,10 +2544,10 @@
     nav-frontend-typografi-style "^1.1.1"
     prop-types "^15.7.2"
 
-"@navikt/fnrvalidator@^1.1.3", "@navikt/fnrvalidator@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.1.4.tgz#22a776ba05a90c1ba5316a4f7567f9a45abcda04"
-  integrity sha512-IroYFqa8PpzVxtIk6ifeEQBFzsI2QJX/FSIQyBtJvpp2D8Cb5Z9+hGNFppCILWR+QYbY8Dkk48la7K5fPGXeWQ==
+"@navikt/fnrvalidator@^1.1.3", "@navikt/fnrvalidator@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.2.0.tgz#41799586c418bb98bc6b45a62bedbcb5869792a3"
+  integrity sha512-WMK+Y+BLw/4qbdKRQCo2TZQDiELidnXNU+GZ3bpk9DdfOi6UbxBDrNYU/s5QOKyzX/Duws1QCnYKm4nz9lq+xw==
 
 "@navikt/helse-frontend-tidslinje@^3.1.0":
   version "3.1.0"
