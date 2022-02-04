@@ -20,22 +20,22 @@ const DokumentDataAlert = styled(AlertStripeFeil)`
 `;
 
 export const DokumentPanel: React.FC = () => {
-    const { dokumentData } = useManuellJournalfør();
+    const { hentetDokument } = useManuellJournalfør();
     return (
         <DokumentDiv>
-            {dokumentData.status === RessursStatus.SUKSESS && (
+            {hentetDokument.status === RessursStatus.SUKSESS && (
                 <iframe
                     title={'dokument'}
-                    src={dokumentData.data}
+                    src={hentetDokument.data}
                     width={'100%'}
                     height={'100%'}
                 ></iframe>
             )}
-            {(dokumentData.status === RessursStatus.FEILET ||
-                dokumentData.status === RessursStatus.FUNKSJONELL_FEIL) && (
-                <DokumentDataAlert children={dokumentData.frontendFeilmelding} />
+            {(hentetDokument.status === RessursStatus.FEILET ||
+                hentetDokument.status === RessursStatus.FUNKSJONELL_FEIL) && (
+                <DokumentDataAlert children={hentetDokument.frontendFeilmelding} />
             )}
-            {dokumentData.status === RessursStatus.IKKE_TILGANG && (
+            {hentetDokument.status === RessursStatus.IKKE_TILGANG && (
                 <DokumentDataAlert children={'Ikke tilgang til dokument'} />
             )}
         </DokumentDiv>

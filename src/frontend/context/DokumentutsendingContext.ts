@@ -15,7 +15,7 @@ import {
 } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useForhåndsvisning from '../hooks/useForhåndsvisning';
+import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
 import {
     Informasjonsbrev,
@@ -50,7 +50,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakRessurser();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-        const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
+        const { hentForhåndsvisning, hentetDokument } = useDokument();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
             IManueltBrevRequestPåFagsak | undefined
@@ -291,7 +291,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const skjemaErLåst = () =>
             skjema.submitRessurs.status === RessursStatus.HENTER ||
-            hentetForhåndsvisning.status === RessursStatus.HENTER;
+            hentetDokument.status === RessursStatus.HENTER;
 
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
@@ -320,14 +320,14 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         };
 
         const hentSkjemaFeilmelding = () =>
-            hentFrontendFeilmelding(hentetForhåndsvisning) ||
+            hentFrontendFeilmelding(hentetDokument) ||
             hentFrontendFeilmelding(skjema.submitRessurs);
 
         return {
             fagsakId,
             hentForhåndsvisningPåFagsak,
             hentSkjemaFeilmelding,
-            hentetForhåndsvisning,
+            hentetDokument,
             sendBrevPåFagsak,
             senderBrev,
             settVisInnsendtBrevModal,
