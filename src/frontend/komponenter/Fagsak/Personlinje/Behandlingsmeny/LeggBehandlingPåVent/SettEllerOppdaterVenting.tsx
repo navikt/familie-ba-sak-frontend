@@ -16,7 +16,7 @@ interface IProps {
 
 const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const { settÅpenBehandling } = useBehandling();
-    const [visModal, settVisModal] = useState<boolean>(false);
+    const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(
         behandling.aktivSettPåVent,
         visModal
