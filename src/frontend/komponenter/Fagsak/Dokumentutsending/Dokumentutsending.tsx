@@ -22,7 +22,7 @@ const Container = styled.div`
 const Dokumentutsending: React.FC = () => {
     const history = useHistory();
 
-    const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =
+    const { fagsakId, hentetForhåndsvisning, settVisInnsendtBrevModal, visInnsendtBrevModal } =
         useDokumentutsending();
 
     return (
@@ -59,7 +59,11 @@ const Dokumentutsending: React.FC = () => {
 
             <iframe
                 title={'dokument'}
-                src={hentetDokument.status === RessursStatus.SUKSESS ? hentetDokument.data : ''}
+                src={
+                    hentetForhåndsvisning.status === RessursStatus.SUKSESS
+                        ? hentetForhåndsvisning.data
+                        : ''
+                }
                 width={'100%'}
                 height={'100%'}
             />
