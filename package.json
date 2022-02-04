@@ -28,7 +28,9 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.3.1",
+    "@navikt/ds-css": "0.14.1",
     "@navikt/ds-icons": "^0.5.4",
+    "@navikt/ds-react": "0.15.3",
     "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/familie-backend": "6.0.0",
     "@navikt/familie-clipboard": "^4.0.0",

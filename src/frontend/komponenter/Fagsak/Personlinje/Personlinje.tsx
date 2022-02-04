@@ -11,6 +11,7 @@ import { IMinimalFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterIdent, hentAlder } from '../../../utils/formatter';
+import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
@@ -29,6 +30,12 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
         >
             <div className="visittkort__pipe">|</div>
             <Normaltekst>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</Normaltekst>
+            {bruker?.dødsfallDato?.length && (
+                <>
+                    <div className="visittkort__pipe"></div>
+                    <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
+                </>
+            )}
             <div style={{ flex: 1 }}></div>
             {minimalFagsak !== undefined && (
                 <>

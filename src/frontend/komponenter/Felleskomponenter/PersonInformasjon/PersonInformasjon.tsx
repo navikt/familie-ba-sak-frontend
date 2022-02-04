@@ -7,6 +7,7 @@ import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
 import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
 import { hentAlder, formaterIdent } from '../../../utils/formatter';
+import DødsfallTag from '../DødsfallTag';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -41,6 +42,12 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     </Clipboard>
                     <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
                     <Undertittel tag={tag}>{`${personTypeMap[person.type]} `}</Undertittel>
+                    {person.dødsfallDato?.length && (
+                        <>
+                            <Undertittel tag={tag}>&ensp;&ensp;</Undertittel>
+                            <DødsfallTag dødsfallDato={person.dødsfallDato} />
+                        </>
+                    )}
                 </>
             )}
 
