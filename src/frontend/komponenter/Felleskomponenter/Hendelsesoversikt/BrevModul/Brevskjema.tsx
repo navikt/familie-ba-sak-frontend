@@ -14,7 +14,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
-import useForhåndsvisning from '../../../../hooks/useForhåndsvisning';
+import useDokument from '../../../../hooks/useDokument';
 import { DokumentIkon } from '../../../../ikoner/DokumentIkon';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
@@ -78,7 +78,7 @@ const LabelOgEtikett = styled.div`
 
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
-    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
+    const { hentForhåndsvisning, hentetDokument } = useDokument();
 
     const {
         skjema,
@@ -97,10 +97,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
     useEffect(() => {
-        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
+        if (hentetDokument.status === RessursStatus.SUKSESS) {
             settForhåndsviningModal(true);
         }
-    }, [hentetForhåndsvisning]);
+    }, [hentetDokument]);
 
     useEffect(() => {
         settForhåndsviningModal(false);
@@ -109,7 +109,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
-        hentetForhåndsvisning.status === RessursStatus.HENTER;
+        hentetDokument.status === RessursStatus.HENTER;
 
     const valgtBrevmal: Felt<Brevmal | ''> = skjema.felter.brevmal;
 
@@ -141,12 +141,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
             <PdfVisningModal
                 åpen={visForhåndsvisningModal}
                 onRequestClose={() => settForhåndsviningModal(false)}
-                pdfdata={hentetForhåndsvisning}
+                pdfdata={hentetDokument}
             />
             <SkjemaGruppe
                 feil={
                     hentFrontendFeilmelding(skjema.submitRessurs) ||
-                    hentFrontendFeilmelding(hentetForhåndsvisning)
+                    hentFrontendFeilmelding(hentetDokument)
                 }
             >
                 <SkjultLegend>Send brev</SkjultLegend>
@@ -334,7 +334,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     ikonPosisjon={IkonPosisjon.VENSTRE}
                     ikon={<DokumentIkon />}
                     mini={true}
-                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
+                    spinner={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
