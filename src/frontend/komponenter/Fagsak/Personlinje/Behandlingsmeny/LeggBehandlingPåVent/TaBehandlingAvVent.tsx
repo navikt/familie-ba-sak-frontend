@@ -37,7 +37,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
-    const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
+    const [visModal, settVisModal] = useState<boolean>(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
 
     const lukkModal = () => {
