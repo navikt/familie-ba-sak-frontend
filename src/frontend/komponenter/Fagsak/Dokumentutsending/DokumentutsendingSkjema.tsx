@@ -51,7 +51,7 @@ const SendBrevKnapp = styled(Knapp)`
 const DokumentutsendingSkjema: React.FC = () => {
     const {
         hentForhåndsvisningPåFagsak,
-        hentetDokument,
+        hentetForhåndsvisning,
         skjema,
         nullstillSkjema,
         senderBrev,
@@ -117,7 +117,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     ikonPosisjon={IkonPosisjon.VENSTRE}
                     ikon={<DokumentIkon />}
                     mini={true}
-                    spinner={hentetDokument.status === RessursStatus.HENTER}
+                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
                 />

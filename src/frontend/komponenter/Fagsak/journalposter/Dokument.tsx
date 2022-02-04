@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
-import { RessursStatus } from '@navikt/familie-typer';
-
-import useDokument from '../../../hooks/useDokument';
+import { useHttp } from '@navikt/familie-http';
+import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
 const SpinnerWrapper = styled.div`
     width: 100%;
@@ -33,20 +32,22 @@ interface IProps {
 }
 
 export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IProps) => {
-    const { hentForhåndsvisning, hentetDokument } = useDokument();
+    const [dokumentRessurs, settDokumentRessurs] = useState<Ressurs<string>>(byggTomRessurs());
+    const { request } = useHttp();
 
     useEffect(() => {
-        hentForhåndsvisning({
+        settDokumentRessurs(byggHenterRessurs());
+        request<void, string>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
-        });
+        }).then(dokumentRessurs => settDokumentRessurs(dokumentRessurs));
     }, [dokumentInfoId, journalpostId]);
 
-    switch (hentetDokument.status) {
+    switch (dokumentRessurs.status) {
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
-            return <DokumentDataAlert children={hentetDokument.frontendFeilmelding} />;
+            return <DokumentDataAlert children={dokumentRessurs.frontendFeilmelding} />;
         case RessursStatus.HENTER:
             return (
                 <SpinnerWrapper>
@@ -58,7 +59,7 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
                 <DokumentDiv>
                     <iframe
                         title={'dokument'}
-                        src={hentetDokument.data}
+                        src={`data:application/pdf;base64,${dokumentRessurs.data}`}
                         width={'100%'}
                         height={'100%'}
                     />

@@ -16,11 +16,11 @@ import {
     IJournalpost,
     Journalposttype,
     journalpoststatus,
+    byggDataRessurs,
+    byggFeiletRessurs,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
-
-import useDokument from '../../../hooks/useDokument';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
@@ -123,8 +123,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
-    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
-        useDokument();
+    const [visPdfModal, settVisPdfModal] = useState<boolean>(false);
+    const [pdfDokument, settPdfDokument] = useState(byggTomRessurs<string>());
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -151,10 +151,29 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     const hentPdfDokument = (journalpostId: string, dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
-            hentForhåndsvisning({
+            request<void, string>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`,
-            });
+            })
+                .then((response: Ressurs<string>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settPdfDokument(
+                            byggDataRessurs(`data:application/pdf;base64,${response.data}`)
+                        );
+                        settVisPdfModal(true);
+                    } else if (
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
+                    ) {
+                        settPdfDokument(response);
+                    } else {
+                        settPdfDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere pdf'));
+                    }
+                })
+                .catch(() => {
+                    settPdfDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere pdf'));
+                });
         } else {
             alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
         }
@@ -335,9 +354,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     </tbody>
                 </StyledTabell>
                 <PdfVisningModal
-                    åpen={visDokumentModal}
-                    onRequestClose={() => settVisDokumentModal(false)}
-                    pdfdata={hentetDokument}
+                    åpen={visPdfModal}
+                    onRequestClose={() => settVisPdfModal(false)}
+                    pdfdata={pdfDokument}
                 />
             </Container>
         );

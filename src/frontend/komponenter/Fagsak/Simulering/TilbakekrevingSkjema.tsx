@@ -17,7 +17,7 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
-import useDokument from '../../../hooks/useDokument';
+import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
@@ -91,8 +91,12 @@ const TilbakekrevingSkjema: React.FC<{
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
-    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
-        useDokument();
+    const {
+        hentForhåndsvisning,
+        visForhåndsvisningModal,
+        hentetForhåndsvisning,
+        settVisForhåndsviningModal,
+    } = useForhåndsvisning();
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
         tilbakekrevingSkjema.felter.tilbakekrevingsvalg.validerOgSettFelt(
@@ -144,9 +148,9 @@ const TilbakekrevingSkjema: React.FC<{
     return (
         <>
             <PdfVisningModal
-                åpen={visDokumentModal}
-                onRequestClose={() => settVisDokumentModal(false)}
-                pdfdata={hentetDokument}
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settVisForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
             />
 
             <TilbakekrevingSkjemaGruppe legend="Tilbakekreving">
@@ -255,7 +259,7 @@ const TilbakekrevingSkjema: React.FC<{
                                             }
                                         )
                                     }
-                                    spinner={hentetDokument.status === RessursStatus.HENTER}
+                                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                                     ikonPosisjon={IkonPosisjon.VENSTRE}
                                     mini={true}
                                 />

@@ -13,7 +13,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import useDokument from '../../../../../hooks/useDokument';
+import useForhåndsvisning from '../../../../../hooks/useForhåndsvisning';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import {
     BehandlingSteg,
@@ -60,11 +60,11 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
     const [visModal, settVisModal] = useState(false);
     const {
         hentForhåndsvisning,
-        nullstillDokument,
-        visDokumentModal,
-        hentetDokument,
-        settVisDokumentModal,
-    } = useDokument();
+        nullstillHentetForhåndsvisning,
+        visForhåndsvisningModal,
+        hentetForhåndsvisning,
+        settVisForhåndsviningModal,
+    } = useForhåndsvisning();
     const { åpenBehandling, erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
@@ -153,7 +153,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                     ],
                     onClose: () => {
                         nullstillSkjema();
-                        nullstillDokument();
+                        nullstillHentetForhåndsvisning();
                         settVisModal(false);
                     },
                     lukkKnapp: true,
@@ -164,7 +164,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                 <SkjemaGruppe
                     feil={
                         hentFrontendFeilmelding(skjema.submitRessurs) ||
-                        hentFrontendFeilmelding(hentetDokument)
+                        hentFrontendFeilmelding(hentetForhåndsvisning)
                     }
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
@@ -246,9 +246,9 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                 </StyledVeivalgTekst>
             </UIModalWrapper>
             <PdfVisningModal
-                åpen={visDokumentModal}
-                onRequestClose={() => settVisDokumentModal(false)}
-                pdfdata={hentetDokument}
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settVisForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
             />
         </>
     );
