@@ -327,7 +327,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             fagsakId,
             hentForhåndsvisningPåFagsak,
             hentSkjemaFeilmelding,
-            hentetForhåndsvisning: hentetDokument,
+            hentetDokument,
             sendBrevPåFagsak,
             senderBrev,
             settVisInnsendtBrevModal,

@@ -424,7 +424,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     return {
         dataForManuellJournalføring,
-        hentetForhåndsvisning: hentetDokument,
+        hentetDokument,
         endreBruker,
         erLesevisning,
         minimalFagsak,
