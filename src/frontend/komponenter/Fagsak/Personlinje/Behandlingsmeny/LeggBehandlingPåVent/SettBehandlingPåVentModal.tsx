@@ -15,6 +15,7 @@ import { FamilieIsoDate } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+import { hentAlleÅrsaker } from './settPåVentUtils';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
@@ -42,9 +43,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
     skjema,
     erBehandlingAlleredePåVent,
 }) => {
-    const årsaker = Object.keys(SettPåVentÅrsak).filter(key =>
-        isNaN(Number(key))
-    ) as SettPåVentÅrsak[];
+    const årsaker = hentAlleÅrsaker();
 
     return (
         <UIModalWrapper
