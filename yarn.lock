@@ -2444,10 +2444,10 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/familie-backend@6.0.1-alpha.2":
-  version "6.0.1-alpha.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/6.0.1-alpha.2/f1308e4911eef4c740b766dfb603978c27bf3d7691bb4fb1de95388a0b2f301d#d56b3680c1710f8dde1f5cfeb7b5c63d7fcc0b0a"
-  integrity sha512-9ukCm/U990YzgC+JAugKdae+PFjyOHf6lfGXyX337P+R9+QUAqedJj94GXdcwjMTOAATE9vc0hTrAtEmg5C7KQ==
+"@navikt/familie-backend@6.0.1-alpha.4":
+  version "6.0.1-alpha.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/6.0.1-alpha.4/5ceed0b30d51d71d5a0b75a7c6f128e73489129bb699fe2afa691200a30132cc#b8b112d87512f8bc481d70b689e3811b795836cf"
+  integrity sha512-W4+ajv8rm0+wGsOs/3nYUXPtByaBqTy8GJ6W6YMUJlUDPRfOf9lJa+xhhfMoAhe/PwoMfelkV8PwIRotn12Ihg==
   dependencies:
     "@navikt/familie-logging" "^2.0.0"
     "@types/cookie-parser" "^1.4.2"
