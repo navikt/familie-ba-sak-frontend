@@ -4,6 +4,8 @@ import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import {
     IVedtaksperiodeMedBegrunnelser,
@@ -22,6 +24,7 @@ interface IProps {
 const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     vedtaksperiodeMedBegrunnelser,
 }) => {
+    const { toggles } = useApp();
     const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
         useVedtaksperiodeMedBegrunnelser();
 
@@ -52,9 +55,14 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                     vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer
                 }
             />
-            {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
-                <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
-            )}
+            {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG &&
+                (toggles[ToggleNavn.endretUtbetalingVedtakssiden] ||
+                    vedtaksperiodeMedBegrunnelser.type !==
+                        Vedtaksperiodetype.ENDRET_UTBETALING) && (
+                    <BegrunnelserMultiselect
+                        vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type}
+                    />
+                )}
             {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
                 genererteBrevbegrunnelser.data.length > 0 && (
                     <>
