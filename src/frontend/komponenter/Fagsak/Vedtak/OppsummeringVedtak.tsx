@@ -141,6 +141,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             maxWidthStyle="100%"
             className={'vedtak'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
+            steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>

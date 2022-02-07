@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Ingress } from 'nav-frontend-typografi';
 
-import { Globe, Heart, Home, Passport } from '@navikt/ds-icons';
+import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 
 import { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
@@ -23,6 +23,8 @@ interface IRegisteropplysningerProps {
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysninger }) => {
     const manglerRegisteropplysninger = opplysninger.statsborgerskap.length === 0;
+
+    const personErDød = opplysninger.dødsboadresse.length > 0;
 
     return (
         <>
@@ -43,6 +45,20 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                             )
                         }
                     />
+                    {personErDød && (
+                        <RegisteropplysningerTabell
+                            opplysningstype={Registeropplysning.DØDSBOADRESSE}
+                            ikon={
+                                <FlowerBladeFall
+                                    style={{ fontSize: '1.5rem' }}
+                                    aria-label="Blomst ikon"
+                                    role="img"
+                                    focusable="false"
+                                />
+                            }
+                            historikk={opplysninger.dødsboadresse}
+                        />
+                    )}
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.SIVILSTAND}
                         ikon={

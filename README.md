@@ -11,7 +11,7 @@ Frontend app for barnetrygd sak
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. 
 Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
-i konsollen.
+mot dev-gcp clusteret i konsollen.
 ```
     CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
     CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
@@ -28,11 +28,25 @@ i konsollen.
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
+## Få token mot ba-sak
+For å få token for å gå mot familie-ba-sak kan du kjøre følgende kommando i terminalen med samme verdier for cliend_id, 
+client_secret og scope som er definert i forrige avsnitt. 
+
+``` 
+curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token’ \
+--header ‘Content-Type: application/x-www-form-urlencoded’ \
+--header ‘Cookie: fpc=AsRNnIJ3MI9FqfN68mC5KW4’ \
+--data-urlencode ‘client_id=’ \
+--data-urlencode ‘client_secret=’ \
+--data-urlencode ‘scope=’ \
+--data-urlencode ‘grant_type=client_credentials’
+```
+
 ---
 
 
 # Bygg og deploy
-Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i fss området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
+Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
 
 # Henvendelser
 

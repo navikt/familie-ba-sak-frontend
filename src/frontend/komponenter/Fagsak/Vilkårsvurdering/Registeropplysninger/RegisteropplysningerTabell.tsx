@@ -54,6 +54,16 @@ interface IRegisteropplysningerTabellProps {
     historikk: IRestRegisteropplysning[];
 }
 
+const hentDatoHeader = (opplysningstype: Registeropplysning) => {
+    if (opplysningstype === Registeropplysning.SIVILSTAND) {
+        return 'Dato';
+    } else if (opplysningstype === Registeropplysning.DØDSBOADRESSE) {
+        return 'Dødsdato';
+    } else {
+        return 'Periode';
+    }
+};
+
 const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = ({
     opplysningstype,
     ikon,
@@ -70,13 +80,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                     <thead>
                         <tr>
                             <TabellHeader children={registeropplysning[opplysningstype]} />
-                            <TabellHeader
-                                children={
-                                    opplysningstype === Registeropplysning.SIVILSTAND
-                                        ? 'Dato'
-                                        : 'Periode'
-                                }
-                            />
+                            <TabellHeader children={hentDatoHeader(opplysningstype)} />
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +105,9 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                                             <td
                                                 children={
                                                     opplysningstype ===
-                                                    Registeropplysning.SIVILSTAND
+                                                        Registeropplysning.SIVILSTAND ||
+                                                    opplysningstype ===
+                                                        Registeropplysning.DØDSBOADRESSE
                                                         ? tilVisning(
                                                               periode.fom
                                                                   ? kalenderDato(periode.fom)

@@ -4,7 +4,7 @@ import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
-import { VedtakBegrunnelseType } from '../../../../../typer/vedtak';
+import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import {
     IVedtaksperiodeMedBegrunnelser,
     Vedtaksperiodetype,
@@ -25,11 +25,20 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
         useVedtaksperiodeMedBegrunnelser();
 
+    const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
+        Standardbegrunnelse.REDUKSJON_SATSENDRING,
+        Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
+        Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
+    ];
+
     const visFritekster = () =>
         (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
             vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.ENDRET_UTBETALING) ||
         vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
-            begrunnelse => begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
+            begrunnelse =>
+                !ugyldigeReduksjonsteksterForÅTriggeFritekst.includes(
+                    begrunnelse.vedtakBegrunnelseSpesifikasjon as Standardbegrunnelse
+                ) && begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
         ).length > 0;
 
     return (

@@ -13,13 +13,14 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, Behandlingstype, IBehandling } from '../../../typer/behandling';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
+import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
@@ -107,6 +108,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
         });
     };
 
+    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+
     return (
         <Skjemasteg
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
@@ -122,7 +125,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
             }}
             maxWidthStyle={'80rem'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
+            steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
+            {erMigreringFraInfotrygd && (
+                <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
+            )}
+
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
