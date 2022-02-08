@@ -40,11 +40,7 @@ export const useVilkårBegrunnelser = ({
             case Vedtaksperiodetype.OPPHØR:
                 return [VedtakBegrunnelseType.OPPHØR];
             case Vedtaksperiodetype.ENDRET_UTBETALING:
-                return [
-                    VedtakBegrunnelseType.INNVILGET,
-                    VedtakBegrunnelseType.REDUKSJON,
-                    VedtakBegrunnelseType.ENDRET_UTBETALING,
-                ];
+                return [VedtakBegrunnelseType.ENDRET_UTBETALING];
             default:
                 return [];
         }
