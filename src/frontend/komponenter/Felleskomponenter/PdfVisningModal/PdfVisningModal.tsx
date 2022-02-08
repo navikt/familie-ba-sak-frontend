@@ -34,10 +34,8 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     åpen,
 }) => {
     useEffect(() => {
-        if (åpen) {
-            setTimeout(() => {
-                onRequestOpen && onRequestOpen();
-            }, 200);
+        if (åpen && onRequestOpen) {
+            onRequestOpen();
         }
     }, [åpen]);
 

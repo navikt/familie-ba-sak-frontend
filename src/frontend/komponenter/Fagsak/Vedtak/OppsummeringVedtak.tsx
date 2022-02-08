@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -8,18 +7,11 @@ import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { useHttp } from '@navikt/familie-http';
-import {
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
@@ -53,16 +45,19 @@ const Container = styled.div`
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { request } = useHttp();
     const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
     const history = useHistory();
 
+    const {
+        hentForhåndsvisning,
+        nullstillDokument,
+        visDokumentModal,
+        hentetDokument,
+        settVisDokumentModal,
+    } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [visVedtaksbrev, settVisVedtaksbrev] = React.useState(false);
-
-    const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
@@ -82,41 +77,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         const httpMethod =
             genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
-        if (vedtak) {
-            settVedtaksbrev(byggHenterRessurs());
-            request<void, string>({
-                method: httpMethod,
-                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
-            })
-                .then((response: Ressurs<string>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settVedtaksbrev(
-                            byggDataRessurs(`data:application/pdf;base64,${response.data}`)
-                        );
-                    } else if (
-                        response.status === RessursStatus.FEILET ||
-                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                        response.status === RessursStatus.IKKE_TILGANG
-                    ) {
-                        settVedtaksbrev(response);
-                    } else {
-                        settVedtaksbrev(
-                            byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                        );
-                    }
-                })
-                .catch((_error: AxiosError) => {
-                    settVedtaksbrev(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                    );
-                });
-        } else {
-            settVedtaksbrev(
-                byggFeiletRessurs(
-                    'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
-                )
-            );
-        }
+        hentForhåndsvisning({
+            method: httpMethod,
+            url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
+        });
     };
 
     const sendTilBeslutter = () => {
@@ -147,16 +111,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 <>
                     <PdfVisningModal
                         onRequestOpen={() => {
-                            if (vedtaksbrev.status !== RessursStatus.HENTER) {
+                            if (hentetDokument.status !== RessursStatus.HENTER) {
                                 hentVedtaksbrev();
                             }
                         }}
-                        åpen={visVedtaksbrev}
+                        åpen={visDokumentModal}
                         onRequestClose={() => {
-                            settVisVedtaksbrev(false);
-                            settVedtaksbrev(byggTomRessurs());
+                            settVisDokumentModal(false);
+                            nullstillDokument();
                         }}
-                        pdfdata={vedtaksbrev}
+                        pdfdata={hentetDokument}
                     />
                     <Container>
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
@@ -186,8 +150,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             erLesevisning={false}
                             label={'Vis vedtaksbrev'}
                             ikon={<DokumentIkon />}
-                            onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
-                            spinner={vedtaksbrev.status === RessursStatus.HENTER}
+                            onClick={() => settVisDokumentModal(!visDokumentModal)}
+                            spinner={hentetDokument.status === RessursStatus.HENTER}
                             ikonPosisjon={IkonPosisjon.VENSTRE}
                             mini={true}
                         />
