@@ -14,7 +14,9 @@ import {
 } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
@@ -40,10 +42,12 @@ const GroupLabel = styled.div`
 
 const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { erLesevisning } = useBehandling();
+    const { toggles } = useApp();
     const skalIkkeEditeres =
         erLesevisning() ||
         vedtaksperiodetype === Vedtaksperiodetype.AVSLAG ||
-        vedtaksperiodetype === Vedtaksperiodetype.ENDRET_UTBETALING;
+        (!toggles[ToggleNavn.endretUtbetalingVedtakssiden] &&
+            vedtaksperiodetype === Vedtaksperiodetype.ENDRET_UTBETALING);
 
     const {
         id,

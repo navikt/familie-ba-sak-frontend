@@ -44,6 +44,7 @@ export enum VedtakBegrunnelseType {
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
+    ENDRET_UTBETALING = 'ENDRET_UTBETALING',
     ETTER_ENDRET_UTBETALING = 'ETTER_ENDRET_UTBETALING',
 }
 
@@ -53,6 +54,7 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
+    ENDRET_UTBETALING: 'Endret utbetaling',
     ETTER_ENDRET_UTBETALING: 'Etter endret utbetaling',
 };
 
