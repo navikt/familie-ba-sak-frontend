@@ -31,7 +31,7 @@
     "@navikt/ds-css": "0.14.1",
     "@navikt/ds-icons": "^0.5.4",
     "@navikt/ds-react": "0.15.3",
-    "@navikt/familie-backend": "6.0.1-alpha.5",
+    "@navikt/familie-backend": "^6.0.1",
     "@navikt/familie-clipboard": "^4.0.0",
     "@navikt/familie-endringslogg": "^2.0.0",
     "@navikt/familie-form-elements": "^4.0.0",
