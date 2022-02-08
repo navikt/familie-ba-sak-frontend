@@ -14,42 +14,53 @@ import {
 
 import { FamilieAxiosRequestConfig } from '../context/AppContext';
 
-const useForhåndsvisning = () => {
+const useDokument = () => {
     const { request } = useHttp();
 
-    const [visForhåndsvisningModal, settVisForhåndsviningModal] = useState<boolean>(false);
+    const [visDokumentModal, settVisDokumentModal] = useState<boolean>(false);
 
-    const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
-        byggTomRessurs()
-    );
+    const [hentetDokument, settHentetDokument] = React.useState<Ressurs<string>>(byggTomRessurs());
 
-    const nullstillHentetForhåndsvisning = () => {
-        settHentetForhåndsvisning(byggTomRessurs);
+    const nullstillDokument = () => {
+        settHentetDokument(byggTomRessurs);
+    };
+
+    const base64ToArrayBuffer = (base64: string) => {
+        const binaryString = window.atob(base64);
+        const binaryLen = binaryString.length;
+        const bytes = new Uint8Array(binaryLen);
+        for (let i = 0; i < binaryLen; i++) {
+            const ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
     };
 
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
-        settHentetForhåndsvisning(byggHenterRessurs());
+        settHentetDokument(byggHenterRessurs());
         request<D, string>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
-                settVisForhåndsviningModal(true);
+                settVisDokumentModal(true);
                 if (response.status === RessursStatus.SUKSESS) {
-                    settHentetForhåndsvisning(
-                        byggDataRessurs(`data:application/pdf;base64,${response.data}`)
-                    );
+                    const blob = new Blob([base64ToArrayBuffer(response.data)], {
+                        type: 'application/pdf',
+                    });
+
+                    settHentetDokument(byggDataRessurs(window.URL.createObjectURL(blob)));
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||
                     response.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settHentetForhåndsvisning(response);
+                    settHentetDokument(response);
                 } else {
-                    settHentetForhåndsvisning(
+                    settHentetDokument(
                         byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
                     );
                 }
             })
             .catch((_error: AxiosError) => {
-                settHentetForhåndsvisning(
+                settHentetDokument(
                     byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
                 );
             });
@@ -57,12 +68,12 @@ const useForhåndsvisning = () => {
 
     return {
         hentForhåndsvisning,
-        nullstillHentetForhåndsvisning,
-        hentetForhåndsvisning,
-        settHentetForhåndsvisning,
-        visForhåndsvisningModal,
-        settVisForhåndsviningModal,
+        nullstillDokument,
+        hentetDokument,
+        settHentetDokument,
+        visDokumentModal,
+        settVisDokumentModal,
     };
 };
 
-export default useForhåndsvisning;
+export default useDokument;
