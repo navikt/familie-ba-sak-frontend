@@ -18,6 +18,7 @@ import {
 } from '../../../../../typer/behandling';
 import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
+import { erBehandlingstypeOgÅrsakLovSammen } from '../../../../../utils/behandling/validering';
 import { erIsoStringGyldig, FamilieIsoDate } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
@@ -43,10 +44,20 @@ const useOpprettBehandling = (
 
     const behandlingsårsak = useFelt<BehandlingÅrsak | ''>({
         verdi: '',
-        valideringsfunksjon: felt => {
-            return felt.verdi !== ''
-                ? ok(felt)
-                : feil(felt, 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten');
+        valideringsfunksjon: (felt, avhengigheter) => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Velg behandlingsårsak som skal opprettes fra nedtrekkslisten');
+            }
+
+            const behandlingstype = avhengigheter?.behandlingstype.verdi;
+            if (!erBehandlingstypeOgÅrsakLovSammen(behandlingstype, felt.verdi)) {
+                return feil(
+                    felt,
+                    `Behandlingstype ${behandlingstype} og behandlingsårsak ${felt.verdi} kan ikke brukes sammen.`
+                );
+            }
+
+            return ok(felt);
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             const behandlingstypeVerdi = avhengigheter.behandlingstype.verdi;
