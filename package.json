@@ -191,6 +191,7 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "testEnvironment": "jsdom",
     "globals": {
       "ts-jest": {
         "tsconfig": "<rootDir>/src/frontend/tsconfig.json"
