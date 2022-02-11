@@ -5,9 +5,11 @@ import styled from 'styled-components';
 
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { ExternalLink } from '@navikt/ds-icons';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { Avhengigheter, feil, Felt, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -49,6 +51,11 @@ const StyledHjelpetekst = styled(Hjelpetekst)`
     .hjelpetekst__innhold {
         max-width: 36rem;
     }
+`;
+
+const DrekLenkeContainer = styled.div`
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
 `;
 
 export interface IRegistrerBarnSkjema {
@@ -310,7 +317,20 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         label={'Fødselsnummer'}
                         placeholder={'11 siffer'}
                     />
-
+                    <DrekLenkeContainer>
+                        <Lenke
+                            href="#"
+                            target="_blank"
+                            onClick={(e: React.UIEvent) => {
+                                e.preventDefault();
+                                window.open('/redirect/drek', '_new');
+                                settVisModal(false);
+                            }}
+                        >
+                            <span>Rekvirer D-nr i DREK</span>
+                            <ExternalLink aria-label="Rekvirer D-nr i DREK" />
+                        </Lenke>
+                    </DrekLenkeContainer>
                     {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
                         <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
                     )}

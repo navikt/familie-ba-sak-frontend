@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 
@@ -37,6 +38,10 @@ const BarnaWrapper = styled.div`
 
 const StyledCheckboxGruppe = styled(CheckboxGruppe)`
     min-width: 0;
+`;
+
+const IngenBarnRegistrertInfo = styled(AlertStripe)`
+    margin-bottom: 1.25rem;
 `;
 
 const Barna: React.FunctionComponent = () => {
@@ -114,6 +119,13 @@ const Barna: React.FunctionComponent = () => {
                         barn={barnMedOpplysninger}
                     />
                 ))}
+
+                {sorterteBarnMedOpplysninger.length === 0 && (
+                    <IngenBarnRegistrertInfo
+                        type="info"
+                        children={'Folkeregisteret har ikke registrerte barn på denne søkeren'}
+                    />
+                )}
 
                 {!lesevisning && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
