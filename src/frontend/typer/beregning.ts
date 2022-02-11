@@ -20,6 +20,7 @@ export enum YtelseType {
     ORDINÆR_BARNETRYGD = 'ORDINÆR_BARNETRYGD',
     UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
     SMÅBARNSTILLEGG = 'SMÅBARNSTILLEGG',
+    EØS = 'EØS',
 }
 
 export const ytelsetype: INøkkelPar = {
@@ -34,5 +35,9 @@ export const ytelsetype: INøkkelPar = {
     SMÅBARNSTILLEGG: {
         id: 'SMÅBARNSTILLEGG',
         navn: 'Småbarnstillegg',
+    },
+    EØS: {
+        id: 'EØS',
+        navn: 'EØS-forordningen',
     },
 };

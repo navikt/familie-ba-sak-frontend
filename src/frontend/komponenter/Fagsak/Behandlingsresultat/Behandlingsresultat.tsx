@@ -6,20 +6,24 @@ import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Flatknapp } from 'nav-frontend-knapper';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
+import { type FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useKompetanse } from '../../../context/Kompetanse/KompetanseContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
+import { IKompetanse } from '../../../typer/kompetanse';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatter';
@@ -27,6 +31,7 @@ import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
+import KompetanseSkjema, { kompetanseFeilmeldingId } from './kompetanse/KompetanseSkjema';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
@@ -86,6 +91,13 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         behandlingsstegSubmitressurs,
         settÅpenBehandling,
     } = useBehandling();
+    const {
+        hentKomeptanser,
+        kompetanserRessurs,
+        kompetanser,
+        erKompetanserGyldige,
+        hentKompetanserMedFeil,
+    } = useKompetanse();
 
     useEffect(() => {
         if (toggles[ToggleNavn.etterbetaling3år]) {
@@ -142,6 +154,36 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     };
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
+    const harEØSPerioder = åpenBehandling.personerMedAndelerTilkjentYtelse.some(tilkjentYtelse =>
+        tilkjentYtelse.ytelsePerioder.some(periode => periode.ytelseType === YtelseType.EØS)
+    );
+
+    React.useEffect(() => {
+        if (harEØSPerioder) {
+            hentKomeptanser();
+        }
+    }, [åpenBehandling, harEØSPerioder]);
+
+    const visEøsKompetanse = () => {
+        switch (kompetanserRessurs.status) {
+            case RessursStatus.SUKSESS:
+                return (
+                    <KompetanseSkjema
+                        kompetanser={kompetanser}
+                        visFeilmeldinger={visFeilmeldinger}
+                    />
+                );
+            case RessursStatus.FEILET:
+            case RessursStatus.FUNKSJONELL_FEIL:
+            case RessursStatus.IKKE_TILGANG:
+                return (
+                    <AlertStripe type="info" children={kompetanserRessurs.frontendFeilmelding} />
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
         <Skjemasteg
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
@@ -151,6 +193,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
+                } else if (harEØSPerioder && !erKompetanserGyldige()) {
+                    settVisFeilmeldinger(true);
                 } else {
                     behandlingresultatNesteOnClick();
                 }
@@ -200,6 +244,18 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
                 <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
+            )}
+            {harEØSPerioder && visEøsKompetanse()}
+            {visFeilmeldinger && hentKompetanserMedFeil().length > 0 && (
+                <Feiloppsummering
+                    tittel={'For å gå videre må du rette opp følgende:'}
+                    feil={[
+                        ...hentKompetanserMedFeil().map((kompetanse: FeltState<IKompetanse>) => ({
+                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barn.verdi}, f.o.m.: ${kompetanse.verdi.fom.verdi} er ikke fullstendig.`,
+                            skjemaelementId: kompetanseFeilmeldingId(kompetanse),
+                        })),
+                    ]}
+                />
             )}
         </Skjemasteg>
     );
