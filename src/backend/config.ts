@@ -60,9 +60,9 @@ if (!process.env.BA_SAK_SCOPE) {
     throw new Error('Scope mot familie-ba-sak er ikke konfigurert');
 }
 
-// if (!process.env.DREK_URL) {
-//     throw new Error('URL til drek er ikke konfigurert');
-// }
+if (!process.env.DREK_URL) {
+    throw new Error('URL til Drek er ikke konfigurert');
+}
 
 export const oboConfig: IApi = {
     clientId: appConfig.clientId,
@@ -76,5 +76,5 @@ export const namespace = env.namespace;
 
 export const redirectRecords: Record<string, string> = {
     '/redirect/familie-tilbake': env.familieTilbakeUrl,
-    '/redirect/drek': process.env.DREK_URL || 'https://drek.nais.preprod.local/',
+    '/redirect/drek': process.env.DREK_URL,
 };
