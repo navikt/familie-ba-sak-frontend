@@ -22,6 +22,7 @@ export interface IBaseFagsak {
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {
+    migreringsdato?: string;
     behandlinger: VisningBehandling[];
     tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];

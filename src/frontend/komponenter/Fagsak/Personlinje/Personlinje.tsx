@@ -1,16 +1,16 @@
 import React from 'react';
 
 import Lenke from 'nav-frontend-lenker';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import { useApp } from '../../../context/AppContext';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
-import { hentFagsakStatusVisning } from '../../../utils/fagsak';
-import { formaterIdent, hentAlder } from '../../../utils/formatter';
+import { datoformat, formaterIdent, formaterIsoDato, hentAlder } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
@@ -39,11 +39,18 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             <div style={{ flex: 1 }}></div>
             {minimalFagsak !== undefined && (
                 <>
-                    <Normaltekst children={'Status på sak '} />
-                    <Element
-                        className={'visittkort__status'}
-                        children={hentFagsakStatusVisning(minimalFagsak)}
-                    />
+                    {minimalFagsak?.migreringsdato !== undefined &&
+                        sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) < 3 && (
+                            <Tag
+                                size="small"
+                                children={`Migrert ${formaterIsoDato(
+                                    minimalFagsak?.migreringsdato,
+                                    datoformat.DATO_FORKORTTET
+                                )}`}
+                                variant={'info'}
+                            />
+                        )}
+                    <div style={{ flex: 1 }}></div>
                     <Lenke
                         className={'visittkort__lenke'}
                         href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
@@ -63,6 +70,13 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             )}
         </Visittkort>
     );
+};
+
+const sjekkOmMigreringsdatoErEldreEnn3År = (migreringsdatoIString: string) => {
+    const dato = new Date();
+    const migreringsdato = new Date(migreringsdatoIString);
+    const difference = dato.getTime() - migreringsdato.getTime();
+    return Math.floor(Math.abs(difference) / (1000 * 60 * 60 * 24 * 365));
 };
 
 export default Personlinje;
