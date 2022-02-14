@@ -43,6 +43,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                 </>
             )}
             <div style={{ flex: 1 }}></div>
+            <div style={{ flex: 1 }}></div>
             {minimalFagsak !== undefined && (
                 <>
                     {minimalFagsak?.migreringsdato !== undefined &&
@@ -56,7 +57,6 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                                 variant={'info'}
                             />
                         )}
-                    <div style={{ flex: 1 }}></div>
                     <Lenke
                         className={'visittkort__lenke'}
                         href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
