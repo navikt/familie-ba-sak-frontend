@@ -10,7 +10,13 @@ import Visittkort from '@navikt/familie-visittkort';
 import { useApp } from '../../../context/AppContext';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
-import { datoformat, formaterIdent, formaterIsoDato, hentAlder } from '../../../utils/formatter';
+import {
+    datoformat,
+    formaterIdent,
+    formaterIsoDato,
+    hentAlder,
+    millisekunderIEttÅr,
+} from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
@@ -40,12 +46,12 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             {minimalFagsak !== undefined && (
                 <>
                     {minimalFagsak?.migreringsdato !== undefined &&
-                        sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) < 3 && (
+                        sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                             <Tag
                                 size="small"
                                 children={`Migrert ${formaterIsoDato(
                                     minimalFagsak?.migreringsdato,
-                                    datoformat.DATO_FORKORTTET
+                                    datoformat.DATO
                                 )}`}
                                 variant={'info'}
                             />
@@ -76,7 +82,7 @@ const sjekkOmMigreringsdatoErEldreEnn3År = (migreringsdatoIString: string) => {
     const dato = new Date();
     const migreringsdato = new Date(migreringsdatoIString);
     const difference = dato.getTime() - migreringsdato.getTime();
-    return Math.floor(Math.abs(difference) / (1000 * 60 * 60 * 24 * 365));
+    return Math.floor(Math.abs(difference) / millisekunderIEttÅr) < 3;
 };
 
 export default Personlinje;

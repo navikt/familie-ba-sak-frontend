@@ -120,7 +120,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     <HentetLabel
                         children={`Saken ble migrert fra Infotrygd: ${formaterIsoDato(
                             åpenBehandling?.migreringsdato,
-                            datoformat.DATO_FORKORTTET
+                            datoformat.DATO_TID_SEKUNDER
                         )}`}
                     />
                 )}
