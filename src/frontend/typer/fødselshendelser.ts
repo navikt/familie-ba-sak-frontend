@@ -27,5 +27,6 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     MOR_ER_OVER_18_ÅR: 'Mor er over 18 år',
     MOR_HAR_IKKE_VERGE: 'Mor har ikke verge',
     MOR_MOTTAR_IKKE_LØPENDE_UTVIDET: 'Mor mottar ikke utvidet barnetrygd',
-    LØPER_IKKE_BARNETRYGD_FOR_BARNET: 'Ikke utbetalt barnetrygd for barnet til annen mottaker',
+    LØPER_IKKE_BARNETRYGD_FOR_BARNET:
+        'Det er ikke utbetalt barnetrygd for barnet til annen mottaker',
 };
