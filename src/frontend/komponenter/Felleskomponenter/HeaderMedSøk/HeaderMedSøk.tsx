@@ -18,7 +18,13 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({
             tittel="NAV Barnetrygd"
             brukerinfo={{ navn: brukerNavn ?? 'Ukjent', enhet: brukerEnhet ?? 'Ukjent' }}
             brukerPopoverItems={[{ name: 'Logg ut', href: `${window.origin}/auth/logout` }]}
-            eksterneLenker={[]}
+            eksterneLenker={[
+                {
+                    name: 'Rekvirer D-nr i DREK',
+                    href: `${window.origin}/redirect/drek`,
+                    isExternal: true,
+                },
+            ]}
         >
             <FagsakDeltagerSøk />
         </Header>
