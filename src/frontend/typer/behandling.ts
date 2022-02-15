@@ -231,6 +231,7 @@ export interface IBehandling {
     skalBehandlesAutomatisk: boolean;
     tilbakekreving?: ITilbakekreving;
     aktivSettPåVent?: ISettPåVent;
+    migreringsdato?: string;
 }
 
 export interface IArbeidsfordelingPåBehandling {

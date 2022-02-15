@@ -4,6 +4,7 @@ import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { mockVisningBehandling } from '../behandling/behandling.mock';
 
 interface IMockMinimalFagsak {
+    migreringsdato?: string;
     behandlinger?: VisningBehandling[];
     gjeldendeUtbetalingsperioder?: Utbetalingsperiode[];
     id?: number;
@@ -15,6 +16,7 @@ interface IMockMinimalFagsak {
 }
 
 export const mockMinimalFagsak = ({
+    migreringsdato = '',
     behandlinger = [mockVisningBehandling()],
     gjeldendeUtbetalingsperioder = [],
     id = 1,
@@ -24,6 +26,7 @@ export const mockMinimalFagsak = ({
     søkerFødselsnummer = '12345678910',
     underBehandling = false,
 }: IMockMinimalFagsak = {}): IMinimalFagsak => ({
+    migreringsdato,
     behandlinger,
     id,
     søkerFødselsnummer,

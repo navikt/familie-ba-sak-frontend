@@ -11,6 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { erBehandlingHenlagt } from '../../typer/behandling';
 import { IMinimalFagsak } from '../../typer/fagsak';
 import { IInfotrygdSak } from '../../typer/infotrygd';
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import { Sakstabell } from './Sakstabell';
 import { useInfotrygdMigrering } from './useInfotrygd';
@@ -122,6 +123,16 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                         migreringen er ferdig.
                     </Normaltekst>
                 </UIModalWrapper>
+            )}
+
+            {minimalFagsak?.migreringsdato !== '' && (
+                <AlertStripe
+                    type={'info'}
+                    children={`Saken ble migrert fra Infotrygd ${formaterIsoDato(
+                        minimalFagsak?.migreringsdato,
+                        datoformat.DATO_FORKORTTET
+                    )}`}
+                />
             )}
             <SakerTekst>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
