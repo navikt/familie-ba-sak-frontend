@@ -10816,10 +10816,10 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-paginering@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/paginering/-/paginering-1.1.1.tgz#aa4c9ab332946f158ac8c14ca1abd68ca083558a"
-  integrity sha512-xz0zZ0KHkmyx7gDtrCWaBZvpp1bCviTeujN9KXRVlQmIsv2MH+0TEcy7yg5OQVaNNy+WNgYX/yrg7b3D1hxVeA==
+paginering@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/paginering/-/paginering-2.1.1.tgz#c288a858db87b3044193301366f296e868dc22c5"
+  integrity sha512-IUsfFpIlBBT//bQ69UqxSqHkl2pxbqdQjv0Ypsr4jAByTnRFSJhLhVcmP645aOIomVwiC6ujDPHeU1yEpgshtg==
 
 param-case@^3.0.4:
   version "3.0.4"
