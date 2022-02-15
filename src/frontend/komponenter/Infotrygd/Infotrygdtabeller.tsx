@@ -125,7 +125,7 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                 </UIModalWrapper>
             )}
 
-            {minimalFagsak?.migreringsdato !== undefined && (
+            {minimalFagsak?.migreringsdato !== null && (
                 <AlertStripe
                     type={'info'}
                     children={`Saken ble migrert fra Infotrygd ${formaterIsoDato(
