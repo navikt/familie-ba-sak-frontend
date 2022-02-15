@@ -17,6 +17,7 @@ mot dev-gcp clusteret i konsollen.
     CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
     COOKIE_KEY1='<any string of length 32>'
     COOKIE_KEY2='<any string of length 32>'
+    DREK_URL=<any string eller en url for testing>
     
     SESSION_SECRET='<any string of length 32>'
     BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
