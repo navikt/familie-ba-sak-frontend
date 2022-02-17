@@ -31,5 +31,5 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     LØPER_IKKE_BARNETRYGD_FOR_BARNET:
         'Det er ikke utbetalt barnetrygd for barnet til annen mottaker',
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT:
-        'Fagsaken har ikke blitt migrert fra infotrygd etter barn ble født.',
+        'Fagsaken har ikke blitt migrert fra infotrygd etter barn ble født',
 };
