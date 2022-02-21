@@ -5117,7 +5117,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-confusing-browser-globals@^1.0.10, confusing-browser-globals@^1.0.9:
+confusing-browser-globals@^1.0.9:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.10.tgz#30d1e7f3d1b882b25ec4933d1d1adac353d20a59"
   integrity sha512-gNld/3lySHwuhaVluJUKLePYirM3QNCKzVxqAdhJII9/WXKVX5PURzMVJspS1jTslSqjeuG4KMVTSouit5YPHA==
@@ -6056,25 +6056,6 @@ escodegen@^2.0.0:
     optionator "^0.8.1"
   optionalDependencies:
     source-map "~0.6.1"
-
-eslint-config-airbnb-base@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-15.0.0.tgz#6b09add90ac79c2f8d723a2580e07f3925afd236"
-  integrity sha512-xaX3z4ZZIcFLvh2oUNvcX5oEofXda7giYmuplVxoOg5A7EXJMrUyqRgR+mhDhPK8LZ4PttFOBvCYDbX3sUoUig==
-  dependencies:
-    confusing-browser-globals "^1.0.10"
-    object.assign "^4.1.2"
-    object.entries "^1.1.5"
-    semver "^6.3.0"
-
-eslint-config-airbnb@^19.0.4:
-  version "19.0.4"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb/-/eslint-config-airbnb-19.0.4.tgz#84d4c3490ad70a0ffa571138ebcdea6ab085fdc3"
-  integrity sha512-T75QYQVQX57jiNgpF9r1KegMICE94VYwoFQyMGhrvc+lB8YF2E/M/PYDaQe1AJcWaEgqLE+ErXV1Og/+6Vyzew==
-  dependencies:
-    eslint-config-airbnb-base "^15.0.0"
-    object.assign "^4.1.2"
-    object.entries "^1.1.5"
 
 eslint-config-prettier@^8.4.0:
   version "8.4.0"
