@@ -1,8 +1,21 @@
 import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { AnnenForelderAktivitet, IKompetanse, SøkerAktivitet } from '../../typer/kompetanse';
-import { YearMonth, yearMonthTilKalenderMåned, MånedÅr } from '../../utils/kalender';
+import {
+    AnnenForelderAktivitet,
+    IKompetanse,
+    LandkodeNorge,
+    SøkerAktivitet,
+} from '../../typer/kompetanse';
+import {
+    YearMonth,
+    yearMonthTilKalenderMåned,
+    MånedÅr,
+    iDag,
+    IYearMonthPeriode,
+} from '../../utils/kalender';
 
+const isEmpty = (text?: string | number | boolean | Date | null) =>
+    text === null || text === undefined || text.toString().trim().length === 0;
 const erFør = (dato1: MånedÅr, dato2: MånedÅr) => {
     if (dato1.måned <= dato2.måned && dato1.år <= dato2.år) {
         return true;
@@ -10,58 +23,64 @@ const erFør = (dato1: MånedÅr, dato2: MånedÅr) => {
 
     return dato1.år < dato2.år;
 };
-
-const erEtter = (dato1: YearMonth, dato2: YearMonth) => {
-    return erFør(yearMonthTilKalenderMåned(dato2), yearMonthTilKalenderMåned(dato1));
-};
+const erEtter = (dato1: YearMonth, dato2: YearMonth) =>
+    erFør(yearMonthTilKalenderMåned(dato2), yearMonthTilKalenderMåned(dato1));
+const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: MånedÅr) =>
+    valgtDato.år > today.år || (valgtDato.år === today.år && valgtDato.måned > today.måned);
+const valgtTomErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
+    valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
-const erFomGyldig = (
-    felt: FeltState<YearMonth>,
-    avhengigheter?: Avhengigheter
-): FeltState<YearMonth> => {
-    if (!felt.verdi) return feil(felt, ikkeUtfyltFelt);
-    return erEtter(felt.verdi, avhengigheter?.initielFom)
-        ? ok(felt)
-        : feil(felt, `Fom. kan ikke være før: ${avhengigheter?.initielFom}`);
-};
-const erTomGyldig = (felt: FeltState<YearMonth | undefined>): FeltState<YearMonth | undefined> => {
-    return ok(felt);
-};
-const erBarnGyldig = (felt: FeltState<string[]>): FeltState<string[]> => {
-    return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Må velge minst ett barn');
-};
+const erBarnGyldig = (felt: FeltState<string[]>): FeltState<string[]> =>
+    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 const erSøkersAktivitetGyldig = (
     felt: FeltState<SøkerAktivitet | undefined>
-): FeltState<SøkerAktivitet | undefined> => {
-    return felt.verdi ? ok(felt) : feil(felt, ikkeUtfyltFelt);
-};
+): FeltState<SøkerAktivitet | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 const erAnnenForeldersAktivitetGyldig = (
     felt: FeltState<AnnenForelderAktivitet | undefined>
-): FeltState<AnnenForelderAktivitet | undefined> => {
-    return felt.verdi ? ok(felt) : feil(felt, ikkeUtfyltFelt);
-};
+): FeltState<AnnenForelderAktivitet | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 const erBarnetsBostedslandGyldig = (
     felt: FeltState<string | undefined>
-): FeltState<string | undefined> => {
-    return felt.verdi ? ok(felt) : feil(felt, ikkeUtfyltFelt);
-};
-const erPrimærlandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
-    return felt.verdi ? ok(felt) : feil(felt, ikkeUtfyltFelt);
-};
-const erSekundærlandGyldig = (
-    felt: FeltState<string | undefined>
-): FeltState<string | undefined> => {
-    return felt.verdi ? ok(felt) : feil(felt, ikkeUtfyltFelt);
+): FeltState<string | undefined> => (!isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt));
+const erPrimærlandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
+const erSekundærlandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
+
+const erKompetansePeriodeGyldig = (
+    felt: FeltState<IYearMonthPeriode>,
+    avhengigheter?: Avhengigheter
+): FeltState<IYearMonthPeriode> => {
+    const fom = felt.verdi.fom;
+    const tom = felt.verdi.tom;
+
+    if (!fom || isEmpty(fom)) {
+        return feil(felt, 'Fra og med måned må være utfylt');
+    }
+    if (!erEtter(fom, avhengigheter?.initielFom)) {
+        return feil(
+            felt,
+            `Du kan ikke legge inn fra og med måned som er før: ${avhengigheter?.initielFom}`
+        );
+    }
+    if (tom && valgtTomErNesteMånedEllerSenere(tom)) {
+        return feil(
+            felt,
+            'Du kan ikke legge inn til og med måned som er i neste måned eller senere'
+        );
+    }
+
+    return ok(felt);
 };
 
 const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKompetanse> => {
-    const nyVerdi: IKompetanse = {
+    let nyVerdi: IKompetanse = {
         ...nyKompetanse.verdi,
-        fom: nyKompetanse.verdi.fom.valider(nyKompetanse.verdi.fom, {
+        periode: nyKompetanse.verdi.periode.valider(nyKompetanse.verdi.periode, {
             initielFom: nyKompetanse.verdi.initielFom,
         }),
-        tom: nyKompetanse.verdi.tom.valider(nyKompetanse.verdi.tom),
         barn: nyKompetanse.verdi.barn.valider(nyKompetanse.verdi.barn),
         søkersAktivitet: nyKompetanse.verdi.søkersAktivitet?.valider(
             nyKompetanse.verdi.søkersAktivitet
@@ -76,9 +95,8 @@ const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKom
         sekundærland: nyKompetanse.verdi.sekundærland?.valider(nyKompetanse.verdi.sekundærland),
     };
 
-    const gyldigkompetanse: boolean =
-        nyVerdi.fom.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.tom.valideringsstatus === Valideringsstatus.OK &&
+    let gyldigkompetanse: boolean =
+        nyVerdi.periode.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.barn.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.søkersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.annenForeldersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
@@ -86,14 +104,37 @@ const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKom
         nyVerdi.primærland?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.sekundærland?.valideringsstatus === Valideringsstatus.OK;
 
+    if (
+        nyVerdi.primærland?.valideringsstatus === Valideringsstatus.OK &&
+        nyVerdi.primærland.verdi !== LandkodeNorge &&
+        nyVerdi.sekundærland?.valideringsstatus === Valideringsstatus.OK &&
+        nyVerdi.sekundærland.verdi !== LandkodeNorge
+    ) {
+        nyVerdi = {
+            ...nyVerdi,
+            primærland: {
+                ...nyVerdi.primærland,
+                valideringsstatus: Valideringsstatus.FEIL,
+                verdi: nyVerdi.primærland.verdi,
+                feilmelding: 'Norge må være valgt som primærland eller sekundærland',
+            },
+            sekundærland: {
+                ...nyVerdi.sekundærland,
+                valideringsstatus: Valideringsstatus.FEIL,
+                verdi: nyVerdi.sekundærland.verdi,
+                feilmelding: 'Norge må være valgt som primærland eller sekundærland',
+            },
+        };
+        gyldigkompetanse = false;
+    }
+
     return gyldigkompetanse
         ? ok({ ...nyKompetanse, verdi: nyVerdi })
         : feil({ ...nyKompetanse, verdi: nyVerdi }, '');
 };
 
 export {
-    erFomGyldig,
-    erTomGyldig,
+    erKompetansePeriodeGyldig,
     erBarnGyldig,
     erSøkersAktivitetGyldig,
     erAnnenForeldersAktivitetGyldig,

@@ -7,6 +7,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Heading } from '@navikt/ds-react';
 import { FeltState } from '@navikt/familie-skjema';
 
+import { IBehandling } from '../../../../typer/behandling';
 import { IKompetanse } from '../../../../typer/kompetanse';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
@@ -24,18 +25,38 @@ const Tabell = styled.table`
     }
 `;
 
+const TabellHeader = styled.th`
+    &:nth-of-type(2) {
+        width: 11rem;
+    }
+    &:nth-of-type(3) {
+        width: 9rem;
+    }
+    &:nth-of-type(4) {
+        width: 14rem;
+    }
+`;
+
 export const kompetanseFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
-    `vilkår_${kompetanse.verdi.barn.verdi.map(barn => `${barn}-`)}_${kompetanse.verdi.fom.verdi}`;
+    `kompetanse_${kompetanse.verdi.barn.verdi.map(barn => `${barn}-`)}_${
+        kompetanse.verdi.periode.verdi.fom
+    }`;
+
+export const kompetansePeriodeFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
+    `kompetanse-periode_${kompetanse.verdi.barn.verdi.map(barn => `${barn}-`)}_${
+        kompetanse.verdi.periode.verdi.fom
+    }`;
 
 interface IProps {
     kompetanser: FeltState<IKompetanse>[];
+    åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
-const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, visFeilmeldinger }) => {
+const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visFeilmeldinger }) => {
     return (
         <KompetanseContainer>
-            <Heading size="medium" level="3">
+            <Heading spacing size="medium" level="3">
                 Kompetanse
             </Heading>
             <AlertStripe
@@ -45,19 +66,20 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, visFeilmeldinger }) =
             <Tabell className={`tabell`}>
                 <thead>
                     <tr>
-                        <th>Barn</th>
-                        <th>Periode</th>
-                        <th>Kompetanse</th>
-                        <th></th>
+                        <TabellHeader>Barn</TabellHeader>
+                        <TabellHeader>Periode</TabellHeader>
+                        <TabellHeader>Kompetanse</TabellHeader>
+                        <TabellHeader></TabellHeader>
                     </tr>
                 </thead>
                 <tbody>
                     {kompetanser.map(kompetanse => (
                         <KompetanseTabellRad
                             key={`${kompetanse.verdi?.barn.verdi.map(barn => `${barn}-`)}-${
-                                kompetanse.verdi?.fom.verdi
-                            }-${kompetanse.verdi?.tom.verdi}`}
+                                kompetanse.verdi.periode.verdi.fom
+                            }-${kompetanse.verdi.periode.verdi.tom}`}
                             kompetanse={kompetanse}
+                            åpenBehandling={åpenBehandling}
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     ))}

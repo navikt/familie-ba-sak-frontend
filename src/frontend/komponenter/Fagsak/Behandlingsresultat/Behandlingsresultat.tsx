@@ -171,6 +171,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     <KompetanseSkjema
                         kompetanser={kompetanser}
                         visFeilmeldinger={visFeilmeldinger}
+                        åpenBehandling={åpenBehandling}
                     />
                 );
             case RessursStatus.FEILET:
@@ -251,7 +252,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     tittel={'For å gå videre må du rette opp følgende:'}
                     feil={[
                         ...hentKompetanserMedFeil().map((kompetanse: FeltState<IKompetanse>) => ({
-                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barn.verdi}, f.o.m.: ${kompetanse.verdi.fom.verdi} er ikke fullstendig.`,
+                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barn.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
                             skjemaelementId: kompetanseFeilmeldingId(kompetanse),
                         })),
                     ]}

@@ -8,16 +8,16 @@ import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navi
 
 import { IBehandling } from '../../typer/behandling';
 import { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
+import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
 import {
     erAnnenForeldersAktivitetGyldig,
     erBarnetsBostedslandGyldig,
     erBarnGyldig,
-    erFomGyldig,
+    erKompetansePeriodeGyldig,
     erPrimærlandGyldig,
     erSekundærlandGyldig,
     erSøkersAktivitetGyldig,
-    erTomGyldig,
     validerKompetanse,
 } from './valideringKompetanse';
 
@@ -61,9 +61,12 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
                 {
                     id: restKompetanse.id,
                     behandlingId: restKompetanse.behandlingId,
+                    status: restKompetanse.status,
                     initielFom: restKompetanse.fom,
-                    fom: lagInitiellFelt(restKompetanse.fom, erFomGyldig),
-                    tom: lagInitiellFelt(restKompetanse.tom, erTomGyldig),
+                    periode: lagInitiellFelt(
+                        nyYearMonthPeriode(restKompetanse.fom, restKompetanse.tom),
+                        erKompetansePeriodeGyldig
+                    ),
                     barn: lagInitiellFelt(restKompetanse.barn, erBarnGyldig),
                     søkersAktivitet: lagInitiellFelt(
                         restKompetanse.søkersAktivitet,
@@ -118,9 +121,11 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
             method: 'PUT',
             url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}/${redigerbartKompetanse.verdi.id}`,
             data: {
-                ...redigerbartKompetanse.verdi,
-                fom: redigerbartKompetanse.verdi.fom.verdi,
-                tom: redigerbartKompetanse.verdi.tom.verdi,
+                id: redigerbartKompetanse.verdi.id,
+                behandlingId: redigerbartKompetanse.verdi.behandlingId,
+                status: redigerbartKompetanse.verdi.status,
+                fom: redigerbartKompetanse.verdi.periode.verdi.fom || '', // undefined fom vil bli stoppet i valideringen
+                tom: redigerbartKompetanse.verdi.periode.verdi.tom,
                 barn: redigerbartKompetanse.verdi.barn.verdi,
                 søkersAktivitet: redigerbartKompetanse.verdi.søkersAktivitet.verdi,
                 annenForeldersAktivitet: redigerbartKompetanse.verdi.annenForeldersAktivitet.verdi,
@@ -131,10 +136,10 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
         });
     };
 
-    const deleteKompetanse = (kompetanseId: number) => {
+    const deleteKompetanse = (kompetanseId: number): Promise<Ressurs<IRestKompetanse[]>> => {
         settKompetanseSubmit(KompetanseSubmit.DELETE);
 
-        return request<string, IBehandling>({
+        return request<string, IRestKompetanse[]>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}/${kompetanseId}`,
         });

@@ -32,7 +32,12 @@ const Landvelger = styled(CountrySelect)`
 
     .navds-error-message {
         color: ${navFarger.redError};
+        font-size: 1rem;
         font-weight: bold;
+
+        &::before {
+            display: none;
+        }
     }
 
     .navds-body-long {
@@ -71,8 +76,10 @@ const FamilieLandvelger: React.FC<IProps> = ({
     medWave = false,
     erLesevisning = false,
     onChange,
+    ...props
 }) => {
     let landvelgerProps: CountrySelectProps<Country> = {
+        ...props,
         id,
         values: value,
         placeholder,
@@ -89,11 +96,7 @@ const FamilieLandvelger: React.FC<IProps> = ({
     if (eøs) {
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
     }
-    return (
-        <>
-            <Landvelger {...landvelgerProps} place label={<Element>{label}</Element>} />
-        </>
-    );
+    return <Landvelger {...landvelgerProps} place label={<Element>{label}</Element>} />;
 };
 
 export default FamilieLandvelger;

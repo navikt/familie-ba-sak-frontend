@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import dayjs from 'dayjs';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
@@ -9,7 +10,10 @@ import { OptionType } from '@navikt/familie-form-elements';
 import { FeltState } from '@navikt/familie-skjema';
 
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import { IKompetanse } from '../../../../typer/kompetanse';
+import { IBehandling } from '../../../../typer/behandling';
+import { IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
+import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
+import { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import KompetanseIkon from './KompetanseIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
@@ -49,10 +53,15 @@ const EkspandertTd = styled.td`
 
 interface IProps {
     kompetanse: FeltState<IKompetanse>;
+    åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
-const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, visFeilmeldinger }) => {
+const KompetanseTabellRad: React.FC<IProps> = ({
+    kompetanse,
+    åpenBehandling,
+    visFeilmeldinger,
+}) => {
     const [ekspandertKompetanse, settEkspandertKompetanse] = React.useState<boolean>(false);
     const [redigerbartKompetanse, settRedigerbartKompetanse] =
         useState<FeltState<IKompetanse>>(kompetanse);
@@ -76,33 +85,73 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, visFeilmeldinger })
         }
     };
 
+    const lagLabelBarn = (barnetsIdent: string): string => {
+        const barnet = åpenBehandling.personer.find(person => person.personIdent === barnetsIdent);
+        if (barnet) {
+            return `${barnet.navn} (${hentAlder(barnet.fødselsdato)} år) ${barnet.personIdent}`;
+        } else {
+            return barnetsIdent;
+        }
+    };
+
     const barn: OptionType[] = kompetanse.verdi?.barn.verdi.map(barn => ({
-        value: barn + '',
-        label: barn + '',
+        value: barn,
+        label: lagLabelBarn(barn),
     }));
+
+    const formatterPeriode = (periode: IYearMonthPeriode): string => {
+        const fom = dayjs(periode.fom, datoformat.ISO_MÅNED);
+        const tom = dayjs(periode.tom, datoformat.ISO_MÅNED);
+
+        if (!fom.isValid() || !tom.isValid()) {
+            throw new Error(`Periode '${periode}' er ugyldig`);
+        }
+
+        return `${formaterIsoDato(periode.fom, datoformat.MÅNED_ÅR_KORTNAVN)} - ${
+            periode.tom ? formaterIsoDato(periode.tom, datoformat.MÅNED_ÅR_KORTNAVN) : ''
+        }`;
+    };
 
     return (
         <>
             <EkspanderbarTr ekspandert={ekspandertKompetanse}>
                 <td>
                     <KompetanseVurdertCelle>
-                        <KompetanseIkon vurdert={undefined} width={20} heigth={20} />
+                        <div>
+                            <KompetanseIkon
+                                status={kompetanse.verdi.status}
+                                width={20}
+                                heigth={20}
+                            />
+                        </div>
                         <BarnDiv>
                             {kompetanse.verdi?.barn.verdi.map(barn => (
-                                <Normaltekst key={barn}>{barn}</Normaltekst>
+                                <Normaltekst key={barn}>{lagLabelBarn(barn)}</Normaltekst>
                             ))}
                         </BarnDiv>
                     </KompetanseVurdertCelle>
                 </td>
-                <td>{`${kompetanse.verdi?.fom.verdi ? kompetanse.verdi?.fom.verdi : ''} - ${
-                    kompetanse.verdi?.tom.verdi
-                }`}</td>
+                <td>
+                    {`${
+                        kompetanse.verdi.periode.verdi.fom ? kompetanse.verdi.periode.verdi.fom : ''
+                    } - ${
+                        kompetanse.verdi.periode.verdi.tom ? kompetanse.verdi.periode.verdi.tom : ''
+                    }`}
+                    <br />
+                    {formatterPeriode(kompetanse.verdi.periode.verdi)}
+                </td>
                 <td>{visVurdertKompetanse()}</td>
                 <ToggleFormKnappTd>
                     <IkonKnapp
                         id={kompetanseFeilmeldingId(kompetanse)}
                         erLesevisning={false}
-                        label={ekspandertKompetanse ? `Skjul` : `Vis`}
+                        label={
+                            !ekspandertKompetanse
+                                ? redigerbartKompetanse.verdi.status === KompetanseStatus.OK
+                                    ? 'Endre'
+                                    : 'Fastsett kompetanse'
+                                : `Lukk`
+                        }
                         onClick={() => toggleForm(true)}
                         ikon={<FamilieChevron retning={ekspandertKompetanse ? 'opp' : 'ned'} />}
                         mini={true}

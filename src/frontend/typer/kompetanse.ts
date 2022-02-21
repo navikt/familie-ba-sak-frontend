@@ -1,6 +1,8 @@
 import { FeltState } from '@navikt/familie-skjema';
 
-import { YearMonth } from '../utils/kalender';
+import { IYearMonthPeriode, YearMonth } from '../utils/kalender';
+
+export const LandkodeNorge = 'NO';
 
 export enum SøkerAktivitet {
     IARBEID_NORGE = 'IARBEID_NORGE',
@@ -59,9 +61,16 @@ export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = 
     AF_INAKTIV: 'Inaktiv',
 };
 
+export enum KompetanseStatus {
+    IKKE_UTFYLT = 'IKKE_UTFYLT',
+    UFULLSTENDIG = 'UFULLSTENDIG',
+    OK = 'OK',
+}
+
 export interface IRestKompetanse {
     id: number;
     behandlingId: number;
+    status: KompetanseStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barn: string[];
@@ -75,9 +84,9 @@ export interface IRestKompetanse {
 export interface IKompetanse {
     id: number;
     behandlingId: number;
+    status: KompetanseStatus;
     initielFom: YearMonth;
-    fom: FeltState<YearMonth>;
-    tom: FeltState<YearMonth | undefined>;
+    periode: FeltState<IYearMonthPeriode>;
     barn: FeltState<string[]>;
     søkersAktivitet: FeltState<SøkerAktivitet | undefined>;
     annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
