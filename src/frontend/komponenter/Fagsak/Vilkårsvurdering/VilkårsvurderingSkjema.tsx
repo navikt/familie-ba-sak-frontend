@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
@@ -69,20 +69,31 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
-    const { erLesevisning, erMigreringsbehandling, settÅpenBehandling } = useBehandling();
-    const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
-        vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
-            return {
+    const { erLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent } =
+        useBehandling();
+
+    const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
+        personResultat.vilkårResultater.some(
+            vilkårResultatFelt => vilkårResultatFelt.verdi.resultat.verdi === Resultat.IKKE_VURDERT
+        );
+
+    const hentEkspantdertePersoner = () =>
+        vilkårsvurdering.reduce(
+            (personMapEkspandert, personResultat) => ({
                 ...personMapEkspandert,
                 [personResultat.personIdent]:
-                    erLesevisning() ||
-                    personResultat.vilkårResultater.filter(
-                        (vilkårResultat: FeltState<IVilkårResultat>) =>
-                            vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-                    ).length > 0,
-            };
-        }, {})
+                    erLesevisning() || personHarIkkevurdertVilkår(personResultat),
+            }),
+            {}
+        );
+
+    const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
+        hentEkspantdertePersoner()
     );
+
+    useEffect(() => {
+        settPersonErEkspandert(hentEkspantdertePersoner());
+    }, [aktivSettPåVent]);
 
     const leggTilVilkårUtvidet = (personIdent: string) => {
         const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);

@@ -219,6 +219,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         oppdaterRegisteropplysninger,
         sendTilBeslutterNesteOnClick,
         erMigreringsbehandling,
+        aktivSettPåVent: hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent,
     };
 });
 
