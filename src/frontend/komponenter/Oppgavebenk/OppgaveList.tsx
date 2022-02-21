@@ -93,6 +93,11 @@ const OppgaveList: React.FunctionComponent = () => {
                                                         : '',
                                                     styleFraAccessorEllerId(cell.column.id),
                                                 ])}
+                                                title={
+                                                    (typeof cell.value === 'string' &&
+                                                        cell.value) ||
+                                                    ''
+                                                }
                                                 {...cell.getCellProps()}
                                             >
                                                 {cell.render('Cell')}
