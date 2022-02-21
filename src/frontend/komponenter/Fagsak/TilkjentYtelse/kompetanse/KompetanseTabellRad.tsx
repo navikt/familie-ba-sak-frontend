@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import dayjs from 'dayjs';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
@@ -100,13 +99,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({
     }));
 
     const formatterPeriode = (periode: IYearMonthPeriode): string => {
-        const fom = dayjs(periode.fom, datoformat.ISO_MÅNED);
-        const tom = dayjs(periode.tom, datoformat.ISO_MÅNED);
-
-        if (!fom.isValid() || !tom.isValid()) {
-            throw new Error(`Periode '${periode}' er ugyldig`);
-        }
-
         return `${formaterIsoDato(periode.fom, datoformat.MÅNED_ÅR_KORTNAVN)} - ${
             periode.tom ? formaterIsoDato(periode.tom, datoformat.MÅNED_ÅR_KORTNAVN) : ''
         }`;
@@ -131,15 +123,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         </BarnDiv>
                     </KompetanseVurdertCelle>
                 </td>
-                <td>
-                    {`${
-                        kompetanse.verdi.periode.verdi.fom ? kompetanse.verdi.periode.verdi.fom : ''
-                    } - ${
-                        kompetanse.verdi.periode.verdi.tom ? kompetanse.verdi.periode.verdi.tom : ''
-                    }`}
-                    <br />
-                    {formatterPeriode(kompetanse.verdi.periode.verdi)}
-                </td>
+                <td>{formatterPeriode(kompetanse.verdi.periode.verdi)}</td>
                 <td>{visVurdertKompetanse()}</td>
                 <ToggleFormKnappTd>
                     <IkonKnapp

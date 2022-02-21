@@ -153,8 +153,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 settKompetanseSubmit(KompetanseSubmit.NONE);
                 if (oppdatertKompetanser.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEnKompetanse(false);
-                    behandleHentetKompetanser(oppdatertKompetanser);
                     settEkspandertKompetanse(false);
+                    behandleHentetKompetanser(oppdatertKompetanser);
                 } else if (
                     oppdatertKompetanser.status === RessursStatus.FEILET ||
                     oppdatertKompetanser.status === RessursStatus.FUNKSJONELL_FEIL ||
