@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@amplitude/analytics-connector@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/analytics-connector/-/analytics-connector-1.0.0.tgz#cb8d84b7c3eb2809f2485d5c105699b01a8c3af6"
+  integrity sha512-6RZwSMjhO9VD5rw5FV5U7pU00drDQAQqA+ZTv4mSop8XEws9TimzynGYzLYLijV0vnK7h6j7D3+VJtM4f4MlNA==
+  dependencies:
+    "@amplitude/ua-parser-js" "0.7.26"
+
 "@amplitude/types@^1.8.2":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.8.2.tgz#34315ba822de569c1d02a7c001913b7ac2fbc04c"
@@ -1819,21 +1826,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.13", "@babel/runtime@^7.13.10", "@babel/runtime@^7.4.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
-  version "7.15.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
-  integrity sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==
-  dependencies:
-    regenerator-runtime "^0.13.4"
-
-"@babel/runtime@^7.16.3":
-  version "7.16.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.3.tgz#b86f0db02a04187a3c17caa77de69840165d42d5"
-  integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
-  dependencies:
-    regenerator-runtime "^0.13.4"
-
-"@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.4", "@babel/runtime@^7.8.3":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.13", "@babel/runtime@^7.13.10", "@babel/runtime@^7.16.3", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.7.tgz#03ff99f64106588c9c403c6ecb8c3bafbbdff1fa"
   integrity sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==
@@ -3984,11 +3977,12 @@ alphanum-sort@^1.0.2:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@^8.15.1:
-  version "8.16.0"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.16.0.tgz#7c4faf4dc16342c6f377d775d0a02c0db3f47cba"
-  integrity sha512-PtHuYphktZsCf2BRSbb0EMuClQjHP2kSTDz2QBy6cv18yRvqVs3I2MB386BfeOxgxR16J/OlfFVBWhv9CX2rYw==
+amplitude-js@^8.17.0:
+  version "8.17.0"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.17.0.tgz#fa20e28fa3945fd0447cfa2bfadfe5a7b2c71c5f"
+  integrity sha512-9Ovx/15Wt4byNSKpesaTaNnHmwgkV9pn0BfI70qHr0iaPgEAtMV0HdA+Zs6555ODp3pvrmj5JTXDl3/DPLmNRQ==
   dependencies:
+    "@amplitude/analytics-connector" "1.0.0"
     "@amplitude/ua-parser-js" "0.7.26"
     "@amplitude/utils" "^1.0.5"
     "@babel/runtime" "^7.3.4"
@@ -9447,6 +9441,11 @@ nav-frontend-typografi@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-4.0.1.tgz#dee38984be84bc472e1ee3b726fa69b8f0b363b9"
   integrity sha512-zJrvysIWqZm0HSJqqgc1G5Lqr8bLO16B9Pg/FW7+mJQGGz/iqPhX5vvIFTXqAlXVo95qImoZ72uiWiHHRdGhPQ==
+
+nav-hoykontrast@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nav-hoykontrast/-/nav-hoykontrast-2.1.2.tgz#4e6b686fa67af8b4381f7c33271612b89230a6c2"
+  integrity sha512-2mwwbiSImWdLh4m2Jhr1YKf0Ew/+C3bUCyVDbUCWXo8n3N2fZdweH2NSIdI6Zpk3fyp3T/E74vArOHkMSVcG9Q==
 
 needle@^2.5.2:
   version "2.9.1"
