@@ -90,6 +90,24 @@ const useOpprettBehandling = (
         },
     });
 
+    const søknadMottattDato = useFelt<FamilieIsoDate | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge mottatt dato'),
+        avhengigheter: { behandlingstype, behandlingsårsak },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return (
+                behandlingstypeVerdi === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                (behandlingstypeVerdi === Behandlingstype.REVURDERING &&
+                    behandlingsårsakVerdi === BehandlingÅrsak.SØKNAD)
+            );
+        },
+    });
+
     const valgteBarn = useFelt({
         verdi: [],
         valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
@@ -110,6 +128,7 @@ const useOpprettBehandling = (
             behandlingsårsak: BehandlingÅrsak | '';
             behandlingstema: IBehandlingstema | undefined;
             migreringsdato: FamilieIsoDate | undefined;
+            søknadMottattDato: FamilieIsoDate | undefined;
             valgteBarn: ISelectOption[];
         },
         IBehandling
@@ -119,6 +138,7 @@ const useOpprettBehandling = (
             behandlingsårsak,
             behandlingstema,
             migreringsdato,
+            søknadMottattDato,
             valgteBarn,
         },
         skjemanavn: 'Opprett behandling modal',
@@ -174,6 +194,7 @@ const useOpprettBehandling = (
                             nyMigreringsdato: erMigreringFraInfoTrygd
                                 ? skjema.felter.migreringsdato.verdi
                                 : undefined,
+                            søknadMottattDato: skjema.felter.søknadMottattDato.verdi ?? undefined,
                             barnasIdenter: erHelmanuellMigrering
                                 ? skjema.felter.valgteBarn.verdi.map(option => option.value)
                                 : undefined,
