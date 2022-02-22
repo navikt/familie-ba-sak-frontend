@@ -31,11 +31,9 @@ import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandli
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
-import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
-    const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -219,14 +217,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
-        if (restFagsak.status === RessursStatus.SUKSESS) {
-            skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
-            settMinimalFagsak(restFagsak.data);
-            return '';
-        } else {
-            return 'Ukjent feil ved henting av fagsak.';
-        }
+        skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
+        return '';
     };
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {
