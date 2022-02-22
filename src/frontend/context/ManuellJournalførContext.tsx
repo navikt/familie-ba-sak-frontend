@@ -297,9 +297,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const hentSorterteBehandlinger = () => {
-        return dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.minimalFagsak?.behandlinger.length
-            ? dataForManuellJournalføring.data.minimalFagsak.behandlinger.sort((a, b) =>
+        return minimalFagsak?.behandlinger.length
+            ? minimalFagsak.behandlinger.sort((a, b) =>
                   kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )
             : [];
