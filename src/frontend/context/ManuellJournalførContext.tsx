@@ -220,13 +220,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
 
         const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
-        if (restFagsak.status === RessursStatus.SUKSESS) {
-            skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
+        skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
+        if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
             settMinimalFagsak(restFagsak.data);
-            return '';
         } else {
-            return 'Ukjent feil ved henting av fagsak.';
+            settMinimalFagsak(undefined);
         }
+        return '';
     };
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {
@@ -297,9 +297,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const hentSorterteBehandlinger = () => {
-        return dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.minimalFagsak?.behandlinger.length
-            ? dataForManuellJournalføring.data.minimalFagsak.behandlinger.sort((a, b) =>
+        return minimalFagsak?.behandlinger.length
+            ? minimalFagsak.behandlinger.sort((a, b) =>
                   kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )
             : [];
