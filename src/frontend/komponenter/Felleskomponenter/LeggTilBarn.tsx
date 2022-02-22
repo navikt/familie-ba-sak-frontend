@@ -16,14 +16,12 @@ import { Avhengigheter, feil, Felt, ok, useFelt, useSkjema } from '@navikt/famil
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
-    hentDataFraRessursMedFallback,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import Pluss from '../../ikoner/Pluss';
-import { LoggType } from '../../typer/logg';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../typer/person';
 import { IBarnMedOpplysninger } from '../../typer/søknad';
 import { FamilieIsoDate } from '../../utils/kalender';
@@ -76,16 +74,10 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
 
     const [visModal, settVisModal] = useState<boolean>(false);
 
-    const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(false);
+    const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
 
     React.useEffect(() => {
-        settKanLeggeTilUregistrerteBarn(
-            hentDataFraRessursMedFallback(logg, [])?.some(
-                l =>
-                    l.type === LoggType.DISTRIBUERE_BREV &&
-                    (l.tekst.includes('Innhente') || l.tekst.includes('Innhenting'))
-            )
-        );
+        settKanLeggeTilUregistrerteBarn(true);
     }, [logg.status]);
 
     const erFolkeregistrert = useFelt<boolean>({
