@@ -114,11 +114,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år)`,
         }));
 
-    const kanLagreSøknadMottattDato =
-        behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING ||
-        (behandlingstype.verdi === Behandlingstype.REVURDERING &&
-            behandlingsårsak.verdi === BehandlingÅrsak.SØKNAD);
-
     return (
         <>
             <FamilieSelect
@@ -298,7 +293,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     )}
                 </>
             )}
-            {kanLagreSøknadMottattDato && søknadMottattDato?.erSynlig && (
+            {søknadMottattDato?.erSynlig && (
                 <>
                     <FixedDatoVelger
                         {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
