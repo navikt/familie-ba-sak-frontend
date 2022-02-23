@@ -38,18 +38,6 @@ const Container = styled.div`
     max-width: 30rem;
     border-left: 0.0625rem solid ${navFarger.navOransje};
     padding-left: 2rem;
-
-    & fieldset.skjemagruppe {
-        margin-bottom: 2.5rem;
-    }
-
-    & div.skjemaelement {
-        margin-bottom: 2.5rem;
-    }
-`;
-
-const BarneContainer = styled.div`
-    margin-bottom: 2.5rem;
 `;
 
 const StyledLegend = styled.legend`
@@ -68,20 +56,16 @@ const FlexDiv = styled.div`
         z-index: 0;
     }
 
-    & div.skjemaelement {
+    div div.skjemaelement {
         margin-bottom: 0rem;
     }
-`;
-
-const StyledLandvelger = styled(FamilieLandvelger)`
-    margin-bottom: 2.5rem;
 `;
 
 const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
-    margin-top: 3rem;
+    margin-top: 2rem;
 `;
 
 interface IProps {
@@ -212,7 +196,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     return (
         <SkjemaGruppe>
             <Container>
-                <BarneContainer>
+                <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         erLesevisning={lesevisning}
                         label={'Barn'}
@@ -228,7 +212,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 : ''
                         }
                     />
-                </BarneContainer>
+                </div>
                 <SkjemaGruppe
                     className={lesevisning ? 'lesevisning' : ''}
                     feilmeldingId={kompetansePeriodeFeilmeldingId(redigerbartKompetanse)}
@@ -396,7 +380,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
-                <StyledLandvelger
+                <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'bostedadresse'}
                     label={'Barnets bostedsland'}
@@ -423,7 +407,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                 />
-                <StyledLandvelger
+                <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'primærland'}
                     label={'Kompetent land (primærland)'}
@@ -450,7 +434,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                 />
-                <StyledLandvelger
+                <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'bostedadresse'}
                     label={'Differanseland (sekundærland)'}

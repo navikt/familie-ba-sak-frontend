@@ -76,10 +76,8 @@ const FamilieLandvelger: React.FC<IProps> = ({
     medWave = false,
     erLesevisning = false,
     onChange,
-    ...props
 }) => {
     let landvelgerProps: CountrySelectProps<Country> = {
-        ...props,
         id,
         values: value,
         placeholder,
@@ -96,7 +94,11 @@ const FamilieLandvelger: React.FC<IProps> = ({
     if (eøs) {
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
     }
-    return <Landvelger {...landvelgerProps} place label={<Element>{label}</Element>} />;
+    return (
+        <div className={'skjemaelement'}>
+            <Landvelger {...landvelgerProps} place label={<Element>{label}</Element>} />
+        </div>
+    );
 };
 
 export default FamilieLandvelger;

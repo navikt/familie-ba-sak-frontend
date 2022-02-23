@@ -19,9 +19,13 @@ const Tabell = styled.table`
     margin-top: 2rem;
     table-layout: fixed;
     min-width: 64rem;
-    td:first-child .checkboks + .skjemaelement__label {
-        text-indent: 2rem;
-        width: 13rem;
+
+    & fieldset.skjemagruppe {
+        margin-bottom: 1.5rem;
+    }
+
+    & div.skjemaelement {
+        margin-bottom: 1.5rem;
     }
 `;
 
