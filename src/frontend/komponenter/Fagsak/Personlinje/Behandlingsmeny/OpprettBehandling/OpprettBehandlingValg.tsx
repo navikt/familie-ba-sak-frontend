@@ -53,6 +53,7 @@ interface IProps {
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
     behandlingstema: Felt<IBehandlingstema | undefined>;
     migreringsdato?: Felt<FamilieIsoDate | undefined>;
+    søknadMottattDato?: Felt<FamilieIsoDate | undefined>;
     minimalFagsak?: IMinimalFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
@@ -74,6 +75,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     behandlingsårsak,
     behandlingstema,
     migreringsdato = undefined,
+    søknadMottattDato = undefined,
     minimalFagsak,
     visFeilmeldinger,
     erLesevisning = false,
@@ -288,6 +290,19 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     />
                     {migreringsdato.feilmelding && visFeilmeldinger && (
                         <FeltFeilmelding>{migreringsdato.feilmelding}</FeltFeilmelding>
+                    )}
+                </>
+            )}
+            {søknadMottattDato?.erSynlig && (
+                <>
+                    <FixedDatoVelger
+                        {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
+                        valgtDato={søknadMottattDato.verdi}
+                        label={'Mottatt dato'}
+                        placeholder={'DD.MM.ÅÅÅÅ'}
+                    />
+                    {søknadMottattDato.feilmelding && visFeilmeldinger && (
+                        <FeltFeilmelding>{søknadMottattDato.feilmelding}</FeltFeilmelding>
                     )}
                 </>
             )}
