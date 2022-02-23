@@ -232,6 +232,7 @@ export interface IBehandling {
     tilbakekreving?: ITilbakekreving;
     aktivSettPåVent?: ISettPåVent;
     migreringsdato?: string;
+    søknadMottattDato?: string;
 }
 
 export interface IArbeidsfordelingPåBehandling {
