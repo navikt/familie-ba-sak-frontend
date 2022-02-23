@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
@@ -80,13 +80,18 @@ const VilkårTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { toggles } = useApp();
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-    );
+    const hentInitiellEkspandering = () =>
+        erLesevisning() || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] =
         useState<FeltState<IVilkårResultat>>(vilkårResultat);
+
+    useEffect(() => {
+        settEkspandertVilkår(hentInitiellEkspandering());
+    }, [aktivSettPåVent]);
 
     const periodeErTom =
         !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
