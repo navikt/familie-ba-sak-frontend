@@ -86,7 +86,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                     >
                                         <KnyttTilBehandlingTd>
                                             <FamilieCheckbox
-                                                id={behandlingId.toLocaleString()}
+                                                id={behandlingId.toString()}
                                                 erLesevisning={erLesevisning()}
                                                 label={'-'}
                                                 checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
