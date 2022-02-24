@@ -44,7 +44,7 @@
     "@navikt/familie-visittkort": "^3.0.0",
     "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
-    "@sentry/browser": "^6.17.1",
+    "@sentry/browser": "^6.18.0",
     "@sentry/core": "^6.17.1",
     "@sentry/tracing": "^6.17.1",
     "@sentry/webpack-plugin": "^1.18.6",
