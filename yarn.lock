@@ -2398,10 +2398,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/ds-css@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.14.1.tgz#0e3a37b802043106ecdca7ed154b82d7384b0441"
-  integrity sha512-mkbrnUcXIfQSCGoydmr3Vo5/1qRlWX9/s50nlKz6GviV+7b75XiG0CL/wf1QIqfmdbYtCMLRqPVoW9TQbfuleA==
+"@navikt/ds-css@0.15.10":
+  version "0.15.10"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.15.10/c0e93d2b82bfdc2d1962e932e332269f0fcd3cee520ab532531e8258fdec38bd#6743a6e927aaeda9767139faf69dbd500ac3ad49"
+  integrity sha512-SArfLUWqmVLkbNbTTLV3YgPldXR9iXqkGR4SPp0MkbzWC2AmdSb403YLnSZphBr/lIR7stu/y5YMm2FiRhtIDA==
 
 "@navikt/ds-icons@^0.2.1":
   version "0.2.2"
