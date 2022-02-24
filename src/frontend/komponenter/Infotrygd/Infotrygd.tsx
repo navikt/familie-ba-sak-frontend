@@ -77,7 +77,7 @@ export const Infotrygd: React.FC = () => {
         ) {
             return (
                 <AlertStripe
-                    children={migrerInfotrygdSakRessurs.frontendFeilmelding}
+                    children="Saken kan ikke migreres. Du må behandle saken i Infotrygd."
                     type={'feil'}
                 />
             );
