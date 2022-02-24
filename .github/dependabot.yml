@@ -1,5 +1,10 @@
 version: 2
 
+registries:
+  npm-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.NAV_READ_PACKAGES }}
 updates:
 - package-ecosystem: npm
   directory: "/"
@@ -7,6 +12,7 @@ updates:
     interval: daily
     time: "18:00"
   open-pull-requests-limit: 10
+  registries: "*"
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
