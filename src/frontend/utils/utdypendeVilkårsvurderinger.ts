@@ -10,7 +10,8 @@ export interface UtdypendeVilkRsvurderingAvhengigheter {
 }
 
 export const bestemMuligeUtdypendeVilkårsvurderinger = (
-    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
+    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter,
+    skalViseDeltBostedSkalIkkeDeles: boolean
 ): UtdypendeVilkårsvurdering[] => {
     /*
     Det er mange ting på avhengigheter her som ikke brukes for øyeblikket, men som vil bli nødvendig å ha tilgjengelig senere
@@ -28,10 +29,12 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
             ? [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]
             : []),
         ...(vilkårType === VilkårType.BOR_MED_SØKER
-            ? [
-                  UtdypendeVilkårsvurdering.DELT_BOSTED,
-                  UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
-              ]
+            ? skalViseDeltBostedSkalIkkeDeles
+                ? [
+                      UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
+                      UtdypendeVilkårsvurdering.DELT_BOSTED,
+                  ]
+                : [UtdypendeVilkårsvurdering.DELT_BOSTED]
             : []),
     ];
 };
