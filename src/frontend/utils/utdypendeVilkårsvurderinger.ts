@@ -27,6 +27,11 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
         ...(vilkårType === VilkårType.BOSATT_I_RIKET
             ? [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]
             : []),
-        ...(vilkårType === VilkårType.BOR_MED_SØKER ? [UtdypendeVilkårsvurdering.DELT_BOSTED] : []),
+        ...(vilkårType === VilkårType.BOR_MED_SØKER
+            ? [
+                  UtdypendeVilkårsvurdering.DELT_BOSTED,
+                  UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
+              ]
+            : []),
     ];
 };

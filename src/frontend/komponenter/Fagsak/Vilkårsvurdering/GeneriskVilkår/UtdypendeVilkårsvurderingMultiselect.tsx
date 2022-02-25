@@ -24,6 +24,7 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
     [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
     [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
     [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted: skal deles',
+    [UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES]: 'Delt bosted: skal ikke deles',
 };
 
 const mapUtdypendeVilkårsvurderingTilOption = (
