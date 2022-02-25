@@ -23,7 +23,7 @@ interface Props {
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
     [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
     [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
-    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted',
+    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted: skal deles',
 };
 
 const mapUtdypendeVilkårsvurderingTilOption = (
