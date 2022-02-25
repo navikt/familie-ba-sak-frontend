@@ -1,7 +1,9 @@
 import { GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { IBehandling } from '../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import {
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
@@ -24,17 +26,24 @@ export const useVilkårBegrunnelser = ({
     periode: IPeriode;
     åpenBehandling: IBehandling;
 }) => {
+    const { toggles } = useApp();
+
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiodeMedBegrunnelser.type) {
             case Vedtaksperiodetype.UTBETALING:
-                return [
+                const begrunnelsetyperForUtbetaling = [
                     VedtakBegrunnelseType.INNVILGET,
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                 ];
+                if (toggles[ToggleNavn.ingenOverlappHenlegglese]) {
+                    return [...begrunnelsetyperForUtbetaling, Vedtaksperiodetype.ENDRET_UTBETALING];
+                } else {
+                    return begrunnelsetyperForUtbetaling;
+                }
             case Vedtaksperiodetype.FORTSATT_INNVILGET:
                 return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
             case Vedtaksperiodetype.OPPHØR:

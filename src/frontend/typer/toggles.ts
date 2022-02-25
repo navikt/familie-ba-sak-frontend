@@ -11,6 +11,7 @@ export enum ToggleNavn {
     brukEndringslogg = 'familie-ba-sak.endringslogg',
     skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
+    ingenOverlappHenlegglese = 'familie-ba-sak.ingen-overlapp-vedtaksperioder.utgivelse',
 }
 
 export const alleTogglerAv = (): IToggles => {
