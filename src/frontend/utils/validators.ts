@@ -206,10 +206,11 @@ export const erBegrunnelseGyldig = (
 
 export const erUtdypendeVilkårsvurderingerGyldig = (
     utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
-    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
+    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter,
+    skalViseDeltBostedSkalIkkeDeles: boolean
 ): boolean => {
     const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
-        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
+        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter, skalViseDeltBostedSkalIkkeDeles);
 
     return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
         if (!acc) return false;

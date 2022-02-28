@@ -17,11 +17,13 @@ describe('Utdypende Vilkårsvurderinger', () => {
             [
                 UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurdering.DELT_BOSTED,
+                UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
             ],
             {
                 ...avhengigheter,
                 vilkårType: VilkårType.BOR_MED_SØKER,
-            }
+            },
+            true
         );
         expect(actual).toBe(true);
     });
@@ -32,11 +34,13 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP,
                 UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurdering.DELT_BOSTED,
+                UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
             ],
             {
                 ...avhengigheter,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
-            }
+            },
+            true
         );
         expect(actual).toBe(false);
     });
