@@ -23,7 +23,8 @@ interface Props {
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
     [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
     [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
-    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted',
+    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted: skal deles',
+    [UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES]: 'Delt bosted: skal ikke deles',
 };
 
 const mapUtdypendeVilkårsvurderingTilOption = (
@@ -73,14 +74,16 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     };
 
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
-        utdypendeVilkårsvurderingAvhengigheter
+        utdypendeVilkårsvurderingAvhengigheter,
+        toggles[ToggleNavn.deltBostedSkalIkkeDeles]
     );
 
     useEffect(() => {
         if (
             !erUtdypendeVilkårsvurderingerGyldig(
                 redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                utdypendeVilkårsvurderingAvhengigheter
+                utdypendeVilkårsvurderingAvhengigheter,
+                toggles[ToggleNavn.deltBostedSkalIkkeDeles]
             )
         ) {
             validerOgSettRedigerbartVilkår({
