@@ -39,7 +39,10 @@ describe('utils/formatter', () => {
     });
 
     test('Skal hente riktig alder fra fødselsdato', () => {
-        expect(hentAlder(serializeIso8601String(trekkFra(iDag(), 2, KalenderEnhet.ÅR)))).toBe(2);
+        const toÅrSiden = trekkFra(iDag(), 2, KalenderEnhet.ÅR);
+        expect(hentAlder(serializeIso8601String(trekkFra(toÅrSiden, 1, KalenderEnhet.DAG)))).toBe(
+            2
+        );
     });
 
     test('Skal hente riktig alder før og etter fødselsdato', () => {
