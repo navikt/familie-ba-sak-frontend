@@ -4,7 +4,7 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 
 interface MånedProps {
     måned: string | undefined;
-    settMåned: (måned: string) => void;
+    settMåned: (måned: string | undefined) => void;
     lesevisning?: boolean;
     disabled?: boolean;
     className?: string;
@@ -38,11 +38,11 @@ const MånedVelger: React.FC<MånedProps> = ({
         <FamilieSelect
             erLesevisning={lesevisning}
             lesevisningVerdi={måned ? månedValg.find(mnd => mnd.mndNr === måned)?.verdi : ''}
-            value={måned}
+            value={måned ?? ''}
             className={className}
             onChange={event => {
                 event.persist();
-                settMåned(event.target.value);
+                settMåned(event.target.value !== '' ? event.target.value : undefined);
             }}
             disabled={disabled}
             feil={feil}
