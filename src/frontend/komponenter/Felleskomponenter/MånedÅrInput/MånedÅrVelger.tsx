@@ -64,19 +64,24 @@ const MånedÅrVelger: React.FC<Props> = ({
         }
     }, [år, måned]);
 
+    useEffect(() => {
+        settMåned(månedFraVerdi());
+        settÅr(årFraVerdi());
+    }, [value]);
+
     return (
         <div className={className} style={lesevisning ? { minWidth: '140px' } : {}}>
             {label && <DatolabelStyle htmlFor={id}>{label}</DatolabelStyle>}
             <Knapperad>
                 <StyledMånedVelger
-                    måned={månedFraVerdi()}
+                    måned={måned}
                     settMåned={settMåned}
                     lesevisning={lesevisning}
                     disabled={disabled}
                     feil={!!feil && !måned}
                 />
                 <Årvelger
-                    år={årFraVerdi()}
+                    år={år}
                     settÅr={settÅr}
                     antallÅrTilbake={antallÅrTilbake}
                     antallÅrFrem={antallÅrFrem}
