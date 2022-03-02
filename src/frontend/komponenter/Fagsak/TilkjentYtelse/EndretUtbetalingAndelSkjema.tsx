@@ -157,6 +157,12 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         );
     };
 
+    useEffect(() => {
+        if (hentFrontendFeilmelding(skjema.submitRessurs)?.includes('til og med dato')) {
+            skjema.felter.tom.nullstill();
+        }
+    }, [skjema.submitRessurs]);
+
     return (
         <>
             <StyledSkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
@@ -192,21 +198,31 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         <MånedÅrVelger
                             {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                             label={<Normaltekst>F.o.m</Normaltekst>}
+                            value={skjema.felter.fom.verdi}
                             antallÅrFrem={finnÅrFremTilStønadTom()}
                             antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                            onEndret={(dato: YearMonth | undefined) =>
-                                skjema.felter.fom.validerOgSettFelt(dato)
-                            }
+                            onEndret={(dato: YearMonth | undefined) => {
+                                if (dato === undefined) {
+                                    skjema.felter.fom.nullstill();
+                                } else {
+                                    skjema.felter.fom.validerOgSettFelt(dato);
+                                }
+                            }}
                             lesevisning={erLesevisning()}
                         />
                     </Feltmargin>
                     <MånedÅrVelger
                         {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<Normaltekst>T.o.m</Normaltekst>}
+                        label={<Normaltekst>T.o.m (valgfri)</Normaltekst>}
+                        value={skjema.felter.tom.verdi}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                         onEndret={(dato: YearMonth | undefined) => {
-                            skjema.felter.tom.validerOgSettFelt(dato);
+                            if (dato === undefined) {
+                                skjema.felter.tom.nullstill();
+                            } else {
+                                skjema.felter.tom.validerOgSettFelt(dato);
+                            }
                         }}
                         lesevisning={erLesevisning()}
                     />
