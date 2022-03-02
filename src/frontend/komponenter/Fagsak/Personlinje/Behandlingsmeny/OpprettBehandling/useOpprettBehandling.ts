@@ -95,7 +95,10 @@ const useOpprettBehandling = (
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
             felt.verdi && erIsoStringGyldig(felt.verdi)
                 ? ok(felt)
-                : feil(felt, 'Du må velge mottatt dato'),
+                : feil(
+                      felt,
+                      'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
+                  ),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
