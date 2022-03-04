@@ -17,10 +17,14 @@ export interface IRestEndretUtbetalingAndel {
 
 export enum IEndretUtbetalingAndelÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
+    ENDRE_MOTTAKER = 'ENDRE_MOTTAKER',
+    ALLEREDE_UTBETALT = 'ALLEREDE_UTBETALT',
 }
 
 export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
     DELT_BOSTED: 'Delt bosted',
+    ENDRE_MOTTAKER: 'Foreldrene bor sammen, endret mottaker',
+    ALLEREDE_UTBETALT: 'Allerede utbetalt',
 };
 
 export interface ÅrsakOption extends OptionType {
