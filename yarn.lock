@@ -2574,6 +2574,15 @@
     "@sentry/core" "^6.2.1"
     constate "^3.2.0"
 
+"@navikt/familie-http@^3.0.0":
+  version "3.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/3.0.0/560a0d4ecc1414f7f7d5f8723fdcaa1fe44014e1c0f1a4e90ad318e5c6cd13d6#deb611291de24ffd91f25e1b8f2d15c4ff135750"
+  integrity sha512-D96leJXA0ag98rsWB9oibuiommc8cgvyvuW2zbP8ddL5t9dktq1bNm99LQg+NcA8F02XDwXOnpCbW/iUajXMrw==
+  dependencies:
+    "@navikt/familie-typer" "^5.0.0"
+    "@sentry/core" "^6.2.1"
+    constate "^3.2.0"
+
 "@navikt/familie-ikoner@^4.0.0":
   version "4.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/4.0.0/18361c23dc026f7daf514fd3a82e6ffeac6fab878a64a223e55165ed0869f501#2c3d968c951ff21c141f33f42f17e4ba128c856f"
@@ -2603,6 +2612,11 @@
   version "4.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/4.0.0/adda0a9283e562ad0b509d1e3a0bc5e6dfffecb2250ed4cb45d8325d35bc58ab#d74b795678bd5c5d80e5e662dd2c4989b300cfd0"
   integrity sha512-GxXL7TcUa/XTOSG5AEhP/U7rVcENFZRLw9AQlOqnByb3HYX0EeFSRdruXvR/km/NCpVmGC6wOVoiKZk7A4WjAw==
+
+"@navikt/familie-typer@^5.0.0":
+  version "5.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/5.0.0/457a7865af7d164c5ea26ba942fec62da74e02c0fdcd48165fc6c1c8c9d19f1c#9b59ac4a1b044de72586339c2e3e4af60c9baac4"
+  integrity sha512-rHc1Q+ND28qJ02A7ddn7Y3LDZBelvZv/g528GvxNhgYidpN+nD75czbUje/x3ZwD3W+f+WealUlcDMf057DTGg==
 
 "@navikt/familie-validering@^2.0.0":
   version "2.0.0"
