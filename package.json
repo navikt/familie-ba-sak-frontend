@@ -40,7 +40,7 @@
     "@navikt/familie-ikoner": "^4.0.0",
     "@navikt/familie-logging": "^2.0.0",
     "@navikt/familie-skjema": "^2.0.0",
-    "@navikt/familie-typer": "^4.0.0",
+    "@navikt/familie-typer": "^5.0.0",
     "@navikt/familie-visittkort": "^3.0.0",
     "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
