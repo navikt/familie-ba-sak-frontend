@@ -22,8 +22,7 @@ describe('Utdypende Vilkårsvurderinger', () => {
             {
                 ...avhengigheter,
                 vilkårType: VilkårType.BOR_MED_SØKER,
-            },
-            true
+            }
         );
         expect(actual).toBe(true);
     });
@@ -39,8 +38,7 @@ describe('Utdypende Vilkårsvurderinger', () => {
             {
                 ...avhengigheter,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
-            },
-            true
+            }
         );
         expect(actual).toBe(false);
     });
