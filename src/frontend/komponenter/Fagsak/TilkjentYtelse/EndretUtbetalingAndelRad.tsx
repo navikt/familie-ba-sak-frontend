@@ -81,13 +81,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     const fraProsentTilTekst = (prosent: number, årsak?: IEndretUtbetalingAndelÅrsak): string => {
         switch (årsak) {
             case IEndretUtbetalingAndelÅrsak.DELT_BOSTED:
-                return fraProsentTilTekstDeltBosted(prosent);
+            case IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER:
+            case IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT:
+                return fraProsentTilTekstDefault(prosent);
             default:
                 throw new Error(`Ukjent årsak ${årsak}`);
         }
     };
 
-    const fraProsentTilTekstDeltBosted = (prosent: number): string => {
+    const fraProsentTilTekstDefault = (prosent: number): string => {
         switch (prosent) {
             case 100:
                 return 'Ja - Full utbetaling';

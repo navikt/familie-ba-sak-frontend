@@ -13,6 +13,7 @@ export enum ToggleNavn {
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
     ingenOverlappHenlegglese = 'familie-ba-sak.ingen-overlapp-vedtaksperioder.utgivelse',
     deltBostedSkalIkkeDeles = 'familie-ba-sak.behandling.delt-bosted-skal-ikke-deles.utgivelse',
+    endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
 }
 
 export const alleTogglerAv = (): IToggles => {

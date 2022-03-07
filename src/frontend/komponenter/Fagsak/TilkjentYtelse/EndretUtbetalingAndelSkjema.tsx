@@ -18,9 +18,11 @@ import {
 import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import {
     IEndretUtbetalingAndelFullSats,
     IEndretUtbetalingAndelÅrsak,
@@ -88,6 +90,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 }) => {
     const { request } = useHttp();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
+    const { toggles } = useApp();
 
     const {
         endretUtbetalingAndel,
@@ -155,6 +158,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 )
             ).getFullYear() - new Date().getFullYear()
         );
+    };
+
+    const endringsårsakSkalVises = (årsak: IEndretUtbetalingAndelÅrsak): boolean => {
+        if (
+            årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT ||
+            årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
+        ) {
+            return toggles[ToggleNavn.endreMottakerEndringsårsaker];
+        } else {
+            return true;
+        }
     };
 
     useEffect(() => {
@@ -271,7 +285,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }
                     >
                         <option value={undefined}>Velg årsak</option>
-                        {årsaker.map(årsak => (
+                        {årsaker.filter(endringsårsakSkalVises).map(årsak => (
                             <option value={årsak.valueOf()} key={årsak.valueOf()}>
                                 {årsakTekst[årsak]}
                             </option>
