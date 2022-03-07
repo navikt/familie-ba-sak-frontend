@@ -7,6 +7,7 @@ import { Målform } from './søknad';
 export interface IManueltBrevRequestPåBehandling {
     mottakerIdent: string;
     multiselectVerdier: string[];
+    barnIBrev: string[];
     brevmal: Brevmal;
 }
 

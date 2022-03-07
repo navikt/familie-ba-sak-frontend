@@ -24,6 +24,7 @@ import {
 import { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, Målform } from '../typer/søknad';
+import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import { datoformat, formaterIsoDato } from '../utils/formatter';
 import { IFritekstFelt } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
@@ -100,36 +101,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillVedAvhengighetEndring: false,
         });
 
-        const barnaMedOpplysninger = useFelt<IBarnMedOpplysninger[]>({
-            verdi: [],
-            valideringsfunksjon: felt => {
-                return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
-                    ? ok(felt)
-                    : feil(felt, 'Du må velge barn');
-            },
-            avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED;
-            },
-        });
+        const { barnaMedOpplysninger, avtalerOmDeltBostedPerBarn, nullstillBarnaMedOpplysninger } =
+            useDeltBostedFelter({
+                avhengigheter: { årsakFelt: årsak },
+                skalFeltetVises: avhengigheter =>
+                    avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
+            });
 
-        const avtalerOmDeltBostedPerBarn = useFelt<Record<string, ISODateString[]>>({
-            verdi: {},
-            valideringsfunksjon: (felt, avhengigheter) => {
-                const barnaMedOpplysninger = avhengigheter?.verdi ?? [];
-
-                return barnaMedOpplysninger
-                    .filter((barn: IBarnMedOpplysninger) => barn.merket)
-                    .some((barn: IBarnMedOpplysninger) =>
-                        felt.verdi[barn.ident]?.some(
-                            avtaleDato => avtaleDato.length === 0 || !erIsoStringGyldig(avtaleDato)
-                        )
-                    )
-                    ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
-                    : ok(felt);
-            },
-            avhengigheter: barnaMedOpplysninger,
-        });
         const {
             skjema,
             onSubmit,
@@ -158,28 +136,6 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             },
             skjemanavn: 'Dokumentutsending',
         });
-
-        const nullstillBarnaMedOpplysninger = () => {
-            if (bruker.status === RessursStatus.SUKSESS) {
-                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                    bruker.data.forelderBarnRelasjon
-                        .filter(
-                            (relasjon: IForelderBarnRelasjon) =>
-                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        )
-                        .map(
-                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
-                                ident: relasjon.personIdent,
-                                navn: relasjon.navn,
-                                fødselsdato: relasjon.fødselsdato,
-                                manueltRegistrert: false,
-                                erFolkeregistrert: true,
-                            })
-                        ) ?? []
-                );
-            }
-        };
 
         const nullstillSkjemaUtenomÅrsak = () => {
             skjema.felter.dokumenter.nullstill();
