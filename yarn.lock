@@ -2438,12 +2438,13 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/familie-backend@^6.0.1":
-  version "6.0.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/6.0.1/313031a39f02ffe01ee3cec60690bef3e861b4d4be8fbfb1d11f2f195244e6c1#6561c357fc1198de790b38ce9b2a936355d44b32"
-  integrity sha512-oLwHbXEpJKlNRE6HMGyoNQCAmfn+TnFbh2+Ilsx+kLaUc/Cz4fC4ZIg1EMZ5UEd+PgmmFJVwCL38IfLtla3TKg==
+"@navikt/familie-backend@^7.0.1":
+  version "7.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/7.0.1/c0d1255ff0270d465fd3c12f5abcaa7f425a2a83b06bbcfb43238ff598d9c0f2#22318de2bbfe74c62e8df8dec68053336b7494f8"
+  integrity sha512-xRUJ0JVCbnMwAV/7C6GXIUHJEHqC3uQ+CbyW0RxZwdr5yrDiAdNoUrx6FP88im23dRUDjOn2GyJdpgmzwROZaw==
   dependencies:
-    "@navikt/familie-logging" "^2.0.0"
+    "@navikt/familie-logging" "^3.0.0"
+    "@types/connect-redis" "~0.0.18"
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.11"
     "@types/express-session" "^1.17.3"
@@ -2585,6 +2586,13 @@
   version "2.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/2.0.0/a36fbf16e65ba0de20254fa372d59c57f7f59590580e84b40be8a182fca4a106#a6b041899d45671529d5565a75ecdc9bab68063a"
   integrity sha512-Odl6NqiqYUgnsxW0uf4jQlXJe/aPMBbLOK1D8fltU2iBvR9dz6ZY/Wh5+itItIr/403TePeelc33LkvwhrudUg==
+  dependencies:
+    winston "^3.2.1"
+
+"@navikt/familie-logging@^3.0.0":
+  version "3.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/3.0.0/9f25db42689547b9016fe1640759af6b809853bbb5cc249af79078423bd44b51#66f7b66ae2849d3df36079be3151e25eb67a6514"
+  integrity sha512-oYVF5jIPZdnEhlA/cXrTTOKkMIAQmR6DW5i+08cs/jI4LnfCjdr2lNkHCUEnYxxhu4rmtniqBiPyeBi+8HjljA==
   dependencies:
     winston "^3.2.1"
 
@@ -3158,6 +3166,16 @@
   dependencies:
     classnames "*"
 
+"@types/connect-redis@~0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@types/connect-redis/-/connect-redis-0.0.18.tgz#f2dd17607626a741177efa22641cc2030924eda3"
+  integrity sha512-iGygGbXgPIr94DEAuoluWhzre3c2/ew5NPlbW9IWvwCTXMM1YCmc7M9wpXMkYqt6kB9aO1sjZnmDzyugUu+2vQ==
+  dependencies:
+    "@types/express" "*"
+    "@types/express-session" "*"
+    "@types/ioredis" "*"
+    "@types/redis" "^2.8.0"
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -3212,7 +3230,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express-session@^1.17.3":
+"@types/express-session@*", "@types/express-session@^1.17.3":
   version "1.17.4"
   resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.17.4.tgz#97a30a35e853a61bdd26e727453b8ed314d6166b"
   integrity sha512-7cNlSI8+oOBUHTfPXMwDxF/Lchx5aJ3ho7+p9jJZYVg9dVDJFh3qdMXmJtRsysnvS+C6x46k9DRYmrmCkE+MVg==
@@ -3272,6 +3290,13 @@
   version "1.17.7"
   resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.7.tgz#30ea85cc2c868368352a37f0d0d3581e24834c6f"
   integrity sha512-9hdj6iXH64tHSLTY+Vt2eYOGzSogC+JQ2H7bdPWkuh7KXP5qLllWx++t+K9Wk556c3dkDdPws/SpMRi0sdCT1w==
+  dependencies:
+    "@types/node" "*"
+
+"@types/ioredis@*":
+  version "4.28.8"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.8.tgz#a181d6eb70e402a6db670fe54b9c5bb66c0fac17"
+  integrity sha512-mULOyO2smtvkE1zmzRRA4P0+1UjEqusi014kXOL1q3CY0RgqkR5/wKvv+vAJbPw2Q66wPyylKeevUy+m/FaRMg==
   dependencies:
     "@types/node" "*"
 
@@ -3493,7 +3518,7 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/redis@^2.8.14":
+"@types/redis@^2.8.0", "@types/redis@^2.8.14":
   version "2.8.32"
   resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.32.tgz#1d3430219afbee10f8cfa389dad2571a05ecfb11"
   integrity sha512-7jkMKxcGq9p242exlbsVzuJb57KqHRhNl4dHoQu2Y5v9bCAbtIXXH0R3HleSQW4CTOqpHIYUW3t6tpUj4BVQ+w==
