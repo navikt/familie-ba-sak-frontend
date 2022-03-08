@@ -122,7 +122,7 @@ const TilbakekrevingSkjema: React.FC<{
             <>
                 <StyledElement>Tilbakekrevingsvalg</StyledElement>
                 <StyledAlertstripe type="advarsel">
-                    Det foreligger en åpen tilbakekrevingsbehandling, endringer i vedtaket vil
+                    Det foreligger en åpen tilbakekrevingsbehandling. Endringer i vedtaket vil
                     automatisk oppdatere eksisterende feilutbetalte perioder og beløp.
                 </StyledAlertstripe>
             </>
