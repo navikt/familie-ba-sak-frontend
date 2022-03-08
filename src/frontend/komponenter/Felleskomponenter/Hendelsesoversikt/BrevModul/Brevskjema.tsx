@@ -327,7 +327,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         )}
                     </>
                 )}
-                {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED && (
+                {skjema.felter.brevmal.verdi ===
+                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
                     <DeltBostedSkjema
                         avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
                         barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}

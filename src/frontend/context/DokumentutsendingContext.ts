@@ -22,12 +22,9 @@ import {
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { IManueltBrevRequestPåFagsak } from '../typer/dokument';
-import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { datoformat, formaterIsoDato } from '../utils/formatter';
 import { IFritekstFelt } from '../utils/fritekstfelter';
-import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useFagsakRessurser } from './FagsakContext';
 
@@ -101,12 +98,16 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillVedAvhengighetEndring: false,
         });
 
-        const { barnaMedOpplysninger, avtalerOmDeltBostedPerBarn, nullstillBarnaMedOpplysninger } =
-            useDeltBostedFelter({
-                avhengigheter: { årsakFelt: årsak },
-                skalFeltetVises: avhengigheter =>
-                    avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
-            });
+        const {
+            barnaMedOpplysninger,
+            avtalerOmDeltBostedPerBarn,
+            nullstillDeltBosted,
+            hentDeltBostedMulitiselectVerdierForBarn,
+        } = useDeltBostedFelter({
+            avhengigheter: { årsakFelt: årsak },
+            skalFeltetVises: avhengigheter =>
+                avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
+        });
 
         const {
             skjema,
@@ -141,13 +142,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.felter.dokumenter.nullstill();
             skjema.felter.fritekster.nullstill();
             skjema.felter.målform.nullstill();
-            skjema.felter.avtalerOmDeltBostedPerBarn.nullstill();
-            nullstillBarnaMedOpplysninger();
+            nullstillDeltBosted();
         };
 
         const nullstillSkjema = () => {
             nullstillHeleSkjema();
-            nullstillBarnaMedOpplysninger();
+            nullstillDeltBosted();
         };
 
         useEffect(() => {
@@ -162,21 +162,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
                 return {
                     mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: barnIBrev.flatMap(barn => {
-                        const avtalerOmDeltBosted =
-                            skjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
-
-                        return avtalerOmDeltBosted.map(
-                            avtaletidspunktDeltBosted =>
-                                `Barn født ${formaterIsoDato(
-                                    barn.fødselsdato,
-                                    datoformat.DATO
-                                )}. Avtalen gjelder fra ${formaterIsoDato(
-                                    avtaletidspunktDeltBosted,
-                                    datoformat.DATO_FORLENGET
-                                )}.`
-                        );
-                    }),
+                    multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,

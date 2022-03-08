@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { ISODateString } from '@navikt/familie-form-elements';
 import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
@@ -8,6 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../context/FagsakContext';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger } from '../typer/søknad';
+import { datoformat, formaterIsoDato } from './formatter';
 import { erIsoStringGyldig } from './kalender';
 
 interface IProps {
@@ -16,7 +15,7 @@ interface IProps {
 }
 
 export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
-    const { bruker } = useFagsakRessurser();
+    const { bruker: brukerRessurs } = useFagsakRessurser();
 
     const barnaMedOpplysninger = useFelt<IBarnMedOpplysninger[]>({
         verdi: [],
@@ -27,6 +26,7 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
         },
         avhengigheter: avhengigheter,
         skalFeltetVises: skalFeltetVises,
+        nullstillVedAvhengighetEndring: false,
     });
 
     const avtalerOmDeltBostedPerBarn = useFelt<Record<string, ISODateString[]>>({
@@ -47,10 +47,10 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
         avhengigheter: barnaMedOpplysninger,
     });
 
-    const nullstillBarnaMedOpplysninger = () => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            barnaMedOpplysninger.validerOgSettFelt(
-                bruker.data.forelderBarnRelasjon
+    const hentBarnMedOpplysningerFraBruker = () => {
+        if (brukerRessurs.status === RessursStatus.SUKSESS)
+            return (
+                brukerRessurs.data.forelderBarnRelasjon
                     .filter(
                         (relasjon: IForelderBarnRelasjon) =>
                             relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
@@ -66,12 +66,33 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
                         })
                     ) ?? []
             );
-        }
+        else return [];
     };
 
-    useEffect(() => {
-        nullstillBarnaMedOpplysninger();
-    }, [bruker]);
+    const nullstillDeltBosted = () => {
+        avtalerOmDeltBostedPerBarn.nullstill();
+        barnaMedOpplysninger.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
+    };
 
-    return { barnaMedOpplysninger, avtalerOmDeltBostedPerBarn, nullstillBarnaMedOpplysninger };
+    const hentDeltBostedMulitiselectVerdierForBarn = (barn: IBarnMedOpplysninger) => {
+        const avtalerOmDeltBosted = avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
+
+        return avtalerOmDeltBosted.map(
+            avtaletidspunktDeltBosted =>
+                `Barn født ${formaterIsoDato(
+                    barn.fødselsdato,
+                    datoformat.DATO
+                )}. Avtalen gjelder fra ${formaterIsoDato(
+                    avtaletidspunktDeltBosted,
+                    datoformat.DATO_FORLENGET
+                )}.`
+        );
+    };
+
+    return {
+        barnaMedOpplysninger,
+        avtalerOmDeltBostedPerBarn,
+        nullstillDeltBosted,
+        hentDeltBostedMulitiselectVerdierForBarn,
+    };
 };

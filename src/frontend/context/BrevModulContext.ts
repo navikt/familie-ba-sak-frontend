@@ -51,7 +51,7 @@ const brevmalKanVelges = (brevmal: Brevmal, åpenBehandling: IBehandling): boole
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
                 åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
             );
-        case Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED:
+        case Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
                 [
@@ -111,9 +111,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                ![Brevmal.SVARTIDSBREV, Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED].includes(
-                    avhengigheter.brevmal.verdi
-                )
+                ![
+                    Brevmal.SVARTIDSBREV,
+                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+                ].includes(avhengigheter.brevmal.verdi)
             );
         },
         avhengigheter: { brevmal },
@@ -166,7 +167,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ![
                     Brevmal.VARSEL_OM_REVURDERING,
                     Brevmal.SVARTIDSBREV,
-                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED,
+                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
@@ -174,12 +175,16 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         nullstillVedAvhengighetEndring: false,
     });
 
-    const { barnaMedOpplysninger, avtalerOmDeltBostedPerBarn, nullstillBarnaMedOpplysninger } =
-        useDeltBostedFelter({
-            avhengigheter: { brevmal: brevmal },
-            skalFeltetVises: avhengigheter =>
-                avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED,
-        });
+    const {
+        barnaMedOpplysninger,
+        avtalerOmDeltBostedPerBarn,
+        nullstillDeltBosted,
+        hentDeltBostedMulitiselectVerdierForBarn,
+    } = useDeltBostedFelter({
+        avhengigheter: { brevmal: brevmal },
+        skalFeltetVises: avhengigheter =>
+            avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+    });
 
     const { kanSendeSkjema, onSubmit, skjema, settVisfeilmeldinger } = useSkjema<
         {
@@ -212,8 +217,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      */
     useEffect(() => {
         skjema.felter.multiselect.nullstill();
-        nullstillBarnaMedOpplysninger();
+        nullstillDeltBosted();
     }, [åpenBehandling]);
+
+    useEffect(() => {
+        nullstillDeltBosted();
+    }, [skjema.felter.brevmal.verdi]);
 
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
@@ -243,21 +252,45 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         }
     }, [brevmal, fritekster]);
 
-    const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerIdent: skjema.felter.mottakerIdent.verdi,
-        multiselectVerdier: [
-            ...skjema.felter.multiselect.verdi.map((selectOption: ISelectOptionMedBrevtekst) => {
-                if (selectOption.brevtekst) {
-                    return selectOption.brevtekst[mottakersMålform()];
-                } else {
-                    return selectOption.value;
-                }
-            }),
-            ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
-        ],
-        brevmal: skjema.felter.brevmal.verdi as Brevmal,
-        barnIBrev: [],
-    });
+    const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
+        const erDeltBosted =
+            skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
+
+        if (erDeltBosted) {
+            return hentDeltBostedSkjemaData();
+        } else {
+            const multiselectVerdier = [
+                ...skjema.felter.multiselect.verdi.map(
+                    (selectOption: ISelectOptionMedBrevtekst) => {
+                        if (selectOption.brevtekst) {
+                            return selectOption.brevtekst[mottakersMålform()];
+                        } else {
+                            return selectOption.value;
+                        }
+                    }
+                ),
+                ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
+            ];
+
+            return {
+                mottakerIdent: skjema.felter.mottakerIdent.verdi,
+                multiselectVerdier: multiselectVerdier,
+                brevmal: skjema.felter.brevmal.verdi as Brevmal,
+                barnIBrev: [],
+            };
+        }
+    };
+
+    const hentDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
+        const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(barn => barn.merket);
+
+        return {
+            mottakerIdent: skjema.felter.mottakerIdent.verdi,
+            multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
+            barnIBrev: barnIBrev.map(barn => barn.ident),
+            brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+        };
+    };
 
     return {
         skjema,
