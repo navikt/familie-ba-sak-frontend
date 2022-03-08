@@ -67,7 +67,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
                 </div>
             );
         case RessursStatus.SUKSESS:
-            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} />;
+            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} tabIndex={0} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
