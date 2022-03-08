@@ -39,10 +39,10 @@ export const hentMuligeBrevmalerImplementering = (
     }
 
     const brevmaler: Brevmal[] = Object.keys(Brevmal) as Brevmal[];
-    return brevmaler.filter(brevmal => brevmalKanVelges(brevmal, åpenBehandling.data));
+    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
 };
 
-const brevmalKanVelges = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
+const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
