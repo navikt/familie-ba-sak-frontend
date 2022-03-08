@@ -257,7 +257,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
 
         if (erVarselOmRevurderingDeltBosted) {
-            return hentDeltBostedSkjemaData();
+            return hentVarselOmRevurderingDeltBostedSkjemaData();
         } else {
             const multiselectVerdier = [
                 ...skjema.felter.multiselect.verdi.map(
@@ -281,7 +281,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         }
     };
 
-    const hentDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
+    const hentVarselOmRevurderingDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
         const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(barn => barn.merket);
 
         return {
