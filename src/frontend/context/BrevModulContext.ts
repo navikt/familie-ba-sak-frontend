@@ -253,10 +253,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     }, [brevmal, fritekster]);
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
-        const erDeltBosted =
+        const erVarselOmRevurderingDeltBosted =
             skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
 
-        if (erDeltBosted) {
+        if (erVarselOmRevurderingDeltBosted) {
             return hentDeltBostedSkjemaData();
         } else {
             const multiselectVerdier = [
