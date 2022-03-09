@@ -66,4 +66,4 @@ const prodConfig = merge.mergeWithRules({
     ],
 });
 
-module.exports = prodConfig;
+export default prodConfig;
