@@ -62,7 +62,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     const leggTilPeriodeKnappId = `${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`;
 
-    const settFokusKnapp = () => {
+    const settFokusPåLeggTilPeriodeKnapp = () => {
         document.getElementById(leggTilPeriodeKnappId)?.focus();
     };
 
@@ -123,7 +123,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultater={vilkårResultater}
                     visFeilmeldinger={visFeilmeldinger}
-                    settFokusKnapp={settFokusKnapp}
+                    settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
                 />
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
