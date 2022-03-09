@@ -60,6 +60,12 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
 
+    const leggTilPeriodeKnappId = `${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`;
+
+    const settFokusKnapp = () => {
+        document.getElementById(leggTilPeriodeKnappId)?.focus();
+    };
+
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
             .then((oppdatertBehandling: Ressurs<IBehandling>) => {
@@ -117,6 +123,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultater={vilkårResultater}
                     visFeilmeldinger={visFeilmeldinger}
+                    settFokusKnapp={settFokusKnapp}
                 />
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
@@ -128,7 +135,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             );
                             håndterNyPeriodeVilkårsvurdering(promise);
                         }}
-                        id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
+                        id={leggTilPeriodeKnappId}
                         ikon={<Pluss />}
                         ikonPosisjon={IkonPosisjon.VENSTRE}
                         label={'Legg til periode'}

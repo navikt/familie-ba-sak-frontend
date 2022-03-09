@@ -27,6 +27,7 @@ interface IProps {
     vilkårResultater: FeltState<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
+    settFokusKnapp: () => void;
 }
 
 const Tabell = styled.table`
@@ -62,6 +63,7 @@ const VilkårTabell: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultater,
     visFeilmeldinger,
+    settFokusKnapp,
 }) => {
     const { toggles } = useApp();
     return (
@@ -87,6 +89,7 @@ const VilkårTabell: React.FC<IProps> = ({
                             person={person}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
+                            settFokusKnapp={settFokusKnapp}
                         />
                     );
                 })}
