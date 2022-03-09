@@ -75,16 +75,14 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     };
 
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
-        utdypendeVilkårsvurderingAvhengigheter,
-        toggles[ToggleNavn.deltBostedSkalIkkeDeles]
+        utdypendeVilkårsvurderingAvhengigheter
     );
 
     useEffect(() => {
         if (
             !erUtdypendeVilkårsvurderingerGyldig(
                 redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                utdypendeVilkårsvurderingAvhengigheter,
-                toggles[ToggleNavn.deltBostedSkalIkkeDeles]
+                utdypendeVilkårsvurderingAvhengigheter
             )
         ) {
             validerOgSettRedigerbartVilkår({

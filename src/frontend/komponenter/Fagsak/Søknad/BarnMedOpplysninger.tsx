@@ -115,32 +115,32 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             <UIModalWrapper
                 modal={{
                     tittel: 'Søker mottar allerede barnetrygd for dette barnet',
-                    lukkKnapp: false,
+                    lukkKnapp: true,
                     visModal: visHarLøpendeModal,
                     actions: [
                         <Knapp
-                            key={'fjern-barn'}
+                            key={'avbryt'}
                             mini={true}
                             onClick={() => {
                                 settVisHarLøpendeModal(false);
                             }}
-                            children={'Fjern barn'}
+                            children={'Avbryt'}
                         />,
                         <Knapp
-                            key={'behold-barn'}
+                            key={'velg-barnet'}
                             mini={true}
                             onClick={() => {
                                 settVisHarLøpendeModal(false);
                                 oppdaterBarnMerket(true);
                             }}
-                            children={'Behold barn'}
+                            children={'Velg barnet'}
                         />,
                     ],
                 }}
             >
                 <Normaltekst>
-                    Hvis det ikke er søkt for nye perioder skal du ikke krysse av for dette barnet (
-                    {formaterIdent(barn.ident)}).
+                    Barnet ({formaterIdent(barn.ident)}) har løpende barnetrygd. Du skal kun velge
+                    barn som det ikke utbetales barnetrygd for.
                 </Normaltekst>
             </UIModalWrapper>
         </CheckboxOgSlettknapp>
