@@ -1,16 +1,12 @@
 import React from 'react';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
-import { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
-import { Felt } from '@navikt/familie-skjema';
+import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
+import type { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../context/AppContext';
-import {
-    BehandlingKategori,
-    Behandlingstema,
-    behandlingstemaer,
-    IBehandlingstema,
-} from '../../typer/behandlingstema';
+import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
+import { BehandlingKategori, behandlingstemaer } from '../../typer/behandlingstema';
 import { ToggleNavn } from '../../typer/toggles';
 
 interface EgneProps {

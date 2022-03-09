@@ -1,5 +1,6 @@
-import { PersonType } from '../typer/person';
-import { Regelverk, Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
+import type { PersonType } from '../typer/person';
+import type { Regelverk, Resultat } from '../typer/vilkår';
+import { UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
 
 export interface UtdypendeVilkRsvurderingAvhengigheter {
     personType: PersonType;

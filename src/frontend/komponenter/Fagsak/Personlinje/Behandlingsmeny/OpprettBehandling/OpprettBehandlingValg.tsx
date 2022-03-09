@@ -5,14 +5,13 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
 import {
     FamilieDatovelger,
     FamilieReactSelect,
     FamilieSelect,
-    FormatOptionLabelMeta,
-    ISelectOption,
 } from '@navikt/familie-form-elements';
-import { Felt } from '@navikt/familie-skjema';
+import type { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
 import {
@@ -22,16 +21,18 @@ import {
     behandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../../typer/behandling';
-import { IBehandlingstema } from '../../../../../typer/behandlingstema';
-import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
-import { ForelderBarnRelasjonRolle, IPersonInfo } from '../../../../../typer/person';
+import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
+import type { IMinimalFagsak } from '../../../../../typer/fagsak';
+import { FagsakStatus } from '../../../../../typer/fagsak';
+import type { IPersonInfo } from '../../../../../typer/person';
+import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
-import { FamilieIsoDate } from '../../../../../utils/kalender';
+import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
-import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
 const FixedDatoVelger = styled(FamilieDatovelger)`
     .nav-datovelger__kalenderPortal__content {

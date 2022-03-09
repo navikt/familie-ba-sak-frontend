@@ -5,13 +5,13 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { IBehandling } from '../../../../../typer/behandling';
-import { IRestEndreBehandlendeEnhet } from '../../../../../typer/enhet';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IRestEndreBehandlendeEnhet } from '../../../../../typer/enhet';
 
 const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
     const { request } = useHttp();

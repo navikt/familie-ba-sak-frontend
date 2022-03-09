@@ -9,8 +9,8 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erBehandlingHenlagt } from '../../typer/behandling';
-import { IMinimalFagsak } from '../../typer/fagsak';
-import { IInfotrygdSak } from '../../typer/infotrygd';
+import type { IMinimalFagsak } from '../../typer/fagsak';
+import type { IInfotrygdSak } from '../../typer/infotrygd';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import { Sakstabell } from './Sakstabell';

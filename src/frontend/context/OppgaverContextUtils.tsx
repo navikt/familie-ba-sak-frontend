@@ -1,24 +1,26 @@
 import React from 'react';
 
-import { Column } from 'react-table';
+import type { Column } from 'react-table';
 
 import { Knapp } from 'nav-frontend-knapper';
 
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from '../komponenter/Oppgavebenk/OppgaveDirektelenke';
 import OppgavelisteSaksbehandler from '../komponenter/Oppgavebenk/OppgavelisteSaksbehandler';
-import { IPar } from '../typer/common';
-import {
+import type { IPar } from '../typer/common';
+import type {
     BehandlingstypeFilter,
-    behandlingstypeFilter,
     EnhetFilter,
-    enhetFilter,
     GjelderFilter,
-    gjelderFilter,
     IOppgave,
     IOppgaveIdent,
     OppgavetypeFilter,
+} from '../typer/oppgave';
+import {
+    behandlingstypeFilter,
+    enhetFilter,
+    gjelderFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
 } from '../typer/oppgave';

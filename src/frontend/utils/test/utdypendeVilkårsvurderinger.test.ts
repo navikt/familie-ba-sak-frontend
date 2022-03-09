@@ -1,6 +1,6 @@
 import { PersonType } from '../../typer/person';
 import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../../typer/vilkår';
-import { UtdypendeVilkRsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
+import type { UtdypendeVilkRsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../validators';
 
 const avhengigheter: UtdypendeVilkRsvurderingAvhengigheter = {

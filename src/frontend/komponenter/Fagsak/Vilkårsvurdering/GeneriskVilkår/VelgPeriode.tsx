@@ -7,11 +7,13 @@ import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
-import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import type { ISODateString } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { IVilkårResultat, Resultat } from '../../../../typer/vilkår';
+import type { IVilkårResultat } from '../../../../typer/vilkår';
+import { Resultat } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';

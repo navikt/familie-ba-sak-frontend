@@ -1,6 +1,7 @@
 // Konfigurer appen før backend prøver å sette opp konfigurasjon
 
-import { appConfig, IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
+import type { IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
+import { appConfig } from '@navikt/familie-backend';
 
 const Environment = () => {
     if (process.env.ENV === 'local') {

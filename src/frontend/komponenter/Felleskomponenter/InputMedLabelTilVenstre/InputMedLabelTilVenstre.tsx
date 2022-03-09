@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Input, InputProps } from 'nav-frontend-skjema';
+import type { InputProps } from 'nav-frontend-skjema';
+import { Input } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 const InputMedLabelTilVenstre: React.FunctionComponent<InputProps> = ({

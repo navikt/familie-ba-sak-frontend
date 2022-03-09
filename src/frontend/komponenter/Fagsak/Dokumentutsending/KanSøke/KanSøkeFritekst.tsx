@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieTextarea } from '@navikt/familie-form-elements';
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekster,
-    IFritekstFelt,
     lagInitiellFritekst,
 } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';

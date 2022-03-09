@@ -1,16 +1,17 @@
-import React, { CSSProperties, useEffect } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useEffect } from 'react';
 
-import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
-import { FeltState } from '@navikt/familie-skjema';
+import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
-import { PersonType } from '../../../../typer/person';
+import type { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
-import {
-    bestemMuligeUtdypendeVilkårsvurderinger,
-    UtdypendeVilkRsvurderingAvhengigheter,
-} from '../../../../utils/utdypendeVilkårsvurderinger';
+import type { IVilkårResultat } from '../../../../typer/vilkår';
+import { UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
+import type { UtdypendeVilkRsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
+import { bestemMuligeUtdypendeVilkårsvurderinger } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../../../../utils/validators';
 
 interface Props {

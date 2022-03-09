@@ -2,11 +2,12 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
-import { Periode } from '@navikt/helse-frontend-tidslinje';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Periode } from '@navikt/helse-frontend-tidslinje';
+import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
-import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode, YtelseType } from '../typer/beregning';
-import { IGrunnlagPerson } from '../typer/person';
+import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
+import { YtelseType } from '../typer/beregning';
+import type { IGrunnlagPerson } from '../typer/person';
 import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import {
     hentFørsteDagIYearMonth,

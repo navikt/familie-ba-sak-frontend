@@ -1,25 +1,23 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import {
+import type {
     ActionMeta,
-    FamilieReactSelect,
     FormatOptionLabelMeta,
     GroupType,
     ISelectOption,
     MultiValueProps,
 } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import {
-    VedtakBegrunnelse,
-    VedtakBegrunnelseType,
-    vedtakBegrunnelseTyper,
-} from '../../../../../typer/vedtak';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
+import { vedtakBegrunnelseTyper } from '../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     finnVedtakBegrunnelseType,

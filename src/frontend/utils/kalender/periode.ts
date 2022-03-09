@@ -1,6 +1,5 @@
+import type { FamilieIsoDate, IPeriode, IYearMonthPeriode } from '.';
 import {
-    FamilieIsoDate,
-    IPeriode,
     erEtter,
     erFør,
     erSamme,
@@ -12,7 +11,6 @@ import {
     TIDENES_MORGEN,
     kalenderDiff,
     kalenderDatoTilDate,
-    IYearMonthPeriode,
     yearMonthTilVisning,
     yearMonthTilKalenderMåned,
 } from '.';

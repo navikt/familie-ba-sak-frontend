@@ -3,30 +3,27 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import {
-    Avhengigheter,
+    type Avhengigheter,
     feil,
-    FeltState,
+    type FeltState,
     ok,
     useFelt,
     useSkjema,
     Valideringsstatus,
 } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import {
-    Brevmal,
-    ISelectOptionMedBrevtekst,
-} from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
-import { IManueltBrevRequestPåBehandling } from '../typer/dokument';
-import { IGrunnlagPerson, PersonType } from '../typer/person';
+import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { IBehandling } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
+import type { IGrunnlagPerson } from '../typer/person';
+import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { fjernWhitespace } from '../utils/commons';
-import {
-    genererIdBasertPåAndreFritekster,
-    IFritekstFelt,
-    lagInitiellFritekst,
-} from '../utils/fritekstfelter';
+import type { IFritekstFelt } from '../utils/fritekstfelter';
+import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (

@@ -8,7 +8,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { IOppgave, oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
+import type { IOppgave } from '../../typer/oppgave';
+import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 import { ToastTyper } from '../Felleskomponenter/Toast/typer';

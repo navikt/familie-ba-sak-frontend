@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 
-import { FamilieRequestConfig, useHttp } from '@navikt/familie-http';
+import type { FamilieRequestConfig } from '@navikt/familie-http';
+import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
-    RessursStatus,
 } from '@navikt/familie-typer';
 
-import {
+import type {
     IInfotrygdsaker,
     IInfotrygdsakerRequest,
     IMigreringResponseDto,

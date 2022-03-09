@@ -1,4 +1,4 @@
-import { Resultat } from './vilkår';
+import type { Resultat } from './vilkår';
 
 export interface IFødselshendelsefiltreringResultat {
     filtreringsregel: Filtreringsregel;

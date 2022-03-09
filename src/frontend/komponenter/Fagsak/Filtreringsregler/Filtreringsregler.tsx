@@ -7,7 +7,8 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
-import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg } from '../../../typer/behandling';
 import { Filtreringsregel, filtreringsregler } from '../../../typer/fødselshendelser';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 

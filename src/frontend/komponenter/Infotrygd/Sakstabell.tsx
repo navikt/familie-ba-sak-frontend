@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { IInfotrygdSak } from '../../typer/infotrygd';
+import type { IInfotrygdSak } from '../../typer/infotrygd';
 
 const IngenSakerTekst = styled(Normaltekst)`
     margin: 1rem;

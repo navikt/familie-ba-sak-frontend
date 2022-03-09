@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 import { useApp } from '../../../context/AppContext';
-import { IToast } from './typer';
+import type { IToast } from './typer';
 
 const Container = styled.div`
     grid-column: 3;

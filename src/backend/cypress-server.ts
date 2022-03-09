@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Express, Request, Response } from 'express';
+import type { Express, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 
 import { logInfo } from '@navikt/familie-logging';

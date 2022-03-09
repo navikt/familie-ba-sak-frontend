@@ -5,10 +5,8 @@ import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
-import {
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../typer/vedtaksperiode';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';

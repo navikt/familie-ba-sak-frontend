@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
-import { ISODateString } from 'nav-datovelger/lib/types';
+import type { ISODateString } from 'nav-datovelger/lib/types';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';

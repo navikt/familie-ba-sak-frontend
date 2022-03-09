@@ -14,6 +14,7 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
+import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -21,7 +22,6 @@ import {
     Behandlingstype,
     BehandlingÅrsak,
     hentStegNummer,
-    IBehandling,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';

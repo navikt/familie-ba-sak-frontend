@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 import classNames from 'classnames';
 
@@ -14,20 +15,20 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
+import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import {
     hentKategorierHvisVisningBehandling,
-    IBehandlingstema,
     tilBehandlingstema,
 } from '../../../typer/behandlingstema';
-import { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
-    ITilbakekrevingsbehandling,
     Tilbakekrevingsbehandlingstype,
     tilbakekrevingstyper,
 } from '../../../typer/tilbakekrevingsbehandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDiff } from '../../../utils/kalender';
-import { VisningBehandling } from './visningBehandling';
+import type { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;

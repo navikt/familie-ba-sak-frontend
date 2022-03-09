@@ -4,12 +4,14 @@ import classNames from 'classnames';
 
 import { useApp } from '../../../context/AppContext';
 import { BrevModulProvider } from '../../../context/BrevModulContext';
-import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
 import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
-import { Hendelse, Tabs } from './typer';
+import type { Hendelse } from './typer';
+import { Tabs } from './typer';
 
 export interface IHendelsesoversiktProps {
     className?: string;

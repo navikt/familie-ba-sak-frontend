@@ -15,12 +15,8 @@ import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
-import {
-    BehandlingSteg,
-    henleggÅrsak,
-    HenleggÅrsak,
-    IBehandling,
-} from '../../../../../typer/behandling';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';

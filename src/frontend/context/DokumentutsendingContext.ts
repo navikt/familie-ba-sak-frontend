@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
-import { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
 import {
-    Avhengigheter,
+    type Avhengigheter,
     feil,
-    FeltState,
+    type FeltState,
     ok,
     useFelt,
     useSkjema,
@@ -17,15 +17,15 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import {
-    Informasjonsbrev,
-    ISelectOptionMedBrevtekst,
-} from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { IManueltBrevRequestPåFagsak } from '../typer/dokument';
-import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
-import { IBarnMedOpplysninger, Målform } from '../typer/søknad';
+import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Informasjonsbrev } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
+import type { IForelderBarnRelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle } from '../typer/person';
+import type { IBarnMedOpplysninger } from '../typer/søknad';
+import { Målform } from '../typer/søknad';
 import { datoformat, formaterIsoDato } from '../utils/formatter';
-import { IFritekstFelt } from '../utils/fritekstfelter';
+import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useFagsakRessurser } from './FagsakContext';

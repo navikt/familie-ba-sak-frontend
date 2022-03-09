@@ -1,5 +1,5 @@
-import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from './vedtaksperiode';
-import { VilkårType } from './vilkår';
+import type { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from './vedtaksperiode';
+import type { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
