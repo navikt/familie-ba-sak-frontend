@@ -1,11 +1,5 @@
-import {
-    DagMånedÅr,
-    YearMonth,
-    antallDagerIMåned,
-    FamilieIsoDate,
-    MånedÅr,
-    parseIso8601MånedString,
-} from '.';
+import type { DagMånedÅr, YearMonth, FamilieIsoDate, MånedÅr } from '.';
+import { antallDagerIMåned, parseIso8601MånedString } from '.';
 
 export const kalenderMåned = (dato: FamilieIsoDate): MånedÅr => {
     const dagMånedÅr = parseIso8601MånedString(dato);

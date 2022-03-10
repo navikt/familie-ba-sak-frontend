@@ -7,15 +7,16 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
-import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { IPar } from '../../typer/common';
+import type { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
-import { IOppgaveFelt } from './oppgavefelter';
+import type { IOppgaveFelt } from './oppgavefelter';
 
 const StyledElement = styled(Element)`
     margin-top: 0.5rem;

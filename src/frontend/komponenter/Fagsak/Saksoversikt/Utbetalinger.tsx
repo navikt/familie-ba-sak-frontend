@@ -2,11 +2,8 @@ import React from 'react';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import {
-    IUtbetalingsperiodeDetalj,
-    Vedtaksperiode,
-    Vedtaksperiodetype,
-} from '../../../typer/vedtaksperiode';
+import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
 import PersonUtbetaling from './PersonUtbetaling';
 

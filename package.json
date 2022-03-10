@@ -1,13 +1,14 @@
 {
   "name": "familie-ba-sak-frontend",
+  "type": "module",
   "version": "0.0.1",
   "main": "node_dist/server.js",
   "repository": "https://github.com/navikt/familie-ba-sak-frontend.git",
   "author": "Henning Håkonsen",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=production node node_dist/backend/server.js",
-    "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/server.js",
+    "start": "NODE_ENV=production node --es-module-specifier-resolution=node node_dist/backend/server.js",
+    "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node --es-module-specifier-resolution=node node_dist/backend/server.js",
     "build": "yarn build:prod",
     "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
@@ -16,7 +17,7 @@
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
     "prepare": "husky install",
-    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=production node node_dist/backend/cypress-server.js",
+    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=production node --es-module-specifier-resolution=node node_dist/backend/cypress-server.js",
     "run:cypress": "cypress run",
     "cypress": "npm-run-all -p start:cypress -r run:cypress"
   },
@@ -31,16 +32,16 @@
     "@navikt/ds-css": "0.15.12",
     "@navikt/ds-icons": "^0.5.4",
     "@navikt/ds-react": "0.16.19",
-    "@navikt/familie-backend": "^6.0.1",
+    "@navikt/familie-backend": "^7.0.1",
     "@navikt/familie-clipboard": "^4.0.0",
     "@navikt/familie-endringslogg": "^2.0.0",
     "@navikt/familie-form-elements": "^4.0.0",
     "@navikt/familie-header": "^4.0.0",
-    "@navikt/familie-http": "^2.0.0",
+    "@navikt/familie-http": "^3.0.0",
     "@navikt/familie-ikoner": "^4.0.0",
-    "@navikt/familie-logging": "^2.0.0",
-    "@navikt/familie-skjema": "^2.0.0",
-    "@navikt/familie-typer": "^4.0.0",
+    "@navikt/familie-logging": "^3.0.0",
+    "@navikt/familie-skjema": "^3.0.0",
+    "@navikt/familie-typer": "^5.0.0",
     "@navikt/familie-visittkort": "^3.0.0",
     "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
@@ -141,8 +142,8 @@
     "@types/webpack-dev-middleware": "^3.7.1",
     "@types/webpack-env": "^1.15.2",
     "@types/webpack-hot-middleware": "^2.25.3",
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "@typescript-eslint/parser": "^5.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react-app": "^10.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
@@ -200,6 +201,12 @@
       "\\.(css|less|svg)$": "<rootDir>/src/mockFile.js",
       "nav-(.*)-style": "<rootDir>/src/mockFile.js",
       "nav-frontend-core": "<rootDir>/src/mockFile.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(@navikt)/)"
+    ],
+    "transform": {
+      "\\.[jt]sx?$": "babel-jest"
     }
   },
   "snyk": true,

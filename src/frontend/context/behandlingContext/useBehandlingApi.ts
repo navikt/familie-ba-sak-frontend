@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 import {
-    Ressurs,
+    type Ressurs,
     byggTomRessurs,
     byggHenterRessurs,
     byggFeiletRessurs,
@@ -13,8 +13,9 @@ import {
 } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import { BehandlingÅrsak, IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
-import { ILogg } from '../../typer/logg';
+import type { IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
+import { BehandlingÅrsak } from '../../typer/behandling';
+import type { ILogg } from '../../typer/logg';
 
 const useBehandlingApi = (
     behandling: Ressurs<IBehandling>,

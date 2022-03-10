@@ -1,13 +1,8 @@
-import { feil, FeltState, ok } from '@navikt/familie-skjema';
+import { feil, type FeltState, ok } from '@navikt/familie-skjema';
 
 import { SettPåVentÅrsak } from '../../../../../typer/behandling';
-import {
-    erEtter,
-    erIsoStringGyldig,
-    FamilieIsoDate,
-    iDag,
-    kalenderDato,
-} from '../../../../../utils/kalender';
+import type { FamilieIsoDate } from '../../../../../utils/kalender';
+import { erEtter, erIsoStringGyldig, iDag, kalenderDato } from '../../../../../utils/kalender';
 
 export const validerSettPåVentFrist = (
     felt: FeltState<FamilieIsoDate | undefined>

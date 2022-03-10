@@ -1,7 +1,7 @@
-import { FamilieIsoDate } from '../utils/kalender';
+import type { FamilieIsoDate } from '../utils/kalender';
 import { ytelsetype, YtelseType } from './beregning';
-import { IGrunnlagPerson } from './person';
-import { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
+import type { IGrunnlagPerson } from './person';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 
 export interface IVedtaksperiodeMedBegrunnelser {
     id: number;

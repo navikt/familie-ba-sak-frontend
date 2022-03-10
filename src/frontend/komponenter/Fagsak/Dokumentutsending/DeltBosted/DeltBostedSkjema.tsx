@@ -3,8 +3,8 @@ import React from 'react';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
-import { IPersonInfo } from '../../../../typer/person';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IPersonInfo } from '../../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 import BarnCheckbox from './BarnCheckbox';

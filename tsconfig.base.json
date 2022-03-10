@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "target": "es6",
-      "module": "commonjs",
+      "module": "es6",
       "lib": ["dom", "esnext", "es6"],
       "importHelpers": true,
       "declaration": true,
@@ -18,6 +18,8 @@
       "moduleResolution": "node",
       "traceResolution": false,
       "jsx": "react",
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "isolatedModules": true,
+      "importsNotUsedAsValues": "error",
     }
   }

@@ -5,14 +5,15 @@ import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
-import { ITilbakekreving } from '../../../typer/simulering';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg } from '../../../typer/behandling';
+import type { ITilbakekreving } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';

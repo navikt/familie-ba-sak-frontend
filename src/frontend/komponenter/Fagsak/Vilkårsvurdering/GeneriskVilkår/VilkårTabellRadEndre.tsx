@@ -1,4 +1,5 @@
-import React, { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -12,8 +13,8 @@ import {
     FamilieSelect,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -22,18 +23,17 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { BehandlingÅrsak, IBehandling } from '../../../../typer/behandling';
-import { IGrunnlagPerson } from '../../../../typer/person';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import {
+import type {
     IPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
     Regelverk,
-    Resultat,
-    resultater,
-    VilkårType,
 } from '../../../../typer/vilkår';
+import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';

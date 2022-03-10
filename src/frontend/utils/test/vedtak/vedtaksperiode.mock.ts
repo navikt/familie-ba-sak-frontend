@@ -1,10 +1,10 @@
 import { VedtakBegrunnelseType } from '../../../typer/vedtak';
-import {
+import type {
     IRestVedtaksbegrunnelse,
     IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
 } from '../../../typer/vedtaksperiode';
-import { FamilieIsoDate } from '../../kalender';
+import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import type { FamilieIsoDate } from '../../kalender';
 
 interface IMockVedtaksperiode {
     fom?: FamilieIsoDate;

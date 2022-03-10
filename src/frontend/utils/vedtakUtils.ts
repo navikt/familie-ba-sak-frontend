@@ -1,15 +1,14 @@
 import navFarger from 'nav-frontend-core';
 
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingResultat } from '../typer/behandling';
-import {
-    IRestVedtakBegrunnelseTilknyttetVilkår,
-    VedtakBegrunnelse,
-    VedtakBegrunnelseType,
-} from '../typer/vedtak';
-import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from '../typer/vedtaksperiode';
-import { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
+import { VedtakBegrunnelseType } from '../typer/vedtak';
+import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../typer/vedtaksperiode';
+import type { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
     kalenderDatoMedFallback,

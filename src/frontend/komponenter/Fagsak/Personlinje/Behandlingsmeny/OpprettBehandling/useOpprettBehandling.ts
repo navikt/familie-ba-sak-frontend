@@ -2,23 +2,27 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { ISelectOption } from '@navikt/familie-form-elements';
-import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { ISelectOption } from '@navikt/familie-form-elements';
+import {
+    type Avhengigheter,
+    feil,
+    type FeltState,
+    ok,
+    useFelt,
+    useSkjema,
+} from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import {
-    Behandlingstype,
-    BehandlingÅrsak,
-    IBehandling,
-    IRestNyBehandling,
-} from '../../../../../typer/behandling';
-import { IBehandlingstema } from '../../../../../typer/behandlingstema';
+import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
+import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { erIsoStringGyldig, FamilieIsoDate } from '../../../../../utils/kalender';
+import type { FamilieIsoDate } from '../../../../../utils/kalender';
+import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
     lukkModal: () => void,

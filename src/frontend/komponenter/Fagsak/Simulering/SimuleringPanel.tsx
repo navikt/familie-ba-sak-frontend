@@ -6,7 +6,7 @@ import navFarger from 'nav-frontend-core';
 import Panel from 'nav-frontend-paneler';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDato, erFør } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender';

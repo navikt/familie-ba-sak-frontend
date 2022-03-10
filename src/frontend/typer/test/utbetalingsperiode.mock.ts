@@ -1,7 +1,7 @@
 import { mockSøker } from '../../utils/test/person/person.mock';
 import { YtelseType } from '../beregning';
-import { IGrunnlagPerson } from '../person';
-import { IUtbetalingsperiodeDetalj } from '../vedtaksperiode';
+import type { IGrunnlagPerson } from '../person';
+import type { IUtbetalingsperiodeDetalj } from '../vedtaksperiode';
 
 interface IMockUtbetalingsperiodeDetalj {
     person?: IGrunnlagPerson;

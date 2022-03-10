@@ -1,4 +1,5 @@
-import { IdentGruppe, IOppgaveIdent } from '../typer/oppgave';
+import type { IOppgaveIdent } from '../typer/oppgave';
+import { IdentGruppe } from '../typer/oppgave';
 
 /**
 - Oppgaver tilknyttet barnetrygd opererer kun med folkeregisterident.

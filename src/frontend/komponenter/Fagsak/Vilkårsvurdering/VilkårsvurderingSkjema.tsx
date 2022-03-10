@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { FeltState } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { FeltState } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import {
@@ -15,17 +15,10 @@ import {
     VilkårSubmit,
 } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
-import {
-    IPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-    vilkårConfig,
-    Resultat,
-    annenVurderingConfig,
-    VilkårType,
-} from '../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../typer/vilkår';
+import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';

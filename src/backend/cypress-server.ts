@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Express, Request, Response } from 'express';
+import type { Express, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 
 import { logInfo } from '@navikt/familie-logging';
@@ -8,7 +8,7 @@ import { logInfo } from '@navikt/familie-logging';
 import { fagsakMock, oppgaveMock, personMock, profileMock } from './mock-data';
 
 // eslint-disable-next-line
-const express = require('express');
+import express from 'express';
 
 const port = 8000;
 

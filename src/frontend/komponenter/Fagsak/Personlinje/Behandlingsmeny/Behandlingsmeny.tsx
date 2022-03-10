@@ -10,7 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import { IMinimalFagsak } from '../../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';

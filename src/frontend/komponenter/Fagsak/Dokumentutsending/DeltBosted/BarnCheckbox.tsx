@@ -6,7 +6,7 @@ import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import Slett from '../../../../ikoner/Slett';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';

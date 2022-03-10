@@ -14,7 +14,8 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { behandlingErEtterSteg } from '../../../utils/steg';
-import { ISide, sider } from '../Venstremeny/sider';
+import type { ISide } from '../Venstremeny/sider';
+import { sider } from '../Venstremeny/sider';
 
 interface IProps {
     className?: string;

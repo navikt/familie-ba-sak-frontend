@@ -1,4 +1,4 @@
-import { BehandlingUnderkategori } from './behandlingstema';
+import type { BehandlingUnderkategori } from './behandlingstema';
 
 export interface IRestRegistrerSøknad {
     søknad: ISøknadDTO;

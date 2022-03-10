@@ -1,10 +1,12 @@
 import createUseContext from 'constate';
 
-import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { type Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
-import { IBehandling } from '../typer/behandling';
-import { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
-import { erIsoStringGyldig, FamilieIsoDate } from '../utils/kalender';
+import type { IBehandling } from '../typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
+import type { FamilieIsoDate } from '../utils/kalender';
+import { erIsoStringGyldig } from '../utils/kalender';
 
 interface IProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;

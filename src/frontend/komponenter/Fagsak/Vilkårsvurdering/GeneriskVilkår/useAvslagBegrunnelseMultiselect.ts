@@ -1,7 +1,7 @@
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../typer/vedtak';
-import { VilkårType } from '../../../../typer/vilkår';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../typer/vedtak';
+import type { VilkårType } from '../../../../typer/vilkår';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType) => {

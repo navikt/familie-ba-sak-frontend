@@ -12,13 +12,13 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     kjønnType,
-    Ressurs,
-    RessursStatus,
 } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
-import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
 import { ToggleNavn } from '../../../typer/toggles';
 import OpprettFagsakModal from './OpprettFagsakModal';
 

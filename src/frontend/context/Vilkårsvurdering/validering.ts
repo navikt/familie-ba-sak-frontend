@@ -1,14 +1,20 @@
-import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
-
-import { VedtakBegrunnelse } from '../../typer/vedtak';
 import {
+    type Avhengigheter,
+    feil,
+    type FeltState,
+    ok,
+    Valideringsstatus,
+} from '@navikt/familie-skjema';
+
+import type { VedtakBegrunnelse } from '../../typer/vedtak';
+import type {
     IAnnenVurdering,
     IPersonResultat,
     IVilkårResultat,
     Resultat,
-    VilkårType,
 } from '../../typer/vilkår';
-import { IPeriode } from '../../utils/kalender';
+import { VilkårType } from '../../typer/vilkår';
+import type { IPeriode } from '../../utils/kalender';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,

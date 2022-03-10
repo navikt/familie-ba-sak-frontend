@@ -1,9 +1,11 @@
-import React, { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import React from 'react';
 
 import navFarger from 'nav-frontend-core';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import type { ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { useFelt } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 

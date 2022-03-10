@@ -1,8 +1,8 @@
-import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
-import { BehandlingÅrsak } from './behandling';
-import { INøkkelPar } from './common';
-import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
-import { Utbetalingsperiode } from './vedtaksperiode';
+import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { BehandlingÅrsak } from './behandling';
+import type { INøkkelPar } from './common';
+import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
+import type { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
 export enum FagsakStatus {

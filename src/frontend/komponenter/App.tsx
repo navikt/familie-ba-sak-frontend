@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Modal from 'nav-frontend-modal';
 
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';

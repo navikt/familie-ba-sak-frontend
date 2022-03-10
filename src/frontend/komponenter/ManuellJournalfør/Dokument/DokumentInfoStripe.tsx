@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { IDokumentInfo } from '@navikt/familie-typer';
+import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { EksternLenke } from '../../../ikoner/EksternLenke';

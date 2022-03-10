@@ -1,4 +1,4 @@
-import { AlertStripeType } from 'nav-frontend-alertstriper';
+import type { AlertStripeType } from 'nav-frontend-alertstriper';
 
 export interface IToast {
     alertstripeType: AlertStripeType;

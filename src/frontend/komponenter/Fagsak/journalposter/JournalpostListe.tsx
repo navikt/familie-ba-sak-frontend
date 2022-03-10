@@ -6,23 +6,22 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
 
-import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
+import { DownFilled, LeftFilled, RightFilled } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
+import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
 import {
-    RessursStatus,
-    Ressurs,
-    byggTomRessurs,
     byggHenterRessurs,
-    IJournalpost,
-    Journalposttype,
+    byggTomRessurs,
     journalpoststatus,
+    Journalposttype,
+    RessursStatus,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
 
 import useDokument from '../../../hooks/useDokument';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
-import { IPersonInfo } from '../../../typer/person';
+import type { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import {

@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggFeiletRessurs } from '@navikt/familie-typer';
 
-import { IPersonInfo } from '../typer/person';
+import type { IPersonInfo } from '../typer/person';
 
 export const randomUUID = (): string => {
     return uuidv4();
