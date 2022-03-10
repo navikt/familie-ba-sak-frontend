@@ -8,7 +8,7 @@ import { logInfo } from '@navikt/familie-logging';
 import { fagsakMock, oppgaveMock, personMock, profileMock } from './mock-data';
 
 // eslint-disable-next-line
-const express = require('express');
+import express from 'express';
 
 const port = 8000;
 
