@@ -30,5 +30,6 @@ jobs:
           SENTRY_RELEASE: ${{ github.sha }}
         run: |
           yarn build
+          ls -la
           yarn test
           yarn run cypress
