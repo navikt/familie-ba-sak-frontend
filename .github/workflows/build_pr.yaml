@@ -27,6 +27,7 @@ jobs:
     needs: node-og-yarn
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Kjør tester
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,6 +39,7 @@ jobs:
     needs: node-og-yarn
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,6 +51,7 @@ jobs:
     needs: node-og-yarn
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Kjør Cypress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
