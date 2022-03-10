@@ -8,8 +8,8 @@ env:
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
-  test:
-    name: Run tests
+  node-og-yarn:
+    name: Installer node og installer node-pakker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,32 +21,37 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
+
+  test:
+    name: Run tests
+    needs: node-og-yarn
+    runs-on: ubuntu-latest
+    steps:
       - name: Kjør tester
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
-        run: npx yarn test
+        run: yarn test
   build:
     name: Build
+    needs: node-og-yarn
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-          cache: npm
-          registry-url: "https://npm.pkg.github.com"
-      - uses: ./.github/yarn-cache
-      - name: Yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: yarn --prefer-offline --frozen-lockfile
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
-        run: |
-          yarn build
-          yarn run cypress
+        run: yarn build
+  cypress:
+    name: Cypress
+    needs: node-og-yarn
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kjør Cypress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: yarn run cypress
