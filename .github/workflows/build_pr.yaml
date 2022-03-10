@@ -9,7 +9,7 @@ env:
 
 jobs:
   node-og-yarn:
-    name: Installer node og installer node-pakker
+    name: Installer node og npm-pakker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '14'
           registry-url: "https://npm.pkg.github.com"
-      - name: Installer node-pakker
+      - name: Installer npm-pakker
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
