@@ -21,8 +21,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
-      - name: Kjør typecheck
-        run: npx yarn typecheck
       - name: Kjør tester
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
