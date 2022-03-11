@@ -1,5 +1,6 @@
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import type { BehandlingÅrsak } from './behandling';
+import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import type { Utbetalingsperiode } from './vedtaksperiode';
@@ -19,6 +20,8 @@ export interface IBaseFagsak {
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
+    løpendeKategori?: BehandlingKategori;
+    løpendeUnderkategori?: BehandlingUnderkategori;
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {

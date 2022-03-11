@@ -22,9 +22,11 @@ interface IInnholdstabell {
     behandling?: VisningBehandling;
 }
 
-const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }) => {
+const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
     const behandlingstema: IBehandlingstema | undefined =
-        behandling && tilBehandlingstema(behandling.kategori, behandling.underkategori);
+        minimalFagsak.løpendeKategori &&
+        minimalFagsak.løpendeUnderkategori &&
+        tilBehandlingstema(minimalFagsak.løpendeKategori, minimalFagsak.løpendeUnderkategori);
     return (
         <table className={'fagsak-panel__tabell'}>
             <thead>
@@ -67,11 +69,11 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
             className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
             href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
         >
-            <Innholdstabell minimalFagsak={minimalFagsak} behandling={aktivBehandling} />
+            <Innholdstabell minimalFagsak={minimalFagsak} />
         </LenkepanelBase>
     ) : (
         <Panel className={'fagsak-panel'}>
-            <Innholdstabell minimalFagsak={minimalFagsak} behandling={aktivBehandling} />
+            <Innholdstabell minimalFagsak={minimalFagsak} />
         </Panel>
     );
 };
