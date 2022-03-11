@@ -5,18 +5,21 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Feilmelding } from 'nav-frontend-typografi';
 
-import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import type { Felt } from '@navikt/familie-skjema';
 
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
+    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
+    visFeilmeldinger: boolean;
 }
 
 const Container = styled.div`
@@ -59,14 +62,16 @@ const LeggTilAvtaleKnapp = styled(IkonKnapp)`
     margin: 1rem 0;
 `;
 
-const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
-    const { skjema } = useDokumentutsending();
-
+const DeltBostedAvtaler: React.FC<IProps> = ({
+    barn,
+    avtalerOmDeltBostedPerBarnFelt,
+    visFeilmeldinger,
+}) => {
     const avtalerOmDeltBosted: ISODateString[] =
-        skjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
+        avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: ISODateString) => {
-        if (!skjema.visFeilmeldinger) return undefined;
+        if (!visFeilmeldinger) return undefined;
 
         if (avtaleDato === '') {
             return 'Du må fylle inn dato for avtale';
@@ -95,8 +100,8 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                                 }}
                                 feil={feilmelding !== undefined}
                                 onChange={(dato?: ISODateString) => {
-                                    skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                                        ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
                                         [barn.ident]: avtalerOmDeltBosted.reduce(
                                             (
                                                 acc: string[],
@@ -123,8 +128,8 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                                     ikon={<Slett />}
                                     ikonPosisjon={IkonPosisjon.VENSTRE}
                                     onClick={() => {
-                                        skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                                            ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
                                             [barn.ident]: avtalerOmDeltBosted.reduce(
                                                 (
                                                     acc: string[],
@@ -159,8 +164,8 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                     ikon={<Pluss />}
                     ikonPosisjon={IkonPosisjon.VENSTRE}
                     onClick={() =>
-                        skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                            ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }

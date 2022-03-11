@@ -1,21 +1,21 @@
-import { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
 
-import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
-import { IPersonMedAndelerTilkjentYtelse } from './beregning';
-import { INøkkelPar } from './common';
-import { IFødselshendelsefiltreringResultat } from './fødselshendelser';
-import { IGrunnlagPerson } from './person';
-import { ITilbakekreving } from './simulering';
-import { ISøknadDTO } from './søknad';
-import {
+import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
+import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
+import type { INøkkelPar } from './common';
+import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
+import type { IGrunnlagPerson } from './person';
+import type { ITilbakekreving } from './simulering';
+import type { ISøknadDTO } from './søknad';
+import type {
     TilbakekrevingsbehandlingResultat,
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
-import { ITotrinnskontroll } from './totrinnskontroll';
-import { IRestEndretUtbetalingAndel } from './utbetalingAndel';
-import { IVedtakForBehandling } from './vedtak';
-import { Utbetalingsperiode } from './vedtaksperiode';
-import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
+import type { ITotrinnskontroll } from './totrinnskontroll';
+import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
+import type { IVedtakForBehandling } from './vedtak';
+import type { Utbetalingsperiode } from './vedtaksperiode';
+import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export interface IRestNyBehandling {
     kategori: BehandlingKategori | null;

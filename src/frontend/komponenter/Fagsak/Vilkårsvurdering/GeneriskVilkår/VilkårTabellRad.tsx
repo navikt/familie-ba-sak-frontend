@@ -6,16 +6,17 @@ import styled from 'styled-components';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
-import { IGrunnlagPerson } from '../../../../typer/person';
+import type { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { IVilkårConfig, IVilkårResultat, Resultat, uiResultat } from '../../../../typer/vilkår';
+import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { Resultat, uiResultat } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';

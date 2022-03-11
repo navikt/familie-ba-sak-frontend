@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { feil, type FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import {
+    byggHenterRessurs,
+    byggTomRessurs,
+    type Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { IBehandling } from '../../../../../typer/behandling';
-import {
+import type { IBehandling } from '../../../../../typer/behandling';
+import type {
     IBehandlingstema,
     IRestEndreBehandlingUnderkategori,
-    tilBehandlingstema,
 } from '../../../../../typer/behandlingstema';
+import { tilBehandlingstema } from '../../../../../typer/behandlingstema';
 
 const useEndreBehandling = (lukkModal: () => void) => {
     const { request } = useHttp();

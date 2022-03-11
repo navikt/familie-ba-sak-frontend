@@ -1,9 +1,10 @@
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
-import { FamilieIsoDate, IPeriode } from '../utils/kalender';
-import { BehandlingSteg, BehandlingStegStatus } from './behandling';
-import { IGrunnlagPerson, PersonType } from './person';
-import {
+import type { FamilieIsoDate, IPeriode } from '../utils/kalender';
+import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
+import type { IGrunnlagPerson } from './person';
+import { PersonType } from './person';
+import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,

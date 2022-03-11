@@ -7,7 +7,7 @@ import Modal from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
 
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;
@@ -67,7 +67,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
                 </div>
             );
         case RessursStatus.SUKSESS:
-            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} />;
+            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} tabIndex={0} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:

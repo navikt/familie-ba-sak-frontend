@@ -1,10 +1,10 @@
-import { IJournalpost } from '@navikt/familie-typer';
+import type { IJournalpost } from '@navikt/familie-typer';
 
-import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
-import { INøkkelPar } from './common';
-import { IMinimalFagsak } from './fagsak';
-import { IOppgave } from './oppgave';
-import { IPersonInfo } from './person';
+import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
+import type { INøkkelPar } from './common';
+import type { IMinimalFagsak } from './fagsak';
+import type { IOppgave } from './oppgave';
+import type { IPersonInfo } from './person';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;

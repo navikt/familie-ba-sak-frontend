@@ -1,4 +1,4 @@
-import { ISimuleringPeriode } from '../../../typer/simulering';
+import type { ISimuleringPeriode } from '../../../typer/simulering';
 
 interface IMockSimuleringPeriode {
     fom?: string;

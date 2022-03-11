@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -12,19 +12,18 @@ import {
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
-    RessursStatus,
 } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import { BehandlingStatus, IBehandling } from '../../../../typer/behandling';
-import {
-    TotrinnskontrollBeslutning,
-    ITotrinnskontrollData,
-} from '../../../../typer/totrinnskontroll';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingStatus } from '../../../../typer/behandling';
+import type { ITotrinnskontrollData } from '../../../../typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
-import { ITrinn, KontrollertStatus } from '../../Venstremeny/sider';
+import type { ITrinn } from '../../Venstremeny/sider';
+import { KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 

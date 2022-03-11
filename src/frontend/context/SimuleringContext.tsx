@@ -3,17 +3,14 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
-import {
-    ISimuleringDTO,
-    ISimuleringPeriode,
-    ITilbakekreving,
-    Tilbakekrevingsvalg,
-} from '../typer/simulering';
+import type { IBehandling } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
+import { Tilbakekrevingsvalg } from '../typer/simulering';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff, TIDENES_MORGEN } from '../utils/kalender';
 
 interface IProps {

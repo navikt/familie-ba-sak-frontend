@@ -7,11 +7,12 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
-import { ISkjema } from '@navikt/familie-skjema';
+import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IBehandling, SettPåVentÅrsak, settPåVentÅrsaker } from '../../../../../typer/behandling';
-import { FamilieIsoDate } from '../../../../../utils/kalender';
+import type { IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import { settPåVentÅrsaker } from '../../../../../typer/behandling';
+import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';

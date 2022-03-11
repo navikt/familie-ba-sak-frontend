@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
@@ -10,12 +10,12 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     hentDataFraRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
-import { IPersonInfo } from '../typer/person';
+import type { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
+import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {

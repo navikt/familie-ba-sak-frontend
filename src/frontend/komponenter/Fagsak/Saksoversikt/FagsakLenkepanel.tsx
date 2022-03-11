@@ -7,10 +7,11 @@ import Panel from 'nav-frontend-paneler';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { BehandlingStatus } from '../../../typer/behandling';
-import { IBehandlingstema, tilBehandlingstema } from '../../../typer/behandlingstema';
-import { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IBehandlingstema } from '../../../typer/behandlingstema';
+import { tilBehandlingstema } from '../../../typer/behandlingstema';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
-import { VisningBehandling } from './visningBehandling';
+import type { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingLenkepanel {
     minimalFagsak: IMinimalFagsak;

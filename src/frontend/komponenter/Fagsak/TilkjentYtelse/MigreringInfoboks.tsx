@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 import { useHttp } from '@navikt/familie-http';
-import { byggTomRessurs, Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 

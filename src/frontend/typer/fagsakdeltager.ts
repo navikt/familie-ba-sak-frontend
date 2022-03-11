@@ -1,4 +1,4 @@
-import { Adressebeskyttelsegradering, kjønnType } from '@navikt/familie-typer';
+import type { Adressebeskyttelsegradering, kjønnType } from '@navikt/familie-typer';
 
 export enum FagsakDeltagerRolle {
     Barn = 'BARN',

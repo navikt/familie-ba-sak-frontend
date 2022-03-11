@@ -1,6 +1,6 @@
-import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
-import { IOppgave } from './oppgave';
-import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
+import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { IOppgave } from './oppgave';
+import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',

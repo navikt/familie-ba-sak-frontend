@@ -1,6 +1,6 @@
-import { kjønnType } from '@navikt/familie-typer';
+import type { kjønnType } from '@navikt/familie-typer';
 
-import { Målform } from './søknad';
+import type { Målform } from './søknad';
 
 // Enum
 export enum AdresseType {

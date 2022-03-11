@@ -8,19 +8,20 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import { Radio, Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
-import { RessursStatus, Ressurs } from '@navikt/familie-typer';
+import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simulering';
-import { Målform, målform } from '../../../typer/søknad';
+import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
+import type { Målform } from '../../../typer/søknad';
+import { målform } from '../../../typer/søknad';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -122,7 +123,7 @@ const TilbakekrevingSkjema: React.FC<{
             <>
                 <StyledElement>Tilbakekrevingsvalg</StyledElement>
                 <StyledAlertstripe type="advarsel">
-                    Det foreligger en åpen tilbakekrevingsbehandling, endringer i vedtaket vil
+                    Det foreligger en åpen tilbakekrevingsbehandling. Endringer i vedtaket vil
                     automatisk oppdatere eksisterende feilutbetalte perioder og beløp.
                 </StyledAlertstripe>
             </>

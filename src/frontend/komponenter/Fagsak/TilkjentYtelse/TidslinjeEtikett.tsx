@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';

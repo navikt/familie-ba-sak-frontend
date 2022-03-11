@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
-import { IGrunnlagPerson } from '../../../../typer/person';
-import { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
 import AnnenVurderingTabell from './AnnenVurderingTabell';
 
 interface IProps {

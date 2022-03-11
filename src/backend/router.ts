@@ -1,8 +1,9 @@
 import path from 'path';
 
-import { Response, Request, Router } from 'express';
+import type { Response, Request, Router } from 'express';
 
-import { Client, ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
+import type { Client } from '@navikt/familie-backend';
+import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
 import { buildPath } from './config';

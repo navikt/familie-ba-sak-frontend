@@ -3,31 +3,39 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 import deepEqual from 'deep-equal';
 
-import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import {
+    feil,
+    type FeltState,
+    ok,
+    useFelt,
+    useSkjema,
+    Valideringsstatus,
+} from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
-import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
-import {
+import type { IBehandling } from '../../../../../typer/behandling';
+import { Behandlingstype } from '../../../../../typer/behandling';
+import type { VedtakBegrunnelse } from '../../../../../typer/vedtak';
+import type {
     IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
+import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekster,
-    IFritekstFelt,
     lagInitiellFritekst,
 } from '../../../../../utils/fritekstfelter';
-import { IPeriode } from '../../../../../utils/kalender';
+import type { IPeriode } from '../../../../../utils/kalender';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {

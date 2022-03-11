@@ -1,5 +1,5 @@
-import { YearMonth } from '../utils/kalender';
-import { INøkkelPar } from './common';
+import type { YearMonth } from '../utils/kalender';
+import type { INøkkelPar } from './common';
 
 export interface IPersonMedAndelerTilkjentYtelse {
     personIdent: string;

@@ -7,7 +7,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IMinimalFagsak } from '../../../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';

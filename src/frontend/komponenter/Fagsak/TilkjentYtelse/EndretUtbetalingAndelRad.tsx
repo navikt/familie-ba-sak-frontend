@@ -12,12 +12,9 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import Advarsel from '../../../ikoner/Advarsel';
 import GrønnHake from '../../../ikoner/GrønnHake';
-import { IBehandling } from '../../../typer/behandling';
-import {
-    IEndretUtbetalingAndelÅrsak,
-    IRestEndretUtbetalingAndel,
-    årsakTekst,
-} from '../../../typer/utbetalingAndel';
+import type { IBehandling } from '../../../typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { formaterIdent } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';

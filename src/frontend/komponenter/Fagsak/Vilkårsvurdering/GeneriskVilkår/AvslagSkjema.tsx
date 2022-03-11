@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { VedtakBegrunnelse } from '../../../../typer/vedtak';
-import { IVilkårResultat } from '../../../../typer/vilkår';
+import type { VedtakBegrunnelse } from '../../../../typer/vedtak';
+import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { VedtaksbegrunnelseTeksterProvider } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 

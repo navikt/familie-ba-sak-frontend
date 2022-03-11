@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
-import { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import type { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import {
-    FamilieIsoDate,
     iDag,
     KalenderEnhet,
     leggTil,

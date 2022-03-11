@@ -3,7 +3,7 @@ import * as React from 'react';
 import { showReportDialog } from '@sentry/browser';
 import { configureScope, withScope, captureException } from '@sentry/core';
 
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
 interface IProps {
     autentisertSaksbehandler?: ISaksbehandler;

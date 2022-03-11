@@ -8,8 +8,8 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import { useApp } from '../../../context/AppContext';
-import { IMinimalFagsak } from '../../../typer/fagsak';
-import { IPersonInfo } from '../../../typer/person';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IPersonInfo } from '../../../typer/person';
 import {
     datoformat,
     formaterIdent,
