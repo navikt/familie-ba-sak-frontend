@@ -1,4 +1,5 @@
-import { feil, Felt, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
+import { type Felt, type FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
+import { feil } from '@navikt/familie-skjema';
 
 export interface IFritekstFelt {
     tekst: string;

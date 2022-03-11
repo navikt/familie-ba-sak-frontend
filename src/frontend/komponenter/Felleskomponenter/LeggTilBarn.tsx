@@ -12,19 +12,17 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { ExternalLink } from '@navikt/ds-icons';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Avhengigheter, feil, Felt, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import Pluss from '../../ikoner/Pluss';
-import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../typer/person';
-import { IBarnMedOpplysninger } from '../../typer/søknad';
-import { FamilieIsoDate } from '../../utils/kalender';
+import type { IPersonInfo, IRestTilgang } from '../../typer/person';
+import { adressebeskyttelsestyper } from '../../typer/person';
+import type { IBarnMedOpplysninger } from '../../typer/søknad';
+import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 import IkonKnapp, { IkonPosisjon } from './IkonKnapp/IkonKnapp';

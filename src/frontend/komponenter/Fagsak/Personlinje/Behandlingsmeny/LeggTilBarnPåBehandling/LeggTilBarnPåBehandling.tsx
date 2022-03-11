@@ -15,13 +15,14 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { IBehandling } from '../../../../../typer/behandling';
-import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../../../typer/person';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IPersonInfo, IRestTilgang } from '../../../../../typer/person';
+import { adressebeskyttelsestyper } from '../../../../../typer/person';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { identValidator } from '../../../../../utils/validators';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';

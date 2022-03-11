@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { Felt } from '@navikt/familie-skjema';
+import type { Felt } from '@navikt/familie-skjema';
 
 import Slett from '../../../../ikoner/Slett';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';

@@ -5,12 +5,13 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Feilmelding } from 'nav-frontend-typografi';
 
-import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
-import { Felt } from '@navikt/familie-skjema';
+import type { ISODateString } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import type { Felt } from '@navikt/familie-skjema';
 
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';

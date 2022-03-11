@@ -3,7 +3,7 @@ import React from 'react';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
-import { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
+import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, hentAlder } from '../../../utils/formatter';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';

@@ -1,4 +1,4 @@
-import { BehandlerRolle } from './behandling';
+import type { BehandlerRolle } from './behandling';
 
 export interface ILogg {
     id: number;

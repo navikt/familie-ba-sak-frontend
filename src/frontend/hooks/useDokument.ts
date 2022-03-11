@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -8,11 +8,11 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { FamilieAxiosRequestConfig } from '../context/AppContext';
+import type { FamilieAxiosRequestConfig } from '../context/AppContext';
 
 const useDokument = () => {
     const { request } = useHttp();

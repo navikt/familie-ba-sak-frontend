@@ -2,7 +2,8 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-import KnappBase, { KnappBaseProps } from 'nav-frontend-knapper';
+import type { KnappBaseProps } from 'nav-frontend-knapper';
+import KnappBase from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Normaltekst } from 'nav-frontend-typografi';
 

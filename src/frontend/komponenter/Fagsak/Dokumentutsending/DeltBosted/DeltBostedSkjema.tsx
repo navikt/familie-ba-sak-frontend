@@ -2,10 +2,10 @@ import React from 'react';
 
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 
-import { Felt } from '@navikt/familie-skjema';
+import type { Felt } from '@navikt/familie-skjema';
 
-import { IPersonInfo } from '../../../../typer/person';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import type { IPersonInfo } from '../../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 import BarnCheckbox from './BarnCheckbox';

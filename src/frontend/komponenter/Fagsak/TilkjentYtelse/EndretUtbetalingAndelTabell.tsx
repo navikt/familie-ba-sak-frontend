@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
 
 import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
-import { IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 
 interface IEndretUtbetalingAndelTabellProps {

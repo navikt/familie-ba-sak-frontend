@@ -1,25 +1,24 @@
-import './konfigurerApp';
+import './konfigurerApp.js';
 
 import path from 'path';
 
 import bodyParser from 'body-parser';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { v4 as uuidv4 } from 'uuid';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-import backend, { ensureAuthenticated, envVar, IApp } from '@navikt/familie-backend';
+import type { IApp } from '@navikt/familie-backend';
+import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
+import webpackDevConfig from '../webpack/webpack.dev';
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doEndringslogProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
-
-// eslint-disable-next-line
-const webpackDevConfig = require('../webpack/webpack.dev');
 
 const port = 8000;
 

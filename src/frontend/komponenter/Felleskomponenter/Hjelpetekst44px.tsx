@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import Hjelpetekst, { HjelpetekstProps } from 'nav-frontend-hjelpetekst';
+import type { HjelpetekstProps } from 'nav-frontend-hjelpetekst';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 
 interface IHjelpetekst44pxProps extends HjelpetekstProps {
     innhold: string | JSX.Element;

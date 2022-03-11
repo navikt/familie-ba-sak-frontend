@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { IInfotrygdSak, IInfotrygdStønad } from '../../typer/infotrygd';
+import type { IInfotrygdSak, IInfotrygdStønad } from '../../typer/infotrygd';
 
 const IngenVedtakTekst = styled(Normaltekst)`
     margin: 1rem;

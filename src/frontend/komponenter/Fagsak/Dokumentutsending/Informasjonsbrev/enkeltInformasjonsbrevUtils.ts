@@ -1,9 +1,9 @@
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
-import { IPersonInfo } from '../../../../typer/person';
-import { Målform } from '../../../../typer/søknad';
-import { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
+import type { IPersonInfo } from '../../../../typer/person';
+import type { Målform } from '../../../../typer/søknad';
+import type { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 interface IHentEnkeltInformasjonsbrevRequestInput {
     bruker: Ressurs<IPersonInfo>;

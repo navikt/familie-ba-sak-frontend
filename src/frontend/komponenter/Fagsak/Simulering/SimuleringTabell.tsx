@@ -8,7 +8,7 @@ import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
-import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
 import { periodeToString, kalenderDato, erEtter } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';

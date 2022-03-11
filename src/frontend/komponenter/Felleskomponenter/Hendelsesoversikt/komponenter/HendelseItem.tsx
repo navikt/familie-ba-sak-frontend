@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { BehandlerRolle, behandlerRoller } from '../../../../typer/behandling';
-import { Hendelse } from '../typer';
+import type { Hendelse } from '../typer';
 
 interface IHendelseItemProps {
     hendelse: Hendelse;

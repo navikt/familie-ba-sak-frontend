@@ -1,17 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
-import {
+import type {
     Column,
     TableInstance,
-    usePagination,
     UsePaginationInstanceProps,
-    useSortBy,
     UseSortByInstanceProps,
-    useTable,
 } from 'react-table';
+import { usePagination, useSortBy, useTable } from 'react-table';
 
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -19,26 +17,20 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import { ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
-import {
-    FeltSortOrder,
-    initialOppgaveFelter,
-    IOppgaveFelt,
-    IOppgaveFelter,
-} from '../komponenter/Oppgavebenk/oppgavefelter';
-import { IMinimalFagsak } from '../typer/fagsak';
+import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
+import type { IMinimalFagsak } from '../typer/fagsak';
+import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
 import {
     BehandlingstypeFilter,
     EnhetFilter,
-    IFinnOppgaveRequest,
-    IHentOppgaveDto,
-    IOppgave,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
@@ -46,7 +38,8 @@ import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
-import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
+import type { IOppgaveRad } from './OppgaverContextUtils';
+import { kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 
 export const oppgaveSideLimit = 15;
 

@@ -1,11 +1,5 @@
-import {
-    DagMånedÅr,
-    KalenderEnhet,
-    kalenderDatoTilDate,
-    kalenderDatoFraDate,
-    antallDagerIMåned,
-    mod,
-} from '.';
+import type { DagMånedÅr } from '.';
+import { KalenderEnhet, kalenderDatoTilDate, kalenderDatoFraDate, antallDagerIMåned, mod } from '.';
 
 /**
  * Aritmetikk for kalender er tilnærmet lik logikken for Localdate i kotlin.

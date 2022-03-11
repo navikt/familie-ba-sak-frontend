@@ -1,8 +1,6 @@
 import { BehandlingResultat } from '../../../../../typer/behandling';
-import {
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../typer/vedtaksperiode';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     førsteDagIInneværendeMåned,
     KalenderEnhet,

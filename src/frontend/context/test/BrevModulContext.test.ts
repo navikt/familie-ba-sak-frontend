@@ -1,9 +1,10 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Brevmal } from '../../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
+import type { IBehandling } from '../../typer/behandling';
+import { BehandlingÅrsak, Behandlingstype } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
 import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';

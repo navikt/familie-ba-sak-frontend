@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import { useSkjema, useFelt, FeltState, feil, ok } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { useSkjema, useFelt, type FeltState, feil, ok } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
-import { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {

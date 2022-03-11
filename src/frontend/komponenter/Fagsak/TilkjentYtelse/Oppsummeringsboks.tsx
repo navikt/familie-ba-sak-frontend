@@ -3,11 +3,11 @@ import * as React from 'react';
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
-import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import {
     datoformat,
     formaterBeløp,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
+import { type IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import { StyledEkspanderbartpanelBase } from '../StyledEkspanderbartpanelBase';

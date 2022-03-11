@@ -1,33 +1,42 @@
 import React, { useEffect, useState } from 'react';
 
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import {
+    type Avhengigheter,
+    feil,
+    type FeltState,
+    ok,
+    useFelt,
+    useSkjema,
+} from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    IDokumentInfo,
+    type IDokumentInfo,
     Journalstatus,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
-import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import { IBehandlingstema, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
-import { IMinimalFagsak } from '../typer/fagsak';
-import {
+import type { IBehandlingstema } from '../typer/behandlingstema';
+import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
+import type { IMinimalFagsak } from '../typer/fagsak';
+import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
-    JournalpostKanal,
 } from '../typer/manuell-journalføring';
-import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
-import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { JournalpostKanal } from '../typer/manuell-journalføring';
+import type { IPersonInfo } from '../typer/person';
+import { Adressebeskyttelsegradering } from '../typer/person';
+import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';

@@ -1,13 +1,13 @@
 /* eslint-disable */
-const path = require('path');
+import path from 'path';
 
-const CompressionPlugin = require('compression-webpack-plugin');
-const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
-const merge = require('webpack-merge');
+import CompressionPlugin from 'compression-webpack-plugin';
+import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+import merge from 'webpack-merge';
 
-const baseConfig = require('./webpack.common.js');
-const SentryCliPlugin = require('@sentry/webpack-plugin');
+import baseConfig from './webpack.common.js';
+import SentryCliPlugin from '@sentry/webpack-plugin';
 
 const prodConfig = merge.mergeWithRules({
     module: {
@@ -66,4 +66,4 @@ const prodConfig = merge.mergeWithRules({
     ],
 });
 
-module.exports = prodConfig;
+export default prodConfig;

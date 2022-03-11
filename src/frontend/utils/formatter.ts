@@ -1,6 +1,7 @@
 import { YtelseType } from '../typer/beregning';
-import { IGrunnlagPerson, PersonType } from '../typer/person';
-import { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
+import type { IGrunnlagPerson } from '../typer/person';
+import { PersonType } from '../typer/person';
+import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
 import familieDayjs from './familieDayjs';
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 

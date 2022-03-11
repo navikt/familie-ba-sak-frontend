@@ -1,4 +1,5 @@
-import { YearMonth, hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '..';
+import type { YearMonth } from '..';
+import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '..';
 
 describe('Year month tester', () => {
     test('Skal hente første dag i YearMonth', () => {

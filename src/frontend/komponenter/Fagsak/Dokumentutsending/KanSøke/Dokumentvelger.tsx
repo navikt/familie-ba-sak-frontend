@@ -7,8 +7,8 @@ import { Label } from 'nav-frontend-skjema';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import type { ISelectOptionMedBrevtekst } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import {
-    ISelectOptionMedBrevtekst,
     leggTilValuePåOption,
     opplysningsdokumenter,
 } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
