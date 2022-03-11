@@ -6,7 +6,7 @@ import { Radio } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
-import { Felt } from '@navikt/familie-skjema';
+import type { Felt } from '@navikt/familie-skjema';
 
 import { Målform, målform } from '../../typer/søknad';
 

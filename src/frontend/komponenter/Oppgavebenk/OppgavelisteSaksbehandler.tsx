@@ -3,11 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
+import type { IOppgave } from '../../typer/oppgave';
+import { OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 

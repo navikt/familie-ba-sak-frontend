@@ -1,6 +1,6 @@
-import { ISODateString, OptionType } from '@navikt/familie-form-elements';
+import type { ISODateString, OptionType } from '@navikt/familie-form-elements';
 
-import { FamilieIsoDate } from '../utils/kalender';
+import type { FamilieIsoDate } from '../utils/kalender';
 
 export interface IRestEndretUtbetalingAndel {
     id?: number;

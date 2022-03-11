@@ -3,15 +3,16 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { IBehandling } from '../typer/behandling';
+import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
-import { IMinimalFagsak } from '../typer/fagsak';
-import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
-import {
+import type { IMinimalFagsak } from '../typer/fagsak';
+import type { IForelderBarnRelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle } from '../typer/person';
+import type {
     IBarnMedOpplysninger,
     IBarnMedOpplysningerBackend,
     IRestRegistrerSøknad,

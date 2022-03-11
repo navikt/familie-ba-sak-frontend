@@ -5,20 +5,16 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
-import { IGrunnlagPerson } from '../../../../typer/person';
-import {
-    IAnnenVurdering,
-    IAnnenVurderingConfig,
-    Resultat,
-    uiResultat,
-} from '../../../../typer/vilkår';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
+import { Resultat, uiResultat } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';

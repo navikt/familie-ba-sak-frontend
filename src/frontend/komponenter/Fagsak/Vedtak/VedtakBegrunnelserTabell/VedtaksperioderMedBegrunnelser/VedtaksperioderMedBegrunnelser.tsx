@@ -4,11 +4,9 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IBehandling } from '../../../../../typer/behandling';
-import {
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../typer/vedtaksperiode';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov2 } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';

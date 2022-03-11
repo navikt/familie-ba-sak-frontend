@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { Cell, ColumnInstance } from 'react-table';
+import type { Cell, ColumnInstance } from 'react-table';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Systemtittel } from 'nav-frontend-typografi';
@@ -9,7 +9,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
-import { IOppgaveRad } from '../../context/OppgaverContextUtils';
+import type { IOppgaveRad } from '../../context/OppgaverContextUtils';
 import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 

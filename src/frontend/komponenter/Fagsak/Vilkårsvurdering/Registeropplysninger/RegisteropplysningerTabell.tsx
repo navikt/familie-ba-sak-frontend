@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { IRestRegisteropplysning } from '../../../../typer/person';
+import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
 import {
     kalenderDato,

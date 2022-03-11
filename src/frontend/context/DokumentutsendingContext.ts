@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
-import { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
 import {
-    Avhengigheter,
+    type Avhengigheter,
     feil,
-    FeltState,
+    type FeltState,
     ok,
     useFelt,
     useSkjema,
@@ -17,16 +17,13 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import {
-    Informasjonsbrev,
-    ISelectOptionMedBrevtekst,
-} from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { IManueltBrevRequestPåFagsak } from '../typer/dokument';
-import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
-import { IBarnMedOpplysninger, Målform } from '../typer/søknad';
-import { datoformat, formaterIsoDato } from '../utils/formatter';
-import { IFritekstFelt } from '../utils/fritekstfelter';
-import { erIsoStringGyldig } from '../utils/kalender';
+import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Informasjonsbrev } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
+import type { IBarnMedOpplysninger } from '../typer/søknad';
+import { Målform } from '../typer/søknad';
+import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
+import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useFagsakRessurser } from './FagsakContext';
 
@@ -100,36 +97,17 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillVedAvhengighetEndring: false,
         });
 
-        const barnaMedOpplysninger = useFelt<IBarnMedOpplysninger[]>({
-            verdi: [],
-            valideringsfunksjon: felt => {
-                return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
-                    ? ok(felt)
-                    : feil(felt, 'Du må velge barn');
-            },
+        const {
+            barnaMedOpplysninger,
+            avtalerOmDeltBostedPerBarn,
+            nullstillDeltBosted,
+            hentDeltBostedMulitiselectVerdierForBarn,
+        } = useDeltBostedFelter({
             avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED;
-            },
+            skalFeltetVises: avhengigheter =>
+                avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
         });
 
-        const avtalerOmDeltBostedPerBarn = useFelt<Record<string, ISODateString[]>>({
-            verdi: {},
-            valideringsfunksjon: (felt, avhengigheter) => {
-                const barnaMedOpplysninger = avhengigheter?.verdi ?? [];
-
-                return barnaMedOpplysninger
-                    .filter((barn: IBarnMedOpplysninger) => barn.merket)
-                    .some((barn: IBarnMedOpplysninger) =>
-                        felt.verdi[barn.ident]?.some(
-                            avtaleDato => avtaleDato.length === 0 || !erIsoStringGyldig(avtaleDato)
-                        )
-                    )
-                    ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
-                    : ok(felt);
-            },
-            avhengigheter: barnaMedOpplysninger,
-        });
         const {
             skjema,
             onSubmit,
@@ -159,39 +137,16 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjemanavn: 'Dokumentutsending',
         });
 
-        const nullstillBarnaMedOpplysninger = () => {
-            if (bruker.status === RessursStatus.SUKSESS) {
-                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                    bruker.data.forelderBarnRelasjon
-                        .filter(
-                            (relasjon: IForelderBarnRelasjon) =>
-                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        )
-                        .map(
-                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
-                                ident: relasjon.personIdent,
-                                navn: relasjon.navn,
-                                fødselsdato: relasjon.fødselsdato,
-                                manueltRegistrert: false,
-                                erFolkeregistrert: true,
-                            })
-                        ) ?? []
-                );
-            }
-        };
-
         const nullstillSkjemaUtenomÅrsak = () => {
             skjema.felter.dokumenter.nullstill();
             skjema.felter.fritekster.nullstill();
             skjema.felter.målform.nullstill();
-            skjema.felter.avtalerOmDeltBostedPerBarn.nullstill();
-            nullstillBarnaMedOpplysninger();
+            nullstillDeltBosted();
         };
 
         const nullstillSkjema = () => {
             nullstillHeleSkjema();
-            nullstillBarnaMedOpplysninger();
+            nullstillDeltBosted();
         };
 
         useEffect(() => {
@@ -206,21 +161,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
                 return {
                     mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: barnIBrev.flatMap(barn => {
-                        const avtalerOmDeltBosted =
-                            skjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
-
-                        return avtalerOmDeltBosted.map(
-                            avtaletidspunktDeltBosted =>
-                                `Barn født ${formaterIsoDato(
-                                    barn.fødselsdato,
-                                    datoformat.DATO
-                                )}. Avtalen gjelder fra ${formaterIsoDato(
-                                    avtaletidspunktDeltBosted,
-                                    datoformat.DATO_FORLENGET
-                                )}.`
-                        );
-                    }),
+                    multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,

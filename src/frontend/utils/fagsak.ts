@@ -1,5 +1,6 @@
-import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
-import { fagsakStatus, IMinimalFagsak } from '../typer/fagsak';
+import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { IMinimalFagsak } from '../typer/fagsak';
+import { fagsakStatus } from '../typer/fagsak';
 import { kalenderDiff } from './kalender';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>

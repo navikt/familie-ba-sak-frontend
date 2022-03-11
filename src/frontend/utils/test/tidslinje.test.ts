@@ -1,6 +1,7 @@
-import { Periode } from '@navikt/helse-frontend-tidslinje';
+import type { Periode } from '@navikt/helse-frontend-tidslinje';
 
-import { IYtelsePeriode, YtelseType } from '../../typer/beregning';
+import type { IYtelsePeriode } from '../../typer/beregning';
+import { YtelseType } from '../../typer/beregning';
 import {
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,

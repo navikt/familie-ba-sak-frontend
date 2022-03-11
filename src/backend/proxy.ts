@@ -1,9 +1,10 @@
-import { ClientRequest } from 'http';
+import type { ClientRequest } from 'http';
 
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
+import type { Client } from '@navikt/familie-backend';
+import { getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger } from '@navikt/familie-logging';
 
 import { endringsloggProxyUrl, oboConfig, proxyUrl, redirectRecords } from './config.js';

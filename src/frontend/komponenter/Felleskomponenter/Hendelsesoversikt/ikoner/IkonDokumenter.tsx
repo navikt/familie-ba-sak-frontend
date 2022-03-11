@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import Ikon, { IIkonProps } from './Ikon';
+import type { IIkonProps } from './Ikon';
+import Ikon from './Ikon';
 
 const IkonDokumenter = ({ width = 32, height = 32 }: IIkonProps) => {
     return (

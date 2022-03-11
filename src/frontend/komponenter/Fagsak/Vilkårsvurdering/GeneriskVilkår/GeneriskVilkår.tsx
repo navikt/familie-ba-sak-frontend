@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 
-import { FeltState } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { FeltState } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
@@ -14,9 +14,11 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
-import { IBehandling } from '../../../../typer/behandling';
-import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
-import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
+import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { Resultat, VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';

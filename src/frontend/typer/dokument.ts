@@ -1,12 +1,13 @@
-import {
+import type {
     Brevmal,
     Informasjonsbrev,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Målform } from './søknad';
+import type { Målform } from './søknad';
 
 export interface IManueltBrevRequestPåBehandling {
     mottakerIdent: string;
     multiselectVerdier: string[];
+    barnIBrev: string[];
     brevmal: Brevmal;
 }
 

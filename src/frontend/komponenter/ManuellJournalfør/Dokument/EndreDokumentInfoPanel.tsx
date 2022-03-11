@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
-import { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
+import type { ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';

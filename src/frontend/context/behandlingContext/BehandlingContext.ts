@@ -3,27 +3,29 @@ import React, { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import { byggTomRessurs, hentDataFraRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggTomRessurs,
+    hentDataFraRessurs,
+    type Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import type { ISide, SideId, ITrinn } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
-    ISide,
-    SideId,
     sider,
     hentTrinnForBehandling,
-    ITrinn,
     KontrollertStatus,
 } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
+import type { BehandlingSteg, IBehandling } from '../../typer/behandling';
 import {
     BehandlerRolle,
     BehandlingStatus,
-    BehandlingSteg,
     Behandlingstype,
     BehandlingÅrsak,
-    IBehandling,
 } from '../../typer/behandling';
 import { harTilgangTilEnhet } from '../../typer/enhet';
 import { PersonType } from '../../typer/person';

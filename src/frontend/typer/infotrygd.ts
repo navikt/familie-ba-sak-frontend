@@ -1,4 +1,4 @@
-import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
+import type { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 
 export interface IInfotrygdsaker {
     adressebeskyttelsegradering?: Adressebeskyttelsegradering;

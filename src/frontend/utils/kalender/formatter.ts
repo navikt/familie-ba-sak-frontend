@@ -1,4 +1,4 @@
-import { DagMånedÅr, MånedÅr } from './typer';
+import type { DagMånedÅr, MånedÅr } from './typer';
 import { capString } from './utils';
 
 // Plusser på 1 måned da dato objektet bruker 0-11 tallrekke for måneder

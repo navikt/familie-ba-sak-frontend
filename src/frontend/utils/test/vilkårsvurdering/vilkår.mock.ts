@@ -1,17 +1,15 @@
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { VedtakBegrunnelse } from '../../../typer/vedtak';
-import {
+import type { VedtakBegrunnelse } from '../../../typer/vedtak';
+import type {
     IRestAnnenVurdering,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
-    Regelverk,
-    Resultat,
     UtdypendeVilkårsvurdering,
-    VilkårType,
 } from '../../../typer/vilkår';
-import { IPeriode } from '../../kalender';
+import { Regelverk, Resultat, VilkårType } from '../../../typer/vilkår';
+import type { IPeriode } from '../../kalender';
 import { erIkkeGenereltVilkår } from '../../vilkår';
 
 interface IMockVilkårResultat {

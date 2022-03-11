@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Normaltekst, Element } from 'nav-frontend-typografi';
 
-import { IUtbetalingsperiodeDetalj } from '../../../../../typer/vedtaksperiode';
+import type { IUtbetalingsperiodeDetalj } from '../../../../../typer/vedtaksperiode';
 import { formaterIdent, formaterBeløp, sorterUtbetaling } from '../../../../../utils/formatter';
 
 interface IProps {

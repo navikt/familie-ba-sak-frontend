@@ -1,22 +1,21 @@
-import { GroupType, ISelectOption } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { GroupType, ISelectOption } from '@navikt/familie-form-elements';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
-import { IBehandling } from '../../../../../typer/behandling';
+import type { IBehandling } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import {
-    VedtakBegrunnelseType,
-    vedtakBegrunnelseTyper,
+import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
 } from '../../../../../typer/vedtak';
-import {
-    IVedtaksperiodeMedBegrunnelser,
+import { VedtakBegrunnelseType, vedtakBegrunnelseTyper } from '../../../../../typer/vedtak';
+import type {
     IRestVedtaksbegrunnelse,
-    Vedtaksperiodetype,
+    IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../typer/vedtaksperiode';
-import { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
-import { IPeriode } from '../../../../../utils/kalender';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
+import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
+import type { IPeriode } from '../../../../../utils/kalender';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 
 export const useVilkårBegrunnelser = ({

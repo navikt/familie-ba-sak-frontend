@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
-import { Resultat } from '../../../typer/vilkår';
+import type { Resultat } from '../../../typer/vilkår';
 
 interface StatuslinjeProps {
     resultat: Resultat;

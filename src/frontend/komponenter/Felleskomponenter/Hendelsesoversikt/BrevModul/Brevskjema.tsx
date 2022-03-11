@@ -9,8 +9,8 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import { Felt, FeltState } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Felt, FeltState } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -18,25 +18,22 @@ import useDokument from '../../../../hooks/useDokument';
 import { DokumentIkon } from '../../../../ikoner/DokumentIkon';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
-import { BehandlingSteg, hentStegNummer, IBehandling } from '../../../../typer/behandling';
-import { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
-import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
-import { IFritekstFelt } from '../../../../utils/fritekstfelter';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
-import {
-    Brevmal,
-    brevmaler,
-    BrevtypeSelect,
-    hentSelectOptions,
-    ISelectOptionMedBrevtekst,
-    selectLabelsForBrevmaler,
-} from './typer';
+import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
+import { Brevmal, brevmaler, hentSelectOptions, selectLabelsForBrevmaler } from './typer';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -92,6 +89,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         makslengdeFritekst,
         maksAntallKulepunkter,
         leggTilFritekst,
+        settVisfeilmeldinger,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -324,6 +322,15 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             </>
                         )}
                     </>
+                )}
+                {skjema.felter.brevmal.verdi ===
+                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
+                    <DeltBostedSkjema
+                        avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
+                        barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        settVisFeilmeldinger={settVisfeilmeldinger}
+                    />
                 )}
             </SkjemaGruppe>
             <Knapperekke>

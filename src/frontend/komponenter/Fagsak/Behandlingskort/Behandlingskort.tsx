@@ -8,6 +8,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlingResultat,
     behandlingsresultater,
@@ -15,7 +16,6 @@ import {
     behandlingstyper,
     behandlingÅrsak,
     erBehandlingHenlagt,
-    IBehandling,
 } from '../../../typer/behandling';
 import { datoformat, formaterIsoDato, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
