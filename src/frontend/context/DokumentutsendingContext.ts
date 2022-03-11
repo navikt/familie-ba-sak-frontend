@@ -22,6 +22,7 @@ import { Informasjonsbrev } from '../komponenter/Felleskomponenter/Hendelsesover
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
+import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useFagsakRessurser } from './FagsakContext';

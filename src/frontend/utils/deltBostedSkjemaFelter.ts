@@ -1,11 +1,12 @@
-import { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
 import { feil, ok, useFelt } from '@navikt/familie-skjema';
-import { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
+import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../context/FagsakContext';
-import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
-import { IBarnMedOpplysninger } from '../typer/søknad';
+import type { IForelderBarnRelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle } from '../typer/person';
+import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { datoformat, formaterIsoDato } from './formatter';
 import { erIsoStringGyldig } from './kalender';
 
