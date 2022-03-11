@@ -2434,10 +2434,10 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@0.16.19":
-  version "0.16.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.16.19/4a7051f8cca3f73f9a8b26d1f6d178c52fc0f4ad60452fd75d80572598cc6e64#0a94f1a17f97fcacb380d7c1fdad07f1d715cf32"
-  integrity sha512-HvTYJzc1Gq6o9xMZvtuiVyeKdPNdNrCj7SyHYYwP6zUFpXT3ymA2G48xf4yOeREvmK50lhFJBuPFVHTbpvSkLA==
+"@navikt/ds-react@0.17.3":
+  version "0.17.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.17.3/36e043d89a5a5093ec46c826951e1925410a36349761eed2d9f35773441d7d1c#0c3dc94e91c05763d825534594f5629422a92d2a"
+  integrity sha512-ZFAzyqB3+t1zSoz4WamV0FjzOd1LNwSNbqbLH92PbWEskbFOBd1Yj7fb6CT8eFfFWSmkSgklOje1Ji+uU5VH8w==
   dependencies:
     "@material-ui/core" "^4.12.3"
     "@navikt/ds-icons" "^0.8.4"
