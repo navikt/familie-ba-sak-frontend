@@ -1,5 +1,7 @@
-FROM navikt/node-express:12.2.0-alpine
+FROM navikt/node-express:14-alpine
+USER root
 RUN apk --no-cache add curl
+USER apprunner
 
 ADD ./ /var/server/
 
