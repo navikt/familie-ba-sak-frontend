@@ -62,6 +62,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
                 : '',
         multiselectVerdier: [],
         brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
+        barnIBrev: [],
     });
 
     return {

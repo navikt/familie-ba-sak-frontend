@@ -27,6 +27,7 @@ import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
@@ -88,6 +89,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         makslengdeFritekst,
         maksAntallKulepunkter,
         leggTilFritekst,
+        settVisfeilmeldinger,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -320,6 +322,15 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             </>
                         )}
                     </>
+                )}
+                {skjema.felter.brevmal.verdi ===
+                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
+                    <DeltBostedSkjema
+                        avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
+                        barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        settVisFeilmeldinger={settVisfeilmeldinger}
+                    />
                 )}
             </SkjemaGruppe>
             <Knapperekke>

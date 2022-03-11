@@ -36,7 +36,7 @@ describe('BrevmodulContext', () => {
             BehandlingÅrsak.OMREGNING_6ÅR,
         ];
         test(
-            `Skal returnere liste med VARSEL_OM_REVURDERING når behandlingstypen er REVURDERING` +
+            `Skal returnere liste som inneholder VARSEL_OM_REVURDERING når behandlingstypen er REVURDERING` +
                 ` og årsaken er ikke er SØKNAD`,
             () => {
                 behandlingsårsaker
@@ -51,7 +51,7 @@ describe('BrevmodulContext', () => {
                                     })
                                 )
                             )
-                        ).toEqual([Brevmal.VARSEL_OM_REVURDERING])
+                        ).toContain(Brevmal.VARSEL_OM_REVURDERING)
                     );
             }
         );
