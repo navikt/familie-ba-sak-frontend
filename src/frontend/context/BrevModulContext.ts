@@ -3,16 +3,10 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';

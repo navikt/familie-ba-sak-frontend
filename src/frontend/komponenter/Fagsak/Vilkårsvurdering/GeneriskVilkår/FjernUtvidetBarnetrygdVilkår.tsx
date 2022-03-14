@@ -7,7 +7,8 @@ import { Feilmelding } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';

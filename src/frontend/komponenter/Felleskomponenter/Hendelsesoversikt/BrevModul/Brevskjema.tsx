@@ -10,7 +10,8 @@ import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { Felt, FeltState } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';

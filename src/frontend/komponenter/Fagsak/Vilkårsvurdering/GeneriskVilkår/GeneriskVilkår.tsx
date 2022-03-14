@@ -6,7 +6,8 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 
 import type { FeltState } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {

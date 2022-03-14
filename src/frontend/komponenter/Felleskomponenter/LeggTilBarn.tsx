@@ -14,8 +14,8 @@ import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggHenterRessurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import Pluss from '../../ikoner/Pluss';

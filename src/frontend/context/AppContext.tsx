@@ -8,8 +8,9 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
+import { RessursStatus } from '@navikt/familie-typer';
 import type { ISaksbehandler } from '@navikt/familie-typer';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
