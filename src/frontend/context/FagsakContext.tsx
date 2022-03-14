@@ -10,9 +10,9 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     hentDataFraRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
