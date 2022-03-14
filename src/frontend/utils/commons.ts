@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-import { byggFeiletRessurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IPersonInfo } from '../typer/person';
 
