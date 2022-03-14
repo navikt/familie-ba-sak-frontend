@@ -10,7 +10,8 @@ import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { Felt, FeltState } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -34,6 +35,7 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal, brevmaler, hentSelectOptions, selectLabelsForBrevmaler } from './typer';
+import VarselOmRevurderingSamboerSkjema from './VarselOmRevurderingSamboerSkjema';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -331,6 +333,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
                     />
+                )}
+                {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
+                    <VarselOmRevurderingSamboerSkjema datoFelt={skjema.felter.dato} />
                 )}
             </SkjemaGruppe>
             <Knapperekke>
