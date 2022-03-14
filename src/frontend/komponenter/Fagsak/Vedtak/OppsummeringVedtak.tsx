@@ -138,10 +138,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                <VedtaksperioderMedBegrunnelser
-                                    åpenBehandling={åpenBehandling}
-                                    erLesevisning={erLesevisning()}
-                                />
+                                <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
 

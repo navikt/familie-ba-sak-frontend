@@ -3,7 +3,7 @@ import navFarger from 'nav-frontend-core';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { BehandlingResultat } from '../typer/behandling';
+import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
 import { VedtakBegrunnelseType } from '../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
@@ -19,10 +19,10 @@ import {
     TIDENES_MORGEN,
 } from './kalender';
 
-export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
+export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
-    erLesevisning: boolean,
-    behandlingResultat: BehandlingResultat
+    behandlingResultat: BehandlingResultat,
+    behandlingStatus: BehandlingStatus
 ): IVedtaksperiodeMedBegrunnelser[] => {
     const sorterteOgFiltrertePerioder = vedtaksperioder
         .slice()
@@ -33,7 +33,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
             )
         )
         .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-            if (erLesevisning) {
+            if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
                 return harPeriodeBegrunnelse(vedtaksperiode);
             } else {
                 return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
@@ -41,7 +41,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
         });
 
     if (behandlingResultat === BehandlingResultat.OPPHØRT) {
-        return [hentSisteOpphørsperiode(sorterteOgFiltrertePerioder)];
+        return hentSisteOpphørsperiode(sorterteOgFiltrertePerioder);
     } else {
         return sorterteOgFiltrertePerioder;
     }
@@ -64,7 +64,9 @@ const hentSisteOpphørsperiode = (sortertePerioder: IVedtaksperiodeMedBegrunnels
         (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) =>
             vedtaksperiode.type === Vedtaksperiodetype.OPPHØR
     );
-    return sorterteOgFiltrerteOpphørsperioder[sorterteOgFiltrerteOpphørsperioder.length - 1];
+    const sisteOpphørsPeriode =
+        sorterteOgFiltrerteOpphørsperioder[sorterteOgFiltrerteOpphørsperioder.length - 1];
+    return sisteOpphørsPeriode ? [sisteOpphørsPeriode] : [];
 };
 
 export const finnVedtakBegrunnelseType = (
