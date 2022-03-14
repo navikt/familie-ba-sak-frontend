@@ -1,17 +1,23 @@
-import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
+import {
+    type Avhengigheter,
+    feil,
+    type FeltState,
+    ok,
+    Valideringsstatus,
+} from '@navikt/familie-skjema';
 
 import {
-    AnnenForelderAktivitet,
-    IKompetanse,
+    type AnnenForelderAktivitet,
+    type IKompetanse,
     LandkodeNorge,
-    SøkerAktivitet,
+    type SøkerAktivitet,
 } from '../../typer/kompetanse';
 import {
-    YearMonth,
+    type YearMonth,
     yearMonthTilKalenderMåned,
-    MånedÅr,
+    type MånedÅr,
     iDag,
-    IYearMonthPeriode,
+    type IYearMonthPeriode,
 } from '../../utils/kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>

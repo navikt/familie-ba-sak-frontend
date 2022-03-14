@@ -1,6 +1,6 @@
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
-import { IYearMonthPeriode, YearMonth } from '../utils/kalender';
+import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 

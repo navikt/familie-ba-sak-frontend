@@ -3,11 +3,16 @@ import { useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import {
+    byggHenterRessurs,
+    byggTomRessurs,
+    type Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
-import { IBehandling } from '../../typer/behandling';
-import { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
+import type { IBehandling } from '../../typer/behandling';
+import type { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
 import {

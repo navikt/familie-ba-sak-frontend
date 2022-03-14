@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 import { Heading } from '@navikt/ds-react';
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
-import { IBehandling } from '../../../../typer/behandling';
-import { IKompetanse } from '../../../../typer/kompetanse';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IKompetanse } from '../../../../typer/kompetanse';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
 const KompetanseContainer = styled.div`

@@ -11,11 +11,11 @@ import {
     FamilieKnapp,
     FamilieReactSelect,
     FamilieSelect,
-    OptionType,
+    type OptionType,
 } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { Country } from '@navikt/land-verktoy';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { KompetanseSubmit, useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
@@ -23,8 +23,8 @@ import { validerKompetanse } from '../../../../context/Kompetanse/valideringKomp
 import {
     AnnenForelderAktivitet,
     annenForelderAktiviteter,
-    IKompetanse,
-    IRestKompetanse,
+    type IKompetanse,
+    type IRestKompetanse,
     SøkerAktivitet,
     søkerAktiviteter,
 } from '../../../../typer/kompetanse';

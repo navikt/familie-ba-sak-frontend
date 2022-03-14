@@ -13,7 +13,7 @@ import {
     kalenderDatoTilDate,
     yearMonthTilVisning,
     yearMonthTilKalenderMåned,
-    YearMonth,
+    type YearMonth,
 } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {

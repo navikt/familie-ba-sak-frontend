@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Element } from 'nav-frontend-typografi';
 
-import { Country, CountryFilter } from '@navikt/land-verktoy';
-import CountrySelect, { CountrySelectProps } from '@navikt/landvelger';
+import { type Country, CountryFilter } from '@navikt/land-verktoy';
+import CountrySelect, { type CountrySelectProps } from '@navikt/landvelger';
 
 const Landvelger = styled(CountrySelect)`
     margin-bottom: 1rem;

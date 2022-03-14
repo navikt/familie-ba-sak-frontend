@@ -5,14 +5,14 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { OptionType } from '@navikt/familie-form-elements';
-import { FeltState } from '@navikt/familie-skjema';
+import type { OptionType } from '@navikt/familie-form-elements';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import { IBehandling } from '../../../../typer/behandling';
-import { IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
+import type { IBehandling } from '../../../../typer/behandling';
+import { type IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
-import { IYearMonthPeriode } from '../../../../utils/kalender';
+import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import KompetanseIkon from './KompetanseIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
