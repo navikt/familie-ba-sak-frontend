@@ -3,7 +3,8 @@ import * as React from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../typer/behandling';
 import type {

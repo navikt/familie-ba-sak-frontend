@@ -3,7 +3,8 @@ import React, { useEffect } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
 

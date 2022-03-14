@@ -10,8 +10,8 @@ import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
-import { byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';

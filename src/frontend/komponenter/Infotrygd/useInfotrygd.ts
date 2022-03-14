@@ -6,12 +6,13 @@ import { useHistory } from 'react-router';
 import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    RessursStatus,
 } from '@navikt/familie-typer';
 
 import type {

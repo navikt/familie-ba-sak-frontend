@@ -1,7 +1,8 @@
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';

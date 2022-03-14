@@ -1,4 +1,5 @@
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import type { VedtakBegrunnelse } from '../../../typer/vedtak';
 import type {

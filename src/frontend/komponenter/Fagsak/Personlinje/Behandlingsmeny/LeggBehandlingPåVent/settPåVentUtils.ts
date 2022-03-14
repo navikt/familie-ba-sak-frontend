@@ -1,4 +1,5 @@
-import { feil, type FeltState, ok } from '@navikt/familie-skjema';
+import { feil, ok } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { SettPåVentÅrsak } from '../../../../../typer/behandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
