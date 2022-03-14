@@ -1,11 +1,13 @@
 import * as React from 'react';
 
-import { Country, CountryFilter } from 'land-verktoy';
-import CountrySelect, { CountrySelectProps } from 'landvelger';
+import classNames from 'classnames';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { Element } from 'nav-frontend-typografi';
+
+import { Country, CountryFilter } from '@navikt/land-verktoy';
+import CountrySelect, { CountrySelectProps } from '@navikt/landvelger';
 
 const Landvelger = styled(CountrySelect)`
     margin-bottom: 1rem;
@@ -28,6 +30,11 @@ const Landvelger = styled(CountrySelect)`
                 display: none;
             }
         }
+
+        .c-countrySelect__select__control {
+            border: 1px solid ${props => (props.feil ? navFarger.redError : navFarger.navGra60)};
+            box-shadow: ${props => (props.feil ? `0 0 0 1px ${navFarger.redError}` : 'none')};
+        }
     }
 
     .navds-error-message {
@@ -48,6 +55,7 @@ const Landvelger = styled(CountrySelect)`
 
 interface IProps {
     id: string;
+    className?: string;
     value?: string | string[] | undefined;
     feil?: string;
     label: string | JSX.Element;
@@ -63,7 +71,7 @@ interface IProps {
 }
 
 const FamilieLandvelger: React.FC<IProps> = ({
-    id,
+    className,
     value,
     feil,
     label,
@@ -77,6 +85,8 @@ const FamilieLandvelger: React.FC<IProps> = ({
     erLesevisning = false,
     onChange,
 }) => {
+    const id = `country-select-${label}`;
+
     let landvelgerProps: CountrySelectProps<Country> = {
         id,
         values: value,
@@ -95,8 +105,8 @@ const FamilieLandvelger: React.FC<IProps> = ({
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
     }
     return (
-        <div className={'skjemaelement'}>
-            <Landvelger {...landvelgerProps} place label={<Element>{label}</Element>} />
+        <div className={classNames('skjemaelement', className)}>
+            <Landvelger feil={feil} {...landvelgerProps} place label={<Element>{label}</Element>} />
         </div>
     );
 };

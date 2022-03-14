@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { Country } from 'land-verktoy';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
@@ -16,6 +15,7 @@ import {
 } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { KompetanseSubmit, useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
