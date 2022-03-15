@@ -336,7 +336,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
                     <FamilieDatovelgerWrapper
-                        label={'Velg dato'}
+                        label={'Samboer fra'}
                         valgtDato={skjema.felter.datoAvtale.verdi}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
