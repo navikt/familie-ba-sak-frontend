@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { VedtakBegrunnelse } from '../../../../typer/vedtak';

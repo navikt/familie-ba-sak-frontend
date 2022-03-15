@@ -9,7 +9,8 @@ import { Element } from 'nav-frontend-typografi';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';

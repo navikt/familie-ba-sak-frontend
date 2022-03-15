@@ -1,6 +1,7 @@
 import createUseContext from 'constate';
 
-import { type Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { Avhengigheter } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';

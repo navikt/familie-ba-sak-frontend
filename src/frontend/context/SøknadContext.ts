@@ -3,8 +3,10 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import { type Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { Avhengigheter } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';

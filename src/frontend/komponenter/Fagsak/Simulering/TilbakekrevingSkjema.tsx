@@ -13,7 +13,8 @@ import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
 import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';

@@ -10,8 +10,10 @@ import {
     FamilieRadioGruppe,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';

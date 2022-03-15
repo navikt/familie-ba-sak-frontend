@@ -12,8 +12,9 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     kjønnType,
+    RessursStatus,
 } from '@navikt/familie-typer';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';

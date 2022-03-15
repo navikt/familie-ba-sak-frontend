@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, type FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import {
-    byggHenterRessurs,
-    byggTomRessurs,
-    type Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';

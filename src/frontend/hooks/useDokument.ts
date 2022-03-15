@@ -8,9 +8,9 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { FamilieAxiosRequestConfig } from '../context/AppContext';
 

@@ -5,23 +5,16 @@ import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-} from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type IDokumentInfo,
     Journalstatus,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+import type { IDokumentInfo, Ressurs } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
