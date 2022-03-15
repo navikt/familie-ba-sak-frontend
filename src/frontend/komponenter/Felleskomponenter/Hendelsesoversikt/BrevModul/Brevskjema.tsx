@@ -28,6 +28,7 @@ import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
@@ -35,7 +36,6 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal, brevmaler, hentSelectOptions, selectLabelsForBrevmaler } from './typer';
-import VarselOmRevurderingSamboerSkjema from './VarselOmRevurderingSamboerSkjema';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -335,7 +335,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     />
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
-                    <VarselOmRevurderingSamboerSkjema datoFelt={skjema.felter.dato} />
+                    <FamilieDatovelgerWrapper
+                        label={'Velg dato'}
+                        valgtDato={skjema.felter.datoAvtale.verdi}
+                        placeholder={'DD.MM.ÅÅÅÅ'}
+                        {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
+                    />
                 )}
             </SkjemaGruppe>
             <Knapperekke>

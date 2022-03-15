@@ -3,10 +3,10 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -21,6 +21,7 @@ import { fjernWhitespace } from '../utils/commons';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
+import { erIsoStringGyldig } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (
@@ -115,10 +116,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
-    const dato = useFelt<ISODateString | undefined>({
+    const datoAvtale = useFelt<ISODateString | undefined>({
         verdi: '',
         valideringsfunksjon: (felt: FeltState<string | undefined>) =>
-            felt.verdi ? ok(felt) : feil(felt, 'Du må velge en dato'),
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en gyldig dato.'),
         skalFeltetVises: avhengigheter => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
@@ -203,7 +206,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster: FeltState<IFritekstFelt>[];
             barnaMedOpplysninger: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
-            dato: ISODateString | undefined;
+            datoAvtale: ISODateString | undefined;
         },
         IBehandling
     >({
@@ -214,7 +217,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster,
             barnaMedOpplysninger,
             avtalerOmDeltBostedPerBarn,
-            dato,
+            datoAvtale: datoAvtale,
         },
         skjemanavn: 'brevmodul',
     });
@@ -288,6 +291,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
+                datoAvtale: skjema.felter.datoAvtale.verdi,
             };
         }
     };
