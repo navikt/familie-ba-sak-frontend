@@ -19,4 +19,5 @@ export interface IManueltBrevRequestPåFagsak {
     mottakerMålform: Målform;
     mottakerNavn: string;
     brevmal: Brevmal | Informasjonsbrev;
+    datoAvtale?: string;
 }
