@@ -36,7 +36,7 @@ export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
     SVARTIDSBREV: 'Velg årsak',
     VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14: 'Varsel om revurdering delt bosted §14',
-    VARSEL_OM_REVURDERING_SAMBOER: 'Testiiiiiing',
+    VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
 };
 
 export const leggTilValuePåOption = (
