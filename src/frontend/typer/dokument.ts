@@ -9,6 +9,7 @@ export interface IManueltBrevRequestPåBehandling {
     multiselectVerdier: string[];
     barnIBrev: string[];
     brevmal: Brevmal;
+    datoAvtale?: string;
 }
 
 export interface IManueltBrevRequestPåFagsak {
@@ -18,4 +19,5 @@ export interface IManueltBrevRequestPåFagsak {
     mottakerMålform: Målform;
     mottakerNavn: string;
     brevmal: Brevmal | Informasjonsbrev;
+    datoAvtale?: string;
 }
