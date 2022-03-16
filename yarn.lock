@@ -2427,20 +2427,20 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-icons@^0.8.4":
-  version "0.8.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.4/ad157908309028f6372c8132792803a39386345f427cbb772e86603fcd7714fa#82ba73cbc5704132ec2dd6e6faace3a2b9d6abff"
-  integrity sha512-yIBYeJrkO3pEL2qcR5DGtQQ6mfs9Bb8iueMdmj1sa0JBPuDmPLLW5SJ/2HH4tcQciDZ3erp7k4CemJkbtob5AQ==
+"@navikt/ds-icons@^0.8.5":
+  version "0.8.5"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.5/2bcd2aefb9337f292a7f9dcb2a1cd070e672a21a5dfcaac0f25d72b6f0da2319#9d868d9242a649a239ae61f33bc8749252e7640c"
+  integrity sha512-D3oCTXOYmBqTZMse/tNWQDGYEc1YiO98vn0aeb/7R3x2nJElskrLg6ZSFzPzJsgtXG0c+fiaBPbr1gYFfNUNgQ==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@0.16.19":
-  version "0.16.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.16.19/4a7051f8cca3f73f9a8b26d1f6d178c52fc0f4ad60452fd75d80572598cc6e64#0a94f1a17f97fcacb380d7c1fdad07f1d715cf32"
-  integrity sha512-HvTYJzc1Gq6o9xMZvtuiVyeKdPNdNrCj7SyHYYwP6zUFpXT3ymA2G48xf4yOeREvmK50lhFJBuPFVHTbpvSkLA==
+"@navikt/ds-react@0.17.6":
+  version "0.17.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.17.6/6d595335c9693f4d97b34531cb88cd0cf1af21909a15de28045dcd72eae138ee#24ac1236d50882f31a002477145ded7d8016d63b"
+  integrity sha512-wF90tnabF+K4IiOduRsvNyh2ev3v8M+vGhoxd1Yp6NZjsmamhCrHUVZajobqfE/cLcyqeSOpdtBJx+ItnnHpKw==
   dependencies:
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.8.4"
+    "@navikt/ds-icons" "^0.8.5"
     "@popperjs/core" "^2.10.1"
     "@radix-ui/react-toggle-group" "0.1.5"
     classnames "^2.2.6"
