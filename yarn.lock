@@ -2427,20 +2427,20 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-icons@^0.8.4":
-  version "0.8.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.4/ad157908309028f6372c8132792803a39386345f427cbb772e86603fcd7714fa#82ba73cbc5704132ec2dd6e6faace3a2b9d6abff"
-  integrity sha512-yIBYeJrkO3pEL2qcR5DGtQQ6mfs9Bb8iueMdmj1sa0JBPuDmPLLW5SJ/2HH4tcQciDZ3erp7k4CemJkbtob5AQ==
+"@navikt/ds-icons@^0.8.6":
+  version "0.8.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.6/51a9a30e74f2f2cd3849d52132b58d01880840ad8503b41329626bd1f0a604db#d5237b20a086c83291d5fcb02d6d5206c93bde45"
+  integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@0.16.19":
-  version "0.16.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.16.19/4a7051f8cca3f73f9a8b26d1f6d178c52fc0f4ad60452fd75d80572598cc6e64#0a94f1a17f97fcacb380d7c1fdad07f1d715cf32"
-  integrity sha512-HvTYJzc1Gq6o9xMZvtuiVyeKdPNdNrCj7SyHYYwP6zUFpXT3ymA2G48xf4yOeREvmK50lhFJBuPFVHTbpvSkLA==
+"@navikt/ds-react@0.17.8":
+  version "0.17.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.17.8/46c607125cce50c6fd37eb808eef411b8d0692e868508b81d9c8854ea0961422#8147f9accf7f170bee3683e9dbc6d20a4d1b2977"
+  integrity sha512-9RkDdbg/CG14lgtcjlXQeoAIPgQI4oME1UEdUybSNKH6jwY87nZFQpmKGtGkn44GQKRbKK7GJLVF2jgzk6hIHQ==
   dependencies:
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.8.4"
+    "@navikt/ds-icons" "^0.8.6"
     "@popperjs/core" "^2.10.1"
     "@radix-ui/react-toggle-group" "0.1.5"
     classnames "^2.2.6"
@@ -5991,10 +5991,10 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-enhanced-resolve@^5.7.0, enhanced-resolve@^5.8.3:
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.8.3.tgz#6d552d465cce0423f5b3d718511ea53826a7b2f0"
-  integrity sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==
+enhanced-resolve@^5.7.0, enhanced-resolve@^5.9.2:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.9.2.tgz#0224dcd6a43389ebfb2d55efee517e5466772dd9"
+  integrity sha512-GIm3fQfwLJ8YZx2smuHpBKkXC1yOk+OBEmKckVyL0i/ea8mqDEykK3ld5dgH1QYPNyT/lIllxV2LULnxCHaHkA==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -12831,10 +12831,10 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@^5.69.1:
-  version "5.69.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.69.1.tgz#8cfd92c192c6a52c99ab00529b5a0d33aa848dc5"
-  integrity sha512-+VyvOSJXZMT2V5vLzOnDuMz5GxEqLk7hKWQ56YxPW/PQRUuKimPqmEIJOx8jHYeyo65pKbapbW464mvsKbaj4A==
+webpack@^5.70.0:
+  version "5.70.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.70.0.tgz#3461e6287a72b5e6e2f4872700bc8de0d7500e6d"
+  integrity sha512-ZMWWy8CeuTTjCxbeaQI21xSswseF2oNOwc70QSKNePvmxE7XW36i7vpBMYZFAUHPwQiEbNGCEYIOOlyRbdGmxw==
   dependencies:
     "@types/eslint-scope" "^3.7.3"
     "@types/estree" "^0.0.51"
@@ -12845,7 +12845,7 @@ webpack@^5.69.1:
     acorn-import-assertions "^1.7.6"
     browserslist "^4.14.5"
     chrome-trace-event "^1.0.2"
-    enhanced-resolve "^5.8.3"
+    enhanced-resolve "^5.9.2"
     es-module-lexer "^0.9.0"
     eslint-scope "5.1.1"
     events "^3.2.0"
