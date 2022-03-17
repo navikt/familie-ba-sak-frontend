@@ -3,10 +3,10 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -17,24 +17,38 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
+import { ToggleNavn } from '../typer/toggles';
 import { fjernWhitespace } from '../utils/commons';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
+import { erIsoStringGyldig } from '../utils/kalender';
+import { useApp } from './AppContext';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (
-    åpenBehandling: Ressurs<IBehandling>
+    åpenBehandling: Ressurs<IBehandling>,
+    kanViseVarselOmRevurderingSamboer: boolean
 ): Brevmal[] => {
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return [];
     }
 
     const brevmaler: Brevmal[] = Object.keys(Brevmal) as Brevmal[];
-    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
+    return brevmaler.filter(brevmal =>
+        brevmalKanVelgesForBehandling(
+            brevmal,
+            åpenBehandling.data,
+            kanViseVarselOmRevurderingSamboer
+        )
+    );
 };
 
-const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
+const brevmalKanVelgesForBehandling = (
+    brevmal: Brevmal,
+    åpenBehandling: IBehandling,
+    kanViseVarselOmRevurderingSamboer: boolean
+): boolean => {
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
@@ -51,6 +65,11 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
                     BehandlingÅrsak.SØKNAD,
                     BehandlingÅrsak.ÅRLIG_KONTROLL,
                 ].includes(åpenBehandling.årsak)
+            );
+        case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
+            return (
+                åpenBehandling.type === Behandlingstype.REVURDERING &&
+                kanViseVarselOmRevurderingSamboer
             );
         case Brevmal.SVARTIDSBREV:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
@@ -74,6 +93,7 @@ export const mottakersMålformImplementering = (
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
+    const { toggles } = useApp();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
@@ -106,7 +126,23 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ![
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                 ].includes(avhengigheter.brevmal.verdi)
+            );
+        },
+        avhengigheter: { brevmal },
+    });
+
+    const datoAvtale = useFelt<ISODateString | undefined>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<string | undefined>) =>
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en gyldig dato.'),
+        skalFeltetVises: avhengigheter => {
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER
             );
         },
         avhengigheter: { brevmal },
@@ -160,6 +196,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.VARSEL_OM_REVURDERING,
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
@@ -186,6 +223,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster: FeltState<IFritekstFelt>[];
             barnaMedOpplysninger: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
+            datoAvtale: ISODateString | undefined;
         },
         IBehandling
     >({
@@ -196,6 +234,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster,
             barnaMedOpplysninger,
             avtalerOmDeltBostedPerBarn,
+            datoAvtale: datoAvtale,
         },
         skjemanavn: 'brevmodul',
     });
@@ -226,7 +265,11 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             skjema.felter.mottakerIdent.verdi
         );
 
-    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
+    const hentMuligeBrevMaler = (): Brevmal[] =>
+        hentMuligeBrevmalerImplementering(
+            åpenBehandling,
+            !!toggles[ToggleNavn.brevVarselRevurderingSamboer]
+        );
 
     const leggTilFritekst = () => {
         skjema.felter.fritekster.validerOgSettFelt([
@@ -269,6 +312,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
+                datoAvtale: skjema.felter.datoAvtale.verdi,
             };
         }
     };
