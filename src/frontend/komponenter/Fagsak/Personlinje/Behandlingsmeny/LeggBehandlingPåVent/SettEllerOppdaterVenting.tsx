@@ -6,6 +6,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingStatus } from '../../../../../typer/behandling';
 import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 
@@ -48,6 +49,7 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
                     settVisModal(true);
                     onListElementClick();
                 }}
+                disabled={behandling.status !== BehandlingStatus.UTREDES}
             >
                 {erBehandlingAlleredePåVent
                     ? 'Endre ventende behandling'
