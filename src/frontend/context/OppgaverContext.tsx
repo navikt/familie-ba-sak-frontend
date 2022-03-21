@@ -215,9 +215,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         })
             .then((oppgaveId: Ressurs<string>) => {
                 if (oppgaveId.status === RessursStatus.SUKSESS) {
+                    const oppgavetypeFilter =
+                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter];
                     if (
-                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
-                        OppgavetypeFilter.JFR
+                        oppgavetypeFilter === OppgavetypeFilter.JFR ||
+                        oppgavetypeFilter === OppgavetypeFilter.BEH_SED
                     ) {
                         history.push(`/oppgaver/journalfør/${oppgave.id}`);
                     } else {

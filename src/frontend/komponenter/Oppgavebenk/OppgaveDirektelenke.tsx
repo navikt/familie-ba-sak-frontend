@@ -70,6 +70,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     } else {
         switch (oppgavetype) {
             case OppgavetypeFilter.JFR:
+            case OppgavetypeFilter.BEH_SED:
                 return (
                     <FamilieBaseKnapp
                         key={'tiloppg'}

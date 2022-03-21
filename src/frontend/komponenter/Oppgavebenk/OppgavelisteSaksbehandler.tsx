@@ -42,6 +42,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         OppgavetypeFilter.BEH_UND_VED,
         OppgavetypeFilter.GOD_VED,
         OppgavetypeFilter.VURD_LIVS,
+        OppgavetypeFilter.BEH_SED,
     ].find(
         (type: OppgavetypeFilter) =>
             OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
