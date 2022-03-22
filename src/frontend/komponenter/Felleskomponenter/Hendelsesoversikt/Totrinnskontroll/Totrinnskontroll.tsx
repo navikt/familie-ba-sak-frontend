@@ -12,8 +12,9 @@ import {
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    RessursStatus,
 } from '@navikt/familie-typer';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';

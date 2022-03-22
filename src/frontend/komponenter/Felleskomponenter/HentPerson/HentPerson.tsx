@@ -9,7 +9,8 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IPersonInfo } from '../../../typer/person';
 import { sjekkTilgangTilPerson } from '../../../utils/commons';

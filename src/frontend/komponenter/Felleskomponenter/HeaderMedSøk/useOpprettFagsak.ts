@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';

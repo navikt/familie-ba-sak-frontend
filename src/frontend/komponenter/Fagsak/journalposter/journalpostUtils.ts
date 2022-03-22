@@ -1,8 +1,5 @@
-import {
-    type IJournalpost,
-    type IJournalpostRelevantDato,
-    JournalpostDatotype,
-} from '@navikt/familie-typer';
+import { JournalpostDatotype } from '@navikt/familie-typer';
+import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato } from '../../../utils/kalender';

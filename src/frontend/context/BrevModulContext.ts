@@ -3,16 +3,10 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -27,6 +21,7 @@ import { fjernWhitespace } from '../utils/commons';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
+import { erIsoStringGyldig } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (
@@ -58,6 +53,8 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
                     BehandlingÅrsak.ÅRLIG_KONTROLL,
                 ].includes(åpenBehandling.årsak)
             );
+        case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
+            return åpenBehandling.type === Behandlingstype.REVURDERING;
         case Brevmal.SVARTIDSBREV:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
@@ -112,7 +109,23 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ![
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                 ].includes(avhengigheter.brevmal.verdi)
+            );
+        },
+        avhengigheter: { brevmal },
+    });
+
+    const datoAvtale = useFelt<ISODateString | undefined>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<string | undefined>) =>
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en gyldig dato.'),
+        skalFeltetVises: avhengigheter => {
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER
             );
         },
         avhengigheter: { brevmal },
@@ -166,6 +179,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.VARSEL_OM_REVURDERING,
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
@@ -192,6 +206,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster: FeltState<IFritekstFelt>[];
             barnaMedOpplysninger: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
+            datoAvtale: ISODateString | undefined;
         },
         IBehandling
     >({
@@ -202,6 +217,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster,
             barnaMedOpplysninger,
             avtalerOmDeltBostedPerBarn,
+            datoAvtale: datoAvtale,
         },
         skjemanavn: 'brevmodul',
     });
@@ -275,6 +291,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
+                datoAvtale: skjema.felter.datoAvtale.verdi,
             };
         }
     };

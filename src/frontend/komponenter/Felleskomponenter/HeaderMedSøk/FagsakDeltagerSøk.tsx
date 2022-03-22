@@ -12,14 +12,14 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     kjønnType,
+    RessursStatus,
 } from '@navikt/familie-typer';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
-import { ToggleNavn } from '../../../typer/toggles';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
@@ -27,7 +27,7 @@ const validator = require('@navikt/fnrvalidator');
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
-    const { toggles, innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useApp();
     const history = useHistory();
 
     const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
@@ -118,7 +118,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 }
             />
 
-            {toggles[ToggleNavn.brukEndringslogg] && innloggetSaksbehandler && (
+            {innloggetSaksbehandler && (
                 <Endringslogg
                     userId={innloggetSaksbehandler.navIdent}
                     dataFetchingIntervalSeconds={60 * 15}

@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import { type FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import generator from '../../testverktøy/fnr/fnr-generator';
 import { PersonType } from '../../typer/person';

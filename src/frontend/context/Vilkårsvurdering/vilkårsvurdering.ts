@@ -1,4 +1,5 @@
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IGrunnlagPerson } from '../../typer/person';
 import { PersonTypeVisningsRangering } from '../../typer/person';

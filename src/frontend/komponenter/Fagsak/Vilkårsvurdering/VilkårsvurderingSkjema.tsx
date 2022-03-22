@@ -7,7 +7,8 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { AddCircle } from '@navikt/ds-icons';
 import type { FeltState } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../typer/vilkår';
 import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../typer/vilkår';
@@ -62,8 +64,19 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
-    const { erLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent } =
-        useBehandling();
+    const {
+        erLesevisning,
+        erMigreringsbehandling,
+        settÅpenBehandling,
+        aktivSettPåVent,
+        åpenBehandling,
+    } = useBehandling();
+
+    const kanLeggeTilUtvidetVilkår =
+        erMigreringsbehandling ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KLAGE;
 
     const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
         personResultat.vilkårResultater.some(
@@ -122,7 +135,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
-                                erMigreringsbehandling && (
+                                kanLeggeTilUtvidetVilkår && (
                                     <VilkårDiv>
                                         <IkonKnapp
                                             erLesevisning={erLesevisning()}

@@ -10,7 +10,8 @@ import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { Felt, FeltState } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -27,6 +28,7 @@ import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
@@ -330,6 +332,14 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
+                    />
+                )}
+                {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
+                    <FamilieDatovelgerWrapper
+                        label={'Samboer fra'}
+                        valgtDato={skjema.felter.datoAvtale.verdi}
+                        placeholder={'DD.MM.ÅÅÅÅ'}
+                        {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
                     />
                 )}
             </SkjemaGruppe>
