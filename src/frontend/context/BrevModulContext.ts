@@ -17,38 +17,25 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
-import { ToggleNavn } from '../typer/toggles';
 import { fjernWhitespace } from '../utils/commons';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
-import { useApp } from './AppContext';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (
-    åpenBehandling: Ressurs<IBehandling>,
-    kanViseVarselOmRevurderingSamboer: boolean
+    åpenBehandling: Ressurs<IBehandling>
 ): Brevmal[] => {
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return [];
     }
 
     const brevmaler: Brevmal[] = Object.keys(Brevmal) as Brevmal[];
-    return brevmaler.filter(brevmal =>
-        brevmalKanVelgesForBehandling(
-            brevmal,
-            åpenBehandling.data,
-            kanViseVarselOmRevurderingSamboer
-        )
-    );
+    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
 };
 
-const brevmalKanVelgesForBehandling = (
-    brevmal: Brevmal,
-    åpenBehandling: IBehandling,
-    kanViseVarselOmRevurderingSamboer: boolean
-): boolean => {
+const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
@@ -67,10 +54,7 @@ const brevmalKanVelgesForBehandling = (
                 ].includes(åpenBehandling.årsak)
             );
         case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
-            return (
-                åpenBehandling.type === Behandlingstype.REVURDERING &&
-                kanViseVarselOmRevurderingSamboer
-            );
+            return åpenBehandling.type === Behandlingstype.REVURDERING;
         case Brevmal.SVARTIDSBREV:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
@@ -93,7 +77,6 @@ export const mottakersMålformImplementering = (
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
-    const { toggles } = useApp();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
@@ -265,11 +248,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             skjema.felter.mottakerIdent.verdi
         );
 
-    const hentMuligeBrevMaler = (): Brevmal[] =>
-        hentMuligeBrevmalerImplementering(
-            åpenBehandling,
-            !!toggles[ToggleNavn.brevVarselRevurderingSamboer]
-        );
+    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
     const leggTilFritekst = () => {
         skjema.felter.fritekster.validerOgSettFelt([

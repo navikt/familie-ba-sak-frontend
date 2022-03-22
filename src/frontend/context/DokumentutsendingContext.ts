@@ -4,15 +4,8 @@ import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
