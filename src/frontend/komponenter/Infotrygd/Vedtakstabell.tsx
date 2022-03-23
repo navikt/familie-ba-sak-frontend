@@ -66,8 +66,8 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                         <th>Status</th>
                         <th>Tekstkode</th>
                         <th>Ant barn</th>
-                        <th>Iverksatt</th>
-                        <th>Virkfom</th>
+                        <th>Opphør iverksatt</th>
+                        <th>Opphør virkfom</th>
                         <th>Opphørsgrunn</th>
                         <th>Beløp</th>
                         <th>Fom</th>
