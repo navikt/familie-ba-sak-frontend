@@ -38,9 +38,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     };
 
     return (
-        <div className={'tilkjentytelse-informasjonsboks'}>
-            <div className={'tilkjentytelse-informasjonsboks__header'}>
-                <div className={'tilkjentytelse-informasjonsboks__header__info'}>
+        <div className={'behandlingsresultat-informasjonsboks'}>
+            <div className={'behandlingsresultat-informasjonsboks__header'}>
+                <div className={'behandlingsresultat-informasjonsboks__header__info'}>
                     <Element>{månedNavnOgÅr()}</Element>
 
                     {utbetalingsperiode !== undefined ? (
@@ -48,7 +48,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             Totalt utbetalt i mnd
                             <span
                                 className={
-                                    'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
+                                    'behandlingsresultat-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
                                 {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}

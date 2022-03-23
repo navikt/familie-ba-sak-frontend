@@ -36,11 +36,13 @@ const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
 `;
 
-interface ITilkjentYtelseProps {
+interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
 
-const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBehandling }) => {
+const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({
+    åpenBehandling,
+}) => {
     const history = useHistory();
     const { fagsakId } = useSakOgBehandlingParams();
 
@@ -116,7 +118,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
         <Skjemasteg
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
-            className="tilkjentytelse"
+            className="behandlingsresultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
                 if (erLesevisning()) {
@@ -163,4 +165,4 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
     );
 };
 
-export default TilkjentYtelse;
+export default Behandlingsresultat;

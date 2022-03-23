@@ -12,7 +12,7 @@ import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simuleri
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
 import { periodeToString, kalenderDato, erEtter } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
-import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
+import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
 
 const Årsvelger = styled.div`
     display: flex;

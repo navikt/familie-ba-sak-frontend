@@ -15,10 +15,10 @@ import { useAmplitude } from '../../utils/amplitude';
 import { hentSideHref } from '../../utils/miljø';
 import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
+import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
-import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 
@@ -76,7 +76,7 @@ const BehandlingContainer: React.FunctionComponent = () => {
                         render={() => {
                             return (
                                 <TidslinjeProvider>
-                                    <TilkjentYtelse åpenBehandling={åpenBehandling.data} />
+                                    <Behandlingsresultat åpenBehandling={åpenBehandling.data} />
                                 </TidslinjeProvider>
                             );
                         }}
