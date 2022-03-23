@@ -1,6 +1,6 @@
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import { IPar } from './common';
+import type { IPar } from './common';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;

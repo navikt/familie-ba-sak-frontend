@@ -3,10 +3,10 @@ import * as React from 'react';
 import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { ILogg } from '../../../typer/logg';
+import type { ILogg } from '../../../typer/logg';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
-import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
+import type { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
 
 const Høyremeny: React.FunctionComponent = () => {

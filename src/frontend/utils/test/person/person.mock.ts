@@ -1,6 +1,7 @@
-import { kjønnType } from '@navikt/familie-typer';
+import type { kjønnType } from '@navikt/familie-typer';
 
-import { IGrunnlagPerson, PersonType } from '../../../typer/person';
+import type { IGrunnlagPerson } from '../../../typer/person';
+import { PersonType } from '../../../typer/person';
 import { Målform } from '../../../typer/søknad';
 
 export const mockBarn: IGrunnlagPerson = {

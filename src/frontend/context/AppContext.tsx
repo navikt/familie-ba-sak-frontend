@@ -1,21 +1,25 @@
-import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
-import { ISaksbehandler } from '@navikt/familie-typer';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
-import { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
+import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
-import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
-import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
+import type { IRestTilgang } from '../typer/person';
+import { adressebeskyttelsestyper } from '../typer/person';
+import type { IToggles } from '../typer/toggles';
+import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
 import { gruppeIdTilRolle } from '../utils/behandling';
 import { tilFeilside } from '../utils/commons';
 

@@ -9,24 +9,21 @@ import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
-import {
-    FamilieRadioGruppe,
-    FamilieSelect,
-    FamilieTextarea,
-    ISODateString,
-} from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-form-elements';
+import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
-import { IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
+import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import {
     IEndretUtbetalingAndelFullSats,
     IEndretUtbetalingAndelÅrsak,
-    IRestEndretUtbetalingAndel,
     optionTilsats,
     satser,
     satsTilOption,
@@ -34,7 +31,7 @@ import {
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
 import { datoformatNorsk, formaterIdent } from '../../../utils/formatter';
-import { YearMonth } from '../../../utils/kalender';
+import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';

@@ -7,7 +7,7 @@ import { Ingress } from 'nav-frontend-typografi';
 
 import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 
-import { IRestRegisterhistorikk } from '../../../../typer/person';
+import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { HentetLabel } from './HentetLabel';

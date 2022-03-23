@@ -10,7 +10,7 @@ import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -18,7 +18,7 @@ import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
-import { IFritekstFelt } from '../../../../../utils/fritekstfelter';
+import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';

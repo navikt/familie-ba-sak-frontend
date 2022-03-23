@@ -1,4 +1,5 @@
-import { DagMånedÅr, valgtDatoErNesteMånedEllerSenere } from '../kalender';
+import type { DagMånedÅr } from '../kalender';
+import { valgtDatoErNesteMånedEllerSenere } from '../kalender';
 
 const today: DagMånedÅr = {
     år: 2100,

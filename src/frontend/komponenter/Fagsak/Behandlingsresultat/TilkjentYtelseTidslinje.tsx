@@ -5,11 +5,11 @@ import '@navikt/helse-frontend-tidslinje/lib/main.css';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
-import { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
-import { IGrunnlagPerson } from '../../../typer/person';
+import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
+import type { IGrunnlagPerson } from '../../../typer/person';
 import { formaterIdent } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
 import TidslinjeEtikett from './TidslinjeEtikett';

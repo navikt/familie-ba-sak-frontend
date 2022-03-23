@@ -1,5 +1,6 @@
 import { parseIso8601String, parseIso8601StringMånedÅr } from './io';
-import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
+import type { DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
+import { antallDagerIMåned } from './typer';
 
 export const TIDENES_MORGEN: DagMånedÅr = {
     dag: 1,

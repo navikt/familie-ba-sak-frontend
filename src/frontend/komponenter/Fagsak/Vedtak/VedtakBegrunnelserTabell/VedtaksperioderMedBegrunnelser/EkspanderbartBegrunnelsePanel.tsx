@@ -5,11 +5,8 @@ import styled from 'styled-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import {
-    hentVedtaksperiodeTittel,
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../typer/vedtaksperiode';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { formaterBeløp, summer } from '../../../../../utils/formatter';
 import {
     erEtter,
@@ -78,7 +75,8 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                         </Element>
                     )}
                     <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
-                    {vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING &&
+                    {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
+                        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.REDUKSJON) &&
                         vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
                             <Normaltekst>
                                 {formaterBeløp(

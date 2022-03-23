@@ -1,22 +1,24 @@
 import {
-    Avhengigheter,
+    type Avhengigheter,
     feil,
-    FeltState,
+    type FeltState,
     ok,
-    ValiderFelt,
+    type ValiderFelt,
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import { IGrunnlagPerson, PersonType } from '../typer/person';
-import { VedtakBegrunnelse } from '../typer/vedtak';
-import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
+import type { IGrunnlagPerson } from '../typer/person';
+import { PersonType } from '../typer/person';
+import type { VedtakBegrunnelse } from '../typer/vedtak';
+import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
+import { Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
+import type { IPeriode } from './kalender';
 import {
     erEtter,
     erFør,
     erIsoStringGyldig,
     erSamme,
-    IPeriode,
     kalenderDato,
     kalenderDatoMedFallback,
     KalenderEnhet,
@@ -25,10 +27,8 @@ import {
     TIDENES_MORGEN,
     valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
-import {
-    bestemMuligeUtdypendeVilkårsvurderinger,
-    UtdypendeVilkRsvurderingAvhengigheter,
-} from './utdypendeVilkårsvurderinger';
+import type { UtdypendeVilkRsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
+import { bestemMuligeUtdypendeVilkårsvurderinger } from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');

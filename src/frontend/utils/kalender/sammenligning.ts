@@ -1,4 +1,4 @@
-import { DagMånedÅr } from '.';
+import type { DagMånedÅr } from '.';
 
 export const erISammeMåned = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
     return dato1.måned === dato2.måned && dato1.år === dato2.år;

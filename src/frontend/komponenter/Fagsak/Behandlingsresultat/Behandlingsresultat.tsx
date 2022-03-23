@@ -8,14 +8,16 @@ import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg, Behandlingstype, IBehandling } from '../../../typer/behandling';
-import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
+import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -34,11 +36,13 @@ const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
 `;
 
-interface ITilkjentYtelseProps {
+interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
 
-const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBehandling }) => {
+const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({
+    åpenBehandling,
+}) => {
     const history = useHistory();
     const { fagsakId } = useSakOgBehandlingParams();
 
@@ -114,7 +118,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
         <Skjemasteg
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
-            className="tilkjentytelse"
+            className="behandlingsresultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
                 if (erLesevisning()) {
@@ -161,4 +165,4 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
     );
 };
 
-export default TilkjentYtelse;
+export default Behandlingsresultat;

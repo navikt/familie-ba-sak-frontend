@@ -10,13 +10,15 @@ import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { BehandlingStatus, erBehandlingHenlagt, IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import {
     behandlingKategori,
     BehandlingKategori,
     behandlingUnderkategori,
 } from '../../../typer/behandlingstema';
-import { FagsakStatus, IMinimalFagsak } from '../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -34,7 +36,7 @@ import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
-import { VisningBehandling } from './visningBehandling';
+import type { VisningBehandling } from './visningBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;

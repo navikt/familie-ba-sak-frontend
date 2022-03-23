@@ -1,9 +1,10 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Brevmal } from '../../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { BehandlingÅrsak, IBehandling, Behandlingstype } from '../../typer/behandling';
+import type { IBehandling } from '../../typer/behandling';
+import { BehandlingÅrsak, Behandlingstype } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
 import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
@@ -35,7 +36,7 @@ describe('BrevmodulContext', () => {
             BehandlingÅrsak.OMREGNING_6ÅR,
         ];
         test(
-            `Skal returnere liste med VARSEL_OM_REVURDERING når behandlingstypen er REVURDERING` +
+            `Skal returnere liste som inneholder VARSEL_OM_REVURDERING når behandlingstypen er REVURDERING` +
                 ` og årsaken er ikke er SØKNAD`,
             () => {
                 behandlingsårsaker
@@ -50,7 +51,7 @@ describe('BrevmodulContext', () => {
                                     })
                                 )
                             )
-                        ).toEqual([Brevmal.VARSEL_OM_REVURDERING])
+                        ).toContain(Brevmal.VARSEL_OM_REVURDERING)
                     );
             }
         );

@@ -10,8 +10,10 @@ import {
     FamilieRadioGruppe,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';
@@ -19,15 +21,14 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IBehandling } from '../../../../typer/behandling';
-import { IGrunnlagPerson } from '../../../../typer/person';
-import {
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import type {
     IAnnenVurdering,
     IAnnenVurderingConfig,
     IPersonResultat,
-    Resultat,
-    resultater,
 } from '../../../../typer/vilkår';
+import { Resultat, resultater } from '../../../../typer/vilkår';
 import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,

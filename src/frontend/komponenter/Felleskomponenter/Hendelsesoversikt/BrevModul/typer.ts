@@ -1,4 +1,4 @@
-import { Målform } from '../../../../typer/søknad';
+import type { Målform } from '../../../../typer/søknad';
 
 export interface BrevtypeSelect extends HTMLSelectElement {
     value: Brevmal | '';
@@ -7,6 +7,8 @@ export interface BrevtypeSelect extends HTMLSelectElement {
 export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
+    VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 = 'VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14',
+    VARSEL_OM_REVURDERING_SAMBOER = 'VARSEL_OM_REVURDERING_SAMBOER',
     HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
     SVARTIDSBREV = 'SVARTIDSBREV',
 }
@@ -24,6 +26,8 @@ export const brevmaler: Record<Brevmal, string> = {
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
     HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
     SVARTIDSBREV: 'Svartidsbrev',
+    VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14: 'Varsel om revurdering delt bosted §14',
+    VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
 };
 
 export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
@@ -31,6 +35,8 @@ export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     VARSEL_OM_REVURDERING: 'Velg årsak',
     HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
     SVARTIDSBREV: 'Velg årsak',
+    VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14: 'Varsel om revurdering delt bosted §14',
+    VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
 };
 
 export const leggTilValuePåOption = (

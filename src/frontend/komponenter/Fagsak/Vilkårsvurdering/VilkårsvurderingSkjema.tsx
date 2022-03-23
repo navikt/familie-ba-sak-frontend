@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { FeltState } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { FeltState } from '@navikt/familie-skjema';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import {
@@ -15,17 +16,11 @@ import {
     VilkårSubmit,
 } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
-import {
-    IPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-    vilkårConfig,
-    Resultat,
-    annenVurderingConfig,
-    VilkårType,
-} from '../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../typer/vilkår';
+import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
@@ -69,8 +64,19 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
-    const { erLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent } =
-        useBehandling();
+    const {
+        erLesevisning,
+        erMigreringsbehandling,
+        settÅpenBehandling,
+        aktivSettPåVent,
+        åpenBehandling,
+    } = useBehandling();
+
+    const kanLeggeTilUtvidetVilkår =
+        erMigreringsbehandling ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KLAGE;
 
     const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
         personResultat.vilkårResultater.some(
@@ -129,7 +135,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
-                                erMigreringsbehandling && (
+                                kanLeggeTilUtvidetVilkår && (
                                     <VilkårDiv>
                                         <IkonKnapp
                                             erLesevisning={erLesevisning()}

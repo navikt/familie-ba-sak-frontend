@@ -1,17 +1,24 @@
 /* eslint-disable */
-const path = require('path');
+import path from 'path';
 
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import TypeScriptTypeChecker from 'fork-ts-checker-webpack-plugin';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const publicUrl = '/assets';
 
-module.exports = {
+const baseConfig = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
         fallback: { crypto: false },
+    },
+    output: {
+        filename: '[name].[contenthash].js',
+        path: path.resolve(process.cwd(), 'node_dist/'),
     },
     entry: ['./src/frontend/index.tsx'],
     plugins: [
@@ -36,6 +43,12 @@ module.exports = {
     devtool: 'inline-source-map',
     module: {
         rules: [
+            {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false, // Fikser at man ikke kan gjøre import uten filextension fra moduler med type: module i package.json
+                },
+            },
             {
                 test: /\.(ts|tsx)$/,
                 enforce: 'pre',
@@ -86,3 +99,5 @@ module.exports = {
         ],
     },
 };
+
+export default baseConfig;

@@ -7,17 +7,13 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Ressurs,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import {
-    IBehandling,
-    BehandlingResultat,
-    BehandlingÅrsak,
-    Behandlingstype,
-} from '../../typer/behandling';
+import type { IBehandling } from '../../typer/behandling';
+import { BehandlingResultat, BehandlingÅrsak, Behandlingstype } from '../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
 import { useApp } from '../AppContext';
 

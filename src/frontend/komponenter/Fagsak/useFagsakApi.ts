@@ -1,13 +1,14 @@
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
-import { IOpprettEllerHentFagsakData } from '../../api/fagsak';
+import type { IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { IMinimalFagsak } from '../../typer/fagsak';
+import type { IMinimalFagsak } from '../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import { VisningBehandling } from './Saksoversikt/visningBehandling';
+import type { VisningBehandling } from './Saksoversikt/visningBehandling';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,

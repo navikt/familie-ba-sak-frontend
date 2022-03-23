@@ -12,12 +12,9 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
-import {
-    adressebeskyttelsestyper,
-    ForelderBarnRelasjonRolle,
-    IForelderBarnRelasjonMaskert,
-} from '../../../typer/person';
-import { IBarnMedOpplysninger } from '../../../typer/søknad';
+import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
+import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';

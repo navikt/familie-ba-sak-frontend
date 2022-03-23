@@ -5,7 +5,8 @@ import classNames from 'classnames';
 import Modal from 'nav-frontend-modal';
 import { Undertittel } from 'nav-frontend-typografi';
 
-import { useApp, IModal } from '../../../context/AppContext';
+import type { IModal } from '../../../context/AppContext';
+import { useApp } from '../../../context/AppContext';
 
 interface IProps {
     modal?: IModal;

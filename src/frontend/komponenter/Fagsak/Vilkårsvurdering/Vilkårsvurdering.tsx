@@ -10,18 +10,16 @@ import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
-import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg, BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
-import {
-    annenVurderingConfig,
-    IAnnenVurdering,
-    IVilkårResultat,
-    vilkårConfig,
-} from '../../../typer/vilkår';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
+import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
+import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';

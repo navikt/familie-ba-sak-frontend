@@ -2,12 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
-import { IGrunnlagPerson } from '../../../../typer/person';
+import type { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import VilkårTabellRad from './VilkårTabellRad';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>

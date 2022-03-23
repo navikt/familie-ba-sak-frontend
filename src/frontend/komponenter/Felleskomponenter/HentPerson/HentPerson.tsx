@@ -9,9 +9,10 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
-import { IPersonInfo } from '../../../typer/person';
+import type { IPersonInfo } from '../../../typer/person';
 import { sjekkTilgangTilPerson } from '../../../utils/commons';
 import { identValidator } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';

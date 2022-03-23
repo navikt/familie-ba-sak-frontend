@@ -7,10 +7,11 @@ import { Feilmelding } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { IBehandling } from '../../../../typer/behandling';
+import type { IBehandling } from '../../../../typer/behandling';
 import { VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';

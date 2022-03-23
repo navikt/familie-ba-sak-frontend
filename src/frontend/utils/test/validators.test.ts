@@ -1,12 +1,14 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import { FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import generator from '../../testverktøy/fnr/fnr-generator';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { Resultat, UtdypendeVilkårsvurdering } from '../../typer/vilkår';
-import { IPeriode, nyPeriode } from '../kalender';
+import type { IPeriode } from '../kalender';
+import { nyPeriode } from '../kalender';
 import {
     erBegrunnelseGyldig,
     erPeriodeGyldig,

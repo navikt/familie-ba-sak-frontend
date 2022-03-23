@@ -1,7 +1,8 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import { ISaksbehandler } from '@navikt/familie-typer';
+import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import { hentPar, INøkkelPar, IPar } from '../../typer/common';
+import type { INøkkelPar, IPar } from '../../typer/common';
+import { hentPar } from '../../typer/common';
 import { harTilgangTilEnhet } from '../../typer/enhet';
 import {
     BehandlingstypeFilter,

@@ -59,6 +59,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         skjemaErLåst,
         hentSkjemaFeilmelding,
         visForhåndsvisningBeskjed,
+        settVisfeilmeldinger,
     } = useDokumentutsending();
 
     return (
@@ -97,7 +98,14 @@ const DokumentutsendingSkjema: React.FC = () => {
 
                 <ÅrsakSkjema>
                     {skjema.felter.årsak.verdi === DokumentÅrsak.DELT_BOSTED && (
-                        <DeltBostedSkjema />
+                        <DeltBostedSkjema
+                            avtalerOmDeltBostedPerBarnFelt={
+                                skjema.felter.avtalerOmDeltBostedPerBarn
+                            }
+                            barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            settVisFeilmeldinger={settVisfeilmeldinger}
+                        />
                     )}
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>

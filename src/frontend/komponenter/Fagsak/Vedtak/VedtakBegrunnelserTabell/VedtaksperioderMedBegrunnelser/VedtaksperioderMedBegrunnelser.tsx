@@ -4,13 +4,11 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IBehandling } from '../../../../../typer/behandling';
-import {
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../typer/vedtaksperiode';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov2 } from '../../../../../utils/vedtakUtils';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
@@ -18,19 +16,17 @@ import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserP
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
-    erLesevisning: boolean;
 }
 
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
-    erLesevisning,
 }) => {
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov2(
+    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
         åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [],
-        erLesevisning,
-        åpenBehandling.resultat
+        åpenBehandling.resultat,
+        åpenBehandling.status
     );
 
     if (

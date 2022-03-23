@@ -5,7 +5,8 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import Clipboard from '@navikt/familie-clipboard';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
-import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
+import type { IGrunnlagPerson } from '../../../typer/person';
+import { personTypeMap } from '../../../typer/person';
 import { hentAlder, formaterIdent } from '../../../utils/formatter';
 import DødsfallTag from '../DødsfallTag';
 

@@ -1,7 +1,7 @@
-import { FamilieIsoDate } from '../utils/kalender';
+import type { FamilieIsoDate } from '../utils/kalender';
 import { ytelsetype, YtelseType } from './beregning';
-import { IGrunnlagPerson } from './person';
-import { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
+import type { IGrunnlagPerson } from './person';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 
 export interface IVedtaksperiodeMedBegrunnelser {
     id: number;
@@ -30,6 +30,7 @@ export interface IRestPutVedtaksperiodeMedFritekster {
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
+    REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
     AVSLAG = 'AVSLAG',
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
@@ -92,6 +93,7 @@ export const hentVedtaksperiodeTittel = (
 
     if (
         (type === Vedtaksperiodetype.UTBETALING ||
+            type === Vedtaksperiodetype.REDUKSJON ||
             type === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
         utbetalingsperiodeDetaljer.length > 0
     ) {

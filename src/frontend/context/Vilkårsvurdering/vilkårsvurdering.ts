@@ -1,13 +1,15 @@
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 
-import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
-import {
+import type { IGrunnlagPerson } from '../../typer/person';
+import { PersonTypeVisningsRangering } from '../../typer/person';
+import type {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
-    Resultat,
 } from '../../typer/vilkår';
+import { Resultat } from '../../typer/vilkår';
 import {
     kalenderDato,
     kalenderDatoTilDate,

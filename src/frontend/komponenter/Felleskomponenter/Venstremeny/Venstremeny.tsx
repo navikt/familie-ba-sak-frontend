@@ -9,7 +9,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import Link from './Link';
-import { erSidenAktiv, IUnderside } from './sider';
+import type { IUnderside } from './sider';
+import { erSidenAktiv } from './sider';
 
 const Venstremeny: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();

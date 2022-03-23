@@ -8,16 +8,16 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import type { BehandlingÅrsak } from '../../typer/behandling';
 import {
     behandlingsstatuser,
     BehandlingStatus,
     behandlingstyper,
-    BehandlingÅrsak,
     behandlingÅrsak,
 } from '../../typer/behandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
-import { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`

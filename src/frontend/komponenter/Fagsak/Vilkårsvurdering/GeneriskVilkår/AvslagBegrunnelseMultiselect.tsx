@@ -1,9 +1,11 @@
-import React, { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import React from 'react';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 
-import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -11,13 +13,13 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import {
+import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
-    VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
-import { VilkårType } from '../../../../typer/vilkår';
-import { IPeriode } from '../../../../utils/kalender';
+import { VedtakBegrunnelseType } from '../../../../typer/vedtak';
+import type { VilkårType } from '../../../../typer/vilkår';
+import type { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
