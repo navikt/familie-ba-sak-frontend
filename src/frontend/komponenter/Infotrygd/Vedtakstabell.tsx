@@ -10,6 +10,10 @@ const IngenVedtakTekst = styled(Normaltekst)`
     margin: 1rem;
 `;
 
+const iverksattFom = (stønad: IInfotrygdStønad) => {
+    return 999999 - parseInt(stønad.iverksattFom as string);
+};
+
 const antallBarn = (stønad: IInfotrygdStønad) => {
     return stønad.barn.length;
 };
@@ -27,32 +31,20 @@ const visBeløp = (stønad: IInfotrygdStønad) => {
     });
 };
 
-// Anta at alle delytelser har samme fom
 const visDelytelseFom = (stønad: IInfotrygdStønad) => {
-    const fom = stønad.delytelse[0] ? stønad.delytelse[0].fom : undefined;
-    if (fom) {
-        return stønad.delytelse.every(delytelse => {
-            return fom === delytelse.fom;
-        })
-            ? fom
-            : 'Feil';
-    } else {
-        return '';
-    }
+    return stønad.delytelse.map((delytelse, index) => {
+        let fom = '';
+        fom += delytelse.fom ?? '?';
+        return <Normaltekst key={fom + index}>{fom}</Normaltekst>;
+    });
 };
 
-// Anta at alle delytelser har samme tom
 const visDelytelseTom = (stønad: IInfotrygdStønad) => {
-    const tom = stønad.delytelse[0] ? stønad.delytelse[0].tom : undefined;
-    if (tom) {
-        return stønad.delytelse.every(delytelse => {
-            return tom === delytelse.tom;
-        })
-            ? tom
-            : 'Feil';
-    } else {
-        return '';
-    }
+    return stønad.delytelse.map((delytelse, index) => {
+        let tom = '';
+        tom += delytelse.tom ?? '?';
+        return <Normaltekst key={tom + index}>{tom}</Normaltekst>;
+    });
 };
 
 export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
@@ -84,7 +76,7 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                         return (
                             <tr key={index}>
                                 <td>{(sak.saksblokk ?? '') + (sak.saksnr ?? '')}</td>
-                                <td>{stønad?.iverksattFom}</td>
+                                <td>{stønad ? iverksattFom(stønad) : ''}</td>
                                 <td>{stønad?.virkningFom}</td>
                                 <td>{/* kommer når vi finner dataene i replikasettet */}</td>
                                 <td>{stønad?.status}</td>
