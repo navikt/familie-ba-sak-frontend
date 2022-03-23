@@ -100,7 +100,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
               .length > 0 && kanOppretteBehandling;
     const kanOppretteTekniskEndring =
         kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
-    const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
+    const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
