@@ -10,8 +10,12 @@ const IngenVedtakTekst = styled(Normaltekst)`
     margin: 1rem;
 `;
 
-const iverksattFom = (stønad: IInfotrygdStønad) => {
-    return 999999 - parseInt(stønad.iverksattFom as string);
+const seqYearMonthTilYearMonth = (seqDato: string | undefined) => {
+    if (!seqDato) {
+        return '';
+    }
+    const yearMonth = 999999 - parseInt(seqDato);
+    return yearMonth.toString().substring(0, 4) + '-' + yearMonth.toString().substring(4, 6);
 };
 
 const antallBarn = (stønad: IInfotrygdStønad) => {
@@ -42,7 +46,7 @@ const visDelytelseFom = (stønad: IInfotrygdStønad) => {
 const visDelytelseTom = (stønad: IInfotrygdStønad) => {
     return stønad.delytelse.map((delytelse, index) => {
         let tom = '';
-        tom += delytelse.tom ?? '?';
+        tom += delytelse.tom ?? '-';
         return <Normaltekst key={tom + index}>{tom}</Normaltekst>;
     });
 };
@@ -76,8 +80,8 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                         return (
                             <tr key={index}>
                                 <td>{(sak.saksblokk ?? '') + (sak.saksnr ?? '')}</td>
-                                <td>{stønad ? iverksattFom(stønad) : ''}</td>
-                                <td>{stønad?.virkningFom}</td>
+                                <td>{seqYearMonthTilYearMonth(stønad?.iverksattFom)}</td>
+                                <td>{seqYearMonthTilYearMonth(stønad?.virkningFom)}</td>
                                 <td>{/* kommer når vi finner dataene i replikasettet */}</td>
                                 <td>{stønad?.status}</td>
                                 <td>{stønad?.tekstkode}</td>
