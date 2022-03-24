@@ -7,6 +7,7 @@ import { useApp } from '../context/AppContext';
 import { BehandlingProvider } from '../context/behandlingContext/BehandlingContext';
 import { FagsakProvider } from '../context/FagsakContext';
 import { Oppgaver } from '../context/OppgaverContext';
+import { TidslinjeProvider } from '../context/TidslinjeContext';
 import FagsakContainer from './Fagsak/FagsakContainer';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
@@ -49,7 +50,11 @@ const Container: React.FC = () => {
                                     <Route
                                         exact={true}
                                         path="/tidslinjer/:behandlingId"
-                                        component={TidslinjeVisualisering}
+                                        render={() => (
+                                            <TidslinjeProvider>
+                                                <TidslinjeVisualisering />
+                                            </TidslinjeProvider>
+                                        )}
                                     />
                                     <Redirect to="/oppgaver" />
                                 </Switch>
