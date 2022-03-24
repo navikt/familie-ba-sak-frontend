@@ -7,6 +7,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { Back } from '@navikt/ds-icons';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -26,6 +27,18 @@ const Container = styled.div`
 const StyledSectionDiv = styled.div`
     margin-top: 2.5rem;
 `;
+
+const StyledIkonKnappDiv = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const tilbakeKnappInnhold = (
+    <StyledIkonKnappDiv>
+        <Back />
+        Tilbake
+    </StyledIkonKnappDiv>
+);
 
 export const JournalpostSkjema: React.FC = () => {
     const { skjema, journalfør, hentFeilTilOppsummering, erLesevisning } = useManuellJournalfør();
@@ -69,7 +82,7 @@ export const JournalpostSkjema: React.FC = () => {
                     onClick={() => history.push(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    {erLesevisning() ? 'Tilbake' : 'Avbryt'}
+                    {erLesevisning() ? tilbakeKnappInnhold : 'Avbryt'}
                 </FamilieKnapp>
                 <FamilieKnapp
                     mini={true}
