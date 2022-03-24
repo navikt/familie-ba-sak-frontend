@@ -11,6 +11,7 @@ import { type Periode, Tidslinje } from '@navikt/helse-frontend-tidslinje';
 import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
+import { PersonType } from '../../../typer/person';
 import type {
     IRestRegelverkTidslinjePeriode,
     IRestResultatTidslinjePeriode,
@@ -19,7 +20,7 @@ import type {
     IRestVilkårRegelverkResultatTidslinjePeriode,
     ITidslinjer,
 } from '../../../typer/tidslinjer';
-import { Regelverk, Resultat } from '../../../typer/vilkår';
+import { type IVilkårConfig, Regelverk, Resultat, vilkårConfig } from '../../../typer/vilkår';
 import { formaterIdent } from '../../../utils/formatter';
 import {
     kalenderDato,
@@ -38,15 +39,13 @@ const Container = styled.div`
 `;
 
 const tidslinjerLabels = [
-    'Under 18 år',
-    'Bor med søker',
-    'Bosatt i riket',
-    'Lovlig opphold',
-    'Gift/partnerskap',
+    ...Object.values(vilkårConfig)
+        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.BARN))
+        .map(vc => vc.beskrivelse),
     '----',
-    'Bosatt i riket',
-    'Lovlig opphold',
-    'Utvidet',
+    ...Object.values(vilkårConfig)
+        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.SØKER))
+        .map(vc => vc.beskrivelse),
     '----',
     'Oppfylte perioder',
     '----',
@@ -101,6 +100,20 @@ const TidslinjeVisualisering: React.FC = () => {
         }));
     };
 
+    const genererSorterteVilkårsresultaterTidslinjer = (
+        vilkårsresultaterTidslinjer: IRestVilkårRegelverkResultatTidslinjePeriode[][]
+    ) => {
+        return Object.values(vilkårConfig).reduce((acc: Periode[][], vc: IVilkårConfig) => {
+            const vilkårTidslinje = vilkårsresultaterTidslinjer.find(vTidslinje =>
+                vTidslinje.some(v => v.innhold.vilkår === vc.key)
+            );
+
+            return vilkårTidslinje !== undefined
+                ? [genererRaderVilkårRegelverkResultatTidslinje(vilkårTidslinje), ...acc]
+                : acc;
+        }, []);
+    };
+
     const genererRaderResultatTidslinje = (
         resultatTidslinje: IRestResultatTidslinjePeriode[]
     ): Periode[] => {
@@ -128,12 +141,12 @@ const TidslinjeVisualisering: React.FC = () => {
         søkersTidslinjer: IRestTidslinjerForSøker,
         barnetsTidslinjer: IRestTidslinjerForBarn
     ): Periode[][] => {
-        const barnetsVilkårPerioder: Periode[][] = barnetsTidslinjer.vilkårTidslinjer.map(
-            vilkårTidslinje => genererRaderVilkårRegelverkResultatTidslinje(vilkårTidslinje.sort())
+        const barnetsVilkårPerioder: Periode[][] = genererSorterteVilkårsresultaterTidslinjer(
+            barnetsTidslinjer.vilkårTidslinjer
         );
 
-        const søkersVilkårPerioder: Periode[][] = søkersTidslinjer.vilkårTidslinjer.map(
-            vilkårTidslinje => genererRaderVilkårRegelverkResultatTidslinje(vilkårTidslinje.sort())
+        const søkersVilkårPerioder: Periode[][] = genererSorterteVilkårsresultaterTidslinjer(
+            søkersTidslinjer.vilkårTidslinjer
         );
 
         const barnetsOppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: Periode[] =
@@ -163,8 +176,8 @@ const TidslinjeVisualisering: React.FC = () => {
             return (
                 <Container>
                     <Sidetittel>Tidslinjer</Sidetittel>
-                    {barna.map(barn => (
-                        <>
+                    {barna.map((barn, index) => (
+                        <div key={`barn_${index}`}>
                             <div className={'tidslinje-header'}>
                                 <Undertittel>{`${formaterIdent(
                                     barn
@@ -211,7 +224,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                     }
                                 />
                             </div>
-                        </>
+                        </div>
                     ))}
                 </Container>
             );
