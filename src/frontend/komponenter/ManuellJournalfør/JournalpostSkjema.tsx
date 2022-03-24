@@ -69,7 +69,7 @@ export const JournalpostSkjema: React.FC = () => {
                     onClick={() => history.push(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    Avbryt
+                    {erLesevisning() ? 'Tilbake' : 'Avbryt'}
                 </FamilieKnapp>
                 <FamilieKnapp
                     mini={true}
