@@ -12,6 +12,7 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
+import TidslinjeVisualisering from './Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './Felleskomponenter/Toast/Toasts';
 import { Infotrygd } from './Infotrygd/Infotrygd';
 import Internstatistikk from './Internstatistikk';
@@ -45,6 +46,11 @@ const Container: React.FC = () => {
                                     <Route exact={true} path="/oppgaver" component={Oppgaver} />
                                     <Route path="/internstatistikk" component={Internstatistikk} />
                                     <Route path="/infotrygd" component={Infotrygd} />
+                                    <Route
+                                        exact={true}
+                                        path="/tidslinjer/:behandlingId"
+                                        component={TidslinjeVisualisering}
+                                    />
                                     <Redirect to="/oppgaver" />
                                 </Switch>
                             </BehandlingProvider>
