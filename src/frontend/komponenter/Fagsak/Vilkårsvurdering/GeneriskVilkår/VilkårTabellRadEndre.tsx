@@ -27,7 +27,7 @@ import {
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../typer/person';
+import { type IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type {
     IPersonResultat,
@@ -205,6 +205,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
         redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
 
+    const visRegelverkValg = (): boolean =>
+        person.type === PersonType.BARN &&
+        [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
+            vilkårFraConfig.key as VilkårType
+        );
+
     return (
         <SkjemaGruppe
             feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
@@ -266,8 +272,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-
-                {toggles[ToggleNavn.brukEøs] && redigerbartVilkår.verdi.vurderesEtter !== null && (
+                {console.log(redigerbartVilkår.verdi)}
+                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
                         lesevisningVerdi={
