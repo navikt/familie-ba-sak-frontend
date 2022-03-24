@@ -272,7 +272,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {console.log(redigerbartVilkår.verdi)}
                 {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
@@ -281,7 +280,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
                                 : 'Generell vurdering'
                         }
-                        value={redigerbartVilkår.verdi.vurderesEtter}
+                        value={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? redigerbartVilkår.verdi.vurderesEtter
+                                : undefined
+                        }
                         label={'Vurderes etter'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             settRedigerbartVilkår({
