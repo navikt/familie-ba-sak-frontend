@@ -27,7 +27,8 @@ import {
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
-import { type IGrunnlagPerson, PersonType } from '../../../../typer/person';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type {
     IPersonResultat,
