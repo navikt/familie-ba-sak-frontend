@@ -40,7 +40,7 @@ export interface IOppgave {
     opprettetTidspunkt: string;
     prioritet: string;
     status: string;
-    tilordnetRessurs: string;
+    tilordnetRessurs?: string;
 }
 
 export interface IOppgaveIdent {

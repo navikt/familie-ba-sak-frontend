@@ -5,8 +5,9 @@ import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { IDokumentInfo, Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -14,7 +15,6 @@ import {
     Journalstatus,
     RessursStatus,
 } from '@navikt/familie-typer';
-import type { IDokumentInfo, Ressurs } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
@@ -396,7 +396,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const erLesevisning = () => {
         return (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT
+            (dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT ||
+                (innloggetSaksbehandler !== undefined &&
+                    dataForManuellJournalføring.data.oppgave.tilordnetRessurs !==
+                        innloggetSaksbehandler.navIdent))
         );
     };
 
