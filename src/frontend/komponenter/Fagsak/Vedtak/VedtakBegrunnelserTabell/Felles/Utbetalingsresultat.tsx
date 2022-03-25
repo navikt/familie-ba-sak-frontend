@@ -29,8 +29,8 @@ const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) =
 
             {utbetalingsperiodeDetaljer
                 .sort(sorterUtbetaling)
-                .map((detalj: IUtbetalingsperiodeDetalj) => (
-                    <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
+                .map((detalj: IUtbetalingsperiodeDetalj, index: number) => (
+                    <UtbetalingsperiodeDetalj key={`${index}_${detalj.person.fødselsdato}`}>
                         <Normaltekst title={detalj.person.navn}>
                             {formaterIdent(detalj.person.personIdent)}
                         </Normaltekst>

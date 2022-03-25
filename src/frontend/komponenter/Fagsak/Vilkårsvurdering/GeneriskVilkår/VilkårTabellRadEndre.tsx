@@ -56,6 +56,7 @@ interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     settEkspandertVilkår: (ekspandertVilkår: boolean) => void;
+    settFokusPåKnapp: () => void;
 }
 
 const Container = styled.div`
@@ -85,6 +86,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     redigerbartVilkår,
     settRedigerbartVilkår,
     settEkspandertVilkår,
+    settFokusPåKnapp,
 }) => {
     const { toggles } = useApp();
 
@@ -133,6 +135,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         );
 
         lagreVilkår(validertVilkår, vilkårsvurderingForPerson);
+        settFokusPåKnapp();
     };
 
     const lagreVilkår = (
