@@ -17,9 +17,9 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import { ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
