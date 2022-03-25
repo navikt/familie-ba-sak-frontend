@@ -6,26 +6,14 @@ export interface ITidslinjer {
 }
 
 export interface IRestTidslinjerForBarn {
-    vilkårTidslinjer: IRestVilkårRegelverkResultatTidslinjePeriode[][];
-    oppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: IRestResultatTidslinjePeriode[];
-    regelverkTidslinje: IRestRegelverkTidslinjePeriode[];
+    vilkårTidslinjer: IRestTidslinjePeriode<IVilkårRegelverkResultat>[][];
+    oppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: IRestTidslinjePeriode<Resultat>[];
+    regelverkTidslinje: IRestTidslinjePeriode<Regelverk>[];
 }
 
 export interface IRestTidslinjerForSøker {
-    vilkårTidslinjer: IRestVilkårRegelverkResultatTidslinjePeriode[][];
-    oppfyllerEgneVilkårTidslinje: IRestResultatTidslinjePeriode[];
-}
-
-export interface IRestVilkårRegelverkResultatTidslinjePeriode {
-    fraOgMed: string;
-    tilOgMed: string;
-    innhold: IVilkårRegelverkResultat;
-}
-
-export interface IRestResultatTidslinjePeriode {
-    fraOgMed: string;
-    tilOgMed: string;
-    innhold: Resultat;
+    vilkårTidslinjer: IRestTidslinjePeriode<IVilkårRegelverkResultat>[][];
+    oppfyllerEgneVilkårTidslinje: IRestTidslinjePeriode<Resultat>[];
 }
 
 export interface IVilkårRegelverkResultat {
@@ -34,8 +22,8 @@ export interface IVilkårRegelverkResultat {
     resultat: Resultat;
 }
 
-export interface IRestRegelverkTidslinjePeriode {
+export interface IRestTidslinjePeriode<T> {
     fraOgMed: string;
     tilOgMed: string;
-    innhold: Regelverk;
+    innhold: T;
 }

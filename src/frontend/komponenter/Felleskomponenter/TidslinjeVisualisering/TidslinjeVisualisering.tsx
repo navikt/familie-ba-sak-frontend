@@ -13,12 +13,11 @@ import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/comp
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { PersonType } from '../../../typer/person';
 import type {
-    IRestRegelverkTidslinjePeriode,
-    IRestResultatTidslinjePeriode,
+    IRestTidslinjePeriode,
     IRestTidslinjerForBarn,
     IRestTidslinjerForSøker,
-    IRestVilkårRegelverkResultatTidslinjePeriode,
     ITidslinjer,
+    IVilkårRegelverkResultat,
 } from '../../../typer/tidslinjer';
 import { type IVilkårConfig, Regelverk, Resultat, vilkårConfig } from '../../../typer/vilkår';
 import { formaterIdent } from '../../../utils/formatter';
@@ -90,7 +89,7 @@ const TidslinjeVisualisering: React.FC = () => {
     };
 
     const genererRaderVilkårRegelverkResultatTidslinje = (
-        resultatTidslinje: IRestVilkårRegelverkResultatTidslinjePeriode[]
+        resultatTidslinje: IRestTidslinjePeriode<IVilkårRegelverkResultat>[]
     ): Periode[] => {
         return resultatTidslinje.map(resultatPeriode => ({
             fom: kalenderDatoTilDate(kalenderDato(resultatPeriode.fraOgMed)),
@@ -101,7 +100,7 @@ const TidslinjeVisualisering: React.FC = () => {
     };
 
     const genererSorterteVilkårsresultaterTidslinjer = (
-        vilkårsresultaterTidslinjer: IRestVilkårRegelverkResultatTidslinjePeriode[][]
+        vilkårsresultaterTidslinjer: IRestTidslinjePeriode<IVilkårRegelverkResultat>[][]
     ) => {
         return Object.values(vilkårConfig).reduce((acc: Periode[][], vc: IVilkårConfig) => {
             const vilkårTidslinje = vilkårsresultaterTidslinjer.find(vTidslinje =>
@@ -115,7 +114,7 @@ const TidslinjeVisualisering: React.FC = () => {
     };
 
     const genererRaderResultatTidslinje = (
-        resultatTidslinje: IRestResultatTidslinjePeriode[]
+        resultatTidslinje: IRestTidslinjePeriode<Resultat>[]
     ): Periode[] => {
         return resultatTidslinje.map(resultatPeriode => ({
             fom: kalenderDatoTilDate(kalenderDato(resultatPeriode.fraOgMed)),
@@ -126,7 +125,7 @@ const TidslinjeVisualisering: React.FC = () => {
     };
 
     const genererRaderRegelverkTidslinje = (
-        regelverkTidslinje: IRestRegelverkTidslinjePeriode[]
+        regelverkTidslinje: IRestTidslinjePeriode<Regelverk>[]
     ): Periode[] => {
         return regelverkTidslinje.map(regelverkPeriode => ({
             fom: kalenderDatoTilDate(kalenderDato(regelverkPeriode.fraOgMed)),
