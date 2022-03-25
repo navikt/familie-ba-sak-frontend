@@ -125,15 +125,19 @@ const TidslinjeVisualisering: React.FC = () => {
     };
 
     const genererRaderRegelverkTidslinje = (
-        regelverkTidslinje: IRestTidslinjePeriode<Regelverk>[]
+        regelverkTidslinje: IRestTidslinjePeriode<Regelverk | undefined>[]
     ): Periode[] => {
-        return regelverkTidslinje.map(regelverkPeriode => ({
-            fom: kalenderDatoTilDate(kalenderDato(regelverkPeriode.fraOgMed)),
-            tom: kalenderDatoTilDate(kalenderDato(regelverkPeriode.tilOgMed)),
-            id: `${regelverkPeriode.fraOgMed}_${regelverkPeriode.tilOgMed}`,
-            status:
-                regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER ? 'suksess' : 'advarsel',
-        }));
+        return regelverkTidslinje
+            .filter(regelverkPeriode => regelverkPeriode.innhold)
+            .map(regelverkPeriode => ({
+                fom: kalenderDatoTilDate(kalenderDato(regelverkPeriode.fraOgMed)),
+                tom: kalenderDatoTilDate(kalenderDato(regelverkPeriode.tilOgMed)),
+                id: `${regelverkPeriode.fraOgMed}_${regelverkPeriode.tilOgMed}`,
+                status:
+                    regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER
+                        ? 'suksess'
+                        : 'advarsel',
+            }));
     };
 
     const genererRaderForBarnetsTidslinjer = (

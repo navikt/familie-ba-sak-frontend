@@ -8,7 +8,7 @@ export interface ITidslinjer {
 export interface IRestTidslinjerForBarn {
     vilkårTidslinjer: IRestTidslinjePeriode<IVilkårRegelverkResultat>[][];
     oppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: IRestTidslinjePeriode<Resultat>[];
-    regelverkTidslinje: IRestTidslinjePeriode<Regelverk>[];
+    regelverkTidslinje: IRestTidslinjePeriode<Regelverk | undefined>[];
 }
 
 export interface IRestTidslinjerForSøker {
