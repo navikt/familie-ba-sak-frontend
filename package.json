@@ -115,7 +115,7 @@
     "nav-frontend-typografi": "^4.0.1",
     "nav-frontend-typografi-style": "^2.0.1",
     "nav-hoykontrast": "^2.1.2",
-    "node": "^17.5.0",
+    "node": "^17.7.1",
     "paginering": "^2.1.1",
     "prop-types": "^15.8.1",
     "query-string": "^7.1.0",
