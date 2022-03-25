@@ -29,6 +29,7 @@ interface IProps {
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
+    settFokusPåKnapp: () => void;
 }
 
 interface IEkspanderbarTrProps {
@@ -79,6 +80,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
+    settFokusPåKnapp,
 }) => {
     const { toggles } = useApp();
     const { erLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
@@ -206,6 +208,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                             redigerbartVilkår={redigerbartVilkår}
                             settRedigerbartVilkår={settRedigerbartVilkår}
                             settEkspandertVilkår={settEkspandertVilkår}
+                            settFokusPåKnapp={settFokusPåKnapp}
                         />
                     </EkspandertTd>
                 </tr>

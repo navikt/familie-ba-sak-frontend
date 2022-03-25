@@ -27,6 +27,7 @@ interface IProps {
     vilkårResultater: FeltState<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
+    settFokusPåKnapp: () => void;
 }
 
 const Tabell = styled.table`
@@ -62,6 +63,7 @@ const VilkårTabell: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultater,
     visFeilmeldinger,
+    settFokusPåKnapp,
 }) => {
     const { toggles } = useApp();
     return (
@@ -79,17 +81,20 @@ const VilkårTabell: React.FC<IProps> = ({
                 </tr>
             </thead>
             <tbody>
-                {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
-                    return (
-                        <VilkårTabellRad
-                            key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
-                            vilkårFraConfig={vilkårFraConfig}
-                            person={person}
-                            vilkårResultat={vilkårResultat}
-                            visFeilmeldinger={visFeilmeldinger}
-                        />
-                    );
-                })}
+                {vilkårResultater.map(
+                    (vilkårResultat: FeltState<IVilkårResultat>, index: number) => {
+                        return (
+                            <VilkårTabellRad
+                                key={`${index}_${person.fødselsdato}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                                vilkårFraConfig={vilkårFraConfig}
+                                person={person}
+                                vilkårResultat={vilkårResultat}
+                                visFeilmeldinger={visFeilmeldinger}
+                                settFokusPåKnapp={settFokusPåKnapp}
+                            />
+                        );
+                    }
+                )}
             </tbody>
         </Tabell>
     );
