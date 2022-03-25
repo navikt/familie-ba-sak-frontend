@@ -29,6 +29,7 @@ interface IProps {
     vilkårResultater: FeltState<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
+    generiskVilkårKey: string;
 }
 
 const Container = styled.div`
@@ -56,6 +57,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultater,
     visFeilmeldinger,
+    generiskVilkårKey,
 }) => {
     const { erLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
@@ -63,7 +65,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
 
-    const leggTilPeriodeKnappId = `${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`;
+    const leggTilPeriodeKnappId = generiskVilkårKey + '__legg_til_periode';
 
     const settFokusPåLeggTilPeriodeKnapp = () => {
         document.getElementById(leggTilPeriodeKnappId)?.focus();
@@ -151,6 +153,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     <FjernUtvidetBarnetrygdVilkår
                         erLesevisning={erLesevisning()}
                         personIdent={person.personIdent}
+                        slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                     />
                 )}
             </SkjemaGruppe>

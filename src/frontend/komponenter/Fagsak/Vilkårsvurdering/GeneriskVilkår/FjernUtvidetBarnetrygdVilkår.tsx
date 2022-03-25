@@ -23,9 +23,14 @@ const UtførKnapp = styled(IkonKnapp)`
 interface IProps {
     erLesevisning: boolean;
     personIdent: string;
+    slettVilkårId: string;
 }
 
-const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ erLesevisning, personIdent }) => {
+const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({
+    erLesevisning,
+    personIdent,
+    slettVilkårId,
+}) => {
     const { request } = useHttp();
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = React.useState<boolean>(false);
@@ -65,7 +70,7 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ erLesevisning, person
     return (
         <>
             <UtførKnapp
-                id={`${personIdent}__slett-vilkår-utvidet`}
+                id={slettVilkårId}
                 onClick={() => settVisModal(true)}
                 mini={true}
                 erLesevisning={erLesevisning}

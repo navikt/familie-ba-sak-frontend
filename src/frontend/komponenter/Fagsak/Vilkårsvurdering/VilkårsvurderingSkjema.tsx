@@ -121,7 +121,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                 );
                 return (
                     <Container
-                        key={personResultat.personIdent}
+                        key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
                         <PersonLinje>
@@ -139,7 +139,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     <VilkårDiv>
                                         <IkonKnapp
                                             erLesevisning={erLesevisning()}
-                                            id={`${personResultat.person.personIdent}__legg-til-vilkår-utvidet`}
+                                            id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
                                             onClick={() =>
                                                 leggTilVilkårUtvidet(personResultat.personIdent)
                                             }
@@ -155,7 +155,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
 
                             <IkonKnapp
                                 erLesevisning={false}
-                                id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
+                                id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
                                 onClick={() =>
                                     settPersonErEkspandert({
                                         ...personErEkspandert,
@@ -214,7 +214,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     else
                                         return (
                                             <GeneriskVilkår
-                                                key={`${personResultat.personIdent}_${vc.key}`}
+                                                key={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
+                                                generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
                                                 person={personResultat.person}
                                                 vilkårResultater={vilkårResultater}
                                                 vilkårFraConfig={vc}
@@ -231,7 +232,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     )
                                     .map(annenVurderingConfig => (
                                         <GeneriskAnnenVurdering
-                                            key={`${personResultat.personIdent}_${annenVurderingConfig.key}`}
+                                            key={`${index}_${personResultat.person.fødselsdato}_${annenVurderingConfig.key}`}
                                             person={personResultat.person}
                                             andreVurderinger={personResultat.andreVurderinger}
                                             annenVurderingConfig={annenVurderingConfig}
