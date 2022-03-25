@@ -108,7 +108,7 @@ const TidslinjeVisualisering: React.FC = () => {
             );
 
             return vilkårTidslinje !== undefined
-                ? [genererRaderVilkårRegelverkResultatTidslinje(vilkårTidslinje), ...acc]
+                ? [...acc, genererRaderVilkårRegelverkResultatTidslinje(vilkårTidslinje)]
                 : acc;
         }, []);
     };
@@ -160,12 +160,13 @@ const TidslinjeVisualisering: React.FC = () => {
         const barnetsRegelverkTidslinje: Periode[] = genererRaderRegelverkTidslinje(
             barnetsTidslinjer.regelverkTidslinje
         );
+        console.log(søkersVilkårPerioder);
 
         return [
             ...barnetsVilkårPerioder,
             [],
             ...søkersVilkårPerioder,
-            [],
+            ...(søkersVilkårPerioder.length === 2 ? [[], []] : [[]]),
             barnetsOppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje,
             [],
             barnetsRegelverkTidslinje,
