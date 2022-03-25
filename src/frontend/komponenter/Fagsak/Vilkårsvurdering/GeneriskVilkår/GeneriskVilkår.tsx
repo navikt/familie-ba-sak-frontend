@@ -29,6 +29,7 @@ interface IProps {
     vilkårResultater: FeltState<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
+    generiskVilkårKey: string;
 }
 
 const Container = styled.div`
@@ -56,12 +57,19 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultater,
     visFeilmeldinger,
+    generiskVilkårKey,
 }) => {
     const { erLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
+
+    const leggTilPeriodeKnappId = generiskVilkårKey + '__legg_til_periode';
+
+    const settFokusPåLeggTilPeriodeKnapp = () => {
+        document.getElementById(leggTilPeriodeKnappId)?.focus();
+    };
 
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
@@ -120,6 +128,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultater={vilkårResultater}
                     visFeilmeldinger={visFeilmeldinger}
+                    settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
                 />
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
@@ -131,7 +140,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             );
                             håndterNyPeriodeVilkårsvurdering(promise);
                         }}
-                        id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
+                        id={leggTilPeriodeKnappId}
                         ikon={<Pluss />}
                         ikonPosisjon={IkonPosisjon.VENSTRE}
                         label={'Legg til periode'}
@@ -144,6 +153,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     <FjernUtvidetBarnetrygdVilkår
                         erLesevisning={erLesevisning()}
                         personIdent={person.personIdent}
+                        slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                     />
                 )}
             </SkjemaGruppe>
