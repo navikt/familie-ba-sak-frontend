@@ -161,13 +161,13 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     <option value={''}>Velg</option>
                     {personer
                         .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
-                        .map(person => {
+                        .map((person, index) => {
                             return (
                                 <option
                                     aria-selected={
                                         person.personIdent === skjema.felter.mottakerIdent.verdi
                                     }
-                                    key={person.personIdent}
+                                    key={`${index}_${person.fødselsdato}`}
                                     value={person.personIdent}
                                 >
                                     {formaterIdent(person.personIdent)}

@@ -195,8 +195,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     .map(personMedAndeler => personMedAndeler.personIdent)
                                     .includes(person.personIdent)
                             )
-                            .map(person => (
-                                <option value={person.personIdent} key={person.personIdent}>
+                            .map((person, index) => (
+                                <option
+                                    value={person.personIdent}
+                                    key={`${index}_${person.fødselsdato}`}
+                                >
                                     {formaterIdent(person.personIdent)}
                                 </option>
                             ))}
