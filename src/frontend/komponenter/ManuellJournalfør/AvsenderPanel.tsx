@@ -60,7 +60,7 @@ export const AvsenderPanel: React.FC = () => {
             }}
         >
             <FamilieCheckbox
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 label={'Avsender er bruker'}
                 checked={brukerErAvsender}
                 onChange={() => {
