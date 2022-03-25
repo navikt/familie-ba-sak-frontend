@@ -8,10 +8,13 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { Back } from '@navikt/ds-icons';
+import { Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import type { OppgavetypeFilter } from '../../typer/oppgave';
+import { oppgaveTypeFilter } from '../../typer/oppgave';
 import Knapperekke from '../Felleskomponenter/Knapperekke';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
@@ -41,12 +44,30 @@ const tilbakeKnappInnhold = (
 );
 
 export const JournalpostSkjema: React.FC = () => {
-    const { skjema, journalfør, hentFeilTilOppsummering, erLesevisning } = useManuellJournalfør();
+    const {
+        dataForManuellJournalføring,
+        skjema,
+        journalfør,
+        hentFeilTilOppsummering,
+        erLesevisning,
+        lukkOppgaveOgKnyttJournalpostTilBehandling,
+        kanKnytteJournalpostTilBehandling,
+    } = useManuellJournalfør();
 
     const history = useHistory();
 
     return (
         <Container>
+            {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
+                <Heading spacing size="medium" level="2">
+                    {
+                        oppgaveTypeFilter[
+                            dataForManuellJournalføring.data.oppgave
+                                .oppgavetype as keyof typeof OppgavetypeFilter
+                        ].navn
+                    }
+                </Heading>
+            )}
             <Journalpost />
             <StyledSectionDiv>
                 <Undertittel children={'Dokumenter'} />
@@ -60,7 +81,7 @@ export const JournalpostSkjema: React.FC = () => {
             </StyledSectionDiv>
 
             <StyledSectionDiv>
-                {!erLesevisning() && <KnyttJournalpostTilBehandling />}
+                {kanKnytteJournalpostTilBehandling() && <KnyttJournalpostTilBehandling />}
                 <br />
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -93,6 +114,17 @@ export const JournalpostSkjema: React.FC = () => {
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
                     Journalfør
+                </FamilieKnapp>
+
+                <FamilieKnapp
+                    mini={true}
+                    type={'hoved'}
+                    onClick={lukkOppgaveOgKnyttJournalpostTilBehandling}
+                    erLesevisning={!erLesevisning() || !kanKnytteJournalpostTilBehandling()}
+                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                >
+                    Lukk oppgave
                 </FamilieKnapp>
             </Knapperekke>
         </Container>

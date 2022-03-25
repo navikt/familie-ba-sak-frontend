@@ -10,6 +10,7 @@ import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
+import { ToggleNavn } from '../../typer/toggles';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 import { ToastTyper } from '../Felleskomponenter/Toast/typer';
@@ -21,7 +22,7 @@ interface IOppgaveDirektelenke {
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
-    const { sjekkTilgang } = useApp();
+    const { sjekkTilgang, toggles } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
     const history = useHistory();
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
@@ -70,7 +71,6 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     } else {
         switch (oppgavetype) {
             case OppgavetypeFilter.JFR:
-            case OppgavetypeFilter.BEH_SED:
                 return (
                     <FamilieBaseKnapp
                         key={'tiloppg'}
@@ -80,6 +80,20 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                         children={'Gå til oppgave'}
                     />
                 );
+            case OppgavetypeFilter.BEH_SED:
+                if (oppgavetype === OppgavetypeFilter.BEH_SED && toggles[ToggleNavn.brukEøs]) {
+                    return (
+                        <FamilieBaseKnapp
+                            key={'tiloppg'}
+                            onClick={() => {
+                                visTilgangsmodalEllerSendVidere(oppgave);
+                            }}
+                            children={'Gå til oppgave'}
+                        />
+                    );
+                } else {
+                    return <></>;
+                }
             case OppgavetypeFilter.BEH_SAK:
             case OppgavetypeFilter.GOD_VED:
             case OppgavetypeFilter.BEH_UND_VED:

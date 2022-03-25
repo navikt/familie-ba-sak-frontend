@@ -9,6 +9,7 @@ import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
+import { ToggleNavn } from '../../typer/toggles';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 
@@ -22,7 +23,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
-    const { sjekkTilgang } = useApp();
+    const { sjekkTilgang, toggles } = useApp();
     const oppgaveRef = useRef<IOppgave | null>(null);
 
     useEffect(() => {
@@ -36,17 +37,20 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
     }
 
-    const oppgaveTypeErStøttet = [
-        OppgavetypeFilter.JFR,
-        OppgavetypeFilter.BEH_SAK,
-        OppgavetypeFilter.BEH_UND_VED,
-        OppgavetypeFilter.GOD_VED,
-        OppgavetypeFilter.VURD_LIVS,
-        OppgavetypeFilter.BEH_SED,
-    ].find(
-        (type: OppgavetypeFilter) =>
-            OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
-    );
+    let oppgaveTypeErStøttet =
+        [
+            OppgavetypeFilter.JFR,
+            OppgavetypeFilter.BEH_SAK,
+            OppgavetypeFilter.BEH_UND_VED,
+            OppgavetypeFilter.GOD_VED,
+            OppgavetypeFilter.VURD_LIVS,
+        ].find(
+            (type: OppgavetypeFilter) =>
+                OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
+        ) !== undefined;
+    oppgaveTypeErStøttet =
+        oppgaveTypeErStøttet ||
+        (toggles[ToggleNavn.brukEøs] && oppgave.oppgavetype === OppgavetypeFilter.BEH_SED);
 
     return oppgave.tilordnetRessurs ? (
         <div className={'kolonne'}>

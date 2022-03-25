@@ -39,7 +39,7 @@ const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { skjema, minimalFagsak, hentSorterteBehandlinger, erLesevisning } =
+    const { skjema, minimalFagsak, hentSorterteBehandlinger, kanKnytteJournalpostTilBehandling } =
         useManuellJournalfør();
     const åpenBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
@@ -87,7 +87,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         <KnyttTilBehandlingTd>
                                             <FamilieCheckbox
                                                 id={behandlingId.toString()}
-                                                erLesevisning={erLesevisning()}
+                                                erLesevisning={!kanKnytteJournalpostTilBehandling()}
                                                 label={'-'}
                                                 checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
                                                     behandlingId
