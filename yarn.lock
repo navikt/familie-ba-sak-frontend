@@ -2427,21 +2427,22 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-icons@^0.8.4":
-  version "0.8.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.4/ad157908309028f6372c8132792803a39386345f427cbb772e86603fcd7714fa#82ba73cbc5704132ec2dd6e6faace3a2b9d6abff"
-  integrity sha512-yIBYeJrkO3pEL2qcR5DGtQQ6mfs9Bb8iueMdmj1sa0JBPuDmPLLW5SJ/2HH4tcQciDZ3erp7k4CemJkbtob5AQ==
+"@navikt/ds-icons@^0.8.6":
+  version "0.8.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.6/51a9a30e74f2f2cd3849d52132b58d01880840ad8503b41329626bd1f0a604db#d5237b20a086c83291d5fcb02d6d5206c93bde45"
+  integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@0.16.19":
-  version "0.16.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.16.19/4a7051f8cca3f73f9a8b26d1f6d178c52fc0f4ad60452fd75d80572598cc6e64#0a94f1a17f97fcacb380d7c1fdad07f1d715cf32"
-  integrity sha512-HvTYJzc1Gq6o9xMZvtuiVyeKdPNdNrCj7SyHYYwP6zUFpXT3ymA2G48xf4yOeREvmK50lhFJBuPFVHTbpvSkLA==
+"@navikt/ds-react@0.17.16":
+  version "0.17.16"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.17.16/eb7c9d8ea0a103e61173face2fc3a8eb6d97c97ef1504db315280de8fcbc564b#4cb7c90c85865dd5fd01a138aa1670af32c726be"
+  integrity sha512-fxh/gXGQjKf/skDiXoBZzceqLR0sd3xv1v2+aui/Z8hy2mr2sepn2wiiWcYKDMu+yR7KIjdrUb7DIvifForjmw==
   dependencies:
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.8.4"
+    "@navikt/ds-icons" "^0.8.6"
     "@popperjs/core" "^2.10.1"
+    "@radix-ui/react-tabs" "0.1.5"
     "@radix-ui/react-toggle-group" "0.1.5"
     classnames "^2.2.6"
     react-collapse "^5.1.0"
@@ -2793,6 +2794,19 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "0.1.0"
+
+"@radix-ui/react-tabs@0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-tabs/-/react-tabs-0.1.5.tgz#ddcf860cc32e186d76477ae767dbb216d1944252"
+  integrity sha512-ieVQS1TFr0dX1XA8B+CsSFKOE7kcgEaNWWEfItxj9D1GZjn1o3WqPkW+FhQWDAWZLSKCH2PezYF3MNyO41lgJg==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-context" "0.1.1"
+    "@radix-ui/react-id" "0.1.5"
+    "@radix-ui/react-primitive" "0.1.4"
+    "@radix-ui/react-roving-focus" "0.1.5"
+    "@radix-ui/react-use-controllable-state" "0.1.0"
 
 "@radix-ui/react-toggle-group@0.1.5":
   version "0.1.5"
