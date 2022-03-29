@@ -28,7 +28,6 @@ import {
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
-import { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type {
     IPersonResultat,
@@ -210,7 +209,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
 
     const visRegelverkValg = (): boolean =>
-        person.type === PersonType.BARN &&
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
             vilkårFraConfig.key as VilkårType
         );
