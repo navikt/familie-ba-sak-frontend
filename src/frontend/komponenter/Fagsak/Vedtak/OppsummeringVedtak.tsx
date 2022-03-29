@@ -3,10 +3,11 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -93,6 +94,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
         !erMigreringFraInfotrygd;
 
+    const hentInfostripeTekst = (årsak: BehandlingÅrsak, status: BehandlingStatus): string => {
+        if (status === BehandlingStatus.AVSLUTTET) {
+            return "Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på 'Vis vedtaksbrev'.";
+        } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
+            return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
+        } else if (årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV) {
+            return 'Behandling bruker manuelt skrevet vedtaksbrev. Forhåndsvis for å se brevet.';
+        } else return '';
+    };
+
     return (
         <Skjemasteg
             tittel={'Vedtak'}
@@ -124,18 +135,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     />
                     <Container>
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
-                        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ? (
-                            <Alertstripe
-                                type="info"
-                                style={{ margin: '2rem 0 1rem 0' }}
-                                form="inline"
-                            >
+                        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                        åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
+                            <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
                                 <b>
-                                    {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER
-                                        ? 'Vedtak om opphør på grunn av dødsfall er automatisk generert.'
-                                        : 'Behandling bruker manuelt skrevet vedtaksbrev. Forhåndsvis for å se brevet.'}
+                                    {hentInfostripeTekst(
+                                        åpenBehandling.årsak,
+                                        åpenBehandling.status
+                                    )}
                                 </b>
-                            </Alertstripe>
+                            </Alert>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
                                 <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
