@@ -126,7 +126,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     }}
                     loading={oppgaver.status === RessursStatus.HENTER}
                     disabled={oppgaver.status === RessursStatus.HENTER}
-                    children={'Hent'}
+                    children={'Hent oppgaver'}
                 />
                 <Button
                     onClick={tilbakestillOppgaveFelter}
