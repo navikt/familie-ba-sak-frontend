@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Knapp } from 'nav-frontend-knapper';
 import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
+import { Button } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -119,19 +119,18 @@ const FilterSkjema: React.FunctionComponent = () => {
             </div>
 
             <div className="filterskjema__actions">
-                <Knapp
-                    type={'hoved'}
-                    mini
+                <Button
+                    variant="primary"
                     onClick={() => {
                         validerSkjema() && hentOppgaver();
                     }}
-                    spinner={oppgaver.status === RessursStatus.HENTER}
+                    loading={oppgaver.status === RessursStatus.HENTER}
                     disabled={oppgaver.status === RessursStatus.HENTER}
                     children={'Hent'}
                 />
-                <Knapp
+                <Button
                     onClick={tilbakestillOppgaveFelter}
-                    mini
+                    variant="secondary"
                     children={'Tilbakestill filtrering'}
                 />
             </div>
