@@ -89,19 +89,16 @@
         .tilordnet-ressurs {
             .kolonne {
                 display: flex;
+                align-items: center;
         
-                *:nth-child(1) {
+                .tilordnet-ressurs-tekst {
                     width: 5rem;
                     margin-right: 2.5rem;
                     text-align: left;
                 }
-                *:nth-child(2) {
-                    color: #0067c5;
-                    text-align: left;
-
-                    &:focus{
-                        border: 2px solid @fokusFarge;
-                    }
+                .tilordne-ressurs-knapp {
+                    text-align: center;
+                    min-width: fit-content;
                 }
             }
         }

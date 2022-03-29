@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
@@ -10,7 +11,6 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -49,9 +49,14 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
 
     return oppgave.tilordnetRessurs ? (
         <div className={'kolonne'}>
-            <Normaltekst>{oppgave.tilordnetRessurs}</Normaltekst>
+            <Normaltekst className="tilordnet-ressurs-tekst">
+                {oppgave.tilordnetRessurs}
+            </Normaltekst>
             {oppgaveTypeErStøttet && (
-                <FamilieBaseKnapp
+                <Button
+                    className="tilordne-ressurs-knapp"
+                    variant="tertiary"
+                    size="small"
                     key={'tilbakestill'}
                     onClick={() => {
                         tilbakestillFordelingPåOppgave(oppgave);
@@ -62,9 +67,12 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         </div>
     ) : (
         <div className={'kolonne'}>
-            <Normaltekst>Ikke tildelt</Normaltekst>
+            <Normaltekst className="tilordnet-ressurs-tekst">Ikke tildelt</Normaltekst>
             {oppgaveTypeErStøttet && (
-                <FamilieBaseKnapp
+                <Button
+                    className="tilordne-ressurs-knapp"
+                    variant="secondary"
+                    size="small"
                     key={'plukk'}
                     onClick={async () => {
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
@@ -73,7 +81,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent);
                         }
                     }}
-                    children={'Plukk'}
+                    children={'Tildel meg'}
                 />
             )}
         </div>
