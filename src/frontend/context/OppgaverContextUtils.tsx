@@ -28,14 +28,22 @@ import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     {
         accessor: 'opprettetTidspunkt',
-        Header: <Button size="small">Reg. dato</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Reg. dato
+            </Button>
+        ),
         Cell: ({ value: opprettetTidspunkt }) => {
             return opprettetTidspunkt ? intDatoTilNorskDato(opprettetTidspunkt) : 'Ukjent';
         },
     },
     {
         accessor: 'oppgavetype',
-        Header: <Button size="small">Oppgavetype</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Oppgavetype
+            </Button>
+        ),
         Cell: ({ value: oppgavetype }) => {
             return oppgavetype
                 ? oppgaveTypeFilter[oppgavetype as OppgavetypeFilter]?.navn ?? oppgavetype
@@ -44,7 +52,11 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'behandlingstema',
-        Header: <Button size="small">Gjelder</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Gjelder
+            </Button>
+        ),
         Cell: ({ value: behandlingstema }) => {
             return behandlingstema
                 ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
@@ -53,40 +65,68 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'behandlingstype',
-        Header: <Button size="small">Behandlingstype</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Behandlingstype
+            </Button>
+        ),
     },
     {
         accessor: 'fristFerdigstillelse',
-        Header: <Button size="small">Frist</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Frist
+            </Button>
+        ),
         Cell: ({ value: fristFerdigstillelse }) => {
             return fristFerdigstillelse ? intDatoTilNorskDato(fristFerdigstillelse) : 'Ukjent';
         },
     },
     {
         accessor: 'prioritet',
-        Header: <Button size="small">Prioritet</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Prioritet
+            </Button>
+        ),
         Cell: ({ value: prioritet }) => {
             return PrioritetFilter[prioritet as keyof typeof PrioritetFilter];
         },
     },
     {
         accessor: 'beskrivelse',
-        Header: <Button size="small">Beskrivelse</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Beskrivelse
+            </Button>
+        ),
     },
     {
         accessor: 'ident',
-        Header: <Button size="small">Bruker</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Bruker
+            </Button>
+        ),
         Cell: ({ value: identer }) => {
             return hentFnrFraOppgaveIdenter(identer) || 'Ukjent';
         },
     },
     {
         accessor: 'tildeltEnhetsnr',
-        Header: <Button size="small">Enhet</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Enhet
+            </Button>
+        ),
     },
     {
         accessor: 'tilordnetRessurs',
-        Header: <Button size="small">Saksbehandler</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Saksbehandler
+            </Button>
+        ),
         Cell: ({ value: tilordnetRessurs }) => {
             return (
                 <OppgavelisteSaksbehandler
@@ -98,7 +138,11 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'handlinger',
-        Header: <Button size="small">Handlinger</Button>,
+        Header: (
+            <Button size="small" variant="tertiary">
+                Handlinger
+            </Button>
+        ),
         Cell: ({ value: handlinger }) => {
             return <OppgaveDirektelenke oppgave={handlinger} />;
         },
