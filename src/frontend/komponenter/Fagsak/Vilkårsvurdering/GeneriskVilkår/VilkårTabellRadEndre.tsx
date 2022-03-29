@@ -208,6 +208,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
         redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
 
+    const visRegelverkValg = (): boolean =>
+        [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
+            vilkårFraConfig.key as VilkårType
+        );
+
     return (
         <SkjemaGruppe
             feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
@@ -269,8 +274,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-
-                {toggles[ToggleNavn.brukEøs] && redigerbartVilkår.verdi.vurderesEtter !== null && (
+                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
                         lesevisningVerdi={
@@ -278,7 +282,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
                                 : 'Generell vurdering'
                         }
-                        value={redigerbartVilkår.verdi.vurderesEtter}
+                        value={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? redigerbartVilkår.verdi.vurderesEtter
+                                : undefined
+                        }
                         label={'Vurderes etter'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             settRedigerbartVilkår({
