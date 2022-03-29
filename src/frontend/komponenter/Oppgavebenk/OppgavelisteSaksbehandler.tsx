@@ -54,7 +54,6 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             </Normaltekst>
             {oppgaveTypeErStøttet && (
                 <Button
-                    className="tilordne-ressurs-knapp"
                     variant="tertiary"
                     size="small"
                     key={'tilbakestill'}
@@ -70,7 +69,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             <Normaltekst className="tilordnet-ressurs-tekst">Ikke tildelt</Normaltekst>
             {oppgaveTypeErStøttet && (
                 <Button
-                    className="tilordne-ressurs-knapp"
+                    className="tildel-meg"
                     variant="secondary"
                     size="small"
                     key={'plukk'}
