@@ -1,6 +1,8 @@
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
+import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPar } from './common';
+import type { INavnOgIdent } from './manuell-journalføring';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
@@ -177,4 +179,15 @@ export enum PrioritetFilter {
     NORM = 'Normal',
     HOY = 'Høy',
     LAV = 'Lav',
+}
+
+export interface IRestLukkOppgaveOgKnyttJournalpost {
+    journalpostId: string;
+    tilknyttedeBehandlingIder: number[];
+    opprettOgKnyttTilNyBehandling: boolean;
+    bruker?: INavnOgIdent;
+    datoMottatt?: string;
+    navIdent: string;
+    kategori: BehandlingKategori | null;
+    underkategori: BehandlingUnderkategori | null;
 }

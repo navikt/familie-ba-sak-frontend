@@ -34,6 +34,7 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
+import { ToggleNavn } from '../typer/toggles';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
@@ -47,7 +48,7 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const history = useHistory();
-    const { innloggetSaksbehandler, settToast } = useApp();
+    const { innloggetSaksbehandler, settToast, toggles } = useApp();
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
@@ -215,9 +216,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         })
             .then((oppgaveId: Ressurs<string>) => {
                 if (oppgaveId.status === RessursStatus.SUKSESS) {
+                    const oppgavetypeFilter =
+                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter];
                     if (
-                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
-                        OppgavetypeFilter.JFR
+                        oppgavetypeFilter === OppgavetypeFilter.JFR ||
+                        (oppgavetypeFilter === OppgavetypeFilter.BEH_SED &&
+                            toggles[ToggleNavn.brukEøs])
                     ) {
                         history.push(`/oppgaver/journalfør/${oppgave.id}`);
                     } else {
