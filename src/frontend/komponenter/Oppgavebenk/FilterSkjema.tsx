@@ -27,6 +27,19 @@ const DatoVelgerContainer = styled.div`
     max-width: 12.5rem;
 `;
 
+// Denne stylingen skal fjernes på sikt (minus marginer)
+const StyledButton = styled(Button)`
+    margin-top: 0.5rem;
+    margin-right: 1.5rem;
+    padding: calc(0.25rem - 1px) 1.5rem calc(0.25rem - 1px) 1.5rem;
+    font-weight: bolder;
+    min-height: 2rem;
+    .navds-button__inner {
+        font-weight: 600;
+        letter-spacing: 0.0625em;
+    }
+`;
+
 const FilterSkjema: React.FunctionComponent = () => {
     const { innloggetSaksbehandler } = useApp();
     const {
@@ -119,7 +132,7 @@ const FilterSkjema: React.FunctionComponent = () => {
             </div>
 
             <div className="filterskjema__actions">
-                <Button
+                <StyledButton
                     variant="primary"
                     onClick={() => {
                         validerSkjema() && hentOppgaver();
@@ -128,7 +141,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     disabled={oppgaver.status === RessursStatus.HENTER}
                     children={'Hent oppgaver'}
                 />
-                <Button
+                <StyledButton
                     onClick={tilbakestillOppgaveFelter}
                     variant="secondary"
                     children={'Tilbakestill filtrering'}
