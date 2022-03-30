@@ -172,26 +172,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             });
         };
 
-        interface IOppdaterVedtaksperioder {
-            skalGenererePerioderForFortsattInnvilget: boolean;
-            behandlingId: number;
-        }
-
-        const oppdaterVedtaksperioder = (medPerioder: boolean) => {
-            request<IOppdaterVedtaksperioder, IBehandling>({
-                method: 'PUT',
-                url: '/familie-ba-sak/api/vedtaksperioder/fortsatt-innvilget',
-                data: {
-                    skalGenererePerioderForFortsattInnvilget: medPerioder,
-                    behandlingId: åpenBehandling.behandlingId,
-                },
-            }).then((behandling: Ressurs<IBehandling>) => {
-                if (behandling.status === RessursStatus.SUKSESS) {
-                    settÅpenBehandling(behandling);
-                }
-            });
-        };
-
         const genererOgSettBegrunnelserForForhåndsvisning = (vedtaksperiodeId: number) => {
             settGenererteBrevbegrunnelser(byggHenterRessurs());
             request<void, string[]>({
@@ -274,7 +254,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling,
             standardBegrunnelserPut,
             genererteBrevbegrunnelser,
-            oppdaterVedtaksperioder,
         };
     }
 );
