@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
+import { Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
@@ -11,7 +12,6 @@ import { useFagsakRessurser } from '../../context/FagsakContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 import { ToastTyper } from '../Felleskomponenter/Toast/typer';
 
 interface IOppgaveDirektelenke {
@@ -71,12 +71,14 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
         switch (oppgavetype) {
             case OppgavetypeFilter.JFR:
                 return (
-                    <FamilieBaseKnapp
+                    <Button
+                        variant="tertiary"
+                        size="small"
                         key={'tiloppg'}
                         onClick={() => {
                             visTilgangsmodalEllerSendVidere(oppgave);
                         }}
-                        children={'Gå til oppgave'}
+                        children={'Se oppgave'}
                     />
                 );
             case OppgavetypeFilter.BEH_SAK:
@@ -85,7 +87,9 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             case OppgavetypeFilter.VURD_LIVS:
             case OppgavetypeFilter.FREM:
                 return (
-                    <FamilieBaseKnapp
+                    <Button
+                        variant="tertiary"
+                        size="small"
                         key={'tilfagsak'}
                         onClick={() => {
                             sjekkTilgangOgGåTilBehandling(oppgave);

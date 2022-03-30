@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
+import styled from 'styled-components';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
@@ -10,12 +13,22 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     innloggetSaksbehandler?: ISaksbehandler;
 }
+
+const StyledNormaltekst = styled(Normaltekst)`
+    width: 5rem;
+    margin-right: 2.5rem;
+    text-align: left;
+`;
+
+const StyledButton = styled(Button)`
+    text-align: center;
+    min-width: fit-content;
+`;
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
     oppgave,
@@ -49,9 +62,11 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
 
     return oppgave.tilordnetRessurs ? (
         <div className={'kolonne'}>
-            <Normaltekst>{oppgave.tilordnetRessurs}</Normaltekst>
+            <StyledNormaltekst>{oppgave.tilordnetRessurs}</StyledNormaltekst>
             {oppgaveTypeErStøttet && (
-                <FamilieBaseKnapp
+                <StyledButton
+                    variant="tertiary"
+                    size="small"
                     key={'tilbakestill'}
                     onClick={() => {
                         tilbakestillFordelingPåOppgave(oppgave);
@@ -62,9 +77,11 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         </div>
     ) : (
         <div className={'kolonne'}>
-            <Normaltekst>Ikke tildelt</Normaltekst>
+            <StyledNormaltekst>Ikke tildelt</StyledNormaltekst>
             {oppgaveTypeErStøttet && (
-                <FamilieBaseKnapp
+                <StyledButton
+                    variant="secondary"
+                    size="small"
                     key={'plukk'}
                     onClick={async () => {
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
@@ -73,7 +90,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent);
                         }
                     }}
-                    children={'Plukk'}
+                    children={'Tildel meg'}
                 />
             )}
         </div>
