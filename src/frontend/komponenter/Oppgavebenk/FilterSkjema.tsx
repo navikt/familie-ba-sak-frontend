@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Knapp } from 'nav-frontend-knapper';
 import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
+import { Button } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -25,6 +25,19 @@ const StyledElement = styled(Element)`
 
 const DatoVelgerContainer = styled.div`
     max-width: 12.5rem;
+`;
+
+// Denne stylingen skal fjernes på sikt (minus marginer)
+const StyledButton = styled(Button)`
+    margin-top: 0.5rem;
+    margin-right: 1.5rem;
+    padding: calc(0.25rem - 1px) 1.5rem calc(0.25rem - 1px) 1.5rem;
+    font-weight: bolder;
+    min-height: 2rem;
+    .navds-button__inner {
+        font-weight: 600;
+        letter-spacing: 0.0625em;
+    }
 `;
 
 const FilterSkjema: React.FunctionComponent = () => {
@@ -119,19 +132,18 @@ const FilterSkjema: React.FunctionComponent = () => {
             </div>
 
             <div className="filterskjema__actions">
-                <Knapp
-                    type={'hoved'}
-                    mini
+                <StyledButton
+                    variant="primary"
                     onClick={() => {
                         validerSkjema() && hentOppgaver();
                     }}
-                    spinner={oppgaver.status === RessursStatus.HENTER}
+                    loading={oppgaver.status === RessursStatus.HENTER}
                     disabled={oppgaver.status === RessursStatus.HENTER}
-                    children={'Hent'}
+                    children={'Hent oppgaver'}
                 />
-                <Knapp
+                <StyledButton
                     onClick={tilbakestillOppgaveFelter}
-                    mini
+                    variant="secondary"
                     children={'Tilbakestill filtrering'}
                 />
             </div>

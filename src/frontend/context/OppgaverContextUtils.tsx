@@ -1,9 +1,9 @@
 import React from 'react';
 
 import type { Column } from 'react-table';
+import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
+import { Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from '../komponenter/Oppgavebenk/OppgaveDirektelenke';
@@ -26,17 +26,32 @@ import {
 } from '../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 
+const StyledButton = styled(Button)`
+    .navds-button__inner {
+        font-weight: 600;
+        margin: 0;
+    }
+`;
+
+const LitenKnapp: React.FC = ({ children }) => {
+    return (
+        <StyledButton size="small" variant="tertiary">
+            {children}
+        </StyledButton>
+    );
+};
+
 export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     {
         accessor: 'opprettetTidspunkt',
-        Header: <Knapp>Reg. dato</Knapp>,
+        Header: <LitenKnapp>Reg. dato</LitenKnapp>,
         Cell: ({ value: opprettetTidspunkt }) => {
             return opprettetTidspunkt ? intDatoTilNorskDato(opprettetTidspunkt) : 'Ukjent';
         },
     },
     {
         accessor: 'oppgavetype',
-        Header: <Knapp>Oppgavetype</Knapp>,
+        Header: <LitenKnapp>Oppgavetype</LitenKnapp>,
         Cell: ({ value: oppgavetype }) => {
             return oppgavetype
                 ? oppgaveTypeFilter[oppgavetype as OppgavetypeFilter]?.navn ?? oppgavetype
@@ -45,7 +60,7 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'behandlingstema',
-        Header: <Knapp>Gjelder</Knapp>,
+        Header: <LitenKnapp>Gjelder</LitenKnapp>,
         Cell: ({ value: behandlingstema }) => {
             return behandlingstema
                 ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
@@ -54,40 +69,40 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'behandlingstype',
-        Header: <Knapp>Behandlingstype</Knapp>,
+        Header: <LitenKnapp>Behandlingstype</LitenKnapp>,
     },
     {
         accessor: 'fristFerdigstillelse',
-        Header: <Knapp>Frist</Knapp>,
+        Header: <LitenKnapp>Frist</LitenKnapp>,
         Cell: ({ value: fristFerdigstillelse }) => {
             return fristFerdigstillelse ? intDatoTilNorskDato(fristFerdigstillelse) : 'Ukjent';
         },
     },
     {
         accessor: 'prioritet',
-        Header: <Knapp>Prioritet</Knapp>,
+        Header: <LitenKnapp>Prioritet</LitenKnapp>,
         Cell: ({ value: prioritet }) => {
             return PrioritetFilter[prioritet as keyof typeof PrioritetFilter];
         },
     },
     {
         accessor: 'beskrivelse',
-        Header: <Knapp>Beskrivelse</Knapp>,
+        Header: <LitenKnapp>Beskrivelse</LitenKnapp>,
     },
     {
         accessor: 'ident',
-        Header: <Knapp>Bruker</Knapp>,
+        Header: <LitenKnapp>Bruker</LitenKnapp>,
         Cell: ({ value: identer }) => {
             return hentFnrFraOppgaveIdenter(identer) || 'Ukjent';
         },
     },
     {
         accessor: 'tildeltEnhetsnr',
-        Header: <Knapp>Enhet</Knapp>,
+        Header: <LitenKnapp>Enhet</LitenKnapp>,
     },
     {
         accessor: 'tilordnetRessurs',
-        Header: <Knapp>Saksbehandler</Knapp>,
+        Header: <LitenKnapp>Saksbehandler</LitenKnapp>,
         Cell: ({ value: tilordnetRessurs }) => {
             return (
                 <OppgavelisteSaksbehandler
@@ -99,7 +114,7 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
     {
         accessor: 'handlinger',
-        Header: <Knapp>Handlinger</Knapp>,
+        Header: <LitenKnapp>Handlinger</LitenKnapp>,
         Cell: ({ value: handlinger }) => {
             return <OppgaveDirektelenke oppgave={handlinger} />;
         },
