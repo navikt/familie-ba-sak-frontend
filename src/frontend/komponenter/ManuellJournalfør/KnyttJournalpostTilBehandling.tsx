@@ -39,13 +39,19 @@ const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { skjema, minimalFagsak, hentSorterteBehandlinger, kanKnytteJournalpostTilBehandling } =
-        useManuellJournalfør();
+    const {
+        skjema,
+        minimalFagsak,
+        hentSorterteBehandlinger,
+        kanKnytteJournalpostTilBehandling,
+        erLesevisning,
+    } = useManuellJournalfør();
     const åpenBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
 
     const visGenerellSakInfoStripe =
+        !erLesevisning() &&
         skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
         !skjema.felter.knyttTilNyBehandling.verdi;
     return (

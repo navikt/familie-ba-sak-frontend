@@ -183,7 +183,6 @@ export enum PrioritetFilter {
 
 export interface IRestLukkOppgaveOgKnyttJournalpost {
     journalpostId: string;
-    knyttJournalpostTilFagsak: boolean;
     tilknyttedeBehandlingIder: number[];
     opprettOgKnyttTilNyBehandling: boolean;
     bruker?: INavnOgIdent;
