@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { Column } from 'react-table';
+import styled from 'styled-components';
 
 import { Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
@@ -25,11 +26,18 @@ import {
 } from '../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 
+const StyledButton = styled(Button)`
+    .navds-button__inner {
+        font-weight: 600;
+        margin: 0;
+    }
+`;
+
 const LitenKnapp: React.FC = ({ children }) => {
     return (
-        <Button size="small" variant="tertiary">
+        <StyledButton size="small" variant="tertiary">
             {children}
-        </Button>
+        </StyledButton>
     );
 };
 
