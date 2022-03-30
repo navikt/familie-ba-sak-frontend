@@ -39,13 +39,19 @@ const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { skjema, minimalFagsak, hentSorterteBehandlinger, erLesevisning } =
-        useManuellJournalfør();
+    const {
+        skjema,
+        minimalFagsak,
+        hentSorterteBehandlinger,
+        kanKnytteJournalpostTilBehandling,
+        erLesevisning,
+    } = useManuellJournalfør();
     const åpenBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
 
     const visGenerellSakInfoStripe =
+        !erLesevisning() &&
         skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
         !skjema.felter.knyttTilNyBehandling.verdi;
     return (
@@ -87,7 +93,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         <KnyttTilBehandlingTd>
                                             <FamilieCheckbox
                                                 id={behandlingId.toString()}
-                                                erLesevisning={erLesevisning()}
+                                                erLesevisning={!kanKnytteJournalpostTilBehandling()}
                                                 label={'-'}
                                                 checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
                                                     behandlingId
