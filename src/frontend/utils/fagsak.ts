@@ -4,7 +4,11 @@ import { fagsakStatus } from '../typer/fagsak';
 import { kalenderDiff } from './kalender';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
-    minimalFagsak.underBehandling ? 'Under behandling' : fagsakStatus[minimalFagsak.status].navn;
+    minimalFagsak.behandlinger.length === 0
+        ? '-'
+        : minimalFagsak.underBehandling
+        ? 'Under behandling'
+        : fagsakStatus[minimalFagsak.status].navn;
 
 export const hentSisteBehandlingPåMinimalFagsak = (
     fagsak: IMinimalFagsak
