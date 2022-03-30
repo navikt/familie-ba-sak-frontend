@@ -22,6 +22,7 @@
     .filterskjema {
         display: flex;
         flex-direction: column;
+        margin-bottom: 2rem;
     
         &__filtre {
             display: flex;
@@ -32,13 +33,6 @@
     
             &--input{
                 padding-right: 1.5rem;
-            }
-        }
-        
-        &__actions {
-            & .knapp {
-                margin-top: 1.5rem;
-                margin-right: 2rem;
             }
         }
     }
@@ -89,20 +83,7 @@
         .tilordnet-ressurs {
             .kolonne {
                 display: flex;
-        
-                *:nth-child(1) {
-                    width: 5rem;
-                    margin-right: 2.5rem;
-                    text-align: left;
-                }
-                *:nth-child(2) {
-                    color: #0067c5;
-                    text-align: left;
-
-                    &:focus{
-                        border: 2px solid @fokusFarge;
-                    }
-                }
+                align-items: center;
             }
         }
         
