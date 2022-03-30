@@ -10,7 +10,7 @@ import { useManuellJournalfør } from '../../../context/ManuellJournalførContex
 
 const DokumentDiv = styled.div`
     width: 100%;
-    height: 92vh;
+    height: 100%;
 `;
 
 const DokumentDataAlert = styled(AlertStripeFeil)`

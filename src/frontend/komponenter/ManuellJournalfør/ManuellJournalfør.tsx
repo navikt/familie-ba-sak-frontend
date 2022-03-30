@@ -15,18 +15,25 @@ import Personlinje from '../Fagsak/Personlinje/Personlinje';
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
-const ToKolonnerDiv = styled.div`
+const ToKolonnerDiv = styled.div(
+    (props: { viserAlert?: boolean }) => `
     display: grid;
     grid-template-columns: 40rem 1fr;
     grid-template-rows: 1fr;
-    height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
-`;
+    height: calc(100vh - ${
+        props.viserAlert ? fagsakHeaderHøydeRem + 5.25 : fagsakHeaderHøydeRem
+    }rem);
+`
+);
 
 const ManuellJournalførContent: React.FC = () => {
     const { dataForManuellJournalføring, minimalFagsak } = useManuellJournalfør();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
+            const viserAlert =
+                dataForManuellJournalføring.data.journalpost.journalstatus !==
+                Journalstatus.MOTTATT;
             return (
                 <>
                     <Personlinje
@@ -44,7 +51,7 @@ const ManuellJournalførContent: React.FC = () => {
                         </>
                     )}
 
-                    <ToKolonnerDiv>
+                    <ToKolonnerDiv viserAlert={viserAlert}>
                         <JournalpostSkjema />
                         <DokumentPanel />
                     </ToKolonnerDiv>

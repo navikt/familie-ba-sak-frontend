@@ -27,16 +27,18 @@ import type {
     IRestJournalføring,
 } from '../typer/manuell-journalføring';
 import { JournalpostKanal } from '../typer/manuell-journalføring';
+import { type IRestLukkOppgaveOgKnyttJournalpost, OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler, toggles } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
@@ -393,14 +395,93 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
+    const lukkOppgaveOgKnyttJournalpostTilBehandling = () => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            const nyBehandlingstype = skjema.felter.behandlingstype.verdi;
+            const nyBehandlingsårsak = skjema.felter.behandlingsårsak.verdi;
+            const { verdi: behandlingstema } = skjema.felter.behandlingstema;
+
+            const knyttJournalpostTilFagsak =
+                skjema.felter.tilknyttedeBehandlingIder.verdi.length > 0 ||
+                skjema.felter.knyttTilNyBehandling.verdi;
+
+            if (!knyttJournalpostTilFagsak) {
+                onSubmit<void>(
+                    {
+                        method: 'GET',
+                        url: `/familie-ba-sak/api/oppgave/${oppgaveId}/ferdigstill`,
+                    },
+                    (respons: Ressurs<string>) => {
+                        if (respons.status === RessursStatus.SUKSESS) {
+                            history.push('/oppgaver');
+                        }
+                    }
+                );
+            } else {
+                onSubmit<IRestLukkOppgaveOgKnyttJournalpost>(
+                    {
+                        method: 'POST',
+                        url: `/familie-ba-sak/api/oppgave/${oppgaveId}/ferdigstillOgKnyttjournalpost`,
+                        data: {
+                            journalpostId:
+                                dataForManuellJournalføring.data.journalpost.journalpostId,
+                            opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
+                            tilknyttedeBehandlingIder:
+                                skjema.felter.tilknyttedeBehandlingIder.verdi,
+                            kategori: behandlingstema?.kategori ?? null,
+                            underkategori: behandlingstema?.underkategori ?? null,
+                            bruker: {
+                                navn: skjema.felter.bruker.verdi?.navn ?? '',
+                                id: skjema.felter.bruker.verdi?.personIdent ?? '',
+                            },
+                            datoMottatt: dataForManuellJournalføring.data.journalpost.datoMottatt,
+                            nyBehandlingstype:
+                                nyBehandlingstype === ''
+                                    ? Behandlingstype.FØRSTEGANGSBEHANDLING
+                                    : nyBehandlingstype,
+                            nyBehandlingsårsak:
+                                nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                                    ? BehandlingÅrsak.SØKNAD
+                                    : nyBehandlingsårsak === ''
+                                    ? BehandlingÅrsak.SØKNAD
+                                    : nyBehandlingsårsak,
+                            navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                        },
+                    },
+                    (fagsakId: Ressurs<string>) => {
+                        if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
+                            history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                        } else if (fagsakId.status === RessursStatus.SUKSESS) {
+                            history.push('/oppgaver');
+                        }
+                    }
+                );
+            }
+        }
+    };
+
+    const tilordnetInnloggetSaksbehandler = () =>
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+        innloggetSaksbehandler !== undefined &&
+        dataForManuellJournalføring.data.oppgave.tilordnetRessurs ===
+            innloggetSaksbehandler.navIdent;
+
     const erLesevisning = () => {
         return (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             (dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT ||
-                (innloggetSaksbehandler !== undefined &&
-                    dataForManuellJournalføring.data.oppgave.tilordnetRessurs !==
-                        innloggetSaksbehandler.navIdent))
+                !tilordnetInnloggetSaksbehandler())
         );
+    };
+
+    const kanKnytteJournalpostTilBehandling = () => {
+        return dataForManuellJournalføring.status !== RessursStatus.SUKSESS
+            ? false
+            : dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.BEH_SED &&
+              tilordnetInnloggetSaksbehandler() &&
+              toggles[ToggleNavn.brukEøs]
+            ? true
+            : !erLesevisning();
     };
 
     const settAvsenderLikBruker = () => {
@@ -444,6 +525,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         velgOgHentDokumentData,
         settAvsenderLikBruker,
         tilbakestillAvsender,
+        lukkOppgaveOgKnyttJournalpostTilBehandling,
+        kanKnytteJournalpostTilBehandling,
     };
 });
 
