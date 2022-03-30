@@ -46,6 +46,12 @@ const Container = styled.div`
     }
 `;
 
+const StyledSkjemaSteg = styled(Skjemasteg)`
+    .typo-innholdstittel {
+        margin-bottom: 1.4rem;
+    }
+`;
+
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
     value: PeriodetypeIVedtaksbrev;
 }
@@ -107,7 +113,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         !erMigreringFraInfotrygd;
 
     return (
-        <Skjemasteg
+        <StyledSkjemaSteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
                 history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
@@ -229,7 +235,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}
                 </AlertStripeInfo>
             )}
-        </Skjemasteg>
+        </StyledSkjemaSteg>
     );
 };
 
