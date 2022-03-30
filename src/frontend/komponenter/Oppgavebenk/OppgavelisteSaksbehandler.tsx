@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
+import styled from 'styled-components';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
@@ -16,6 +18,17 @@ interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     innloggetSaksbehandler?: ISaksbehandler;
 }
+
+const StyledNormaltekst = styled(Normaltekst)`
+    width: 5rem;
+    margin-right: 2.5rem;
+    text-align: left;
+`;
+
+const StyledButton = styled(Button)`
+    text-align: center;
+    min-width: fit-content;
+`;
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
     oppgave,
@@ -49,11 +62,9 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
 
     return oppgave.tilordnetRessurs ? (
         <div className={'kolonne'}>
-            <Normaltekst className="tilordnet-ressurs-tekst">
-                {oppgave.tilordnetRessurs}
-            </Normaltekst>
+            <StyledNormaltekst>{oppgave.tilordnetRessurs}</StyledNormaltekst>
             {oppgaveTypeErStøttet && (
-                <Button
+                <StyledButton
                     variant="tertiary"
                     size="small"
                     key={'tilbakestill'}
@@ -66,10 +77,9 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         </div>
     ) : (
         <div className={'kolonne'}>
-            <Normaltekst className="tilordnet-ressurs-tekst">Ikke tildelt</Normaltekst>
+            <StyledNormaltekst>Ikke tildelt</StyledNormaltekst>
             {oppgaveTypeErStøttet && (
-                <Button
-                    className="tildel-meg"
+                <StyledButton
                     variant="secondary"
                     size="small"
                     key={'plukk'}
