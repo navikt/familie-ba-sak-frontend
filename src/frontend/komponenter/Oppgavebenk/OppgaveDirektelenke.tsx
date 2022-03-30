@@ -85,7 +85,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             case OppgavetypeFilter.BEH_SED:
                 if (oppgavetype === OppgavetypeFilter.BEH_SED && toggles[ToggleNavn.brukEøs]) {
                     return (
-                        <FamilieBaseKnapp
+                        <Button
                             key={'tiloppg'}
                             onClick={() => {
                                 visTilgangsmodalEllerSendVidere(oppgave);
