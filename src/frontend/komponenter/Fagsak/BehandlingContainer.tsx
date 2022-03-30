@@ -20,6 +20,7 @@ import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import { VedtakProvider } from './Vedtak/VedtakContext';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 
 const BehandlingContainer: React.FunctionComponent = () => {
@@ -96,7 +97,11 @@ const BehandlingContainer: React.FunctionComponent = () => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/vedtak"
                         render={() => {
-                            return <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />;
+                            return (
+                                <VedtakProvider åpenBehandling={åpenBehandling.data}>
+                                    <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
+                                </VedtakProvider>
+                            );
                         }}
                     />
                     <Redirect

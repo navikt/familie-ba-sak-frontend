@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -9,8 +8,6 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -35,6 +32,7 @@ import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningM
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import { PeriodetypeIVedtaksbrev, useVedtak } from './VedtakContext';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -47,56 +45,19 @@ const Container = styled.div`
     }
 `;
 
-enum FortsattInnvilgetPeriodetype {
-    MED_PERIODER = 'MED_PERIODER',
-    UTEN_PERIODER = 'UTEN_PERIODER',
-}
-
-export const mapFortsattInnvilgetPeriodetypeTilBoolean: Record<
-    FortsattInnvilgetPeriodetype,
-    boolean
-> = {
-    MED_PERIODER: true,
-    UTEN_PERIODER: false,
-};
-
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
-    value: FortsattInnvilgetPeriodetype;
+    value: PeriodetypeIVedtaksbrev;
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const {
-        erLesevisning,
-        sendTilBeslutterNesteOnClick,
-        behandlingsstegSubmitressurs,
-        settÅpenBehandling,
-    } = useBehandling();
+    const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandling();
+
+    const { oppdaterVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak();
 
     const history = useHistory();
-
-    const { request } = useHttp();
-
-    interface IOppdaterVedtaksperioder {
-        skalGenererePerioderForFortsattInnvilget: boolean;
-        behandlingId: number;
-    }
-
-    const oppdaterVedtaksperioder = (medPerioder: boolean) => {
-        request<IOppdaterVedtaksperioder, IBehandling>({
-            method: 'PUT',
-            url: '/familie-ba-sak/api/vedtaksperioder/fortsatt-innvilget',
-            data: {
-                skalGenererePerioderForFortsattInnvilget: medPerioder,
-                behandlingId: åpenBehandling.behandlingId,
-            },
-        }).then((behandling: Ressurs<IBehandling>) => {
-            if (behandling.status === RessursStatus.SUKSESS) {
-                settÅpenBehandling(behandling);
-            }
-        });
-    };
 
     const {
         hentForhåndsvisning,
@@ -143,13 +104,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
         !erMigreringFraInfotrygd;
 
-    const startverdi =
-        åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser.length === 1
-            ? FortsattInnvilgetPeriodetype.UTEN_PERIODER
-            : FortsattInnvilgetPeriodetype.MED_PERIODER;
-    const [fortsattInnvilgetPeriodetype, settFortsattInnvilgetPeriodetype] =
-        useState<FortsattInnvilgetPeriodetype>(startverdi);
-
     return (
         <Skjemasteg
             tittel={'Vedtak'}
@@ -187,19 +141,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 onChange={(
                                     event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
                                 ): void => {
-                                    oppdaterVedtaksperioder(
-                                        mapFortsattInnvilgetPeriodetypeTilBoolean[
-                                            event.target.value
-                                        ]
-                                    );
-                                    settFortsattInnvilgetPeriodetype(event.target.value);
+                                    oppdaterVedtaksperioder(event.target.value);
                                 }}
-                                value={fortsattInnvilgetPeriodetype}
+                                value={periodetypeIVedtaksbrev}
                             >
-                                <option value={FortsattInnvilgetPeriodetype.UTEN_PERIODER}>
+                                <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
                                     Fortsatt innvilget: Uten perioder
                                 </option>
-                                <option value={FortsattInnvilgetPeriodetype.MED_PERIODER}>
+                                <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
                                     Fortsatt innvilget: Med perioder
                                 </option>
                             </FamilieSelect>
