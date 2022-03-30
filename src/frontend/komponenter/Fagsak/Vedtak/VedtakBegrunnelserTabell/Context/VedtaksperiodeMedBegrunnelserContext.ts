@@ -5,19 +5,13 @@ import deepEqual from 'deep-equal';
 
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import {
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -178,6 +172,26 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             });
         };
 
+        interface IOppdaterVedtaksperioder {
+            skalGenererePerioderForFortsattInnvilget: boolean;
+            behandlingId: number;
+        }
+
+        const oppdaterVedtaksperioder = (medPerioder: boolean) => {
+            request<IOppdaterVedtaksperioder, IBehandling>({
+                method: 'PUT',
+                url: '/familie-ba-sak/api/vedtaksperioder/fortsatt-innvilget',
+                data: {
+                    skalGenererePerioderForFortsattInnvilget: medPerioder,
+                    behandlingId: åpenBehandling.behandlingId,
+                },
+            }).then((behandling: Ressurs<IBehandling>) => {
+                if (behandling.status === RessursStatus.SUKSESS) {
+                    settÅpenBehandling(behandling);
+                }
+            });
+        };
+
         const genererOgSettBegrunnelserForForhåndsvisning = (vedtaksperiodeId: number) => {
             settGenererteBrevbegrunnelser(byggHenterRessurs());
             request<void, string[]>({
@@ -260,6 +274,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling,
             standardBegrunnelserPut,
             genererteBrevbegrunnelser,
+            oppdaterVedtaksperioder,
         };
     }
 );

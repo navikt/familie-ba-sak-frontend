@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -7,6 +8,9 @@ import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { FamilieSelect } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -17,6 +21,7 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
+    BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
     Behandlingstype,
@@ -42,13 +47,56 @@ const Container = styled.div`
     }
 `;
 
+enum FortsattInnvilgetPeriodetype {
+    MED_PERIODER = 'MED_PERIODER',
+    UTEN_PERIODER = 'UTEN_PERIODER',
+}
+
+export const mapFortsattInnvilgetPeriodetypeTilBoolean: Record<
+    FortsattInnvilgetPeriodetype,
+    boolean
+> = {
+    MED_PERIODER: true,
+    UTEN_PERIODER: false,
+};
+
+interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
+    value: FortsattInnvilgetPeriodetype;
+}
+
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandling();
+    const {
+        erLesevisning,
+        sendTilBeslutterNesteOnClick,
+        behandlingsstegSubmitressurs,
+        settÅpenBehandling,
+    } = useBehandling();
 
     const history = useHistory();
+
+    const { request } = useHttp();
+
+    interface IOppdaterVedtaksperioder {
+        skalGenererePerioderForFortsattInnvilget: boolean;
+        behandlingId: number;
+    }
+
+    const oppdaterVedtaksperioder = (medPerioder: boolean) => {
+        request<IOppdaterVedtaksperioder, IBehandling>({
+            method: 'PUT',
+            url: '/familie-ba-sak/api/vedtaksperioder/fortsatt-innvilget',
+            data: {
+                skalGenererePerioderForFortsattInnvilget: medPerioder,
+                behandlingId: åpenBehandling.behandlingId,
+            },
+        }).then((behandling: Ressurs<IBehandling>) => {
+            if (behandling.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(behandling);
+            }
+        });
+    };
 
     const {
         hentForhåndsvisning,
@@ -87,11 +135,20 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
     };
 
+    const lesevisning = erLesevisning();
+
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erBehandlingMedVedtaksbrevutsending =
         åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
         åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
         !erMigreringFraInfotrygd;
+
+    const startverdi =
+        åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser.length === 1
+            ? FortsattInnvilgetPeriodetype.UTEN_PERIODER
+            : FortsattInnvilgetPeriodetype.MED_PERIODER;
+    const [fortsattInnvilgetPeriodetype, settFortsattInnvilgetPeriodetype] =
+        useState<FortsattInnvilgetPeriodetype>(startverdi);
 
     return (
         <Skjemasteg
@@ -123,6 +180,30 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         pdfdata={hentetDokument}
                     />
                     <Container>
+                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
+                            <FamilieSelect
+                                label="Velg brev med eller uten perioder"
+                                erLesevisning={lesevisning}
+                                onChange={(
+                                    event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
+                                ): void => {
+                                    oppdaterVedtaksperioder(
+                                        mapFortsattInnvilgetPeriodetypeTilBoolean[
+                                            event.target.value
+                                        ]
+                                    );
+                                    settFortsattInnvilgetPeriodetype(event.target.value);
+                                }}
+                                value={fortsattInnvilgetPeriodetype}
+                            >
+                                <option value={FortsattInnvilgetPeriodetype.UTEN_PERIODER}>
+                                    Fortsatt innvilget: Uten perioder
+                                </option>
+                                <option value={FortsattInnvilgetPeriodetype.MED_PERIODER}>
+                                    Fortsatt innvilget: Med perioder
+                                </option>
+                            </FamilieSelect>
+                        )}
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ? (
                             <Alertstripe
