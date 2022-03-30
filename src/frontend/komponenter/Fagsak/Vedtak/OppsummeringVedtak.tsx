@@ -96,7 +96,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const hentInfostripeTekst = (årsak: BehandlingÅrsak, status: BehandlingStatus): string => {
         if (status === BehandlingStatus.AVSLUTTET) {
-            return "Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på 'Vis vedtaksbrev'.";
+            return 'Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på "Vis vedtaksbrev".';
         } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
             return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
         } else if (årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV) {
