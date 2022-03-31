@@ -42,7 +42,7 @@ export const useVedtak = ({ åpenBehandling }: IProps) => {
     const oppdaterVedtaksperioder = (periodetypeIVedtaksbrev: PeriodetypeIVedtaksbrev) => {
         request<IOppdaterVedtaksperioder, IBehandling>({
             method: 'PUT',
-            url: '/familie-ba-sak/api/vedtaksperioder/fortsatt-innvilget',
+            url: '/familie-ba-sak/api/vedtaksperioder/overstyr-fortsatt-innvilget-vedtaksperioder',
             data: {
                 skalGenererePerioderForFortsattInnvilget:
                     mapPeriodetypeIVedtaksbrevTilBoolean[periodetypeIVedtaksbrev],
