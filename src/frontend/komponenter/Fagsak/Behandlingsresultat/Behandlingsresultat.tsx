@@ -39,6 +39,10 @@ const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
 `;
 
+const StyledAlertStripe = styled(AlertStripe)`
+    margin-bottom: 1rem;
+`;
+
 interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
@@ -151,13 +155,13 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
-                <AlertStripe type={'advarsel'}>
+                <StyledAlertStripe type={'advarsel'}>
                     Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
                     {slåSammenListeTilStreng(
                         personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
                     )}
                     .
-                </AlertStripe>
+                </StyledAlertStripe>
             )}
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
