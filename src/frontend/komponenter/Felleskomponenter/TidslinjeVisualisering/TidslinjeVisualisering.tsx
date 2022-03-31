@@ -39,11 +39,11 @@ const Container = styled.div`
 
 const tidslinjerLabels = [
     ...Object.values(vilkårConfig)
-        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.BARN))
+        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.SØKER))
         .map(vc => vc.beskrivelse),
     '----',
     ...Object.values(vilkårConfig)
-        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.SØKER))
+        .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.BARN))
         .map(vc => vc.beskrivelse),
     '----',
     'Oppfylte perioder',
@@ -160,13 +160,12 @@ const TidslinjeVisualisering: React.FC = () => {
         const barnetsRegelverkTidslinje: Periode[] = genererRaderRegelverkTidslinje(
             barnetsTidslinjer.regelverkTidslinje
         );
-        console.log(søkersVilkårPerioder);
 
         return [
-            ...barnetsVilkårPerioder,
-            [],
             ...søkersVilkårPerioder,
             ...(søkersVilkårPerioder.length === 2 ? [[], []] : [[]]),
+            ...barnetsVilkårPerioder,
+            [],
             barnetsOppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje,
             [],
             barnetsRegelverkTidslinje,
