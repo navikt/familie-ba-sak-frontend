@@ -50,6 +50,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
+        useState<string[]>([]);
 
     const {
         aktivEtikett,
@@ -59,21 +61,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const { request } = useHttp();
 
-    const {
-        erLesevisning,
-        behandlingresultatNesteOnClick,
-        behandlingsstegSubmitressurs,
-        settÅpenBehandling,
-    } = useBehandling();
-
-    const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
-    };
-
-    const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
-        useState<string[]>([]);
-
-    const hentGyldigEtterbetalingsperiodeForBehandling = () => {
+    const hentPersonerMedUgyldigEtterbetalingsperiode = () => {
         request<void, string[]>({
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/personer-med-ugyldig-etterbetalingsperiode`,
@@ -84,9 +72,20 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         });
     };
 
+    const {
+        erLesevisning,
+        behandlingresultatNesteOnClick,
+        behandlingsstegSubmitressurs,
+        settÅpenBehandling,
+    } = useBehandling();
+
     useEffect(() => {
-        hentGyldigEtterbetalingsperiodeForBehandling();
+        hentPersonerMedUgyldigEtterbetalingsperiode();
     }, []);
+
+    const forrigeOnClick = () => {
+        history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+    };
 
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
