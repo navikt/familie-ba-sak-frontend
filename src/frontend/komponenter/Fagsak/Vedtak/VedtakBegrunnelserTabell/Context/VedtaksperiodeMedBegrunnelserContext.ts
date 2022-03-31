@@ -5,19 +5,13 @@ import deepEqual from 'deep-equal';
 
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import {
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
