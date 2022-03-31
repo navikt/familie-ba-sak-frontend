@@ -31,7 +31,7 @@ export const useVedtak = ({ åpenBehandling }: IProps) => {
             ? PeriodetypeIVedtaksbrev.UTEN_PERIODER
             : PeriodetypeIVedtaksbrev.MED_PERIODER;
 
-    const [periodetypeIVedtaksbrev, settperiodetypeIVedtaksbrev] =
+    const [periodetypeIVedtaksbrev, settPeriodetypeIVedtaksbrev] =
         useState<PeriodetypeIVedtaksbrev>(startverdiPeriodetype);
 
     interface IOppdaterVedtaksperioder {
@@ -51,7 +51,7 @@ export const useVedtak = ({ åpenBehandling }: IProps) => {
         }).then((behandling: Ressurs<IBehandling>) => {
             if (behandling.status === RessursStatus.SUKSESS) {
                 settÅpenBehandling(behandling);
-                settperiodetypeIVedtaksbrev(periodetypeIVedtaksbrev);
+                settPeriodetypeIVedtaksbrev(periodetypeIVedtaksbrev);
             }
         });
     };
