@@ -3,12 +3,8 @@ import React, { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import {
-    byggTomRessurs,
-    hentDataFraRessurs,
-    type Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { ISide, SideId, ITrinn } from '../../komponenter/Felleskomponenter/Venstremeny/sider';

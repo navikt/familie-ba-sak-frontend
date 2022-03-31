@@ -8,7 +8,7 @@ import { Element } from 'nav-frontend-typografi';
 import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 
 const Container = styled.div`
-    margin: 2.75rem 0 1rem;
+    margin: 1.4rem 0 1rem;
     display: flex;
     align-items: center;
     text-align: center;
