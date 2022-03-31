@@ -31,9 +31,9 @@ import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonK
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
-import { PeriodetypeIVedtaksbrev, useVedtak } from './VedtakContext';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -62,7 +62,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
-    const { oppdaterVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak();
+    const { oppdaterVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
+        åpenBehandling,
+    });
 
     const history = useHistory();
     const { toggles } = useApp();

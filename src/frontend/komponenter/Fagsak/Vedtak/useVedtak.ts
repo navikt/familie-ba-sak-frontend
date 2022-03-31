@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import createUseContext from 'constate';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -23,7 +21,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const [VedtakProvider, useVedtak] = createUseContext(({ åpenBehandling }: IProps) => {
+export const useVedtak = ({ åpenBehandling }: IProps) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
@@ -62,6 +60,4 @@ const [VedtakProvider, useVedtak] = createUseContext(({ åpenBehandling }: IProp
         oppdaterVedtaksperioder,
         periodetypeIVedtaksbrev,
     };
-});
-
-export { VedtakProvider, useVedtak };
+};
