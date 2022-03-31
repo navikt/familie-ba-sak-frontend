@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { Flatknapp } from 'nav-frontend-knapper';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 
@@ -68,6 +70,24 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
     };
 
+    const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
+        useState<string[]>([]);
+
+    const hentGyldigEtterbetalingsperiodeForBehandling = () => {
+        request<void, string[]>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/personer-med-ugyldig-etterbetalingsperiode`,
+        }).then((erGyldigEtterbetalingsperiode: Ressurs<string[]>) => {
+            if (erGyldigEtterbetalingsperiode.status === RessursStatus.SUKSESS) {
+                settPersonerMedUgyldigEtterbetalingsperiode(erGyldigEtterbetalingsperiode.data);
+            }
+        });
+    };
+
+    useEffect(() => {
+        hentGyldigEtterbetalingsperiodeForBehandling();
+    }, []);
+
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
     ): Utbetalingsperiode | undefined => {
@@ -131,6 +151,12 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
+            {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
+                <AlertStripe type={'advarsel'}>
+                    Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
+                    {personerMedUgyldigEtterbetalingsperiode}.
+                </AlertStripe>
+            )}
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
             )}
