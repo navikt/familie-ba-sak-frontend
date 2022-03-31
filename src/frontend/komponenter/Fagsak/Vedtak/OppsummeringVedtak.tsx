@@ -62,7 +62,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
-    const { oppdaterVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
+    const { overstyrFortsattInnvilgetVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
         åpenBehandling,
     });
 
@@ -150,7 +150,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                     onChange={(
                                         event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
                                     ): void => {
-                                        oppdaterVedtaksperioder(event.target.value);
+                                        overstyrFortsattInnvilgetVedtaksperioder(
+                                            event.target.value
+                                        );
                                     }}
                                     value={periodetypeIVedtaksbrev}
                                 >

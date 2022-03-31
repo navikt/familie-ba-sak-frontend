@@ -34,13 +34,15 @@ export const useVedtak = ({ åpenBehandling }: IProps) => {
     const [periodetypeIVedtaksbrev, settPeriodetypeIVedtaksbrev] =
         useState<PeriodetypeIVedtaksbrev>(startverdiPeriodetype);
 
-    interface IOppdaterVedtaksperioder {
+    interface IOppdaterFortsattInnvilgetVedtaksperioder {
         skalGenererePerioderForFortsattInnvilget: boolean;
         behandlingId: number;
     }
 
-    const oppdaterVedtaksperioder = (periodetypeIVedtaksbrev: PeriodetypeIVedtaksbrev) => {
-        request<IOppdaterVedtaksperioder, IBehandling>({
+    const overstyrFortsattInnvilgetVedtaksperioder = (
+        periodetypeIVedtaksbrev: PeriodetypeIVedtaksbrev
+    ) => {
+        request<IOppdaterFortsattInnvilgetVedtaksperioder, IBehandling>({
             method: 'PUT',
             url: '/familie-ba-sak/api/vedtaksperioder/overstyr-fortsatt-innvilget-vedtaksperioder',
             data: {
@@ -57,7 +59,7 @@ export const useVedtak = ({ åpenBehandling }: IProps) => {
     };
 
     return {
-        oppdaterVedtaksperioder,
+        overstyrFortsattInnvilgetVedtaksperioder,
         periodetypeIVedtaksbrev,
     };
 };
