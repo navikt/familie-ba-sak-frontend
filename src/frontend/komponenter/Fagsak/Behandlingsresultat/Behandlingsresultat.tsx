@@ -13,11 +13,13 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatter';
@@ -52,6 +54,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const history = useHistory();
     const { fagsakId } = useSakOgBehandlingParams();
+    const { toggles } = useApp();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -154,15 +157,18 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
-            {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
-                <StyledAlertStripe type={'advarsel'}>
-                    Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
-                    {slåSammenListeTilStreng(
-                        personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
-                    )}
-                    .
-                </StyledAlertStripe>
-            )}
+            {personerMedUgyldigEtterbetalingsperiode.length > 0 &&
+                toggles[ToggleNavn.etterbetaling3år] && (
+                    <StyledAlertStripe type={'advarsel'}>
+                        Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
+                        {slåSammenListeTilStreng(
+                            personerMedUgyldigEtterbetalingsperiode.map(ident =>
+                                formaterIdent(ident)
+                            )
+                        )}
+                        .
+                    </StyledAlertStripe>
+                )}
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
             )}

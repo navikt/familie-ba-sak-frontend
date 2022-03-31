@@ -13,6 +13,7 @@ export enum ToggleNavn {
     ingenOverlappHenlegglese = 'familie-ba-sak.ingen-overlapp-vedtaksperioder.utgivelse',
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
     fortsattInnvilgetMedPerioder = 'familie-ba-sak.utgivelse.behandling.fortsatt-innvilget.med-perioder',
+    etterbetaling3år = 'familie-ba-sak.utgivelse.behandling.etterbetaling-3-aar',
 }
 
 export const alleTogglerAv = (): IToggles => {
