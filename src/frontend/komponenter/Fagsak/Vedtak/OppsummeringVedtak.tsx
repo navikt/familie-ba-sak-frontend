@@ -7,6 +7,7 @@ import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -17,17 +18,20 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
+    BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
     Behandlingstype,
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
@@ -42,13 +46,28 @@ const Container = styled.div`
     }
 `;
 
+const StyledSkjemaSteg = styled(Skjemasteg)`
+    .typo-innholdstittel {
+        margin-bottom: 1.4rem;
+    }
+`;
+
+interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
+    value: PeriodetypeIVedtaksbrev;
+}
+
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
+    const { overstyrFortsattInnvilgetVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
+        åpenBehandling,
+    });
+
     const history = useHistory();
+    const { toggles } = useApp();
 
     const {
         hentForhåndsvisning,
@@ -94,7 +113,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         !erMigreringFraInfotrygd;
 
     return (
-        <Skjemasteg
+        <StyledSkjemaSteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
                 history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
@@ -123,6 +142,28 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         pdfdata={hentetDokument}
                     />
                     <Container>
+                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
+                            toggles[ToggleNavn.fortsattInnvilgetMedPerioder] && (
+                                <FamilieSelect
+                                    label="Velg brev med eller uten perioder"
+                                    erLesevisning={erLesevisning()}
+                                    onChange={(
+                                        event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
+                                    ): void => {
+                                        overstyrFortsattInnvilgetVedtaksperioder(
+                                            event.target.value
+                                        );
+                                    }}
+                                    value={periodetypeIVedtaksbrev}
+                                >
+                                    <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
+                                        Fortsatt innvilget: Uten perioder
+                                    </option>
+                                    <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
+                                        Fortsatt innvilget: Med perioder
+                                    </option>
+                                </FamilieSelect>
+                            )}
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ? (
                             <Alertstripe
@@ -196,7 +237,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}
                 </AlertStripeInfo>
             )}
-        </Skjemasteg>
+        </StyledSkjemaSteg>
     );
 };
 
