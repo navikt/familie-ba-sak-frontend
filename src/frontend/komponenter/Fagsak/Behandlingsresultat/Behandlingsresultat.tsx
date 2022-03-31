@@ -20,6 +20,7 @@ import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -130,7 +131,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             }
         });
     };
-
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
@@ -153,7 +153,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
                 <AlertStripe type={'advarsel'}>
                     Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
-                    {personerMedUgyldigEtterbetalingsperiode}.
+                    {slåSammenListeTilStreng(
+                        personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
+                    )}
+                    .
                 </AlertStripe>
             )}
             {erMigreringFraInfotrygd && (
