@@ -4,6 +4,7 @@ import type { VilkårType } from './vilkår';
 export interface IVedtakForBehandling {
     aktiv: boolean;
     vedtaksdato: string;
+    førsteEndringstidspunkt?: string | undefined;
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     id: number;
 }
