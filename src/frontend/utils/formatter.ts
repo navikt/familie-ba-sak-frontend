@@ -112,3 +112,7 @@ export const sorterUtbetaling = (
             utbetalingsperiodeDetaljB.person.fødselsdato
         );
 };
+
+export const slåSammenListeTilStreng = (liste: string[]) => {
+    return liste.join(', ').replace(new RegExp('(.*),'), '$1 og');
+};
