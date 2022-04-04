@@ -22,7 +22,7 @@ interface IProps {
     visModal: boolean;
     onAvbryt: () => void;
     oppdaterEndringstidspunkt: () => void;
-    skjema: ISkjema<{ førsteEndringstidspunkt: FamilieIsoDate | undefined }, IBehandling>;
+    skjema: ISkjema<{ endringstidspunkt: FamilieIsoDate | undefined }, IBehandling>;
 }
 
 export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
@@ -34,7 +34,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
     return (
         <UIModalWrapper
             modal={{
-                tittel: 'Oppdater første endringstidspunkt',
+                tittel: 'Oppdater endringstidspunkt',
                 visModal: visModal,
                 lukkKnapp: true,
                 onClose: onAvbryt,
@@ -58,15 +58,14 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
             >
                 <Feltmargin>
                     <StyledFamilieDatovelger
-                        {...skjema.felter.førsteEndringstidspunkt.hentNavInputProps(
+                        {...skjema.felter.endringstidspunkt.hentNavInputProps(
                             skjema.visFeilmeldinger
                         )}
                         feil={
-                            !!skjema.felter.førsteEndringstidspunkt.feilmelding &&
-                            skjema.visFeilmeldinger
+                            !!skjema.felter.endringstidspunkt.feilmelding && skjema.visFeilmeldinger
                         }
-                        valgtDato={skjema.felter.førsteEndringstidspunkt.verdi}
-                        label={'Første endringstidspunkt'}
+                        valgtDato={skjema.felter.endringstidspunkt.verdi}
+                        label={'Endringstidspunkt'}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                         allowInvalidDateSelection={false}
                         limitations={{

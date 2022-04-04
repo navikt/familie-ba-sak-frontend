@@ -14,7 +14,7 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import EndreFørsteEndringstidspunkt from '../EndreFørsteEndringstidspunkt';
+import EndreEndringstidspunkt from '../EndreEndringstidspunkt';
 import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
@@ -88,8 +88,8 @@ const VedtaksperiodeListe: React.FC<{
         <>
             <StyledFlexiDiv>
                 <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
-                {åpenBehandling.vedtak?.førsteEndringstidspunkt && (
-                    <EndreFørsteEndringstidspunkt åpenBehandling={åpenBehandling} />
+                {åpenBehandling.endringstidspunkt && (
+                    <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                 )}
             </StyledFlexiDiv>
 

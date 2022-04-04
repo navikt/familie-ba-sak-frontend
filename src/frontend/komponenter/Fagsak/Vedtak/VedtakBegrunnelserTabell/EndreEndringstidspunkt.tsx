@@ -14,7 +14,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 
-const FørsteEndringstidspunktDiv = styled.div`
+const EndringstidspunktDiv = styled.div`
     display: flex;
     justify-content: flex-end;
     margin: 2.75rem 0 1rem;
@@ -23,13 +23,13 @@ const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
 `;
 
-const EndreFørsteEndringstidspunkt: React.FC<{
+const EndreEndringstidspunkt: React.FC<{
     åpenBehandling: IBehandling;
 }> = ({ åpenBehandling }) => {
     const [visModal, settVisModal] = useState(false);
     const { settÅpenBehandling } = useBehandling();
     const { skjema, kanSendeSkjema, onSubmit } = useOppdaterEndringstidspunktSkjema(
-        åpenBehandling.vedtak?.førsteEndringstidspunkt,
+        åpenBehandling.endringstidspunkt,
         visModal
     );
     const oppdaterEndringstidspunkt = () => {
@@ -38,10 +38,10 @@ const EndreFørsteEndringstidspunkt: React.FC<{
                 {
                     method: 'PUT',
                     data: {
-                        førsteEndringstidspunkt: skjema.felter.førsteEndringstidspunkt.verdi,
+                        overstyrtEndringstidspunkt: skjema.felter.endringstidspunkt.verdi,
                         behandlingId: åpenBehandling.behandlingId,
                     },
-                    url: `/familie-ba-sak/api/vedtaksperioder/førsteEndringstidspunkt`,
+                    url: `/familie-ba-sak/api/vedtaksperioder/endringstidspunkt`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -54,7 +54,7 @@ const EndreFørsteEndringstidspunkt: React.FC<{
     };
 
     return (
-        <FørsteEndringstidspunktDiv>
+        <EndringstidspunktDiv>
             <Flatknapp
                 mini
                 onClick={() => {
@@ -70,8 +70,8 @@ const EndreFørsteEndringstidspunkt: React.FC<{
                 oppdaterEndringstidspunkt={oppdaterEndringstidspunkt}
                 skjema={skjema}
             />
-        </FørsteEndringstidspunktDiv>
+        </EndringstidspunktDiv>
     );
 };
 
-export default EndreFørsteEndringstidspunkt;
+export default EndreEndringstidspunkt;

@@ -10,7 +10,7 @@ import { iDag, KalenderEnhet, leggTil, serializeIso8601String } from '../../../.
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
 export const useOppdaterEndringstidspunktSkjema = (
-    førsteEndringstidspunkt: ISODateString | undefined,
+    endringstidspunkt: ISODateString | undefined,
     modalVises: boolean
 ) => {
     const standardfrist = serializeIso8601String(
@@ -19,13 +19,13 @@ export const useOppdaterEndringstidspunktSkjema = (
 
     const oppdaterEndringstidspunktSkjema = useSkjema<
         {
-            førsteEndringstidspunkt: FamilieIsoDate | undefined;
+            endringstidspunkt: FamilieIsoDate | undefined;
         },
         IBehandling
     >({
         felter: {
-            førsteEndringstidspunkt: useFelt<FamilieIsoDate | undefined>({
-                verdi: førsteEndringstidspunkt ?? standardfrist,
+            endringstidspunkt: useFelt<FamilieIsoDate | undefined>({
+                verdi: endringstidspunkt ?? standardfrist,
             }),
         },
         skjemanavn: 'Oppdater første endringstidspunkt',
@@ -33,15 +33,15 @@ export const useOppdaterEndringstidspunktSkjema = (
 
     const fyllInnStandardverdier = () => {
         oppdaterEndringstidspunktSkjema.nullstillSkjema();
-        oppdaterEndringstidspunktSkjema.skjema.felter.førsteEndringstidspunkt.validerOgSettFelt(
+        oppdaterEndringstidspunktSkjema.skjema.felter.endringstidspunkt.validerOgSettFelt(
             standardfrist
         );
     };
 
     useEffect(() => {
-        if (modalVises && førsteEndringstidspunkt) {
-            oppdaterEndringstidspunktSkjema.skjema.felter.førsteEndringstidspunkt.validerOgSettFelt(
-                førsteEndringstidspunkt
+        if (modalVises && endringstidspunkt) {
+            oppdaterEndringstidspunktSkjema.skjema.felter.endringstidspunkt.validerOgSettFelt(
+                endringstidspunkt
             );
         } else {
             fyllInnStandardverdier();
