@@ -6,11 +6,11 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import {
-    type AnnenForelderAktivitet,
-    type IKompetanse,
-    LandkodeNorge,
-    type SøkerAktivitet,
+import type {
+    AnnenForelderAktivitet,
+    IKompetanse,
+    KompetanseResultat,
+    SøkerAktivitet,
 } from '../../typer/kompetanse';
 import {
     type YearMonth,
@@ -50,9 +50,9 @@ const erAnnenForeldersAktivitetGyldig = (
 const erBarnetsBostedslandGyldig = (
     felt: FeltState<string | undefined>
 ): FeltState<string | undefined> => (!isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt));
-const erPrimærlandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
-const erSekundærlandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+const erKompetanseResultatGyldig = (
+    felt: FeltState<KompetanseResultat | undefined>
+): FeltState<KompetanseResultat | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 
 const erKompetansePeriodeGyldig = (
@@ -82,12 +82,12 @@ const erKompetansePeriodeGyldig = (
 };
 
 const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKompetanse> => {
-    let nyVerdi: IKompetanse = {
+    const nyVerdi: IKompetanse = {
         ...nyKompetanse.verdi,
         periode: nyKompetanse.verdi.periode.valider(nyKompetanse.verdi.periode, {
             initielFom: nyKompetanse.verdi.initielFom,
         }),
-        barn: nyKompetanse.verdi.barn.valider(nyKompetanse.verdi.barn),
+        barnIdenter: nyKompetanse.verdi.barnIdenter.valider(nyKompetanse.verdi.barnIdenter),
         søkersAktivitet: nyKompetanse.verdi.søkersAktivitet?.valider(
             nyKompetanse.verdi.søkersAktivitet
         ),
@@ -97,42 +97,16 @@ const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKom
         barnetsBostedsland: nyKompetanse.verdi.barnetsBostedsland?.valider(
             nyKompetanse.verdi.barnetsBostedsland
         ),
-        primærland: nyKompetanse.verdi.primærland?.valider(nyKompetanse.verdi.primærland),
-        sekundærland: nyKompetanse.verdi.sekundærland?.valider(nyKompetanse.verdi.sekundærland),
+        resultat: nyKompetanse.verdi.resultat?.valider(nyKompetanse.verdi.resultat),
     };
 
-    let gyldigkompetanse: boolean =
+    const gyldigkompetanse: boolean =
         nyVerdi.periode.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.barn.valideringsstatus === Valideringsstatus.OK &&
+        nyVerdi.barnIdenter.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.søkersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.annenForeldersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.barnetsBostedsland?.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.primærland?.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.sekundærland?.valideringsstatus === Valideringsstatus.OK;
-
-    if (
-        nyVerdi.primærland?.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.primærland.verdi !== LandkodeNorge &&
-        nyVerdi.sekundærland?.valideringsstatus === Valideringsstatus.OK &&
-        nyVerdi.sekundærland.verdi !== LandkodeNorge
-    ) {
-        nyVerdi = {
-            ...nyVerdi,
-            primærland: {
-                ...nyVerdi.primærland,
-                valideringsstatus: Valideringsstatus.FEIL,
-                verdi: nyVerdi.primærland.verdi,
-                feilmelding: 'Norge må være valgt som primærland eller sekundærland',
-            },
-            sekundærland: {
-                ...nyVerdi.sekundærland,
-                valideringsstatus: Valideringsstatus.FEIL,
-                verdi: nyVerdi.sekundærland.verdi,
-                feilmelding: 'Norge må være valgt som primærland eller sekundærland',
-            },
-        };
-        gyldigkompetanse = false;
-    }
+        nyVerdi.resultat?.valideringsstatus === Valideringsstatus.OK;
 
     return gyldigkompetanse
         ? ok({ ...nyKompetanse, verdi: nyVerdi })
@@ -145,7 +119,6 @@ export {
     erSøkersAktivitetGyldig,
     erAnnenForeldersAktivitetGyldig,
     erBarnetsBostedslandGyldig,
-    erPrimærlandGyldig,
-    erSekundærlandGyldig,
+    erKompetanseResultatGyldig,
     validerKompetanse,
 };

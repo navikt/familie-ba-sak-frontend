@@ -5,60 +5,51 @@ import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
 export const LandkodeNorge = 'NO';
 
 export enum SøkerAktivitet {
-    IARBEID_NORGE = 'IARBEID_NORGE',
-    SELVSTENDIG = 'SELVSTENDIG',
-    UTSENDT_ARBEIDSTAKER = 'UTSENDT_ARBEIDSTAKER',
-    LIKESTILT_YTELSE = 'LIKESTILT_YTELSE',
-    UFØRETRYGD = 'UFØRETRYGD',
-    UFØRETRYGD_EØS = 'UFØRETRYGD_EØS',
-    PENSJON = 'PENSJON',
-    PENSJON_EØS = 'PENSJON_EØS',
-    NORSKREGISTRERT_SKIP = 'NORSKREGISTRERT_SKIP',
-    NORSK_SOKKEL = 'NORSK_SOKKEL',
-    NORSK_FLYSELSKAP = 'NORSK_FLYSELSKAP',
-    UTENRIKSSTASJON = 'UTENRIKSSTASJON',
-    LIKESTILT_YTELSE_UTLAND = 'LIKESTILT_YTELSE_UTLAND',
-    UFØRETRGYD_UTLAND = 'UFØRETRGYD_UTLAND',
-    PENSON_UTLAND = 'PENSON_UTLAND',
+    ARBEIDER_I_NORGE = 'ARBEIDER_I_NORGE',
+    SELVSTENDIG_NÆRINGSDRIVENDE = 'SELVSTENDIG_NÆRINGSDRIVENDE',
+    MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN',
+    UTSENDT_ARBEIDSTAKER_FRA_NORGE = 'UTSENDT_ARBEIDSTAKER_FRA_NORGE',
+    MOTTAR_UFØRETRYGD_FRA_NORGE = 'MOTTAR_UFØRETRYGD_FRA_NORGE',
+    MOTTAR_PENSJON_FRA_NORGE = 'MOTTAR_PENSJON_FRA_NORGE',
     INAKTIV = 'INAKTIV',
 }
 
-export enum AnnenForelderAktivitet {
-    AF_IARBEID = 'AF_IARBEID',
-    AF_LIKESTILT_YTELSE = 'AF_LIKESTILT_YTELSE',
-    AF_PENSJON = 'AF_PENSJON',
-    AF_FORSIKRET = 'AF_FORSIKRET',
-    AF_IKKE_AKTUELT = 'AF_IKKE_AKTUELT',
-    AF_INAKTIV = 'AF_INAKTIV',
-}
-
 export const søkerAktiviteter: Record<SøkerAktivitet, string> = {
-    IARBEID_NORGE: 'Arbeid i Norge',
-    SELVSTENDIG: 'Selvstendig næringsdrivende',
-    UTSENDT_ARBEIDSTAKER: 'Utsendt arbeidstaker fra Norge',
-    LIKESTILT_YTELSE: 'Mottar ytelse likestilt med arbeid',
-    UFØRETRYGD: 'Mottar uføretrygd fra Norge',
-    UFØRETRYGD_EØS: 'Mottar uføretrygd fra annet EØS-land',
-    PENSJON: 'Mottar pensjon fra Norge',
-    PENSJON_EØS: 'Mottar pensjon fra annet EØS-land',
-    NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
-    NORSK_SOKKEL: 'Arbeider på norsk sokkel',
-    NORSK_FLYSELSKAP: 'Arbeider for norsk flyselskap',
-    UTENRIKSSTASJON:
-        'Arbeider som lokalt ansatt ved utenlandsk utenriksstasjon og er omfattet av norsk lovgivning',
-    LIKESTILT_YTELSE_UTLAND: 'Mottar ytelse likestilt med arbeid fra NAV under opphold i utlandet',
-    UFØRETRGYD_UTLAND: 'Mottar uføretrygd fra Norge under opphold i utlandet',
-    PENSON_UTLAND: 'Mottar pensjon fra Norge under opphold i utlandet',
+    ARBEIDER_I_NORGE: 'Arbeider i Norge',
+    SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
+    MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN: 'Mottar utbetaling fra NAV som erstatter lønn',
+    UTSENDT_ARBEIDSTAKER_FRA_NORGE: 'Utsendt arbeidstaker fra Norge',
+    MOTTAR_UFØRETRYGD_FRA_NORGE: 'Mottar uføretrygd fra Norge',
+    MOTTAR_PENSJON_FRA_NORGE: 'Mottar pensjon fra Norge',
     INAKTIV: 'Inaktiv',
 };
 
+export enum AnnenForelderAktivitet {
+    I_ARBEID = 'I_ARBEID',
+    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN',
+    FORSIKRET_I_BOSTEDSLAND = 'FORSIKRET_I_BOSTEDSLAND',
+    MOTTAR_PENSJON = 'MOTTAR_PENSJON',
+    INAKTIV = 'INAKTIV',
+    IKKE_AKTUELT = 'IKKE_AKTUELT',
+}
+
 export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = {
-    AF_IARBEID: 'I arbeid / yrkesaktiv',
-    AF_LIKESTILT_YTELSE: 'Mottar ytelse likestilt med arbeid',
-    AF_PENSJON: 'Mottar pensjon',
-    AF_FORSIKRET: 'Forsikret i bostedsland',
-    AF_IKKE_AKTUELT: 'Ikke aktuelt',
-    AF_INAKTIV: 'Inaktiv',
+    I_ARBEID: 'I arbeid',
+    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
+    FORSIKRET_I_BOSTEDSLAND: 'Forsikret i bostedsland',
+    MOTTAR_PENSJON: 'Mottar pensjon',
+    INAKTIV: 'Inaktiv',
+    IKKE_AKTUELT: 'Ikke aktuelt',
+};
+
+export enum KompetanseResultat {
+    NORGE_ER_PRIMÆRLAND = 'NORGE_ER_PRIMÆRLAND',
+    NORGE_ER_SEKUNDÆRLAND = 'NORGE_ER_SEKUNDÆRLAND',
+}
+
+export const kompetanseResultater: Record<KompetanseResultat, string> = {
+    NORGE_ER_PRIMÆRLAND: 'Norge er Primærland',
+    NORGE_ER_SEKUNDÆRLAND: 'Norge er Sekundærland',
 };
 
 export enum KompetanseStatus {
@@ -69,28 +60,24 @@ export enum KompetanseStatus {
 
 export interface IRestKompetanse {
     id: number;
-    behandlingId: number;
     status: KompetanseStatus;
     fom: YearMonth;
     tom?: YearMonth;
-    barn: string[];
+    barnIdenter: string[];
     søkersAktivitet?: SøkerAktivitet;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     barnetsBostedsland?: string;
-    primærland?: string;
-    sekundærland?: string;
+    resultat?: KompetanseResultat;
 }
 
 export interface IKompetanse {
     id: number;
-    behandlingId: number;
     status: KompetanseStatus;
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
-    barn: FeltState<string[]>;
+    barnIdenter: FeltState<string[]>;
     søkersAktivitet: FeltState<SøkerAktivitet | undefined>;
     annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
-    primærland: FeltState<string | undefined>;
-    sekundærland: FeltState<string | undefined>;
+    resultat: FeltState<KompetanseResultat | undefined>;
 }

@@ -20,13 +20,15 @@ import type { Country } from '@navikt/land-verktoy';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { KompetanseSubmit, useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
 import { validerKompetanse } from '../../../../context/Kompetanse/valideringKompetanse';
+import type { IBehandling } from '../../../../typer/behandling';
 import {
     AnnenForelderAktivitet,
     annenForelderAktiviteter,
     type IKompetanse,
-    type IRestKompetanse,
     SøkerAktivitet,
     søkerAktiviteter,
+    KompetanseResultat,
+    kompetanseResultater,
 } from '../../../../typer/kompetanse';
 import { nyYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -85,17 +87,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     toggleForm,
     settEkspandertKompetanse,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const {
-        kompetanseSubmit,
-        putKompetanse,
-        deleteKompetanse,
-        settKompetanseSubmit,
-        behandleHentetKompetanser,
-    } = useKompetanse();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
+    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } =
+        useKompetanse();
     const lesevisning = erLesevisning(true);
 
-    const valgteBarn = redigerbartKompetanse.verdi?.barn.verdi.map(barn => {
+    const valgteBarn = redigerbartKompetanse.verdi?.barnIdenter.verdi.map(barn => {
         const tilBarn = tilgjengeligeBarn.find(opt => {
             return opt.value.match(barn);
         });
@@ -123,32 +120,32 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             ...redigerbartKompetanse,
             verdi: {
                 ...redigerbartKompetanse.verdi,
-                barn: {
-                    ...redigerbartKompetanse.verdi?.barn,
+                barnIdenter: {
+                    ...redigerbartKompetanse.verdi?.barnIdenter,
                     verdi: valgteOptions.map(option => option.value),
                 },
             },
         });
     };
 
-    const håndterEndringPåKompetanse = (promise: Promise<Ressurs<IRestKompetanse[]>>) => {
+    const håndterEndringPåKompetanse = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
-            .then((oppdatertKompetanser: Ressurs<IRestKompetanse[]>) => {
+            .then((respons: Ressurs<IBehandling>) => {
                 settKompetanseSubmit(KompetanseSubmit.NONE);
-                if (oppdatertKompetanser.status === RessursStatus.SUKSESS) {
+                if (respons.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEnKompetanse(false);
                     settEkspandertKompetanse(false);
-                    behandleHentetKompetanser(oppdatertKompetanser);
+                    settÅpenBehandling(respons);
                 } else if (
-                    oppdatertKompetanser.status === RessursStatus.FEILET ||
-                    oppdatertKompetanser.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    oppdatertKompetanser.status === RessursStatus.IKKE_TILGANG
+                    respons.status === RessursStatus.FEILET ||
+                    respons.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    respons.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settVisFeilmeldingerForEnKompetanse(true);
                     settRedigerbartKompetanse({
                         ...redigerbartKompetanse,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding: oppdatertKompetanser.frontendFeilmelding,
+                        feilmelding: respons.frontendFeilmelding,
                     });
                 } else {
                     settVisFeilmeldingerForEnKompetanse(true);
@@ -206,9 +203,9 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         onChange={options => onEndretBarn(options as OptionType[])}
                         feil={
                             skalViseFeilmeldinger() &&
-                            redigerbartKompetanse.verdi.barn.valideringsstatus ===
+                            redigerbartKompetanse.verdi.barnIdenter.valideringsstatus ===
                                 Valideringsstatus.FEIL
-                                ? redigerbartKompetanse.verdi.barn.feilmelding
+                                ? redigerbartKompetanse.verdi.barnIdenter.feilmelding
                                 : ''
                         }
                     />
@@ -407,60 +404,48 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                 />
-                <FamilieLandvelger
+                <FamilieSelect
                     erLesevisning={lesevisning}
-                    id={'primærland'}
-                    label={'Kompetent land (primærland)'}
-                    eøs
-                    medFlag
-                    value={redigerbartKompetanse.verdi.primærland.verdi}
-                    onChange={(value: Country) => {
+                    label={'Kompetanse'}
+                    value={
+                        redigerbartKompetanse.verdi?.resultat?.verdi
+                            ? redigerbartKompetanse.verdi?.resultat?.verdi
+                            : undefined
+                    }
+                    lesevisningVerdi={
+                        redigerbartKompetanse.verdi?.resultat?.verdi
+                            ? kompetanseResultater[redigerbartKompetanse.verdi?.resultat?.verdi]
+                            : 'Ikke utfylt'
+                    }
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         validerOgSettRedigbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
-                                primærland: {
-                                    ...redigerbartKompetanse.verdi?.primærland,
-                                    verdi: value.value,
+                                resultat: {
+                                    ...redigerbartKompetanse.verdi?.resultat,
+                                    verdi: event.target.value as KompetanseResultat,
                                 },
                             },
                         });
                     }}
                     feil={
                         skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.primærland?.valideringsstatus ===
+                        redigerbartKompetanse.verdi?.resultat?.valideringsstatus ===
                             Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.primærland?.feilmelding?.toString()
+                            ? redigerbartKompetanse.verdi.resultat?.feilmelding
                             : ''
                     }
-                />
-                <FamilieLandvelger
-                    erLesevisning={lesevisning}
-                    id={'bostedadresse'}
-                    label={'Differanseland (sekundærland)'}
-                    eøs
-                    medFlag
-                    value={redigerbartKompetanse.verdi.sekundærland.verdi}
-                    onChange={(value: Country) => {
-                        validerOgSettRedigbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                sekundærland: {
-                                    ...redigerbartKompetanse.verdi?.sekundærland,
-                                    verdi: value.value,
-                                },
-                            },
-                        });
-                    }}
-                    feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.sekundærland?.valideringsstatus ===
-                            Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.sekundærland?.feilmelding?.toString()
-                            : ''
-                    }
-                />
+                >
+                    <option value={''}>Velg</option>
+                    {Object.values(KompetanseResultat).map(aktivitet => {
+                        return (
+                            <option key={aktivitet} value={aktivitet}>
+                                {kompetanseResultater[aktivitet]}
+                            </option>
+                        );
+                    })}
+                </FamilieSelect>
                 <Knapperad>
                     <div>
                         <FamilieKnapp

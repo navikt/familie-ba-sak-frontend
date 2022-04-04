@@ -85,6 +85,7 @@ export const mockBehandling = ({
         personerMedAndelerTilkjentYtelse: [],
         årsak: årsak,
         skalBehandlesAutomatisk,
+        kompetanser: [],
     };
 };
 

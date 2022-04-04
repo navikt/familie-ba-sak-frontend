@@ -42,12 +42,12 @@ const TabellHeader = styled.th`
 `;
 
 export const kompetanseFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
-    `kompetanse_${kompetanse.verdi.barn.verdi.map(barn => `${barn}-`)}_${
+    `kompetanse_${kompetanse.verdi.barnIdenter.verdi.map(barn => `${barn}-`)}_${
         kompetanse.verdi.periode.verdi.fom
     }`;
 
 export const kompetansePeriodeFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
-    `kompetanse-periode_${kompetanse.verdi.barn.verdi.map(barn => `${barn}-`)}_${
+    `kompetanse-periode_${kompetanse.verdi.barnIdenter.verdi.map(barn => `${barn}-`)}_${
         kompetanse.verdi.periode.verdi.fom
     }`;
 
@@ -79,7 +79,7 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                 <tbody>
                     {kompetanser.map(kompetanse => (
                         <KompetanseTabellRad
-                            key={`${kompetanse.verdi?.barn.verdi.map(barn => `${barn}-`)}-${
+                            key={`${kompetanse.verdi?.barnIdenter.verdi.map(barn => `${barn}-`)}-${
                                 kompetanse.verdi.periode.verdi.fom
                             }-${kompetanse.verdi.periode.verdi.tom}`}
                             kompetanse={kompetanse}

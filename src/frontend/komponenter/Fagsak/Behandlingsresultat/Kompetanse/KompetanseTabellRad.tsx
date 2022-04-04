@@ -10,7 +10,11 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import type { IBehandling } from '../../../../typer/behandling';
-import { type IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
+import {
+    type IKompetanse,
+    KompetanseStatus,
+    KompetanseResultat,
+} from '../../../../typer/kompetanse';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -66,13 +70,21 @@ const KompetanseTabellRad: React.FC<IProps> = ({
         useState<FeltState<IKompetanse>>(kompetanse);
 
     const visVurdertKompetanse = () => {
-        if (kompetanse.verdi?.primærland?.verdi === 'NO') {
+        switch (kompetanse.verdi?.resultat?.verdi) {
+            case KompetanseResultat.NORGE_ER_PRIMÆRLAND:
+                return 'Primærland';
+            case KompetanseResultat.NORGE_ER_SEKUNDÆRLAND:
+                return 'Sekundærland';
+            default:
+                return '-';
+        }
+        /*if (kompetanse.verdi?.resultat?.verdi === KompetanseResultat.NORGE_ER_PRIMÆRLAND) {
             return 'Primærland';
         } else if (kompetanse.verdi?.sekundærland?.verdi === 'NO') {
             return 'Sekundærland';
         } else {
             return '-';
-        }
+        }*/
     };
 
     const toggleForm = (visAlert: boolean) => {
@@ -93,7 +105,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
         }
     };
 
-    const barn: OptionType[] = kompetanse.verdi?.barn.verdi.map(barn => ({
+    const barn: OptionType[] = kompetanse.verdi?.barnIdenter.verdi.map(barn => ({
         value: barn,
         label: lagLabelBarn(barn),
     }));
@@ -117,7 +129,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                             />
                         </div>
                         <BarnDiv>
-                            {kompetanse.verdi?.barn.verdi.map(barn => (
+                            {kompetanse.verdi?.barnIdenter.verdi.map(barn => (
                                 <Normaltekst key={barn}>{lagLabelBarn(barn)}</Normaltekst>
                             ))}
                         </BarnDiv>

@@ -1,15 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
 import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import {
-    byggHenterRessurs,
-    byggTomRessurs,
-    type Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
@@ -20,8 +15,7 @@ import {
     erBarnetsBostedslandGyldig,
     erBarnGyldig,
     erKompetansePeriodeGyldig,
-    erPrimærlandGyldig,
-    erSekundærlandGyldig,
+    erKompetanseResultatGyldig,
     erSøkersAktivitetGyldig,
     validerKompetanse,
 } from './valideringKompetanse';
@@ -39,9 +33,6 @@ interface IProps {
 
 const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProps) => {
     const { request } = useHttp();
-    const [kompetanserRessurs, settKompetanserRessurs] = useState<Ressurs<IRestKompetanse[]>>(
-        byggTomRessurs()
-    );
     const [kompetanser, settKompetanser] = useState<FeltState<IKompetanse>[]>([]);
     const [kompetanseSubmit, settKompetanseSubmit] = useState(KompetanseSubmit.NONE);
 
@@ -50,6 +41,12 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
             validerKompetanse(kompetanse)
         );
     };
+
+    useEffect(() => {
+        if (åpenBehandling.kompetanser.length > 0) {
+            settKompetanser(kjørValidering(mapFraRestKompetanseTilUi(åpenBehandling.kompetanser)));
+        }
+    }, [åpenBehandling]);
 
     const erKompetanserGyldige = (): boolean => {
         return (
@@ -65,14 +62,13 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
             lagInitiellFelt<IKompetanse>(
                 {
                     id: restKompetanse.id,
-                    behandlingId: restKompetanse.behandlingId,
                     status: restKompetanse.status,
                     initielFom: restKompetanse.fom,
                     periode: lagInitiellFelt(
                         nyYearMonthPeriode(restKompetanse.fom, restKompetanse.tom),
                         erKompetansePeriodeGyldig
                     ),
-                    barn: lagInitiellFelt(restKompetanse.barn, erBarnGyldig),
+                    barnIdenter: lagInitiellFelt(restKompetanse.barnIdenter, erBarnGyldig),
                     søkersAktivitet: lagInitiellFelt(
                         restKompetanse.søkersAktivitet,
                         erSøkersAktivitetGyldig
@@ -85,30 +81,11 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
                         restKompetanse.barnetsBostedsland,
                         erBarnetsBostedslandGyldig
                     ),
-                    primærland: lagInitiellFelt(restKompetanse.primærland, erPrimærlandGyldig),
-                    sekundærland: lagInitiellFelt(
-                        restKompetanse.sekundærland,
-                        erSekundærlandGyldig
-                    ),
+                    resultat: lagInitiellFelt(restKompetanse.resultat, erKompetanseResultatGyldig),
                 },
                 validerKompetanse
             )
         );
-    };
-
-    const behandleHentetKompetanser = (response: Ressurs<IRestKompetanse[]>) => {
-        settKompetanserRessurs(response);
-        if (response.status === RessursStatus.SUKSESS) {
-            settKompetanser(kjørValidering(mapFraRestKompetanseTilUi(response.data)));
-        }
-    };
-
-    const hentKomeptanser = () => {
-        settKompetanserRessurs(byggHenterRessurs());
-        request<string, IRestKompetanse[]>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/kompetanse/${åpenBehandling.behandlingId}`,
-        }).then(response => behandleHentetKompetanser(response));
     };
 
     const hentKompetanserMedFeil = (): FeltState<IKompetanse>[] => {
@@ -119,32 +96,30 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
 
     const putKompetanse = (
         redigerbartKompetanse: FeltState<IKompetanse>
-    ): Promise<Ressurs<IRestKompetanse[]>> => {
+    ): Promise<Ressurs<IBehandling>> => {
         settKompetanseSubmit(KompetanseSubmit.PUT);
 
-        return request<IRestKompetanse, IRestKompetanse[]>({
+        return request<IRestKompetanse, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}/${redigerbartKompetanse.verdi.id}`,
             data: {
                 id: redigerbartKompetanse.verdi.id,
-                behandlingId: redigerbartKompetanse.verdi.behandlingId,
                 status: redigerbartKompetanse.verdi.status,
                 fom: redigerbartKompetanse.verdi.periode.verdi.fom || '', // undefined fom vil bli stoppet i valideringen
                 tom: redigerbartKompetanse.verdi.periode.verdi.tom,
-                barn: redigerbartKompetanse.verdi.barn.verdi,
+                barnIdenter: redigerbartKompetanse.verdi.barnIdenter.verdi,
                 søkersAktivitet: redigerbartKompetanse.verdi.søkersAktivitet.verdi,
                 annenForeldersAktivitet: redigerbartKompetanse.verdi.annenForeldersAktivitet.verdi,
                 barnetsBostedsland: redigerbartKompetanse.verdi.barnetsBostedsland.verdi,
-                primærland: redigerbartKompetanse.verdi.primærland.verdi,
-                sekundærland: redigerbartKompetanse.verdi.sekundærland.verdi,
+                resultat: redigerbartKompetanse.verdi.resultat.verdi,
             },
         });
     };
 
-    const deleteKompetanse = (kompetanseId: number): Promise<Ressurs<IRestKompetanse[]>> => {
+    const deleteKompetanse = (kompetanseId: number): Promise<Ressurs<IBehandling>> => {
         settKompetanseSubmit(KompetanseSubmit.DELETE);
 
-        return request<string, IRestKompetanse[]>({
+        return request<string, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}/${kompetanseId}`,
         });
@@ -152,9 +127,6 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
 
     return {
         kompetanser,
-        kompetanserRessurs,
-        hentKomeptanser,
-        behandleHentetKompetanser,
         kompetanseSubmit,
         settKompetanseSubmit,
         putKompetanse,
