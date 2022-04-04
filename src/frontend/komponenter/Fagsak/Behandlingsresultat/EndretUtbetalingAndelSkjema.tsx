@@ -12,8 +12,8 @@ import { Delete } from '@navikt/ds-icons';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -163,6 +163,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
         ) {
             return toggles[ToggleNavn.endreMottakerEndringsårsaker];
+        } else if (årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR) {
+            return toggles[ToggleNavn.etterbetaling3år];
         } else {
             return true;
         }
