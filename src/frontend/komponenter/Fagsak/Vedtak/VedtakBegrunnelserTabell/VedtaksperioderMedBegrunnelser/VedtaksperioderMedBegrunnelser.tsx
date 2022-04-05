@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react';
 
-import styled from 'styled-components';
-
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
-import { FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -14,17 +11,12 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import EndreEndringstidspunkt from '../EndreEndringstidspunkt';
 import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
 }
-
-const StyledFlexiDiv = styled(FlexDiv)`
-    justify-content: space-between;
-`;
 
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
@@ -86,13 +78,7 @@ const VedtaksperiodeListe: React.FC<{
 
     return (
         <>
-            <StyledFlexiDiv>
-                <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
-                {åpenBehandling.endringstidspunkt && (
-                    <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
-                )}
-            </StyledFlexiDiv>
-
+            <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider

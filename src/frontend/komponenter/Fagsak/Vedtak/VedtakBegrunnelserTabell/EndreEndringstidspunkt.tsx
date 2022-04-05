@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp } from 'nav-frontend-knapper';
 import { Element } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -17,7 +17,6 @@ import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspun
 const EndringstidspunktDiv = styled.div`
     display: flex;
     justify-content: flex-end;
-    margin: 2.75rem 0 1rem;
 `;
 const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
@@ -55,15 +54,16 @@ const EndreEndringstidspunkt: React.FC<{
 
     return (
         <EndringstidspunktDiv>
-            <Flatknapp
-                mini
+            <Button
+                variant="tertiary"
+                size="small"
                 onClick={() => {
                     settVisModal(true);
                 }}
             >
                 <StyledEditIkon />
                 <Element>Oppdater endringstidspunkt</Element>
-            </Flatknapp>
+            </Button>
             <OppdaterEndringstidspunktModal
                 visModal={visModal}
                 onAvbryt={() => settVisModal(false)}

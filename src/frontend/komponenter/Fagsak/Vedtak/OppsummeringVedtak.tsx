@@ -7,8 +7,8 @@ import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { Alert, Heading } from '@navikt/ds-react';
+import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -34,6 +34,7 @@ import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningM
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
@@ -51,6 +52,15 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     .typo-innholdstittel {
         margin-bottom: 1.4rem;
     }
+`;
+
+const StyledFlexiDiv = styled(FlexDiv)`
+    justify-content: space-between;
+    max-width: 49rem;
+`;
+
+const StyleHeading = styled(Heading)`
+    display: flex;
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -125,7 +135,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     return (
         <StyledSkjemaSteg
-            tittel={'Vedtak'}
+            tittel={
+                <StyledFlexiDiv>
+                    <StyleHeading size="large" level="1">
+                        Vedtak
+                    </StyleHeading>
+                    {åpenBehandling.endringstidspunkt && (
+                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
+                    )}
+                </StyledFlexiDiv>
+            }
             forrigeOnClick={() =>
                 history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
