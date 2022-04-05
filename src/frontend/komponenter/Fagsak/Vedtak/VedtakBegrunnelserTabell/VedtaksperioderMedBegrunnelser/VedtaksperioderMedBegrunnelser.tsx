@@ -79,7 +79,6 @@ const VedtaksperiodeListe: React.FC<{
     return (
         <>
             <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
-
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
