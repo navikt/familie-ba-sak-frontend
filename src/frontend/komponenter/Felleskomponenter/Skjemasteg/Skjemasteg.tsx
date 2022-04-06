@@ -24,7 +24,7 @@ interface IProps {
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
     senderInn: boolean;
-    tittel: string;
+    tittel: string | React.ReactNode;
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;

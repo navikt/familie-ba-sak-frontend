@@ -233,6 +233,7 @@ export interface IBehandling {
     aktivSettPåVent?: ISettPåVent;
     migreringsdato?: string;
     søknadMottattDato?: string;
+    endringstidspunkt?: string;
 }
 
 export interface IArbeidsfordelingPåBehandling {
