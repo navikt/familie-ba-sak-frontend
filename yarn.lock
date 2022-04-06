@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@amplitude/analytics-connector@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@amplitude/analytics-connector/-/analytics-connector-1.0.0.tgz#cb8d84b7c3eb2809f2485d5c105699b01a8c3af6"
-  integrity sha512-6RZwSMjhO9VD5rw5FV5U7pU00drDQAQqA+ZTv4mSop8XEws9TimzynGYzLYLijV0vnK7h6j7D3+VJtM4f4MlNA==
+"@amplitude/analytics-connector@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@amplitude/analytics-connector/-/analytics-connector-1.4.1.tgz#eb8e693f0fcc5c095a5949c84be9be84af642833"
+  integrity sha512-trahVHrwlAoHI/JmysS+HUK/Ot50zDAHoxeqKZSfaiSeNBW5gvLDQ/mTrhksOTxZmaw7CGdqEcaiPoPRmo96bA==
   dependencies:
     "@amplitude/ua-parser-js" "0.7.26"
 
@@ -4189,12 +4189,12 @@ alphanum-sort@^1.0.2:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@^8.17.0:
-  version "8.17.0"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.17.0.tgz#fa20e28fa3945fd0447cfa2bfadfe5a7b2c71c5f"
-  integrity sha512-9Ovx/15Wt4byNSKpesaTaNnHmwgkV9pn0BfI70qHr0iaPgEAtMV0HdA+Zs6555ODp3pvrmj5JTXDl3/DPLmNRQ==
+amplitude-js@^8.18.1:
+  version "8.18.1"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.18.1.tgz#ed3dca868f2dc133273840e22bfcd3626c3a2862"
+  integrity sha512-TwCZFrivkqZH2/iUp2QN/PFir3+hfRdCidDA2J81HR0z5F9NrvG0B+0bqrtY3MTjoeakmAcoj55ehBGd91QEBg==
   dependencies:
-    "@amplitude/analytics-connector" "1.0.0"
+    "@amplitude/analytics-connector" "1.4.1"
     "@amplitude/ua-parser-js" "0.7.26"
     "@amplitude/utils" "^1.0.5"
     "@babel/runtime" "^7.3.4"
