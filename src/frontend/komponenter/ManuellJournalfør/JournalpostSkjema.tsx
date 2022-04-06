@@ -124,7 +124,7 @@ export const JournalpostSkjema: React.FC = () => {
                     spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    Lukk oppgave
+                    Ferdigstill oppgave
                 </FamilieKnapp>
             </Knapperekke>
         </Container>
