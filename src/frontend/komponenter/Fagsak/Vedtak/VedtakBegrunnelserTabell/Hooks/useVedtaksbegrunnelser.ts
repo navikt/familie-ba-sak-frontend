@@ -46,7 +46,7 @@ export const useVilkårBegrunnelser = ({
                 }
             case Vedtaksperiodetype.FORTSATT_INNVILGET:
                 return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
-            case Vedtaksperiodetype.REDUKSJON:
+            case Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING:
                 return [
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.INNVILGET,
