@@ -88,7 +88,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     } = useBehandling();
 
     useEffect(() => {
-        hentPersonerMedUgyldigEtterbetalingsperiode();
+        if (toggles[ToggleNavn.etterbetaling3år]) {
+            hentPersonerMedUgyldigEtterbetalingsperiode();
+        }
     }, [åpenBehandling]);
 
     const forrigeOnClick = () => {
