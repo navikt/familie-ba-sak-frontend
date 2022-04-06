@@ -78,13 +78,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({
             default:
                 return '-';
         }
-        /*if (kompetanse.verdi?.resultat?.verdi === KompetanseResultat.NORGE_ER_PRIMÆRLAND) {
-            return 'Primærland';
-        } else if (kompetanse.verdi?.sekundærland?.verdi === 'NO') {
-            return 'Sekundærland';
-        } else {
-            return '-';
-        }*/
     };
 
     const toggleForm = (visAlert: boolean) => {

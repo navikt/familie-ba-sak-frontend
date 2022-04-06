@@ -12,6 +12,7 @@ import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
 import {
     erAnnenForeldersAktivitetGyldig,
+    erAnnenForeldersAktivitetslandGyldig,
     erBarnetsBostedslandGyldig,
     erBarnGyldig,
     erKompetansePeriodeGyldig,
@@ -77,6 +78,10 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
                         restKompetanse.annenForeldersAktivitet,
                         erAnnenForeldersAktivitetGyldig
                     ),
+                    annenForeldersAktivitetsland: lagInitiellFelt(
+                        restKompetanse.annenForeldersAktivitetsland,
+                        erAnnenForeldersAktivitetslandGyldig
+                    ),
                     barnetsBostedsland: lagInitiellFelt(
                         restKompetanse.barnetsBostedsland,
                         erBarnetsBostedslandGyldig
@@ -110,6 +115,8 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
                 barnIdenter: redigerbartKompetanse.verdi.barnIdenter.verdi,
                 søkersAktivitet: redigerbartKompetanse.verdi.søkersAktivitet.verdi,
                 annenForeldersAktivitet: redigerbartKompetanse.verdi.annenForeldersAktivitet.verdi,
+                annenForeldersAktivitetsland:
+                    redigerbartKompetanse.verdi.annenForeldersAktivitetsland.verdi,
                 barnetsBostedsland: redigerbartKompetanse.verdi.barnetsBostedsland.verdi,
                 resultat: redigerbartKompetanse.verdi.resultat.verdi,
             },

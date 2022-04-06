@@ -379,6 +379,33 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 </FamilieSelect>
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
+                    id={'annenForeldersAktivitetsland'}
+                    label={'Annen forelders aktivitetsland'}
+                    eøs
+                    medFlag
+                    value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
+                    onChange={(value: Country) => {
+                        validerOgSettRedigbartKompetanse({
+                            ...redigerbartKompetanse,
+                            verdi: {
+                                ...redigerbartKompetanse.verdi,
+                                annenForeldersAktivitetsland: {
+                                    ...redigerbartKompetanse.verdi?.annenForeldersAktivitetsland,
+                                    verdi: value.value,
+                                },
+                            },
+                        });
+                    }}
+                    feil={
+                        skalViseFeilmeldinger() &&
+                        redigerbartKompetanse.verdi?.annenForeldersAktivitetsland
+                            ?.valideringsstatus === Valideringsstatus.FEIL
+                            ? redigerbartKompetanse.verdi.annenForeldersAktivitetsland?.feilmelding?.toString()
+                            : ''
+                    }
+                />
+                <FamilieLandvelger
+                    erLesevisning={lesevisning}
                     id={'bostedadresse'}
                     label={'Barnets bostedsland'}
                     eøs

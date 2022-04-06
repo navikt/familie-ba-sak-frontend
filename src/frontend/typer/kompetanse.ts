@@ -66,6 +66,7 @@ export interface IRestKompetanse {
     barnIdenter: string[];
     søkersAktivitet?: SøkerAktivitet;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
+    annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
     resultat?: KompetanseResultat;
 }
@@ -78,6 +79,7 @@ export interface IKompetanse {
     barnIdenter: FeltState<string[]>;
     søkersAktivitet: FeltState<SøkerAktivitet | undefined>;
     annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
+    annenForeldersAktivitetsland: FeltState<string | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
     resultat: FeltState<KompetanseResultat | undefined>;
 }

@@ -6,11 +6,11 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import type {
+import {
     AnnenForelderAktivitet,
-    IKompetanse,
-    KompetanseResultat,
-    SøkerAktivitet,
+    type IKompetanse,
+    type KompetanseResultat,
+    type SøkerAktivitet,
 } from '../../typer/kompetanse';
 import {
     type YearMonth,
@@ -47,6 +47,18 @@ const erAnnenForeldersAktivitetGyldig = (
     felt: FeltState<AnnenForelderAktivitet | undefined>
 ): FeltState<AnnenForelderAktivitet | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
+const erAnnenForeldersAktivitetslandGyldig = (
+    felt: FeltState<string | undefined>,
+    avhengigheter?: Avhengigheter
+): FeltState<string | undefined> => {
+    if (
+        avhengigheter?.annenForeldersAktivitet.verdi === AnnenForelderAktivitet.IKKE_AKTUELT ||
+        avhengigheter?.annenForeldersAktivitet.verdi === AnnenForelderAktivitet.INAKTIV
+    ) {
+        return ok(felt);
+    }
+    return !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
+};
 const erBarnetsBostedslandGyldig = (
     felt: FeltState<string | undefined>
 ): FeltState<string | undefined> => (!isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt));
@@ -94,6 +106,12 @@ const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKom
         annenForeldersAktivitet: nyKompetanse.verdi.annenForeldersAktivitet?.valider(
             nyKompetanse.verdi.annenForeldersAktivitet
         ),
+        annenForeldersAktivitetsland: nyKompetanse.verdi.annenForeldersAktivitetsland?.valider(
+            nyKompetanse.verdi.annenForeldersAktivitetsland,
+            {
+                annenForeldersAktivitet: nyKompetanse.verdi.annenForeldersAktivitet,
+            }
+        ),
         barnetsBostedsland: nyKompetanse.verdi.barnetsBostedsland?.valider(
             nyKompetanse.verdi.barnetsBostedsland
         ),
@@ -105,6 +123,7 @@ const validerKompetanse = (nyKompetanse: FeltState<IKompetanse>): FeltState<IKom
         nyVerdi.barnIdenter.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.søkersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.annenForeldersAktivitet?.valideringsstatus === Valideringsstatus.OK &&
+        nyVerdi.annenForeldersAktivitetsland?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.barnetsBostedsland?.valideringsstatus === Valideringsstatus.OK &&
         nyVerdi.resultat?.valideringsstatus === Valideringsstatus.OK;
 
@@ -118,6 +137,7 @@ export {
     erBarnGyldig,
     erSøkersAktivitetGyldig,
     erAnnenForeldersAktivitetGyldig,
+    erAnnenForeldersAktivitetslandGyldig,
     erBarnetsBostedslandGyldig,
     erKompetanseResultatGyldig,
     validerKompetanse,
