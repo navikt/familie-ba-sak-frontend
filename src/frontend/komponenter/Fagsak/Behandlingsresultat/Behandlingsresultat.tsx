@@ -89,7 +89,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
-    }, []);
+    }, [åpenBehandling]);
 
     const forrigeOnClick = () => {
         history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
