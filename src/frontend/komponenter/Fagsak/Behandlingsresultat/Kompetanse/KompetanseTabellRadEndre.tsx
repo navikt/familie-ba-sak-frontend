@@ -141,20 +141,20 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     respons.status === RessursStatus.FUNKSJONELL_FEIL ||
                     respons.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settVisFeilmeldingerForEnKompetanse(true);
                     settRedigerbartKompetanse({
                         ...redigerbartKompetanse,
                         valideringsstatus: Valideringsstatus.FEIL,
                         feilmelding: respons.frontendFeilmelding,
                     });
-                } else {
                     settVisFeilmeldingerForEnKompetanse(true);
+                } else {
                     settRedigerbartKompetanse({
                         ...redigerbartKompetanse,
                         valideringsstatus: Valideringsstatus.FEIL,
                         feilmelding:
                             'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                     });
+                    settVisFeilmeldingerForEnKompetanse(true);
                 }
             })
             .catch(() => {
@@ -188,10 +188,14 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
         );
     };
 
-    console.info();
-
     return (
-        <SkjemaGruppe>
+        <SkjemaGruppe
+            feil={
+                skalViseFeilmeldinger() &&
+                redigerbartKompetanse.valideringsstatus === Valideringsstatus.FEIL &&
+                redigerbartKompetanse.feilmelding
+            }
+        >
             <Container>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect

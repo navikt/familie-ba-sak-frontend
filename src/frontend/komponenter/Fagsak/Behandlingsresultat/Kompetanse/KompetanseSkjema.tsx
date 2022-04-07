@@ -8,7 +8,7 @@ import { Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse } from '../../../../typer/kompetanse';
+import { type IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
 const KompetanseContainer = styled.div`
@@ -58,15 +58,21 @@ interface IProps {
 }
 
 const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visFeilmeldinger }) => {
+    const harUfullstendigeKompetanser =
+        åpenBehandling.kompetanser?.filter(kompetanse => kompetanse.status !== KompetanseStatus.OK)
+            .length > 0;
+
     return (
         <KompetanseContainer>
             <Heading spacing size="medium" level="3">
                 Kompetanse
             </Heading>
-            <AlertStripe
-                type="advarsel"
-                children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
-            />
+            {harUfullstendigeKompetanser && (
+                <AlertStripe
+                    type="advarsel"
+                    children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
+                />
+            )}
             <Tabell className={`tabell`}>
                 <thead>
                     <tr>
