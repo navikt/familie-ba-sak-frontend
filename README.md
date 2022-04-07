@@ -51,9 +51,7 @@ Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere 
 
 # Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes til:
-
-* Henning Håkonsen, `henning.hakonsen@nav.no`
+Ved spørsmål knyttet til koden eller prosjektet opprett en issue.
 
 ## For NAV-ansatte
 
