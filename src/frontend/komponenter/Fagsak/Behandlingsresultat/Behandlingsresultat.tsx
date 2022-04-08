@@ -148,7 +148,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     };
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const harKompetanser = åpenBehandling.kompetanser?.length > 0;
+    const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
 
     return (
         <Skjemasteg
@@ -218,17 +218,21 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     åpenBehandling={åpenBehandling}
                 />
             )}
-            {visFeilmeldinger && hentKompetanserMedFeil().length > 0 && (
-                <Feiloppsummering
-                    tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={[
-                        ...hentKompetanserMedFeil().map((kompetanse: FeltState<IKompetanse>) => ({
-                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
-                            skjemaelementId: kompetanseFeilmeldingId(kompetanse),
-                        })),
-                    ]}
-                />
-            )}
+            {visFeilmeldinger &&
+                toggles[ToggleNavn.brukEøs] &&
+                hentKompetanserMedFeil().length > 0 && (
+                    <Feiloppsummering
+                        tittel={'For å gå videre må du rette opp følgende:'}
+                        feil={[
+                            ...hentKompetanserMedFeil().map(
+                                (kompetanse: FeltState<IKompetanse>) => ({
+                                    feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
+                                    skjemaelementId: kompetanseFeilmeldingId(kompetanse),
+                                })
+                            ),
+                        ]}
+                    />
+                )}
         </Skjemasteg>
     );
 };

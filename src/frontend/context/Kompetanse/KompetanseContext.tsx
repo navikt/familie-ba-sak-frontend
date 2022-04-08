@@ -8,8 +8,10 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
+import { ToggleNavn } from '../../typer/toggles';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
+import { useApp } from '../AppContext';
 import {
     erAnnenForeldersAktivitetGyldig,
     erAnnenForeldersAktivitetslandGyldig,
@@ -33,6 +35,7 @@ interface IProps {
 }
 
 const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProps) => {
+    const { toggles } = useApp();
     const { request } = useHttp();
     const [kompetanser, settKompetanser] = useState<FeltState<IKompetanse>[]>([]);
     const [kompetanseSubmit, settKompetanseSubmit] = useState(KompetanseSubmit.NONE);
@@ -44,7 +47,7 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
     };
 
     useEffect(() => {
-        if (åpenBehandling.kompetanser.length > 0) {
+        if (toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser.length > 0) {
             settKompetanser(kjørValidering(mapFraRestKompetanseTilUi(åpenBehandling.kompetanser)));
         }
     }, [åpenBehandling]);

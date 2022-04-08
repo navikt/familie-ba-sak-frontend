@@ -75,6 +75,8 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                 return 'Primærland';
             case KompetanseResultat.NORGE_ER_SEKUNDÆRLAND:
                 return 'Sekundærland';
+            case KompetanseResultat.TO_PRIMÆRLAND:
+                return 'To primærland';
             default:
                 return '-';
         }

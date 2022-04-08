@@ -7,6 +7,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
+import { Alert } from '@navikt/ds-react';
 import {
     FamilieKnapp,
     FamilieReactSelect,
@@ -187,6 +188,9 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             new Date(redigerbartKompetanse.verdi.initielFom).getFullYear()
         );
     };
+
+    const toPrimærland =
+        redigerbartKompetanse.verdi.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
 
     return (
         <SkjemaGruppe
@@ -477,6 +481,16 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
+                {toPrimærland && (
+                    <Alert
+                        variant={'warning'}
+                        inline
+                        size={'small'}
+                        children={
+                            'Norge og annen forelders aktivitetsland er primærland. Saksbehandler må manuelt vurdere om Norge skal utbetale barnetrygden.'
+                        }
+                    />
+                )}
                 <Knapperad>
                     <div>
                         <FamilieKnapp

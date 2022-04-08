@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
-
-import { Heading } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
@@ -68,8 +66,9 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                 Kompetanse
             </Heading>
             {harUfullstendigeKompetanser && (
-                <AlertStripe
-                    type="advarsel"
+                <Alert
+                    variant={'warning'}
+                    fullWidth
                     children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
                 />
             )}

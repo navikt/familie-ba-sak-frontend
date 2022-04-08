@@ -1,9 +1,21 @@
 import * as React from 'react';
 
-import IkkeOppfylt from '../../../../ikoner/IkkeOppfylt';
-import IkkeVurdert from '../../../../ikoner/IkkeVurdert';
-import Oppfylt from '../../../../ikoner/Oppfylt';
+import styled from 'styled-components';
+
+import '@navikt/ds-css-internal';
+import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
+
 import { KompetanseStatus } from '../../../../typer/kompetanse';
+
+const StyledSuccess = styled(SuccessFilled)`
+    color: var(--navds-semantic-color-feedback-success-icon);
+`;
+const StyledError = styled(ErrorFilled)`
+    color: var(--navds-semantic-color-feedback-danger-icon);
+`;
+const StyledWarning = styled(WarningFilled)`
+    color: var(--navds-semantic-color-feedback-warning-border);
+`;
 
 interface IProps {
     status?: KompetanseStatus;
@@ -14,12 +26,12 @@ interface IProps {
 const KompetanseIkon: React.FC<IProps> = ({ status, heigth, width }) => {
     switch (status) {
         case KompetanseStatus.OK:
-            return <Oppfylt heigth={heigth} width={width} />;
+            return <StyledSuccess height={heigth} width={width} />;
         case KompetanseStatus.UFULLSTENDIG:
-            return <IkkeOppfylt heigth={heigth} width={width} />;
+            return <StyledError height={heigth} width={width} />;
         case KompetanseStatus.IKKE_UTFYLT:
         default:
-            return <IkkeVurdert heigth={heigth} width={width} />;
+            return <StyledWarning height={heigth} width={width} />;
     }
 };
 

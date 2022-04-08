@@ -2430,6 +2430,11 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
+"@navikt/ds-css-internal@^0.7.3":
+  version "0.7.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css-internal/0.7.3/1f807f24db86976f1e220700b4089be252215e834bd18ea2561ba8d1d3488586#06ea2722e95c226eb5e562116054477613f71f4e"
+  integrity sha512-mCjEWAwNW4fqmA+SMG3hmRZW49imxx8wIv+0yfQIpk9fnhutEqB2cnJmXvgYY4XVZaPeWFLeZcGAwouuSGBqXQ==
+
 "@navikt/ds-css@0.16.17":
   version "0.16.17"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.16.17/2dcf733af4b0f506c6a777a88290f25dbccace6d3f307c3a0fc8dce068f358ad#a25ca3801587894b120bae02f21c9d96c8b4d6ee"
@@ -2442,8 +2447,8 @@
 
 "@navikt/ds-icons@^0.5.4":
   version "0.5.10"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.5.10.tgz#9cf9dba666b96abb3d72494e8847849ab207f0d0"
-  integrity sha512-quBaILBT6mznJOUaSXH1bLx5Ao8LFW6Xj5wc/txy9zg07yOAl+60vxyADl2Uk5pl8hfXrflejV9bcxY6zWv/Lg==
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.5.10/94c8c95f7c0ae8e26ff335737df0075fb388b7775a6634c4355d9b34372dd257#000a37bde2ec612354766d6d06b603c90292ec52"
+  integrity sha512-ThVHgyy7wwqI/Je3Qg1wNW5gcwH+DwW+CLWb/IFB0zNQcDp/GI1nXw3hA/IFAhzxJPRhqqtfEldFJ5UkaxzZYw==
   dependencies:
     uuid "^8.3.2"
 

@@ -45,11 +45,13 @@ export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = 
 export enum KompetanseResultat {
     NORGE_ER_PRIMÆRLAND = 'NORGE_ER_PRIMÆRLAND',
     NORGE_ER_SEKUNDÆRLAND = 'NORGE_ER_SEKUNDÆRLAND',
+    TO_PRIMÆRLAND = 'TO_PRIMÆRLAND',
 }
 
 export const kompetanseResultater: Record<KompetanseResultat, string> = {
     NORGE_ER_PRIMÆRLAND: 'Norge er Primærland',
     NORGE_ER_SEKUNDÆRLAND: 'Norge er Sekundærland',
+    TO_PRIMÆRLAND: 'To primærland',
 };
 
 export enum KompetanseStatus {
