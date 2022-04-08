@@ -60,8 +60,8 @@ const validerEndringstidspunkt = (
     if (felt.verdi && erIsoStringGyldig(felt.verdi)) {
         return felt.verdi && erFør(kalenderDato(felt.verdi), iDag())
             ? ok(felt)
-            : feil(felt, 'Frist kan ikke settes frem i tid.');
+            : feil(felt, 'Endringstidspunkt kan ikke settes frem i tid.');
     } else {
-        return feil(felt, 'Du må sette en frist.');
+        return feil(felt, 'Endringstidspunkt er ikke i gyldig dato-format.');
     }
 };
