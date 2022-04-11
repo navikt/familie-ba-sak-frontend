@@ -12,7 +12,8 @@ import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { BodyLong, Heading, HelpText } from '@navikt/ds-react';
+import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -51,6 +52,14 @@ const FlexRad = styled.div`
 
 const StyledHjelpetekst = styled(Hjelpetekst)`
     margin-left: 1rem;
+`;
+
+const StyledHelpText = styled(HelpText)`
+    margin-left: 1rem;
+`;
+
+const StyledHelpTextContainer = styled.div`
+    max-width: 24rem;
 `;
 
 const StyledNormaltekst = styled(Normaltekst)`
@@ -153,13 +162,57 @@ const TilbakekrevingSkjema: React.FC<{
 
             <TilbakekrevingSkjemaGruppe legend="Tilbakekreving">
                 <FamilieTextarea
-                    label="Begrunn hvordan feilutbetalingen skal behandles videre"
+                    label={
+                        <FlexDiv>
+                            Årsak til feilutbetaling og videre behandling
+                            <StyledHelpText
+                                title="Hvordan skal feltet fylles ut?"
+                                placement="right"
+                            >
+                                <StyledHelpTextContainer>
+                                    <Heading size="xsmall">Hvordan skal feltet fylles ut?</Heading>
+                                    <BodyLong size="small">
+                                        Pass på at teksten besvarer dette:
+                                        <ul>
+                                            <li>Hva er årsaken til feilutbetaling?</li>
+                                            <li>Hvordan ble feilutbetalingen oppdaget?</li>
+                                            <li>Når ble feilutbetalingen oppdaget?</li>
+                                        </ul>
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Teksteksempel ved opprett tilbakekreving
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Barn født 01.02.03 flyttet fra bruker 01.01.2019. Bruker har
+                                        mottatt barnetrygd for barnet etter at barnet ikke lenger
+                                        bor fast sammen med bruker.
+                                    </BodyLong>
+                                    <BodyLong size="small" spacing={true}>
+                                        Ble oppdaget når den andre forelderen fremsatte søknad om
+                                        barnetrygd for barnet.
+                                    </BodyLong>
+                                    <BodyLong size="small" spacing={true}>
+                                        Søknaden ble mottatt 11.03.2022. Bruker har ikke meldt fra
+                                        om dette selv.
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Teksteksempel ved avvent tilbakekreving
+                                    </Heading>
+                                    <BodyLong size="small">
+                                        Feilutbetaling gjelder kun inneværende måned, og
+                                        utbetalingen stoppes antakelig.
+                                    </BodyLong>
+                                </StyledHelpTextContainer>
+                            </StyledHelpText>
+                        </FlexDiv>
+                    }
                     {...begrunnelse.hentNavInputProps(
                         tilbakekrevingSkjema.visFeilmeldinger ||
                             begrunnelse.verdi.length > maksLengdeTekst
                     )}
                     erLesevisning={erLesevisning()}
                     maxLength={maksLengdeTekst}
+                    description="Hva er årsaken til feilutbetaling? Hvordan og når ble feilutbetalingen oppdaget? Begrunn hvordan feilutbetalingen skal behandles videre."
                 />
 
                 <FamilieRadioGruppe
