@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
-
+import { BodyShort } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -29,14 +28,16 @@ interface IEkspanderbarTrProps {
 const EkspanderbarTr = styled.tr`
     td {
         border-bottom: ${(props: IEkspanderbarTrProps) =>
-            props.ekspandert ? 'none' : '1px solid rgba(0, 0, 0, 0.15)'} !important;
+            props.ekspandert
+                ? 'none'
+                : '1px solid rgba(0, 0, 0, 0.15)'} !important; // Denne !important er nødvendig
         vertical-align: top;
     }
-`;
 
-const ToggleFormKnappTd = styled.td`
-    text-align: right !important;
-    padding-right: 0 !important;
+    & td:last-child {
+        text-align: right;
+        padding-right: 0;
+    }
 `;
 
 const KompetanseVurdertCelle = styled.div`
@@ -48,6 +49,7 @@ const KompetanseVurdertCelle = styled.div`
 
 const BarnDiv = styled.div`
     display: inline-block;
+    margin-top: 1px;
 `;
 
 const EkspandertTd = styled.td`
@@ -125,14 +127,22 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         </div>
                         <BarnDiv>
                             {kompetanse.verdi?.barnIdenter.verdi.map(barn => (
-                                <Normaltekst key={barn}>{lagLabelBarn(barn)}</Normaltekst>
+                                <BodyShort size="small" key={barn}>
+                                    {lagLabelBarn(barn)}
+                                </BodyShort>
                             ))}
                         </BarnDiv>
                     </KompetanseVurdertCelle>
                 </td>
-                <td>{formatterPeriode(kompetanse.verdi.periode.verdi)}</td>
-                <td>{visVurdertKompetanse()}</td>
-                <ToggleFormKnappTd>
+                <td>
+                    <BodyShort size="small">
+                        {formatterPeriode(kompetanse.verdi.periode.verdi)}
+                    </BodyShort>
+                </td>
+                <td>
+                    <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
+                </td>
+                <td>
                     <IkonKnapp
                         id={kompetanseFeilmeldingId(kompetanse)}
                         erLesevisning={false}
@@ -147,7 +157,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         ikon={<FamilieChevron retning={ekspandertKompetanse ? 'opp' : 'ned'} />}
                         mini={true}
                     />
-                </ToggleFormKnappTd>
+                </td>
             </EkspanderbarTr>
             {ekspandertKompetanse && (
                 <tr>

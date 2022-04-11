@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import { Alert } from '@navikt/ds-react';
@@ -30,38 +28,17 @@ import {
     søkerAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
+    KompetanseStatus,
 } from '../../../../typer/kompetanse';
-import { nyYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
+import EndreKompetansePeriode from './EndreKompetansePeriode';
 import FamilieLandvelger from './FamilieLandvelger';
-import { kompetanseFeilmeldingId, kompetansePeriodeFeilmeldingId } from './KompetanseSkjema';
+import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 0.0625rem solid ${navFarger.navOransje};
+    border-left: 0.0625rem solid var(--navds-global-color-orange-500);
     padding-left: 2rem;
-`;
-
-const StyledLegend = styled.legend`
-    && {
-        display: flex;
-        margin-bottom: 0;
-    }
-`;
-
-const FlexDiv = styled.div`
-    width: 28rem;
-    display: flex;
-    justify-content: space-between;
-
-    div {
-        z-index: 0;
-    }
-
-    div div.skjemaelement {
-        margin-bottom: 0rem;
-    }
 `;
 
 const Knapperad = styled.div`
@@ -101,7 +78,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             return tilBarn;
         } else {
             throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i orginal kompetanse'
+                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i original kompetanse'
             );
         }
     });
@@ -112,12 +89,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
         return visFeilmeldinger || visFeilmeldingerForEnKompetanse;
     };
 
-    const validerOgSettRedigbartKompetanse = (endretKompetanse: FeltState<IKompetanse>) => {
+    const validerOgSettRedigerbartKompetanse = (endretKompetanse: FeltState<IKompetanse>) => {
         settRedigerbartKompetanse(validerKompetanse(endretKompetanse));
     };
 
     const onEndretBarn = (valgteOptions: OptionType[]) => {
-        validerOgSettRedigbartKompetanse({
+        validerOgSettRedigerbartKompetanse({
             ...redigerbartKompetanse,
             verdi: {
                 ...redigerbartKompetanse.verdi,
@@ -182,13 +159,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
-    const finnÅrTilbakeTil = (): number => {
-        return (
-            new Date().getFullYear() -
-            new Date(redigerbartKompetanse.verdi.initielFom).getFullYear()
-        );
-    };
-
     const toPrimærland =
         redigerbartKompetanse.verdi.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
 
@@ -218,87 +188,13 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </div>
-                <SkjemaGruppe
-                    className={lesevisning ? 'lesevisning' : ''}
-                    feilmeldingId={kompetansePeriodeFeilmeldingId(redigerbartKompetanse)}
-                    feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.periode.valideringsstatus ===
-                            Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.periode.feilmelding
-                            : ''
-                    }
-                >
-                    <StyledLegend>
-                        <Element>Periode</Element>
-                    </StyledLegend>
-                    <FlexDiv>
-                        <MånedÅrVelger
-                            lesevisning={lesevisning}
-                            id={`periode_fom`}
-                            label={'F.o.m'}
-                            antallÅrTilbake={finnÅrTilbakeTil()}
-                            antallÅrFrem={0}
-                            value={
-                                redigerbartKompetanse.verdi?.periode.verdi?.fom
-                                    ? redigerbartKompetanse.verdi?.periode.verdi?.fom
-                                    : undefined
-                            }
-                            onEndret={årMåned => {
-                                if (årMåned === redigerbartKompetanse.verdi.periode.verdi.fom) {
-                                    // fom ikke endret
-                                    return;
-                                }
-                                validerOgSettRedigbartKompetanse({
-                                    ...redigerbartKompetanse,
-                                    verdi: {
-                                        ...redigerbartKompetanse.verdi,
-                                        periode: {
-                                            ...redigerbartKompetanse.verdi.periode,
-                                            verdi: nyYearMonthPeriode(
-                                                årMåned,
-                                                redigerbartKompetanse.verdi.periode.verdi.tom
-                                            ),
-                                        },
-                                    },
-                                });
-                            }}
-                            feil={undefined}
-                        />
-                        <MånedÅrVelger
-                            lesevisning={lesevisning}
-                            id={`periode_tom`}
-                            label={'T.o.m (valgfri)'}
-                            antallÅrTilbake={finnÅrTilbakeTil()}
-                            antallÅrFrem={0}
-                            value={
-                                redigerbartKompetanse.verdi?.periode.verdi.tom
-                                    ? redigerbartKompetanse.verdi?.periode.verdi.tom
-                                    : undefined
-                            }
-                            onEndret={årMåned => {
-                                if (årMåned === redigerbartKompetanse.verdi.periode.verdi.tom) {
-                                    // tom ikke endret
-                                    return;
-                                }
-                                validerOgSettRedigbartKompetanse({
-                                    ...redigerbartKompetanse,
-                                    verdi: {
-                                        ...redigerbartKompetanse.verdi,
-                                        periode: {
-                                            ...redigerbartKompetanse.verdi.periode,
-                                            verdi: nyYearMonthPeriode(
-                                                redigerbartKompetanse.verdi?.periode.verdi.fom,
-                                                årMåned
-                                            ),
-                                        },
-                                    },
-                                });
-                            }}
-                            feil={undefined}
-                        />
-                    </FlexDiv>
-                </SkjemaGruppe>
+                <EndreKompetansePeriode
+                    lesevisning={lesevisning}
+                    visFeilmeldinger={skalViseFeilmeldinger()}
+                    redigerbartKompetanse={redigerbartKompetanse}
+                    validerOgSettRedigerbartKompetanse={validerOgSettRedigerbartKompetanse}
+                />
+
                 <FamilieSelect
                     erLesevisning={lesevisning}
                     label={'Søkers aktivitet'}
@@ -313,7 +209,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : 'Ikke utfylt'
                     }
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigbartKompetanse({
+                        validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
@@ -357,7 +253,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : 'Ikke utfylt'
                     }
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigbartKompetanse({
+                        validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
@@ -389,11 +285,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     erLesevisning={lesevisning}
                     id={'annenForeldersAktivitetsland'}
                     label={'Annen forelders aktivitetsland'}
-                    eøs
+                    kunEøs
                     medFlag
                     value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
                     onChange={(value: Country) => {
-                        validerOgSettRedigbartKompetanse({
+                        validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
@@ -416,11 +312,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     erLesevisning={lesevisning}
                     id={'bostedadresse'}
                     label={'Barnets bostedsland'}
-                    eøs
+                    kunEøs
                     medFlag
                     value={redigerbartKompetanse.verdi?.barnetsBostedsland?.verdi}
                     onChange={(value: Country) => {
-                        validerOgSettRedigbartKompetanse({
+                        validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
@@ -453,7 +349,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : 'Ikke utfylt'
                     }
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigbartKompetanse({
+                        validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
@@ -518,20 +414,22 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    <IkonKnapp
-                        erLesevisning={lesevisning}
-                        onClick={() => {
-                            const promise = deleteKompetanse(redigerbartKompetanse.verdi.id);
-                            håndterEndringPåKompetanse(promise);
-                        }}
-                        id={kompetanseFeilmeldingId(redigerbartKompetanse)}
-                        spinner={kompetanseSubmit === KompetanseSubmit.DELETE}
-                        disabled={kompetanseSubmit === KompetanseSubmit.DELETE}
-                        mini={true}
-                        label={'Fjern'}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                        ikon={<Delete />}
-                    />
+                    {redigerbartKompetanse.verdi.status !== KompetanseStatus.IKKE_UTFYLT && (
+                        <IkonKnapp
+                            erLesevisning={lesevisning}
+                            onClick={() => {
+                                const promise = deleteKompetanse(redigerbartKompetanse.verdi.id);
+                                håndterEndringPåKompetanse(promise);
+                            }}
+                            id={kompetanseFeilmeldingId(redigerbartKompetanse)}
+                            spinner={kompetanseSubmit === KompetanseSubmit.DELETE}
+                            disabled={kompetanseSubmit === KompetanseSubmit.DELETE}
+                            mini={true}
+                            label={'Fjern'}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                            ikon={<Delete />}
+                        />
+                    )}
                 </Knapperad>
             </Container>
         </SkjemaGruppe>

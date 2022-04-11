@@ -3,14 +3,25 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import { Element } from 'nav-frontend-typografi';
-
+import { Label } from '@navikt/ds-react';
 import { type Country, CountryFilter } from '@navikt/land-verktoy';
 import CountrySelect, { type CountrySelectProps } from '@navikt/landvelger';
 
 const Landvelger = styled(CountrySelect)`
     margin-bottom: 1rem;
+
+    &.navds-select--disabled {
+        opacity: unset;
+
+        & div.c-countrySelect__select--is-disabled {
+            .c-countrySelect__select__indicators {
+                display: none;
+            }
+            .c-countrySelect__select__control {
+                background-color: var(--navds-global-color-gray-100);
+            }
+        }
+    }
 
     & div.c-countrySelect__select {
         margin-top: 0px;
@@ -23,22 +34,21 @@ const Landvelger = styled(CountrySelect)`
             width: 0px;
         }
 
-        .c-countrySelect__select--is-disabled {
-            background-color: ${navFarger.navGraBakgrunn};
-
-            .c-countrySelect__select__indicators {
-                display: none;
-            }
-        }
-
         .c-countrySelect__select__control {
-            border: 1px solid ${props => (props.feil ? navFarger.redError : navFarger.navGra60)};
-            box-shadow: ${props => (props.feil ? `0 0 0 1px ${navFarger.redError}` : 'none')};
+            border: 1px solid
+                ${props =>
+                    props.feil
+                        ? 'var(--navds-semantic-color-feedback-danger-border)'
+                        : 'var(--navds-semantic-color-border)'};
+            box-shadow: ${props =>
+                props.feil
+                    ? `0 0 0 1px var(--navds-semantic-color-feedback-danger-border)`
+                    : 'none'};
         }
     }
 
     .navds-error-message {
-        color: ${navFarger.redError};
+        color: var(--navds-semantic-color-feedback-danger-text);
         font-size: 1rem;
         font-weight: bold;
 
@@ -61,7 +71,7 @@ interface IProps {
     label: string | JSX.Element;
     placeholder?: string | undefined;
     isMulti?: boolean;
-    eøs?: boolean;
+    kunEøs?: boolean;
     medFlag?: boolean;
     medWave?: boolean;
     sirkulær?: boolean;
@@ -77,7 +87,7 @@ const FamilieLandvelger: React.FC<IProps> = ({
     label,
     placeholder,
     isMulti = false,
-    eøs = false,
+    kunEøs = false,
     sirkulær = false,
     size = 'small',
     medFlag = false,
@@ -101,12 +111,17 @@ const FamilieLandvelger: React.FC<IProps> = ({
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
     };
-    if (eøs) {
+    if (kunEøs) {
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
     }
     return (
         <div className={classNames('skjemaelement', className)}>
-            <Landvelger feil={feil} {...landvelgerProps} place label={<Element>{label}</Element>} />
+            <Landvelger
+                feil={feil}
+                {...landvelgerProps}
+                place
+                label={<Label size="small">{label}</Label>}
+            />
         </div>
     );
 };

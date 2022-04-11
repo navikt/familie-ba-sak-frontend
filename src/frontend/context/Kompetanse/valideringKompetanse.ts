@@ -20,6 +20,8 @@ import {
     type IYearMonthPeriode,
 } from '../../utils/kalender';
 
+const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
+
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;
 const erFør = (dato1: MånedÅr, dato2: MånedÅr) => {
@@ -36,7 +38,6 @@ const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: Må
 const valgtTomErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
     valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
 
-const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 const erBarnGyldig = (felt: FeltState<string[]>): FeltState<string[]> =>
     felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 const erSøkersAktivitetGyldig = (
