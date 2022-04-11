@@ -5,11 +5,9 @@ import styled from 'styled-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import Lenke from 'nav-frontend-lenker';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
+import { Element, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
 import { BodyLong, Heading, HelpText } from '@navikt/ds-react';
@@ -50,19 +48,11 @@ const FlexRad = styled.div`
     flex-direction: row;
 `;
 
-const StyledHjelpetekst = styled(Hjelpetekst)`
-    margin-left: 1rem;
-`;
-
 const StyledHelpText = styled(HelpText)`
     margin-left: 1rem;
 `;
 
 const StyledHelpTextContainer = styled.div`
-    max-width: 24rem;
-`;
-
-const StyledNormaltekst = styled(Normaltekst)`
     max-width: 20rem;
 `;
 
@@ -246,36 +236,37 @@ const TilbakekrevingSkjema: React.FC<{
                                     <FritektsVarselLabel>
                                         <FlexRad>
                                             <Element>Fritekst i varselet</Element>
-                                            <StyledHjelpetekst type={PopoverOrientering.Hoyre}>
-                                                <StyledNormaltekst>
-                                                    Her skal du oppgi hvorfor brukeren ikke skulle
-                                                    fått utbetalt ytelsen i perioden(e). Du må også
-                                                    oppgi hvordan feilutbetalingen ble oppdaget,
-                                                    hvem som oppdaget den og når den ble oppdaget
-                                                    eller meldt til NAV.
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <StyledNormaltekst>
-                                                    Eksempel på tekst:
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <StyledNormaltekst>
-                                                    Vi mottok melding fra deg (dato) om at du
-                                                    flyttet utenlands (dato). Du har ikke rett på
-                                                    barnetrygd når du oppholder deg utenlands. Da vi
-                                                    mottok meldingen fra deg, var det allerede
-                                                    utbetalt barnetrygd for perioden (Fom dato - Tom
-                                                    dato).
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <Lenke
-                                                    href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
-                                                    target="_blank"
-                                                >
-                                                    <span>Se retningslinjer for klarspråk:</span>
-                                                    <ExternalLink />
-                                                </Lenke>
-                                            </StyledHjelpetekst>
+                                            <StyledHelpText placement="right">
+                                                <StyledHelpTextContainer>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Her skal du oppgi hvorfor brukeren ikke
+                                                        skulle fått utbetalt ytelsen i perioden(e).
+                                                        Du må også oppgi hvordan feilutbetalingen
+                                                        ble oppdaget, hvem som oppdaget den og når
+                                                        den ble oppdaget eller meldt til NAV.
+                                                    </BodyLong>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Eksempel på tekst:
+                                                    </BodyLong>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Vi mottok melding fra deg (dato) om at du
+                                                        flyttet utenlands (dato). Du har ikke rett
+                                                        på barnetrygd når du oppholder deg
+                                                        utenlands. Da vi mottok meldingen fra deg,
+                                                        var det allerede utbetalt barnetrygd for
+                                                        perioden (Fom dato - Tom dato).
+                                                    </BodyLong>
+                                                    <Lenke
+                                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
+                                                        target="_blank"
+                                                    >
+                                                        <span>
+                                                            Se retningslinjer for klarspråk:
+                                                        </span>
+                                                        <ExternalLink />
+                                                    </Lenke>
+                                                </StyledHelpTextContainer>
+                                            </StyledHelpText>
                                         </FlexRad>
                                         <StyledEtikettInfo>
                                             <Undertekst>
