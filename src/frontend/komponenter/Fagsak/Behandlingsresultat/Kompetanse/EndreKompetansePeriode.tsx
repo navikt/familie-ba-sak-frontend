@@ -98,7 +98,6 @@ const EndreKompetansePeriode: React.FC<IProps> = ({
                             },
                         });
                     }}
-                    feil={undefined}
                 />
                 <MånedÅrVelger
                     lesevisning={lesevisning}
@@ -130,7 +129,6 @@ const EndreKompetansePeriode: React.FC<IProps> = ({
                             },
                         });
                     }}
-                    feil={undefined}
                 />
             </FlexDiv>
         </SkjemaGruppe>
