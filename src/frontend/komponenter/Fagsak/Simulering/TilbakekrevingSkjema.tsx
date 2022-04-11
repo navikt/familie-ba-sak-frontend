@@ -215,7 +215,38 @@ const TilbakekrevingSkjema: React.FC<{
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
                     }
-                    legend="Fastsett videre behandling"
+                    legend={
+                        <FlexDiv>
+                            Fastsett videre behandling
+                            <StyledHelpText placement="right">
+                                <StyledHelpTextContainer>
+                                    <Heading size="small">
+                                        Hvordan fastsette videre behandling?
+                                    </Heading>
+                                    <Heading size="xsmall">
+                                        Opprett tilbakekreving, send varsel
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Hovedregel er at en feilutbetaling skal varsles, og at
+                                        bruker får varsel samtidig med revurderingsvedtaket.
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Opprett tilbakekreving, ikke send varsel
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Velges unntaksvis når man er usikker på om inneværende måned
+                                        blir feilutbetalt eller ikke. Eller at det fremstår som
+                                        relativt sikkert at feilutbetalt beløp ikke skal kreves inn.
+                                    </BodyLong>
+                                    <Heading size="small">Avvent tilbakekreving</Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Velges når man er rimelig sikker på at det ikke blir
+                                        feilutbetaling.
+                                    </BodyLong>
+                                </StyledHelpTextContainer>
+                            </StyledHelpText>
+                        </FlexDiv>
+                    }
                 >
                     <Radio
                         label={'Opprett tilbakekreving, send varsel'}
