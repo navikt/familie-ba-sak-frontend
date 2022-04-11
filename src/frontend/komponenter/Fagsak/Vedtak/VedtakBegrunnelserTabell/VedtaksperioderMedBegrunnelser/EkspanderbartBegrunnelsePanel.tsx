@@ -76,7 +76,8 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                     )}
                     <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
                     {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
-                        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.REDUKSJON) &&
+                        vedtaksperiodeMedBegrunnelser.type ===
+                            Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING) &&
                         vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
                             <Normaltekst>
                                 {formaterBeløp(
