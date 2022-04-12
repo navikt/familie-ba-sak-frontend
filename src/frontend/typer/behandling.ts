@@ -4,6 +4,7 @@ import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingst
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
+import type { IRestKompetanse } from './kompetanse';
 import type { IGrunnlagPerson } from './person';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
@@ -234,6 +235,7 @@ export interface IBehandling {
     migreringsdato?: string;
     søknadMottattDato?: string;
     endringstidspunkt?: string;
+    kompetanser: IRestKompetanse[];
 }
 
 export interface IArbeidsfordelingPåBehandling {
