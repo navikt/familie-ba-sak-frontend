@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Flatknapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
+import { Alert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -46,7 +46,7 @@ const StyledEditIkon = styled(Edit)`
     margin-right: 0.5rem;
 `;
 
-const StyledAlertStripe = styled(AlertStripe)`
+const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
@@ -171,7 +171,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 &&
                 toggles[ToggleNavn.etterbetaling3år] && (
-                    <StyledAlertStripe type={'advarsel'}>
+                    <StyledAlert variant={'warning'}>
                         Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
                         {slåSammenListeTilStreng(
                             personerMedUgyldigEtterbetalingsperiode.map(ident =>
@@ -179,7 +179,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                             )
                         )}
                         .
-                    </StyledAlertStripe>
+                    </StyledAlert>
                 )}
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
