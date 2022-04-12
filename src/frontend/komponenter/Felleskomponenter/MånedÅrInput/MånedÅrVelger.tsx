@@ -10,7 +10,7 @@ import Årvelger from './ÅrVelger';
 
 interface Props {
     id: string;
-    feil: ReactNode | undefined;
+    feil?: ReactNode | undefined;
     value: string | undefined;
     className?: string;
     label?: ReactNode;

@@ -2430,6 +2430,11 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
+"@navikt/ds-css-internal@^0.7.3":
+  version "0.7.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css-internal/0.7.3/1f807f24db86976f1e220700b4089be252215e834bd18ea2561ba8d1d3488586#06ea2722e95c226eb5e562116054477613f71f4e"
+  integrity sha512-mCjEWAwNW4fqmA+SMG3hmRZW49imxx8wIv+0yfQIpk9fnhutEqB2cnJmXvgYY4XVZaPeWFLeZcGAwouuSGBqXQ==
+
 "@navikt/ds-css@0.16.17":
   version "0.16.17"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.16.17/2dcf733af4b0f506c6a777a88290f25dbccace6d3f307c3a0fc8dce068f358ad#a25ca3801587894b120bae02f21c9d96c8b4d6ee"
@@ -2442,8 +2447,8 @@
 
 "@navikt/ds-icons@^0.5.4":
   version "0.5.10"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.5.10.tgz#9cf9dba666b96abb3d72494e8847849ab207f0d0"
-  integrity sha512-quBaILBT6mznJOUaSXH1bLx5Ao8LFW6Xj5wc/txy9zg07yOAl+60vxyADl2Uk5pl8hfXrflejV9bcxY6zWv/Lg==
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.5.10/94c8c95f7c0ae8e26ff335737df0075fb388b7775a6634c4355d9b34372dd257#000a37bde2ec612354766d6d06b603c90292ec52"
+  integrity sha512-ThVHgyy7wwqI/Je3Qg1wNW5gcwH+DwW+CLWb/IFB0zNQcDp/GI1nXw3hA/IFAhzxJPRhqqtfEldFJ5UkaxzZYw==
   dependencies:
     uuid "^8.3.2"
 
@@ -2671,6 +2676,14 @@
     nav-frontend-typografi-style "^1.1.1"
     prop-types "^15.7.2"
 
+"@navikt/flagg-ikoner@^3.1.2":
+  version "3.1.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/3.1.2/616ec5beb400063203c065cfc2dc8635a15eafe5449ec523c845903d01a6fadd#1a82cde207c47d26b846643b327d0994aa0cfc4b"
+  integrity sha512-saEu9urnT3AnAWhpR0Ts6swGGFo1jG8KPW5B2yQ9wNfG71he2YHmvMjGhTMdPjaJ6BAFC82B9t5xF9RkfB/dhQ==
+  dependencies:
+    svg-country-flags "^1.2.10"
+    uuid "^8.3.2"
+
 "@navikt/fnrvalidator@^1.1.3", "@navikt/fnrvalidator@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.2.0.tgz#41799586c418bb98bc6b45a62bedbcb5869792a3"
@@ -2682,6 +2695,25 @@
   integrity sha512-J4SvS8L5VUowb8Kii+Ko15qkS80VUqEqQgi7S+DfkiWa2wgvQMpV5PrEJUpjaSpE3gp9cQetap/XELbr+QS+vA==
   dependencies:
     nanoid "^3.1.3"
+
+"@navikt/hoykontrast@^3.0.1":
+  version "3.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.0.1/0525de7ea4e8738a5c44599564eb8acf9c16f0f074ad65b5aba3ef7581bc7868#dc20ff864d5b942e209f71b5dd5059992769ddd2"
+  integrity sha512-nB/+fAK4JIvumgl0CH4vSiXqnjaAt33YFXWhEVplPzjuEl8dN9dXMAeb0TiahFfQBAnr2RcUMADHVNXxFSuN6Q==
+
+"@navikt/land-verktoy@^3.0.1":
+  version "3.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/3.0.1/494cda62e3cb6b202436f8db246c60e0b955ba90605597347935da39325c31ca#838be895f8ab027aeeaa963a0f1cf63a460c77c7"
+  integrity sha512-cND63dE6lH658edgkuijmpf+O79splfBl2xQ6YZZ/UsnDqR0+eBFrK5XbxwidfF8Am568kHOKsd+N+kPkaauwA==
+  dependencies:
+    "@piotrgorecki/i18n-currency-name" "^1.2.0"
+    country-data-list "^1.2.1"
+    i18n-iso-countries "^7.3.0"
+
+"@navikt/landvelger@^3.0.3":
+  version "3.0.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/3.0.3/42b3975a2285b4ed975c904064c971468720028c8e40df249e123fa3f26ad6d7#f226864a654df2926f1e6a8be9840bc014e9a9ee"
+  integrity sha512-X1eUoYaanAYKlyjyPSucs5jD7xYqgjC4sLq6P60vsgn1UvSonE3HfevxoxhFtUwkpx53FqjWSNgivNKoKL/HJA==
 
 "@navikt/nap-bem-utils@1.0.1":
   version "1.0.1"
@@ -2724,6 +2756,11 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
   integrity sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==
+
+"@piotrgorecki/i18n-currency-name@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@piotrgorecki/i18n-currency-name/-/i18n-currency-name-1.2.0.tgz#2be4792936a1a4e8e64c11913d1ecbdb92b08b0e"
+  integrity sha512-zPv1D/EXxyeS5PfetB/JsCNVw+kIZBzDDdTjRkF/VHoQH8WlfsrmSfcoLg0EUj+tbjh7kRcbNkDVuUjI0092Cg==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.0":
   version "0.5.0"
@@ -5446,6 +5483,13 @@ cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+country-data-list@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/country-data-list/-/country-data-list-1.2.1.tgz#fbc87163b93a0fbae16dbc26911891c3862556d0"
+  integrity sha512-FiW0PB/OVdx88BxRcbBY55ozr+uq2p7cYf1nmX7Q75uRfguHohB5qeQoizVm8ECBjryA79U3UudeG2T+puw3dw==
+  dependencies:
+    currency-symbol-map "~5"
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
@@ -5695,6 +5739,11 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.8.tgz#d2266a792729fb227cd216fb572f43728e1ad340"
   integrity sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==
 
+currency-symbol-map@~5:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/currency-symbol-map/-/currency-symbol-map-5.0.1.tgz#447629c7e26730299aa6174c55bde281f682b2e5"
+  integrity sha512-2yHvoVBPIS9Dx7fjritu9l7UHWo4Z3D2oQnQj8AYwUee2j/PAcoHB4issCqwabfbipISZ/iG6vVYsfrAoks2eA==
+
 cypress@^9.5.0:
   version "9.5.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-9.5.0.tgz#704a79f0d3d4e775f433334eb8f5ae065e3bea31"
@@ -5911,6 +5960,11 @@ detect-newline@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
+
+diacritics@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/diacritics/-/diacritics-1.3.0.tgz#3efa87323ebb863e6696cebb0082d48ff3d6f7a1"
+  integrity sha1-PvqHMj67hj5mls67AILUj/PW96E=
 
 diff-sequences@^26.6.2:
   version "26.6.2"
@@ -7606,6 +7660,13 @@ hyphenate-style-name@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
+
+i18n-iso-countries@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/i18n-iso-countries/-/i18n-iso-countries-7.3.0.tgz#4e54855a2e5280ab9dacd6d51bc79d2336f83514"
+  integrity sha512-z7vFa/wSDx3lpxQZNr/+ZioUQNTYqk1NZoP6vxjukr554r/QxpSRkYFfE3ovKKW82GpyAw4/c6Zi+2Ebr4T0fA==
+  dependencies:
+    diacritics "1.3.0"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"
@@ -12234,6 +12295,11 @@ supports-hyperlinks@^2.0.0:
   dependencies:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
+
+svg-country-flags@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/svg-country-flags/-/svg-country-flags-1.2.10.tgz#b1b94e9f08f065d7b3d0ff9ab359898edd4dd3b0"
+  integrity sha512-xrqwo0TYf/h2cfPvGpjdSuSguUbri4vNNizBnwzoZnX0xGo3O5nGJMlbYEp7NOYcnPGBm6LE2axqDWSB847bLw==
 
 svg-parser@^2.0.2:
   version "2.0.4"
