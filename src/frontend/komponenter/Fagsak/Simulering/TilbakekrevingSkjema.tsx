@@ -5,14 +5,13 @@ import styled from 'styled-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import Lenke from 'nav-frontend-lenker';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
+import { Element, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { BodyLong, Heading, HelpText } from '@navikt/ds-react';
+import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -49,11 +48,11 @@ const FlexRad = styled.div`
     flex-direction: row;
 `;
 
-const StyledHjelpetekst = styled(Hjelpetekst)`
+const StyledHelpText = styled(HelpText)`
     margin-left: 1rem;
 `;
 
-const StyledNormaltekst = styled(Normaltekst)`
+const StyledHelpTextContainer = styled.div`
     max-width: 20rem;
 `;
 
@@ -153,13 +152,57 @@ const TilbakekrevingSkjema: React.FC<{
 
             <TilbakekrevingSkjemaGruppe legend="Tilbakekreving">
                 <FamilieTextarea
-                    label="Begrunn hvordan feilutbetalingen skal behandles videre"
+                    label={
+                        <FlexDiv>
+                            Årsak til feilutbetaling og videre behandling
+                            <StyledHelpText
+                                title="Hvordan skal feltet fylles ut?"
+                                placement="right"
+                            >
+                                <StyledHelpTextContainer>
+                                    <Heading size="xsmall">Hvordan skal feltet fylles ut?</Heading>
+                                    <BodyLong size="small">
+                                        Pass på at teksten besvarer dette:
+                                        <ul>
+                                            <li>Hva er årsaken til feilutbetaling?</li>
+                                            <li>Hvordan ble feilutbetalingen oppdaget?</li>
+                                            <li>Når ble feilutbetalingen oppdaget?</li>
+                                        </ul>
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Teksteksempel ved opprett tilbakekreving
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Barn født 01.02.03 flyttet fra bruker 01.01.2019. Bruker har
+                                        mottatt barnetrygd for barnet etter at barnet ikke lenger
+                                        bor fast sammen med bruker.
+                                    </BodyLong>
+                                    <BodyLong size="small" spacing={true}>
+                                        Ble oppdaget når den andre forelderen fremsatte søknad om
+                                        barnetrygd for barnet.
+                                    </BodyLong>
+                                    <BodyLong size="small" spacing={true}>
+                                        Søknaden ble mottatt 11.03.2022. Bruker har ikke meldt fra
+                                        om dette selv.
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Teksteksempel ved avvent tilbakekreving
+                                    </Heading>
+                                    <BodyLong size="small">
+                                        Feilutbetaling gjelder kun inneværende måned, og
+                                        utbetalingen stoppes antakelig.
+                                    </BodyLong>
+                                </StyledHelpTextContainer>
+                            </StyledHelpText>
+                        </FlexDiv>
+                    }
                     {...begrunnelse.hentNavInputProps(
                         tilbakekrevingSkjema.visFeilmeldinger ||
                             begrunnelse.verdi.length > maksLengdeTekst
                     )}
                     erLesevisning={erLesevisning()}
                     maxLength={maksLengdeTekst}
+                    description="Hva er årsaken til feilutbetaling? Hvordan og når ble feilutbetalingen oppdaget? Begrunn hvordan feilutbetalingen skal behandles videre."
                 />
 
                 <FamilieRadioGruppe
@@ -172,7 +215,38 @@ const TilbakekrevingSkjema: React.FC<{
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
                     }
-                    legend="Fastsett videre behandling"
+                    legend={
+                        <FlexDiv>
+                            Fastsett videre behandling
+                            <StyledHelpText placement="right">
+                                <StyledHelpTextContainer>
+                                    <Heading size="small">
+                                        Hvordan fastsette videre behandling?
+                                    </Heading>
+                                    <Heading size="xsmall">
+                                        Opprett tilbakekreving, send varsel
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Hovedregel er at en feilutbetaling skal varsles, og at
+                                        bruker får varsel samtidig med revurderingsvedtaket.
+                                    </BodyLong>
+                                    <Heading size="xsmall">
+                                        Opprett tilbakekreving, ikke send varsel
+                                    </Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Velges unntaksvis når man er usikker på om inneværende måned
+                                        blir feilutbetalt eller ikke. Eller at det fremstår som
+                                        relativt sikkert at feilutbetalt beløp ikke skal kreves inn.
+                                    </BodyLong>
+                                    <Heading size="small">Avvent tilbakekreving</Heading>
+                                    <BodyLong size="small" spacing={true}>
+                                        Velges når man er rimelig sikker på at det ikke blir
+                                        feilutbetaling.
+                                    </BodyLong>
+                                </StyledHelpTextContainer>
+                            </StyledHelpText>
+                        </FlexDiv>
+                    }
                 >
                     <Radio
                         label={'Opprett tilbakekreving, send varsel'}
@@ -193,36 +267,37 @@ const TilbakekrevingSkjema: React.FC<{
                                     <FritektsVarselLabel>
                                         <FlexRad>
                                             <Element>Fritekst i varselet</Element>
-                                            <StyledHjelpetekst type={PopoverOrientering.Hoyre}>
-                                                <StyledNormaltekst>
-                                                    Her skal du oppgi hvorfor brukeren ikke skulle
-                                                    fått utbetalt ytelsen i perioden(e). Du må også
-                                                    oppgi hvordan feilutbetalingen ble oppdaget,
-                                                    hvem som oppdaget den og når den ble oppdaget
-                                                    eller meldt til NAV.
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <StyledNormaltekst>
-                                                    Eksempel på tekst:
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <StyledNormaltekst>
-                                                    Vi mottok melding fra deg (dato) om at du
-                                                    flyttet utenlands (dato). Du har ikke rett på
-                                                    barnetrygd når du oppholder deg utenlands. Da vi
-                                                    mottok meldingen fra deg, var det allerede
-                                                    utbetalt barnetrygd for perioden (Fom dato - Tom
-                                                    dato).
-                                                </StyledNormaltekst>
-                                                <br />
-                                                <Lenke
-                                                    href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
-                                                    target="_blank"
-                                                >
-                                                    <span>Se retningslinjer for klarspråk:</span>
-                                                    <ExternalLink />
-                                                </Lenke>
-                                            </StyledHjelpetekst>
+                                            <StyledHelpText placement="right">
+                                                <StyledHelpTextContainer>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Her skal du oppgi hvorfor brukeren ikke
+                                                        skulle fått utbetalt ytelsen i perioden(e).
+                                                        Du må også oppgi hvordan feilutbetalingen
+                                                        ble oppdaget, hvem som oppdaget den og når
+                                                        den ble oppdaget eller meldt til NAV.
+                                                    </BodyLong>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Eksempel på tekst:
+                                                    </BodyLong>
+                                                    <BodyLong size="small" spacing={true}>
+                                                        Vi mottok melding fra deg (dato) om at du
+                                                        flyttet utenlands (dato). Du har ikke rett
+                                                        på barnetrygd når du oppholder deg
+                                                        utenlands. Da vi mottok meldingen fra deg,
+                                                        var det allerede utbetalt barnetrygd for
+                                                        perioden (Fom dato - Tom dato).
+                                                    </BodyLong>
+                                                    <Lenke
+                                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
+                                                        target="_blank"
+                                                    >
+                                                        <span>
+                                                            Se retningslinjer for klarspråk:
+                                                        </span>
+                                                        <ExternalLink />
+                                                    </Lenke>
+                                                </StyledHelpTextContainer>
+                                            </StyledHelpText>
                                         </FlexRad>
                                         <StyledEtikettInfo>
                                             <Undertekst>

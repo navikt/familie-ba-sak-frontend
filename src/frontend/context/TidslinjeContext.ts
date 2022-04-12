@@ -15,10 +15,9 @@ import {
     kalenderDatoTilDate,
     KalenderEnhet,
     leggTil,
-    iDag,
-    sisteDagIInneværendeMåned,
     sisteDagIMåned,
     trekkFra,
+    nesteMåned,
 } from '../utils/kalender';
 import { splittUtvidetVedEndringerPåSmåbarnstillegg } from '../utils/tidslinje';
 
@@ -51,8 +50,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        startDato: sisteDagIMåned(trekkFra(iDag(), 12, KalenderEnhet.MÅNED)),
-        sluttDato: sisteDagIInneværendeMåned(),
+        startDato: sisteDagIMåned(trekkFra(nesteMåned(), 12, KalenderEnhet.MÅNED)),
+        sluttDato: sisteDagIMåned(nesteMåned()),
     });
 
     const genererFormatertÅrstall = () => {
