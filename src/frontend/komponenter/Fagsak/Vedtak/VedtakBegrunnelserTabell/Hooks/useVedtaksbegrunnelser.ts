@@ -2,9 +2,7 @@ import type { GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../typer/behandling';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
@@ -26,8 +24,6 @@ export const useVilkårBegrunnelser = ({
     periode: IPeriode;
     åpenBehandling: IBehandling;
 }) => {
-    const { toggles } = useApp();
-
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
