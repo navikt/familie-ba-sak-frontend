@@ -33,17 +33,13 @@ export const useVilkårBegrunnelser = ({
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiodeMedBegrunnelser.type) {
             case Vedtaksperiodetype.UTBETALING:
-                const begrunnelsetyperForUtbetaling = [
+                return [
                     VedtakBegrunnelseType.INNVILGET,
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
+                    Vedtaksperiodetype.ENDRET_UTBETALING,
                 ];
-                if (toggles[ToggleNavn.ingenOverlappHenlegglese]) {
-                    return [...begrunnelsetyperForUtbetaling, Vedtaksperiodetype.ENDRET_UTBETALING];
-                } else {
-                    return begrunnelsetyperForUtbetaling;
-                }
             case Vedtaksperiodetype.FORTSATT_INNVILGET:
                 return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
             case Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING:
