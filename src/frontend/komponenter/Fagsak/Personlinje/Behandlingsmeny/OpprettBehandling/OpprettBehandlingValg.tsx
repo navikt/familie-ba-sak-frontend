@@ -107,6 +107,16 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erHelmanuellMigrering =
         erMigreringFraInfotrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+    const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
+        (!minimalFagsak
+            ? false
+            : minimalFagsak.behandlinger.filter(
+                  behandling =>
+                      !erBehandlingHenlagt(behandling.resultat) &&
+                      behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+              ).length > 0 && kanOppretteBehandling) && erMigreringFraInfotrygd;
+    const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
+        kanOppretteFørstegangsbehandling && !kanOppretteMigreringsbehandlingMedEndreMigreringsdato;
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
@@ -194,9 +204,9 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         ? Object.values(BehandlingÅrsak)
                               .filter(
                                   årsak =>
-                                      (kanOppretteFørstegangsbehandling &&
+                                      (kanOpprettMigreringsbehandlingMedHelmanuellMigrering &&
                                           årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
-                                      (!kanOppretteFørstegangsbehandling &&
+                                      (kanOppretteMigreringsbehandlingMedEndreMigreringsdato &&
                                           årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
                               )
                               .map(årsak => {
