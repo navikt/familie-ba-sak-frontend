@@ -108,15 +108,16 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const erHelmanuellMigrering =
         erMigreringFraInfotrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
+        kanOppretteMigreringFraInfotrygd &&
         (!minimalFagsak
             ? false
             : minimalFagsak.behandlinger.filter(
                   behandling =>
                       !erBehandlingHenlagt(behandling.resultat) &&
                       behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-              ).length > 0 && kanOppretteBehandling) && erMigreringFraInfotrygd;
+              ).length > 0);
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
-        kanOppretteFørstegangsbehandling && !kanOppretteMigreringsbehandlingMedEndreMigreringsdato;
+        kanOppretteMigreringFraInfotrygd && !kanOppretteMigreringsbehandlingMedEndreMigreringsdato;
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
