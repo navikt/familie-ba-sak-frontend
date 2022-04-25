@@ -163,8 +163,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
         ) {
             return toggles[ToggleNavn.endreMottakerEndringsårsaker];
-        } else if (årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR) {
-            return toggles[ToggleNavn.etterbetaling3år];
         } else {
             return true;
         }
