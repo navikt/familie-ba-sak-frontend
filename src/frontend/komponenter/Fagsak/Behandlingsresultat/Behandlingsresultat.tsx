@@ -94,9 +94,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse();
 
     useEffect(() => {
-        if (toggles[ToggleNavn.etterbetaling3år]) {
-            hentPersonerMedUgyldigEtterbetalingsperiode();
-        }
+        hentPersonerMedUgyldigEtterbetalingsperiode();
     }, [åpenBehandling]);
 
     const forrigeOnClick = () => {
@@ -169,18 +167,15 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
-            {personerMedUgyldigEtterbetalingsperiode.length > 0 &&
-                toggles[ToggleNavn.etterbetaling3år] && (
-                    <StyledAlert variant={'warning'}>
-                        Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
-                        {slåSammenListeTilStreng(
-                            personerMedUgyldigEtterbetalingsperiode.map(ident =>
-                                formaterIdent(ident)
-                            )
-                        )}
-                        .
-                    </StyledAlert>
-                )}
+            {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
+                <StyledAlert variant={'warning'}>
+                    Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
+                    {slåSammenListeTilStreng(
+                        personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
+                    )}
+                    .
+                </StyledAlert>
+            )}
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
             )}
