@@ -26,7 +26,6 @@ import {
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
@@ -78,7 +77,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     });
 
     const history = useHistory();
-    const { toggles } = useApp();
 
     const {
         hentForhåndsvisning,
@@ -172,28 +170,25 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         pdfdata={hentetDokument}
                     />
                     <Container>
-                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
-                            toggles[ToggleNavn.fortsattInnvilgetMedPerioder] && (
-                                <FamilieSelect
-                                    label="Velg brev med eller uten perioder"
-                                    erLesevisning={erLesevisning()}
-                                    onChange={(
-                                        event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
-                                    ): void => {
-                                        overstyrFortsattInnvilgetVedtaksperioder(
-                                            event.target.value
-                                        );
-                                    }}
-                                    value={periodetypeIVedtaksbrev}
-                                >
-                                    <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
-                                        Fortsatt innvilget: Uten perioder
-                                    </option>
-                                    <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
-                                        Fortsatt innvilget: Med perioder
-                                    </option>
-                                </FamilieSelect>
-                            )}
+                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
+                            <FamilieSelect
+                                label="Velg brev med eller uten perioder"
+                                erLesevisning={erLesevisning()}
+                                onChange={(
+                                    event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
+                                ): void => {
+                                    overstyrFortsattInnvilgetVedtaksperioder(event.target.value);
+                                }}
+                                value={periodetypeIVedtaksbrev}
+                            >
+                                <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
+                                    Fortsatt innvilget: Uten perioder
+                                </option>
+                                <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
+                                    Fortsatt innvilget: Med perioder
+                                </option>
+                            </FamilieSelect>
+                        )}
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                         åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
