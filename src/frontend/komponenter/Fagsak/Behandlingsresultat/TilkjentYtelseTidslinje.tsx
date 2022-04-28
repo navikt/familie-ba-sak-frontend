@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
@@ -13,6 +15,54 @@ import TidslinjeEtikett from './TidslinjeEtikett';
 import TidslinjeNavigering from './TidslinjeNavigering';
 import Vinduvelger from './VinduVelger';
 
+const TidslinjeHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+`;
+
+const TidslinjeControls = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    > div:first-child {
+        margin-bottom: 1rem;
+    }
+
+    & .tidslinje-header__navigering > button {
+        &:first-child {
+            margin-right: 0.625rem;
+        }
+    }
+`;
+
+const TidslinjeContainer = styled.div`
+    display: flex;
+
+    & .tidslinje {
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    & .typo-normal {
+        &:first-child {
+            margin-top: 4.8rem;
+        }
+    }
+
+    & .typo-normal {
+        &:not(:first-child) {
+            margin-top: 2.125rem;
+        }
+    }
+`;
+
+const TidslinjeLabels = styled.div`
+    min-width: 7rem;
+`;
+
 interface IProps {
     grunnlagPersoner: IGrunnlagPerson[];
     tidslinjePersoner: IPersonMedAndelerTilkjentYtelse[];
@@ -25,15 +75,15 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
 
     return (
         <>
-            <div className={'tidslinje-header'}>
+            <TidslinjeHeader>
                 <Undertittel>{genererFormatertÅrstall()}</Undertittel>
-                <div className={'tidslinje-header__controls'}>
+                <TidslinjeControls>
                     <Vinduvelger />
                     <TidslinjeNavigering naviger={naviger} />
-                </div>
-            </div>
-            <div className={'tidslinje-container'}>
-                <div className={'tidslinje-container__labels'}>
+                </TidslinjeControls>
+            </TidslinjeHeader>
+            <TidslinjeContainer>
+                <TidslinjeLabels>
                     {grunnlagPersoner.map((person, index) => {
                         return (
                             <Normaltekst key={index} title={person.navn}>
@@ -41,7 +91,7 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                             </Normaltekst>
                         );
                     })}
-                </div>
+                </TidslinjeLabels>
                 <Tidslinje
                     rader={tidslinjeRader}
                     etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}
@@ -56,7 +106,7 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                         }
                     }
                 />
-            </div>
+            </TidslinjeContainer>
         </>
     );
 };

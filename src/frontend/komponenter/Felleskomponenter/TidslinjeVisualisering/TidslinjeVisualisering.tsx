@@ -37,6 +37,54 @@ const Container = styled.div`
     height: calc(100vh - 6rem);
 `;
 
+const TidslinjeHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+`;
+
+const TidslinjeControls = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    > div:first-child {
+        margin-bottom: 1rem;
+    }
+
+    & .tidslinje-header__navigering > button {
+        &:first-child {
+            margin-right: 0.625rem;
+        }
+    }
+`;
+
+const TidslinjeContainer = styled.div`
+    display: flex;
+
+    & .tidslinje {
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    & .typo-normal {
+        &:first-child {
+            margin-top: 4.8rem;
+        }
+    }
+
+    & .typo-normal {
+        &:not(:first-child) {
+            margin-top: 2.125rem;
+        }
+    }
+`;
+
+const TidslinjeLabels = styled.div`
+    min-width: 7rem;
+`;
+
 const tidslinjerLabels = [
     ...Object.values(vilkårConfig)
         .filter(vc => vc.parterDetteGjelderFor.includes(PersonType.SØKER))
@@ -187,17 +235,17 @@ const TidslinjeVisualisering: React.FC = () => {
                     <Sidetittel>Tidslinjer</Sidetittel>
                     {barna.map((barn, index) => (
                         <div key={`barn_${index}`}>
-                            <div className={'tidslinje-header'}>
+                            <TidslinjeHeader>
                                 <Undertittel>{`${formaterIdent(
                                     barn
                                 )}: ${genererFormatertÅrstall()}`}</Undertittel>
-                                <div className={'tidslinje-header__controls'}>
+                                <TidslinjeControls>
                                     <Vinduvelger />
                                     <TidslinjeNavigering naviger={naviger} />
-                                </div>
-                            </div>
-                            <div className={'tidslinje-container'}>
-                                <div className={'tidslinje-container__labels'}>
+                                </TidslinjeControls>
+                            </TidslinjeHeader>
+                            <TidslinjeContainer>
+                                <TidslinjeLabels>
                                     {tidslinjerLabels.map((label, index) => {
                                         return (
                                             <Normaltekst key={index} title={label}>
@@ -205,7 +253,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                             </Normaltekst>
                                         );
                                     })}
-                                </div>
+                                </TidslinjeLabels>
                                 <Tidslinje
                                     rader={genererRaderForBarnetsTidslinjer(
                                         tidslinjerRessurs.data.søkersTidslinjer,
@@ -231,7 +279,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                         }
                                     }
                                 />
-                            </div>
+                            </TidslinjeContainer>
                         </div>
                     ))}
                 </Container>
