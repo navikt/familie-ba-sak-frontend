@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '@navikt/helse-frontend-tidslinje/lib/main.css';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';

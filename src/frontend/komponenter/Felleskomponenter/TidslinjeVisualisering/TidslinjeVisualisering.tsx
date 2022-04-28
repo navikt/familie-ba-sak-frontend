@@ -5,10 +5,10 @@ import styled from 'styled-components';
 
 import { Normaltekst, Sidetittel, Undertittel } from 'nav-frontend-typografi';
 
+import { Globe as Eu, Home as NorwegianFlag } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
+import { type Periode, Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 import { byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { type Periode, Tidslinje } from '@navikt/helse-frontend-tidslinje';
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { PersonType } from '../../../typer/person';
@@ -137,6 +137,12 @@ const TidslinjeVisualisering: React.FC = () => {
                     regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER
                         ? 'suksess'
                         : 'advarsel',
+                children:
+                    regelverkPeriode.innhold === Regelverk.EØS_FORORDNINGEN ? (
+                        <Eu width={24} height={24} />
+                    ) : (
+                        <NorwegianFlag width={24} height={24} />
+                    ),
             }));
     };
 
@@ -205,8 +211,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                         tidslinjerRessurs.data.søkersTidslinjer,
                                         tidslinjerRessurs.data.barnasTidslinjer[barn]
                                     )}
-                                    direction={'right'}
-                                    etikettRender={(etikett: Skalaetikett) => (
+                                    etikettRender={(etikett: Etikett) => (
                                         <TidslinjeEtikett etikett={etikett} />
                                     )}
                                     startDato={kalenderDatoTilDate(
@@ -217,10 +222,10 @@ const TidslinjeVisualisering: React.FC = () => {
                                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                                     aktivtUtsnitt={
                                         aktivEtikett && {
-                                            fom: aktivEtikett.dato,
+                                            fom: aktivEtikett.date,
                                             tom: kalenderDatoTilDate(
                                                 sisteDagIMåned(
-                                                    kalenderDatoFraDate(aktivEtikett.dato)
+                                                    kalenderDatoFraDate(aktivEtikett.date)
                                                 )
                                             ),
                                         }

@@ -2,8 +2,7 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
-import type { Periode } from '@navikt/helse-frontend-tidslinje';
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Periode, Etikett } from '@navikt/familie-tidslinje';
 
 import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { YtelseType } from '../typer/beregning';
@@ -45,7 +44,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         { id: TidslinjeVindu.TRE_ÅR, label: '3 år', måneder: 36 },
     ];
 
-    const [aktivEtikett, settAktivEtikett] = useState<Skalaetikett | undefined>(undefined);
+    const [aktivEtikett, settAktivEtikett] = useState<Etikett | undefined>(undefined);
     const [initiellAktivEtikettErSatt, setInitiellAktivEtikettErSatt] = useState<boolean>(false);
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({

@@ -1,11 +1,8 @@
 import React from 'react';
 
-import '@navikt/helse-frontend-tidslinje/lib/main.css';
-
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import { Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
@@ -47,17 +44,14 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                 </div>
                 <Tidslinje
                     rader={tidslinjeRader}
-                    direction={'right'}
-                    etikettRender={(etikett: Skalaetikett) => (
-                        <TidslinjeEtikett etikett={etikett} />
-                    )}
+                    etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}
                     startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                     aktivtUtsnitt={
                         aktivEtikett && {
-                            fom: aktivEtikett.dato,
+                            fom: aktivEtikett.date,
                             tom: kalenderDatoTilDate(
-                                sisteDagIMåned(kalenderDatoFraDate(aktivEtikett.dato))
+                                sisteDagIMåned(kalenderDatoFraDate(aktivEtikett.date))
                             ),
                         }
                     }
