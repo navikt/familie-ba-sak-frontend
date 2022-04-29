@@ -1,4 +1,4 @@
-import type { Periode } from '@navikt/helse-frontend-tidslinje';
+import type { Periode } from '@navikt/familie-tidslinje';
 
 import type { IYtelsePeriode } from '../../typer/beregning';
 import { YtelseType } from '../../typer/beregning';

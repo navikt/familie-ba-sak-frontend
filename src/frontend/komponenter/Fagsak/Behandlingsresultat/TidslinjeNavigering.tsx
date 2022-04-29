@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '@navikt/helse-frontend-tidslinje/lib/main.css';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';
@@ -20,6 +19,12 @@ interface IProps {
 const StyledTidslinjenavigering = styled.div`
     display: flex;
     flex-direction: row;
+
+    & > button {
+        &:first-child {
+            margin-right: 0.625rem;
+        }
+    }
 `;
 
 const DivMedHøyremargin = styled.div`

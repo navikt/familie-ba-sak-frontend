@@ -109,7 +109,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                   periodeOverlapperMedValgtDato(
                       utbetalingsperiode.periodeFom,
                       utbetalingsperiode.periodeTom,
-                      aktivEtikett.dato
+                      aktivEtikett.date
                   )
               )
             : undefined;

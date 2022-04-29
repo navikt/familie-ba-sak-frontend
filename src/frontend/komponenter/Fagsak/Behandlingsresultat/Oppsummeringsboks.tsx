@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
@@ -20,7 +20,7 @@ import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kale
 
 interface IProps {
     utbetalingsperiode: Utbetalingsperiode | undefined;
-    aktivEtikett: Skalaetikett;
+    aktivEtikett: Etikett;
 }
 
 const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
@@ -31,7 +31,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
     const månedNavnOgÅr = () => {
         const navn = formaterIsoDato(
-            serializeIso8601String(kalenderDatoFraDate(aktivEtikett.dato)),
+            serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
             datoformat.MÅNED_ÅR_NAVN
         );
         return navn[0].toUpperCase() + navn.substr(1);
