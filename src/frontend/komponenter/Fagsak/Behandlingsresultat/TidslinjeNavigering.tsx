@@ -19,6 +19,12 @@ interface IProps {
 const StyledTidslinjenavigering = styled.div`
     display: flex;
     flex-direction: row;
+
+    & > button {
+        &:first-child {
+            margin-right: 0.625rem;
+        }
+    }
 `;
 
 const DivMedHøyremargin = styled.div`

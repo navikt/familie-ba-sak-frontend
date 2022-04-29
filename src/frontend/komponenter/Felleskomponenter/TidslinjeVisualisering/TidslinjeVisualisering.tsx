@@ -52,12 +52,6 @@ const TidslinjeControls = styled.div`
     > div:first-child {
         margin-bottom: 1rem;
     }
-
-    & .tidslinje-header__navigering > button {
-        &:first-child {
-            margin-right: 0.625rem;
-        }
-    }
 `;
 
 const TidslinjeContainer = styled.div`
