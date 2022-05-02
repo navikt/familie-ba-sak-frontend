@@ -10,7 +10,7 @@ import type { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
-import type { UtdypendeVilkRsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
+import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { bestemMuligeUtdypendeVilkårsvurderinger } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../../../../utils/validators';
 
@@ -66,7 +66,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
 }) => {
     const { toggles } = useApp();
 
-    const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkRsvurderingAvhengigheter = {
+    const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,
         resultat: redigerbartVilkår.verdi.resultat.verdi,

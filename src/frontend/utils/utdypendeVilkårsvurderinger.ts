@@ -2,7 +2,7 @@ import type { PersonType } from '../typer/person';
 import type { Regelverk, Resultat } from '../typer/vilkår';
 import { UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
 
-export interface UtdypendeVilkRsvurderingAvhengigheter {
+export interface UtdypendeVilkårsvurderingAvhengigheter {
     personType: PersonType;
     vilkårType: VilkårType;
     resultat: Resultat;
@@ -11,7 +11,7 @@ export interface UtdypendeVilkRsvurderingAvhengigheter {
 }
 
 export const bestemMuligeUtdypendeVilkårsvurderinger = (
-    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
+    avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
 ): UtdypendeVilkårsvurdering[] => {
     /*
     Det er mange ting på avhengigheter her som ikke brukes for øyeblikket, men som vil bli nødvendig å ha tilgjengelig senere

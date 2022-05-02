@@ -1,9 +1,9 @@
 import { PersonType } from '../../typer/person';
 import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../../typer/vilkår';
-import type { UtdypendeVilkRsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
+import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../validators';
 
-const avhengigheter: UtdypendeVilkRsvurderingAvhengigheter = {
+const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     personType: PersonType.SØKER,
     vilkårType: VilkårType.BOSATT_I_RIKET,
     resultat: Resultat.OPPFYLT,

@@ -27,7 +27,7 @@ import {
     TIDENES_MORGEN,
     valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
-import type { UtdypendeVilkRsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
+import type { UtdypendeVilkårsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
 import { bestemMuligeUtdypendeVilkårsvurderinger } from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
@@ -206,7 +206,7 @@ export const erBegrunnelseGyldig = (
 
 export const erUtdypendeVilkårsvurderingerGyldig = (
     utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
-    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
+    avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
 ): boolean => {
     const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
         bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
