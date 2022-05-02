@@ -17,7 +17,7 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     brukEøs: true,
 };
 
-describe('Utdypende-Vilkårsvurderinger', () => {
+describe('Utdypende Vilkårsvurderinger', () => {
     it('UtdypendeVilkårsvurderingerGyldig er gyldig', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
