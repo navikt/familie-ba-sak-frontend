@@ -8,8 +8,15 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { useApp } from '../../../../context/AppContext';
 import type { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import type { IVilkårResultat } from '../../../../typer/vilkår';
-import { UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
+import {
+    UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
+    UtdypendeVilkårsvurderingEøsBarnBosattIRiket,
+    UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
+    UtdypendeVilkårsvurderingGenerell,
+    UtdypendeVilkårsvurderingNasjonal,
+} from '../../../../typer/vilkår';
+import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../../../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { bestemMuligeUtdypendeVilkårsvurderinger } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../../../../utils/validators';
@@ -22,25 +29,31 @@ interface Props {
 }
 
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
-    [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
-    [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
-    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted: skal deles',
-    [UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES]: 'Delt bosted: skal ikke deles',
-    [UtdypendeVilkårsvurdering.OMFATTET_AV_NORSK_LOVGIVNING]: 'Omfattet av norsk lovgivning',
-    [UtdypendeVilkårsvurdering.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND]:
+    [UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
+    [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
+    [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED]: 'Delt bosted: skal deles',
+    [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES]:
+        'Delt bosted: skal ikke deles',
+    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING]:
+        'Omfattet av norsk lovgivning',
+    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND]:
         'Omfattet av norsk lovgivning Utland',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_NORGE]: 'Barn bor i Norge',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_EØS]: 'Barn bor i EØS-land',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA]: 'Barn bor i Storbritannia',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_NORGE_MED_SØKER]: 'Barn bor i Norge med søker',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_EØS_MED_SØKER]: 'Barn bor i EØS-land med søker',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_EØS_MED_ANNEN_FORELDER]:
+    [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE]: 'Barn bor i Norge',
+    [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS]: 'Barn bor i EØS-land',
+    [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA]:
+        'Barn bor i Storbritannia',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER]:
+        'Barn bor i Norge med søker',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER]:
+        'Barn bor i EØS-land med søker',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_ANNEN_FORELDER]:
         'Barn bor i EØS-land med annen forelder',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA_MED_SØKER]:
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_SØKER]:
         'Barn bor i Storbritannia med søker',
-    [UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER]:
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER]:
         'Barn bor i Storbritannia med annen forelder',
-    [UtdypendeVilkårsvurdering.BARN_BOR_ALENE_I_ANNET_EØS_LAND]: 'Barn bor alene i annet EØS-land',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND]:
+        'Barn bor alene i annet EØS-land',
 };
 
 const mapUtdypendeVilkårsvurderingTilOption = (

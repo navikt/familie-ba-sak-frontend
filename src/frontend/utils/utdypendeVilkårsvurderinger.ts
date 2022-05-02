@@ -1,7 +1,16 @@
 import { PersonType } from '../typer/person';
-import { Resultat } from '../typer/vilkår';
-import { Regelverk } from '../typer/vilkår';
-import { UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
+import {
+    Resultat,
+    Regelverk,
+    VilkårType,
+    UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
+    UtdypendeVilkårsvurderingEøsBarnBosattIRiket,
+    UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
+    UtdypendeVilkårsvurderingGenerell,
+    UtdypendeVilkårsvurderingNasjonal,
+} from '../typer/vilkår';
+import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
 
 export interface UtdypendeVilkårsvurderingAvhengigheter {
     personType: PersonType;
@@ -33,41 +42,41 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
         }
         if (vilkårType === VilkårType.BOSATT_I_RIKET && personType === PersonType.SØKER) {
             return [
-                UtdypendeVilkårsvurdering.OMFATTET_AV_NORSK_LOVGIVNING,
-                UtdypendeVilkårsvurdering.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
+                UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
+                UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
             ];
         }
         if (vilkårType === VilkårType.BOSATT_I_RIKET && personType === PersonType.BARN) {
             return [
-                UtdypendeVilkårsvurdering.BARN_BOR_I_NORGE,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_EØS,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA,
+                UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE,
+                UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS,
+                UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA,
             ];
         }
         if (vilkårType === VilkårType.BOR_MED_SØKER) {
             return [
-                UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
-                UtdypendeVilkårsvurdering.DELT_BOSTED,
-                UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_NORGE_MED_SØKER,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_EØS_MED_SØKER,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_EØS_MED_ANNEN_FORELDER,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA_MED_SØKER,
-                UtdypendeVilkårsvurdering.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER,
-                UtdypendeVilkårsvurdering.BARN_BOR_ALENE_I_ANNET_EØS_LAND,
+                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_ANNEN_FORELDER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_SØKER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND,
             ];
         }
     }
 
     return [
-        UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
+        UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
         ...(vilkårType === VilkårType.BOSATT_I_RIKET
-            ? [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]
+            ? [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]
             : []),
         ...(vilkårType === VilkårType.BOR_MED_SØKER
             ? [
-                  UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
-                  UtdypendeVilkårsvurdering.DELT_BOSTED,
+                  UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
+                  UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
               ]
             : []),
     ];

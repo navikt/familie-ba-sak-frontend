@@ -1,5 +1,11 @@
 import { PersonType } from '../../typer/person';
-import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../../typer/vilkår';
+import {
+    Resultat,
+    UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingGenerell,
+    UtdypendeVilkårsvurderingNasjonal,
+    VilkårType,
+} from '../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
 import { erUtdypendeVilkårsvurderingerGyldig } from '../validators';
 
@@ -11,13 +17,13 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     brukEøs: true,
 };
 
-describe('Utdypende Vilkårsvurderinger', () => {
+describe('Utdypende-Vilkårsvurderinger', () => {
     it('UtdypendeVilkårsvurderingerGyldig er gyldig', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
-                UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
-                UtdypendeVilkårsvurdering.DELT_BOSTED,
-                UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
+                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
             ],
             {
                 ...avhengigheter,
@@ -30,10 +36,10 @@ describe('Utdypende Vilkårsvurderinger', () => {
     it('kan ikke velge DELT_BOSTED for VilkårType BOSATT_I_RIKET', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
-                UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP,
-                UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
-                UtdypendeVilkårsvurdering.DELT_BOSTED,
-                UtdypendeVilkårsvurdering.DELT_BOSTED_SKAL_IKKE_DELES,
+                UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
+                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
             ],
             {
                 ...avhengigheter,

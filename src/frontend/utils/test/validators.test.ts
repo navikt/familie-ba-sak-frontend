@@ -6,7 +6,12 @@ import type { FeltState } from '@navikt/familie-skjema';
 import generator from '../../testverktøy/fnr/fnr-generator';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
-import { Resultat, UtdypendeVilkårsvurdering } from '../../typer/vilkår';
+import {
+    Resultat,
+    UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingGenerell,
+    UtdypendeVilkårsvurderingNasjonal,
+} from '../../typer/vilkår';
 import type { IPeriode } from '../kalender';
 import { nyPeriode } from '../kalender';
 import {
@@ -146,7 +151,7 @@ describe('utils/validators', () => {
 
     test('Begrunnelse må oppgis dersom Utdypende vilkårsvurdering er valgt', () => {
         const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
-            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP],
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP],
         });
         expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
 
@@ -156,7 +161,7 @@ describe('utils/validators', () => {
         expect(valideringVurderingIkkeValgt.valideringsstatus).toEqual(Valideringsstatus.OK);
 
         const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
-            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP],
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP],
         });
         expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
             Valideringsstatus.FEIL
@@ -168,7 +173,9 @@ describe('utils/validators', () => {
         const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
             nyFeltState(''),
             {
-                utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG],
+                utdypendeVilkårsvurderinger: [
+                    UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
+                ],
             }
         );
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
@@ -179,7 +186,7 @@ describe('utils/validators', () => {
         );
 
         const valideringDeltBostedManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
-            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.DELT_BOSTED],
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED],
         });
         expect(valideringDeltBostedManglerBegrunnelse.valideringsstatus).toEqual(
             Valideringsstatus.FEIL
