@@ -219,6 +219,50 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             utenFeilPropagering={true}
         >
             <Container>
+                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
+                    <FamilieSelect
+                        erLesevisning={erLesevisning()}
+                        lesevisningVerdi={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
+                                : 'Generell vurdering'
+                        }
+                        value={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? redigerbartVilkår.verdi.vurderesEtter
+                                : undefined
+                        }
+                        label={'Vurderes etter'}
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                            settRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    vurderesEtter: event.target.value as Regelverk,
+                                },
+                            });
+                        }}
+                    >
+                        {Object.entries(alleRegelverk).map(
+                            ([regelverk, { tekst }]: [
+                                string,
+                                { tekst: string; symbol: ReactNode }
+                            ]) => {
+                                return (
+                                    <option
+                                        key={regelverk}
+                                        aria-selected={
+                                            vilkårResultat.verdi.vurderesEtter === regelverk
+                                        }
+                                        value={regelverk}
+                                    >
+                                        {tekst}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </FamilieSelect>
+                )}
                 <FamilieRadioGruppe
                     erLesevisning={leseVisning}
                     verdi={
@@ -274,50 +318,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
-                    <FamilieSelect
-                        erLesevisning={erLesevisning()}
-                        lesevisningVerdi={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
-                                : 'Generell vurdering'
-                        }
-                        value={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? redigerbartVilkår.verdi.vurderesEtter
-                                : undefined
-                        }
-                        label={'Vurderes etter'}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                            settRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    vurderesEtter: event.target.value as Regelverk,
-                                },
-                            });
-                        }}
-                    >
-                        {Object.entries(alleRegelverk).map(
-                            ([regelverk, { tekst }]: [
-                                string,
-                                { tekst: string; symbol: ReactNode }
-                            ]) => {
-                                return (
-                                    <option
-                                        key={regelverk}
-                                        aria-selected={
-                                            vilkårResultat.verdi.vurderesEtter === regelverk
-                                        }
-                                        value={regelverk}
-                                    >
-                                        {tekst}
-                                    </option>
-                                );
-                            }
-                        )}
-                    </FamilieSelect>
-                )}
                 <UtdypendeVilkårsvurderingMultiselect
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
