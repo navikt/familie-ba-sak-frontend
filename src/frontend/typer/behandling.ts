@@ -320,7 +320,7 @@ export const behandlingsresultater: Record<
     ENDRET: 'Endret',
     ENDRET_OG_OPPHØRT: 'Endret og opphørt',
     OPPHØRT: 'Opphørt',
-    FORTSATT_OPPHØRT: 'Fortsatt Opphørt',
+    FORTSATT_OPPHØRT: 'Fortsatt opphørt',
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
