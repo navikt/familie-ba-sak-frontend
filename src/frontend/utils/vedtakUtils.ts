@@ -40,7 +40,10 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
             }
         });
 
-    if (behandlingResultat === BehandlingResultat.OPPHØRT) {
+    if (
+        behandlingResultat === BehandlingResultat.OPPHØRT ||
+        behandlingResultat === BehandlingResultat.FORTSATT_OPPHØRT
+    ) {
         return hentSisteOpphørsperiode(sorterteOgFiltrertePerioder);
     } else {
         return sorterteOgFiltrertePerioder;
