@@ -251,97 +251,105 @@ const TilbakekrevingSkjema: React.FC<{
                         </FlexDiv>
                     }
                 >
-                    <Radio
-                        label={'Opprett tilbakekreving, send varsel'}
-                        name={'tilbakekreving'}
-                        disabled={!bruker || bruker.dødsfallDato !== undefined}
-                        checked={
-                            tilbakekrevingsvalg.verdi ===
-                            Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
-                        }
-                        onChange={() =>
-                            radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL)
-                        }
-                        id={'Opprett-tilbakekreving-send-varsel'}
-                    />
-                    {fritekstVarsel.erSynlig && (
-                        <FritekstVarsel>
-                            <FamilieTextarea
-                                label={
-                                    <FritektsVarselLabel>
-                                        <FlexRad>
-                                            <Element>Fritekst i varselet</Element>
-                                            <StyledHelpText placement="right">
-                                                <StyledHelpTextContainer>
-                                                    <BodyLong size="small" spacing={true}>
-                                                        Her skal du oppgi hvorfor brukeren ikke
-                                                        skulle fått utbetalt ytelsen i perioden(e).
-                                                        Du må også oppgi hvordan feilutbetalingen
-                                                        ble oppdaget, hvem som oppdaget den og når
-                                                        den ble oppdaget eller meldt til NAV.
-                                                    </BodyLong>
-                                                    <BodyLong size="small" spacing={true}>
-                                                        Eksempel på tekst:
-                                                    </BodyLong>
-                                                    <BodyLong size="small" spacing={true}>
-                                                        Vi mottok melding fra deg (dato) om at du
-                                                        flyttet utenlands (dato). Du har ikke rett
-                                                        på barnetrygd når du oppholder deg
-                                                        utenlands. Da vi mottok meldingen fra deg,
-                                                        var det allerede utbetalt barnetrygd for
-                                                        perioden (Fom dato - Tom dato).
-                                                    </BodyLong>
-                                                    <Lenke
-                                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
-                                                        target="_blank"
-                                                    >
-                                                        <span>
-                                                            Se retningslinjer for klarspråk:
-                                                        </span>
-                                                        <ExternalLink />
-                                                    </Lenke>
-                                                </StyledHelpTextContainer>
-                                            </StyledHelpText>
-                                        </FlexRad>
-                                        <StyledEtikettInfo>
-                                            <Undertekst>
-                                                Skriv {målform[søkerMålform].toLowerCase()}
-                                            </Undertekst>
-                                        </StyledEtikettInfo>
-                                    </FritektsVarselLabel>
+                    {bruker && !bruker.dødsfallDato && (
+                        <>
+                            <Radio
+                                label={'Opprett tilbakekreving, send varsel'}
+                                name={'tilbakekreving'}
+                                checked={
+                                    tilbakekrevingsvalg.verdi ===
+                                    Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
                                 }
-                                {...fritekstVarsel.hentNavInputProps(
-                                    tilbakekrevingSkjema.visFeilmeldinger ||
-                                        fritekstVarsel.verdi.length > maksLengdeTekst
-                                )}
-                                erLesevisning={erLesevisning()}
-                                maxLength={maksLengdeTekst}
+                                onChange={() =>
+                                    radioOnChange(
+                                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
+                                    )
+                                }
+                                id={'Opprett-tilbakekreving-send-varsel'}
                             />
+                            {fritekstVarsel.erSynlig && (
+                                <FritekstVarsel>
+                                    <FamilieTextarea
+                                        label={
+                                            <FritektsVarselLabel>
+                                                <FlexRad>
+                                                    <Element>Fritekst i varselet</Element>
+                                                    <StyledHelpText placement="right">
+                                                        <StyledHelpTextContainer>
+                                                            <BodyLong size="small" spacing={true}>
+                                                                Her skal du oppgi hvorfor brukeren
+                                                                ikke skulle fått utbetalt ytelsen i
+                                                                perioden(e). Du må også oppgi
+                                                                hvordan feilutbetalingen ble
+                                                                oppdaget, hvem som oppdaget den og
+                                                                når den ble oppdaget eller meldt til
+                                                                NAV.
+                                                            </BodyLong>
+                                                            <BodyLong size="small" spacing={true}>
+                                                                Eksempel på tekst:
+                                                            </BodyLong>
+                                                            <BodyLong size="small" spacing={true}>
+                                                                Vi mottok melding fra deg (dato) om
+                                                                at du flyttet utenlands (dato). Du
+                                                                har ikke rett på barnetrygd når du
+                                                                oppholder deg utenlands. Da vi
+                                                                mottok meldingen fra deg, var det
+                                                                allerede utbetalt barnetrygd for
+                                                                perioden (Fom dato - Tom dato).
+                                                            </BodyLong>
+                                                            <Lenke
+                                                                href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
+                                                                target="_blank"
+                                                            >
+                                                                <span>
+                                                                    Se retningslinjer for klarspråk:
+                                                                </span>
+                                                                <ExternalLink />
+                                                            </Lenke>
+                                                        </StyledHelpTextContainer>
+                                                    </StyledHelpText>
+                                                </FlexRad>
+                                                <StyledEtikettInfo>
+                                                    <Undertekst>
+                                                        Skriv {målform[søkerMålform].toLowerCase()}
+                                                    </Undertekst>
+                                                </StyledEtikettInfo>
+                                            </FritektsVarselLabel>
+                                        }
+                                        {...fritekstVarsel.hentNavInputProps(
+                                            tilbakekrevingSkjema.visFeilmeldinger ||
+                                                fritekstVarsel.verdi.length > maksLengdeTekst
+                                        )}
+                                        erLesevisning={erLesevisning()}
+                                        maxLength={maksLengdeTekst}
+                                    />
 
-                            <ForhåndsvisVarselKnappContainer>
-                                <IkonKnapp
-                                    id={'forhandsvis-varsel'}
-                                    erLesevisning={false}
-                                    label={'Forhåndsvis varsel'}
-                                    ikon={<DokumentIkon />}
-                                    onClick={() =>
-                                        åpenBehandling.status === RessursStatus.SUKSESS &&
-                                        hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
-                                            {
-                                                method: 'POST',
-                                                url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
-                                                data: {
-                                                    fritekst: fritekstVarsel.verdi,
-                                                },
+                                    <ForhåndsvisVarselKnappContainer>
+                                        <IkonKnapp
+                                            id={'forhandsvis-varsel'}
+                                            erLesevisning={false}
+                                            label={'Forhåndsvis varsel'}
+                                            ikon={<DokumentIkon />}
+                                            onClick={() =>
+                                                åpenBehandling.status === RessursStatus.SUKSESS &&
+                                                hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
+                                                    {
+                                                        method: 'POST',
+                                                        url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
+                                                        data: {
+                                                            fritekst: fritekstVarsel.verdi,
+                                                        },
+                                                    }
+                                                )
                                             }
-                                        )
-                                    }
-                                    spinner={hentetDokument.status === RessursStatus.HENTER}
-                                    ikonPosisjon={IkonPosisjon.VENSTRE}
-                                    mini={true}
-                                />
-                            </ForhåndsvisVarselKnappContainer>
-                        </FritekstVarsel>
+                                            spinner={hentetDokument.status === RessursStatus.HENTER}
+                                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                                            mini={true}
+                                        />
+                                    </ForhåndsvisVarselKnappContainer>
+                                </FritekstVarsel>
+                            )}
+                        </>
                     )}
                     <Radio
                         label={'Opprett tilbakekreving, ikke send varsel'}
