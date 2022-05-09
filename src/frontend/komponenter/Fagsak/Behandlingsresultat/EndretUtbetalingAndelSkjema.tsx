@@ -241,6 +241,32 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         lesevisning={erLesevisning()}
                     />
                 </Feltmargin>
+
+                <Feltmargin>
+                    <FamilieSelect
+                        {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        value={skjema.felter.årsak.verdi}
+                        label={<Element>Årsak</Element>}
+                        placeholder={'Velg årsak'}
+                        onChange={(event): void => {
+                            skjema.felter.årsak.validerOgSettFelt(
+                                event.target.value as IEndretUtbetalingAndelÅrsak
+                            );
+                        }}
+                        erLesevisning={erLesevisning()}
+                        lesevisningVerdi={
+                            skjema.felter.årsak.verdi ? årsakTekst[skjema.felter.årsak.verdi] : ''
+                        }
+                    >
+                        <option value={undefined}>Velg årsak</option>
+                        {årsaker.filter(endringsårsakSkalVises).map(årsak => (
+                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                {årsakTekst[årsak]}
+                            </option>
+                        ))}
+                    </FamilieSelect>
+                </Feltmargin>
+
                 <Feltmargin>
                     <FamilieRadioGruppe
                         legend={<Element>Utbetaling</Element>}
@@ -266,31 +292,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             id={'nei-perioden-skal-ikke-utbetales-til-søker'}
                         />
                     </FamilieRadioGruppe>
-                </Feltmargin>
-
-                <Feltmargin>
-                    <FamilieSelect
-                        {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        value={skjema.felter.årsak.verdi}
-                        label={<Element>Årsak</Element>}
-                        placeholder={'Velg årsak'}
-                        onChange={(event): void => {
-                            skjema.felter.årsak.validerOgSettFelt(
-                                event.target.value as IEndretUtbetalingAndelÅrsak
-                            );
-                        }}
-                        erLesevisning={erLesevisning()}
-                        lesevisningVerdi={
-                            skjema.felter.årsak.verdi ? årsakTekst[skjema.felter.årsak.verdi] : ''
-                        }
-                    >
-                        <option value={undefined}>Velg årsak</option>
-                        {årsaker.filter(endringsårsakSkalVises).map(årsak => (
-                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                                {årsakTekst[årsak]}
-                            </option>
-                        ))}
-                    </FamilieSelect>
                 </Feltmargin>
 
                 <Feltmargin>
