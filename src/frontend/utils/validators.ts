@@ -200,7 +200,7 @@ export const erBegrunnelseGyldig = (
 
     return feil(
         felt,
-        'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
+        'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
     );
 };
 
@@ -211,8 +211,10 @@ export const erUtdypendeVilkårsvurderingerGyldig = (
     const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
         bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
 
-    return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
-        if (!acc) return false;
-        return muligeUtdypendeVilkårsvurderinger.find(e => e === curr) !== undefined;
-    }, true);
+    if (
+        !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
+    ) {
+        return false;
+    }
+    return true;
 };
