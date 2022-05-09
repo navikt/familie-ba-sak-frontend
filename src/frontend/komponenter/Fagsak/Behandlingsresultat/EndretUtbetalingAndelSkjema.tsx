@@ -243,13 +243,13 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
                 <Feltmargin>
                     <FamilieRadioGruppe
-                        legend={<Element>Skal perioden utbetales til søker?</Element>}
+                        legend={<Element>Utbetaling</Element>}
                         erLesevisning={erLesevisning()}
                         verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
                     >
                         <Radio
-                            label={'Ja'}
-                            name={'skal perioden utbetales til søker?'}
+                            label={'Perioden skal utbetales'}
+                            name={'utbetaling'}
                             checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
                             onChange={() =>
                                 skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
@@ -257,8 +257,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             id={'ja-perioden-utbetales-til-søker'}
                         />
                         <Radio
-                            label={'Nei'}
-                            name={'skal perioden utbetales til søker?'}
+                            label={'Perioden skal ikke utbetales'}
+                            name={'utbetaling'}
                             checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
                             onChange={() =>
                                 skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
