@@ -35,7 +35,7 @@ const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
             return navFarger.navGronnDarken20;
-        case BehandlingResultat.ENDRET:
+        case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
             return navFarger.navDypBlaDarken20;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
@@ -57,7 +57,7 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
             return navFarger.navGronnDarken20;
-        case BehandlingResultat.ENDRET:
+        case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
             return navFarger.navDypBlaDarken20;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
