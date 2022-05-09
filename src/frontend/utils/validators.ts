@@ -11,7 +11,12 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import {
+    Resultat,
+    VilkårType,
+    Regelverk,
+    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
+} from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -215,6 +220,23 @@ export const erUtdypendeVilkårsvurderingerGyldig = (
         !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
     ) {
         return false;
+    }
+
+    if (avhengigheter.vurderesEtter === Regelverk.EØS_FORORDNINGEN) {
+        if (avhengigheter.vilkårType === VilkårType.BOSATT_I_RIKET) {
+            if (utdypendeVilkårsvurderinger.length !== 1) {
+                return false;
+            }
+        }
+        if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
+            if (
+                utdypendeVilkårsvurderinger.filter(item =>
+                    Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
+                ).length !== 1
+            ) {
+                return false;
+            }
+        }
     }
     return true;
 };
