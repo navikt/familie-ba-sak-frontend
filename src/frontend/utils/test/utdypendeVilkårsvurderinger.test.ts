@@ -1,5 +1,6 @@
 import { PersonType } from '../../typer/person';
 import {
+    Regelverk,
     Resultat,
     UtdypendeVilkårsvurderingDeltBosted,
     UtdypendeVilkårsvurderingGenerell,
@@ -18,7 +19,7 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
 };
 
 describe('Utdypende Vilkårsvurderinger', () => {
-    it('UtdypendeVilkårsvurderingerGyldig er gyldig', () => {
+    it('Bor med søker - kan velge alternativer for delt bosted', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
                 UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
@@ -33,7 +34,7 @@ describe('Utdypende Vilkårsvurderinger', () => {
         expect(actual).toBe(true);
     });
 
-    it('kan ikke velge DELT_BOSTED for VilkårType BOSATT_I_RIKET', () => {
+    it('Nasjonal - bosatt i riket - kan ikke velge alternativer for delt bosted', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
                 UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
@@ -43,6 +44,7 @@ describe('Utdypende Vilkårsvurderinger', () => {
             ],
             {
                 ...avhengigheter,
+                vurderesEtter: Regelverk.NASJONALE_REGLER,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
             }
         );
