@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Element } from 'nav-frontend-typografi';
+import { Heading } from '@navikt/ds-react';
 
 import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
@@ -18,10 +18,6 @@ const EndredePerioder = styled.div`
     margin-top: 6rem;
 `;
 
-const Overskrift = styled(Element)`
-    margin-bottom: 1rem;
-`;
-
 const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
     åpenBehandling,
 }) => {
@@ -29,7 +25,9 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
 
     return (
         <EndredePerioder>
-            <Overskrift>Endrede utbetalingsperioder</Overskrift>
+            <Heading spacing size="medium" level="3">
+                Endrede utbetalingsperioder
+            </Heading>
             <table className="tabell">
                 <thead>
                     <tr>
