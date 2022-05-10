@@ -29,7 +29,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
 
     return (
         <EndredePerioder>
-            <Overskrift>Endrede perioder</Overskrift>
+            <Overskrift>Endrede utbetalingsperioder</Overskrift>
             <table className="tabell">
                 <thead>
                     <tr>
