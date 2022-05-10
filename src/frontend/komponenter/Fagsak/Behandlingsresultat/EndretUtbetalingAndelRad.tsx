@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Flatknapp } from 'nav-frontend-knapper';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
+import { Table } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -32,7 +33,7 @@ const StyledExpandIkon = styled(Expand)`
     margin-right: 0.5rem;
 `;
 
-const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
+const TdUtenUnderstrek = styled(Table.DataCell)<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
 `;
 
@@ -102,7 +103,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 
     return (
         <>
-            <tr>
+            <Table.Row>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
                         {endretUtbetalingAndel.erTilknyttetAndeler ? (
@@ -157,18 +158,18 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         )}
                     </Flatknapp>
                 </TdUtenUnderstrek>
-            </tr>
+            </Table.Row>
             {åpenUtbetalingsAndel && (
-                <tr>
-                    <td colSpan={5}>
+                <Table.Row>
+                    <Table.DataCell colSpan={5}>
                         <EndretUtbetalingAndelSkjema
                             åpenBehandling={åpenBehandling}
                             avbrytEndringAvUtbetalingsperiode={() => {
                                 settÅpenUtbetalingsAndel(false);
                             }}
                         />
-                    </td>
-                </tr>
+                    </Table.DataCell>
+                </Table.Row>
             )}
         </>
     );
