@@ -33,8 +33,8 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                     <Table.Row>
                         <Table.HeaderCell>Person</Table.HeaderCell>
                         <Table.HeaderCell>Periode</Table.HeaderCell>
-                        <Table.HeaderCell>Utbetales</Table.HeaderCell>
                         <Table.HeaderCell>Årsak</Table.HeaderCell>
+                        <Table.HeaderCell>Utbetales</Table.HeaderCell>
                         <Table.HeaderCell />
                     </Table.Row>
                 </Table.Header>

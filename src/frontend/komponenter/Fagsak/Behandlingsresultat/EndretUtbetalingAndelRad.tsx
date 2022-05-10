@@ -134,6 +134,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
+                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {typeof endretUtbetalingAndel.prosent === 'number' &&
                     endretUtbetalingAndel.årsak
                         ? fraProsentTilTekst(
@@ -141,9 +144,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                               endretUtbetalingAndel.årsak
                           )
                         : ''}
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <Flatknapp mini onClick={() => toggleForm()}>
