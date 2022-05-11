@@ -102,7 +102,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
+        settRedigerbartVilkår(
+            validerVilkår(endretVilkår, { person, brukEøs: toggles[ToggleNavn.brukEøs] })
+        );
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -128,7 +130,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, {
+            person,
+            brukEøs: toggles[ToggleNavn.brukEøs],
+        });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
@@ -206,7 +211,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
-        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
+        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.length > 0;
 
     const visRegelverkValg = (): boolean =>
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
@@ -323,6 +328,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     erLesevisning={leseVisning}
                     personType={person.type}
+                    feilhåndtering={
+                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                            ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
+                            : ''
+                    }
                 />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (

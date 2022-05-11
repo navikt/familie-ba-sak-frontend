@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import React, { useEffect } from 'react';
 
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
@@ -19,13 +19,13 @@ import {
 import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../../../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
 import { bestemMuligeUtdypendeVilkårsvurderinger } from '../../../../utils/utdypendeVilkårsvurderinger';
-import { erUtdypendeVilkårsvurderingerGyldig } from '../../../../utils/validators';
 
 interface Props {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     erLesevisning: boolean;
     personType: PersonType;
+    feilhåndtering: ReactNode;
 }
 
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
@@ -67,8 +67,25 @@ const mapOptionTilUtdypendeVilkårsvurdering = (option: ISelectOption): Utdypend
 
 const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IVilkårResultat => ({
     ...vilkårResultat,
-    utdypendeVilkårsvurderinger: [],
+    utdypendeVilkårsvurderinger: {
+        ...vilkårResultat.utdypendeVilkårsvurderinger,
+        verdi: [],
+    },
 });
+
+const inneholderUmuligeAlternativer = (
+    valgteAlternativer: UtdypendeVilkårsvurdering[],
+    muligeAlternativer: UtdypendeVilkårsvurdering[]
+): boolean => {
+    return valgteAlternativer.some(item => !muligeAlternativer.includes(item));
+};
+
+const filtrerUtUmuligeAlternativer = (
+    valgteAlternativer: UtdypendeVilkårsvurdering[],
+    muligeAlternativer: UtdypendeVilkårsvurdering[]
+): UtdypendeVilkårsvurdering[] => {
+    return valgteAlternativer.filter(item => muligeAlternativer.includes(item));
+};
 
 function mapOgLeggTilUtdypendeVilkårsvurdering(
     action: ActionMeta<ISelectOption>,
@@ -78,10 +95,13 @@ function mapOgLeggTilUtdypendeVilkårsvurdering(
     return option
         ? {
               ...vilkår,
-              utdypendeVilkårsvurderinger: [
+              utdypendeVilkårsvurderinger: {
                   ...vilkår.utdypendeVilkårsvurderinger,
-                  mapOptionTilUtdypendeVilkårsvurdering(option),
-              ],
+                  verdi: [
+                      ...vilkår.utdypendeVilkårsvurderinger.verdi,
+                      mapOptionTilUtdypendeVilkårsvurdering(option),
+                  ],
+              },
           }
         : vilkår;
 }
@@ -91,6 +111,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     validerOgSettRedigerbartVilkår,
     erLesevisning,
     personType,
+    feilhåndtering,
 }) => {
     const { toggles } = useApp();
 
@@ -108,14 +129,23 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
 
     useEffect(() => {
         if (
-            !erUtdypendeVilkårsvurderingerGyldig(
-                redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                utdypendeVilkårsvurderingAvhengigheter
+            inneholderUmuligeAlternativer(
+                redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                muligeUtdypendeVilkårsvurderinger
             )
         ) {
             validerOgSettRedigerbartVilkår({
                 ...redigerbartVilkår,
-                verdi: tømUtdypendeVilkårsvurderinger(redigerbartVilkår.verdi), // TODO: Muligens bedre å bare filtrere ut de som ikke lenger er lov å ha med
+                verdi: {
+                    ...redigerbartVilkår.verdi,
+                    utdypendeVilkårsvurderinger: {
+                        ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
+                        verdi: filtrerUtUmuligeAlternativer(
+                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                            muligeUtdypendeVilkårsvurderinger
+                        ),
+                    },
+                },
             });
         }
     }, [redigerbartVilkår, utdypendeVilkårsvurderingAvhengigheter]);
@@ -136,9 +166,12 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                     ...redigerbartVilkår,
                     verdi: {
                         ...redigerbartVilkår.verdi,
-                        utdypendeVilkårsvurderinger: [
+                        utdypendeVilkårsvurderinger: {
                             ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                        ].filter(e => e !== action.removedValue?.value),
+                            verdi: [
+                                ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                            ].filter(e => e !== action.removedValue?.value),
+                        },
                     },
                 });
                 break;
@@ -162,7 +195,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         <FamilieReactSelect
             id="UtdypendeVilkarsvurderingMultiselect"
             label="Utdypende vilkårsvurdering"
-            value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.map(
+            value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}
             placeholder={'Velg utdypende vilkårsvurdering(er)'}
@@ -179,6 +212,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                 håndterEndring(action);
             }}
             options={muligeUtdypendeVilkårsvurderinger.map(mapUtdypendeVilkårsvurderingTilOption)}
+            feil={feilhåndtering}
         />
     );
 };

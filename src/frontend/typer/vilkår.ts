@@ -78,7 +78,7 @@ export interface IVilkårResultat {
     erEksplisittAvslagPåSøknad?: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
-    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[];
+    utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
 }
 
 // Vilkårsvurdering typer for api

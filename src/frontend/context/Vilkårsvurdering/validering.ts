@@ -12,6 +12,7 @@ import type {
     IPersonResultat,
     IVilkårResultat,
     Resultat,
+    UtdypendeVilkårsvurdering,
 } from '../../typer/vilkår';
 import { VilkårType } from '../../typer/vilkår';
 import type { IPeriode } from '../../utils/kalender';
@@ -32,7 +33,7 @@ export const validerVilkår = (
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse,
         {
-            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
+            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.verdi,
             vilkårType: nyttVilkårResultat.verdi.vilkårType,
         }
     );
@@ -47,11 +48,24 @@ export const validerVilkår = (
             { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
         );
 
+    const nyUtdypendeVilkårsvurdering: FeltState<UtdypendeVilkårsvurdering[]> =
+        nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.valider(
+            nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
+            {
+                personType: avhengigheter?.person.type,
+                vilkårType: nyttVilkårResultat.verdi.vilkårType,
+                resultat: nyttVilkårResultat.verdi.resultat,
+                vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
+                brukEøs: avhengigheter?.brukEøs,
+            }
+        );
+
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
         nyttResultat.valideringsstatus === Valideringsstatus.OK &&
-        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK;
+        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK &&
+        nyUtdypendeVilkårsvurdering.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
         ...nyttVilkårResultat.verdi,
@@ -59,6 +73,7 @@ export const validerVilkår = (
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
         avslagBegrunnelser: nyeAvslagbegrunnelser,
+        utdypendeVilkårsvurderinger: nyUtdypendeVilkårsvurdering,
     };
 
     return gyldigVilkår

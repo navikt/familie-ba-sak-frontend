@@ -11,12 +11,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import {
-    Resultat,
-    VilkårType,
-    Regelverk,
-    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
-} from '../typer/vilkår';
+import { Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -32,8 +27,7 @@ import {
     TIDENES_MORGEN,
     valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
-import type { UtdypendeVilkårsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
-import { bestemMuligeUtdypendeVilkårsvurderinger } from './utdypendeVilkårsvurderinger';
+import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -210,33 +204,18 @@ export const erBegrunnelseGyldig = (
 };
 
 export const erUtdypendeVilkårsvurderingerGyldig = (
-    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
-    avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
-): boolean => {
-    const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
-        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
-
-    if (
-        !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
-    ) {
-        return false;
+    felt: FeltState<UtdypendeVilkårsvurdering[]>,
+    avhengigheter?: Avhengigheter
+): FeltState<UtdypendeVilkårsvurdering[]> => {
+    if (!avhengigheter) {
+        return feil(felt, 'Utdypende vilkårsvurdering er ugyldig');
     }
-
-    if (avhengigheter.vurderesEtter === Regelverk.EØS_FORORDNINGEN) {
-        if (avhengigheter.vilkårType === VilkårType.BOSATT_I_RIKET) {
-            if (utdypendeVilkårsvurderinger.length !== 1) {
-                return false;
-            }
-        }
-        if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
-            if (
-                utdypendeVilkårsvurderinger.filter(item =>
-                    Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
-                ).length !== 1
-            ) {
-                return false;
-            }
-        }
-    }
-    return true;
+    const feilmelding = bestemFeilmeldingForUtdypendeVilkårsvurdering(felt.verdi, {
+        resultat: avhengigheter.resultat,
+        personType: avhengigheter.personType,
+        vilkårType: avhengigheter.vilkårType,
+        vurderesEtter: avhengigheter.vurderesEtter,
+        brukEøs: avhengigheter.brukEøs,
+    });
+    return feilmelding ? feil(felt, feilmelding) : ok(felt);
 };
