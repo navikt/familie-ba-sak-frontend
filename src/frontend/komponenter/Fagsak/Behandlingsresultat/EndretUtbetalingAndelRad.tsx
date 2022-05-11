@@ -4,10 +4,8 @@ import { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Flatknapp } from 'nav-frontend-knapper';
-
 import { Collapse, Expand } from '@navikt/ds-icons';
-import { Table } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -146,17 +144,17 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <Flatknapp mini onClick={() => toggleForm()}>
+                    <Button size="small" variant="tertiary" onClick={() => toggleForm()}>
                         {åpenUtbetalingsAndel ? (
                             <>
-                                <StyledCollapseIkon /> Lukk
+                                Lukk <StyledCollapseIkon />
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> {erLesevisning() ? 'Se mer' : 'Endre'}
+                                {erLesevisning() ? 'Se mer' : 'Endre'} <StyledExpandIkon />
                             </>
                         )}
-                    </Flatknapp>
+                    </Button>
                 </TdUtenUnderstrek>
             </Table.Row>
             {åpenUtbetalingsAndel && (
