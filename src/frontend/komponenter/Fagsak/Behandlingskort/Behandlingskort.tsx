@@ -35,10 +35,10 @@ const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
             return navFarger.navGronnDarken20;
-        case BehandlingResultat.ENDRET:
+        case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
             return navFarger.navDypBlaDarken20;
         case BehandlingResultat.AVSLÅTT:
-        case BehandlingResultat.OPPHØRT:
+        case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
             return navFarger.redErrorDarken20;
         case BehandlingResultat.IKKE_VURDERT:
             return '#F2F2F2';
@@ -57,10 +57,10 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
             return navFarger.navGronnDarken20;
-        case BehandlingResultat.ENDRET:
+        case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
             return navFarger.navDypBlaDarken20;
         case BehandlingResultat.AVSLÅTT:
-        case BehandlingResultat.OPPHØRT:
+        case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
             return navFarger.redErrorDarken20;
         default:
             return navFarger.navMorkGra;
