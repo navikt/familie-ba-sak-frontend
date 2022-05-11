@@ -9,17 +9,14 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import type { IBehandling } from '../../../../typer/behandling';
-import {
-    type IKompetanse,
-    KompetanseStatus,
-    KompetanseResultat,
-} from '../../../../typer/kompetanse';
+import type { IKompetanse } from '../../../../typer/kompetanse';
+import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetanse';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import KompetanseIkon from './KompetanseIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
+import StatusIkon, { kompetanseStatusTilStatus } from './StatusIkon';
 
 interface IEkspanderbarTrProps {
     ekspandert?: boolean;
@@ -119,8 +116,8 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                 <td>
                     <KompetanseVurdertCelle>
                         <div>
-                            <KompetanseIkon
-                                status={kompetanse.verdi.status}
+                            <StatusIkon
+                                status={kompetanseStatusTilStatus[kompetanse.verdi.status]}
                                 width={20}
                                 heigth={20}
                             />

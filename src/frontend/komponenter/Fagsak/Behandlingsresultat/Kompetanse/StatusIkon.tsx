@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import styled from 'styled-components';
-
 import '@navikt/ds-css-internal';
+
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
 
-import { KompetanseStatus } from '../../../../typer/kompetanse';
+import type { KompetanseStatus } from '../../../../typer/kompetanse';
 
 const StyledSuccess = styled(SuccessFilled)`
     color: var(--navds-semantic-color-feedback-success-icon);
@@ -18,21 +18,33 @@ const StyledWarning = styled(WarningFilled)`
 `;
 
 interface IProps {
-    status?: KompetanseStatus;
+    status?: Status;
     heigth?: number;
     width?: number;
 }
 
-const KompetanseIkon: React.FC<IProps> = ({ status, heigth, width }) => {
+export enum Status {
+    IKKE_UTFYLT = 'IKKE_UTFYLT',
+    UFULLSTENDIG = 'UFULLSTENDIG',
+    OK = 'OK',
+}
+
+export const kompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
+    IKKE_UTFYLT: Status.IKKE_UTFYLT,
+    UFULLSTENDIG: Status.UFULLSTENDIG,
+    OK: Status.OK,
+};
+
+const StatusIkon: React.FC<IProps> = ({ status, heigth, width }) => {
     switch (status) {
-        case KompetanseStatus.OK:
+        case Status.OK:
             return <StyledSuccess height={heigth} width={width} />;
-        case KompetanseStatus.UFULLSTENDIG:
+        case Status.UFULLSTENDIG:
             return <StyledError height={heigth} width={width} />;
-        case KompetanseStatus.IKKE_UTFYLT:
+        case Status.IKKE_UTFYLT:
         default:
             return <StyledWarning height={heigth} width={width} />;
     }
 };
 
-export default KompetanseIkon;
+export default StatusIkon;

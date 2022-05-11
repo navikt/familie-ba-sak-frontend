@@ -9,14 +9,13 @@ import { Button, Table } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
-import Advarsel from '../../../ikoner/Advarsel';
-import GrønnHake from '../../../ikoner/GrønnHake';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { formaterIdent } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
+import StatusIkon, { Status } from './Kompetanse/StatusIkon';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -104,17 +103,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <Table.Row>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
-                        {endretUtbetalingAndel.erTilknyttetAndeler ? (
-                            <GrønnHake heigth={20} width={20} title={'Periode OK'} />
-                        ) : (
-                            <Advarsel
-                                heigth={20}
-                                width={20}
-                                title={
-                                    'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
-                                }
-                            />
-                        )}
+                        <StatusIkon
+                            status={
+                                endretUtbetalingAndel.erTilknyttetAndeler
+                                    ? Status.OK
+                                    : Status.IKKE_UTFYLT
+                            }
+                            heigth={20}
+                            width={20}
+                        />
                         {formaterIdent(
                             endretUtbetalingAndel.personIdent
                                 ? endretUtbetalingAndel.personIdent
