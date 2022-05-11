@@ -10,7 +10,7 @@ import {
     VilkårType,
 } from '../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
-import { erUtdypendeVilkårsvurderingerGyldig } from '../validators';
+import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from '../utdypendeVilkårsvurderinger';
 
 const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     personType: PersonType.SØKER,
@@ -22,7 +22,7 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
 
 describe('Utdypende Vilkårsvurderinger', () => {
     it('Bor med søker - kan velge alternativer for delt bosted', () => {
-        const actual = erUtdypendeVilkårsvurderingerGyldig(
+        const actualUgyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
                 UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
@@ -33,16 +33,26 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOR_MED_SØKER,
             }
         );
-        expect(actual).toBe(true);
+        expect(actualUgyldig).toBe('Du kan kun velge ett alternativ for delt bosted');
+        const actualGyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
+            [
+                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
+            ],
+            {
+                ...avhengigheter,
+                vilkårType: VilkårType.BOR_MED_SØKER,
+            }
+        );
+        expect(actualGyldig).toBe(undefined);
     });
 
     it('Nasjonal - bosatt i riket - kan ikke velge alternativer for delt bosted', () => {
-        const actual = erUtdypendeVilkårsvurderingerGyldig(
+        const actual = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
                 UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
                 UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
-                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
             ],
             {
                 ...avhengigheter,
@@ -50,58 +60,58 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOSATT_I_RIKET,
             }
         );
-        expect(actual).toBe(false);
+        expect(actual).toBe('Du har valgt en ugyldig kombinasjon');
     });
 
     it('EØS - Bosatt i riket - obligatorisk å velge nøyaktig ett alternativ', () => {
-        const actualIkkeUtfylt = erUtdypendeVilkårsvurderingerGyldig([], {
+        const actualIkkeUtfylt = bestemFeilmeldingForUtdypendeVilkårsvurdering([], {
             ...avhengigheter,
             vurderesEtter: Regelverk.EØS_FORORDNINGEN,
         });
-        expect(actualIkkeUtfylt).toBe(false);
+        expect(actualIkkeUtfylt).toBe('Du må velge ett alternativ');
 
-        const actualKunEttValgGyldig = erUtdypendeVilkårsvurderingerGyldig(
+        const actualKunEttValgGyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING],
             { ...avhengigheter, vurderesEtter: Regelverk.EØS_FORORDNINGEN }
         );
-        expect(actualKunEttValgGyldig).toBe(true);
+        expect(actualKunEttValgGyldig).toBe(undefined);
 
-        const actualKunEttValgUgyldig = erUtdypendeVilkårsvurderingerGyldig(
+        const actualKunEttValgUgyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP],
             { ...avhengigheter, vurderesEtter: Regelverk.EØS_FORORDNINGEN }
         );
-        expect(actualKunEttValgUgyldig).toBe(false);
+        expect(actualKunEttValgUgyldig).toBe('Du har valgt en ugyldig kombinasjon');
 
-        const actualForMangeValg = erUtdypendeVilkårsvurderingerGyldig(
+        const actualForMangeValg = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
             ],
             { ...avhengigheter, vurderesEtter: Regelverk.EØS_FORORDNINGEN }
         );
-        expect(actualForMangeValg).toBe(false);
+        expect(actualForMangeValg).toBe('Du kan kun velge ett alternativ');
     });
 
     it('EØS - Lovlig opphold - Skal ikke fylles ut', () => {
-        const actualIkkeUtfylt = erUtdypendeVilkårsvurderingerGyldig([], {
+        const actualIkkeUtfylt = bestemFeilmeldingForUtdypendeVilkårsvurdering([], {
             ...avhengigheter,
             vurderesEtter: Regelverk.EØS_FORORDNINGEN,
             vilkårType: VilkårType.LOVLIG_OPPHOLD,
         });
 
-        expect(actualIkkeUtfylt).toBe(true);
+        expect(actualIkkeUtfylt).toBe(undefined);
     });
 
     it('EØS - Barn - Bor med søker - obligatorisk å velge nøyaktig ett alternativ for barns bosted, i fri kombinasjon med generelle alternativer', () => {
-        const actualIkkeUtfylt = erUtdypendeVilkårsvurderingerGyldig([], {
+        const actualIkkeUtfylt = bestemFeilmeldingForUtdypendeVilkårsvurdering([], {
             ...avhengigheter,
             personType: PersonType.BARN,
             vurderesEtter: Regelverk.EØS_FORORDNINGEN,
             vilkårType: VilkårType.BOR_MED_SØKER,
         });
-        expect(actualIkkeUtfylt).toBe(false);
+        expect(actualIkkeUtfylt).toBe('Du må velge ett alternativ for hvem barnet bor med');
 
-        const actualKunEttValgGyldig = erUtdypendeVilkårsvurderingerGyldig(
+        const actualKunEttValgGyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER],
             {
                 ...avhengigheter,
@@ -110,9 +120,9 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOR_MED_SØKER,
             }
         );
-        expect(actualKunEttValgGyldig).toBe(true);
+        expect(actualKunEttValgGyldig).toBe(undefined);
 
-        const actualKombinasjonGyldig = erUtdypendeVilkårsvurderingerGyldig(
+        const actualKombinasjonGyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
                 UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
@@ -125,9 +135,9 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOR_MED_SØKER,
             }
         );
-        expect(actualKombinasjonGyldig).toBe(true);
+        expect(actualKombinasjonGyldig).toBe(undefined);
 
-        const actualKombinasjonUgyldig = erUtdypendeVilkårsvurderingerGyldig(
+        const actualKombinasjonUgyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
                 UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND,
@@ -140,6 +150,8 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOR_MED_SØKER,
             }
         );
-        expect(actualKombinasjonUgyldig).toBe(false);
+        expect(actualKombinasjonUgyldig).toBe(
+            'Du kan kun velge ett alternativ for hvem barnet bor med'
+        );
     });
 });

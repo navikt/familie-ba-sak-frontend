@@ -81,3 +81,52 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
             : []),
     ];
 };
+
+export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
+    avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
+): string | undefined => {
+    const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
+        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
+
+    if (
+        !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
+    ) {
+        return 'Du har valgt en ugyldig kombinasjon';
+    }
+
+    if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
+        const antallValgteAlternativerForDeltBosted = utdypendeVilkårsvurderinger.filter(item =>
+            Object.keys(UtdypendeVilkårsvurderingDeltBosted).includes(item)
+        ).length;
+        if (antallValgteAlternativerForDeltBosted > 1) {
+            return 'Du kan kun velge ett alternativ for delt bosted';
+        }
+    }
+
+    if (avhengigheter.vurderesEtter === Regelverk.EØS_FORORDNINGEN) {
+        if (avhengigheter.vilkårType === VilkårType.BOSATT_I_RIKET) {
+            if (utdypendeVilkårsvurderinger.length === 0) {
+                return 'Du må velge ett alternativ';
+            }
+            if (utdypendeVilkårsvurderinger.length > 1) {
+                return 'Du kan kun velge ett alternativ';
+            }
+        }
+        if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
+            const antallValgteAlternativerForHvemBarnetBorMed = utdypendeVilkårsvurderinger.filter(
+                item => Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
+            ).length;
+            if (antallValgteAlternativerForHvemBarnetBorMed === 0) {
+                return 'Du må velge ett alternativ for hvem barnet bor med';
+            }
+            if (
+                utdypendeVilkårsvurderinger.filter(item =>
+                    Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
+                ).length > 1
+            ) {
+                return 'Du kan kun velge ett alternativ for hvem barnet bor med';
+            }
+        }
+    }
+};
