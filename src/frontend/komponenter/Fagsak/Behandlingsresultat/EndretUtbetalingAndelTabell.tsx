@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Heading, Table } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
 
 import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
@@ -28,17 +28,17 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
             <Heading spacing size="medium" level="3">
                 Endrede utbetalingsperioder
             </Heading>
-            <Table className="tabell">
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Person</Table.HeaderCell>
-                        <Table.HeaderCell>Periode</Table.HeaderCell>
-                        <Table.HeaderCell>Årsak</Table.HeaderCell>
-                        <Table.HeaderCell>Utbetales</Table.HeaderCell>
-                        <Table.HeaderCell />
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
+            <table className="tabell">
+                <thead>
+                    <tr>
+                        <th>Person</th>
+                        <th>Periode</th>
+                        <th>Årsak</th>
+                        <th>Utbetales</th>
+                        <th />
+                    </tr>
+                </thead>
+                <tbody>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
                         <EndretUtbetalingAndelProvider
                             endretUtbetalingAndel={endretUtbetalingAndel}
@@ -50,8 +50,8 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                             />
                         </EndretUtbetalingAndelProvider>
                     ))}
-                </Table.Body>
-            </Table>
+                </tbody>
+            </table>
         </EndredePerioder>
     );
 };

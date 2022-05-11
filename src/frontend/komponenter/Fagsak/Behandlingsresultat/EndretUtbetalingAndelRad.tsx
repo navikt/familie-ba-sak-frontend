@@ -5,7 +5,7 @@ import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
-import { Button, Table } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -30,7 +30,7 @@ const StyledExpandIkon = styled(Expand)`
     margin-right: 0.5rem;
 `;
 
-const TdUtenUnderstrek = styled(Table.DataCell)<{ erÅpen: boolean }>`
+const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
 `;
 
@@ -100,7 +100,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 
     return (
         <>
-            <Table.Row>
+            <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
                         <StatusIkon
@@ -153,18 +153,18 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         )}
                     </Button>
                 </TdUtenUnderstrek>
-            </Table.Row>
+            </tr>
             {åpenUtbetalingsAndel && (
-                <Table.Row>
-                    <Table.DataCell colSpan={5}>
+                <tr>
+                    <td colSpan={5}>
                         <EndretUtbetalingAndelSkjema
                             åpenBehandling={åpenBehandling}
                             avbrytEndringAvUtbetalingsperiode={() => {
                                 settÅpenUtbetalingsAndel(false);
                             }}
                         />
-                    </Table.DataCell>
-                </Table.Row>
+                    </td>
+                </tr>
             )}
         </>
     );
