@@ -18,7 +18,11 @@ import {
 } from '../../../../typer/vilkår';
 import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../../../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
-import { bestemMuligeUtdypendeVilkårsvurderinger } from '../../../../utils/utdypendeVilkårsvurderinger';
+import {
+    bestemMuligeUtdypendeVilkårsvurderinger,
+    inneholderUmuligeAlternativer,
+    filtrerUtUmuligeAlternativer,
+} from '../../../../utils/utdypendeVilkårsvurderinger';
 
 interface Props {
     redigerbartVilkår: FeltState<IVilkårResultat>;
@@ -72,20 +76,6 @@ const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IV
         verdi: [],
     },
 });
-
-const inneholderUmuligeAlternativer = (
-    valgteAlternativer: UtdypendeVilkårsvurdering[],
-    muligeAlternativer: UtdypendeVilkårsvurdering[]
-): boolean => {
-    return valgteAlternativer.some(item => !muligeAlternativer.includes(item));
-};
-
-const filtrerUtUmuligeAlternativer = (
-    valgteAlternativer: UtdypendeVilkårsvurdering[],
-    muligeAlternativer: UtdypendeVilkårsvurdering[]
-): UtdypendeVilkårsvurdering[] => {
-    return valgteAlternativer.filter(item => muligeAlternativer.includes(item));
-};
 
 function mapOgLeggTilUtdypendeVilkårsvurdering(
     action: ActionMeta<ISelectOption>,

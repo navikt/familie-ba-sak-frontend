@@ -130,3 +130,17 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
         }
     }
 };
+
+export const inneholderUmuligeAlternativer = (
+    valgteAlternativer: UtdypendeVilkårsvurdering[],
+    muligeAlternativer: UtdypendeVilkårsvurdering[]
+): boolean => {
+    return valgteAlternativer.some(item => !muligeAlternativer.includes(item));
+};
+
+export const filtrerUtUmuligeAlternativer = (
+    valgteAlternativer: UtdypendeVilkårsvurdering[],
+    muligeAlternativer: UtdypendeVilkårsvurdering[]
+): UtdypendeVilkårsvurdering[] => {
+    return valgteAlternativer.filter(item => muligeAlternativer.includes(item));
+};
