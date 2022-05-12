@@ -20,8 +20,7 @@ import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../../../../t
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
 import {
     bestemMuligeUtdypendeVilkårsvurderinger,
-    inneholderUmuligeAlternativer,
-    filtrerUtUmuligeAlternativer,
+    fjernUmuligeAlternativerFraRedigerbartVilkår,
 } from '../../../../utils/utdypendeVilkårsvurderinger';
 
 interface Props {
@@ -118,26 +117,11 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     );
 
     useEffect(() => {
-        if (
-            inneholderUmuligeAlternativer(
-                redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                muligeUtdypendeVilkårsvurderinger
-            )
-        ) {
-            validerOgSettRedigerbartVilkår({
-                ...redigerbartVilkår,
-                verdi: {
-                    ...redigerbartVilkår.verdi,
-                    utdypendeVilkårsvurderinger: {
-                        ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                        verdi: filtrerUtUmuligeAlternativer(
-                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                            muligeUtdypendeVilkårsvurderinger
-                        ),
-                    },
-                },
-            });
-        }
+        fjernUmuligeAlternativerFraRedigerbartVilkår(
+            validerOgSettRedigerbartVilkår,
+            redigerbartVilkår,
+            muligeUtdypendeVilkårsvurderinger
+        );
     }, [redigerbartVilkår, utdypendeVilkårsvurderingAvhengigheter]);
 
     const håndterEndring = (action: ActionMeta<ISelectOption>) => {

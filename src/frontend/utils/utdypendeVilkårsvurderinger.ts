@@ -1,3 +1,5 @@
+import type { FeltState } from '@navikt/familie-skjema';
+
 import { PersonType } from '../typer/person';
 import {
     Resultat,
@@ -10,7 +12,7 @@ import {
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
 } from '../typer/vilkår';
-import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
+import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../typer/vilkår';
 
 export interface UtdypendeVilkårsvurderingAvhengigheter {
     personType: PersonType;
@@ -23,10 +25,6 @@ export interface UtdypendeVilkårsvurderingAvhengigheter {
 export const bestemMuligeUtdypendeVilkårsvurderinger = (
     avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
 ): UtdypendeVilkårsvurdering[] => {
-    /*
-    Det er mange ting på avhengigheter her som ikke brukes for øyeblikket, men som vil bli nødvendig å ha tilgjengelig senere
-    når reglene for hvilke som skal være mulig å velge endres
-     */
     const { vilkårType, vurderesEtter, personType, resultat } = avhengigheter;
 
     if (vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
@@ -143,4 +141,31 @@ export const filtrerUtUmuligeAlternativer = (
     muligeAlternativer: UtdypendeVilkårsvurdering[]
 ): UtdypendeVilkårsvurdering[] => {
     return valgteAlternativer.filter(item => muligeAlternativer.includes(item));
+};
+
+export const fjernUmuligeAlternativerFraRedigerbartVilkår = (
+    validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void,
+    redigerbartVilkår: FeltState<IVilkårResultat>,
+    muligeAlternativer: UtdypendeVilkårsvurdering[]
+) => {
+    if (
+        inneholderUmuligeAlternativer(
+            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+            muligeAlternativer
+        )
+    ) {
+        validerOgSettRedigerbartVilkår({
+            ...redigerbartVilkår,
+            verdi: {
+                ...redigerbartVilkår.verdi,
+                utdypendeVilkårsvurderinger: {
+                    ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
+                    verdi: filtrerUtUmuligeAlternativer(
+                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                        muligeAlternativer
+                    ),
+                },
+            },
+        });
+    }
 };
