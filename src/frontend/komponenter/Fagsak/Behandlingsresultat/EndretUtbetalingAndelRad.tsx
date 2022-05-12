@@ -10,12 +10,12 @@ import { Collapse, Expand } from '@navikt/ds-icons';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { formaterIdent } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
-import StatusIkon, { Status } from '../../Felleskomponenter/StatusIkon';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 
 interface IEndretUtbetalingAndelRadProps {

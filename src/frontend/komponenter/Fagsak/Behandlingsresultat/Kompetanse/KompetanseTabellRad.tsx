@@ -8,13 +8,13 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
+import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/kompetanse';
 import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetanse';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import StatusIkon, { Status } from '../../../Felleskomponenter/StatusIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
