@@ -5,7 +5,7 @@ import '@navikt/ds-css-internal';
 
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
 
-import type { KompetanseStatus } from '../../../../typer/kompetanse';
+import type { KompetanseStatus } from '../../typer/kompetanse';
 
 const StyledSuccess = styled(SuccessFilled)`
     color: var(--navds-semantic-color-feedback-success-icon);

@@ -14,9 +14,9 @@ import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetan
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import StatusIkon, { kompetanseStatusTilStatus } from '../../../Felleskomponenter/StatusIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
-import StatusIkon, { kompetanseStatusTilStatus } from './StatusIkon';
 
 interface IEkspanderbarTrProps {
     ekspandert?: boolean;

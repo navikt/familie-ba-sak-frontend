@@ -15,8 +15,8 @@ import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel'
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { formaterIdent } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
+import StatusIkon, { Status } from '../../Felleskomponenter/StatusIkon';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
-import StatusIkon, { Status } from './Kompetanse/StatusIkon';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
