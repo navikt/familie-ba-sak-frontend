@@ -22,6 +22,7 @@ import {
     erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
+    erUtdypendeVilkårsvurderingerGyldig,
     ikkeValider,
     lagInitiellFelt,
 } from '../../utils/validators';
@@ -100,8 +101,10 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                     vurderesEtter: vilkårResultat.vurderesEtter,
-                                    utdypendeVilkårsvurderinger:
+                                    utdypendeVilkårsvurderinger: lagInitiellFelt(
                                         vilkårResultat.utdypendeVilkårsvurderinger,
+                                        erUtdypendeVilkårsvurderingerGyldig
+                                    ),
                                 },
                                 validerVilkår
                             )
