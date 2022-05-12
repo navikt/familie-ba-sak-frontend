@@ -118,11 +118,7 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
             if (antallValgteAlternativerForHvemBarnetBorMed === 0) {
                 return 'Du må velge ett alternativ for hvem barnet bor med';
             }
-            if (
-                utdypendeVilkårsvurderinger.filter(item =>
-                    Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
-                ).length > 1
-            ) {
+            if (antallValgteAlternativerForHvemBarnetBorMed > 1) {
                 return 'Du kan kun velge ett alternativ for hvem barnet bor med';
             }
         }
