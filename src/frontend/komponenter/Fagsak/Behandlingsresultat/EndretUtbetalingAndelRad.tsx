@@ -108,7 +108,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             status={
                                 endretUtbetalingAndel.erTilknyttetAndeler
                                     ? Status.OK
-                                    : Status.IKKE_UTFYLT
+                                    : Status.ADVARSEL
                             }
                             heigth={20}
                             width={20}

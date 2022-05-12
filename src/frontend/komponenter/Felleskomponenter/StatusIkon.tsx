@@ -24,14 +24,14 @@ interface IProps {
 }
 
 export enum Status {
-    IKKE_UTFYLT = 'IKKE_UTFYLT',
-    UFULLSTENDIG = 'UFULLSTENDIG',
-    OK = 'OK',
+    ADVARSEL,
+    FEIL,
+    OK,
 }
 
 export const kompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
-    IKKE_UTFYLT: Status.IKKE_UTFYLT,
-    UFULLSTENDIG: Status.UFULLSTENDIG,
+    IKKE_UTFYLT: Status.ADVARSEL,
+    UFULLSTENDIG: Status.FEIL,
     OK: Status.OK,
 };
 
@@ -39,9 +39,9 @@ const StatusIkon: React.FC<IProps> = ({ status, heigth, width }) => {
     switch (status) {
         case Status.OK:
             return <StyledSuccess height={heigth} width={width} />;
-        case Status.UFULLSTENDIG:
+        case Status.FEIL:
             return <StyledError height={heigth} width={width} />;
-        case Status.IKKE_UTFYLT:
+        case Status.ADVARSEL:
         default:
             return <StyledWarning height={heigth} width={width} />;
     }
