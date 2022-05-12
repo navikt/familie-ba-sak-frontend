@@ -14,13 +14,19 @@ import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetan
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import StatusIkon, { kompetanseStatusTilStatus } from '../../../Felleskomponenter/StatusIkon';
+import StatusIkon, { Status } from '../../../Felleskomponenter/StatusIkon';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
 interface IEkspanderbarTrProps {
     ekspandert?: boolean;
 }
+
+const mapKompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
+    IKKE_UTFYLT: Status.ADVARSEL,
+    UFULLSTENDIG: Status.FEIL,
+    OK: Status.OK,
+};
 
 const EkspanderbarTr = styled.tr`
     td {
@@ -117,7 +123,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     <KompetanseVurdertCelle>
                         <div>
                             <StatusIkon
-                                status={kompetanseStatusTilStatus[kompetanse.verdi.status]}
+                                status={mapKompetanseStatusTilStatus[kompetanse.verdi.status]}
                                 width={20}
                                 heigth={20}
                             />

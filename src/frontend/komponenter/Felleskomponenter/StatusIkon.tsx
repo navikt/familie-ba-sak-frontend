@@ -5,8 +5,6 @@ import '@navikt/ds-css-internal';
 
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
 
-import type { KompetanseStatus } from '../../typer/kompetanse';
-
 const StyledSuccess = styled(SuccessFilled)`
     color: var(--navds-semantic-color-feedback-success-icon);
 `;
@@ -28,12 +26,6 @@ export enum Status {
     FEIL,
     OK,
 }
-
-export const kompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
-    IKKE_UTFYLT: Status.ADVARSEL,
-    UFULLSTENDIG: Status.FEIL,
-    OK: Status.OK,
-};
 
 const StatusIkon: React.FC<IProps> = ({ status, heigth, width }) => {
     switch (status) {
