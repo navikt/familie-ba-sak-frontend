@@ -14,7 +14,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
-import Oppfylt from '../../../../../ikoner/Oppfylt';
+import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -37,12 +37,11 @@ interface HenleggÅrsakSelect extends HTMLSelectElement {
 const StyledVeivalgTekst = styled(Normaltekst)`
     position: relative;
     top: -32px;
-`;
-
-const StyledVeivalgIkon = styled(Oppfylt)`
-    position: relative;
-    top: 7px;
-    margin-right: 10px;
+    svg {
+        position: relative;
+        top: 6px;
+        margin-right: 10px;
+    }
 `;
 
 const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
@@ -235,7 +234,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                 }}
             >
                 <StyledVeivalgTekst>
-                    <StyledVeivalgIkon />
+                    <StatusIkon status={Status.OK} />
                     {årsak === HenleggÅrsak.SØKNAD_TRUKKET
                         ? 'Behandlingen er henlagt og brev til bruker er sendt'
                         : 'Behandlingen er henlagt'}
