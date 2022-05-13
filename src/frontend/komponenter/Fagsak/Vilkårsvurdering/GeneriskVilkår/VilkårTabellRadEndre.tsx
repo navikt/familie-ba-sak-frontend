@@ -102,7 +102,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
+        settRedigerbartVilkår(
+            validerVilkår(endretVilkår, { person, brukEøs: toggles[ToggleNavn.brukEøs] })
+        );
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -128,7 +130,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, {
+            person,
+            brukEøs: toggles[ToggleNavn.brukEøs],
+        });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
@@ -206,7 +211,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
-        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
+        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.length > 0;
 
     const visRegelverkValg = (): boolean =>
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
@@ -219,6 +224,50 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             utenFeilPropagering={true}
         >
             <Container>
+                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
+                    <FamilieSelect
+                        erLesevisning={erLesevisning()}
+                        lesevisningVerdi={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
+                                : 'Generell vurdering'
+                        }
+                        value={
+                            redigerbartVilkår.verdi.vurderesEtter
+                                ? redigerbartVilkår.verdi.vurderesEtter
+                                : undefined
+                        }
+                        label={'Vurderes etter'}
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                            settRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    vurderesEtter: event.target.value as Regelverk,
+                                },
+                            });
+                        }}
+                    >
+                        {Object.entries(alleRegelverk).map(
+                            ([regelverk, { tekst }]: [
+                                string,
+                                { tekst: string; symbol: ReactNode }
+                            ]) => {
+                                return (
+                                    <option
+                                        key={regelverk}
+                                        aria-selected={
+                                            vilkårResultat.verdi.vurderesEtter === regelverk
+                                        }
+                                        value={regelverk}
+                                    >
+                                        {tekst}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </FamilieSelect>
+                )}
                 <FamilieRadioGruppe
                     erLesevisning={leseVisning}
                     verdi={
@@ -274,55 +323,17 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
-                    <FamilieSelect
-                        erLesevisning={erLesevisning()}
-                        lesevisningVerdi={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
-                                : 'Generell vurdering'
-                        }
-                        value={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? redigerbartVilkår.verdi.vurderesEtter
-                                : undefined
-                        }
-                        label={'Vurderes etter'}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                            settRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    vurderesEtter: event.target.value as Regelverk,
-                                },
-                            });
-                        }}
-                    >
-                        {Object.entries(alleRegelverk).map(
-                            ([regelverk, { tekst }]: [
-                                string,
-                                { tekst: string; symbol: ReactNode }
-                            ]) => {
-                                return (
-                                    <option
-                                        key={regelverk}
-                                        aria-selected={
-                                            vilkårResultat.verdi.vurderesEtter === regelverk
-                                        }
-                                        value={regelverk}
-                                    >
-                                        {tekst}
-                                    </option>
-                                );
-                            }
-                        )}
-                    </FamilieSelect>
-                )}
                 <UtdypendeVilkårsvurderingMultiselect
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     erLesevisning={leseVisning}
                     personType={person.type}
+                    feilhåndtering={
+                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                            ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
+                            : ''
+                    }
                 />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (
