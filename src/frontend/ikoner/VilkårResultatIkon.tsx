@@ -1,30 +1,22 @@
 import React from 'react';
 
 import { Resultat } from '../typer/vilkår';
-import IkkeOppfylt from './IkkeOppfylt';
-import IkkeVurdert from './IkkeVurdert';
-import Oppfylt from './Oppfylt';
+import StatusIkon, { Status } from './StatusIkon';
 
 interface IVilkårResultatIkon {
-    className?: string;
     heigth?: number;
     resultat: Resultat;
     width?: number;
 }
 
-const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({
-    className,
-    heigth,
-    resultat,
-    width,
-}) => {
+const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({ heigth, resultat, width }) => {
     switch (resultat) {
         case Resultat.OPPFYLT:
-            return <Oppfylt heigth={heigth} className={className} width={width} />;
+            return <StatusIkon status={Status.OK} heigth={heigth} width={width} />;
         case Resultat.IKKE_OPPFYLT:
-            return <IkkeOppfylt heigth={heigth} className={className} width={width} />;
+            return <StatusIkon status={Status.FEIL} heigth={heigth} width={width} />;
         case Resultat.IKKE_VURDERT:
-            return <IkkeVurdert heigth={heigth} className={className} width={width} />;
+            return <StatusIkon status={Status.ADVARSEL} heigth={heigth} width={width} />;
     }
 };
 

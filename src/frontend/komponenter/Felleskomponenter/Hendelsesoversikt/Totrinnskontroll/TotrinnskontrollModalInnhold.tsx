@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import IkkeOppfylt from '../../../../ikoner/IkkeOppfylt';
-import Oppfylt from '../../../../ikoner/Oppfylt';
+import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 
 interface IProps {
@@ -12,7 +11,7 @@ const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutn
     if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
         return (
             <div className={'totrinnsvurdering-modal-innhold'}>
-                <IkkeOppfylt />
+                <StatusIkon status={Status.FEIL} />
                 <div className={'totrinnsvurdering-modal-tekst'}>
                     Beslutning er IKKE_VURDERT. Ta kontakt med barnetrygdteamet.
                 </div>
@@ -21,7 +20,7 @@ const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutn
     } else {
         return (
             <div className={'totrinnsvurdering-modal-innhold'}>
-                <Oppfylt />
+                <StatusIkon status={Status.OK} />
                 <div className={'totrinnsvurdering-modal-tekst'}>
                     {beslutning === TotrinnskontrollBeslutning.GODKJENT
                         ? 'Behandlingen er godkjent, og vedtaket er iverksatt'

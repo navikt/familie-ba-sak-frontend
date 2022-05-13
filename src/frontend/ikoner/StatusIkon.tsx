@@ -27,7 +27,7 @@ export enum Status {
     OK,
 }
 
-const StatusIkon: React.FC<IProps> = ({ status, heigth, width }) => {
+const StatusIkon: React.FC<IProps> = ({ status, heigth = 24, width = 24 }) => {
     switch (status) {
         case Status.OK:
             return <StyledSuccess height={heigth} width={width} />;
