@@ -140,27 +140,6 @@ export interface IVilkårConfig {
 }
 
 export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
-    UNDER_18_ÅR: {
-        beskrivelse: 'under 18 år',
-        key: 'UNDER_18_ÅR',
-        tittel: 'Under 18 år',
-        spørsmål: () => `Er barnet under 18 år?`,
-        parterDetteGjelderFor: [PersonType.BARN],
-    },
-    BOR_MED_SØKER: {
-        beskrivelse: 'bor med søker',
-        key: 'BOR_MED_SØKER',
-        tittel: 'Bor med søker',
-        spørsmål: () => `Bor barnet med søker?`,
-        parterDetteGjelderFor: [PersonType.BARN],
-    },
-    GIFT_PARTNERSKAP: {
-        beskrivelse: 'ugift og ikke partnerskap',
-        key: 'GIFT_PARTNERSKAP',
-        tittel: 'Ugift og ikke partnerskap',
-        spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
-        parterDetteGjelderFor: [PersonType.BARN],
-    },
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
@@ -182,6 +161,27 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
         parterDetteGjelderFor: [PersonType.SØKER],
     },
+    BOR_MED_SØKER: {
+        beskrivelse: 'bor med søker',
+        key: 'BOR_MED_SØKER',
+        tittel: 'Bor med søker',
+        spørsmål: () => `Bor barnet med søker?`,
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    UNDER_18_ÅR: {
+        beskrivelse: 'under 18 år',
+        key: 'UNDER_18_ÅR',
+        tittel: 'Under 18 år',
+        spørsmål: () => `Er barnet under 18 år?`,
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    GIFT_PARTNERSKAP: {
+        beskrivelse: 'ugift og ikke partnerskap',
+        key: 'GIFT_PARTNERSKAP',
+        tittel: 'Ugift og ikke partnerskap',
+        spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
 };
 
 export interface IAnnenVurderingConfig {
@@ -197,7 +197,7 @@ export const annenVurderingConfig: Record<AnnenVurderingType, IAnnenVurderingCon
         beskrivelse: 'Opplysningsplikt',
         key: 'OPPLYSNINGSPLIKT',
         tittel: 'Opplysningsplikt',
-        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
+        parterDetteGjelderFor: [PersonType.SØKER],
         spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
 };
