@@ -10,8 +10,7 @@ import { Collapse, Expand } from '@navikt/ds-icons';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
-import Advarsel from '../../../ikoner/Advarsel';
-import GrønnHake from '../../../ikoner/GrønnHake';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
@@ -105,17 +104,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
-                        {endretUtbetalingAndel.erTilknyttetAndeler ? (
-                            <GrønnHake heigth={20} width={20} title={'Periode OK'} />
-                        ) : (
-                            <Advarsel
-                                heigth={20}
-                                width={20}
-                                title={
-                                    'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
-                                }
-                            />
-                        )}
+                        <StatusIkon
+                            status={
+                                endretUtbetalingAndel.erTilknyttetAndeler
+                                    ? Status.OK
+                                    : Status.ADVARSEL
+                            }
+                            heigth={20}
+                            width={20}
+                        />
                         {formaterIdent(
                             endretUtbetalingAndel.personIdent
                                 ? endretUtbetalingAndel.personIdent
@@ -133,6 +130,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
+                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {typeof endretUtbetalingAndel.prosent === 'number' &&
                     endretUtbetalingAndel.årsak
                         ? fraProsentTilTekst(
@@ -142,17 +142,14 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <Flatknapp mini onClick={() => toggleForm()}>
                         {åpenUtbetalingsAndel ? (
                             <>
-                                <StyledCollapseIkon /> Lukk
+                                Lukk <StyledCollapseIkon />
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> {erLesevisning() ? 'Se mer' : 'Endre'}
+                                {erLesevisning() ? 'Se mer' : 'Endre'} <StyledExpandIkon />
                             </>
                         )}
                     </Flatknapp>
