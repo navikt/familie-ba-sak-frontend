@@ -163,8 +163,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
         ) {
             return toggles[ToggleNavn.endreMottakerEndringsårsaker];
-        } else if (årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR) {
-            return toggles[ToggleNavn.etterbetaling3år];
         } else {
             return true;
         }
@@ -243,32 +241,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         lesevisning={erLesevisning()}
                     />
                 </Feltmargin>
-                <Feltmargin>
-                    <FamilieRadioGruppe
-                        legend={<Element>Skal perioden utbetales til søker?</Element>}
-                        erLesevisning={erLesevisning()}
-                        verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
-                    >
-                        <Radio
-                            label={'Ja'}
-                            name={'skal perioden utbetales til søker?'}
-                            checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={() =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
-                            }
-                            id={'ja-perioden-utbetales-til-søker'}
-                        />
-                        <Radio
-                            label={'Nei'}
-                            name={'skal perioden utbetales til søker?'}
-                            checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={() =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
-                            }
-                            id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                        />
-                    </FamilieRadioGruppe>
-                </Feltmargin>
 
                 <Feltmargin>
                     <FamilieSelect
@@ -293,6 +265,33 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             </option>
                         ))}
                     </FamilieSelect>
+                </Feltmargin>
+
+                <Feltmargin>
+                    <FamilieRadioGruppe
+                        legend={<Element>Utbetaling</Element>}
+                        erLesevisning={erLesevisning()}
+                        verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
+                    >
+                        <Radio
+                            label={'Perioden skal utbetales'}
+                            name={'utbetaling'}
+                            checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                            onChange={() =>
+                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
+                            }
+                            id={'ja-perioden-utbetales-til-søker'}
+                        />
+                        <Radio
+                            label={'Perioden skal ikke utbetales'}
+                            name={'utbetaling'}
+                            checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                            onChange={() =>
+                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
+                            }
+                            id={'nei-perioden-skal-ikke-utbetales-til-søker'}
+                        />
+                    </FamilieRadioGruppe>
                 </Feltmargin>
 
                 <Feltmargin>
@@ -392,7 +391,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <StyledFamilieTextarea
                         {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                         erLesevisning={erLesevisning()}
-                        placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
+                        placeholder={'Begrunn hvorfor utbetalingsperioden er endret.'}
                         label={'Begrunnelse'}
                         value={
                             skjema.felter.begrunnelse.verdi !== null &&

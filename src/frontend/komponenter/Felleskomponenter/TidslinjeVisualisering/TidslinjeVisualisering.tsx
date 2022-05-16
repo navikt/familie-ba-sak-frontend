@@ -5,10 +5,10 @@ import styled from 'styled-components';
 
 import { Normaltekst, Sidetittel, Undertittel } from 'nav-frontend-typografi';
 
+import { Globe as Eu, Home as NorwegianFlag } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
+import { type Periode, Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 import { byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { type Periode, Tidslinje } from '@navikt/helse-frontend-tidslinje';
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { PersonType } from '../../../typer/person';
@@ -35,6 +35,48 @@ const Container = styled.div`
     padding: 2rem;
     overflow: auto;
     height: calc(100vh - 6rem);
+`;
+
+const TidslinjeHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+`;
+
+const TidslinjeControls = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    > div:first-child {
+        margin-bottom: 1rem;
+    }
+`;
+
+const TidslinjeContainer = styled.div`
+    display: flex;
+
+    & .tidslinje {
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    & .typo-normal {
+        &:first-child {
+            margin-top: 4.8rem;
+        }
+    }
+
+    & .typo-normal {
+        &:not(:first-child) {
+            margin-top: 2.125rem;
+        }
+    }
+`;
+
+const TidslinjeLabels = styled.div`
+    min-width: 7rem;
 `;
 
 const tidslinjerLabels = [
@@ -137,6 +179,12 @@ const TidslinjeVisualisering: React.FC = () => {
                     regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER
                         ? 'suksess'
                         : 'advarsel',
+                children:
+                    regelverkPeriode.innhold === Regelverk.EØS_FORORDNINGEN ? (
+                        <Eu width={24} height={24} />
+                    ) : (
+                        <NorwegianFlag width={24} height={24} />
+                    ),
             }));
     };
 
@@ -181,17 +229,17 @@ const TidslinjeVisualisering: React.FC = () => {
                     <Sidetittel>Tidslinjer</Sidetittel>
                     {barna.map((barn, index) => (
                         <div key={`barn_${index}`}>
-                            <div className={'tidslinje-header'}>
+                            <TidslinjeHeader>
                                 <Undertittel>{`${formaterIdent(
                                     barn
                                 )}: ${genererFormatertÅrstall()}`}</Undertittel>
-                                <div className={'tidslinje-header__controls'}>
+                                <TidslinjeControls>
                                     <Vinduvelger />
                                     <TidslinjeNavigering naviger={naviger} />
-                                </div>
-                            </div>
-                            <div className={'tidslinje-container'}>
-                                <div className={'tidslinje-container__labels'}>
+                                </TidslinjeControls>
+                            </TidslinjeHeader>
+                            <TidslinjeContainer>
+                                <TidslinjeLabels>
                                     {tidslinjerLabels.map((label, index) => {
                                         return (
                                             <Normaltekst key={index} title={label}>
@@ -199,14 +247,13 @@ const TidslinjeVisualisering: React.FC = () => {
                                             </Normaltekst>
                                         );
                                     })}
-                                </div>
+                                </TidslinjeLabels>
                                 <Tidslinje
                                     rader={genererRaderForBarnetsTidslinjer(
                                         tidslinjerRessurs.data.søkersTidslinjer,
                                         tidslinjerRessurs.data.barnasTidslinjer[barn]
                                     )}
-                                    direction={'right'}
-                                    etikettRender={(etikett: Skalaetikett) => (
+                                    etikettRender={(etikett: Etikett) => (
                                         <TidslinjeEtikett etikett={etikett} />
                                     )}
                                     startDato={kalenderDatoTilDate(
@@ -217,16 +264,16 @@ const TidslinjeVisualisering: React.FC = () => {
                                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                                     aktivtUtsnitt={
                                         aktivEtikett && {
-                                            fom: aktivEtikett.dato,
+                                            fom: aktivEtikett.date,
                                             tom: kalenderDatoTilDate(
                                                 sisteDagIMåned(
-                                                    kalenderDatoFraDate(aktivEtikett.dato)
+                                                    kalenderDatoFraDate(aktivEtikett.date)
                                                 )
                                             ),
                                         }
                                     }
                                 />
-                            </div>
+                            </TidslinjeContainer>
                         </div>
                     ))}
                 </Container>

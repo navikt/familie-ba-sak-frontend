@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
-import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
-import type { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 
 interface IEtikettProp {
-    etikett: Skalaetikett;
+    etikett: Etikett;
 }
 
 const EtikettKnapp = styled(FamilieBaseKnapp)<{ disabled: boolean; valgt: boolean }>`
@@ -62,8 +61,8 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
     useEffect(() => {
         if (
             !initiellAktivEtikettErSatt &&
-            etikett.dato.getFullYear() === new Date().getFullYear() &&
-            etikett.dato.getMonth() === new Date().getMonth()
+            etikett.date.getFullYear() === new Date().getFullYear() &&
+            etikett.date.getMonth() === new Date().getMonth()
         ) {
             settAktivEtikett(etikett);
             setInitiellAktivEtikettErSatt(true);
@@ -75,7 +74,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
             aria-label={etikett.label}
             disabled={aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR}
             valgt={
-                !!aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
+                !!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString()
             }
             onClick={onEtikettClick}
         >

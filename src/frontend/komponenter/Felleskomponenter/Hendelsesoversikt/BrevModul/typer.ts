@@ -30,41 +30,12 @@ export const brevmaler: Record<Brevmal, string> = {
     VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
 };
 
-export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
-    INNHENTE_OPPLYSNINGER: 'Velg dokumenter',
-    VARSEL_OM_REVURDERING: 'Velg årsak',
-    HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
-    SVARTIDSBREV: 'Velg årsak',
-    VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14: 'Varsel om revurdering delt bosted §14',
-    VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
-};
-
 export const leggTilValuePåOption = (
     option: Omit<ISelectOptionMedBrevtekst, 'value'>
 ): ISelectOptionMedBrevtekst => ({
     ...option,
     value: option.label.toLocaleLowerCase().replace(' ', '_'),
 });
-
-export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
-    let selectOptionsMedBrevtekst;
-    switch (brevmal) {
-        case Brevmal.INNHENTE_OPPLYSNINGER:
-            selectOptionsMedBrevtekst = opplysningsdokumenter;
-            break;
-        case Brevmal.VARSEL_OM_REVURDERING:
-            selectOptionsMedBrevtekst = årsaker;
-            break;
-        case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
-            selectOptionsMedBrevtekst = årsaker;
-            break;
-        case Brevmal.SVARTIDSBREV:
-            selectOptionsMedBrevtekst = [];
-            break;
-    }
-
-    return selectOptionsMedBrevtekst?.map(leggTilValuePåOption) ?? [];
-};
 
 type OptionType = {
     value: string;
@@ -387,5 +358,3 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         },
     },
 ];
-
-const årsaker: ISelectOptionMedBrevtekst[] = [];

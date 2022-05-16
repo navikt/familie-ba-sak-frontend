@@ -9,7 +9,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import type { Felt, FeltState } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -35,11 +35,12 @@ import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
-import { Brevmal, brevmaler, hentSelectOptions, selectLabelsForBrevmaler } from './typer';
+import { Brevmal, brevmaler, leggTilValuePåOption, opplysningsdokumenter } from './typer';
 
 interface IProps {
     onSubmitSuccess: () => void;
 }
+
 const StyledList = styled.ul`
     padding-inline-start: 1rem;
     margin: 0;
@@ -111,8 +112,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetDokument.status === RessursStatus.HENTER;
 
-    const valgtBrevmal: Felt<Brevmal | ''> = skjema.felter.brevmal;
-
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
@@ -181,7 +180,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
-                        skjema.felter.multiselect.nullstill();
+                        skjema.felter.dokumenter.nullstill();
                     }}
                 >
                     <option value={''}>Velg</option>
@@ -198,21 +197,19 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     })}
                 </FamilieSelect>
 
-                {skjema.felter.multiselect.erSynlig && (
+                {skjema.felter.dokumenter.erSynlig && (
                     <FamilieReactSelect
-                        {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
+                        {...skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
                             <LabelOgEtikett>
                                 <Label
                                     htmlFor={
-                                        skjema.felter.multiselect.hentNavInputProps(
+                                        skjema.felter.dokumenter.hentNavInputProps(
                                             skjema.visFeilmeldinger
                                         ).id
                                     }
                                 >
-                                    {valgtBrevmal.verdi !== ''
-                                        ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
-                                        : ''}
+                                    'Velg dokumenter'
                                 </Label>
                                 <StyledEtikettInfo mini={true}>
                                     Skriv {målform[mottakersMålform()].toLowerCase()}
@@ -223,13 +220,13 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         erLesevisning={erLesevisning()}
                         isMulti={true}
                         onChange={valgteOptions => {
-                            skjema.felter.multiselect.onChange(
+                            skjema.felter.dokumenter.onChange(
                                 valgteOptions === null
                                     ? []
                                     : (valgteOptions as ISelectOptionMedBrevtekst[])
                             );
                         }}
-                        options={hentSelectOptions(valgtBrevmal.verdi)}
+                        options={opplysningsdokumenter.map(leggTilValuePåOption)}
                     />
                 )}
                 {skjema.felter.fritekster.erSynlig && (

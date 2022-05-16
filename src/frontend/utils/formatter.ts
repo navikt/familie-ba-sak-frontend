@@ -17,6 +17,7 @@ export enum datoformat {
     DATO_TID_SEKUNDER = 'DD.MM.YY HH:mm:ss',
     TID = 'HH:mm',
     MÅNED_ÅR_NAVN = 'MMMM YYYY',
+    MÅNED_ÅR_KORTNAVN = 'MMM YYYY',
     MÅNED_NAVN = 'MMM',
 }
 

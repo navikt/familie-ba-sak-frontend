@@ -17,7 +17,6 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
-import { fjernWhitespace } from '../utils/commons';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
@@ -131,43 +130,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
-    const multiselect = useFelt({
+    const dokumenter = useFelt({
         verdi: [],
         valideringsfunksjon: (
             felt: FeltState<ISelectOptionMedBrevtekst[]>,
             avhengigheter?: Avhengigheter
         ) => {
-            const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
-
             if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
-                return feil(
-                    felt,
-                    `Du må velge minst ${
-                        brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'ett dokument' : 'en årsak'
-                    }`
-                );
-            }
-
-            const opprettedeVerdierMedFeil = felt.verdi.filter(
-                (selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) =>
-                    !selectOptionMedBrevtekst.brevtekst &&
-                    fjernWhitespace(selectOptionMedBrevtekst.value).length < 3
-            );
-
-            if (opprettedeVerdierMedFeil.length > 0) {
-                return opprettedeVerdierMedFeil.length === 1
-                    ? feil(
-                          felt,
-                          `Du må fjerne ${
-                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentet' : 'årsaken'
-                          } som har mindre enn tre tegn`
-                      )
-                    : feil(
-                          felt,
-                          `Du må fjerne ${
-                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentene' : 'årsakene'
-                          } som har mindre enn tre tegn`
-                      );
+                return feil(felt, `Du må velge minst ett dokument`);
             }
 
             return ok(felt);
@@ -175,12 +145,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                ![
-                    Brevmal.VARSEL_OM_REVURDERING,
-                    Brevmal.SVARTIDSBREV,
-                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
-                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
-                ].includes(avhengigheter?.brevmal.verdi)
+                [Brevmal.INNHENTE_OPPLYSNINGER].includes(avhengigheter?.brevmal.verdi)
             );
         },
         avhengigheter: { brevmal, fritekster },
@@ -202,7 +167,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         {
             mottakerIdent: string;
             brevmal: Brevmal | '';
-            multiselect: ISelectOptionMedBrevtekst[];
+            dokumenter: ISelectOptionMedBrevtekst[];
             fritekster: FeltState<IFritekstFelt>[];
             barnaMedOpplysninger: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
@@ -213,7 +178,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         felter: {
             mottakerIdent,
             brevmal,
-            multiselect,
+            dokumenter,
             fritekster,
             barnaMedOpplysninger,
             avtalerOmDeltBostedPerBarn,
@@ -230,7 +195,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        skjema.felter.multiselect.nullstill();
+        skjema.felter.dokumenter.nullstill();
         nullstillDeltBosted();
     }, [åpenBehandling]);
 
@@ -274,15 +239,13 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             return hentVarselOmRevurderingDeltBostedSkjemaData();
         } else {
             const multiselectVerdier = [
-                ...skjema.felter.multiselect.verdi.map(
-                    (selectOption: ISelectOptionMedBrevtekst) => {
-                        if (selectOption.brevtekst) {
-                            return selectOption.brevtekst[mottakersMålform()];
-                        } else {
-                            return selectOption.value;
-                        }
+                ...skjema.felter.dokumenter.verdi.map((selectOption: ISelectOptionMedBrevtekst) => {
+                    if (selectOption.brevtekst) {
+                        return selectOption.brevtekst[mottakersMålform()];
+                    } else {
+                        return selectOption.value;
                     }
-                ),
+                }),
                 ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
             ];
 

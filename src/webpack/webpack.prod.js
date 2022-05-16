@@ -62,6 +62,9 @@ const prodConfig = merge.mergeWithRules({
             url: 'https://sentry.gc.nav.no/',
             release: process.env.SENTRY_RELEASE,
             urlPrefix: `~/assets`,
+            errorHandler: (err, invokeErr, compilation) => {
+                compilation.warnings.push('Sentry CLI Plugin: ' + err.message);
+            },
         }),
     ],
 });

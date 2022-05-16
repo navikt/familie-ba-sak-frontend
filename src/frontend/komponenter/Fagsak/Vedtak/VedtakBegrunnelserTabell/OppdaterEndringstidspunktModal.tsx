@@ -11,8 +11,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
-import { StyledFamilieDatovelger } from '../../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
@@ -57,20 +57,13 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                 utenFeilPropagering={true}
             >
                 <Feltmargin>
-                    <StyledFamilieDatovelger
+                    <FamilieDatovelgerWrapper
                         {...skjema.felter.endringstidspunkt.hentNavInputProps(
                             skjema.visFeilmeldinger
                         )}
-                        feil={
-                            !!skjema.felter.endringstidspunkt.feilmelding && skjema.visFeilmeldinger
-                        }
                         valgtDato={skjema.felter.endringstidspunkt.verdi}
                         label={'Endringstidspunkt'}
                         placeholder={'DD.MM.ÅÅÅÅ'}
-                        allowInvalidDateSelection={false}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
                     />
                 </Feltmargin>
             </SkjemaGruppe>
