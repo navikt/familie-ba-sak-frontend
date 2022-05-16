@@ -27,8 +27,7 @@ import {
     TIDENES_MORGEN,
     valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
-import type { UtdypendeVilkRsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
-import { bestemMuligeUtdypendeVilkårsvurderinger } from './utdypendeVilkårsvurderinger';
+import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -200,19 +199,23 @@ export const erBegrunnelseGyldig = (
 
     return feil(
         felt,
-        'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
+        'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
     );
 };
 
 export const erUtdypendeVilkårsvurderingerGyldig = (
-    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
-    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
-): boolean => {
-    const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
-        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
-
-    return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
-        if (!acc) return false;
-        return muligeUtdypendeVilkårsvurderinger.find(e => e === curr) !== undefined;
-    }, true);
+    felt: FeltState<UtdypendeVilkårsvurdering[]>,
+    avhengigheter?: Avhengigheter
+): FeltState<UtdypendeVilkårsvurdering[]> => {
+    if (!avhengigheter) {
+        return feil(felt, 'Utdypende vilkårsvurdering er ugyldig');
+    }
+    const feilmelding = bestemFeilmeldingForUtdypendeVilkårsvurdering(felt.verdi, {
+        resultat: avhengigheter.resultat,
+        personType: avhengigheter.personType,
+        vilkårType: avhengigheter.vilkårType,
+        vurderesEtter: avhengigheter.vurderesEtter,
+        brukEøs: avhengigheter.brukEøs,
+    });
+    return feilmelding ? feil(felt, feilmelding) : ok(felt);
 };
