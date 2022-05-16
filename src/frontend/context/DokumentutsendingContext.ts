@@ -26,6 +26,7 @@ export enum DokumentÅrsak {
     FØDSEL_UMYNDIG = 'FØDSEL_UMYNDIG',
     FØDSEL_GENERELL = 'FØDSEL_GENERELL',
     KAN_SØKE = 'KAN_SØKE',
+    KAN_SØKE_EØS = 'KAN_SØKE_EØS',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -34,6 +35,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     FØDSEL_UMYNDIG: 'Fødsel umyndig',
     FØDSEL_GENERELL: 'Fødsel generell',
     KAN_SØKE: 'Kan søke',
+    KAN_SØKE_EØS: 'Kan søke EØS',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -217,6 +219,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
+                    case DokumentÅrsak.KAN_SØKE_EØS:
+                        return hentEnkeltInformasjonsbrevRequest({
+                            bruker: bruker,
+                            målform: målform.verdi ?? Målform.NB,
+                            brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                        });
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
