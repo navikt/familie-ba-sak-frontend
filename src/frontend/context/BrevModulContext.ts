@@ -58,6 +58,13 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             return false;
+        case Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS:
+            return (
+                åpenBehandling.type === Behandlingstype.REVURDERING &&
+                [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD].includes(
+                    åpenBehandling.årsak
+                )
+            );
     }
 };
 
@@ -109,6 +116,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
+                    Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
