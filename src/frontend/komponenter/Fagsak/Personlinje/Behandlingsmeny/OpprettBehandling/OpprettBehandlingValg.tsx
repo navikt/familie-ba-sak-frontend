@@ -101,7 +101,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteTekniskEndring =
         kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør;
-    const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
@@ -231,8 +230,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                                       årsak !== BehandlingÅrsak.MIGRERING &&
                                       årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
                                       årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
-                                      (årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG ||
-                                          kanOppretteSmåbarnstillegg) &&
+                                      årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
                                       (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                                           toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev]) &&
                                       årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
