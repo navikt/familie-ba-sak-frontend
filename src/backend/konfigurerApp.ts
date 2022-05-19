@@ -22,24 +22,14 @@ export const konfigurerAzure = () => {
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             break;
         case 'preprod':
-            if (process.env.CLUSTER === 'gcp') {
-                process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.intern.nav.no`;
-                process.env.AAD_REDIRECT_URL = `https://${host}.dev.intern.nav.no/auth/openid/callback`;
-            } else {
-                process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.adeo.no`;
-                process.env.AAD_REDIRECT_URL = `https://${host}.dev.adeo.no/auth/openid/callback`;
-            }
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.dev.intern.nav.no`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.dev.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
         case 'production':
-            if (process.env.CLUSTER === 'gcp') {
-                process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.nav.no`;
-                process.env.AAD_REDIRECT_URL = `https://${host}.intern.nav.no/auth/openid/callback`;
-            } else {
-                process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.nais.adeo.no`;
-                process.env.AAD_REDIRECT_URL = `https://${host}.nais.adeo.no/auth/openid/callback`;
-            }
+            process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.nav.no`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.intern.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
