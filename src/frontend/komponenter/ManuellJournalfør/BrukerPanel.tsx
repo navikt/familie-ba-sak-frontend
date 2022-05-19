@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -39,6 +39,12 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
+    const erEnsligMindreårig = useFelt({
+        verdi: 'nei',
+    });
+    const erPåInstitusjon = useFelt({
+        verdi: 'nei',
+    });
 
     useEffect(() => {
         settFeilMelding('');
@@ -74,16 +80,44 @@ export const BrukerPanel: React.FC = () => {
         >
             <StyledDiv>
                 {!erLesevisning() && (
-                    <FamilieInput
-                        {...nyIdent.hentNavInputProps(!!feilMelding)}
-                        feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                        erLesevisning={erLesevisning()}
-                        id={'hent-person'}
-                        label={'Skriv inn fødselsnummer/D-nummer'}
-                        bredde={'XL'}
-                        placeholder={'fnr/dnr'}
-                    />
-                )}
+                        <FamilieCheckbox
+                            id={'enslig-mindreårig'}
+                            erLesevisning={erLesevisning()}
+                            label={'Bruker er enslig mindreårig'}
+                            checked={erEnsligMindreårig.verdi === 'ja'}
+                            onChange={() => {
+                                if (erEnsligMindreårig.verdi === 'nei') {
+                                    erEnsligMindreårig.validerOgSettFelt('ja');
+                                } else {
+                                    erEnsligMindreårig.validerOgSettFelt('nei');
+                                }
+                            }}
+                        />
+                    ) && (
+                        <FamilieCheckbox
+                            id={'på-institusjon'}
+                            erLesevisning={erLesevisning()}
+                            label={'Bruker er på institusjon'}
+                            checked={erPåInstitusjon.verdi === 'ja'}
+                            onChange={() => {
+                                if (erPåInstitusjon.verdi === 'nei') {
+                                    erPåInstitusjon.validerOgSettFelt('ja');
+                                } else {
+                                    erPåInstitusjon.validerOgSettFelt('nei');
+                                }
+                            }}
+                        />
+                    ) && (
+                        <FamilieInput
+                            {...nyIdent.hentNavInputProps(!!feilMelding)}
+                            feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                            erLesevisning={erLesevisning()}
+                            id={'hent-person'}
+                            label={'Skriv inn fødselsnummer/D-nummer'}
+                            bredde={'XL'}
+                            placeholder={'fnr/dnr'}
+                        />
+                    )}
                 <StyledKnapp
                     onClick={() => {
                         if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
