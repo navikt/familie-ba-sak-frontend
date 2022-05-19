@@ -8,8 +8,16 @@ const Environment = () => {
         return {
             buildPath: 'frontend_development',
             namespace: 'local',
-            proxyUrl: 'http://localhost:8089',
+            proxyUrl: 'https://familie-ba-sak.dev.intern.nav.no',
             familieTilbakeUrl: 'http://localhost:8000',
+            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
+        };
+    } else if (process.env.ENV === 'lokalt-mot-preprod') {
+        return {
+            buildPath: 'frontend_development',
+            namespace: 'local',
+            proxyUrl: 'https://familie-ba-sak.dev.intern.nav.no',
+            familieTilbakeUrl: 'https://familie-tilbake.dev.intern.nav.no',
             endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
@@ -48,7 +56,11 @@ export const sessionConfig: ISessionKonfigurasjon = {
     navn: 'familie-ba-sak-v1',
     redisPassord: process.env.REDIS_PASSWORD,
     redisUrl: env.redisUrl,
-    secureCookie: !(process.env.ENV === 'local' || process.env.ENV === 'e2e'),
+    secureCookie: !(
+        process.env.ENV === 'local' ||
+        process.env.ENV === 'lokalt-mot-preprod' ||
+        process.env.ENV === 'e2e'
+    ),
     sessionMaxAgeSekunder: 12 * 60 * 60,
 };
 

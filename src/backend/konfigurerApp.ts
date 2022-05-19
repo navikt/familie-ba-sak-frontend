@@ -12,8 +12,9 @@ const settAzureAdPropsFraEnv = () => {
 
 export const konfigurerAzure = () => {
     const host = 'barnetrygd';
-    logInfo(`ENV=${process.env.ENV}, CLUSER=${process.env.CLUSTER}`);
+    logInfo(`ENV=${process.env.ENV}, CLUSTER=${process.env.CLUSTER}`);
     switch (process.env.ENV) {
+        case 'lokalt-mot-preprod':
         case 'local':
             process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=http:\\\\localhost:8000`;
             process.env.AAD_REDIRECT_URL = 'http://localhost:8000/auth/openid/callback';
