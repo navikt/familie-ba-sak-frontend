@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -14,6 +14,10 @@ import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
 const StyledDiv = styled.div`
     display: flex;
+`;
+
+const StyledCheckBoxWrapper = styled.div`
+    margin-bottom: 1rem;
 `;
 
 const StyledKnapp = styled(FamilieKnapp)`
@@ -39,7 +43,6 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-
     useEffect(() => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
@@ -72,6 +75,32 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
+            <StyledCheckBoxWrapper>
+                <FamilieCheckbox
+                    id={'enslig-mindreårig'}
+                    erLesevisning={false}
+                    label={'Bruker er enslig mindreårig'}
+                    checked={skjema.felter.erEnsligÅrig.verdi}
+                    onChange={() => {
+                        skjema.felter.erEnsligÅrig.validerOgSettFelt(
+                            !skjema.felter.erEnsligÅrig.verdi
+                        );
+                    }}
+                />
+            </StyledCheckBoxWrapper>
+            <StyledCheckBoxWrapper>
+                <FamilieCheckbox
+                    id={'på-institusjon'}
+                    erLesevisning={false}
+                    label={'Bruker er på institusjon'}
+                    checked={skjema.felter.erPåInstitusjon.verdi}
+                    onChange={() => {
+                        skjema.felter.erPåInstitusjon.validerOgSettFelt(
+                            !skjema.felter.erPåInstitusjon.verdi
+                        );
+                    }}
+                />
+            </StyledCheckBoxWrapper>
             <StyledDiv>
                 {!erLesevisning() && (
                     <FamilieInput

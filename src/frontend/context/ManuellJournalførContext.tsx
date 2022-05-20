@@ -104,6 +104,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
+            erEnsligÅrig: boolean;
+            erPåInstitusjon: boolean;
         },
         string
     >({
@@ -155,6 +157,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingsårsak,
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
+            }),
+            erEnsligÅrig: useFelt<boolean>({
+                verdi: false,
+            }),
+            erPåInstitusjon: useFelt<boolean>({
+                verdi: false,
             }),
         },
         skjemanavn: 'Journalfør dokument',
