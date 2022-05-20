@@ -87,6 +87,9 @@ export const BrukerPanel: React.FC = () => {
                             label={'Bruker er enslig mindreårig'}
                             checked={skjema.felter.erEnsligMindreårig.verdi}
                             onChange={() => {
+                                if (erLesevisning()) {
+                                    return;
+                                }
                                 skjema.felter.erEnsligMindreårig.validerOgSettFelt(
                                     !skjema.felter.erEnsligMindreårig.verdi
                                 );
@@ -100,6 +103,9 @@ export const BrukerPanel: React.FC = () => {
                             label={'Bruker er på institusjon'}
                             checked={skjema.felter.erPåInstitusjon.verdi}
                             onChange={() => {
+                                if (erLesevisning()) {
+                                    return;
+                                }
                                 skjema.felter.erPåInstitusjon.validerOgSettFelt(
                                     !skjema.felter.erPåInstitusjon.verdi
                                 );
