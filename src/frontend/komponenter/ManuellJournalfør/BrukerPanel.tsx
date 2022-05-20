@@ -5,8 +5,10 @@ import styled from 'styled-components';
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
+import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
@@ -36,6 +38,7 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 
 export const BrukerPanel: React.FC = () => {
     const { skjema, endreBruker, erLesevisning } = useManuellJournalfør();
+    const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
@@ -75,32 +78,36 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
-            <StyledCheckBoxWrapper>
-                <FamilieCheckbox
-                    id={'enslig-mindreårig'}
-                    erLesevisning={false}
-                    label={'Bruker er enslig mindreårig'}
-                    checked={skjema.felter.erEnsligÅrig.verdi}
-                    onChange={() => {
-                        skjema.felter.erEnsligÅrig.validerOgSettFelt(
-                            !skjema.felter.erEnsligÅrig.verdi
-                        );
-                    }}
-                />
-            </StyledCheckBoxWrapper>
-            <StyledCheckBoxWrapper>
-                <FamilieCheckbox
-                    id={'på-institusjon'}
-                    erLesevisning={false}
-                    label={'Bruker er på institusjon'}
-                    checked={skjema.felter.erPåInstitusjon.verdi}
-                    onChange={() => {
-                        skjema.felter.erPåInstitusjon.validerOgSettFelt(
-                            !skjema.felter.erPåInstitusjon.verdi
-                        );
-                    }}
-                />
-            </StyledCheckBoxWrapper>
+            {toggles[ToggleNavn.støtterInstitusjon] && (
+                <div>
+                    <StyledCheckBoxWrapper>
+                        <FamilieCheckbox
+                            id={'enslig-mindreårig'}
+                            erLesevisning={false}
+                            label={'Bruker er enslig mindreårig'}
+                            checked={skjema.felter.erEnsligMindreårig.verdi}
+                            onChange={() => {
+                                skjema.felter.erEnsligMindreårig.validerOgSettFelt(
+                                    !skjema.felter.erEnsligMindreårig.verdi
+                                );
+                            }}
+                        />
+                    </StyledCheckBoxWrapper>
+                    <StyledCheckBoxWrapper>
+                        <FamilieCheckbox
+                            id={'på-institusjon'}
+                            erLesevisning={false}
+                            label={'Bruker er på institusjon'}
+                            checked={skjema.felter.erPåInstitusjon.verdi}
+                            onChange={() => {
+                                skjema.felter.erPåInstitusjon.validerOgSettFelt(
+                                    !skjema.felter.erPåInstitusjon.verdi
+                                );
+                            }}
+                        />
+                    </StyledCheckBoxWrapper>
+                </div>
+            )}
             <StyledDiv>
                 {!erLesevisning() && (
                     <FamilieInput

@@ -104,7 +104,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
-            erEnsligÅrig: boolean;
+            erEnsligMindreårig: boolean;
             erPåInstitusjon: boolean;
         },
         string
@@ -158,7 +158,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
             }),
-            erEnsligÅrig: useFelt<boolean>({
+            erEnsligMindreårig: useFelt<boolean>({
                 verdi: false,
             }),
             erPåInstitusjon: useFelt<boolean>({
@@ -390,6 +390,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 : nyBehandlingsårsak,
 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                        erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
+                        erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
