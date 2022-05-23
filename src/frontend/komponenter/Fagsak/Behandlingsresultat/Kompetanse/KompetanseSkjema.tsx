@@ -6,7 +6,8 @@ import { Alert, Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import { type IKompetanse, KompetanseStatus } from '../../../../typer/kompetanse';
+import type { IKompetanse } from '../../../../typer/kompetanse';
+import { KompetanseStatus } from '../../../../typer/kompetanse';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
 const KompetanseContainer = styled.div`
@@ -16,7 +17,6 @@ const KompetanseContainer = styled.div`
 const Tabell = styled.table`
     margin-top: 2rem;
     table-layout: fixed;
-    min-width: 64rem;
 
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;

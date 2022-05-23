@@ -87,6 +87,17 @@ export const formaterIdent = (personIdent: string, ukjentTekst = 'Ukjent id') =>
         : ukjentTekst;
 };
 
+export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): string => {
+    const person = personer.find(person => person.personIdent === ident);
+    if (person) {
+        return `${person.navn} (${hentAlder(person.fødselsdato)} år) ${formaterIdent(
+            person.personIdent
+        )}`;
+    } else {
+        return ident;
+    }
+};
+
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
     familieDayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;
 
