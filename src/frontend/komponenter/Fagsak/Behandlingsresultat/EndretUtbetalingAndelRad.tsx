@@ -14,7 +14,7 @@ import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
-import { formaterIdent } from '../../../utils/formatter';
+import { lagPersonLabel } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 
@@ -113,12 +113,12 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             heigth={20}
                             width={20}
                         />
-                        {formaterIdent(
-                            endretUtbetalingAndel.personIdent
-                                ? endretUtbetalingAndel.personIdent
-                                : '',
-                            'Ikke satt'
-                        )}
+                        {endretUtbetalingAndel.personIdent
+                            ? lagPersonLabel(
+                                  endretUtbetalingAndel.personIdent,
+                                  åpenBehandling.personer
+                              )
+                            : 'Ikke satt'}
                     </PersonCelle>
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
