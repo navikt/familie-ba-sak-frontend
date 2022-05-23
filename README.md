@@ -26,6 +26,11 @@ mot dev-gcp clusteret i konsollen.
     APP_VERSION=0.0.1
 ```
 
+Ønsker du å kjøre mot preprod gjøres det med dette i .env fila.
+```
+ BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
+ ENV=lokalt-mot-preprod
+```
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
