@@ -12,7 +12,7 @@ import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/kompetanse';
 import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetanse';
-import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
+import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
@@ -96,18 +96,9 @@ const KompetanseTabellRad: React.FC<IProps> = ({
         }
     };
 
-    const lagLabelBarn = (barnetsIdent: string): string => {
-        const barnet = åpenBehandling.personer.find(person => person.personIdent === barnetsIdent);
-        if (barnet) {
-            return `${barnet.navn} (${hentAlder(barnet.fødselsdato)} år) ${barnet.personIdent}`;
-        } else {
-            return barnetsIdent;
-        }
-    };
-
     const barn: OptionType[] = kompetanse.verdi?.barnIdenter.verdi.map(barn => ({
         value: barn,
-        label: lagLabelBarn(barn),
+        label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
     const formatterPeriode = (periode: IYearMonthPeriode): string => {
@@ -131,7 +122,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         <BarnDiv>
                             {kompetanse.verdi?.barnIdenter.verdi.map(barn => (
                                 <BodyShort size="small" key={barn}>
-                                    {lagLabelBarn(barn)}
+                                    {lagPersonLabel(barn, åpenBehandling.personer)}
                                 </BodyShort>
                             ))}
                         </BarnDiv>
