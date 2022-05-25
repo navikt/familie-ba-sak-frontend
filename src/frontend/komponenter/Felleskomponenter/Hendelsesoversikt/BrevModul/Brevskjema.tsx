@@ -322,11 +322,14 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         )}
                     </>
                 )}
+                {skjema.felter.barnBrevetGjelder.erSynlig && (
+                    <div>Komponent for å velge barna som skal merkes og være med i brevet</div>
+                )}
                 {skjema.felter.brevmal.verdi ===
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
                     <DeltBostedSkjema
                         avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
-                        barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                        barnaMedOpplysningerFelt={skjema.felter.barnMedDeltBosted}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
                     />

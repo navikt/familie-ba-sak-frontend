@@ -12,6 +12,7 @@ import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
@@ -38,6 +39,14 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        case Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
         case Brevmal.VARSEL_OM_REVURDERING:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
@@ -54,6 +63,14 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             );
         case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
             return åpenBehandling.type === Behandlingstype.REVURDERING;
+        case Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
         case Brevmal.SVARTIDSBREV:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
@@ -61,6 +78,7 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
         case Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
                 [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD].includes(
                     åpenBehandling.årsak
                 )
@@ -116,7 +134,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
-                    Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
@@ -160,8 +177,25 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         nullstillVedAvhengighetEndring: false,
     });
 
+    const barnBrevetGjelder = useFelt<IBarnMedOpplysninger[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<IBarnMedOpplysninger[]>) => {
+            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
+                ? ok(felt)
+                : feil(felt, 'Du må velge barn');
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return [
+                Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
+                Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+            ].includes(avhengigheter?.brevmal.verdi);
+        },
+        avhengigheter: { brevmal },
+    });
+
     const {
-        barnaMedOpplysninger,
+        barnMedDeltBosted,
         avtalerOmDeltBostedPerBarn,
         nullstillDeltBosted,
         hentDeltBostedMulitiselectVerdierForBarn,
@@ -177,7 +211,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal: Brevmal | '';
             dokumenter: ISelectOptionMedBrevtekst[];
             fritekster: FeltState<IFritekstFelt>[];
-            barnaMedOpplysninger: IBarnMedOpplysninger[];
+            barnMedDeltBosted: IBarnMedOpplysninger[];
+            barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
         },
@@ -188,9 +223,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal,
             dokumenter,
             fritekster,
-            barnaMedOpplysninger,
+            barnMedDeltBosted,
+            barnBrevetGjelder,
             avtalerOmDeltBostedPerBarn,
-            datoAvtale: datoAvtale,
+            datoAvtale,
         },
         skjemanavn: 'brevmodul',
     });
@@ -257,18 +293,23 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
             ];
 
+            const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(
+                barn => barn.merket
+            );
+
             return {
                 mottakerIdent: skjema.felter.mottakerIdent.verdi,
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
-                barnIBrev: [],
+                barnIBrev: barnBrevetGjelder.map(barn => barn.ident),
+                barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
                 datoAvtale: skjema.felter.datoAvtale.verdi,
             };
         }
     };
 
     const hentVarselOmRevurderingDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
-        const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(barn => barn.merket);
+        const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
         return {
             mottakerIdent: skjema.felter.mottakerIdent.verdi,

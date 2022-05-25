@@ -18,7 +18,7 @@ interface IProps {
 export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
     const { bruker: brukerRessurs } = useFagsakRessurser();
 
-    const barnaMedOpplysninger = useFelt<IBarnMedOpplysninger[]>({
+    const barnMedDeltBosted = useFelt<IBarnMedOpplysninger[]>({
         verdi: [],
         valideringsfunksjon: felt => {
             return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
@@ -33,9 +33,9 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
     const avtalerOmDeltBostedPerBarn = useFelt<Record<string, ISODateString[]>>({
         verdi: {},
         valideringsfunksjon: (felt, avhengigheter) => {
-            const barnaMedOpplysninger = avhengigheter?.verdi ?? [];
+            const barnMedDeltBosted = avhengigheter?.verdi ?? [];
 
-            return barnaMedOpplysninger
+            return barnMedDeltBosted
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .some((barn: IBarnMedOpplysninger) =>
                     felt.verdi[barn.ident]?.some(
@@ -45,10 +45,10 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
                 ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
                 : ok(felt);
         },
-        avhengigheter: barnaMedOpplysninger,
+        avhengigheter: barnMedDeltBosted,
     });
 
-    const hentBarnMedOpplysningerFraBruker = () => {
+    const hentBarnMedDeltBostedFraBruker = () => {
         if (brukerRessurs.status === RessursStatus.SUKSESS)
             return (
                 brukerRessurs.data.forelderBarnRelasjon
@@ -72,7 +72,7 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
 
     const nullstillDeltBosted = () => {
         avtalerOmDeltBostedPerBarn.nullstill();
-        barnaMedOpplysninger.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
+        barnMedDeltBosted.validerOgSettFelt(hentBarnMedDeltBostedFraBruker());
     };
 
     const hentDeltBostedMulitiselectVerdierForBarn = (barn: IBarnMedOpplysninger) => {
@@ -91,7 +91,7 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
     };
 
     return {
-        barnaMedOpplysninger,
+        barnMedDeltBosted,
         avtalerOmDeltBostedPerBarn,
         nullstillDeltBosted,
         hentDeltBostedMulitiselectVerdierForBarn,
