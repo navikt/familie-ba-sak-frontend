@@ -7,8 +7,9 @@ import { BodyShort } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import { mapKompetanseStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
+import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/kompetanse';
 import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetanse';
@@ -21,12 +22,6 @@ import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 interface IEkspanderbarTrProps {
     ekspandert?: boolean;
 }
-
-const mapKompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
-    IKKE_UTFYLT: Status.ADVARSEL,
-    UFULLSTENDIG: Status.FEIL,
-    OK: Status.OK,
-};
 
 const EkspanderbarTr = styled.tr`
     td {

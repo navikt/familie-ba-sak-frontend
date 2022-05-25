@@ -17,12 +17,13 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useKompetanse } from '../../../context/Kompetanse/KompetanseContext';
+import { useEøs } from '../../../context/Eøs/EøsContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
+import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
-import type { IKompetanse } from '../../../typer/kompetanse';
+import type { IKompetanse, IRestUtenlandskPeriodeBeløp } from '../../../typer/kompetanse';
 import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
@@ -35,6 +36,7 @@ import KompetanseSkjema, { kompetanseFeilmeldingId } from './Kompetanse/Kompetan
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import UtenlandskePeriodeBeløper from './UtenlandskPeriodeBeløp/UtenlandskePeriodeBeløper';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;
@@ -48,6 +50,10 @@ const StyledEditIkon = styled(Edit)`
 
 const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
+`;
+
+const StyledFeiloppsummering = styled(Feiloppsummering)`
+    margin-top: 5rem;
 `;
 
 interface IBehandlingsresultatProps {
@@ -91,7 +97,13 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         behandlingsstegSubmitressurs,
         settÅpenBehandling,
     } = useBehandling();
-    const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse();
+    const {
+        erEøsInformasjonGyldig,
+        kompetanser,
+        hentKompetanserMedFeil,
+        utenlandskePeriodeBeløper,
+        hentUtenlandskePeriodeBeløperMedFeil,
+    } = useEøs();
 
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
@@ -147,6 +159,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
+    const harUtenlandskeBeløper =
+        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+
+    const harEøs = harKompetanser || harUtenlandskeBeløper;
 
     return (
         <Skjemasteg
@@ -157,7 +173,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
-                } else if (harKompetanser && !erKompetanserGyldige()) {
+                } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {
                     behandlingresultatNesteOnClick();
@@ -213,21 +229,31 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     åpenBehandling={åpenBehandling}
                 />
             )}
-            {visFeilmeldinger &&
-                toggles[ToggleNavn.brukEøs] &&
-                hentKompetanserMedFeil().length > 0 && (
-                    <Feiloppsummering
-                        tittel={'For å gå videre må du rette opp følgende:'}
-                        feil={[
-                            ...hentKompetanserMedFeil().map(
-                                (kompetanse: FeltState<IKompetanse>) => ({
-                                    feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
-                                    skjemaelementId: kompetanseFeilmeldingId(kompetanse),
-                                })
-                            ),
-                        ]}
-                    />
-                )}
+            {harUtenlandskeBeløper && (
+                <UtenlandskePeriodeBeløper
+                    utenlandskePeriodeBeløper={utenlandskePeriodeBeløper}
+                    visFeilmeldinger={visFeilmeldinger}
+                    åpenBehandling={åpenBehandling}
+                />
+            )}
+            {visFeilmeldinger && toggles[ToggleNavn.brukEøs] && (
+                <StyledFeiloppsummering
+                    tittel={'For å gå videre må du rette opp følgende:'}
+                    feil={[
+                        ...hentKompetanserMedFeil().map((kompetanse: FeltState<IKompetanse>) => ({
+                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
+                            skjemaelementId: kompetanseFeilmeldingId(kompetanse),
+                        })),
+                        ...hentUtenlandskePeriodeBeløperMedFeil().map(
+                            (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp) => ({
+                                feilmelding: `Utenlandsk beløp barn: ${utenlandskPeriodeBeløp.barnIdenter}, f.o.m.: ${utenlandskPeriodeBeløp.fom} er ikke fullstendig.`,
+                                skjemaelementId:
+                                    utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
+                            })
+                        ),
+                    ]}
+                />
+            )}
         </Skjemasteg>
     );
 };

@@ -17,7 +17,8 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { KompetanseSubmit, useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
+import { useEøs } from '../../../../context/Eøs/EøsContext';
+import { KompetanseSubmit } from '../../../../context/Kompetanse/KompetanseContext';
 import { validerKompetanse } from '../../../../context/Kompetanse/valideringKompetanse';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
@@ -66,8 +67,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     settEkspandertKompetanse,
 }) => {
     const { erLesevisning, settÅpenBehandling } = useBehandling();
-    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } =
-        useKompetanse();
+    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } = useEøs();
     const lesevisning = erLesevisning(true);
 
     const valgteBarn = redigerbartKompetanse.verdi?.barnIdenter.verdi.map(barn => {
