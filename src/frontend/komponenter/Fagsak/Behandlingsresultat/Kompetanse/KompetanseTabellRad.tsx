@@ -11,8 +11,8 @@ import { mapKompetanseStatusTilStatus } from '../../../../context/Eøs/EøsConte
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse } from '../../../../typer/kompetanse';
-import { KompetanseStatus, KompetanseResultat } from '../../../../typer/kompetanse';
+import type { IKompetanse } from '../../../../typer/eøsPerioder';
+import { KompetanseStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';

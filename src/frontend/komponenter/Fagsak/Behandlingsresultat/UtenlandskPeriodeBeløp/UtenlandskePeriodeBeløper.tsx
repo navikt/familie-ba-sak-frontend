@@ -6,7 +6,7 @@ import { Alert, Heading } from '@navikt/ds-react';
 
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/kompetanse';
+import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
 
 const UtenlandskPeriodeBeløperContainer = styled.div`

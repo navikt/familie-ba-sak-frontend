@@ -8,7 +8,7 @@ import { Label } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IUtenlandskPeriodeBeløp } from '../../../../typer/kompetanse';
+import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const StyledLegend = styled.legend`

@@ -30,7 +30,7 @@ import {
     KompetanseResultat,
     kompetanseResultater,
     KompetanseStatus,
-} from '../../../../typer/kompetanse';
+} from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EndreKompetansePeriode from './EndreKompetansePeriode';
 import FamilieLandvelger from './FamilieLandvelger';

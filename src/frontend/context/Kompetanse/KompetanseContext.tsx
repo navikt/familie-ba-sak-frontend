@@ -5,7 +5,7 @@ import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
-import type { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
+import type { IKompetanse, IRestKompetanse } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
 import { erEøsPeriodeGyldig } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';

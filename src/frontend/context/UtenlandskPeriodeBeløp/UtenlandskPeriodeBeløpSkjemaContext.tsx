@@ -10,7 +10,7 @@ import type {
     IUtenlandskPeriodeBeløp,
     KompetanseStatus,
     UtenlandskPeriodeBeløpIntervall,
-} from '../../typer/kompetanse';
+} from '../../typer/eøsPerioder';
 import { erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import type { IYearMonthPeriode } from '../../utils/kalender';

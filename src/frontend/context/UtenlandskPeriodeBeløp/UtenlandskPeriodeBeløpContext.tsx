@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import type { IBehandling } from '../../typer/behandling';
-import { KompetanseStatus } from '../../typer/kompetanse';
-import type { IRestUtenlandskPeriodeBeløp } from '../../typer/kompetanse';
+import { KompetanseStatus } from '../../typer/eøsPerioder';
+import type { IRestUtenlandskPeriodeBeløp } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
 import { useApp } from '../AppContext';
 

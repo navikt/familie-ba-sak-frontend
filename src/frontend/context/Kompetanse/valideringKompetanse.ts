@@ -11,7 +11,7 @@ import {
     type IKompetanse,
     type KompetanseResultat,
     type SøkerAktivitet,
-} from '../../typer/kompetanse';
+} from '../../typer/eøsPerioder';
 import { isEmpty } from '../../utils/eøsValidators';
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

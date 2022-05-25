@@ -2,7 +2,7 @@ import constate from 'constate';
 
 import { Status } from '../../ikoner/StatusIkon';
 import type { IBehandling } from '../../typer/behandling';
-import type { KompetanseStatus } from '../../typer/kompetanse';
+import type { KompetanseStatus } from '../../typer/eøsPerioder';
 import { useKompetanse } from '../Kompetanse/KompetanseContext';
 import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
 

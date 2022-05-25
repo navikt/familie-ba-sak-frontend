@@ -23,7 +23,7 @@ import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/Utenlands
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
-import type { IKompetanse, IRestUtenlandskPeriodeBeløp } from '../../../typer/kompetanse';
+import type { IKompetanse, IRestUtenlandskPeriodeBeløp } from '../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';

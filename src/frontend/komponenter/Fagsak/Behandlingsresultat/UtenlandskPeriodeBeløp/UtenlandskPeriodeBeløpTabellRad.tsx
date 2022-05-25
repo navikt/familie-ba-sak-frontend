@@ -13,8 +13,8 @@ import {
 } from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
-import { KompetanseStatus } from '../../../../typer/kompetanse';
-import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/kompetanse';
+import { KompetanseStatus } from '../../../../typer/eøsPerioder';
+import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';

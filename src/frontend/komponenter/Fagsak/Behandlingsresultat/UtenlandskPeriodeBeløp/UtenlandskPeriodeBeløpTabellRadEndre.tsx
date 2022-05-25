@@ -24,8 +24,8 @@ import {
     utenlandskPeriodeBeløpIntervaller,
     KompetanseStatus,
     UtenlandskPeriodeBeløpIntervall,
-} from '../../../../typer/kompetanse';
-import type { IUtenlandskPeriodeBeløp } from '../../../../typer/kompetanse';
+} from '../../../../typer/eøsPerioder';
+import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EndreUtenlandskPeriodeBeløp from './EndreUtenlandskPeriodeBeløp';
 import FamilieValutavelger from './FamilieValutavelger';
