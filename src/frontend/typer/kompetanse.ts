@@ -1,3 +1,4 @@
+import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
@@ -84,4 +85,41 @@ export interface IKompetanse {
     annenForeldersAktivitetsland: FeltState<string | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
     resultat: FeltState<KompetanseResultat | undefined>;
+}
+
+export enum UtenlandskPeriodeBeløpIntervall {
+    ÅRLIG = 'ÅRLIG',
+    KVARTALSVIS = 'KVARTALSVIS',
+    MÅNEDLIG = 'MÅNEDLIG',
+    UKENTLIG = 'UKENTLIG',
+}
+
+export const utenlandskPeriodeBeløpIntervaller: Record<UtenlandskPeriodeBeløpIntervall, string> = {
+    ÅRLIG: 'per år',
+    KVARTALSVIS: 'per kvartal',
+    MÅNEDLIG: 'per måned',
+    UKENTLIG: 'per uke',
+};
+
+export interface IRestUtenlandskPeriodeBeløp {
+    id: number;
+    status: KompetanseStatus;
+    fom: YearMonth;
+    tom?: YearMonth;
+    barnIdenter: string[];
+    beløp?: string;
+    valutakode?: string;
+    intervall?: UtenlandskPeriodeBeløpIntervall;
+}
+
+export interface IUtenlandskPeriodeBeløp {
+    periodeId: string;
+    id: number;
+    status: KompetanseStatus;
+    initielFom: YearMonth;
+    periode: IYearMonthPeriode;
+    barnIdenter: OptionType[];
+    beløp?: string | undefined;
+    valutakode?: string | undefined;
+    intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
 }
