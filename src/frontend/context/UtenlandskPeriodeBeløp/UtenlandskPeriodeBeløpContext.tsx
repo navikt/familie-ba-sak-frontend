@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import type { IBehandling } from '../../typer/behandling';
-import { KompetanseStatus } from '../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
 import { useApp } from '../AppContext';
@@ -28,7 +28,7 @@ const useUtenlandskPeriodeBeløp = ({ åpenBehandling }: IProps) => {
 
     const hentUtenlandskePeriodeBeløperMedFeil = (): IRestUtenlandskPeriodeBeløp[] => {
         return utenlandskePeriodeBeløper.filter(
-            utenlandskPeriodeBeløp => utenlandskPeriodeBeløp.status !== KompetanseStatus.OK
+            utenlandskPeriodeBeløp => utenlandskPeriodeBeløp.status !== EøsPeriodeStatus.OK
         );
     };
 

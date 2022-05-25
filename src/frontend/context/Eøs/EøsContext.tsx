@@ -2,11 +2,11 @@ import constate from 'constate';
 
 import { Status } from '../../ikoner/StatusIkon';
 import type { IBehandling } from '../../typer/behandling';
-import type { KompetanseStatus } from '../../typer/eøsPerioder';
+import type { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import { useKompetanse } from '../Kompetanse/KompetanseContext';
 import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
 
-export const mapKompetanseStatusTilStatus: Record<KompetanseStatus, Status> = {
+export const mapEøsPeriodeStatusTilStatus: Record<EøsPeriodeStatus, Status> = {
     IKKE_UTFYLT: Status.ADVARSEL,
     UFULLSTENDIG: Status.FEIL,
     OK: Status.OK,

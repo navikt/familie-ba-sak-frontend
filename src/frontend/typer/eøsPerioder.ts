@@ -55,7 +55,7 @@ export const kompetanseResultater: Record<KompetanseResultat, string> = {
     TO_PRIMÆRLAND: 'To primærland',
 };
 
-export enum KompetanseStatus {
+export enum EøsPeriodeStatus {
     IKKE_UTFYLT = 'IKKE_UTFYLT',
     UFULLSTENDIG = 'UFULLSTENDIG',
     OK = 'OK',
@@ -63,7 +63,7 @@ export enum KompetanseStatus {
 
 export interface IRestKompetanse {
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
@@ -76,7 +76,7 @@ export interface IRestKompetanse {
 
 export interface IKompetanse {
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
     barnIdenter: FeltState<string[]>;
@@ -103,7 +103,7 @@ export const utenlandskPeriodeBeløpIntervaller: Record<UtenlandskPeriodeBeløpI
 
 export interface IRestUtenlandskPeriodeBeløp {
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
@@ -115,7 +115,7 @@ export interface IRestUtenlandskPeriodeBeløp {
 export interface IUtenlandskPeriodeBeløp {
     periodeId: string;
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     initielFom: YearMonth;
     periode: IYearMonthPeriode;
     barnIdenter: OptionType[];

@@ -8,7 +8,7 @@ import type { IBehandling } from '../../typer/behandling';
 import type {
     IRestUtenlandskPeriodeBeløp,
     IUtenlandskPeriodeBeløp,
-    KompetanseStatus,
+    EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
 import { erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
@@ -67,7 +67,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 verdi: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
             }),
             id: useFelt<number>({ verdi: utenlandskPeriodeBeløp.id }),
-            status: useFelt<KompetanseStatus>({ verdi: utenlandskPeriodeBeløp.status }),
+            status: useFelt<EøsPeriodeStatus>({ verdi: utenlandskPeriodeBeløp.status }),
             initielFom: initelFom,
             barnIdenter: useFelt<OptionType[]>({
                 verdi: valgteBarn,

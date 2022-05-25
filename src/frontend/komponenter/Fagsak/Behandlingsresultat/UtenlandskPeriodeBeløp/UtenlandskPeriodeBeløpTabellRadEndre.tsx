@@ -22,7 +22,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     utenlandskPeriodeBeløpIntervaller,
-    KompetanseStatus,
+    EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
@@ -225,7 +225,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {skjema.felter.status?.verdi !== KompetanseStatus.IKKE_UTFYLT && (
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
                         <IkonKnapp
                             erLesevisning={lesevisning}
                             onClick={() => slettUtenlandskPeriodeBeløp()}

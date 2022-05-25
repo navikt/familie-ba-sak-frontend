@@ -7,7 +7,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/eøsPerioder';
-import { KompetanseStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
 const KompetanseContainer = styled.div`
@@ -57,7 +57,7 @@ interface IProps {
 
 const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visFeilmeldinger }) => {
     const harUfullstendigeKompetanser =
-        åpenBehandling.kompetanser?.filter(kompetanse => kompetanse.status !== KompetanseStatus.OK)
+        åpenBehandling.kompetanser?.filter(kompetanse => kompetanse.status !== EøsPeriodeStatus.OK)
             .length > 0;
 
     return (

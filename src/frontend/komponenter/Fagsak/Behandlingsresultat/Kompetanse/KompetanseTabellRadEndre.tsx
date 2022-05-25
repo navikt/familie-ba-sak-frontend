@@ -29,7 +29,7 @@ import {
     søkerAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
-    KompetanseStatus,
+    EøsPeriodeStatus,
 } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EndreKompetansePeriode from './EndreKompetansePeriode';
@@ -414,7 +414,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {redigerbartKompetanse.verdi.status !== KompetanseStatus.IKKE_UTFYLT && (
+                    {redigerbartKompetanse.verdi.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
                         <IkonKnapp
                             erLesevisning={lesevisning}
                             onClick={() => {

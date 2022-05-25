@@ -7,12 +7,12 @@ import { BodyShort } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { mapKompetanseStatusTilStatus } from '../../../../context/Eøs/EøsContext';
+import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/eøsPerioder';
-import { KompetanseStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -109,7 +109,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     <KompetanseVurdertCelle>
                         <div>
                             <StatusIkon
-                                status={mapKompetanseStatusTilStatus[kompetanse.verdi.status]}
+                                status={mapEøsPeriodeStatusTilStatus[kompetanse.verdi.status]}
                                 width={20}
                                 heigth={20}
                             />
@@ -137,7 +137,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         erLesevisning={false}
                         label={
                             !ekspandertKompetanse
-                                ? redigerbartKompetanse.verdi.status === KompetanseStatus.OK
+                                ? redigerbartKompetanse.verdi.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Fastsett kompetanse'
                                 : `Lukk`

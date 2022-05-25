@@ -6,14 +6,14 @@ import { Collapse, Expand } from '@navikt/ds-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import { mapKompetanseStatusTilStatus } from '../../../../context/Eøs/EøsContext';
+import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import {
     useUtenlandskPeriodeBeløpSkjema,
     utenlandskPeriodeBeløpFeilmeldingId,
 } from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
-import { KompetanseStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
@@ -123,7 +123,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     <UtenlandskPeriodeBeløpVurdertCelle>
                         <div>
                             <StatusIkon
-                                status={mapKompetanseStatusTilStatus[utenlandskPeriodeBeløp.status]}
+                                status={mapEøsPeriodeStatusTilStatus[utenlandskPeriodeBeløp.status]}
                                 width={20}
                                 heigth={20}
                             />
@@ -157,7 +157,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     >
                         <BodyShort>
                             {!ekspandertUtenlandskPeriodeBeløp
-                                ? utenlandskPeriodeBeløp.status === KompetanseStatus.OK
+                                ? utenlandskPeriodeBeløp.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Fastsett beløp'
                                 : `Lukk`}
