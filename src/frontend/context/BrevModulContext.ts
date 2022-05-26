@@ -12,6 +12,7 @@ import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
@@ -58,6 +59,14 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             return false;
+        case Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS:
+            return (
+                åpenBehandling.type === Behandlingstype.REVURDERING &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD].includes(
+                    åpenBehandling.årsak
+                )
+            );
     }
 };
 
@@ -226,7 +235,13 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      * Legger til initielt fritekstpunkt hvis brevmal er "Varsel om revurdering"
      */
     useEffect(() => {
-        if (fritekster.verdi.length === 0 && brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING) {
+        if (
+            fritekster.verdi.length === 0 &&
+            [
+                Brevmal.VARSEL_OM_REVURDERING,
+                Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
+            ].includes(brevmal.verdi as Brevmal)
+        ) {
             leggTilFritekst();
         }
     }, [brevmal, fritekster]);
