@@ -67,6 +67,22 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
                     åpenBehandling.årsak
                 )
             );
+        case Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
+        case Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
+                åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
     }
 };
 

@@ -6,6 +6,8 @@ export interface BrevtypeSelect extends HTMLSelectElement {
 
 export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
+    INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED = 'INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED',
+    VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED = 'VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
     VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 = 'VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14',
     VARSEL_OM_REVURDERING_SAMBOER = 'VARSEL_OM_REVURDERING_SAMBOER',
@@ -25,6 +27,8 @@ export enum Informasjonsbrev {
 
 export const brevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Innhent opplysninger',
+    INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED: 'Innhente opplysninger etter søknad i SED',
+    VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED: 'Varsel om vedtak etter søknad i SED',
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
     HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
     SVARTIDSBREV: 'Svartidsbrev',
