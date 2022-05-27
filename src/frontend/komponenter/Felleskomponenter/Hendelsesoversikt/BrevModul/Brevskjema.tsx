@@ -118,6 +118,13 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const skjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
+    const erFørsteKulepunktIRevurderingsBrev = (index: number) =>
+        index === 0 &&
+        [
+            Brevmal.VARSEL_OM_REVURDERING,
+            Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
+        ].includes(skjema.felter.brevmal.verdi as Brevmal);
+
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
             ...skjema.felter.fritekster.verdi.map(mapFritekst => {
@@ -275,11 +282,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                                         autoFocus
                                                     />
-                                                    {!(
-                                                        index === 0 &&
-                                                        skjema.felter.brevmal.verdi ===
-                                                            Brevmal.VARSEL_OM_REVURDERING
-                                                    ) && (
+                                                    {!erFørsteKulepunktIRevurderingsBrev(index) && (
                                                         <SletteKnapp
                                                             erLesevisning={false}
                                                             onClick={() => {
