@@ -7,7 +7,7 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import Slett from '../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
+import { lagBarnLabel } from '../../../../utils/formatter';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
@@ -58,9 +58,7 @@ const BarnCheckbox: React.FC<IProps> = ({
     avtalerOmDeltBostedPerBarnFelt,
     visFeilmeldinger,
 }) => {
-    const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
-        barn.fødselsdato
-    )}) | ${formaterIdent(barn.ident)}`;
+    const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
         <div>

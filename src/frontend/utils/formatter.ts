@@ -1,6 +1,7 @@
 import { YtelseType } from '../typer/beregning';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
+import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
 import familieDayjs from './familieDayjs';
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
@@ -96,6 +97,18 @@ export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): stri
     } else {
         return ident;
     }
+};
+
+export const lagPersonLabelFraGrunnlagPerson = (person: IGrunnlagPerson): string => {
+    return `${person.navn ?? 'Navn ukjent'} (${hentAlderSomString(
+        person.fødselsdato
+    )}) | ${formaterIdent(person.personIdent)}`;
+};
+
+export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
+    return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
+        barn.fødselsdato
+    )}) | ${formaterIdent(barn.ident)}`;
 };
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>

@@ -25,7 +25,7 @@ import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokumen
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
-import { formaterIdent } from '../../../../utils/formatter';
+import { lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
@@ -176,7 +176,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     key={`${index}_${person.fødselsdato}`}
                                     value={person.personIdent}
                                 >
-                                    {formaterIdent(person.personIdent)}
+                                    {lagPersonLabel(person.personIdent, personer)}
                                 </option>
                             );
                         })}
