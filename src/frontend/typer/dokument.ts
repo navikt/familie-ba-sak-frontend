@@ -10,6 +10,7 @@ export interface IManueltBrevRequestPåBehandling {
     barnIBrev: string[];
     brevmal: Brevmal;
     datoAvtale?: string;
+    barnasFødselsdager?: string[];
 }
 
 export interface IManueltBrevRequestPåFagsak {

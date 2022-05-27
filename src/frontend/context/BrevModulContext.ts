@@ -177,6 +177,22 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         nullstillVedAvhengighetEndring: false,
     });
 
+    const barnBrevetGjelder = useFelt<IBarnMedOpplysninger[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<IBarnMedOpplysninger[]>) => {
+            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
+                ? ok(felt)
+                : feil(felt, 'Du må velge hvilke barn brevet gjelder');
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return [
+                Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
+            ].includes(avhengigheter?.brevmal.verdi);
+        },
+        avhengigheter: { brevmal },
+    });
+
     const {
         barnMedDeltBosted,
         avtalerOmDeltBostedPerBarn,
@@ -195,6 +211,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             dokumenter: ISelectOptionMedBrevtekst[];
             fritekster: FeltState<IFritekstFelt>[];
             barnMedDeltBosted: IBarnMedOpplysninger[];
+            barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
         },
@@ -206,6 +223,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             dokumenter,
             fritekster,
             barnMedDeltBosted,
+            barnBrevetGjelder,
             avtalerOmDeltBostedPerBarn,
             datoAvtale,
         },
@@ -280,11 +298,16 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
             ];
 
+            const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(
+                barn => barn.merket
+            );
+
             return {
                 mottakerIdent: skjema.felter.mottakerIdent.verdi,
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
+                barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
                 datoAvtale: skjema.felter.datoAvtale.verdi,
             };
         }
