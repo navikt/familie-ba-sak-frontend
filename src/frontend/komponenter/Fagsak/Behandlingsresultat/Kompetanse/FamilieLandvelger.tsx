@@ -78,6 +78,7 @@ interface IProps {
     size?: 'small' | 'medium';
     erLesevisning?: boolean;
     onChange: (value: Country) => void;
+    kanNullstilles?: boolean;
 }
 
 const FamilieLandvelger: React.FC<IProps> = ({
@@ -94,6 +95,7 @@ const FamilieLandvelger: React.FC<IProps> = ({
     medWave = false,
     erLesevisning = false,
     onChange,
+    kanNullstilles = false,
 }) => {
     const id = `country-select-${label}`;
 
@@ -110,6 +112,7 @@ const FamilieLandvelger: React.FC<IProps> = ({
         size: medFlag ? 'medium' : size,
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
+        isClearable: kanNullstilles,
     };
     if (kunEøs) {
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };

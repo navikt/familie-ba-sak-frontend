@@ -49,6 +49,13 @@ const Knapperad = styled.div`
     margin-top: 2rem;
 `;
 
+const StyledFamilieLandvelger = styled(FamilieLandvelger)`
+    & .c-countrySelect__select__indicator-separator {
+        width: 1px !important;
+        background-color: var(--navds-global-color-gray-300);
+    }
+`;
+
 interface IProps {
     redigerbartKompetanse: FeltState<IKompetanse>;
     settRedigerbartKompetanse: (redigerbartKompetanse: FeltState<IKompetanse>) => void;
@@ -281,12 +288,13 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
-                <FamilieLandvelger
+                <StyledFamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'annenForeldersAktivitetsland'}
                     label={'Annen forelders aktivitetsland'}
                     kunEøs
                     medFlag
+                    kanNullstilles
                     value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
                     onChange={(value: Country) => {
                         validerOgSettRedigerbartKompetanse({
@@ -308,12 +316,13 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                 />
-                <FamilieLandvelger
+                <StyledFamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'bostedadresse'}
                     label={'Barnets bostedsland'}
                     kunEøs
                     medFlag
+                    kanNullstilles
                     value={redigerbartKompetanse.verdi?.barnetsBostedsland?.verdi}
                     onChange={(value: Country) => {
                         validerOgSettRedigerbartKompetanse({

@@ -139,7 +139,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     >
                         <BodyShort>
                             {!ekspandertKompetanse
-                                ? redigerbartKompetanse.verdi.status === EøsPeriodeStatus.OK
+                                ? kompetanse.verdi?.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Fastsett kompetanse'
                                 : `Lukk`}
