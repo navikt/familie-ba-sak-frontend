@@ -162,7 +162,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     });
 
     const {
-        barnaMedOpplysninger,
+        barnMedDeltBosted,
         avtalerOmDeltBostedPerBarn,
         nullstillDeltBosted,
         hentDeltBostedMulitiselectVerdierForBarn,
@@ -178,7 +178,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal: Brevmal | '';
             dokumenter: ISelectOptionMedBrevtekst[];
             fritekster: FeltState<IFritekstFelt>[];
-            barnaMedOpplysninger: IBarnMedOpplysninger[];
+            barnMedDeltBosted: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
         },
@@ -189,9 +189,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal,
             dokumenter,
             fritekster,
-            barnaMedOpplysninger,
+            barnMedDeltBosted,
             avtalerOmDeltBostedPerBarn,
-            datoAvtale: datoAvtale,
+            datoAvtale,
         },
         skjemanavn: 'brevmodul',
     });
@@ -275,12 +275,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     };
 
     const hentVarselOmRevurderingDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
-        const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(barn => barn.merket);
+        const merkedeBarn = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
         return {
             mottakerIdent: skjema.felter.mottakerIdent.verdi,
-            multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
-            barnIBrev: barnIBrev.map(barn => barn.ident),
+            multiselectVerdier: merkedeBarn.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
+            barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
         };
     };
