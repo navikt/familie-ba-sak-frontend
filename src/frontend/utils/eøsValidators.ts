@@ -22,7 +22,7 @@ const erEtter = (dato1: YearMonth, dato2: YearMonth) =>
     erFør(yearMonthTilKalenderMåned(dato2), yearMonthTilKalenderMåned(dato1));
 const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: MånedÅr) =>
     valgtDato.år > today.år || (valgtDato.år === today.år && valgtDato.måned > today.måned);
-const valgtTomErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
+const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
     valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
 
 const erEøsPeriodeGyldig = (
@@ -37,13 +37,19 @@ const erEøsPeriodeGyldig = (
     if (!fom || isEmpty(fom)) {
         return feil(felt, 'Fra og med måned må være utfylt');
     }
+    if (fom && valgtDatoErNesteMånedEllerSenere(fom)) {
+        return feil(
+            felt,
+            'Du kan ikke legge inn fra og med måned som er i neste måned eller senere'
+        );
+    }
     if (initielFom && !erEtter(fom, initielFom)) {
         return feil(
             felt,
             `Du kan ikke legge inn fra og med måned som er før: ${avhengigheter?.initielFom}`
         );
     }
-    if (tom && valgtTomErNesteMånedEllerSenere(tom)) {
+    if (tom && valgtDatoErNesteMånedEllerSenere(tom)) {
         return feil(
             felt,
             'Du kan ikke legge inn til og med måned som er i neste måned eller senere'

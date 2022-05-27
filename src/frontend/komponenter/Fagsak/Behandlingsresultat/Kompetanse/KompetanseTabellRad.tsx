@@ -3,19 +3,18 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { Collapse, Expand } from '@navikt/ds-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
-import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/eøsPerioder';
 import { EøsPeriodeStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
@@ -132,20 +131,25 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
                 </td>
                 <td>
-                    <IkonKnapp
+                    <Button
                         id={kompetanseFeilmeldingId(kompetanse)}
-                        erLesevisning={false}
-                        label={
-                            !ekspandertKompetanse
+                        variant="tertiary"
+                        onClick={() => toggleForm(true)}
+                        size="xsmall"
+                    >
+                        <BodyShort>
+                            {!ekspandertKompetanse
                                 ? redigerbartKompetanse.verdi.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Fastsett kompetanse'
-                                : `Lukk`
-                        }
-                        onClick={() => toggleForm(true)}
-                        ikon={<FamilieChevron retning={ekspandertKompetanse ? 'opp' : 'ned'} />}
-                        mini={true}
-                    />
+                                : `Lukk`}
+                        </BodyShort>
+                        {ekspandertKompetanse ? (
+                            <Collapse width="22" height="22" />
+                        ) : (
+                            <Expand width="22" height="22" />
+                        )}
+                    </Button>
                 </td>
             </EkspanderbarTr>
             {ekspandertKompetanse && (

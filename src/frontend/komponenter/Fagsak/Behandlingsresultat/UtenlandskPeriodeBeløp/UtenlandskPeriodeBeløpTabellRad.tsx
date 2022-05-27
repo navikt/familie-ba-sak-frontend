@@ -89,6 +89,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         slettUtenlandskPeriodeBeløp,
         nullstillSkjema,
         kanSendeSkjema,
+        erUtenlandskPeriodeBeløpSkjemaEndret,
     } = useUtenlandskPeriodeBeløpSkjema({
         utenlandskPeriodeBeløp,
         tilgjengeligeBarn: barn,
@@ -101,11 +102,16 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     }, [visFeilmeldinger]);
 
     const toggleForm = (visAlert: boolean) => {
-        if (ekspandertUtenlandskPeriodeBeløp && visAlert) {
-            alert('Kompetansen har endringer som ikke er lagret!');
-            settEkspandertUtenlandskPeriodeBeløp(!ekspandertUtenlandskPeriodeBeløp);
-            nullstillSkjema();
+        if (
+            ekspandertUtenlandskPeriodeBeløp &&
+            visAlert &&
+            erUtenlandskPeriodeBeløpSkjemaEndret()
+        ) {
+            alert('Utenlandsk beløp har endringer som ikke er lagret!');
         } else {
+            if (ekspandertUtenlandskPeriodeBeløp) {
+                nullstillSkjema();
+            }
             settEkspandertUtenlandskPeriodeBeløp(!ekspandertUtenlandskPeriodeBeløp);
         }
     };
@@ -150,7 +156,6 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                 <td>
                     <Button
                         id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
-                        disabled={false}
                         variant="tertiary"
                         onClick={() => toggleForm(true)}
                         size="xsmall"

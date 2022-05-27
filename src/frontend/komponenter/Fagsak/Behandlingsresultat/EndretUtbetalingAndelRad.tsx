@@ -4,9 +4,8 @@ import { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Flatknapp } from 'nav-frontend-knapper';
-
 import { Collapse, Expand } from '@navikt/ds-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -22,14 +21,6 @@ interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     åpenBehandling: IBehandling;
 }
-
-const StyledCollapseIkon = styled(Collapse)`
-    margin-right: 0.5rem;
-`;
-
-const StyledExpandIkon = styled(Expand)`
-    margin-right: 0.5rem;
-`;
 
 const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
@@ -142,17 +133,19 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <Flatknapp mini onClick={() => toggleForm()}>
+                    <Button variant="tertiary" size="xsmall" onClick={() => toggleForm()}>
                         {åpenUtbetalingsAndel ? (
                             <>
-                                Lukk <StyledCollapseIkon />
+                                <BodyShort>Lukk</BodyShort>
+                                <Collapse width="22" height="22" />
                             </>
                         ) : (
                             <>
-                                {erLesevisning() ? 'Se mer' : 'Endre'} <StyledExpandIkon />
+                                <BodyShort>{erLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
+                                <Expand width="22" height="22" />
                             </>
                         )}
-                    </Flatknapp>
+                    </Button>
                 </TdUtenUnderstrek>
             </tr>
             {åpenUtbetalingsAndel && (

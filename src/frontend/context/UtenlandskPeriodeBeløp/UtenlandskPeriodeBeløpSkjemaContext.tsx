@@ -135,6 +135,20 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         );
     };
 
+    const erUtenlandskPeriodeBeløpSkjemaEndret = () => {
+        const barnFjernetISkjema = utenlandskPeriodeBeløp.barnIdenter.filter(
+            barn => !skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn)
+        );
+        return (
+            barnFjernetISkjema.length > 0 ||
+            skjema.felter.periode?.verdi.fom !== utenlandskPeriodeBeløp.fom ||
+            skjema.felter.periode?.verdi.tom !== utenlandskPeriodeBeløp.tom ||
+            skjema.felter.beløp?.verdi !== utenlandskPeriodeBeløp.beløp ||
+            skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
+            skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall
+        );
+    };
+
     return {
         skjema,
         valideringErOk,
@@ -142,6 +156,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         slettUtenlandskPeriodeBeløp,
         nullstillSkjema,
         kanSendeSkjema,
+        erUtenlandskPeriodeBeløpSkjemaEndret,
     };
 };
 
