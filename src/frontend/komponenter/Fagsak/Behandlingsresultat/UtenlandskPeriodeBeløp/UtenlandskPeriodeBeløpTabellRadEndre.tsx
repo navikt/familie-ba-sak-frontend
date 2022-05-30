@@ -126,123 +126,120 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe>
-            <Container>
-                <div className={'skjemaelement'}>
-                    <FamilieReactSelect
-                        {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
+        <Container>
+            <div className={'skjemaelement'}>
+                <FamilieReactSelect
+                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
+                    erLesevisning={lesevisning}
+                    label={'Barn'}
+                    isMulti
+                    options={tilgjengeligeBarn}
+                    value={skjema.felter.barnIdenter.verdi}
+                    onChange={options =>
+                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    }
+                />
+            </div>
+            <EndreUtenlandskPeriodeBeløp skjema={skjema} lesevisning={lesevisning} />
+            <SkjemaGruppe
+                className={lesevisning ? 'lesevisning' : ''}
+                feilmeldingId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
+                feil={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
+            >
+                <StyledLegend>
+                    <Label size="small">Utbetalt i det andre landet</Label>
+                </StyledLegend>
+                <FlexDiv>
+                    <FamilieInput
+                        label={'Beløp'}
                         erLesevisning={lesevisning}
-                        label={'Barn'}
-                        isMulti
-                        options={tilgjengeligeBarn}
-                        value={skjema.felter.barnIdenter.verdi}
-                        onChange={options =>
-                            skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                        value={skjema.felter.beløp?.verdi}
+                        onChange={event =>
+                            skjema.felter.beløp?.validerOgSettFelt(event.target.value)
                         }
                     />
+                    <StyledFamilieValutavelger
+                        erLesevisning={lesevisning}
+                        id={'valuta'}
+                        label={'Valuta'}
+                        kunEøs
+                        size="small"
+                        medFlag
+                        value={skjema.felter.valutakode?.verdi}
+                        onChange={(value: Currency) => {
+                            if (value) {
+                                skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                            } else {
+                                skjema.felter.valutakode?.nullstill();
+                            }
+                        }}
+                        utenMargin
+                        kanNullstilles
+                    />
+                    <FamilieSelect
+                        label={'Intervall'}
+                        erLesevisning={lesevisning}
+                        value={skjema.felter.intervall?.verdi}
+                        onChange={event =>
+                            skjema.felter.intervall?.validerOgSettFelt(
+                                event.target.value as UtenlandskPeriodeBeløpIntervall
+                            )
+                        }
+                    >
+                        <option key={'-'} value={''}>
+                            Velg
+                        </option>
+                        {Object.values(UtenlandskPeriodeBeløpIntervall).map(intervall => {
+                            return (
+                                <option key={intervall} value={intervall}>
+                                    {utenlandskPeriodeBeløpIntervaller[intervall]}
+                                </option>
+                            );
+                        })}
+                    </FamilieSelect>
+                </FlexDiv>
+            </SkjemaGruppe>
+
+            <Knapperad>
+                <div>
+                    <FamilieKnapp
+                        erLesevisning={lesevisning}
+                        onClick={() => sendInnSkjema()}
+                        mini={true}
+                        type={valideringErOk() ? 'hoved' : 'standard'}
+                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    >
+                        Ferdig
+                    </FamilieKnapp>
+                    <FamilieKnapp
+                        style={{ marginLeft: '1rem' }}
+                        erLesevisning={lesevisning}
+                        onClick={() => toggleForm(false)}
+                        mini={true}
+                        type={'flat'}
+                    >
+                        Avbryt
+                    </FamilieKnapp>
                 </div>
-                <EndreUtenlandskPeriodeBeløp skjema={skjema} lesevisning={lesevisning} />
-                <SkjemaGruppe
-                    className={lesevisning ? 'lesevisning' : ''}
-                    feilmeldingId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
-                    feil={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
-                >
-                    <StyledLegend>
-                        <Label size="small">Utbetalt i det andre landet</Label>
-                    </StyledLegend>
-                    <FlexDiv>
-                        <FamilieInput
-                            label={'Beløp'}
-                            erLesevisning={lesevisning}
-                            value={skjema.felter.beløp?.verdi}
-                            onChange={event =>
-                                skjema.felter.beløp?.validerOgSettFelt(event.target.value)
-                            }
-                        />
-                        <StyledFamilieValutavelger
-                            erLesevisning={lesevisning}
-                            id={'valuta'}
-                            label={'Valuta'}
-                            kunEøs
-                            size="small"
-                            medFlag
-                            value={skjema.felter.valutakode?.verdi}
-                            onChange={(value: Currency) => {
-                                console.info('value', value);
-                                if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                } else {
-                                    skjema.felter.valutakode?.nullstill();
-                                }
-                            }}
-                            utenMargin
-                            kanNullstilles
-                        />
-                        <FamilieSelect
-                            label={'Intervall'}
-                            erLesevisning={lesevisning}
-                            value={skjema.felter.intervall?.verdi}
-                            onChange={event =>
-                                skjema.felter.intervall?.validerOgSettFelt(
-                                    event.target.value as UtenlandskPeriodeBeløpIntervall
-                                )
-                            }
-                        >
-                            <option key={'-'} value={''}>
-                                Velg
-                            </option>
-                            {Object.values(UtenlandskPeriodeBeløpIntervall).map(intervall => {
-                                return (
-                                    <option key={intervall} value={intervall}>
-                                        {utenlandskPeriodeBeløpIntervaller[intervall]}
-                                    </option>
-                                );
-                            })}
-                        </FamilieSelect>
-                    </FlexDiv>
-                </SkjemaGruppe>
 
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => sendInnSkjema()}
-                            mini={true}
-                            type={valideringErOk() ? 'hoved' : 'standard'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
-                            onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
-
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
-                        <IkonKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => slettUtenlandskPeriodeBeløp()}
-                            id={`slett_utd_beløp_${skjema.felter.barnIdenter.verdi.map(
-                                barn => `${barn}-`
-                            )}_${skjema.felter.initielFom.verdi}`}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            mini={true}
-                            label={'Fjern'}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            ikon={<Delete />}
-                        />
-                    )}
-                </Knapperad>
-            </Container>
-        </SkjemaGruppe>
+                {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                    <IkonKnapp
+                        erLesevisning={lesevisning}
+                        onClick={() => slettUtenlandskPeriodeBeløp()}
+                        id={`slett_utd_beløp_${skjema.felter.barnIdenter.verdi.map(
+                            barn => `${barn}-`
+                        )}_${skjema.felter.initielFom.verdi}`}
+                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        mini={true}
+                        label={'Fjern'}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
+                        ikon={<Delete />}
+                    />
+                )}
+            </Knapperad>
+        </Container>
     );
 };
 

@@ -15,7 +15,7 @@ import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import { datoformat, formaterIsoDato, hentAlder } from '../../../../utils/formatter';
+import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 
@@ -68,18 +68,9 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     const [ekspandertUtenlandskPeriodeBeløp, settEkspandertUtenlandskPeriodeBeløp] =
         React.useState<boolean>(false);
 
-    const lagLabelBarn = (barnetsIdent: string): string => {
-        const barnet = åpenBehandling.personer.find(person => person.personIdent === barnetsIdent);
-        if (barnet) {
-            return `${barnet.navn} (${hentAlder(barnet.fødselsdato)} år) ${barnet.personIdent}`;
-        } else {
-            return barnetsIdent;
-        }
-    };
-
     const barn: OptionType[] = utenlandskPeriodeBeløp.barnIdenter.map(barn => ({
         value: barn,
-        label: lagLabelBarn(barn),
+        label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
     const {
@@ -137,7 +128,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                         <BarnDiv>
                             {utenlandskPeriodeBeløp.barnIdenter.map(barn => (
                                 <BodyShort size="small" key={barn}>
-                                    {lagLabelBarn(barn)}
+                                    {lagPersonLabel(barn, åpenBehandling.personer)}
                                 </BodyShort>
                             ))}
                         </BarnDiv>
@@ -164,7 +155,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                             {!ekspandertUtenlandskPeriodeBeløp
                                 ? utenlandskPeriodeBeløp.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
-                                    : 'Fastsett beløp'
+                                    : 'Registrer beløp'
                                 : `Lukk`}
                         </BodyShort>
                         {ekspandertUtenlandskPeriodeBeløp ? (
