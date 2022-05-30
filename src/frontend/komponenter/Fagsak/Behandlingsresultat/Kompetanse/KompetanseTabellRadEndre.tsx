@@ -288,13 +288,14 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 kanNullstilles
                 value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
                 onChange={(value: Country) => {
+                    const nyVerdi = value ? value.value : undefined;
                     validerOgSettRedigerbartKompetanse({
                         ...redigerbartKompetanse,
                         verdi: {
                             ...redigerbartKompetanse.verdi,
                             annenForeldersAktivitetsland: {
                                 ...redigerbartKompetanse.verdi?.annenForeldersAktivitetsland,
-                                verdi: value.value,
+                                verdi: nyVerdi,
                             },
                         },
                     });
@@ -316,13 +317,14 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 kanNullstilles
                 value={redigerbartKompetanse.verdi?.barnetsBostedsland?.verdi}
                 onChange={(value: Country) => {
+                    const nyVerdi = value ? value.value : undefined;
                     validerOgSettRedigerbartKompetanse({
                         ...redigerbartKompetanse,
                         verdi: {
                             ...redigerbartKompetanse.verdi,
                             barnetsBostedsland: {
                                 ...redigerbartKompetanse.verdi?.barnetsBostedsland,
-                                verdi: value.value,
+                                verdi: nyVerdi,
                             },
                         },
                     });
