@@ -135,7 +135,7 @@
     "react-table": "^7.7.0",
     "react-toast-notifications": "^2.5.1",
     "request": "^2.88.2",
-    "snyk": "^1.932.0",
+    "snyk": "^1.942.0",
     "styled-components": "^5.3.1",
     "ts-node": "^10.7.0",
     "uuid": "^8.3.0"
