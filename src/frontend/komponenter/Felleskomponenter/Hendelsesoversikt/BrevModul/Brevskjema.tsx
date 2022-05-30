@@ -118,8 +118,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const skjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const erFørsteKulepunktIRevurderingsBrev = (index: number) =>
-        index === 0 &&
+    const erBrevmalMedObligatoriskFritekst = () =>
         [
             Brevmal.VARSEL_OM_REVURDERING,
             Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
@@ -238,7 +237,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 )}
                 {skjema.felter.fritekster.erSynlig && (
                     <>
-                        <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</Label>
+                        <Label htmlFor={skjemaGruppeId}>Legg til kulepunkt</Label>
                         {erLesevisning() ? (
                             <StyledList id={skjemaGruppeId}>
                                 {skjema.felter.fritekster.verdi.map(
@@ -282,7 +281,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                                         autoFocus
                                                     />
-                                                    {!erFørsteKulepunktIRevurderingsBrev(index) && (
+                                                    {!(
+                                                        erBrevmalMedObligatoriskFritekst() &&
+                                                        index === 0
+                                                    ) && (
                                                         <SletteKnapp
                                                             erLesevisning={false}
                                                             onClick={() => {
@@ -313,11 +315,11 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 {!erMaksAntallKulepunkter && (
                                     <IkonKnapp
                                         erLesevisning={erLesevisning()}
-                                        onClick={leggTilFritekst}
+                                        onClick={() => leggTilFritekst()}
                                         id={`legg-til-fritekst`}
                                         ikon={<Pluss />}
                                         ikonPosisjon={IkonPosisjon.VENSTRE}
-                                        label={'Legg til fritekst'}
+                                        label={'Legg til kulepunkt'}
                                         mini={true}
                                     />
                                 )}

@@ -224,15 +224,19 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
-    const leggTilFritekst = () => {
+    const leggTilFritekst = (valideringsmelding?: string) => {
         skjema.felter.fritekster.validerOgSettFelt([
             ...skjema.felter.fritekster.verdi,
-            lagInitiellFritekst('', genererIdBasertPåAndreFritekster(fritekster)),
+            lagInitiellFritekst(
+                '',
+                genererIdBasertPåAndreFritekster(fritekster),
+                valideringsmelding
+            ),
         ]);
     };
 
     /**
-     * Legger til initielt fritekstpunkt hvis brevmal er "Varsel om revurdering"
+     * Legger til initielt fritekstpunkt for brevmaler med obligatorisk fritekst
      */
     useEffect(() => {
         if (
@@ -242,7 +246,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
             ].includes(brevmal.verdi as Brevmal)
         ) {
-            leggTilFritekst();
+            const valideringsmelding =
+                'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
+            leggTilFritekst(valideringsmelding);
         }
     }, [brevmal, fritekster]);
 
