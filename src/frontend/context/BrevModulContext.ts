@@ -170,7 +170,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [Brevmal.INNHENTE_OPPLYSNINGER].includes(avhengigheter?.brevmal.verdi)
+                [
+                    Brevmal.INNHENTE_OPPLYSNINGER,
+                    Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                ].includes(avhengigheter?.brevmal.verdi)
             );
         },
         avhengigheter: { brevmal, fritekster },
