@@ -28,7 +28,7 @@ import {
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
-import FamilieValutavelger from './FamilieValutavelger';
+import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 
 const Container = styled.div`
     max-width: 30rem;

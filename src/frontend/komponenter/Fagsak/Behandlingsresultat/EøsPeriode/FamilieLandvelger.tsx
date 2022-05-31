@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { Label } from '@navikt/ds-react';
-import type { Currency } from '@navikt/land-verktoy';
+import { CountryFilter } from '@navikt/land-verktoy';
+import type { Country, Currency } from '@navikt/land-verktoy';
 import CountrySelect, { type CountrySelectProps } from '@navikt/landvelger';
 
 const EØS_CURRENCY: Array<string> = [
@@ -76,7 +77,35 @@ const Landvelger = styled(CountrySelect)`
     }
 `;
 
-interface IProps {
+interface IBaseLandvelgerProps {
+    countrySelectProps: CountrySelectProps<Country | Currency>;
+    label: string | JSX.Element;
+    className?: string;
+    utenMargin: boolean;
+    feil?: string;
+}
+
+const BaseFamilieLandvelger: React.FC<IBaseLandvelgerProps> = ({
+    countrySelectProps,
+    label,
+    className,
+    utenMargin,
+    feil,
+}) => {
+    return (
+        <div className={classNames('skjemaelement', className)}>
+            <Landvelger
+                utenMargin={utenMargin}
+                feil={feil}
+                {...countrySelectProps}
+                place
+                label={<Label size="small">{label}</Label>}
+            />
+        </div>
+    );
+};
+
+interface IBaseFamilieLandvelgerProps {
     id: string;
     className?: string;
     value?: string | string[] | undefined;
@@ -86,14 +115,19 @@ interface IProps {
     isMulti?: boolean;
     kunEøs?: boolean;
     medFlag?: boolean;
+    medWave?: boolean;
+    sirkulær?: boolean;
     size?: 'small' | 'medium';
     erLesevisning?: boolean;
-    onChange: (value: Currency) => void;
     utenMargin?: boolean;
     kanNullstilles?: boolean;
 }
 
-const FamilieValutavelger: React.FC<IProps> = ({
+interface IFamilieLandvelgerProps extends IBaseFamilieLandvelgerProps {
+    onChange: (value: Country) => void;
+}
+
+const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
     className,
     value,
     feil,
@@ -101,8 +135,10 @@ const FamilieValutavelger: React.FC<IProps> = ({
     placeholder,
     isMulti = false,
     kunEøs = false,
+    sirkulær = false,
     size = 'small',
     medFlag = false,
+    medWave = false,
     erLesevisning = false,
     onChange,
     utenMargin = false,
@@ -110,7 +146,60 @@ const FamilieValutavelger: React.FC<IProps> = ({
 }) => {
     const id = `country-select-${label}`;
 
-    let landvelgerProps: CountrySelectProps<Currency> = {
+    let landvelgerProps: CountrySelectProps<Country | Currency> = {
+        id,
+        values: value,
+        placeholder,
+        error: feil ? feil : undefined,
+        isMulti,
+        type: 'country',
+        flags: medFlag,
+        flagWave: medFlag && medWave,
+        flagType: sirkulær ? 'circle' : 'original',
+        closeMenuOnSelect: true,
+        size: medFlag ? 'medium' : size,
+        isDisabled: erLesevisning,
+        onOptionSelected: onChange,
+        isClearable: kanNullstilles,
+    };
+    if (kunEøs) {
+        landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
+    }
+    return (
+        <BaseFamilieLandvelger
+            countrySelectProps={landvelgerProps}
+            label={label}
+            className={className}
+            utenMargin={utenMargin}
+            feil={feil}
+        />
+    );
+};
+
+interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
+    onChange: (value: Currency) => void;
+}
+
+const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
+    className,
+    value,
+    feil,
+    label,
+    placeholder,
+    isMulti = false,
+    kunEøs = false,
+    sirkulær = false,
+    size = 'small',
+    medFlag = false,
+    medWave = false,
+    erLesevisning = false,
+    onChange,
+    utenMargin = false,
+    kanNullstilles = false,
+}) => {
+    const id = `currency-select-${label}`;
+
+    let landvelgerProps: CountrySelectProps<Country | Currency> = {
         id,
         values: value,
         placeholder,
@@ -118,9 +207,10 @@ const FamilieValutavelger: React.FC<IProps> = ({
         isMulti,
         type: 'currency',
         flags: medFlag,
-        flagType: 'original',
+        flagWave: medFlag && medWave,
+        flagType: sirkulær ? 'circle' : 'original',
         closeMenuOnSelect: true,
-        size: size,
+        size: medFlag ? 'medium' : size,
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
@@ -146,4 +236,4 @@ const FamilieValutavelger: React.FC<IProps> = ({
     );
 };
 
-export default FamilieValutavelger;
+export { FamilieLandvelger, FamilieValutavelger };

@@ -30,8 +30,8 @@ import {
     EøsPeriodeStatus,
 } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import EndreKompetansePeriode from './EndreKompetansePeriode';
-import FamilieLandvelger from './FamilieLandvelger';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 
 const Container = styled.div`
