@@ -93,7 +93,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         });
 
         const {
-            barnaMedOpplysninger,
+            barnMedDeltBosted,
             avtalerOmDeltBostedPerBarn,
             nullstillDeltBosted,
             hentDeltBostedMulitiselectVerdierForBarn,
@@ -114,7 +114,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
                 dokumenter: ISelectOptionMedBrevtekst[];
-                barnaMedOpplysninger: IBarnMedOpplysninger[];
+                barnMedDeltBosted: IBarnMedOpplysninger[];
                 avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             },
             string
@@ -126,7 +126,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 fritekster: fritekster,
                 dokumenter: dokumenter,
 
-                barnaMedOpplysninger,
+                barnMedDeltBosted,
                 avtalerOmDeltBostedPerBarn: avtalerOmDeltBostedPerBarn,
             },
             skjemanavn: 'Dokumentutsending',
@@ -150,9 +150,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
-                const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(
-                    barn => barn.merket
-                );
+                const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
                 return {
                     mottakerIdent: bruker.data.personIdent,

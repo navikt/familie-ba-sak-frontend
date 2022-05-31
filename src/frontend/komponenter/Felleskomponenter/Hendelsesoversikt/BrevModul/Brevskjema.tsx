@@ -24,8 +24,9 @@ import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { målform } from '../../../../typer/søknad';
-import { formaterIdent } from '../../../../utils/formatter';
+import { lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
@@ -34,6 +35,7 @@ import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
+import BarnBrevetGjelder from './BarnBrevetGjelder';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal, brevmaler, leggTilValuePåOption, opplysningsdokumenter } from './typer';
 
@@ -175,7 +177,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     key={`${index}_${person.fødselsdato}`}
                                     value={person.personIdent}
                                 >
-                                    {formaterIdent(person.personIdent)}
+                                    {lagPersonLabel(person.personIdent, personer)}
                                 </option>
                             );
                         })}
@@ -215,7 +217,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                         ).id
                                     }
                                 >
-                                    'Velg dokumenter'
+                                    Velg dokumenter
                                 </Label>
                                 <StyledEtikettInfo mini={true}>
                                     Skriv {målform[mottakersMålform()].toLowerCase()}
@@ -327,11 +329,30 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         )}
                     </>
                 )}
+                {skjema.felter.barnBrevetGjelder.erSynlig && (
+                    <BarnBrevetGjelder
+                        barnBrevetGjelderFelt={skjema.felter.barnBrevetGjelder}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        settVisFeilmeldinger={settVisfeilmeldinger}
+                        alternativer={personer
+                            .filter(person => person.type === PersonType.BARN)
+                            .map(
+                                (person: IGrunnlagPerson): IBarnMedOpplysninger => ({
+                                    ident: person.personIdent,
+                                    fødselsdato: person.fødselsdato,
+                                    navn: person.navn,
+                                    merket: false,
+                                    manueltRegistrert: false,
+                                    erFolkeregistrert: true,
+                                })
+                            )}
+                    />
+                )}
                 {skjema.felter.brevmal.verdi ===
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
                     <DeltBostedSkjema
                         avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
-                        barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                        barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
                     />
