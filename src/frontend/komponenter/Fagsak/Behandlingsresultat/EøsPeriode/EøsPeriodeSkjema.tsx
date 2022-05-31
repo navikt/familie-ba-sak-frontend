@@ -5,10 +5,9 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Label } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
+import type { Felt } from '@navikt/familie-skjema';
 
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
+import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const StyledLegend = styled.legend`
@@ -32,28 +31,30 @@ const FlexDiv = styled.div`
     }
 `;
 
-const utenlandskPeriodeBeløpFeilmeldingId = (
-    utenlandskPeriodeBeløp: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>
-): string =>
-    `utd_beløp-periode_${utenlandskPeriodeBeløp.felter.barnIdenter.verdi.map(
-        barn => `${barn.value}`
-    )}_${utenlandskPeriodeBeløp.felter.initielFom.verdi}`;
-
 interface IProps {
-    skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
+    periode: Felt<IYearMonthPeriode>;
+    periodeFeilmeldingId: string;
+    initielFom: Felt<string>;
+    visFeilmeldinger: boolean;
     lesevisning: boolean;
 }
 
-const EndreUtenlandskPeriodeBeløp: React.FC<IProps> = ({ skjema, lesevisning }) => {
+const EøsPeriodeSkjema: React.FC<IProps> = ({
+    periode,
+    periodeFeilmeldingId,
+    initielFom,
+    visFeilmeldinger,
+    lesevisning,
+}) => {
     const finnÅrTilbakeTil = (): number => {
-        return new Date().getFullYear() - new Date(skjema.felter.initielFom.verdi).getFullYear();
+        return new Date().getFullYear() - new Date(initielFom.verdi).getFullYear();
     };
 
     return (
         <SkjemaGruppe
             className={lesevisning ? 'lesevisning' : ''}
-            feilmeldingId={utenlandskPeriodeBeløpFeilmeldingId(skjema)}
-            feil={skjema.visFeilmeldinger && skjema.felter.periode.feilmelding}
+            feilmeldingId={periodeFeilmeldingId}
+            feil={visFeilmeldinger && periode.feilmelding}
         >
             <StyledLegend>
                 <Label size="small">Periode</Label>
@@ -65,18 +66,14 @@ const EndreUtenlandskPeriodeBeløp: React.FC<IProps> = ({ skjema, lesevisning })
                     label={'F.o.m'}
                     antallÅrTilbake={finnÅrTilbakeTil()}
                     antallÅrFrem={0}
-                    value={
-                        skjema.felter.periode.verdi?.fom
-                            ? skjema.felter.periode.verdi?.fom
-                            : undefined
-                    }
+                    value={periode.verdi?.fom ? periode.verdi?.fom : undefined}
                     onEndret={årMåned => {
-                        if (årMåned === skjema.felter.periode.verdi.fom) {
+                        if (årMåned === periode.verdi.fom) {
                             // fom ikke endret
                             return;
                         }
-                        skjema.felter.periode.validerOgSettFelt({
-                            ...skjema.felter.periode.verdi,
+                        periode.validerOgSettFelt({
+                            ...periode.verdi,
                             fom: årMåned,
                         });
                     }}
@@ -87,18 +84,14 @@ const EndreUtenlandskPeriodeBeløp: React.FC<IProps> = ({ skjema, lesevisning })
                     label={'T.o.m (valgfri)'}
                     antallÅrTilbake={finnÅrTilbakeTil()}
                     antallÅrFrem={0}
-                    value={
-                        skjema.felter.periode.verdi.tom
-                            ? skjema.felter.periode.verdi.tom
-                            : undefined
-                    }
+                    value={periode.verdi.tom ? periode.verdi.tom : undefined}
                     onEndret={årMåned => {
-                        if (årMåned === skjema.felter.periode.verdi.tom) {
+                        if (årMåned === periode.verdi.tom) {
                             // tom ikke endret
                             return;
                         }
-                        skjema.felter.periode.validerOgSettFelt({
-                            ...skjema.felter.periode.verdi,
+                        periode.validerOgSettFelt({
+                            ...periode.verdi,
                             tom: årMåned,
                         });
                     }}
@@ -108,4 +101,4 @@ const EndreUtenlandskPeriodeBeløp: React.FC<IProps> = ({ skjema, lesevisning })
     );
 };
 
-export default EndreUtenlandskPeriodeBeløp;
+export default EøsPeriodeSkjema;

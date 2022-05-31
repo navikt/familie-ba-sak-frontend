@@ -27,7 +27,7 @@ import {
 } from '../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import EndreUtenlandskPeriodeBeløp from './EndreUtenlandskPeriodeBeløp';
+import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import FamilieValutavelger from './FamilieValutavelger';
 
 const Container = styled.div`
@@ -88,6 +88,13 @@ const Knapperad = styled.div`
     margin-top: 2rem;
 `;
 
+const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
+    utenlandskPeriodeBeløp: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>
+): string =>
+    `utd_beløp-periode_${utenlandskPeriodeBeløp.felter.barnIdenter.verdi.map(
+        barn => `${barn.value}`
+    )}_${utenlandskPeriodeBeløp.felter.initielFom.verdi}`;
+
 const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
     utenlandskPeriodeBeløp: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>
 ): string =>
@@ -140,7 +147,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </div>
-            <EndreUtenlandskPeriodeBeløp skjema={skjema} lesevisning={lesevisning} />
+            <EøsPeriodeSkjema
+                periode={skjema.felter.periode}
+                periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
+                initielFom={skjema.felter.initielFom}
+                visFeilmeldinger={skjema.visFeilmeldinger}
+                lesevisning={lesevisning}
+            />
             <SkjemaGruppe
                 className={lesevisning ? 'lesevisning' : ''}
                 feilmeldingId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
@@ -163,7 +176,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         id={'valuta'}
                         label={'Valuta'}
                         kunEøs
-                        size="small"
+                        size="medium"
                         medFlag
                         value={skjema.felter.valutakode?.verdi}
                         onChange={(value: Currency) => {
