@@ -99,12 +99,6 @@ export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): stri
     }
 };
 
-export const lagPersonLabelFraGrunnlagPerson = (person: IGrunnlagPerson): string => {
-    return `${person.navn ?? 'Navn ukjent'} (${hentAlderSomString(
-        person.fødselsdato
-    )}) | ${formaterIdent(person.personIdent)}`;
-};
-
 export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
     return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
