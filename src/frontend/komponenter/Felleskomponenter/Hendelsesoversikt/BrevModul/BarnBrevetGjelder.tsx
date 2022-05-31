@@ -73,9 +73,8 @@ const BarnBrevetGjelder = (props: IProps) => {
                             </LabelContent>
                         }
                         onChange={event => {
-                            console.log({ barn, checked: event.target.checked });
-                            const nyVerdi = event.target.checked;
-                            if (nyVerdi) {
+                            const barnSkalMerkes = event.target.checked;
+                            if (barnSkalMerkes) {
                                 barnBrevetGjelderFelt.validerOgSettFelt([
                                     ...barnBrevetGjelderFelt.verdi,
                                     { ...barn, merket: true },
@@ -87,17 +86,6 @@ const BarnBrevetGjelder = (props: IProps) => {
                                     )
                                 );
                             }
-                            /*barnBrevetGjelderFelt.validerOgSettFelt(
-                                barnBrevetGjelderFelt.verdi.map(
-                                    (barnBrevetGjelder: IBarnMedOpplysninger) =>
-                                        barnBrevetGjelder.ident === barn.ident
-                                            ? {
-                                                  ...barnBrevetGjelder,
-                                                  merket: !barnBrevetGjelder.merket,
-                                              }
-                                            : barnBrevetGjelder
-                                )
-                            );*/
                             settVisFeilmeldinger(false);
                         }}
                     />
