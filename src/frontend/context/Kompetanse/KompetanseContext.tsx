@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 
-import constate from 'constate';
-
 import { useHttp } from '@navikt/familie-http';
 import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
-import type { IKompetanse, IRestKompetanse } from '../../typer/kompetanse';
+import type { IKompetanse, IRestKompetanse } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
+import { erEøsPeriodeGyldig } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
 import { useApp } from '../AppContext';
@@ -17,7 +16,6 @@ import {
     erAnnenForeldersAktivitetslandGyldig,
     erBarnetsBostedslandGyldig,
     erBarnGyldig,
-    erKompetansePeriodeGyldig,
     erKompetanseResultatGyldig,
     erSøkersAktivitetGyldig,
     validerKompetanse,
@@ -34,7 +32,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProps) => {
+const useKompetanse = ({ åpenBehandling }: IProps) => {
     const { toggles } = useApp();
     const { request } = useHttp();
     const [kompetanser, settKompetanser] = useState<FeltState<IKompetanse>[]>([]);
@@ -70,7 +68,7 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
                     initielFom: restKompetanse.fom,
                     periode: lagInitiellFelt(
                         nyYearMonthPeriode(restKompetanse.fom, restKompetanse.tom),
-                        erKompetansePeriodeGyldig
+                        erEøsPeriodeGyldig
                     ),
                     barnIdenter: lagInitiellFelt(restKompetanse.barnIdenter, erBarnGyldig),
                     søkersAktivitet: lagInitiellFelt(
@@ -144,6 +142,6 @@ const [KompetanseProvider, useKompetanse] = constate(({ åpenBehandling }: IProp
         erKompetanserGyldige,
         hentKompetanserMedFeil,
     };
-});
+};
 
-export { KompetanseProvider, useKompetanse };
+export { useKompetanse };
