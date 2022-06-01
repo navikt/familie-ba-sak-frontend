@@ -26,6 +26,7 @@ export enum DokumentÅrsak {
     FØDSEL_UMYNDIG = 'FØDSEL_UMYNDIG',
     FØDSEL_GENERELL = 'FØDSEL_GENERELL',
     KAN_SØKE = 'KAN_SØKE',
+    KAN_SØKE_EØS = 'KAN_SØKE_EØS',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -34,6 +35,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     FØDSEL_UMYNDIG: 'Fødsel umyndig',
     FØDSEL_GENERELL: 'Fødsel generell',
     KAN_SØKE: 'Kan søke',
+    KAN_SØKE_EØS: 'Kan søke EØS',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -91,7 +93,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         });
 
         const {
-            barnaMedOpplysninger,
+            barnMedDeltBosted,
             avtalerOmDeltBostedPerBarn,
             nullstillDeltBosted,
             hentDeltBostedMulitiselectVerdierForBarn,
@@ -112,7 +114,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
                 dokumenter: ISelectOptionMedBrevtekst[];
-                barnaMedOpplysninger: IBarnMedOpplysninger[];
+                barnMedDeltBosted: IBarnMedOpplysninger[];
                 avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             },
             string
@@ -124,7 +126,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 fritekster: fritekster,
                 dokumenter: dokumenter,
 
-                barnaMedOpplysninger,
+                barnMedDeltBosted,
                 avtalerOmDeltBostedPerBarn: avtalerOmDeltBostedPerBarn,
             },
             skjemanavn: 'Dokumentutsending',
@@ -148,9 +150,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
-                const barnIBrev = skjema.felter.barnaMedOpplysninger.verdi.filter(
-                    barn => barn.merket
-                );
+                const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
                 return {
                     mottakerIdent: bruker.data.personIdent,
@@ -217,6 +217,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
+                    case DokumentÅrsak.KAN_SØKE_EØS:
+                        return hentEnkeltInformasjonsbrevRequest({
+                            bruker: bruker,
+                            målform: målform.verdi ?? Målform.NB,
+                            brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                        });
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');

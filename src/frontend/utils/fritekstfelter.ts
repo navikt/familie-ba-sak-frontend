@@ -16,7 +16,8 @@ export const genererIdBasertPåAndreFritekster = (fritekster?: Felt<FeltState<IF
 
 export const lagInitiellFritekst = (
     initiellVerdi: string,
-    id: number
+    id: number,
+    valideringsmelding?: string
 ): FeltState<IFritekstFelt> => ({
     feilmelding: initiellVerdi === '' ? 'Fritekstfeltet er tomt.' : '',
     verdi: {
@@ -29,7 +30,8 @@ export const lagInitiellFritekst = (
         } else if (felt.verdi.tekst.trim().length === 0) {
             return feil(
                 felt,
-                'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+                valideringsmelding ||
+                    'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
             );
         } else {
             return ok(felt);

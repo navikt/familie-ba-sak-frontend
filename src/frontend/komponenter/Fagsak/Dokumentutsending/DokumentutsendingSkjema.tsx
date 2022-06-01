@@ -102,7 +102,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                             avtalerOmDeltBostedPerBarnFelt={
                                 skjema.felter.avtalerOmDeltBostedPerBarn
                             }
-                            barnaMedOpplysningerFelt={skjema.felter.barnaMedOpplysninger}
+                            barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
                         />
