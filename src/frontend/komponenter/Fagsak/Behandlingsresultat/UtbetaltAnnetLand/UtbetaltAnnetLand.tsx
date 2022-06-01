@@ -43,7 +43,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const UtenlandskePeriodeBeløper: React.FC<IProps> = ({
+const UtbetaltAnnetLand: React.FC<IProps> = ({
     utenlandskePeriodeBeløper,
     åpenBehandling,
     visFeilmeldinger,
@@ -91,4 +91,4 @@ const UtenlandskePeriodeBeløper: React.FC<IProps> = ({
     );
 };
 
-export default UtenlandskePeriodeBeløper;
+export default UtbetaltAnnetLand;
