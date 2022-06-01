@@ -159,7 +159,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
-    const harUtenlandskeBeløper = toggles[ToggleNavn.brukEøs] && true; // åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harUtenlandskeBeløper =
+        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
 
     const harEøs = harKompetanser || harUtenlandskeBeløper;
 
