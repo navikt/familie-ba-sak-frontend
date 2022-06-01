@@ -36,7 +36,7 @@ import KompetanseSkjema, { kompetanseFeilmeldingId } from './Kompetanse/Kompetan
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import UtenlandskePeriodeBeløper from './UtbetaltAnnetLand/UtbetaltAnnetLand';
+import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;
@@ -230,7 +230,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 />
             )}
             {harUtenlandskeBeløper && (
-                <UtenlandskePeriodeBeløper
+                <UtbetaltAnnetLand
                     utenlandskePeriodeBeløper={utenlandskePeriodeBeløper}
                     visFeilmeldinger={visFeilmeldinger}
                     åpenBehandling={åpenBehandling}
