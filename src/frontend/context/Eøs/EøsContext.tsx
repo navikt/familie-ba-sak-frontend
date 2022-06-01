@@ -28,15 +28,15 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
     } = useKompetanse({ åpenBehandling });
 
     const {
-        utenlandskePeriodeBeløper,
-        erUtenlandskePeriodeBeløperGyldige,
-        hentUtenlandskePeriodeBeløperMedFeil,
+        utbetaltAnnetLandBeløp,
+        erUtbetaltAnnetLandBeløpGyldige,
+        hentUtbetaltAnnetLandBeløpMedFeil,
     } = useUtenlandskPeriodeBeløp({
         åpenBehandling,
     });
 
     const erEøsInformasjonGyldig = () => {
-        return erKompetanserGyldige() && erUtenlandskePeriodeBeløperGyldige();
+        return erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige();
     };
 
     return {
@@ -47,9 +47,9 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
         putKompetanse,
         deleteKompetanse,
         hentKompetanserMedFeil,
-        utenlandskePeriodeBeløper,
-        erUtenlandskePeriodeBeløperGyldige,
-        hentUtenlandskePeriodeBeløperMedFeil,
+        utbetaltAnnetLandBeløp,
+        erUtbetaltAnnetLandBeløpGyldige,
+        hentUtbetaltAnnetLandBeløpMedFeil,
     };
 });
 

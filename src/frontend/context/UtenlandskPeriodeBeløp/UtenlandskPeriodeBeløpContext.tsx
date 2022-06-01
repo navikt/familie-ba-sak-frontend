@@ -12,30 +12,30 @@ interface IProps {
 
 const useUtenlandskPeriodeBeløp = ({ åpenBehandling }: IProps) => {
     const { toggles } = useApp();
-    const [utenlandskePeriodeBeløper, settUtenlandskePeriodeBeløper] = useState<
+    const [utbetaltAnnetLandBeløp, settUtbetaltAnnetLandBeløp] = useState<
         IRestUtenlandskPeriodeBeløp[]
     >([]);
 
     useEffect(() => {
-        if (toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp.length > 0) {
-            settUtenlandskePeriodeBeløper(åpenBehandling.utenlandskePeriodebeløp);
+        if (toggles[ToggleNavn.brukEøs]) {
+            settUtbetaltAnnetLandBeløp(åpenBehandling.utenlandskePeriodebeløp);
         }
     }, [åpenBehandling]);
 
-    const erUtenlandskePeriodeBeløperGyldige = (): boolean => {
-        return hentUtenlandskePeriodeBeløperMedFeil().length === 0;
+    const erUtbetaltAnnetLandBeløpGyldige = (): boolean => {
+        return hentUtbetaltAnnetLandBeløpMedFeil().length === 0;
     };
 
-    const hentUtenlandskePeriodeBeløperMedFeil = (): IRestUtenlandskPeriodeBeløp[] => {
-        return utenlandskePeriodeBeløper.filter(
+    const hentUtbetaltAnnetLandBeløpMedFeil = (): IRestUtenlandskPeriodeBeløp[] => {
+        return utbetaltAnnetLandBeløp.filter(
             utenlandskPeriodeBeløp => utenlandskPeriodeBeløp.status !== EøsPeriodeStatus.OK
         );
     };
 
     return {
-        utenlandskePeriodeBeløper,
-        erUtenlandskePeriodeBeløperGyldige,
-        hentUtenlandskePeriodeBeløperMedFeil,
+        utbetaltAnnetLandBeløp,
+        erUtbetaltAnnetLandBeløpGyldige,
+        hentUtbetaltAnnetLandBeløpMedFeil,
     };
 };
 

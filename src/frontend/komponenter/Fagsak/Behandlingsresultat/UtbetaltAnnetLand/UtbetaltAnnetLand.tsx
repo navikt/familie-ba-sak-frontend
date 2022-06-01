@@ -38,24 +38,24 @@ const TabellHeader = styled.th`
 `;
 
 interface IProps {
-    utenlandskePeriodeBeløper: IRestUtenlandskPeriodeBeløp[];
+    utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
 const UtbetaltAnnetLand: React.FC<IProps> = ({
-    utenlandskePeriodeBeløper,
+    utbetaltAnnetLandBeløp,
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const { erUtenlandskePeriodeBeløperGyldige } = useEøs();
+    const { erUtbetaltAnnetLandBeløpGyldige } = useEøs();
 
     return (
         <UtenlandskPeriodeBeløperContainer>
             <Heading spacing size="medium" level="3">
                 Utbetalt i det andre landet
             </Heading>
-            {!erUtenlandskePeriodeBeløperGyldige() && (
+            {!erUtbetaltAnnetLandBeløpGyldige() && (
                 <Alert
                     variant={'warning'}
                     fullWidth
@@ -75,7 +75,7 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {utenlandskePeriodeBeløper.map(utenlandskPeriodeBeløp => (
+                    {utbetaltAnnetLandBeløp.map(utenlandskPeriodeBeløp => (
                         <UtenlandskPeriodeBeløpRad
                             key={`${utenlandskPeriodeBeløp.barnIdenter.map(barn => `${barn}-`)}-${
                                 utenlandskPeriodeBeløp.fom

@@ -101,8 +101,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         erEøsInformasjonGyldig,
         kompetanser,
         hentKompetanserMedFeil,
-        utenlandskePeriodeBeløper,
-        hentUtenlandskePeriodeBeløperMedFeil,
+        utbetaltAnnetLandBeløp,
+        hentUtbetaltAnnetLandBeløpMedFeil,
     } = useEøs();
 
     useEffect(() => {
@@ -159,8 +159,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
-    const harUtenlandskeBeløper =
-        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harUtenlandskeBeløper = toggles[ToggleNavn.brukEøs] && true; // åpenBehandling.utenlandskePeriodebeløp?.length > 0;
 
     const harEøs = harKompetanser || harUtenlandskeBeløper;
 
@@ -231,7 +230,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             )}
             {harUtenlandskeBeløper && (
                 <UtbetaltAnnetLand
-                    utenlandskePeriodeBeløper={utenlandskePeriodeBeløper}
+                    utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
                     visFeilmeldinger={visFeilmeldinger}
                     åpenBehandling={åpenBehandling}
                 />
@@ -244,7 +243,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                             feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
                             skjemaelementId: kompetanseFeilmeldingId(kompetanse),
                         })),
-                        ...hentUtenlandskePeriodeBeløperMedFeil().map(
+                        ...hentUtbetaltAnnetLandBeløpMedFeil().map(
                             (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp) => ({
                                 feilmelding: `Utenlandsk beløp barn: ${utenlandskPeriodeBeløp.barnIdenter}, f.o.m.: ${utenlandskPeriodeBeløp.fom} er ikke fullstendig.`,
                                 skjemaelementId:
