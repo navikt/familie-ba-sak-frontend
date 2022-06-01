@@ -43,7 +43,7 @@ const StyledLegend = styled.legend`
     }
 `;
 
-const FlexDiv = styled.div`
+const UtbetaltBeløpRad = styled.div`
     width: 28rem;
     display: flex;
     justify-content: space-between;
@@ -52,11 +52,11 @@ const FlexDiv = styled.div`
         margin-bottom: 0rem;
 
         label {
-            font-weight: 400;
+            font-weight: normal;
         }
 
         p.navds-label {
-            font-weight: 400;
+            font-weight: normal;
         }
 
         &:nth-of-type(1) {
@@ -68,16 +68,6 @@ const FlexDiv = styled.div`
         &:nth-of-type(3) {
             width: 7rem;
         }
-    }
-`;
-
-const StyledFamilieValutavelger = styled(FamilieValutavelger)`
-    p.navds-label--small {
-        line-height: 1.4;
-    }
-    & .c-countrySelect__select__indicator-separator {
-        width: 1px !important;
-        background-color: var(--navds-global-color-gray-300);
     }
 `;
 
@@ -162,7 +152,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                 <StyledLegend>
                     <Label size="small">Utbetalt i det andre landet</Label>
                 </StyledLegend>
-                <FlexDiv>
+                <UtbetaltBeløpRad>
                     <FamilieInput
                         label={'Beløp'}
                         erLesevisning={lesevisning}
@@ -171,13 +161,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             skjema.felter.beløp?.validerOgSettFelt(event.target.value)
                         }
                     />
-                    <StyledFamilieValutavelger
+                    <FamilieValutavelger
                         erLesevisning={lesevisning}
                         id={'valuta'}
                         label={'Valuta'}
                         kunEøs
-                        size="medium"
                         medFlag
+                        size="small"
                         value={skjema.felter.valutakode?.verdi}
                         onChange={(value: Currency) => {
                             if (value) {
@@ -210,7 +200,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             );
                         })}
                     </FamilieSelect>
-                </FlexDiv>
+                </UtbetaltBeløpRad>
             </SkjemaGruppe>
 
             <Knapperad>

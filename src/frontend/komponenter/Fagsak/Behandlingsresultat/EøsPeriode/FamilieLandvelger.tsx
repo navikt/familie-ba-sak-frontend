@@ -24,6 +24,10 @@ const EØS_CURRENCY: Array<string> = [
 const Landvelger = styled(CountrySelect)`
     margin-bottom: ${props => (props.utenMargin ? '0rem' : '1rem')};
 
+    p.navds-label--small {
+        line-height: 1.4;
+    }
+
     &.navds-select--disabled {
         opacity: unset;
 
@@ -45,7 +49,8 @@ const Landvelger = styled(CountrySelect)`
         }
 
         .c-countrySelect__select__indicator-separator {
-            width: 0px;
+            width: ${props => (props.kanNullstilles ? '1px !important' : '0px')};
+            background-color: var(--navds-global-color-gray-300);
         }
 
         .c-countrySelect__select__control {
@@ -58,6 +63,10 @@ const Landvelger = styled(CountrySelect)`
                 props.feil
                     ? `0 0 0 1px var(--navds-semantic-color-feedback-danger-border)`
                     : 'none'};
+        }
+
+        .c-countrySelect__select__value-container {
+            min-height: 38px;
         }
     }
 
@@ -82,6 +91,7 @@ interface IBaseLandvelgerProps {
     label: string | JSX.Element;
     className?: string;
     utenMargin: boolean;
+    kanNullstilles: boolean;
     feil?: string;
 }
 
@@ -90,12 +100,14 @@ const BaseFamilieLandvelger: React.FC<IBaseLandvelgerProps> = ({
     label,
     className,
     utenMargin,
+    kanNullstilles,
     feil,
 }) => {
     return (
         <div className={classNames('skjemaelement', className)}>
             <Landvelger
                 utenMargin={utenMargin}
+                kanNullstilles={kanNullstilles}
                 feil={feil}
                 {...countrySelectProps}
                 place
@@ -157,7 +169,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
         flagWave: medFlag && medWave,
         flagType: sirkulær ? 'circle' : 'original',
         closeMenuOnSelect: true,
-        size: medFlag ? 'medium' : size,
+        size,
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
@@ -171,6 +183,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
             label={label}
             className={className}
             utenMargin={utenMargin}
+            kanNullstilles={kanNullstilles}
             feil={feil}
         />
     );
@@ -210,7 +223,7 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
         flagWave: medFlag && medWave,
         flagType: sirkulær ? 'circle' : 'original',
         closeMenuOnSelect: true,
-        size: medFlag ? 'medium' : size,
+        size,
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
