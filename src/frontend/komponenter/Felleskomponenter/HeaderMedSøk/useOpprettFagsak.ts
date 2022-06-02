@@ -6,13 +6,14 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IMinimalFagsak, FagsakEier } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
 export interface IOpprettFagsakData {
     personIdent: string | null;
     aktørId: string | null;
+    eier: FagsakEier | null;
 }
 
 const useOpprettFagsak = () => {
