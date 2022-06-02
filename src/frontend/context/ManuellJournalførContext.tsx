@@ -231,7 +231,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
+        const restFagsak = await hentFagsakForPerson(
+            hentetPerson.data.personIdent,
+            skjema.felter.erEnsligMindreårig.verdi,
+            skjema.felter.erPåInstitusjon.verdi
+        );
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
             settMinimalFagsak(restFagsak.data);
