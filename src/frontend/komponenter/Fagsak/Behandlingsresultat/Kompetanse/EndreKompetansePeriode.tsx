@@ -7,7 +7,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Label } from '@navikt/ds-react';
 import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import type { IKompetanse } from '../../../../typer/kompetanse';
+import type { IKompetanse } from '../../../../typer/eøsPerioder';
 import { nyYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import { kompetansePeriodeFeilmeldingId } from './KompetanseSkjema';

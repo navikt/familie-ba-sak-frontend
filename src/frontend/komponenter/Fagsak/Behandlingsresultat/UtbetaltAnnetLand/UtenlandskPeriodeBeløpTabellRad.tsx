@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 
-import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
-import type { FeltState } from '@navikt/familie-skjema';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
+import {
+    useUtenlandskPeriodeBeløpSkjema,
+    utenlandskPeriodeBeløpFeilmeldingId,
+} from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
-import { kompetanseFeilmeldingId } from './KompetanseSkjema';
-import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
+import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 
 interface IEkspanderbarTrProps {
     ekspandert?: boolean;
@@ -37,7 +38,7 @@ const EkspanderbarTr = styled.tr`
     }
 `;
 
-const KompetanseVurdertCelle = styled.div`
+const UtenlandskPeriodeBeløpVurdertCelle = styled.div`
     display: flex;
     svg {
         margin-right: 1rem;
@@ -54,46 +55,57 @@ const EkspandertTd = styled.td`
 `;
 
 interface IProps {
-    kompetanse: FeltState<IKompetanse>;
+    utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
-const KompetanseTabellRad: React.FC<IProps> = ({
-    kompetanse,
+const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
+    utenlandskPeriodeBeløp,
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const [ekspandertKompetanse, settEkspandertKompetanse] = React.useState<boolean>(false);
-    const [redigerbartKompetanse, settRedigerbartKompetanse] =
-        useState<FeltState<IKompetanse>>(kompetanse);
+    const [ekspandertUtenlandskPeriodeBeløp, settEkspandertUtenlandskPeriodeBeløp] =
+        React.useState<boolean>(false);
 
-    const visVurdertKompetanse = () => {
-        switch (kompetanse.verdi?.resultat?.verdi) {
-            case KompetanseResultat.NORGE_ER_PRIMÆRLAND:
-                return 'Primærland';
-            case KompetanseResultat.NORGE_ER_SEKUNDÆRLAND:
-                return 'Sekundærland';
-            case KompetanseResultat.TO_PRIMÆRLAND:
-                return 'To primærland';
-            default:
-                return '-';
-        }
-    };
-
-    const toggleForm = (visAlert: boolean) => {
-        if (ekspandertKompetanse && visAlert && !deepEqual(kompetanse, redigerbartKompetanse)) {
-            alert('Kompetansen har endringer som ikke er lagret!');
-        } else {
-            settEkspandertKompetanse(!ekspandertKompetanse);
-            settRedigerbartKompetanse(kompetanse);
-        }
-    };
-
-    const barn: OptionType[] = kompetanse.verdi?.barnIdenter.verdi.map(barn => ({
+    const barn: OptionType[] = utenlandskPeriodeBeløp.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
+
+    const {
+        skjema,
+        valideringErOk,
+        sendInnSkjema,
+        slettUtenlandskPeriodeBeløp,
+        nullstillSkjema,
+        kanSendeSkjema,
+        erUtenlandskPeriodeBeløpSkjemaEndret,
+    } = useUtenlandskPeriodeBeløpSkjema({
+        utenlandskPeriodeBeløp,
+        tilgjengeligeBarn: barn,
+    });
+
+    React.useEffect(() => {
+        if (visFeilmeldinger) {
+            kanSendeSkjema();
+        }
+    }, [visFeilmeldinger]);
+
+    const toggleForm = (visAlert: boolean) => {
+        if (
+            ekspandertUtenlandskPeriodeBeløp &&
+            visAlert &&
+            erUtenlandskPeriodeBeløpSkjemaEndret()
+        ) {
+            alert('Utenlandsk beløp har endringer som ikke er lagret!');
+        } else {
+            if (ekspandertUtenlandskPeriodeBeløp) {
+                nullstillSkjema();
+            }
+            settEkspandertUtenlandskPeriodeBeløp(!ekspandertUtenlandskPeriodeBeløp);
+        }
+    };
 
     const formatterPeriode = (periode: IYearMonthPeriode): string => {
         return `${formaterIsoDato(periode.fom, datoformat.MÅNED_ÅR_KORTNAVN)} - ${
@@ -103,48 +115,50 @@ const KompetanseTabellRad: React.FC<IProps> = ({
 
     return (
         <>
-            <EkspanderbarTr ekspandert={ekspandertKompetanse}>
+            <EkspanderbarTr ekspandert={ekspandertUtenlandskPeriodeBeløp}>
                 <td>
-                    <KompetanseVurdertCelle>
+                    <UtenlandskPeriodeBeløpVurdertCelle>
                         <div>
                             <StatusIkon
-                                status={mapEøsPeriodeStatusTilStatus[kompetanse.verdi.status]}
+                                status={mapEøsPeriodeStatusTilStatus[utenlandskPeriodeBeløp.status]}
                                 width={20}
                                 heigth={20}
                             />
                         </div>
                         <BarnDiv>
-                            {kompetanse.verdi?.barnIdenter.verdi.map(barn => (
+                            {utenlandskPeriodeBeløp.barnIdenter.map(barn => (
                                 <BodyShort size="small" key={barn}>
                                     {lagPersonLabel(barn, åpenBehandling.personer)}
                                 </BodyShort>
                             ))}
                         </BarnDiv>
-                    </KompetanseVurdertCelle>
+                    </UtenlandskPeriodeBeløpVurdertCelle>
                 </td>
                 <td>
                     <BodyShort size="small">
-                        {formatterPeriode(kompetanse.verdi.periode.verdi)}
+                        {formatterPeriode({
+                            fom: utenlandskPeriodeBeløp.fom,
+                            tom: utenlandskPeriodeBeløp.tom,
+                        })}
                     </BodyShort>
                 </td>
-                <td>
-                    <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
-                </td>
+                <td>-</td>
+                <td>-</td>
                 <td>
                     <Button
-                        id={kompetanseFeilmeldingId(kompetanse)}
+                        id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
                         variant="tertiary"
                         onClick={() => toggleForm(true)}
                         size="xsmall"
                     >
                         <BodyShort>
-                            {!ekspandertKompetanse
-                                ? kompetanse.verdi?.status === EøsPeriodeStatus.OK
+                            {!ekspandertUtenlandskPeriodeBeløp
+                                ? utenlandskPeriodeBeløp.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
-                                    : 'Fastsett kompetanse'
+                                    : 'Registrer beløp'
                                 : `Lukk`}
                         </BodyShort>
-                        {ekspandertKompetanse ? (
+                        {ekspandertUtenlandskPeriodeBeløp ? (
                             <Collapse width="22" height="22" />
                         ) : (
                             <Expand width="22" height="22" />
@@ -152,16 +166,16 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     </Button>
                 </td>
             </EkspanderbarTr>
-            {ekspandertKompetanse && (
+            {ekspandertUtenlandskPeriodeBeløp && (
                 <tr>
-                    <EkspandertTd colSpan={4}>
-                        <KompetanseTabellRadEndre
-                            redigerbartKompetanse={redigerbartKompetanse}
+                    <EkspandertTd colSpan={5}>
+                        <UtenlandskPeriodeBeløpTabellRadEndre
+                            skjema={skjema}
                             tilgjengeligeBarn={barn}
-                            visFeilmeldinger={visFeilmeldinger}
-                            settRedigerbartKompetanse={settRedigerbartKompetanse}
+                            valideringErOk={valideringErOk}
+                            sendInnSkjema={sendInnSkjema}
                             toggleForm={toggleForm}
-                            settEkspandertKompetanse={settEkspandertKompetanse}
+                            slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
                         />
                     </EkspandertTd>
                 </tr>
@@ -170,4 +184,4 @@ const KompetanseTabellRad: React.FC<IProps> = ({
     );
 };
 
-export default KompetanseTabellRad;
+export default UtenlandskPeriodeBeløpRad;
