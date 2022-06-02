@@ -202,7 +202,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const endreBruker = async (personId: string) => {
+    const endreBruker = async (
+        personId: string,
+        erEnsligMindreårig = false,
+        erPåInstitusjon = false
+    ) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -233,8 +237,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
         const restFagsak = await hentFagsakForPerson(
             hentetPerson.data.personIdent,
-            skjema.felter.erEnsligMindreårig.verdi,
-            skjema.felter.erPåInstitusjon.verdi
+            erEnsligMindreårig,
+            erPåInstitusjon
         );
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {

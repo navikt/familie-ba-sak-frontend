@@ -90,9 +90,15 @@ export const BrukerPanel: React.FC = () => {
                                 if (erLesevisning()) {
                                     return;
                                 }
-                                skjema.felter.erEnsligMindreårig.validerOgSettFelt(
-                                    !skjema.felter.erEnsligMindreårig.verdi
-                                );
+                                const oppdatertVerdi = !skjema.felter.erEnsligMindreårig.verdi;
+                                skjema.felter.erEnsligMindreårig.validerOgSettFelt(oppdatertVerdi);
+                                if (skjema.felter.bruker.verdi) {
+                                    endreBruker(
+                                        skjema.felter.bruker.verdi?.personIdent,
+                                        oppdatertVerdi,
+                                        skjema.felter.erPåInstitusjon.verdi
+                                    );
+                                }
                             }}
                         />
                     </StyledCheckBoxWrapper>
@@ -106,9 +112,15 @@ export const BrukerPanel: React.FC = () => {
                                 if (erLesevisning()) {
                                     return;
                                 }
-                                skjema.felter.erPåInstitusjon.validerOgSettFelt(
-                                    !skjema.felter.erPåInstitusjon.verdi
-                                );
+                                const oppdatertVerdi = !skjema.felter.erPåInstitusjon.verdi;
+                                skjema.felter.erPåInstitusjon.validerOgSettFelt(oppdatertVerdi);
+                                if (skjema.felter.bruker.verdi) {
+                                    endreBruker(
+                                        skjema.felter.bruker.verdi?.personIdent,
+                                        skjema.felter.erEnsligMindreårig.verdi,
+                                        oppdatertVerdi
+                                    );
+                                }
                             }}
                         />
                     </StyledCheckBoxWrapper>
