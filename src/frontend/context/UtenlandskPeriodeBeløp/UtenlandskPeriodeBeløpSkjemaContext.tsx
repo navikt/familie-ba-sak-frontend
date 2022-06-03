@@ -1,3 +1,5 @@
+import React from 'react';
+
 import type { OptionType } from '@navikt/familie-form-elements';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -11,7 +13,7 @@ import type {
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
-import { erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
+import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
@@ -24,8 +26,6 @@ const erIntervallGyldig = (
     felt: FeltState<UtenlandskPeriodeBeløpIntervall | undefined>
 ): FeltState<UtenlandskPeriodeBeløpIntervall | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Intervall er påkrevd, men mangler input');
-const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
-    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 
 export const utenlandskPeriodeBeløpFeilmeldingId = (
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp
@@ -40,6 +40,8 @@ interface IProps {
 }
 
 const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriodeBeløp }: IProps) => {
+    const [ekspandertUtenlandskPeriodeBeløp, settEkspandertUtenlandskPeriodeBeløp] =
+        React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
@@ -53,7 +55,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
             return tilBarn;
         } else {
             throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i original kompetanse'
+                'Skulle ikke være mulig å velge et barn,  som ikke er registrert frå før i utenlandsk beløp'
             );
         }
     });
@@ -111,8 +113,9 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                     url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
-                    nullstillSkjema();
                     if (response.status === RessursStatus.SUKSESS) {
+                        nullstillSkjema();
+                        settEkspandertUtenlandskPeriodeBeløp(false);
                         settÅpenBehandling(response);
                     }
                 }
@@ -127,8 +130,9 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
             },
             (response: Ressurs<IBehandling>) => {
-                nullstillSkjema();
                 if (response.status === RessursStatus.SUKSESS) {
+                    nullstillSkjema();
+                    settEkspandertUtenlandskPeriodeBeløp(false);
                     settÅpenBehandling(response);
                 }
             }
@@ -137,7 +141,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const erUtenlandskPeriodeBeløpSkjemaEndret = () => {
         const barnFjernetISkjema = utenlandskPeriodeBeløp.barnIdenter.filter(
-            barn => !skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn)
+            barn => skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn) < 0
         );
         return (
             barnFjernetISkjema.length > 0 ||
@@ -150,6 +154,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     return {
+        ekspandertUtenlandskPeriodeBeløp,
+        settEkspandertUtenlandskPeriodeBeløp,
         skjema,
         valideringErOk,
         sendInnSkjema,
