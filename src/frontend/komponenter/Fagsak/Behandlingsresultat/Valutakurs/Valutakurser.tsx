@@ -55,7 +55,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     variant={'warning'}
                     fullWidth
                     children={
-                        'For perioder som skal differanseberegnes, må valutakursdato og valutakurs registeres'
+                        'For perioder som skal differanseberegnes, må valutakursdato registeres'
                     }
                 />
             )}
