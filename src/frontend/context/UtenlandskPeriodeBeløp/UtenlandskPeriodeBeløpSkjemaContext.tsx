@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { OptionType } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -46,6 +47,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const initelFom = useFelt<string>({ verdi: utenlandskPeriodeBeløp.fom });
+    const { request } = useHttp();
 
     const valgteBarn = utenlandskPeriodeBeløp.barnIdenter.map(barn => {
         const tilBarn = tilgjengeligeBarn.find(opt => {
@@ -124,19 +126,16 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     const slettUtenlandskPeriodeBeløp = () => {
-        onSubmit(
-            {
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
-            },
-            (response: Ressurs<IBehandling>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    nullstillSkjema();
-                    settEkspandertUtenlandskPeriodeBeløp(false);
-                    settÅpenBehandling(response);
-                }
+        request<void, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                nullstillSkjema();
+                settEkspandertUtenlandskPeriodeBeløp(false);
+                settÅpenBehandling(response);
             }
-        );
+        });
     };
 
     const erUtenlandskPeriodeBeløpSkjemaEndret = () => {

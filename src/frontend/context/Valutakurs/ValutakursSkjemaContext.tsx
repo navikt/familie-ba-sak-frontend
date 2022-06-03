@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { OptionType } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -38,6 +39,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const initelFom = useFelt<string>({ verdi: valutakurs.fom });
+    const { request } = useHttp();
 
     const valgteBarn = valutakurs.barnIdenter.map(barn => {
         const tilBarn = tilgjengeligeBarn.find(opt => {
@@ -90,7 +92,6 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
-            console.info('Kan sende inn skjema!');
             onSubmit(
                 {
                     method: 'PUT',
@@ -113,25 +114,20 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                     }
                 }
             );
-        } else {
-            console.info('Kan ikkje sende inn skjema!');
         }
     };
 
     const slettValutakurs = () => {
-        onSubmit(
-            {
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}/${valutakurs.id}`,
-            },
-            (response: Ressurs<IBehandling>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    nullstillSkjema();
-                    settEkspandertValutakurs(false);
-                    settÅpenBehandling(response);
-                }
+        request<void, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}/${valutakurs.id}`,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                nullstillSkjema();
+                settEkspandertValutakurs(false);
+                settÅpenBehandling(response);
             }
-        );
+        });
     };
 
     const erValutakursSkjemaEndret = () => {

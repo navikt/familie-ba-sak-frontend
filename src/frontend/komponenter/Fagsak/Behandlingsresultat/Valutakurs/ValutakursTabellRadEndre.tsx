@@ -206,7 +206,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     <IkonKnapp
                         erLesevisning={lesevisning}
                         onClick={() => slettValutakurs()}
-                        id={`slett_utd_beløp_${skjema.felter.barnIdenter.verdi.map(
+                        id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
                             barn => `${barn}-`
                         )}_${skjema.felter.initielFom.verdi}`}
                         spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
