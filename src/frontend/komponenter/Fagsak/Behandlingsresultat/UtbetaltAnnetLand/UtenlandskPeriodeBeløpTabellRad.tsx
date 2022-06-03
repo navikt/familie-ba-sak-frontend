@@ -65,15 +65,14 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const [ekspandertUtenlandskPeriodeBeløp, settEkspandertUtenlandskPeriodeBeløp] =
-        React.useState<boolean>(false);
-
     const barn: OptionType[] = utenlandskPeriodeBeløp.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
     const {
+        ekspandertUtenlandskPeriodeBeløp,
+        settEkspandertUtenlandskPeriodeBeløp,
         skjema,
         valideringErOk,
         sendInnSkjema,
@@ -85,6 +84,13 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         utenlandskPeriodeBeløp,
         tilgjengeligeBarn: barn,
     });
+
+    React.useEffect(() => {
+        if (åpenBehandling) {
+            nullstillSkjema();
+            settEkspandertUtenlandskPeriodeBeløp(false);
+        }
+    }, [åpenBehandling]);
 
     React.useEffect(() => {
         if (visFeilmeldinger) {
@@ -100,10 +106,8 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         ) {
             alert('Utenlandsk beløp har endringer som ikke er lagret!');
         } else {
-            if (ekspandertUtenlandskPeriodeBeløp) {
-                nullstillSkjema();
-            }
             settEkspandertUtenlandskPeriodeBeløp(!ekspandertUtenlandskPeriodeBeløp);
+            nullstillSkjema();
         }
     };
 
@@ -143,7 +147,9 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     </BodyShort>
                 </td>
                 <td>-</td>
-                <td>-</td>
+                <td>
+                    {utenlandskPeriodeBeløp.valutakode ? utenlandskPeriodeBeløp.valutakode : '-'}
+                </td>
                 <td>
                     <Button
                         id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
