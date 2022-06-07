@@ -18,7 +18,7 @@ interface IMockMinimalFagsak {
     underBehandling?: boolean;
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
-    eier?: FagsakEier;
+    fagsakEier?: FagsakEier;
 }
 
 export const mockMinimalFagsak = ({
@@ -33,7 +33,7 @@ export const mockMinimalFagsak = ({
     underBehandling = false,
     løpendeKategori = BehandlingKategori.NASJONAL,
     løpendeUnderkategori = BehandlingUnderkategori.ORDINÆR,
-    eier = FagsakEier.BARN,
+    fagsakEier = FagsakEier.BARN,
 }: IMockMinimalFagsak = {}): IMinimalFagsak => ({
     migreringsdato,
     behandlinger,
@@ -47,5 +47,5 @@ export const mockMinimalFagsak = ({
     tilbakekrevingsbehandlinger: [],
     løpendeKategori,
     løpendeUnderkategori,
-    eier,
+    fagsakEier,
 });

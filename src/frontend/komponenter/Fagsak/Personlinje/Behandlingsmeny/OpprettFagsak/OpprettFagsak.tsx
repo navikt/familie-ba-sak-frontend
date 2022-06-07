@@ -19,7 +19,7 @@ const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) 
                     onListElementClick();
                 }}
             >
-                {minimalFagsak.eier === FagsakEier.OMSORGSPERSON
+                {minimalFagsak.fagsakEier === FagsakEier.BARN
                     ? 'Opprett normal fagsak'
                     : 'Opprett institusjon fagsak'}
             </KnappBase>

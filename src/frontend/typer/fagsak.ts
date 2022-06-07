@@ -27,7 +27,7 @@ export interface IBaseFagsak {
     underBehandling: boolean;
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
-    eier: FagsakEier;
+    fagsakEier: FagsakEier;
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {
