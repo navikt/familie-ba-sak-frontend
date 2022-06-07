@@ -29,13 +29,6 @@ const StyledKnappContainer = styled.div`
     margin-bottom: 0.5rem;
 `;
 
-const StyledUiModalWrapper = styled(UIModalWrapper)`
-    padding-top: 2.2rem;
-    padding-right: 1.5rem;
-    padding-bottom: 0.6rem;
-    padding-left: 1.5rem;
-`;
-
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
@@ -91,7 +84,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                 )}
                 {!!feilmelding && <Feilmelding children={feilmelding} />}
             </UIModalWrapper>
-            <StyledUiModalWrapper
+            <UIModalWrapper
                 modal={{
                     actions: [
                         <StyledKnappContainer>
@@ -152,6 +145,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                     lukkKnapp: true,
                     tittel: 'Opprett fagsak',
                     visModal: visModal && toggles[ToggleNavn.støtterInstitusjon].valueOf(),
+                    className: 'uimodal-wider',
                 }}
             >
                 <StyledUndertittel tag={'h3'}>
@@ -164,7 +158,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                     )})`}</Normaltekst>
                 )}
                 {!!feilmelding && <Feilmelding children={feilmelding} />}
-            </StyledUiModalWrapper>
+            </UIModalWrapper>
         </>
     );
 };
