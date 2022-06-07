@@ -40,6 +40,7 @@ export type VedtakBegrunnelse = string;
 
 export enum VedtakBegrunnelseType {
     INNVILGET = 'INNVILGET',
+    EØS_INNVILGET = 'EØS_INNVILGET',
     AVSLAG = 'AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
@@ -50,6 +51,7 @@ export enum VedtakBegrunnelseType {
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     INNVILGET: 'Innvilgelse',
+    EØS_INNVILGET: 'EØS - Innvilgelse',
     AVSLAG: 'Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
