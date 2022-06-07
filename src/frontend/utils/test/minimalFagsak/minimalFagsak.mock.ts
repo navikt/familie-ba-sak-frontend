@@ -1,6 +1,7 @@
 import type { VisningBehandling } from '../../../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakEier } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { mockVisningBehandling } from '../behandling/behandling.mock';
@@ -17,6 +18,7 @@ interface IMockMinimalFagsak {
     underBehandling?: boolean;
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
+    eier?: FagsakEier;
 }
 
 export const mockMinimalFagsak = ({
@@ -31,6 +33,7 @@ export const mockMinimalFagsak = ({
     underBehandling = false,
     løpendeKategori = BehandlingKategori.NASJONAL,
     løpendeUnderkategori = BehandlingUnderkategori.ORDINÆR,
+    eier = FagsakEier.BARN,
 }: IMockMinimalFagsak = {}): IMinimalFagsak => ({
     migreringsdato,
     behandlinger,
@@ -44,4 +47,5 @@ export const mockMinimalFagsak = ({
     tilbakekrevingsbehandlinger: [],
     løpendeKategori,
     løpendeUnderkategori,
+    eier,
 });

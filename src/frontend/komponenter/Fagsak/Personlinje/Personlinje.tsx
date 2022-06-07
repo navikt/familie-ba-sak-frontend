@@ -70,7 +70,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         <Normaltekst>Dokumenter</Normaltekst>
                     </Lenke>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny minimalFagsak={minimalFagsak} />
+                        <Behandlingsmeny bruker={bruker} minimalFagsak={minimalFagsak} />
                     )}
                 </>
             )}
