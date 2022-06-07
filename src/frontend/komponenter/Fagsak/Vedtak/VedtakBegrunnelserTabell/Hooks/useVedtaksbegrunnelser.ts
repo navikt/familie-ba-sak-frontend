@@ -108,10 +108,10 @@ export const mapBegrunnelserTilSelectOptions = (
 ): ISelectOption[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
         (begrunnelse: IRestVedtaksbegrunnelse) => ({
-            value: begrunnelse.vedtakBegrunnelseSpesifikasjon.toString(),
+            value: begrunnelse.standardbegrunnelse.toString(),
             label: hentLabelForOption(
                 begrunnelse.vedtakBegrunnelseType,
-                begrunnelse.vedtakBegrunnelseSpesifikasjon,
+                begrunnelse.standardbegrunnelse,
                 vilkårBegrunnelser
             ),
         })
@@ -120,13 +120,13 @@ export const mapBegrunnelserTilSelectOptions = (
 
 const hentLabelForOption = (
     vedtakBegrunnelseType: VedtakBegrunnelseType,
-    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse,
+    standardbegrunnelse: VedtakBegrunnelse,
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ) => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
         ? vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
               (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                  restVedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelseSpesifikasjon
+                  restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
           )?.navn ?? ''
         : '';
 };
