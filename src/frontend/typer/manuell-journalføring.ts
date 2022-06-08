@@ -78,6 +78,8 @@ export interface IRestJournalføring {
     navIdent: string;
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
+    erEnsligMindreårig: boolean;
+    erPåInstitusjon: boolean;
 }
 
 export interface ILogiskVedlegg {

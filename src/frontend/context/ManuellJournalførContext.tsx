@@ -104,6 +104,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
+            erEnsligMindreårig: boolean;
+            erPåInstitusjon: boolean;
         },
         string
     >({
@@ -156,6 +158,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
             }),
+            erEnsligMindreårig: useFelt<boolean>({
+                verdi: false,
+            }),
+            erPåInstitusjon: useFelt<boolean>({
+                verdi: false,
+            }),
         },
         skjemanavn: 'Journalfør dokument',
     });
@@ -194,7 +202,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const endreBruker = async (personId: string) => {
+    const endreBruker = async (
+        personId: string,
+        erEnsligMindreårig = false,
+        erPåInstitusjon = false
+    ) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -223,7 +235,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
+        const restFagsak = await hentFagsakForPerson(
+            hentetPerson.data.personIdent,
+            erEnsligMindreårig,
+            erPåInstitusjon
+        );
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
             settMinimalFagsak(restFagsak.data);
@@ -382,6 +398,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 : nyBehandlingsårsak,
 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                        erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
+                        erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
