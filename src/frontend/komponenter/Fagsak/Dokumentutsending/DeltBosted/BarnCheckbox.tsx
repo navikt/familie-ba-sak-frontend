@@ -7,7 +7,7 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import Slett from '../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
+import { lagBarnLabel } from '../../../../utils/formatter';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
@@ -46,7 +46,7 @@ const FjernBarnKnapp = styled(IkonKnapp)`
 interface IProps {
     barn: IBarnMedOpplysninger;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
-    barnaMedOpplysningerFelt: Felt<IBarnMedOpplysninger[]>;
+    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
 }
@@ -54,13 +54,11 @@ interface IProps {
 const BarnCheckbox: React.FC<IProps> = ({
     barn,
     settVisFeilmeldinger,
-    barnaMedOpplysningerFelt,
+    barnMedDeltBostedFelt,
     avtalerOmDeltBostedPerBarnFelt,
     visFeilmeldinger,
 }) => {
-    const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
-        barn.fødselsdato
-    )}) | ${formaterIdent(barn.ident)}`;
+    const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
         <div>
@@ -74,12 +72,12 @@ const BarnCheckbox: React.FC<IProps> = ({
                     }
                     checked={barn.merket}
                     onChange={() => {
-                        const nyMerketStatus = !barnaMedOpplysningerFelt.verdi.find(
+                        const nyMerketStatus = !barnMedDeltBostedFelt.verdi.find(
                             barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
                         )?.merket;
 
-                        barnaMedOpplysningerFelt.validerOgSettFelt(
-                            barnaMedOpplysningerFelt.verdi.map(
+                        barnMedDeltBostedFelt.validerOgSettFelt(
+                            barnMedDeltBostedFelt.verdi.map(
                                 (barnMedOpplysninger: IBarnMedOpplysninger) =>
                                     barnMedOpplysninger.ident === barn.ident
                                         ? {
@@ -112,12 +110,12 @@ const BarnCheckbox: React.FC<IProps> = ({
                         ikon={<Slett />}
                         ikonPosisjon={IkonPosisjon.VENSTRE}
                         onClick={() => {
-                            barnaMedOpplysningerFelt.validerOgSettFelt([
-                                ...barnaMedOpplysningerFelt.verdi.filter(
-                                    barnMedOpplysninger =>
-                                        barnMedOpplysninger.ident !== barn.ident ||
-                                        barnMedOpplysninger.navn !== barn.navn ||
-                                        barnMedOpplysninger.fødselsdato !== barn.fødselsdato
+                            barnMedDeltBostedFelt.validerOgSettFelt([
+                                ...barnMedDeltBostedFelt.verdi.filter(
+                                    barnMedDeltBosted =>
+                                        barnMedDeltBosted.ident !== barn.ident ||
+                                        barnMedDeltBosted.navn !== barn.navn ||
+                                        barnMedDeltBosted.fødselsdato !== barn.fødselsdato
                                 ),
                             ]);
                         }}
