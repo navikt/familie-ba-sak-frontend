@@ -51,7 +51,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                 type={'hoved'}
                                 mini={true}
                                 onClick={async () => {
-                                    settSenderInn(true);
+                                    settSenderInn(FagsakEier.OMSORGSPERSON);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
                                         opprettFagsak(
                                             {
@@ -64,8 +64,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     }
                                 }}
                                 children={'Ja, opprett fagsak'}
-                                disabled={senderInn}
-                                spinner={senderInn}
+                                disabled={senderInn !== null}
+                                spinner={senderInn === FagsakEier.OMSORGSPERSON}
                             />,
                         ],
                         onClose: lukkModal,
@@ -103,7 +103,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     key={'bekreft institusjon'}
                                     mini={true}
                                     onClick={async () => {
-                                        settSenderInn(true);
+                                        settSenderInn(FagsakEier.BARN);
                                         if (
                                             søkeresultat &&
                                             (await sjekkTilgang(søkeresultat.ident))
@@ -119,8 +119,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                         }
                                     }}
                                     children={'Opprett fagsak på institusjon'}
-                                    disabled={senderInn}
-                                    spinner={senderInn}
+                                    disabled={senderInn !== null}
+                                    spinner={senderInn === FagsakEier.BARN}
                                     kompakt={true}
                                 />
                                 <Knapp
@@ -128,7 +128,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     type={'hoved'}
                                     mini={true}
                                     onClick={async () => {
-                                        settSenderInn(true);
+                                        settSenderInn(FagsakEier.OMSORGSPERSON);
                                         if (
                                             søkeresultat &&
                                             (await sjekkTilgang(søkeresultat.ident))
@@ -144,8 +144,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                         }
                                     }}
                                     children={'Opprett fagsak'}
-                                    disabled={senderInn}
-                                    spinner={senderInn}
+                                    disabled={senderInn !== null}
+                                    spinner={senderInn === FagsakEier.OMSORGSPERSON}
                                     kompakt={true}
                                 />
                             </StyledKnappContainer>,
