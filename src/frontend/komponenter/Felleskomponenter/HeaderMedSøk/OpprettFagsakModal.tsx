@@ -61,6 +61,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                             },
                                             lukkModal
                                         );
+                                    } else {
+                                        settSenderInn(null);
                                     }
                                 }}
                                 children={'Ja, opprett fagsak'}
@@ -116,6 +118,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 },
                                                 lukkModal
                                             );
+                                        } else {
+                                            settSenderInn(null);
                                         }
                                     }}
                                     children={'Opprett fagsak på institusjon'}
@@ -141,6 +145,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 },
                                                 lukkModal
                                             );
+                                        } else {
+                                            settSenderInn(null);
                                         }
                                     }}
                                     children={'Opprett fagsak'}
