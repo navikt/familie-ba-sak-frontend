@@ -13,7 +13,7 @@ import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandl
 export interface IOpprettFagsakData {
     personIdent: string | null;
     aktørId: string | null;
-    eier: FagsakEier | null;
+    fagsakEier: FagsakEier | null;
 }
 
 const useOpprettFagsak = () => {
