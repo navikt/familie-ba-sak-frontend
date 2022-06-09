@@ -28,13 +28,10 @@ import {
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import type {
-    IPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-    Regelverk,
-} from '../../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { Regelverk } from '../../../../typer/vilkår';
 import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -211,7 +208,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
-        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.length > 0;
+        (redigerbartVilkår.verdi.vurderesEtter === Regelverk.NASJONALE_REGLER &&
+            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.length > 0) ||
+        (redigerbartVilkår.verdi.vurderesEtter === Regelverk.EØS_FORORDNINGEN &&
+            person.type === PersonType.SØKER &&
+            redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET);
 
     const visRegelverkValg = (): boolean =>
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
