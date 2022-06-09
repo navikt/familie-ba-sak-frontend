@@ -29,19 +29,11 @@ import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
-
-const Container = styled.div`
-    max-width: 30rem;
-    border-left: 0.0625rem solid var(--navds-global-color-orange-500);
-    padding-left: 2rem;
-`;
-
-const StyledLegend = styled.legend`
-    && {
-        display: flex;
-        margin-bottom: 0;
-    }
-`;
+import {
+    EøsPeriodeSkjemaContainer,
+    Knapperad,
+    StyledLegend,
+} from '../EøsPeriode/fellesKomponenter';
 
 const UtbetaltBeløpRad = styled.div`
     width: 28rem;
@@ -69,13 +61,6 @@ const UtbetaltBeløpRad = styled.div`
             width: 7rem;
         }
     }
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-    margin-top: 2rem;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
@@ -123,7 +108,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <Container>
+        <EøsPeriodeSkjemaContainer>
             <div className={'skjemaelement'}>
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
@@ -242,7 +227,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     />
                 )}
             </Knapperad>
-        </Container>
+        </EøsPeriodeSkjemaContainer>
     );
 };
 

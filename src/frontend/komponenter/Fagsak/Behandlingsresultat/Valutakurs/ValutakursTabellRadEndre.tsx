@@ -25,19 +25,11 @@ import { datoformatNorsk } from '../../../../utils/formatter';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
-
-const Container = styled.div`
-    max-width: 30rem;
-    border-left: 0.0625rem solid var(--navds-global-color-orange-500);
-    padding-left: 2rem;
-`;
-
-const StyledLegend = styled.legend`
-    && {
-        display: flex;
-        margin-bottom: 0;
-    }
-`;
+import {
+    EøsPeriodeSkjemaContainer,
+    Knapperad,
+    StyledLegend,
+} from '../EøsPeriode/fellesKomponenter';
 
 const ValutakursRad = styled.div`
     width: 28rem;
@@ -52,11 +44,11 @@ const ValutakursRad = styled.div`
         margin-bottom: 0rem;
 
         label {
-            font-weight: 400;
+            font-weight: normal;
         }
 
         p.navds-label {
-            font-weight: 400;
+            font-weight: normal;
         }
 
         &:nth-of-type(1) {
@@ -66,13 +58,6 @@ const ValutakursRad = styled.div`
             width: 4.5rem;
         }
     }
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-    margin-top: 2rem;
 `;
 
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
@@ -115,7 +100,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <Container>
+        <EøsPeriodeSkjemaContainer>
             <EøsPeriodeSkjema
                 periode={skjema.felter.periode}
                 periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
@@ -154,6 +139,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
+                        className="skjemaelement"
                         id={`valutakurs_${skjema.felter.periodeId}`}
                         label={'Valutakursdato'}
                         value={skjema.felter.valutakursdato?.verdi}
@@ -218,7 +204,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     />
                 )}
             </Knapperad>
-        </Container>
+        </EøsPeriodeSkjemaContainer>
     );
 };
 
