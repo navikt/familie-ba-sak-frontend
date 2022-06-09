@@ -341,7 +341,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     ident: person.personIdent,
                                     fødselsdato: person.fødselsdato,
                                     navn: person.navn,
-                                    merket: false,
+                                    merket:
+                                        skjema.felter.barnBrevetGjelder.verdi.find(
+                                            markertFelt => markertFelt.ident === person.personIdent
+                                        )?.merket ?? false,
                                     manueltRegistrert: false,
                                     erFolkeregistrert: true,
                                 })
