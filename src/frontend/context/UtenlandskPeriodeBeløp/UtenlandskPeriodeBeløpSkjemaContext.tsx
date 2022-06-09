@@ -4,7 +4,7 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
@@ -62,10 +62,15 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         }
     });
 
-    const { skjema, valideringErOk, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
-        IUtenlandskPeriodeBeløp,
-        IBehandling
-    >({
+    const {
+        skjema,
+        valideringErOk,
+        kanSendeSkjema,
+        onSubmit,
+        nullstillSkjema,
+        settSubmitRessurs,
+        settVisfeilmeldinger,
+    } = useSkjema<IUtenlandskPeriodeBeløp, IBehandling>({
         felter: {
             periodeId: useFelt<string>({
                 verdi: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
@@ -100,6 +105,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            settSubmitRessurs(byggTomRessurs());
+            settVisfeilmeldinger(false);
             onSubmit(
                 {
                     method: 'PUT',
@@ -126,6 +133,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     const slettUtenlandskPeriodeBeløp = () => {
+        settSubmitRessurs(byggTomRessurs());
+        settVisfeilmeldinger(false);
         request<void, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
@@ -134,6 +143,9 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 nullstillSkjema();
                 settEkspandertUtenlandskPeriodeBeløp(false);
                 settÅpenBehandling(response);
+            } else {
+                settSubmitRessurs(response);
+                settVisfeilmeldinger(true);
             }
         });
     };
@@ -142,10 +154,14 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         const barnFjernetISkjema = utenlandskPeriodeBeløp.barnIdenter.filter(
             barn => skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn) < 0
         );
+        const erTomEndret =
+            !(
+                skjema.felter.periode.verdi.tom === undefined && utenlandskPeriodeBeløp.tom === null
+            ) && skjema.felter.periode?.verdi.tom !== utenlandskPeriodeBeløp.tom;
         return (
             barnFjernetISkjema.length > 0 ||
             skjema.felter.periode?.verdi.fom !== utenlandskPeriodeBeløp.fom ||
-            skjema.felter.periode?.verdi.tom !== utenlandskPeriodeBeløp.tom ||
+            erTomEndret ||
             skjema.felter.beløp?.verdi !== utenlandskPeriodeBeløp.beløp ||
             skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
             skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall

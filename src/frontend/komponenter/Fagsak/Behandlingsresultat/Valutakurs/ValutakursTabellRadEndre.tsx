@@ -99,112 +99,126 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const visSubmitFeilmelding = () => {
+        if (
+            skjema.submitRessurs.status === RessursStatus.FEILET ||
+            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
+        ) {
+            return skjema.submitRessurs.frontendFeilmelding;
+        } else {
+            return null;
+        }
+    };
+
     return (
-        <EøsPeriodeSkjemaContainer>
-            <EøsPeriodeSkjema
-                periode={skjema.felter.periode}
-                periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
-                initielFom={skjema.felter.initielFom}
-                visFeilmeldinger={skjema.visFeilmeldinger}
-                lesevisning={lesevisning}
-            />
-            <SkjemaGruppe
-                className={lesevisning ? 'lesevisning' : ''}
-                feilmeldingId={valutakursValutaFeilmeldingId(skjema)}
-                feil={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
-            >
-                <StyledLegend>
-                    <Label size="small">Registrer valuta</Label>
-                </StyledLegend>
-                <ValutakursRad>
-                    <FamilieValutavelger
-                        erLesevisning={lesevisning}
-                        id={'valuta'}
-                        label={'Valuta'}
-                        kunEøs
-                        medFlag
-                        size="small"
-                        value={skjema.felter.valutakode?.verdi}
-                        onChange={(value: Currency) => {
-                            if (value) {
-                                skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                            } else {
-                                skjema.felter.valutakode?.nullstill();
+        <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
+            <EøsPeriodeSkjemaContainer>
+                <EøsPeriodeSkjema
+                    periode={skjema.felter.periode}
+                    periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
+                    initielFom={skjema.felter.initielFom}
+                    visFeilmeldinger={skjema.visFeilmeldinger}
+                    lesevisning={lesevisning}
+                />
+                <SkjemaGruppe
+                    className={lesevisning ? 'lesevisning' : ''}
+                    feilmeldingId={valutakursValutaFeilmeldingId(skjema)}
+                    feil={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
+                >
+                    <StyledLegend>
+                        <Label size="small">Registrer valuta</Label>
+                    </StyledLegend>
+                    <ValutakursRad>
+                        <FamilieValutavelger
+                            erLesevisning={lesevisning}
+                            id={'valuta'}
+                            label={'Valuta'}
+                            kunEøs
+                            medFlag
+                            size="small"
+                            value={skjema.felter.valutakode?.verdi}
+                            onChange={(value: Currency) => {
+                                if (value) {
+                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                                } else {
+                                    skjema.felter.valutakode?.nullstill();
+                                }
+                            }}
+                            utenMargin
+                            kanNullstilles
+                        />
+                        <FamilieDatovelger
+                            {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
+                                skjema.visFeilmeldinger
+                            )}
+                            className="skjemaelement"
+                            id={`valutakurs_${skjema.felter.periodeId}`}
+                            label={'Valutakursdato'}
+                            value={skjema.felter.valutakursdato?.verdi}
+                            placeholder={datoformatNorsk.DATO}
+                            erLesesvisning={lesevisning}
+                            onChange={(dato?: ISODateString) =>
+                                skjema.felter.valutakursdato?.validerOgSettFelt(dato)
                             }
-                        }}
-                        utenMargin
-                        kanNullstilles
-                    />
-                    <FamilieDatovelger
-                        {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
-                            skjema.visFeilmeldinger
-                        )}
-                        className="skjemaelement"
-                        id={`valutakurs_${skjema.felter.periodeId}`}
-                        label={'Valutakursdato'}
-                        value={skjema.felter.valutakursdato?.verdi}
-                        placeholder={datoformatNorsk.DATO}
-                        erLesesvisning={lesevisning}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.valutakursdato?.validerOgSettFelt(dato)
-                        }
-                        valgtDato={
-                            skjema.felter.valutakursdato?.verdi !== null
-                                ? skjema.felter.valutakursdato?.verdi
-                                : undefined
-                        }
-                    />
-                    <FamilieInput
-                        label={'Valutakurs'}
-                        erLesevisning={lesevisning}
-                        value={skjema.felter.kurs?.verdi}
-                        onChange={event =>
-                            skjema.felter.kurs?.validerOgSettFelt(event.target.value)
-                        }
-                    />
-                </ValutakursRad>
-            </SkjemaGruppe>
+                            valgtDato={
+                                skjema.felter.valutakursdato?.verdi !== null
+                                    ? skjema.felter.valutakursdato?.verdi
+                                    : undefined
+                            }
+                        />
+                        <FamilieInput
+                            label={'Valutakurs'}
+                            erLesevisning={lesevisning}
+                            value={skjema.felter.kurs?.verdi}
+                            onChange={event =>
+                                skjema.felter.kurs?.validerOgSettFelt(event.target.value)
+                            }
+                        />
+                    </ValutakursRad>
+                </SkjemaGruppe>
 
-            <Knapperad>
-                <div>
-                    <FamilieKnapp
-                        erLesevisning={lesevisning}
-                        onClick={() => sendInnSkjema()}
-                        mini={true}
-                        type={valideringErOk() ? 'hoved' : 'standard'}
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    >
-                        Ferdig
-                    </FamilieKnapp>
-                    <FamilieKnapp
-                        style={{ marginLeft: '1rem' }}
-                        erLesevisning={lesevisning}
-                        onClick={() => toggleForm(false)}
-                        mini={true}
-                        type={'flat'}
-                    >
-                        Avbryt
-                    </FamilieKnapp>
-                </div>
+                <Knapperad>
+                    <div>
+                        <FamilieKnapp
+                            erLesevisning={lesevisning}
+                            onClick={() => sendInnSkjema()}
+                            mini={true}
+                            type={valideringErOk() ? 'hoved' : 'standard'}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        >
+                            Ferdig
+                        </FamilieKnapp>
+                        <FamilieKnapp
+                            style={{ marginLeft: '1rem' }}
+                            erLesevisning={lesevisning}
+                            onClick={() => toggleForm(false)}
+                            mini={true}
+                            type={'flat'}
+                        >
+                            Avbryt
+                        </FamilieKnapp>
+                    </div>
 
-                {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
-                    <IkonKnapp
-                        erLesevisning={lesevisning}
-                        onClick={() => slettValutakurs()}
-                        id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                            barn => `${barn}-`
-                        )}_${skjema.felter.initielFom.verdi}`}
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        mini={true}
-                        label={'Fjern'}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                        ikon={<Delete />}
-                    />
-                )}
-            </Knapperad>
-        </EøsPeriodeSkjemaContainer>
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                        <IkonKnapp
+                            erLesevisning={lesevisning}
+                            onClick={() => slettValutakurs()}
+                            id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                barn => `${barn}-`
+                            )}_${skjema.felter.initielFom.verdi}`}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            mini={true}
+                            label={'Fjern'}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                            ikon={<Delete />}
+                        />
+                    )}
+                </Knapperad>
+            </EøsPeriodeSkjemaContainer>
+        </SkjemaGruppe>
     );
 };
 

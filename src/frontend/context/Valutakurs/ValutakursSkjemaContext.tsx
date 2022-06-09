@@ -4,7 +4,7 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
@@ -54,10 +54,15 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
         }
     });
 
-    const { skjema, valideringErOk, kanSendeSkjema, nullstillSkjema, onSubmit } = useSkjema<
-        IValutakurs,
-        IBehandling
-    >({
+    const {
+        skjema,
+        valideringErOk,
+        kanSendeSkjema,
+        nullstillSkjema,
+        onSubmit,
+        settSubmitRessurs,
+        settVisfeilmeldinger,
+    } = useSkjema<IValutakurs, IBehandling>({
         felter: {
             periodeId: useFelt<string>({
                 verdi: valutakursFeilmeldingId(valutakurs),
@@ -92,6 +97,8 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            settSubmitRessurs(byggTomRessurs());
+            settVisfeilmeldinger(false);
             onSubmit(
                 {
                     method: 'PUT',
@@ -118,6 +125,8 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
     };
 
     const slettValutakurs = () => {
+        settSubmitRessurs(byggTomRessurs());
+        settVisfeilmeldinger(false);
         request<void, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}/${valutakurs.id}`,
@@ -126,6 +135,9 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                 nullstillSkjema();
                 settEkspandertValutakurs(false);
                 settÅpenBehandling(response);
+            } else {
+                settSubmitRessurs(response);
+                settVisfeilmeldinger(true);
             }
         });
     };
@@ -134,10 +146,13 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
         const barnFjernetISkjema = valutakurs.barnIdenter.filter(
             barn => skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn) < 0
         );
+        const erTomEndret =
+            !(skjema.felter.periode.verdi.tom === undefined && valutakurs.tom === null) &&
+            skjema.felter.periode?.verdi.tom !== valutakurs.tom;
         return (
             barnFjernetISkjema.length > 0 ||
             skjema.felter.periode?.verdi.fom !== valutakurs.fom ||
-            skjema.felter.periode?.verdi.tom !== valutakurs.tom ||
+            erTomEndret ||
             skjema.felter.valutakode?.verdi !== valutakurs.valutakode ||
             skjema.felter.valutakursdato?.verdi !== valutakurs.valutakursdato ||
             skjema.felter.kurs?.verdi !== valutakurs.kurs
