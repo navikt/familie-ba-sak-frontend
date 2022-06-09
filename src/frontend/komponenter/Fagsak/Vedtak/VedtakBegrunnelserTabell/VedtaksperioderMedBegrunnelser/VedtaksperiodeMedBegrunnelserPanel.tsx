@@ -32,7 +32,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     const vedtaksperiodeInneholderEtterbetaling3ÅrBegrunnelse = () =>
         vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
             begrunnelse =>
-                (begrunnelse.vedtakBegrunnelseSpesifikasjon as Standardbegrunnelse) ===
+                (begrunnelse.standardbegrunnelse as Standardbegrunnelse) ===
                 Standardbegrunnelse.ETTER_ENDRET_UTBETALING_ETTERBETALING
         ).length > 0;
 
@@ -43,7 +43,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
             begrunnelse =>
                 !ugyldigeReduksjonsteksterForÅTriggeFritekst.includes(
-                    begrunnelse.vedtakBegrunnelseSpesifikasjon as Standardbegrunnelse
+                    begrunnelse.standardbegrunnelse as Standardbegrunnelse
                 ) && begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
         ).length > 0;
 

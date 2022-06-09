@@ -30,7 +30,7 @@ import {
     årsaker,
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
-import { datoformatNorsk, formaterIdent } from '../../../utils/formatter';
+import { datoformatNorsk, lagPersonLabel } from '../../../utils/formatter';
 import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -200,7 +200,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     value={person.personIdent}
                                     key={`${index}_${person.fødselsdato}`}
                                 >
-                                    {formaterIdent(person.personIdent)}
+                                    {lagPersonLabel(person.personIdent, åpenBehandling.personer)}
                                 </option>
                             ))}
                     </StyledPersonvelger>

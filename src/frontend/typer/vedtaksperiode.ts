@@ -15,13 +15,8 @@ export interface IVedtaksperiodeMedBegrunnelser {
 }
 
 export interface IRestVedtaksbegrunnelse {
-    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
+    standardbegrunnelse: VedtakBegrunnelse;
     vedtakBegrunnelseType: VedtakBegrunnelseType;
-    personIdenter: string[];
-}
-
-export interface IRestPutVedtaksbegrunnelse {
-    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
 }
 
 export interface IRestPutVedtaksperiodeMedFritekster {

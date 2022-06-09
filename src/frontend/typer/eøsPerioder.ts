@@ -1,3 +1,4 @@
+import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
@@ -54,7 +55,7 @@ export const kompetanseResultater: Record<KompetanseResultat, string> = {
     TO_PRIMÆRLAND: 'To primærland',
 };
 
-export enum KompetanseStatus {
+export enum EøsPeriodeStatus {
     IKKE_UTFYLT = 'IKKE_UTFYLT',
     UFULLSTENDIG = 'UFULLSTENDIG',
     OK = 'OK',
@@ -62,7 +63,7 @@ export enum KompetanseStatus {
 
 export interface IRestKompetanse {
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
@@ -75,7 +76,7 @@ export interface IRestKompetanse {
 
 export interface IKompetanse {
     id: number;
-    status: KompetanseStatus;
+    status: EøsPeriodeStatus;
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
     barnIdenter: FeltState<string[]>;
@@ -84,4 +85,41 @@ export interface IKompetanse {
     annenForeldersAktivitetsland: FeltState<string | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
     resultat: FeltState<KompetanseResultat | undefined>;
+}
+
+export enum UtenlandskPeriodeBeløpIntervall {
+    ÅRLIG = 'ÅRLIG',
+    KVARTALSVIS = 'KVARTALSVIS',
+    MÅNEDLIG = 'MÅNEDLIG',
+    UKENTLIG = 'UKENTLIG',
+}
+
+export const utenlandskPeriodeBeløpIntervaller: Record<UtenlandskPeriodeBeløpIntervall, string> = {
+    ÅRLIG: 'per år',
+    KVARTALSVIS: 'per kvartal',
+    MÅNEDLIG: 'per måned',
+    UKENTLIG: 'per uke',
+};
+
+export interface IRestUtenlandskPeriodeBeløp {
+    id: number;
+    status: EøsPeriodeStatus;
+    fom: YearMonth;
+    tom?: YearMonth;
+    barnIdenter: string[];
+    beløp?: string;
+    valutakode?: string;
+    intervall?: UtenlandskPeriodeBeløpIntervall;
+}
+
+export interface IUtenlandskPeriodeBeløp {
+    periodeId: string;
+    id: number;
+    status: EøsPeriodeStatus;
+    initielFom: YearMonth;
+    periode: IYearMonthPeriode;
+    barnIdenter: OptionType[];
+    beløp?: string | undefined;
+    valutakode?: string | undefined;
+    intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
 }

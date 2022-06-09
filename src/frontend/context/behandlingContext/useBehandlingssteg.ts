@@ -76,7 +76,7 @@ const useBehandlingssteg = (
             });
     };
 
-    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
+    const minstEnPeriodeharBegrunnelseEllerFritekst = (): boolean => {
         const vedtaksperioderMedBegrunnelser =
             behandling?.vedtak?.vedtaksperioderMedBegrunnelser ?? [];
         return vedtaksperioderMedBegrunnelser.some(
@@ -87,7 +87,7 @@ const useBehandlingssteg = (
     };
 
     const kanSendeinnVedtak = () =>
-        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
+        minstEnPeriodeharBegrunnelseEllerFritekst() ||
         behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||

@@ -123,7 +123,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     if (action.option) {
                         oppdaterStandardbegrunnelser([
                             ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
-                                begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
+                                begrunnelse => begrunnelse.standardbegrunnelse
                             ),
                             action.option?.value as VedtakBegrunnelse,
                         ]);
@@ -136,10 +136,10 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                             [
                                 ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
                                     persistertBegrunnelse =>
-                                        persistertBegrunnelse.vedtakBegrunnelseSpesifikasjon !==
+                                        persistertBegrunnelse.standardbegrunnelse !==
                                         (action.removedValue?.value as VedtakBegrunnelse)
                                 ),
-                            ].map(begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon)
+                            ].map(begrunnelse => begrunnelse.standardbegrunnelse)
                         );
                     }
 

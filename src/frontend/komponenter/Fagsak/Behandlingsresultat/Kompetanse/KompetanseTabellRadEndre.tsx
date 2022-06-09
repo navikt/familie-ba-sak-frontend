@@ -16,8 +16,10 @@ import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { KompetanseSubmit, useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
+import { useEøs } from '../../../../context/Eøs/EøsContext';
+import { KompetanseSubmit } from '../../../../context/Kompetanse/KompetanseContext';
 import { validerKompetanse } from '../../../../context/Kompetanse/valideringKompetanse';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
@@ -28,11 +30,12 @@ import {
     søkerAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
-    KompetanseStatus,
-} from '../../../../typer/kompetanse';
+    EøsPeriodeStatus,
+} from '../../../../typer/eøsPerioder';
+import { ToggleNavn } from '../../../../typer/toggles';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import EndreKompetansePeriode from './EndreKompetansePeriode';
-import FamilieLandvelger from './FamilieLandvelger';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 
 const Container = styled.div`
@@ -66,9 +69,9 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     settEkspandertKompetanse,
 }) => {
     const { erLesevisning, settÅpenBehandling } = useBehandling();
-    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } =
-        useKompetanse();
+    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } = useEøs();
     const lesevisning = erLesevisning(true);
+    const { toggles } = useApp();
 
     const valgteBarn = redigerbartKompetanse.verdi?.barnIdenter.verdi.map(barn => {
         const tilBarn = tilgjengeligeBarn.find(opt => {
@@ -287,15 +290,18 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     label={'Annen forelders aktivitetsland'}
                     kunEøs
                     medFlag
+                    size="medium"
+                    kanNullstilles
                     value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
                     onChange={(value: Country) => {
+                        const nyVerdi = value ? value.value : undefined;
                         validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
                                 annenForeldersAktivitetsland: {
                                     ...redigerbartKompetanse.verdi?.annenForeldersAktivitetsland,
-                                    verdi: value.value,
+                                    verdi: nyVerdi,
                                 },
                             },
                         });
@@ -314,15 +320,18 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     label={'Barnets bostedsland'}
                     kunEøs
                     medFlag
+                    size="medium"
+                    kanNullstilles
                     value={redigerbartKompetanse.verdi?.barnetsBostedsland?.verdi}
                     onChange={(value: Country) => {
+                        const nyVerdi = value ? value.value : undefined;
                         validerOgSettRedigerbartKompetanse({
                             ...redigerbartKompetanse,
                             verdi: {
                                 ...redigerbartKompetanse.verdi,
                                 barnetsBostedsland: {
                                     ...redigerbartKompetanse.verdi?.barnetsBostedsland,
-                                    verdi: value.value,
+                                    verdi: nyVerdi,
                                 },
                             },
                         });
@@ -369,13 +378,28 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                 >
                     <option value={''}>Velg</option>
-                    {Object.values(KompetanseResultat).map(aktivitet => {
-                        return (
-                            <option key={aktivitet} value={aktivitet}>
-                                {kompetanseResultater[aktivitet]}
-                            </option>
-                        );
-                    })}
+                    <option
+                        key={KompetanseResultat.NORGE_ER_PRIMÆRLAND}
+                        value={KompetanseResultat.NORGE_ER_PRIMÆRLAND}
+                    >
+                        {kompetanseResultater[KompetanseResultat.NORGE_ER_PRIMÆRLAND]}
+                    </option>
+                    {toggles[ToggleNavn.kanBehandleEøsSekunderland] && (
+                        <option
+                            key={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
+                            value={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
+                        >
+                            {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
+                        </option>
+                    )}
+                    {toggles[ToggleNavn.kanBehandleEøsToPrimerland] && (
+                        <option
+                            key={KompetanseResultat.TO_PRIMÆRLAND}
+                            value={KompetanseResultat.TO_PRIMÆRLAND}
+                        >
+                            {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
+                        </option>
+                    )}
                 </FamilieSelect>
                 {toPrimærland && (
                     <Alert
@@ -414,7 +438,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {redigerbartKompetanse.verdi.status !== KompetanseStatus.IKKE_UTFYLT && (
+                    {redigerbartKompetanse.verdi.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
                         <IkonKnapp
                             erLesevisning={lesevisning}
                             onClick={() => {

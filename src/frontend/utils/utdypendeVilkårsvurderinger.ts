@@ -53,15 +53,15 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
         }
         if (vilkårType === VilkårType.BOR_MED_SØKER) {
             return [
-                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
-                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
-                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
-                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_ANNEN_FORELDER,
+                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_SØKER,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER,
                 UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED,
+                UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES,
+                UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
             ];
         }
     }

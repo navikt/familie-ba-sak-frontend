@@ -11,16 +11,16 @@ import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
-    barnaMedOpplysningerFelt: Felt<IBarnMedOpplysninger[]>;
+    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
 }
 
 const DeltBostedSkjema = (props: IProps) => {
-    const { barnaMedOpplysningerFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger } = props;
+    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger } = props;
 
-    const sorterteBarnMedOpplysninger = barnaMedOpplysningerFelt.verdi.sort(
+    const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
             if (!a.fødselsdato) {
                 return 1;
@@ -41,10 +41,10 @@ const DeltBostedSkjema = (props: IProps) => {
 
     return (
         <CheckboxGruppe
-            {...barnaMedOpplysningerFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
+            {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={'Hvilke barn har delt bosted?'}
         >
-            {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
+            {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                 <BarnCheckbox
                     key={barnMedOpplysninger.ident}
                     barn={barnMedOpplysninger}
@@ -53,7 +53,7 @@ const DeltBostedSkjema = (props: IProps) => {
             ))}
 
             <LeggTilBarn
-                barnaMedOpplysninger={barnaMedOpplysningerFelt}
+                barnaMedOpplysninger={barnMedDeltBostedFelt}
                 onSuccess={(barn: IPersonInfo) => {
                     avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
                         ...avtalerOmDeltBostedPerBarnFelt.verdi,
