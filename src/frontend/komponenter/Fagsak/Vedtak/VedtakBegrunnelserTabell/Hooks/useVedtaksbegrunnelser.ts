@@ -31,6 +31,7 @@ export const useVilkårBegrunnelser = ({
             case Vedtaksperiodetype.UTBETALING:
                 return [
                     VedtakBegrunnelseType.INNVILGET,
+                    VedtakBegrunnelseType.EØS_INNVILGET,
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
@@ -42,6 +43,7 @@ export const useVilkårBegrunnelser = ({
                 return [
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.INNVILGET,
+                    VedtakBegrunnelseType.EØS_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                     Vedtaksperiodetype.ENDRET_UTBETALING,
                 ];
@@ -106,10 +108,10 @@ export const mapBegrunnelserTilSelectOptions = (
 ): ISelectOption[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
         (begrunnelse: IRestVedtaksbegrunnelse) => ({
-            value: begrunnelse.vedtakBegrunnelseSpesifikasjon.toString(),
+            value: begrunnelse.standardbegrunnelse.toString(),
             label: hentLabelForOption(
                 begrunnelse.vedtakBegrunnelseType,
-                begrunnelse.vedtakBegrunnelseSpesifikasjon,
+                begrunnelse.standardbegrunnelse,
                 vilkårBegrunnelser
             ),
         })
@@ -118,13 +120,13 @@ export const mapBegrunnelserTilSelectOptions = (
 
 const hentLabelForOption = (
     vedtakBegrunnelseType: VedtakBegrunnelseType,
-    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse,
+    standardbegrunnelse: VedtakBegrunnelse,
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ) => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
         ? vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
               (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                  restVedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelseSpesifikasjon
+                  restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
           )?.navn ?? ''
         : '';
 };
