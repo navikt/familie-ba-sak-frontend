@@ -57,7 +57,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                             {
                                                 personIdent: søkeresultat.ident,
                                                 aktørId: null,
-                                                eier: FagsakEier.OMSORGSPERSON,
+                                                fagsakEier: FagsakEier.OMSORGSPERSON,
                                             },
                                             lukkModal
                                         );
@@ -114,7 +114,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 {
                                                     personIdent: søkeresultat.ident,
                                                     aktørId: null,
-                                                    eier: FagsakEier.BARN,
+                                                    fagsakEier: FagsakEier.BARN,
                                                 },
                                                 lukkModal
                                             );
@@ -141,7 +141,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 {
                                                     personIdent: søkeresultat.ident,
                                                     aktørId: null,
-                                                    eier: FagsakEier.OMSORGSPERSON,
+                                                    fagsakEier: FagsakEier.OMSORGSPERSON,
                                                 },
                                                 lukkModal
                                             );
