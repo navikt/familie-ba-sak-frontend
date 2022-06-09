@@ -314,7 +314,6 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             onClick={(e: React.UIEvent) => {
                                 e.preventDefault();
                                 window.open('/redirect/drek', '_new');
-                                settVisModal(false);
                             }}
                         >
                             <span>Rekvirer D-nr i DREK</span>
