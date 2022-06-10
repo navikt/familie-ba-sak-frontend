@@ -6,20 +6,21 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IMinimalFagsak, FagsakEier } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
 export interface IOpprettFagsakData {
     personIdent: string | null;
     aktørId: string | null;
+    fagsakEier: FagsakEier | null;
 }
 
 const useOpprettFagsak = () => {
     const history = useHistory();
     const { request } = useHttp();
     const [feilmelding, settFeilmelding] = useState('');
-    const [senderInn, settSenderInn] = useState(false);
+    const [senderInn, settSenderInn] = useState<FagsakEier | null>(null);
 
     const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
         request<IOpprettFagsakData, IMinimalFagsak>({
@@ -29,7 +30,7 @@ const useOpprettFagsak = () => {
             påvirkerSystemLaster: true,
         })
             .then((response: Ressurs<IMinimalFagsak>) => {
-                settSenderInn(false);
+                settSenderInn(null);
                 if (response.status === RessursStatus.SUKSESS) {
                     onSuccess && onSuccess();
                     const aktivBehandling: VisningBehandling | undefined =
@@ -50,7 +51,7 @@ const useOpprettFagsak = () => {
                 }
             })
             .catch(() => {
-                settSenderInn(false);
+                settSenderInn(null);
                 settFeilmelding('Opprettelse av fagsak feilet');
             });
     };
