@@ -41,7 +41,7 @@ interface IProps {
 const BarnBrevetGjelder = (props: IProps) => {
     const { barnBrevetGjelderFelt, visFeilmeldinger, settVisFeilmeldinger, alternativer } = props;
 
-    const sorterteBarn = alternativer.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+    alternativer.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
         if (!a.fødselsdato || a.fødselsdato === '') {
             return 1;
         }
@@ -64,7 +64,7 @@ const BarnBrevetGjelder = (props: IProps) => {
                 {...barnBrevetGjelderFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
                 legend={'Hvilke barn gjelder brevet?'}
             >
-                {sorterteBarn.map((barn: IBarnMedOpplysninger) => {
+                {alternativer.map((barn: IBarnMedOpplysninger) => {
                     const barnLabel = lagBarnLabel(barn);
                     return (
                         <StyledFamilieCheckbox
@@ -74,6 +74,7 @@ const BarnBrevetGjelder = (props: IProps) => {
                                     <LabelTekst title={barnLabel}>{barnLabel}</LabelTekst>
                                 </LabelContent>
                             }
+                            checked={barn.merket}
                             onChange={event => {
                                 const barnSkalMerkes = event.target.checked;
                                 if (barnSkalMerkes) {
