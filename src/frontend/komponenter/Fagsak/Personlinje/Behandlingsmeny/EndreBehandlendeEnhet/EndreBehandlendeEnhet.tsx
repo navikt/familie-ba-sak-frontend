@@ -86,7 +86,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
-                        erLesevisning={erLesevisning(false)}
+                        erLesevisning={erLesevisning(false, true)}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
                         value={enhetId}
