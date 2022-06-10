@@ -3,6 +3,7 @@ import type { ISODateString } from '@navikt/familie-form-elements';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
+import type { IRestValutakurs } from './eøsPerioder';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { IGrunnlagPerson } from './person';
@@ -239,6 +240,7 @@ export interface IBehandling {
     endringstidspunkt?: string;
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
+    valutakurser: IRestValutakurs[];
 }
 
 export interface IArbeidsfordelingPåBehandling {
