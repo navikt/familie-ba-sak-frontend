@@ -71,8 +71,14 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { logg } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
+    const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
 
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
+
+    const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
+        inputNode?.focus();
+        settFnrInputNode(inputNode);
+    }, []);
 
     React.useEffect(() => {
         settKanLeggeTilUregistrerteBarn(true);
@@ -306,6 +312,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         }
                         label={'Fødselsnummer'}
                         placeholder={'11 siffer'}
+                        inputRef={fnrInputRef}
                     />
                     <DrekLenkeContainer>
                         <Lenke
@@ -313,6 +320,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             target="_blank"
                             onClick={(e: React.UIEvent) => {
                                 e.preventDefault();
+                                fnrInputNode?.focus();
                                 window.open('/redirect/drek', '_new');
                             }}
                         >
