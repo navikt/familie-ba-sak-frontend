@@ -75,8 +75,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     feilmelding = '',
 }) => {
     const history = useHistory();
-    const { forrigeÅpneSide, åpenBehandling, erLesevisning } = useBehandling();
-    const settPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
+    const { forrigeÅpneSide, åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } =
+        useBehandling();
+    const erBehandlingSattPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
         const element = document.getElementById('skjemasteg');
@@ -97,13 +98,22 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     );
     return (
         <>
-            {settPåVent && (
+            {erBehandlingSattPåVent && (
                 <StyledAlertStripe type="info">
-                    Behandlingen er satt på vent. Årsak: {settPåVentÅrsaker[settPåVent.årsak]}.
-                    Frist: {formaterIsoDato(settPåVent.frist, datoformat.DATO)}. Fortsett behandling
-                    via menyen.
+                    Behandlingen er satt på vent. Årsak:{' '}
+                    {settPåVentÅrsaker[erBehandlingSattPåVent.årsak]}. Frist:{' '}
+                    {formaterIsoDato(erBehandlingSattPåVent.frist, datoformat.DATO)}. Fortsett
+                    behandling via menyen.
                 </StyledAlertStripe>
             )}
+
+            {erBehandleneEnhetMidlertidig && (
+                <StyledAlertStripe type="info">
+                    Denne behandlingen er låst fordi vi ikke har klart å sette behandlende enhet. Du
+                    må endre dette i menyen før du kan fortsette.
+                </StyledAlertStripe>
+            )}
+
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
                 <StyledInnholdstittel children={tittel} />
 
