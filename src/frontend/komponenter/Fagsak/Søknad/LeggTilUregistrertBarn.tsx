@@ -31,7 +31,7 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
             <FamilieCheckbox
                 id={registrerBarnSkjema.felter.erFolkeregistrert.id}
                 erLesevisning={erLesevisning()}
-                label={'Barnet er ikke folkeregistrert (har ikke fødselsnummer / D-nummer)'}
+                label={'Barnet er ikke folkeregistrert / har ikke fødselsnummer'}
                 checked={!registrerBarnSkjema.felter.erFolkeregistrert.verdi}
                 onChange={() => {
                     registrerBarnSkjema.felter.erFolkeregistrert.validerOgSettFelt(
