@@ -8,6 +8,8 @@ import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
+import { FagsakEier } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import useOpprettFagsak from './useOpprettFagsak';
@@ -22,54 +24,158 @@ const StyledUndertittel = styled(Undertittel)`
     margin-bottom: 1.5rem;
 `;
 
+const StyledKnappContainer = styled.div`
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+`;
+
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
-    const { sjekkTilgang } = useApp();
+    const { sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat;
 
     return (
-        <UIModalWrapper
-            modal={{
-                actions: [
-                    <Knapp key={'avbryt'} mini={true} onClick={lukkModal} children={'Avbryt'} />,
-                    <Knapp
-                        key={'bekreft'}
-                        type={'hoved'}
-                        mini={true}
-                        onClick={async () => {
-                            settSenderInn(true);
-                            if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
-                                opprettFagsak(
-                                    {
-                                        personIdent: søkeresultat.ident,
-                                        aktørId: null,
-                                    },
-                                    lukkModal
-                                );
-                            }
-                        }}
-                        children={'Ja, opprett fagsak'}
-                        disabled={senderInn}
-                        spinner={senderInn}
-                    />,
-                ],
-                onClose: lukkModal,
-                lukkKnapp: true,
-                tittel: 'Opprett fagsak',
-                visModal,
-            }}
-        >
-            <StyledUndertittel tag={'h3'}>
-                Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
-                personen?
-            </StyledUndertittel>
-            {søkeresultat && (
-                <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
-                    søkeresultat.ident
-                )})`}</Normaltekst>
+        <>
+            {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
+                <UIModalWrapper
+                    modal={{
+                        actions: [
+                            <Knapp
+                                key={'avbryt'}
+                                mini={true}
+                                onClick={lukkModal}
+                                children={'Avbryt'}
+                            />,
+                            <Knapp
+                                key={'bekreft'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={async () => {
+                                    settSenderInn(FagsakEier.OMSORGSPERSON);
+                                    if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
+                                        opprettFagsak(
+                                            {
+                                                personIdent: søkeresultat.ident,
+                                                aktørId: null,
+                                                fagsakEier: FagsakEier.OMSORGSPERSON,
+                                            },
+                                            lukkModal
+                                        );
+                                    } else {
+                                        settSenderInn(null);
+                                    }
+                                }}
+                                children={'Ja, opprett fagsak'}
+                                disabled={senderInn !== null}
+                                spinner={senderInn === FagsakEier.OMSORGSPERSON}
+                            />,
+                        ],
+                        onClose: lukkModal,
+                        lukkKnapp: true,
+                        tittel: 'Opprett fagsak',
+                        visModal: visModal,
+                    }}
+                >
+                    <StyledUndertittel tag={'h3'}>
+                        Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
+                        personen?
+                    </StyledUndertittel>
+                    {søkeresultat && (
+                        <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
+                            søkeresultat.ident
+                        )})`}</Normaltekst>
+                    )}
+                    {!!feilmelding && <Feilmelding children={feilmelding} />}
+                </UIModalWrapper>
             )}
-            {!!feilmelding && <Feilmelding children={feilmelding} />}
-        </UIModalWrapper>
+            {toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
+                <UIModalWrapper
+                    modal={{
+                        actions: [
+                            <StyledKnappContainer key={'OpprettFagsakModal knapper'}>
+                                <Knapp
+                                    key={'avbryt'}
+                                    type={'flat'}
+                                    mini={true}
+                                    onClick={lukkModal}
+                                    children={'Avbryt'}
+                                    kompakt={true}
+                                />
+                                <Knapp
+                                    key={'bekreft institusjon'}
+                                    mini={true}
+                                    onClick={async () => {
+                                        settSenderInn(FagsakEier.BARN);
+                                        if (
+                                            søkeresultat &&
+                                            (await sjekkTilgang(søkeresultat.ident))
+                                        ) {
+                                            opprettFagsak(
+                                                {
+                                                    personIdent: søkeresultat.ident,
+                                                    aktørId: null,
+                                                    fagsakEier: FagsakEier.BARN,
+                                                },
+                                                lukkModal
+                                            );
+                                        } else {
+                                            settSenderInn(null);
+                                        }
+                                    }}
+                                    children={'Opprett fagsak på institusjon'}
+                                    disabled={senderInn !== null}
+                                    spinner={senderInn === FagsakEier.BARN}
+                                    kompakt={true}
+                                />
+                                <Knapp
+                                    key={'Bekreft'}
+                                    type={'hoved'}
+                                    mini={true}
+                                    onClick={async () => {
+                                        settSenderInn(FagsakEier.OMSORGSPERSON);
+                                        if (
+                                            søkeresultat &&
+                                            (await sjekkTilgang(søkeresultat.ident))
+                                        ) {
+                                            opprettFagsak(
+                                                {
+                                                    personIdent: søkeresultat.ident,
+                                                    aktørId: null,
+                                                    fagsakEier: FagsakEier.OMSORGSPERSON,
+                                                },
+                                                lukkModal
+                                            );
+                                        } else {
+                                            settSenderInn(null);
+                                        }
+                                    }}
+                                    children={'Opprett fagsak'}
+                                    disabled={senderInn !== null}
+                                    spinner={senderInn === FagsakEier.OMSORGSPERSON}
+                                    kompakt={true}
+                                />
+                            </StyledKnappContainer>,
+                        ],
+                        onClose: lukkModal,
+                        lukkKnapp: true,
+                        tittel: 'Opprett fagsak',
+                        visModal: visModal,
+                        className: 'uimodal-wider',
+                    }}
+                >
+                    <StyledUndertittel tag={'h3'}>
+                        Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
+                        personen?
+                    </StyledUndertittel>
+                    {søkeresultat && (
+                        <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
+                            søkeresultat.ident
+                        )})`}</Normaltekst>
+                    )}
+                    {!!feilmelding && <Feilmelding children={feilmelding} />}
+                </UIModalWrapper>
+            )}
+        </>
     );
 };
 
