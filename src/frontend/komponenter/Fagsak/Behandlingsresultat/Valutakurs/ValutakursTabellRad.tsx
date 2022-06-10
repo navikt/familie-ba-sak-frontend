@@ -36,8 +36,8 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     }));
 
     const {
-        ekspandertValutakurs,
-        settEkspandertValutakurs,
+        erValutakursEkspandert,
+        settErValutakursEkspandert,
         skjema,
         valideringErOk,
         sendInnSkjema,
@@ -57,17 +57,17 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     }, [visFeilmeldinger]);
 
     const toggleForm = (visAlert: boolean) => {
-        if (ekspandertValutakurs && visAlert && erValutakursSkjemaEndret()) {
+        if (erValutakursEkspandert && visAlert && erValutakursSkjemaEndret()) {
             alert('Valutakurs har endringer som ikke er lagret!');
         } else {
-            settEkspandertValutakurs(!ekspandertValutakurs);
+            settErValutakursEkspandert(!erValutakursEkspandert);
             nullstillSkjema();
         }
     };
 
     return (
         <>
-            <EkspanderbarTr ekspandert={ekspandertValutakurs}>
+            <EkspanderbarTr ekspandert={erValutakursEkspandert}>
                 <StatusBarnCelleOgPeriodeCelle
                     status={valutakurs.status}
                     barnIdenter={valutakurs.barnIdenter}
@@ -91,13 +91,13 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                         size="xsmall"
                     >
                         <BodyShort>
-                            {!ekspandertValutakurs
+                            {!erValutakursEkspandert
                                 ? valutakurs.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Registrer valutakurs'
                                 : `Lukk`}
                         </BodyShort>
-                        {ekspandertValutakurs ? (
+                        {erValutakursEkspandert ? (
                             <Collapse width="22" height="22" />
                         ) : (
                             <Expand width="22" height="22" />
@@ -105,7 +105,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                     </Button>
                 </td>
             </EkspanderbarTr>
-            {ekspandertValutakurs && (
+            {erValutakursEkspandert && (
                 <tr>
                     <EkspandertTd colSpan={5}>
                         <ValutakursTabellRadEndre

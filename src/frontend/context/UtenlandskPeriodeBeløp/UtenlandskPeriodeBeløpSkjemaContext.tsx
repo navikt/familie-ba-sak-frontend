@@ -41,7 +41,7 @@ interface IProps {
 }
 
 const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriodeBeløp }: IProps) => {
-    const [ekspandertUtenlandskPeriodeBeløp, settEkspandertUtenlandskPeriodeBeløp] =
+    const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] =
         React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
@@ -124,7 +124,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         nullstillSkjema();
-                        settEkspandertUtenlandskPeriodeBeløp(false);
+                        settErUtenlandskPeriodeBeløpEkspandert(false);
                         settÅpenBehandling(response);
                     }
                 }
@@ -141,7 +141,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
-                settEkspandertUtenlandskPeriodeBeløp(false);
+                settErUtenlandskPeriodeBeløpEkspandert(false);
                 settÅpenBehandling(response);
             } else {
                 settSubmitRessurs(response);
@@ -152,7 +152,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const erUtenlandskPeriodeBeløpSkjemaEndret = () => {
         const barnFjernetISkjema = utenlandskPeriodeBeløp.barnIdenter.filter(
-            barn => skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn) < 0
+            barn => !skjema.felter.barnIdenter.verdi.some(ident => ident.value === barn)
         );
         const erTomEndret =
             !(
@@ -169,8 +169,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     return {
-        ekspandertUtenlandskPeriodeBeløp,
-        settEkspandertUtenlandskPeriodeBeløp,
+        erUtenlandskPeriodeBeløpEkspandert,
+        settErUtenlandskPeriodeBeløpEkspandert,
         skjema,
         valideringErOk,
         sendInnSkjema,

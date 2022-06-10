@@ -34,7 +34,7 @@ interface IProps {
 }
 
 const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
-    const [ekspandertValutakurs, settEkspandertValutakurs] = React.useState<boolean>(false);
+    const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
@@ -116,7 +116,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         nullstillSkjema();
-                        settEkspandertValutakurs(false);
+                        settErValutakursEkspandert(false);
                         settÅpenBehandling(response);
                     }
                 }
@@ -133,7 +133,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
-                settEkspandertValutakurs(false);
+                settErValutakursEkspandert(false);
                 settÅpenBehandling(response);
             } else {
                 settSubmitRessurs(response);
@@ -144,7 +144,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
 
     const erValutakursSkjemaEndret = () => {
         const barnFjernetISkjema = valutakurs.barnIdenter.filter(
-            barn => skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn) < 0
+            barn => !skjema.felter.barnIdenter.verdi.some(ident => ident.value === barn)
         );
         const erTomEndret =
             !(skjema.felter.periode.verdi.tom === undefined && valutakurs.tom === null) &&
@@ -160,8 +160,8 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
     };
 
     return {
-        ekspandertValutakurs,
-        settEkspandertValutakurs,
+        erValutakursEkspandert,
+        settErValutakursEkspandert,
         skjema,
         valideringErOk,
         kanSendeSkjema,

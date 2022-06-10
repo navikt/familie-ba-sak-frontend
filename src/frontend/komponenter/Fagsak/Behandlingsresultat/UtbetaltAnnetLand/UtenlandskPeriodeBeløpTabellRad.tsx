@@ -36,8 +36,8 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     }));
 
     const {
-        ekspandertUtenlandskPeriodeBeløp,
-        settEkspandertUtenlandskPeriodeBeløp,
+        erUtenlandskPeriodeBeløpEkspandert,
+        settErUtenlandskPeriodeBeløpEkspandert,
         skjema,
         valideringErOk,
         sendInnSkjema,
@@ -53,7 +53,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     React.useEffect(() => {
         if (åpenBehandling) {
             nullstillSkjema();
-            settEkspandertUtenlandskPeriodeBeløp(false);
+            settErUtenlandskPeriodeBeløpEkspandert(false);
         }
     }, [åpenBehandling]);
 
@@ -65,20 +65,20 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
 
     const toggleForm = (visAlert: boolean) => {
         if (
-            ekspandertUtenlandskPeriodeBeløp &&
+            erUtenlandskPeriodeBeløpEkspandert &&
             visAlert &&
             erUtenlandskPeriodeBeløpSkjemaEndret()
         ) {
             alert('Utenlandsk beløp har endringer som ikke er lagret!');
         } else {
-            settEkspandertUtenlandskPeriodeBeløp(!ekspandertUtenlandskPeriodeBeløp);
+            settErUtenlandskPeriodeBeløpEkspandert(!erUtenlandskPeriodeBeløpEkspandert);
             nullstillSkjema();
         }
     };
 
     return (
         <>
-            <EkspanderbarTr ekspandert={ekspandertUtenlandskPeriodeBeløp}>
+            <EkspanderbarTr ekspandert={erUtenlandskPeriodeBeløpEkspandert}>
                 <StatusBarnCelleOgPeriodeCelle
                     status={utenlandskPeriodeBeløp.status}
                     barnIdenter={utenlandskPeriodeBeløp.barnIdenter}
@@ -100,13 +100,13 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                         size="xsmall"
                     >
                         <BodyShort>
-                            {!ekspandertUtenlandskPeriodeBeløp
+                            {!erUtenlandskPeriodeBeløpEkspandert
                                 ? utenlandskPeriodeBeløp.status === EøsPeriodeStatus.OK
                                     ? 'Endre'
                                     : 'Registrer beløp'
                                 : `Lukk`}
                         </BodyShort>
-                        {ekspandertUtenlandskPeriodeBeløp ? (
+                        {erUtenlandskPeriodeBeløpEkspandert ? (
                             <Collapse width="22" height="22" />
                         ) : (
                             <Expand width="22" height="22" />
@@ -114,7 +114,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     </Button>
                 </td>
             </EkspanderbarTr>
-            {ekspandertUtenlandskPeriodeBeløp && (
+            {erUtenlandskPeriodeBeløpEkspandert && (
                 <tr>
                     <EkspandertTd colSpan={5}>
                         <UtenlandskPeriodeBeløpTabellRadEndre
