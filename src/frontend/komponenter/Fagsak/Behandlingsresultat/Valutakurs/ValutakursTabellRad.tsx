@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
 import {
@@ -10,11 +8,11 @@ import {
 } from '../../../../context/Valutakurs/ValutakursSkjemaContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import {
     EkspanderbarTr,
     EkspandertTd,
+    EøsPeriodeEkspanderKnapp,
     StatusBarnCelleOgPeriodeCelle,
 } from '../EøsPeriode/fellesKomponenter';
 import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
@@ -84,25 +82,13 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                 </td>
                 <td>{valutakurs.valutakode ? valutakurs.valutakode : '-'}</td>
                 <td>
-                    <Button
-                        id={valutakursFeilmeldingId(valutakurs)}
-                        variant="tertiary"
-                        onClick={() => toggleForm(true)}
-                        size="xsmall"
-                    >
-                        <BodyShort>
-                            {!erValutakursEkspandert
-                                ? valutakurs.status === EøsPeriodeStatus.OK
-                                    ? 'Endre'
-                                    : 'Registrer valutakurs'
-                                : `Lukk`}
-                        </BodyShort>
-                        {erValutakursEkspandert ? (
-                            <Collapse width="22" height="22" />
-                        ) : (
-                            <Expand width="22" height="22" />
-                        )}
-                    </Button>
+                    <EøsPeriodeEkspanderKnapp
+                        feilmeldingId={valutakursFeilmeldingId(valutakurs)}
+                        toggleForm={toggleForm}
+                        erEkspandert={erValutakursEkspandert}
+                        periodeStatus={valutakurs.status}
+                        ikkeUtfyltLabel={'Registrer valutakurs'}
+                    />
                 </td>
             </EkspanderbarTr>
             {erValutakursEkspandert && (

@@ -2,11 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { Collapse, Expand } from '@navikt/ds-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
-import type { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
@@ -104,5 +105,37 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                 <BodyShort size="small">{formatterPeriode(props.periode)}</BodyShort>
             </td>
         </>
+    );
+};
+
+interface IEøsPeriodeEkspanderKnappProps {
+    feilmeldingId: string;
+    toggleForm: (visAlert: boolean) => void;
+    erEkspandert: boolean;
+    periodeStatus: EøsPeriodeStatus;
+    ikkeUtfyltLabel: string;
+}
+
+export const EøsPeriodeEkspanderKnapp = (props: IEøsPeriodeEkspanderKnappProps) => {
+    return (
+        <Button
+            id={props.feilmeldingId}
+            variant="tertiary"
+            onClick={() => props.toggleForm(true)}
+            size="xsmall"
+        >
+            <BodyShort>
+                {!props.erEkspandert
+                    ? props.periodeStatus === EøsPeriodeStatus.OK
+                        ? 'Endre'
+                        : props.ikkeUtfyltLabel
+                    : `Lukk`}
+            </BodyShort>
+            {props.erEkspandert ? (
+                <Collapse width="22" height="22" />
+            ) : (
+                <Expand width="22" height="22" />
+            )}
+        </Button>
     );
 };

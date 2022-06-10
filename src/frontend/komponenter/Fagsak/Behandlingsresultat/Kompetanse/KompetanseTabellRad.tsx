@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 
 import deepEqual from 'deep-equal';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus, KompetanseResultat } from '../../../../typer/eøsPerioder';
+import { KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
 import {
     EkspanderbarTr,
     EkspandertTd,
+    EøsPeriodeEkspanderKnapp,
     StatusBarnCelleOgPeriodeCelle,
 } from '../EøsPeriode/fellesKomponenter';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
@@ -74,25 +74,13 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
                 </td>
                 <td>
-                    <Button
-                        id={kompetanseFeilmeldingId(kompetanse)}
-                        variant="tertiary"
-                        onClick={() => toggleForm(true)}
-                        size="xsmall"
-                    >
-                        <BodyShort>
-                            {!ekspandertKompetanse
-                                ? kompetanse.verdi?.status === EøsPeriodeStatus.OK
-                                    ? 'Endre'
-                                    : 'Fastsett kompetanse'
-                                : `Lukk`}
-                        </BodyShort>
-                        {ekspandertKompetanse ? (
-                            <Collapse width="22" height="22" />
-                        ) : (
-                            <Expand width="22" height="22" />
-                        )}
-                    </Button>
+                    <EøsPeriodeEkspanderKnapp
+                        feilmeldingId={kompetanseFeilmeldingId(kompetanse)}
+                        toggleForm={toggleForm}
+                        erEkspandert={ekspandertKompetanse}
+                        periodeStatus={kompetanse.verdi.status}
+                        ikkeUtfyltLabel={'Fastsett kompetanse'}
+                    />
                 </td>
             </EkspanderbarTr>
             {ekspandertKompetanse && (

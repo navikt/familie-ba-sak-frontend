@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
 import {
@@ -9,12 +7,12 @@ import {
     utenlandskPeriodeBeløpFeilmeldingId,
 } from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
 import {
     EkspanderbarTr,
     EkspandertTd,
+    EøsPeriodeEkspanderKnapp,
     StatusBarnCelleOgPeriodeCelle,
 } from '../EøsPeriode/fellesKomponenter';
 import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
@@ -93,25 +91,13 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     {utenlandskPeriodeBeløp.valutakode ? utenlandskPeriodeBeløp.valutakode : '-'}
                 </td>
                 <td>
-                    <Button
-                        id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
-                        variant="tertiary"
-                        onClick={() => toggleForm(true)}
-                        size="xsmall"
-                    >
-                        <BodyShort>
-                            {!erUtenlandskPeriodeBeløpEkspandert
-                                ? utenlandskPeriodeBeløp.status === EøsPeriodeStatus.OK
-                                    ? 'Endre'
-                                    : 'Registrer beløp'
-                                : `Lukk`}
-                        </BodyShort>
-                        {erUtenlandskPeriodeBeløpEkspandert ? (
-                            <Collapse width="22" height="22" />
-                        ) : (
-                            <Expand width="22" height="22" />
-                        )}
-                    </Button>
+                    <EøsPeriodeEkspanderKnapp
+                        feilmeldingId={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
+                        toggleForm={toggleForm}
+                        erEkspandert={erUtenlandskPeriodeBeløpEkspandert}
+                        periodeStatus={utenlandskPeriodeBeløp.status}
+                        ikkeUtfyltLabel={'Registrer beløp'}
+                    />
                 </td>
             </EkspanderbarTr>
             {erUtenlandskPeriodeBeløpEkspandert && (
