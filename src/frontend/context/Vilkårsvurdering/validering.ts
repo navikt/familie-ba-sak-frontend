@@ -35,6 +35,8 @@ export const validerVilkår = (
         {
             utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.verdi,
             vilkårType: nyttVilkårResultat.verdi.vilkårType,
+            regelverk: nyttVilkårResultat.verdi.vurderesEtter,
+            personType: avhengigheter?.person.type,
         }
     );
 

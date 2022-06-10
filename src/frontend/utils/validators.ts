@@ -11,6 +11,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
+import { Regelverk } from '../typer/vilkår';
 import { Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
@@ -193,14 +194,32 @@ export const erBegrunnelseGyldig = (
         return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
     }
 
-    if (felt.verdi.length > 0 || avhengigheter?.utdypendeVilkårsvurderinger.length === 0) {
-        return ok(felt);
+    switch (avhengigheter?.regelverk) {
+        case Regelverk.NASJONALE_REGLER: {
+            if (felt.verdi.length > 0 || avhengigheter?.utdypendeVilkårsvurderinger.length === 0) {
+                return ok(felt);
+            }
+            return feil(
+                felt,
+                'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
+            );
+        }
+        case Regelverk.EØS_FORORDNINGEN: {
+            if (
+                avhengigheter?.regelverk === Regelverk.EØS_FORORDNINGEN &&
+                avhengigheter?.personType === PersonType.SØKER &&
+                avhengigheter?.vilkårType === VilkårType.BOSATT_I_RIKET
+            ) {
+                return felt.verdi.length > 0
+                    ? ok(felt)
+                    : feil(felt, 'Du må fylle inn en begrunnelse');
+            }
+            return ok(felt);
+        }
+        default: {
+            return ok(felt);
+        }
     }
-
-    return feil(
-        felt,
-        'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
-    );
 };
 
 export const erUtdypendeVilkårsvurderingerGyldig = (
