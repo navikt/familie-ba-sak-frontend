@@ -33,7 +33,7 @@ const TabellHeader = styled.th`
         width: 4rem;
     }
     &:nth-of-type(5) {
-        width: 13.5rem;
+        width: 15rem;
     }
 `;
 

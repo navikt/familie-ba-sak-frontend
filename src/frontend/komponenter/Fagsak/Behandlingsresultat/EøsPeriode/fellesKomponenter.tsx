@@ -28,6 +28,7 @@ export const EkspanderbarTr = styled.tr`
     & td:last-child {
         text-align: right;
         padding-right: 0;
+        padding-left: 0;
     }
 `;
 

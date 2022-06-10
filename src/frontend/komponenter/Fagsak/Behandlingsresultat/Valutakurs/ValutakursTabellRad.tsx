@@ -87,7 +87,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                         toggleForm={toggleForm}
                         erEkspandert={erValutakursEkspandert}
                         periodeStatus={valutakurs.status}
-                        ikkeUtfyltLabel={'Registrer valutakurs'}
+                        ikkeUtfyltLabel={'Registrer valutakursdato'}
                     />
                 </td>
             </EkspanderbarTr>

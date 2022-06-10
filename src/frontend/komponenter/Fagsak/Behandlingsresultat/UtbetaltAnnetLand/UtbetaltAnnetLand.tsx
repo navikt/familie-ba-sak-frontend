@@ -27,13 +27,13 @@ const TabellHeader = styled.th`
         width: 11rem;
     }
     &:nth-of-type(3) {
-        width: 10rem;
+        width: 9.5rem;
     }
     &:nth-of-type(4) {
-        width: 9rem;
+        width: 5rem;
     }
     &:nth-of-type(5) {
-        width: 14rem;
+        width: 11rem;
     }
 `;
 
