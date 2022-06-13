@@ -18,12 +18,28 @@ import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
+const isNumeric = (val: string): boolean => {
+    if (typeof val != 'string') return false;
+    return !isNaN(Number(val.toString()));
+};
+
 const erValutakursDatoGyldig = (
     felt: FeltState<string | undefined>
 ): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakursdato er påkrevd, men mangler input');
-const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakurs er påkrevd, men mangler input');
+const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
+    if (!felt.verdi || isEmpty(felt.verdi))
+        return feil(felt, 'Valutakurs er påkrevd, men mangler input');
+
+    const nyKurs = felt.verdi.toString().replace(',', '.');
+    if (!nyKurs) return feil(felt, 'Valutakurs er påkrevd, men mangler input');
+    if (!isNumeric(nyKurs))
+        return feil(felt, `Valutakurs innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    return ok(felt);
+};
+
+const konverterLagretKursTilSkjemaVisning = (kurs: string | undefined) =>
+    kurs ? kurs.toString().replace('.', ',') : undefined;
 
 export const valutakursFeilmeldingId = (valutakurs: IRestValutakurs): string =>
     `valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${valutakurs.fom}`;
@@ -88,7 +104,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                 valideringsfunksjon: erValutakursDatoGyldig,
             }),
             kurs: useFelt<string | undefined>({
-                verdi: valutakurs.kurs,
+                verdi: konverterLagretKursTilSkjemaVisning(valutakurs.kurs),
                 valideringsfunksjon: erValutakursGyldig,
             }),
         },
@@ -97,6 +113,12 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            const nyKurs = skjema.felter.kurs?.verdi?.toString().replace(',', '.');
+            if (!nyKurs || !isNumeric(nyKurs)) {
+                // skal ikke kunne skje. validert annen plass i koden
+                alert('Valutakurs er påkrevd, men mangler input');
+                return;
+            }
             settSubmitRessurs(byggTomRessurs());
             settVisfeilmeldinger(false);
             onSubmit(
@@ -109,7 +131,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         valutakode: skjema.felter.valutakode?.verdi,
                         valutakursdato: skjema.felter.valutakursdato?.verdi,
-                        kurs: skjema.felter.kurs?.verdi,
+                        kurs: nyKurs,
                     },
                     url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}`,
                 },
@@ -155,7 +177,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
             erTomEndret ||
             skjema.felter.valutakode?.verdi !== valutakurs.valutakode ||
             skjema.felter.valutakursdato?.verdi !== valutakurs.valutakursdato ||
-            skjema.felter.kurs?.verdi !== valutakurs.kurs
+            skjema.felter.kurs?.verdi !== konverterLagretKursTilSkjemaVisning(valutakurs.kurs)
         );
     };
 

@@ -186,6 +186,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                     event.target.value as UtenlandskPeriodeBeløpIntervall
                                 )
                             }
+                            lesevisningVerdi={
+                                skjema.felter.intervall?.verdi
+                                    ? utenlandskPeriodeBeløpIntervaller[
+                                          skjema.felter.intervall.verdi
+                                      ]
+                                    : ''
+                            }
                         >
                             <option key={'-'} value={''}>
                                 Velg

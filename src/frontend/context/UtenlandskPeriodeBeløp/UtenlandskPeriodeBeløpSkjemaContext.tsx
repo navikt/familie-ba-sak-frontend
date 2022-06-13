@@ -99,6 +99,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 verdi: utenlandskPeriodeBeløp.intervall,
                 valideringsfunksjon: erIntervallGyldig,
             }),
+            utbetalingsland: useFelt<string>({ verdi: utenlandskPeriodeBeløp.utbetalingsland }),
         },
         skjemanavn: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
     });
@@ -118,6 +119,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                         beløp: skjema.felter.beløp?.verdi,
                         valutakode: skjema.felter.valutakode?.verdi,
                         intervall: skjema.felter.intervall?.verdi,
+                        utbetalingsland: skjema.felter.utbetalingsland.verdi,
                     },
                     url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}`,
                 },

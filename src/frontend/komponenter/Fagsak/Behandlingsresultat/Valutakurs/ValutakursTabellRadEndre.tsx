@@ -131,7 +131,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     </StyledLegend>
                     <ValutakursRad>
                         <FamilieValutavelger
-                            erLesevisning={lesevisning}
+                            erLesevisning={true}
                             id={'valuta'}
                             label={'Valuta'}
                             kunEøs
