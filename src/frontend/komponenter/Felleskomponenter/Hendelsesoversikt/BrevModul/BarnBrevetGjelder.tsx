@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 
+import { Alert } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
 
@@ -96,10 +96,11 @@ const BarnBrevetGjelder = (props: IProps) => {
                 })}
             </CheckboxGruppe>
             {alternativer.length === 0 && (
-                <AlertStripe
-                    type={'advarsel'}
+                <Alert
+                    variant="warning"
                     children={'Du må trykke "Bekreft og fortsett" før du kan legge til barn.'}
-                    form={'inline'}
+                    size={'small'}
+                    inline
                 />
             )}
         </>
