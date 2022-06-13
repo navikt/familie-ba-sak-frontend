@@ -17,7 +17,7 @@ const useUtenlandskPeriodeBeløp = ({ åpenBehandling }: IProps) => {
     >([]);
 
     useEffect(() => {
-        if (toggles[ToggleNavn.brukEøs]) {
+        if (toggles[ToggleNavn.brukEøs] && åpenBehandling) {
             settUtbetaltAnnetLandBeløp(åpenBehandling.utenlandskePeriodebeløp);
         }
     }, [åpenBehandling]);

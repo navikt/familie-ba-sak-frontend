@@ -1,3 +1,4 @@
+import type { OptionType } from '@navikt/familie-form-elements';
 import { type Avhengigheter, feil, type FeltState, ok } from '@navikt/familie-skjema';
 
 import {
@@ -59,4 +60,10 @@ const erEøsPeriodeGyldig = (
     return ok(felt);
 };
 
-export { isEmpty, erEøsPeriodeGyldig };
+const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
+    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
+
+const erValutakodeGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valuta er påkrevd, men mangler input');
+
+export { isEmpty, erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig };
