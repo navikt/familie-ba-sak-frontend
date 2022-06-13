@@ -272,16 +272,19 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         ]);
     };
 
+    const erBrevmalMedObligatoriskFritekst = (brevmal: Brevmal) =>
+        [
+            Brevmal.VARSEL_OM_REVURDERING,
+            Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
+        ].includes(brevmal);
+
     /**
      * Legger til initielt fritekstpunkt for brevmaler med obligatorisk fritekst
      */
     useEffect(() => {
         if (
             fritekster.verdi.length === 0 &&
-            [
-                Brevmal.VARSEL_OM_REVURDERING,
-                Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
-            ].includes(brevmal.verdi as Brevmal)
+            erBrevmalMedObligatoriskFritekst(brevmal.verdi as Brevmal)
         ) {
             const valideringsmelding =
                 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
@@ -347,6 +350,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         makslengdeFritekst,
         maksAntallKulepunkter,
         settVisfeilmeldinger,
+        erBrevmalMedObligatoriskFritekst,
     };
 });
 
