@@ -15,7 +15,7 @@ export enum SøkerAktivitet {
     ARBEIDER_PÅ_NORSKREGISTRERT_SKIP = 'ARBEIDER_PÅ_NORSKREGISTRERT_SKIP',
     ARBEIDER_PÅ_NORSK_SOKKEL = 'ARBEIDER_PÅ_NORSK_SOKKEL',
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP = 'ARBEIDER_FOR_ET_NORSK_FLYSELSKAP',
-    LOKALT_ANSATT_VED_UTENRIKSSTASJON = 'LOKALT_ANSATT_VED_UTENRIKSSTASJON',
+    ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON = 'ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON',
     INAKTIV = 'INAKTIV',
 }
 
@@ -29,8 +29,7 @@ export const søkerAktiviteter: Record<SøkerAktivitet, string> = {
     ARBEIDER_PÅ_NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
     ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
-    LOKALT_ANSATT_VED_UTENRIKSSTASJON:
-        'Arbeider som lokalt ansatt ved utenlandsk utenriksstasjon og er omfattet av norsk lovgivning',
+    ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON: 'Arbeider ved utenlandsk utenriksstasjon',
     INAKTIV: 'Inaktiv',
 };
 
