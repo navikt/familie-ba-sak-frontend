@@ -50,11 +50,11 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER]:
         'Barn bor i EØS-land med søker',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_ANNEN_FORELDER]:
-        'Barn bor i EØS-land med annen forelder',
+        'Barn bor i EØS-land med annen forelder (EFTA)',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_SØKER]:
         'Barn bor i Storbritannia med søker',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER]:
-        'Barn bor i Storbritannia med annen forelder',
+        'Barn bor i Storbritannia med annen forelder (EFTA)',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND]:
         'Barn bor alene i annet EØS-land',
 };
