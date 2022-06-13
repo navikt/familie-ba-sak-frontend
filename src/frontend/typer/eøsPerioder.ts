@@ -12,6 +12,10 @@ export enum SøkerAktivitet {
     UTSENDT_ARBEIDSTAKER_FRA_NORGE = 'UTSENDT_ARBEIDSTAKER_FRA_NORGE',
     MOTTAR_UFØRETRYGD_FRA_NORGE = 'MOTTAR_UFØRETRYGD_FRA_NORGE',
     MOTTAR_PENSJON_FRA_NORGE = 'MOTTAR_PENSJON_FRA_NORGE',
+    ARBEIDER_PÅ_NORSKREGISTRERT_SKIP = 'ARBEIDER_PÅ_NORSKREGISTRERT_SKIP',
+    ARBEIDER_PÅ_NORSK_SOKKEL = 'ARBEIDER_PÅ_NORSK_SOKKEL',
+    ARBEIDER_FOR_ET_NORSK_FLYSELSKAP = 'ARBEIDER_FOR_ET_NORSK_FLYSELSKAP',
+    LOKALT_ANSATT_VED_UTENRIKSSTASJON = 'LOKALT_ANSATT_VED_UTENRIKSSTASJON',
     INAKTIV = 'INAKTIV',
 }
 
@@ -22,6 +26,11 @@ export const søkerAktiviteter: Record<SøkerAktivitet, string> = {
     UTSENDT_ARBEIDSTAKER_FRA_NORGE: 'Utsendt arbeidstaker fra Norge',
     MOTTAR_UFØRETRYGD_FRA_NORGE: 'Mottar uføretrygd fra Norge',
     MOTTAR_PENSJON_FRA_NORGE: 'Mottar pensjon fra Norge',
+    ARBEIDER_PÅ_NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
+    ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
+    ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
+    LOKALT_ANSATT_VED_UTENRIKSSTASJON:
+        'Arbeider som lokalt ansatt ved utenlandsk utenriksstasjon og er omfattet av norsk lovgivning',
     INAKTIV: 'Inaktiv',
 };
 
