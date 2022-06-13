@@ -133,7 +133,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
             NN: 'Dokumentasjon som viser at barnet bur saman med deg.',
         },
     },
-
     {
         label: 'Flyttet til søker - barna',
         brevtekst: {
@@ -183,7 +182,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
             NN: 'Dokumentasjon på at du og barnet har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
-
     {
         label: 'Oppholdstillatelse - barna',
         brevtekst: {
@@ -233,7 +231,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
             NN: 'Avgjersle frå retten som viser frå kva dato barnet bur saman med deg.',
         },
     },
-
     {
         label: 'Utenlandsopphold, perioder - barna',
         brevtekst: {
