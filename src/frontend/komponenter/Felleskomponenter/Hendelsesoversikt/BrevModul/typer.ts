@@ -55,7 +55,7 @@ export interface ISelectOptionMedBrevtekst extends OptionType {
     brevtekst?: Record<Målform, string>;
 }
 
-export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
+export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
     {
         label: 'Adopsjon - barna',
         brevtekst: {
@@ -133,76 +133,7 @@ export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'val
             NN: 'Dokumentasjon som viser at barnet bur saman med deg.',
         },
     },
-    {
-        label: 'Dokumentasjon dødsfall gift',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at ektefellen din er død.',
-            NN: 'Dokumentasjon som viser at ektefellen din er død.',
-        },
-    },
-    {
-        label: 'Dokumentasjon dødsfall samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at samboeren din er død.',
-            NN: 'Dokumentasjon som viser at sambuaren din er død.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på arbeid',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du jobber i Norge.',
-            NN: 'Dokumentasjon som viser at du jobbar i Noreg.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på egen husholdning',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du har egen husholdning.',
-            NN: 'Dokumentasjon som viser at du har eiga hushaldning.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på fengsel ektefelle',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 måneder eller mer.',
-            NN: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 månader eller meir.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på fengsel samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at samboeren din er i fengsel i 6 måneder eller mer.',
-            NN: 'Dokumentasjon som viser at sambuaren din er i fengsel i 6 månader eller meir.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på flytting gift',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du og ektefellen din har flyttet fra hverandre.',
-            NN: 'Dokumentasjon som viser at du og ektefellen din har flytta frå kvarandre.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på flytting samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du og samboeren din har flyttet fra hverandre.',
-            NN: 'Dokumentasjon som viser at du og sambuaren din har flytta frå kvarandre.',
-        },
-    },
-    {
-        label: 'Dokumentasjon skilsmisse',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du er skilt.',
-            NN: 'Dokumentasjon som viser at du er skilt.',
-        },
-    },
-    {
-        label: 'Erklæring samlivsbrudd (faktisk separasjon)',
-        brevtekst: {
-            NB: 'Erklæring på at forholdet er avsluttet.',
-            NN: 'Erklæring på at forholdet er avslutta.',
-        },
-    },
+
     {
         label: 'Flyttet til søker - barna',
         brevtekst: {
@@ -252,13 +183,7 @@ export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'val
             NN: 'Dokumentasjon på at du og barnet har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
-    {
-        label: 'Meklingsattest',
-        brevtekst: {
-            NB: 'Meklingsattest',
-            NN: 'Meklingsattest',
-        },
-    },
+
     {
         label: 'Oppholdstillatelse - barna',
         brevtekst: {
@@ -308,13 +233,7 @@ export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'val
             NN: 'Avgjersle frå retten som viser frå kva dato barnet bur saman med deg.',
         },
     },
-    {
-        label: 'Separasjonsbevilling',
-        brevtekst: {
-            NB: 'Separasjonsbevilling.',
-            NN: 'Separasjonsbevilling.',
-        },
-    },
+
     {
         label: 'Utenlandsopphold, perioder - barna',
         brevtekst: {
@@ -351,6 +270,90 @@ export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'val
         },
     },
     {
+        label: 'Vergefullmakt',
+        brevtekst: {
+            NB: 'Vergefullmakt.',
+            NN: 'Vergefullmakt.',
+        },
+    },
+    {
+        label: 'Dokumentasjon dødsfall samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at samboeren din er død.',
+            NN: 'Dokumentasjon som viser at sambuaren din er død.',
+        },
+    },
+    {
+        label: 'Dokumentasjon dødsfall gift',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at ektefellen din er død.',
+            NN: 'Dokumentasjon som viser at ektefellen din er død.',
+        },
+    },
+    {
+        label: 'Separasjonsbevilling',
+        brevtekst: {
+            NB: 'Separasjonsbevilling.',
+            NN: 'Separasjonsbevilling.',
+        },
+    },
+    {
+        label: 'Dokumentasjon skilsmisse',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du er skilt.',
+            NN: 'Dokumentasjon som viser at du er skilt.',
+        },
+    },
+    {
+        label: 'Meklingsattest',
+        brevtekst: {
+            NB: 'Meklingsattest',
+            NN: 'Meklingsattest',
+        },
+    },
+    {
+        label: 'Dokumentasjon på egen husholdning',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du har egen husholdning.',
+            NN: 'Dokumentasjon som viser at du har eiga hushaldning.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på flytting samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du og samboeren din har flyttet fra hverandre.',
+            NN: 'Dokumentasjon som viser at du og sambuaren din har flytta frå kvarandre.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på flytting gift',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du og ektefellen din har flyttet fra hverandre.',
+            NN: 'Dokumentasjon som viser at du og ektefellen din har flytta frå kvarandre.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på fengsel samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at samboeren din er i fengsel i 6 måneder eller mer.',
+            NN: 'Dokumentasjon som viser at sambuaren din er i fengsel i 6 månader eller meir.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på fengsel ektefelle',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 måneder eller mer.',
+            NN: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 månader eller meir.',
+        },
+    },
+    {
+        label: 'Erklæring samlivsbrudd (faktisk separasjon)',
+        brevtekst: {
+            NB: 'Erklæring på at forholdet er avsluttet.',
+            NN: 'Erklæring på at forholdet er avslutta.',
+        },
+    },
+    {
         label: 'Varig oppholdsbevis for EØS borger',
         brevtekst: {
             NB: 'Varig oppholdsbevis for EØS borger.',
@@ -358,160 +361,73 @@ export const opplysningsdokumenterNasjonal: Omit<ISelectOptionMedBrevtekst, 'val
         },
     },
     {
-        label: 'Vergefullmakt',
+        label: 'Dokumentasjon på arbeid',
         brevtekst: {
-            NB: 'Vergefullmakt.',
-            NN: 'Vergefullmakt.',
-        },
-    },
-];
-
-export const opplysningsdokumenterEØS: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
-    {
-        label: 'Adopsjon - barna',
-        brevtekst: {
-            NB: 'Dokumentasjon på adopsjon som viser hvilken dato du overtok omsorgen for barna.',
-            NN: 'Dokumentasjon på adopsjon som viser frå kva dato du overtok omsorga for barna.',
-        },
-    },
-    {
-        label: 'Adopsjon - barnet',
-        brevtekst: {
-            NB: 'Dokumentasjon på adopsjon som viser hvilken dato du overtok omsorgen for barnet.',
-            NN: 'Dokumentasjon på adopsjon som viser frå kva dato du overtok omsorga for barnet.',
-        },
-    },
-    {
-        label: 'Adresse',
-        brevtekst: {
-            NB: 'Du må registrere adresse på din side på nav.no for at vi kan utbetale deg barnetrygd.',
-            NN: 'Du må registrere adresse på din side på nav.no for at vi kan utbetale deg barnetrygd.',
-        },
-    },
-    {
-        label: 'Arbeidskontrakt',
-        brevtekst: {
-            NB: 'Arbeidskontrakt.',
-            NN: 'Arbeidskontrakt.',
-        },
-    },
-    {
-        label: 'Avtale om delt bosted',
-        brevtekst: {
-            NB: 'Avtale om delt bosted.',
-            NN: 'Avtale om delt bustad.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på at barnetrygden kommer barnet til gode',
-        brevtekst: {
-            NB: 'Dokumentasjon på at barnetrygden kommer barnet til gode.',
-            NN: 'Dokumentasjon på at barnetrygden kommer barnet til gode.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på at familien har frasagt seg retten til barnetrygd fra Storbritannia',
-        brevtekst: {
-            NB: 'Dokumentasjon på at familien har frasagt seg retten til barnetrygd fra Storbritannia.',
-            NN: 'Dokumentasjon på at familien har frasagt seg retten til barnetrygd fra Storbritannia.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på at familien har betalt “High Income Child Benefit Charge”',
-        brevtekst: {
-            NB: 'Dokumentasjon på at familien har betalt “High Income Child Benefit Charge”.',
-            NN: 'Dokumentasjon på at familien har betalt “High Income Child Benefit Charge”.',
+            NB: 'Dokumentasjon som viser at du jobber i Norge.',
+            NN: 'Dokumentasjon som viser at du jobbar i Noreg.',
         },
     },
     {
         label: 'Dokumentasjon på utført arbeid',
         brevtekst: {
-            NB: 'Dokumentasjon på utført arbeid.',
-            NN: 'Dokumentasjon på utført arbeid.',
+            NB: 'Dokumentasjon som viser at du har jobbet i Norge.',
+            NN: 'Dokumentasjon som viser at du har jobba i Noreg.',
         },
     },
     {
-        label: 'Folkeregistrert i Norge - barna',
+        label: 'Fullmakt',
         brevtekst: {
-            NB: 'Dokumentasjon som viser at barna har norsk fødselsnummer og er bosatt i Norge.',
-            NN: 'Dokumentasjon på at barna har norsk fødselsnummer og er busett  i Noreg.',
+            NB: 'Dokumentasjon som viser hvem du har gitt fullmakt til. Dette må være en person.',
+            NN: 'Dokumentasjon som viser kven du har gitt fullmakt til. Dette må vere ein person.',
         },
     },
     {
-        label: 'Folkeregistrert i Norge - barnet',
+        label: 'Driver næring i Norge',
         brevtekst: {
-            NB: 'Dokumentasjon som viser at barnet har norsk fødselsnummer og er bosatt i Norge.',
-            NN: 'Dokumentasjon på at barnet har norsk fødselsnummer og er busett  i Noreg.',
+            NB: 'Næringsoppgave eller resultatregnskap som viser at du driver næring i Norge ',
+            NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du driv næring i Noreg.',
         },
     },
     {
-        label: 'Fullmakt som er gitt til en person',
+        label: 'Har drevet næring i Norge',
         brevtekst: {
-            NB: 'Fullmakt som er gitt til en person.',
-            NN: 'Fullmakt som er gitt til en person.',
+            NB: 'Næringsoppgave eller resultatregnskap som viser at du har drevet næring i Norge ',
+            NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du har drive næring i Noreg.',
         },
     },
     {
-        label: 'Kontonummer',
+        label: 'Frasagt barnetrygd Storbritannia',
         brevtekst: {
-            NB: 'Kontonummer.',
-            NN: 'Kontonummer.',
+            NB: 'Dokumentasjon som viser at familien har frasagt seg retten til barnetrygd fra Storbritannia.',
+            NN: 'Dokumentasjon som viser at familien har sagt frå seg seg retten til barnetrygd frå Storbritannia.',
         },
     },
     {
-        label: 'Lønnslipper',
+        label: 'Betalt skatt Storbritannia',
         brevtekst: {
-            NB: 'Lønnslipper.',
-            NN: 'Lønnslipper.',
-        },
-    },
-    {
-        label: 'MVA-melding med referanse fra Altinn og attest for skatt of merverdiavgift fra Skatteetaten',
-        brevtekst: {
-            NB: 'MVA-melding med referanse fra Altinn og attest for skatt of merverdiavgift fra Skatteetaten.',
-            NN: 'MVA-melding med referanse fra Altinn og attest for skatt of merverdiavgift fra Skatteetaten.',
-        },
-    },
-    {
-        label: 'Næringsspesifikasjon og/eller resultatregnskap som dokumenterer næring i Norge',
-        brevtekst: {
-            NB: 'Næringsspesifikasjon og/eller resultatregnskap som dokumenterer næring i Norge.',
-            NN: 'Næringsspesifikasjon og/eller resultatregnskap som dokumenterer næring i Norge.',
-        },
-    },
-    {
-        label: 'Rettsavgjørelse - barna',
-        brevtekst: {
-            NB: 'Rettsavgjørelse som viser fra hvilken dato barna bor sammen med deg.',
-            NN: 'Avgjersle frå retten som viser frå kva dato barna bur saman med deg.',
-        },
-    },
-    {
-        label: 'Rettsavgjørelse - barnet',
-        brevtekst: {
-            NB: 'Rettsavgjørelse som viser fra hvilken dato barnet bor sammen med deg.',
-            NN: 'Avgjersle frå retten som viser frå kva dato barnet bur saman med deg.',
-        },
-    },
-    {
-        label: 'Registerutskrift fra Enhetsregisteret i Brønnøysundregistrene',
-        brevtekst: {
-            NB: 'Registerutskrift fra Enhetsregisteret i Brønnøysundregistrene.',
-            NN: 'Registerutskrift fra Enhetsregisteret i Brønnøysundregistrene.',
+            NB: 'Dokumentasjon som viser at familien har betalt “High Income Child Benefit Charge” i Storbritannia.',
+            NN: 'Dokumentasjon som viser at familien har betalt “High Income Child Benefit Charge” i Storbritannia.',
         },
     },
     {
         label: 'Sentrum for livsinteresser',
         brevtekst: {
-            NB: 'Informasjon og dokumentasjon på hvor du mener at du, og familien din, er bosatt, enten i Norge eller et annet EØS-land.',
-            NN: 'Informasjon og dokumentasjon på hvor du mener at du, og familien din, er bosatt, enten i Norge eller et annet EØS-land.',
+            NB: 'Opplysninger om hvilket land du og familien din er bosatt i.',
+            NN: 'Opplysningar om kva land du og familien din er busett i.',
         },
     },
     {
-        label: 'Selvforsørgelse',
+        label: 'Selvforsørget EØS borger',
         brevtekst: {
-            NB: 'Dokumentasjon på at du kan forsørge deg selv /familien din mens du er bosatt i Norge. Det kan du gjøre ved å sende oss dokumenter som viser at du har pensjon, oppsparte midler eller inntekt på eiendom i Norge.',
-            NN: 'Dokumentasjon på at du kan forsørge deg selv /familien din mens du er bosatt i Norge. Det kan du gjøre ved å sende oss dokumenter som viser at du har pensjon, oppsparte midler eller inntekt på eiendom i Norge.',
+            NB: 'Dokumentasjon som viser at du kan forsørge deg selv og familien din mens du er bosatt i Norge. Du kan sende oss dokumenter som viser at du har pensjon, oppsparte midler eller inntekt på eiendom i Norge. ',
+            NN: 'Dokumentasjon som viser at du kan forsørge deg sjølv og familien din medan du er busett i Noreg. Du kan sende oss dokument som viser at du har pensjon, oppsparte midlar eller inntekt på eigedom i Noreg.',
+        },
+    },
+    {
+        label: 'Barnetrygden kommer barnet til gode',
+        brevtekst: {
+            NB: 'Dokumentasjon på, eller opplysninger om hvordan du bruker barnetrygden på barnet.',
+            NN: 'Dokumentasjon på, eller opplysningar om korleis du brukar barnetrygda på barnet.',
         },
     },
 ];

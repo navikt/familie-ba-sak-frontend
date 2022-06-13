@@ -21,7 +21,6 @@ import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
-import { BehandlingKategori } from '../../../../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
@@ -38,13 +37,7 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
-import {
-    Brevmal,
-    brevmaler,
-    leggTilValuePåOption,
-    opplysningsdokumenterEØS,
-    opplysningsdokumenterNasjonal,
-} from './typer';
+import { Brevmal, brevmaler, leggTilValuePåOption, opplysningsdokumenter } from './typer';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -241,12 +234,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     : (valgteOptions as ISelectOptionMedBrevtekst[])
                             );
                         }}
-                        options={
-                            åpenBehandling.status === RessursStatus.SUKSESS &&
-                            åpenBehandling.data.kategori === BehandlingKategori.EØS
-                                ? opplysningsdokumenterEØS.map(leggTilValuePåOption)
-                                : opplysningsdokumenterNasjonal.map(leggTilValuePåOption)
-                        }
+                        options={opplysningsdokumenter.map(leggTilValuePåOption)}
                     />
                 )}
                 {skjema.felter.fritekster.erSynlig && (

@@ -10,7 +10,7 @@ import { useDokumentutsending } from '../../../../context/DokumentutsendingConte
 import type { ISelectOptionMedBrevtekst } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import {
     leggTilValuePåOption,
-    opplysningsdokumenterNasjonal,
+    opplysningsdokumenter,
 } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const LabelOgEtikett = styled.div`
@@ -38,7 +38,7 @@ export const Dokumentvelger = () => {
                     valgteOptions === null ? [] : (valgteOptions as ISelectOptionMedBrevtekst[])
                 );
             }}
-            options={opplysningsdokumenterNasjonal.map(leggTilValuePåOption)}
+            options={opplysningsdokumenter.map(leggTilValuePåOption)}
         />
     );
 };
