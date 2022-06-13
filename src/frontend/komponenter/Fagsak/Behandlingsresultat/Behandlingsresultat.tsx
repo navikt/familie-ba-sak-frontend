@@ -20,10 +20,15 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useEøs } from '../../../context/Eøs/EøsContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
+import { valutakursFeilmeldingId } from '../../../context/Valutakurs/ValutakursSkjemaContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
-import type { IKompetanse, IRestUtenlandskPeriodeBeløp } from '../../../typer/eøsPerioder';
+import type {
+    IKompetanse,
+    IRestUtenlandskPeriodeBeløp,
+    IRestValutakurs,
+} from '../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
@@ -37,6 +42,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
+import Valutakurser from './Valutakurs/Valutakurser';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;
@@ -103,6 +109,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         hentKompetanserMedFeil,
         utbetaltAnnetLandBeløp,
         hentUtbetaltAnnetLandBeløpMedFeil,
+        valutakurser,
+        hentValutakurserMedFeil,
     } = useEøs();
 
     useEffect(() => {
@@ -161,8 +169,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
     const harUtenlandskeBeløper =
         toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harValutakurser =
+        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
 
-    const harEøs = harKompetanser || harUtenlandskeBeløper;
+    const harEøs = harKompetanser || harUtenlandskeBeløper || harValutakurser;
 
     return (
         <Skjemasteg
@@ -236,6 +246,13 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     åpenBehandling={åpenBehandling}
                 />
             )}
+            {harValutakurser && (
+                <Valutakurser
+                    valutakurser={valutakurser}
+                    visFeilmeldinger={visFeilmeldinger}
+                    åpenBehandling={åpenBehandling}
+                />
+            )}
             {visFeilmeldinger && toggles[ToggleNavn.brukEøs] && (
                 <StyledFeiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
@@ -251,6 +268,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                                     utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
                             })
                         ),
+                        ...hentValutakurserMedFeil().map((valutakurs: IRestValutakurs) => ({
+                            feilmelding: `Valutakurs barn: ${valutakurs.barnIdenter}, f.o.m.: ${valutakurs.fom} er ikke fullstendig.`,
+                            skjemaelementId: valutakursFeilmeldingId(valutakurs),
+                        })),
                     ]}
                 />
             )}
