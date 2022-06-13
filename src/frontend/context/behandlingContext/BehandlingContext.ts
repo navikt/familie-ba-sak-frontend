@@ -139,15 +139,15 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         return hentDataFraRessurs(åpenBehandling)?.steg;
     };
 
-    const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
+    const erLesevisning = (
+        sjekkTilgangTilEnhet = true,
+        skalIgnorereOmEnhetErMidlertidig = false
+    ): boolean => {
         const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
         if (åpenBehandlingData?.aktivSettPåVent) {
             return true;
         }
-        if (
-            åpenBehandlingData?.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
-            MIDLERTIDIG_BEHANDLENDE_ENHET_ID
-        ) {
+        if (erBehandleneEnhetMidlertidig && !skalIgnorereOmEnhetErMidlertidig) {
             return true;
         }
 
