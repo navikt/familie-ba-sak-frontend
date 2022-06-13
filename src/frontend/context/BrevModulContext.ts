@@ -276,6 +276,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         [
             Brevmal.VARSEL_OM_REVURDERING,
             Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
+            Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
         ].includes(brevmal);
 
     /**
