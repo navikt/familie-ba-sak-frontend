@@ -5,7 +5,7 @@ import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 
-export enum SøkerAktivitet {
+export enum SøkersAktivitet {
     ARBEIDER_I_NORGE = 'ARBEIDER_I_NORGE',
     SELVSTENDIG_NÆRINGSDRIVENDE = 'SELVSTENDIG_NÆRINGSDRIVENDE',
     MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN',
@@ -22,7 +22,7 @@ export enum SøkerAktivitet {
     INAKTIV = 'INAKTIV',
 }
 
-export const søkerAktiviteter: Record<SøkerAktivitet, string> = {
+export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
     ARBEIDER_I_NORGE: 'Arbeider i Norge',
     SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
     MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN: 'Mottar utbetaling fra NAV som erstatter lønn',
@@ -84,7 +84,7 @@ export interface IRestKompetanse {
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
-    søkersAktivitet?: SøkerAktivitet;
+    søkersAktivitet?: SøkersAktivitet;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
@@ -97,7 +97,7 @@ export interface IKompetanse {
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
     barnIdenter: FeltState<string[]>;
-    søkersAktivitet: FeltState<SøkerAktivitet | undefined>;
+    søkersAktivitet: FeltState<SøkersAktivitet | undefined>;
     annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
     annenForeldersAktivitetsland: FeltState<string | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
