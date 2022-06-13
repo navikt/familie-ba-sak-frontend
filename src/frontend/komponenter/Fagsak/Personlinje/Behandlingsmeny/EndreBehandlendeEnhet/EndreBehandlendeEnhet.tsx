@@ -19,9 +19,9 @@ interface IProps {
 }
 
 const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
-    const [visModal, settVisModal] = useState(false);
+    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } = useBehandling();
+    const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
 
-    const { åpenBehandling, erLesevisning } = useBehandling();
     const {
         begrunnelse,
         settBegrunnelse,
@@ -86,7 +86,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
-                        erLesevisning={erLesevisning(false)}
+                        erLesevisning={erLesevisning(false, true)}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
                         value={enhetId}
