@@ -156,6 +156,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
+        hentBruker,
     };
 });
 
