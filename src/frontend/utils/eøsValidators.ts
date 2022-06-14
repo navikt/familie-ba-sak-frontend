@@ -66,4 +66,9 @@ const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
 const erValutakodeGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valuta er påkrevd, men mangler input');
 
-export { isEmpty, erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig };
+const isNumeric = (val: string): boolean => {
+    if (typeof val != 'string') return false;
+    return !isNaN(Number(val.toString()));
+};
+
+export { isEmpty, erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig, isNumeric };

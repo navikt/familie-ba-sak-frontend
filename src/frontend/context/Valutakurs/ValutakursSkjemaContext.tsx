@@ -13,15 +13,11 @@ import {
     erEøsPeriodeGyldig,
     erValutakodeGyldig,
     isEmpty,
+    isNumeric,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
-
-const isNumeric = (val: string): boolean => {
-    if (typeof val != 'string') return false;
-    return !isNaN(Number(val.toString()));
-};
 
 const erValutakursDatoGyldig = (
     felt: FeltState<string | undefined>
@@ -115,9 +111,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
         if (kanSendeSkjema()) {
             const nyKurs = skjema.felter.kurs?.verdi?.toString().replace(',', '.');
             if (!nyKurs || !isNumeric(nyKurs)) {
-                // skal ikke kunne skje. validert annen plass i koden
-                alert('Valutakurs er påkrevd, men mangler input');
-                return;
+                throw Error('Skal ikke kunne skje. Valutakurs er validert annen plass i koden.');
             }
             settSubmitRessurs(byggTomRessurs());
             settVisfeilmeldinger(false);

@@ -14,19 +14,30 @@ import type {
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
-import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
+import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty, isNumeric } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
-const erBeløpGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Beløp er påkrevd, men mangler input');
+const erBeløpGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
+    if (!felt.verdi || isEmpty(felt.verdi))
+        return feil(felt, 'Beløp er påkrevd, men mangler input');
+
+    const nyttBeløp = felt.verdi.toString().replace(',', '.');
+    if (!nyttBeløp) return feil(felt, 'Beløp er påkrevd, men mangler input');
+    if (!isNumeric(nyttBeløp))
+        return feil(felt, `Beløp innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    return ok(felt);
+};
 const erValutaGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valuta er påkrevd, men mangler input');
 const erIntervallGyldig = (
     felt: FeltState<UtenlandskPeriodeBeløpIntervall | undefined>
 ): FeltState<UtenlandskPeriodeBeløpIntervall | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Intervall er påkrevd, men mangler input');
+
+const konverterLagretBeløpTilSkjemaVisning = (beløp: string | undefined) =>
+    beløp ? beløp.toString().replace('.', ',') : undefined;
 
 export const utenlandskPeriodeBeløpFeilmeldingId = (
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp
@@ -88,7 +99,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),
             beløp: useFelt<string | undefined>({
-                verdi: utenlandskPeriodeBeløp.beløp,
+                verdi: konverterLagretBeløpTilSkjemaVisning(utenlandskPeriodeBeløp.beløp),
                 valideringsfunksjon: erBeløpGyldig,
             }),
             valutakode: useFelt<string | undefined>({
@@ -106,6 +117,10 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            const nyttBeløp = skjema.felter.beløp?.verdi?.toString().replace(',', '.');
+            if (!nyttBeløp || !isNumeric(nyttBeløp)) {
+                throw Error('Skal ikke kunne skje. Beløp er validert annen plass i koden.');
+            }
             settSubmitRessurs(byggTomRessurs());
             settVisfeilmeldinger(false);
             onSubmit(
@@ -116,7 +131,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                         fom: skjema.felter.periode.verdi.fom,
                         tom: skjema.felter.periode.verdi.tom,
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
-                        beløp: skjema.felter.beløp?.verdi,
+                        beløp: nyttBeløp,
                         valutakode: skjema.felter.valutakode?.verdi,
                         intervall: skjema.felter.intervall?.verdi,
                         utbetalingsland: skjema.felter.utbetalingsland.verdi,
@@ -164,7 +179,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
             barnFjernetISkjema.length > 0 ||
             skjema.felter.periode?.verdi.fom !== utenlandskPeriodeBeløp.fom ||
             erTomEndret ||
-            skjema.felter.beløp?.verdi !== utenlandskPeriodeBeløp.beløp ||
+            skjema.felter.beløp?.verdi !==
+                konverterLagretBeløpTilSkjemaVisning(utenlandskPeriodeBeløp.beløp) ||
             skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
             skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall
         );
