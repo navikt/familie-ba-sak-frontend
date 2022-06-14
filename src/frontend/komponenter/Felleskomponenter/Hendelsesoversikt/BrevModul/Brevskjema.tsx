@@ -95,6 +95,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         maksAntallKulepunkter,
         leggTilFritekst,
         settVisfeilmeldinger,
+        erBrevmalMedObligatoriskFritekst,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -119,12 +120,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const skjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
-
-    const erBrevmalMedObligatoriskFritekst = () =>
-        [
-            Brevmal.VARSEL_OM_REVURDERING,
-            Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
-        ].includes(skjema.felter.brevmal.verdi as Brevmal);
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -284,8 +279,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         autoFocus
                                                     />
                                                     {!(
-                                                        erBrevmalMedObligatoriskFritekst() &&
-                                                        index === 0
+                                                        erBrevmalMedObligatoriskFritekst(
+                                                            skjema.felter.brevmal.verdi as Brevmal
+                                                        ) && index === 0
                                                     ) && (
                                                         <SletteKnapp
                                                             erLesevisning={false}
