@@ -31,6 +31,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
+    console.log(bruker);
     return (
         <>
             <div style={{ marginLeft: '3rem' }} />
