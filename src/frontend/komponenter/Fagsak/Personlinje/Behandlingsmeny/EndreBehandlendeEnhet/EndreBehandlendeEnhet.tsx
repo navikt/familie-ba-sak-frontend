@@ -42,6 +42,8 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
         settVisModal(false);
     };
 
+    const erLesevisningPåBehandling = erLesevisning(false, true);
+
     return (
         <>
             <KnappBase
@@ -86,7 +88,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
-                        erLesevisning={erLesevisning(false, true)}
+                        erLesevisning={erLesevisningPåBehandling}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
                         value={enhetId}
@@ -116,7 +118,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
 
                     <FamilieTextarea
                         disabled={submitRessurs.status === RessursStatus.HENTER}
-                        erLesevisning={erLesevisning(false)}
+                        erLesevisning={erLesevisningPåBehandling}
                         label={'Begrunnelse'}
                         value={begrunnelse}
                         maxLength={4000}
