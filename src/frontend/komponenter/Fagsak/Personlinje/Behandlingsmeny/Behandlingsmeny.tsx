@@ -8,10 +8,12 @@ import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
@@ -30,6 +32,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
     const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
+    const { toggles } = useApp();
 
     return (
         <>
@@ -82,14 +85,15 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             minimalFagsak={minimalFagsak}
                         />
                     </li>
-                    {(!bruker?.fagsakId || bruker.fagsakId.size < 2) && (
-                        <li>
-                            <OpprettFagsak
-                                onListElementClick={() => settAnker(undefined)}
-                                minimalFagsak={minimalFagsak}
-                            />
-                        </li>
-                    )}
+                    {toggles[ToggleNavn.støtterInstitusjon].valueOf() &&
+                        (!bruker?.fagsakId || bruker.fagsakId.size < 2) && (
+                            <li>
+                                <OpprettFagsak
+                                    onListElementClick={() => settAnker(undefined)}
+                                    minimalFagsak={minimalFagsak}
+                                />
+                            </li>
+                        )}
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
                         <li>
                             <HenleggBehandling
