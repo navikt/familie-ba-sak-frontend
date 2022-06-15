@@ -79,6 +79,7 @@ const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) 
                 fagsakEier: nyFagsakEier,
             },
             () => {
+                settVisFeilmelding(false);
                 hentBruker(minimalFagsak.søkerFødselsnummer);
                 lukkModal();
             }
