@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
-
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
@@ -35,21 +33,9 @@ import {
 import { ToggleNavn } from '../../../../typer/toggles';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
 import EndreKompetansePeriode from './EndreKompetansePeriode';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
-
-const Container = styled.div`
-    max-width: 30rem;
-    border-left: 0.0625rem solid var(--navds-global-color-orange-500);
-    padding-left: 2rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-    margin-top: 2rem;
-`;
 
 interface IProps {
     redigerbartKompetanse: FeltState<IKompetanse>;
@@ -173,7 +159,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 redigerbartKompetanse.feilmelding
             }
         >
-            <Container>
+            <EøsPeriodeSkjemaContainer>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         erLesevisning={lesevisning}
@@ -455,7 +441,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         />
                     )}
                 </Knapperad>
-            </Container>
+            </EøsPeriodeSkjemaContainer>
         </SkjemaGruppe>
     );
 };

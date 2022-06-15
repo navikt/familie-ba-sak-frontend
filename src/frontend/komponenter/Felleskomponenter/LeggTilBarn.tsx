@@ -71,8 +71,14 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { logg } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
+    const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
 
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
+
+    const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
+        inputNode?.focus();
+        settFnrInputNode(inputNode);
+    }, []);
 
     React.useEffect(() => {
         settKanLeggeTilUregistrerteBarn(true);
@@ -245,17 +251,25 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         <LeggTilBarnLegend>
                             <Undertittel children={'Legg til barn'} />
                             <StyledHjelpetekst>
+                                <Normaltekst>Nasjonale saker:</Normaltekst>
+                                <br />
                                 <Normaltekst>
                                     Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
                                     bruker først.
                                 </Normaltekst>
-
                                 <br />
                                 <Normaltekst>
                                     Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
                                     registrere barnet med fødselsdato og/eller navn. Det vil føre
                                     til et avslag, uten at vilkårene skal vurderes. Har du ikke
                                     navnet på barnet kan du skrive “ukjent”.
+                                </Normaltekst>
+                                <br />
+                                <Normaltekst>EØS-saker:</Normaltekst>
+                                <br />
+                                <Normaltekst>
+                                    Dersom Folkeregisteret ikke har registrerte barn tilknyttet
+                                    denne søkeren kan du registrere D-nummer i DREK.
                                 </Normaltekst>
                             </StyledHjelpetekst>
                         </LeggTilBarnLegend>
@@ -304,8 +318,9 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
                             !registrerBarnSkjema.felter.erFolkeregistrert.verdi
                         }
-                        label={'Fødselsnummer'}
+                        label={'Fødselsnummer / D-nummer'}
                         placeholder={'11 siffer'}
+                        inputRef={fnrInputRef}
                     />
                     <DrekLenkeContainer>
                         <Lenke
@@ -313,12 +328,12 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             target="_blank"
                             onClick={(e: React.UIEvent) => {
                                 e.preventDefault();
+                                fnrInputNode?.focus();
                                 window.open('/redirect/drek', '_new');
-                                settVisModal(false);
                             }}
                         >
-                            <span>Rekvirer D-nr i DREK</span>
-                            <ExternalLink aria-label="Rekvirer D-nr i DREK" />
+                            <span>Rekvirer D-nummer i DREK</span>
+                            <ExternalLink aria-label="Rekvirer D-nummer i DREK" />
                         </Lenke>
                     </DrekLenkeContainer>
                     {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (

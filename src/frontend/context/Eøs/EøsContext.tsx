@@ -5,6 +5,7 @@ import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import { useKompetanse } from '../Kompetanse/KompetanseContext';
 import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
+import { useValutakurs } from '../Valutakurs/ValutakursContext';
 
 export const mapEøsPeriodeStatusTilStatus: Record<EøsPeriodeStatus, Status> = {
     IKKE_UTFYLT: Status.ADVARSEL,
@@ -35,8 +36,14 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
         åpenBehandling,
     });
 
+    const { valutakurser, erValutakurserGyldige, hentValutakurserMedFeil } = useValutakurs({
+        åpenBehandling,
+    });
+
     const erEøsInformasjonGyldig = () => {
-        return erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige();
+        return (
+            erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige() && erValutakurserGyldige()
+        );
     };
 
     return {
@@ -50,6 +57,9 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
         utbetaltAnnetLandBeløp,
         erUtbetaltAnnetLandBeløpGyldige,
         hentUtbetaltAnnetLandBeløpMedFeil,
+        valutakurser,
+        erValutakurserGyldige,
+        hentValutakurserMedFeil,
     };
 });
 

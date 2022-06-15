@@ -1,7 +1,10 @@
+import React from 'react';
+
 import type { OptionType } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
@@ -11,7 +14,7 @@ import type {
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
-import { erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
+import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
@@ -24,8 +27,6 @@ const erIntervallGyldig = (
     felt: FeltState<UtenlandskPeriodeBeløpIntervall | undefined>
 ): FeltState<UtenlandskPeriodeBeløpIntervall | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Intervall er påkrevd, men mangler input');
-const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
-    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 
 export const utenlandskPeriodeBeløpFeilmeldingId = (
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp
@@ -40,10 +41,13 @@ interface IProps {
 }
 
 const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriodeBeløp }: IProps) => {
+    const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] =
+        React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const initelFom = useFelt<string>({ verdi: utenlandskPeriodeBeløp.fom });
+    const { request } = useHttp();
 
     const valgteBarn = utenlandskPeriodeBeløp.barnIdenter.map(barn => {
         const tilBarn = tilgjengeligeBarn.find(opt => {
@@ -53,15 +57,20 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
             return tilBarn;
         } else {
             throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i original kompetanse'
+                'Skulle ikke være mulig å velge et barn,  som ikke er registrert frå før i utenlandsk beløp'
             );
         }
     });
 
-    const { skjema, valideringErOk, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
-        IUtenlandskPeriodeBeløp,
-        IBehandling
-    >({
+    const {
+        skjema,
+        valideringErOk,
+        kanSendeSkjema,
+        onSubmit,
+        nullstillSkjema,
+        settSubmitRessurs,
+        settVisfeilmeldinger,
+    } = useSkjema<IUtenlandskPeriodeBeløp, IBehandling>({
         felter: {
             periodeId: useFelt<string>({
                 verdi: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
@@ -96,6 +105,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            settSubmitRessurs(byggTomRessurs());
+            settVisfeilmeldinger(false);
             onSubmit(
                 {
                     method: 'PUT',
@@ -111,8 +122,9 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                     url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
-                    nullstillSkjema();
                     if (response.status === RessursStatus.SUKSESS) {
+                        nullstillSkjema();
+                        settErUtenlandskPeriodeBeløpEkspandert(false);
                         settÅpenBehandling(response);
                     }
                 }
@@ -121,28 +133,35 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     const slettUtenlandskPeriodeBeløp = () => {
-        onSubmit(
-            {
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
-            },
-            (response: Ressurs<IBehandling>) => {
+        settSubmitRessurs(byggTomRessurs());
+        settVisfeilmeldinger(false);
+        request<void, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
-                if (response.status === RessursStatus.SUKSESS) {
-                    settÅpenBehandling(response);
-                }
+                settErUtenlandskPeriodeBeløpEkspandert(false);
+                settÅpenBehandling(response);
+            } else {
+                settSubmitRessurs(response);
+                settVisfeilmeldinger(true);
             }
-        );
+        });
     };
 
     const erUtenlandskPeriodeBeløpSkjemaEndret = () => {
         const barnFjernetISkjema = utenlandskPeriodeBeløp.barnIdenter.filter(
-            barn => !skjema.felter.barnIdenter.verdi.findIndex(ident => ident.value === barn)
+            barn => !skjema.felter.barnIdenter.verdi.some(ident => ident.value === barn)
         );
+        const erTomEndret =
+            !(
+                skjema.felter.periode.verdi.tom === undefined && utenlandskPeriodeBeløp.tom === null
+            ) && skjema.felter.periode?.verdi.tom !== utenlandskPeriodeBeløp.tom;
         return (
             barnFjernetISkjema.length > 0 ||
             skjema.felter.periode?.verdi.fom !== utenlandskPeriodeBeløp.fom ||
-            skjema.felter.periode?.verdi.tom !== utenlandskPeriodeBeløp.tom ||
+            erTomEndret ||
             skjema.felter.beløp?.verdi !== utenlandskPeriodeBeløp.beløp ||
             skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
             skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall
@@ -150,6 +169,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
     };
 
     return {
+        erUtenlandskPeriodeBeløpEkspandert,
+        settErUtenlandskPeriodeBeløpEkspandert,
         skjema,
         valideringErOk,
         sendInnSkjema,

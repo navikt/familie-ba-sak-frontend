@@ -28,3 +28,5 @@ export const hentSøkersMålform = (behandling: IBehandling) =>
     behandling.personer.find((person: IGrunnlagPerson) => {
         return person.type === PersonType.SØKER;
     })?.målform ?? Målform.NB;
+
+export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';

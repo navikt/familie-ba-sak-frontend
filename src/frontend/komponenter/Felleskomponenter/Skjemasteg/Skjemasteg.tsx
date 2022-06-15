@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -45,7 +45,7 @@ const StyledFeilmelding = styled(Feilmelding)`
     margin-top: 1rem;
 `;
 
-const StyledAlertStripe = styled(AlertStripe)`
+const StyledAlert = styled(Alert)`
     margin: 2rem 2rem 0 2rem;
     width: fit-content;
 `;
@@ -75,8 +75,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     feilmelding = '',
 }) => {
     const history = useHistory();
-    const { forrigeÅpneSide, åpenBehandling, erLesevisning } = useBehandling();
-    const settPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
+    const { forrigeÅpneSide, åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } =
+        useBehandling();
+    const erBehandlingSattPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
         const element = document.getElementById('skjemasteg');
@@ -97,13 +98,22 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     );
     return (
         <>
-            {settPåVent && (
-                <StyledAlertStripe type="info">
-                    Behandlingen er satt på vent. Årsak: {settPåVentÅrsaker[settPåVent.årsak]}.
-                    Frist: {formaterIsoDato(settPåVent.frist, datoformat.DATO)}. Fortsett behandling
-                    via menyen.
-                </StyledAlertStripe>
+            {erBehandlingSattPåVent && (
+                <StyledAlert variant="info">
+                    Behandlingen er satt på vent. Årsak:{' '}
+                    {settPåVentÅrsaker[erBehandlingSattPåVent.årsak]}. Frist:{' '}
+                    {formaterIsoDato(erBehandlingSattPåVent.frist, datoformat.DATO)}. Fortsett
+                    behandling via menyen.
+                </StyledAlert>
             )}
+
+            {erBehandleneEnhetMidlertidig && (
+                <StyledAlert variant="info">
+                    Denne behandlingen er låst fordi vi ikke har klart å sette behandlende enhet. Du
+                    må endre dette i menyen før du kan fortsette.
+                </StyledAlert>
+            )}
+
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
                 <StyledInnholdstittel children={tittel} />
 
