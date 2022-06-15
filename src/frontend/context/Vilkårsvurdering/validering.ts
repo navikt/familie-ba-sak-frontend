@@ -56,7 +56,7 @@ export const validerVilkår = (
             {
                 personType: avhengigheter?.person.type,
                 vilkårType: nyttVilkårResultat.verdi.vilkårType,
-                resultat: nyttVilkårResultat.verdi.resultat,
+                resultat: nyttVilkårResultat.verdi.resultat.verdi,
                 vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
                 brukEøs: avhengigheter?.brukEøs,
             }
