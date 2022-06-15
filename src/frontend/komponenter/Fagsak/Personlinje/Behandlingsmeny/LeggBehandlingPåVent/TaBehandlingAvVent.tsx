@@ -71,7 +71,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
                     onListElementClick();
                 }}
             >
-                Forsett behandling
+                Fortsett behandling
             </KnappBase>
 
             <UIModalWrapper
