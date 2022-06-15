@@ -36,8 +36,13 @@ export const EkspandertTd = styled.td`
     padding: 0 1rem 1rem 1.6rem;
 `;
 
+interface IEøsPeriodeSkjemaContainerProps {
+    maxWidth?: number;
+}
+
 export const EøsPeriodeSkjemaContainer = styled.div`
-    max-width: 30rem;
+    max-width: ${(props: IEøsPeriodeSkjemaContainerProps) =>
+        props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
     border-left: 0.0625rem solid var(--navds-global-color-orange-500);
     padding-left: 2rem;
 `;

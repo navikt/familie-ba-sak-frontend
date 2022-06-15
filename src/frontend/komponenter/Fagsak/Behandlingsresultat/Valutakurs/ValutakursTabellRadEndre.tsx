@@ -10,6 +10,7 @@ import {
     FamilieDatovelger,
     FamilieInput,
     FamilieKnapp,
+    FamilieReactSelect,
     type ISODateString,
     type OptionType,
 } from '@navikt/familie-form-elements';
@@ -32,7 +33,7 @@ import {
 } from '../EøsPeriode/fellesKomponenter';
 
 const ValutakursRad = styled.div`
-    width: 28rem;
+    width: 32rem;
     display: flex;
     justify-content: space-between;
 
@@ -51,10 +52,10 @@ const ValutakursRad = styled.div`
             font-weight: normal;
         }
 
-        &:nth-of-type(1) {
-            width: 14rem;
-        }
         &:nth-of-type(3) {
+            width: 16rem;
+        }
+        &:nth-of-type(2) {
             width: 4.5rem;
         }
     }
@@ -81,6 +82,7 @@ interface IProps {
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
     skjema,
+    tilgjengeligeBarn,
     sendInnSkjema,
     valideringErOk,
     toggleForm,
@@ -113,13 +115,27 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer>
+            <EøsPeriodeSkjemaContainer maxWidth={34}>
+                <div className={'skjemaelement'}>
+                    <FamilieReactSelect
+                        {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
+                        erLesevisning={lesevisning}
+                        label={'Barn'}
+                        isMulti
+                        options={tilgjengeligeBarn}
+                        value={skjema.felter.barnIdenter.verdi}
+                        onChange={options =>
+                            skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                        }
+                    />
+                </div>
                 <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
+                    maxWidth={32}
                 />
                 <SkjemaGruppe
                     className={lesevisning ? 'lesevisning' : ''}
@@ -130,24 +146,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         <Label size="small">Registrer valutakursdato</Label>
                     </StyledLegend>
                     <ValutakursRad>
-                        <FamilieValutavelger
-                            erLesevisning={true}
-                            id={'valuta'}
-                            label={'Valuta'}
-                            kunEøs
-                            medFlag
-                            size="small"
-                            value={skjema.felter.valutakode?.verdi}
-                            onChange={(value: Currency) => {
-                                if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                } else {
-                                    skjema.felter.valutakode?.nullstill();
-                                }
-                            }}
-                            utenMargin
-                            kanNullstilles
-                        />
                         <FamilieDatovelger
                             {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
                                 skjema.visFeilmeldinger
@@ -174,6 +172,24 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             onChange={event =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
+                        />
+                        <FamilieValutavelger
+                            erLesevisning={true}
+                            id={'valuta'}
+                            label={'Valuta'}
+                            kunEøs
+                            medFlag
+                            size="small"
+                            value={skjema.felter.valutakode?.verdi}
+                            onChange={(value: Currency) => {
+                                if (value) {
+                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                                } else {
+                                    skjema.felter.valutakode?.nullstill();
+                                }
+                            }}
+                            utenMargin
+                            kanNullstilles
                         />
                     </ValutakursRad>
                 </SkjemaGruppe>
