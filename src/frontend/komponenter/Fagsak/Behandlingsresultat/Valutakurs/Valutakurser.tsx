@@ -6,10 +6,10 @@ import { Alert, Heading } from '@navikt/ds-react';
 
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
+import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
+import ValutakursTabellRad from './ValutakursTabellRad';
 
-const UtenlandskPeriodeBeløperContainer = styled.div`
+const ValutakurserContainer = styled.div`
     margin-top: 5rem;
 `;
 
@@ -27,40 +27,35 @@ const TabellHeader = styled.th`
         width: 11rem;
     }
     &:nth-of-type(3) {
-        width: 9.5rem;
+        width: 7.5rem;
     }
     &:nth-of-type(4) {
-        width: 5rem;
+        width: 4rem;
     }
     &:nth-of-type(5) {
-        width: 11rem;
+        width: 15rem;
     }
 `;
 
 interface IProps {
-    utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
+    valutakurser: IRestValutakurs[];
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
-const UtbetaltAnnetLand: React.FC<IProps> = ({
-    utbetaltAnnetLandBeløp,
-    åpenBehandling,
-    visFeilmeldinger,
-}) => {
-    const { erUtbetaltAnnetLandBeløpGyldige } = useEøs();
-
+const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeilmeldinger }) => {
+    const { erValutakurserGyldige } = useEøs();
     return (
-        <UtenlandskPeriodeBeløperContainer>
+        <ValutakurserContainer>
             <Heading spacing size="medium" level="3">
-                Utbetalt i det andre landet
+                Valuta
             </Heading>
-            {!erUtbetaltAnnetLandBeløpGyldige() && (
+            {!erValutakurserGyldige() && (
                 <Alert
                     variant={'warning'}
                     fullWidth
                     children={
-                        'I periodene Norge er sekundærland må beløpene fra det andre medlemslandet registreres'
+                        'For perioder som skal differanseberegnes, må valutakursdato registeres'
                     }
                 />
             )}
@@ -69,26 +64,26 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                     <tr>
                         <TabellHeader>Barn</TabellHeader>
                         <TabellHeader>Periode</TabellHeader>
-                        <TabellHeader>Beløp per måned</TabellHeader>
+                        <TabellHeader>Valutakursdato</TabellHeader>
                         <TabellHeader>Valuta</TabellHeader>
                         <TabellHeader></TabellHeader>
                     </tr>
                 </thead>
                 <tbody>
-                    {utbetaltAnnetLandBeløp.map(utenlandskPeriodeBeløp => (
-                        <UtenlandskPeriodeBeløpRad
-                            key={`${utenlandskPeriodeBeløp.barnIdenter.map(barn => `${barn}-`)}-${
-                                utenlandskPeriodeBeløp.fom
-                            }-${utenlandskPeriodeBeløp.tom}`}
-                            utenlandskPeriodeBeløp={utenlandskPeriodeBeløp}
+                    {valutakurser.map(valutakurs => (
+                        <ValutakursTabellRad
+                            key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
+                                valutakurs.fom
+                            }-${valutakurs.tom}`}
+                            valutakurs={valutakurs}
                             åpenBehandling={åpenBehandling}
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     ))}
                 </tbody>
             </Tabell>
-        </UtenlandskPeriodeBeløperContainer>
+        </ValutakurserContainer>
     );
 };
 
-export default UtbetaltAnnetLand;
+export default Valutakurser;

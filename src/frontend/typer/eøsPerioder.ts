@@ -1,7 +1,7 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
+import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 
@@ -122,4 +122,27 @@ export interface IUtenlandskPeriodeBeløp {
     beløp?: string | undefined;
     valutakode?: string | undefined;
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
+}
+
+export interface IRestValutakurs {
+    id: number;
+    status: EøsPeriodeStatus;
+    fom: YearMonth;
+    tom?: YearMonth;
+    barnIdenter: string[];
+    valutakode?: string;
+    valutakursdato?: string;
+    kurs?: string;
+}
+
+export interface IValutakurs {
+    periodeId: string;
+    id: number;
+    status: EøsPeriodeStatus;
+    initielFom: YearMonth;
+    periode: IPeriode;
+    barnIdenter: OptionType[];
+    valutakode?: string | undefined;
+    valutakursdato?: string | undefined;
+    kurs?: string | undefined;
 }

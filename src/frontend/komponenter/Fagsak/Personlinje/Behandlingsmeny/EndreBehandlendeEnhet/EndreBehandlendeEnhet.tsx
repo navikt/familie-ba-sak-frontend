@@ -19,9 +19,9 @@ interface IProps {
 }
 
 const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
-    const [visModal, settVisModal] = useState(false);
+    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } = useBehandling();
+    const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
 
-    const { åpenBehandling, erLesevisning } = useBehandling();
     const {
         begrunnelse,
         settBegrunnelse,
@@ -41,6 +41,8 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
         fjernState();
         settVisModal(false);
     };
+
+    const erLesevisningPåBehandling = erLesevisning(false, true);
 
     return (
         <>
@@ -86,7 +88,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
-                        erLesevisning={erLesevisning(false)}
+                        erLesevisning={erLesevisningPåBehandling}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
                         value={enhetId}
@@ -116,7 +118,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
 
                     <FamilieTextarea
                         disabled={submitRessurs.status === RessursStatus.HENTER}
-                        erLesevisning={erLesevisning(false)}
+                        erLesevisning={erLesevisningPåBehandling}
                         label={'Begrunnelse'}
                         value={begrunnelse}
                         maxLength={4000}

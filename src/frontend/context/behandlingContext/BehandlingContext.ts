@@ -7,14 +7,14 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import type { ISide, SideId, ITrinn } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
+import type { ISide, ITrinn, SideId } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
-    sider,
     hentTrinnForBehandling,
     KontrollertStatus,
+    sider,
 } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
 import type { BehandlingSteg, IBehandling } from '../../typer/behandling';
 import {
@@ -26,6 +26,7 @@ import {
 import { harTilgangTilEnhet } from '../../typer/enhet';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
 import { useFagsakRessurser } from '../FagsakContext';
@@ -138,9 +139,15 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         return hentDataFraRessurs(åpenBehandling)?.steg;
     };
 
-    const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
+    const erLesevisning = (
+        sjekkTilgangTilEnhet = true,
+        skalIgnorereOmEnhetErMidlertidig = false
+    ): boolean => {
         const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
         if (åpenBehandlingData?.aktivSettPåVent) {
+            return true;
+        }
+        if (erBehandleneEnhetMidlertidig && !skalIgnorereOmEnhetErMidlertidig) {
             return true;
         }
 
@@ -198,6 +205,11 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         åpenBehandling.status === RessursStatus.SUKSESS &&
         åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
+    const erBehandleneEnhetMidlertidig =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
+            MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
+
     return {
         erLesevisning,
         forrigeÅpneSide,
@@ -218,6 +230,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         sendTilBeslutterNesteOnClick,
         erMigreringsbehandling,
         aktivSettPåVent: hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent,
+        erBehandleneEnhetMidlertidig,
     };
 });
 

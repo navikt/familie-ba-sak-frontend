@@ -134,76 +134,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         },
     },
     {
-        label: 'Dokumentasjon dødsfall gift',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at ektefellen din er død.',
-            NN: 'Dokumentasjon som viser at ektefellen din er død.',
-        },
-    },
-    {
-        label: 'Dokumentasjon dødsfall samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at samboeren din er død.',
-            NN: 'Dokumentasjon som viser at sambuaren din er død.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på arbeid',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du jobber i Norge.',
-            NN: 'Dokumentasjon som viser at du jobbar i Noreg.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på egen husholdning',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du har egen husholdning.',
-            NN: 'Dokumentasjon som viser at du har eiga hushaldning.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på fengsel ektefelle',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 måneder eller mer.',
-            NN: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 månader eller meir.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på fengsel samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at samboeren din er i fengsel i 6 måneder eller mer.',
-            NN: 'Dokumentasjon som viser at sambuaren din er i fengsel i 6 månader eller meir.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på flytting gift',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du og ektefellen din har flyttet fra hverandre.',
-            NN: 'Dokumentasjon som viser at du og ektefellen din har flytta frå kvarandre.',
-        },
-    },
-    {
-        label: 'Dokumentasjon på flytting samboer',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du og samboeren din har flyttet fra hverandre.',
-            NN: 'Dokumentasjon som viser at du og sambuaren din har flytta frå kvarandre.',
-        },
-    },
-    {
-        label: 'Dokumentasjon skilsmisse',
-        brevtekst: {
-            NB: 'Dokumentasjon som viser at du er skilt.',
-            NN: 'Dokumentasjon som viser at du er skilt.',
-        },
-    },
-    {
-        label: 'Erklæring samlivsbrudd (faktisk separasjon)',
-        brevtekst: {
-            NB: 'Erklæring på at forholdet er avsluttet.',
-            NN: 'Erklæring på at forholdet er avslutta.',
-        },
-    },
-    {
         label: 'Flyttet til søker - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilken dato barna flyttet til deg. Du må melde flytting til Folkeregisteret.',
@@ -250,13 +180,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         brevtekst: {
             NB: 'Dokumentasjon som viser at du og barnet har norsk fødselsnummer og er bosatt i Norge.',
             NN: 'Dokumentasjon på at du og barnet har norsk fødselsnummer og er busett  i Noreg.',
-        },
-    },
-    {
-        label: 'Meklingsattest',
-        brevtekst: {
-            NB: 'Meklingsattest',
-            NN: 'Meklingsattest',
         },
     },
     {
@@ -309,13 +232,6 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         },
     },
     {
-        label: 'Separasjonsbevilling',
-        brevtekst: {
-            NB: 'Separasjonsbevilling.',
-            NN: 'Separasjonsbevilling.',
-        },
-    },
-    {
         label: 'Utenlandsopphold, perioder - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder barna har vært i Norge og hvilke perioder barna har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
@@ -351,6 +267,90 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         },
     },
     {
+        label: 'Vergefullmakt',
+        brevtekst: {
+            NB: 'Vergefullmakt.',
+            NN: 'Vergefullmakt.',
+        },
+    },
+    {
+        label: 'Dokumentasjon dødsfall samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at samboeren din er død.',
+            NN: 'Dokumentasjon som viser at sambuaren din er død.',
+        },
+    },
+    {
+        label: 'Dokumentasjon dødsfall gift',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at ektefellen din er død.',
+            NN: 'Dokumentasjon som viser at ektefellen din er død.',
+        },
+    },
+    {
+        label: 'Separasjonsbevilling',
+        brevtekst: {
+            NB: 'Separasjonsbevilling.',
+            NN: 'Separasjonsbevilling.',
+        },
+    },
+    {
+        label: 'Dokumentasjon skilsmisse',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du er skilt.',
+            NN: 'Dokumentasjon som viser at du er skilt.',
+        },
+    },
+    {
+        label: 'Meklingsattest',
+        brevtekst: {
+            NB: 'Meklingsattest',
+            NN: 'Meklingsattest',
+        },
+    },
+    {
+        label: 'Dokumentasjon på egen husholdning',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du har egen husholdning.',
+            NN: 'Dokumentasjon som viser at du har eiga hushaldning.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på flytting samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du og samboeren din har flyttet fra hverandre.',
+            NN: 'Dokumentasjon som viser at du og sambuaren din har flytta frå kvarandre.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på flytting gift',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du og ektefellen din har flyttet fra hverandre.',
+            NN: 'Dokumentasjon som viser at du og ektefellen din har flytta frå kvarandre.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på fengsel samboer',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at samboeren din er i fengsel i 6 måneder eller mer.',
+            NN: 'Dokumentasjon som viser at sambuaren din er i fengsel i 6 månader eller meir.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på fengsel ektefelle',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 måneder eller mer.',
+            NN: 'Dokumentasjon som viser at ektefellen din er i fengsel i 6 månader eller meir.',
+        },
+    },
+    {
+        label: 'Erklæring samlivsbrudd (faktisk separasjon)',
+        brevtekst: {
+            NB: 'Erklæring på at forholdet er avsluttet.',
+            NN: 'Erklæring på at forholdet er avslutta.',
+        },
+    },
+    {
         label: 'Varig oppholdsbevis for EØS borger',
         brevtekst: {
             NB: 'Varig oppholdsbevis for EØS borger.',
@@ -358,10 +358,73 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
         },
     },
     {
-        label: 'Vergefullmakt',
+        label: 'Dokumentasjon på arbeid',
         brevtekst: {
-            NB: 'Vergefullmakt.',
-            NN: 'Vergefullmakt.',
+            NB: 'Dokumentasjon som viser at du jobber i Norge.',
+            NN: 'Dokumentasjon som viser at du jobbar i Noreg.',
+        },
+    },
+    {
+        label: 'Dokumentasjon på utført arbeid',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du har jobbet i Norge.',
+            NN: 'Dokumentasjon som viser at du har jobba i Noreg.',
+        },
+    },
+    {
+        label: 'Fullmakt',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser hvem du har gitt fullmakt til. Dette må være en person.',
+            NN: 'Dokumentasjon som viser kven du har gitt fullmakt til. Dette må vere ein person.',
+        },
+    },
+    {
+        label: 'Driver næring i Norge',
+        brevtekst: {
+            NB: 'Næringsoppgave eller resultatregnskap som viser at du driver næring i Norge ',
+            NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du driv næring i Noreg.',
+        },
+    },
+    {
+        label: 'Har drevet næring i Norge',
+        brevtekst: {
+            NB: 'Næringsoppgave eller resultatregnskap som viser at du har drevet næring i Norge ',
+            NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du har drive næring i Noreg.',
+        },
+    },
+    {
+        label: 'Frasagt barnetrygd Storbritannia',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at familien har frasagt seg retten til barnetrygd fra Storbritannia.',
+            NN: 'Dokumentasjon som viser at familien har sagt frå seg seg retten til barnetrygd frå Storbritannia.',
+        },
+    },
+    {
+        label: 'Betalt skatt Storbritannia',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at familien har betalt “High Income Child Benefit Charge” i Storbritannia.',
+            NN: 'Dokumentasjon som viser at familien har betalt “High Income Child Benefit Charge” i Storbritannia.',
+        },
+    },
+    {
+        label: 'Sentrum for livsinteresser',
+        brevtekst: {
+            NB: 'Opplysninger om hvilket land du og familien din er bosatt i.',
+            NN: 'Opplysningar om kva land du og familien din er busett i.',
+        },
+    },
+    {
+        label: 'Selvforsørget EØS borger',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at du kan forsørge deg selv og familien din mens du er bosatt i Norge. Du kan sende oss dokumenter som viser at du har pensjon, oppsparte midler eller inntekt på eiendom i Norge. ',
+            NN: 'Dokumentasjon som viser at du kan forsørge deg sjølv og familien din medan du er busett i Noreg. Du kan sende oss dokument som viser at du har pensjon, oppsparte midlar eller inntekt på eigedom i Noreg.',
+        },
+    },
+    {
+        label: 'Barnetrygden kommer barnet til gode',
+        brevtekst: {
+            NB: 'Dokumentasjon på, eller opplysninger om hvordan du bruker barnetrygden på barnet.',
+            NN: 'Dokumentasjon på, eller opplysningar om korleis du brukar barnetrygda på barnet.',
         },
     },
 ];
