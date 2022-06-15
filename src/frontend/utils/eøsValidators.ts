@@ -7,6 +7,8 @@ import {
     type YearMonth,
     yearMonthTilKalenderMåned,
     iDag,
+    leggTil,
+    KalenderEnhet,
 } from './kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
@@ -25,6 +27,11 @@ const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: Må
     valgtDato.år > today.år || (valgtDato.år === today.år && valgtDato.måned > today.måned);
 const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
     valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
+const valgtDatoErSenereEnnNesteMåned = (valgtDato: YearMonth) =>
+    valgtÅrMånedErNesteMånedEllerSenere(
+        yearMonthTilKalenderMåned(valgtDato),
+        leggTil(iDag(), 1, KalenderEnhet.MÅNED)
+    );
 
 const erEøsPeriodeGyldig = (
     felt: FeltState<IYearMonthPeriode>,
@@ -38,10 +45,10 @@ const erEøsPeriodeGyldig = (
     if (!fom || isEmpty(fom)) {
         return feil(felt, 'Fra og med måned må være utfylt');
     }
-    if (fom && valgtDatoErNesteMånedEllerSenere(fom)) {
+    if (fom && valgtDatoErSenereEnnNesteMåned(fom)) {
         return feil(
             felt,
-            'Du kan ikke legge inn fra og med måned som er i neste måned eller senere'
+            'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere'
         );
     }
     if (initielFom && !erEtter(fom, initielFom)) {
@@ -51,10 +58,7 @@ const erEøsPeriodeGyldig = (
         );
     }
     if (tom && valgtDatoErNesteMånedEllerSenere(tom)) {
-        return feil(
-            felt,
-            'Du kan ikke legge inn til og med måned som er i neste måned eller senere'
-        );
+        return feil(felt, 'Du kan ikke sette til og med (t.o.m.) til neste måned eller senere');
     }
 
     return ok(felt);
