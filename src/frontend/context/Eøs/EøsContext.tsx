@@ -53,8 +53,8 @@ export const sorterEøsPerioder = (
     if (periodeA.tom === undefined && !beggePerioderLøpende) return -1;
     if (periodeB.tom === undefined && !beggePerioderLøpende) return 1;
 
-    const fomErSammekMåned = familieDayjs(periodeA.fom).isSame(periodeB.fom, 'month');
-    if (fomErSammekMåned) {
+    const fomErSammeMåned = familieDayjs(periodeA.fom).isSame(periodeB.fom, 'month');
+    if (fomErSammeMåned) {
         return sorterPåBarnsFødselsdato(periodeA.barnIdenter, periodeB.barnIdenter, personer);
     } else {
         return familieDayjs(periodeA.fom).isBefore(periodeB.fom) ? 1 : -1;

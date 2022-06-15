@@ -72,7 +72,7 @@ const erValutakodeGyldig = (felt: FeltState<string | undefined>): FeltState<stri
 
 const isNumeric = (val: string): boolean => {
     if (typeof val != 'string') return false;
-    return !isNaN(Number(val.toString()));
+    return !isNaN(Number(val));
 };
 
 export { isEmpty, erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig, isNumeric };
