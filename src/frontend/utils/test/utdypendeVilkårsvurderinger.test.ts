@@ -154,4 +154,13 @@ describe('Utdypende Vilkårsvurderinger', () => {
             'Du kan kun velge ett alternativ for hvem barnet bor med'
         );
     });
+
+    it('EØS - vilkår ikke oppfylt - feltet skal ikke fylles ut og skal ikke være obligatorisk', () => {
+        const actualKombinasjonGyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering([], {
+            ...avhengigheter,
+            resultat: Resultat.IKKE_OPPFYLT,
+        });
+
+        expect(actualKombinasjonGyldig).toBe(undefined);
+    });
 });
