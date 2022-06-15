@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
@@ -29,10 +30,16 @@ const StyledKnappContainer = styled.div`
     margin-bottom: 0.5rem;
 `;
 
+const StyledCheckBoxWrapper = styled.div`
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+`;
+
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat;
+    const [fagsakEier, settFagsakeier] = useState<FagsakEier>(FagsakEier.OMSORGSPERSON);
 
     return (
         <>
@@ -97,34 +104,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     key={'avbryt'}
                                     type={'flat'}
                                     mini={true}
-                                    onClick={lukkModal}
-                                    children={'Avbryt'}
-                                    kompakt={true}
-                                />
-                                <Knapp
-                                    key={'bekreft institusjon'}
-                                    mini={true}
-                                    onClick={async () => {
-                                        settSenderInn(FagsakEier.BARN);
-                                        if (
-                                            søkeresultat &&
-                                            (await sjekkTilgang(søkeresultat.ident))
-                                        ) {
-                                            opprettFagsak(
-                                                {
-                                                    personIdent: søkeresultat.ident,
-                                                    aktørId: null,
-                                                    fagsakEier: FagsakEier.BARN,
-                                                },
-                                                lukkModal
-                                            );
-                                        } else {
-                                            settSenderInn(null);
-                                        }
+                                    onClick={() => {
+                                        settFagsakeier(FagsakEier.OMSORGSPERSON);
+                                        lukkModal();
                                     }}
-                                    children={'Opprett fagsak på institusjon'}
-                                    disabled={senderInn !== null}
-                                    spinner={senderInn === FagsakEier.BARN}
+                                    children={'Avbryt'}
                                     kompakt={true}
                                 />
                                 <Knapp
@@ -132,7 +116,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     type={'hoved'}
                                     mini={true}
                                     onClick={async () => {
-                                        settSenderInn(FagsakEier.OMSORGSPERSON);
+                                        settSenderInn(fagsakEier);
                                         if (
                                             søkeresultat &&
                                             (await sjekkTilgang(søkeresultat.ident))
@@ -141,17 +125,18 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 {
                                                     personIdent: søkeresultat.ident,
                                                     aktørId: null,
-                                                    fagsakEier: FagsakEier.OMSORGSPERSON,
+                                                    fagsakEier: fagsakEier,
                                                 },
                                                 lukkModal
                                             );
                                         } else {
                                             settSenderInn(null);
                                         }
+                                        settFagsakeier(FagsakEier.OMSORGSPERSON);
                                     }}
                                     children={'Opprett fagsak'}
                                     disabled={senderInn !== null}
-                                    spinner={senderInn === FagsakEier.OMSORGSPERSON}
+                                    spinner={senderInn !== null}
                                     kompakt={true}
                                 />
                             </StyledKnappContainer>,
@@ -172,6 +157,21 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                             søkeresultat.ident
                         )})`}</Normaltekst>
                     )}
+                    <StyledCheckBoxWrapper>
+                        <FamilieCheckbox
+                            id={'gjelder-institusjon'}
+                            erLesevisning={false}
+                            label={'Gjelder institusjon eller enslig mindreårig'}
+                            checked={fagsakEier === FagsakEier.BARN}
+                            onChange={() => {
+                                if (fagsakEier === FagsakEier.BARN) {
+                                    settFagsakeier(FagsakEier.OMSORGSPERSON);
+                                } else {
+                                    settFagsakeier(FagsakEier.BARN);
+                                }
+                            }}
+                        />
+                    </StyledCheckBoxWrapper>
                     {!!feilmelding && <Feilmelding children={feilmelding} />}
                 </UIModalWrapper>
             )}
