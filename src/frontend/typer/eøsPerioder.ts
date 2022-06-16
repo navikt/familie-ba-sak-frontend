@@ -5,23 +5,40 @@ import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 
-export enum SøkerAktivitet {
+export enum SøkersAktivitet {
     ARBEIDER_I_NORGE = 'ARBEIDER_I_NORGE',
     SELVSTENDIG_NÆRINGSDRIVENDE = 'SELVSTENDIG_NÆRINGSDRIVENDE',
     MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN',
     UTSENDT_ARBEIDSTAKER_FRA_NORGE = 'UTSENDT_ARBEIDSTAKER_FRA_NORGE',
     MOTTAR_UFØRETRYGD_FRA_NORGE = 'MOTTAR_UFØRETRYGD_FRA_NORGE',
     MOTTAR_PENSJON_FRA_NORGE = 'MOTTAR_PENSJON_FRA_NORGE',
+    ARBEIDER_PÅ_NORSKREGISTRERT_SKIP = 'ARBEIDER_PÅ_NORSKREGISTRERT_SKIP',
+    ARBEIDER_PÅ_NORSK_SOKKEL = 'ARBEIDER_PÅ_NORSK_SOKKEL',
+    ARBEIDER_FOR_ET_NORSK_FLYSELSKAP = 'ARBEIDER_FOR_ET_NORSK_FLYSELSKAP',
+    ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON = 'ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON',
+    MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET = 'MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET',
+    MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET = 'MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET',
+    MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET = 'MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET',
     INAKTIV = 'INAKTIV',
 }
 
-export const søkerAktiviteter: Record<SøkerAktivitet, string> = {
+export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
     ARBEIDER_I_NORGE: 'Arbeider i Norge',
     SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
     MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN: 'Mottar utbetaling fra NAV som erstatter lønn',
     UTSENDT_ARBEIDSTAKER_FRA_NORGE: 'Utsendt arbeidstaker fra Norge',
     MOTTAR_UFØRETRYGD_FRA_NORGE: 'Mottar uføretrygd fra Norge',
     MOTTAR_PENSJON_FRA_NORGE: 'Mottar pensjon fra Norge',
+    ARBEIDER_PÅ_NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
+    ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
+    ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
+    ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON: 'Arbeider ved utenlandsk utenriksstasjon',
+    MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
+        'Mottar utbetaling fra NAV under opphold i utlandet',
+    MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
+        'Mottar uføretrygd fra Norge under opphold i utlandet',
+    MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
+        'Mottar pensjon fra Norge under opphold i utlandet',
     INAKTIV: 'Inaktiv',
 };
 
@@ -61,13 +78,16 @@ export enum EøsPeriodeStatus {
     OK = 'OK',
 }
 
-export interface IRestKompetanse {
+export interface IRestEøsPeriode {
     id: number;
     status: EøsPeriodeStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
-    søkersAktivitet?: SøkerAktivitet;
+}
+
+export interface IRestKompetanse extends IRestEøsPeriode {
+    søkersAktivitet?: SøkersAktivitet;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
@@ -80,7 +100,7 @@ export interface IKompetanse {
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
     barnIdenter: FeltState<string[]>;
-    søkersAktivitet: FeltState<SøkerAktivitet | undefined>;
+    søkersAktivitet: FeltState<SøkersAktivitet | undefined>;
     annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
     annenForeldersAktivitetsland: FeltState<string | undefined>;
     barnetsBostedsland: FeltState<string | undefined>;
@@ -101,15 +121,11 @@ export const utenlandskPeriodeBeløpIntervaller: Record<UtenlandskPeriodeBeløpI
     UKENTLIG: 'per uke',
 };
 
-export interface IRestUtenlandskPeriodeBeløp {
-    id: number;
-    status: EøsPeriodeStatus;
-    fom: YearMonth;
-    tom?: YearMonth;
-    barnIdenter: string[];
+export interface IRestUtenlandskPeriodeBeløp extends IRestEøsPeriode {
     beløp?: string;
     valutakode?: string;
     intervall?: UtenlandskPeriodeBeløpIntervall;
+    utbetalingsland: string;
 }
 
 export interface IUtenlandskPeriodeBeløp {
@@ -122,14 +138,10 @@ export interface IUtenlandskPeriodeBeløp {
     beløp?: string | undefined;
     valutakode?: string | undefined;
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
+    utbetalingsland: string;
 }
 
-export interface IRestValutakurs {
-    id: number;
-    status: EøsPeriodeStatus;
-    fom: YearMonth;
-    tom?: YearMonth;
-    barnIdenter: string[];
+export interface IRestValutakurs extends IRestEøsPeriode {
     valutakode?: string;
     valutakursdato?: string;
     kurs?: string;

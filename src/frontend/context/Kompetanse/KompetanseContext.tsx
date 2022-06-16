@@ -11,6 +11,7 @@ import { erEøsPeriodeGyldig } from '../../utils/eøsValidators';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { lagInitiellFelt } from '../../utils/validators';
 import { useApp } from '../AppContext';
+import { sorterEøsPerioder } from '../Eøs/EøsContext';
 import {
     erAnnenForeldersAktivitetGyldig,
     erAnnenForeldersAktivitetslandGyldig,
@@ -46,7 +47,15 @@ const useKompetanse = ({ åpenBehandling }: IProps) => {
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser.length > 0) {
-            settKompetanser(kjørValidering(mapFraRestKompetanseTilUi(åpenBehandling.kompetanser)));
+            settKompetanser(
+                kjørValidering(
+                    mapFraRestKompetanseTilUi(
+                        åpenBehandling.kompetanser.sort((periodeA, periodeB) =>
+                            sorterEøsPerioder(periodeA, periodeB, åpenBehandling.personer)
+                        )
+                    )
+                )
+            );
         }
     }, [åpenBehandling]);
 

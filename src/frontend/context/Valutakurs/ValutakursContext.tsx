@@ -5,6 +5,7 @@ import type { IRestValutakurs } from '../../typer/eøsPerioder';
 import { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
 import { useApp } from '../AppContext';
+import { sorterEøsPerioder } from '../Eøs/EøsContext';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -16,7 +17,11 @@ const useValutakurs = ({ åpenBehandling }: IProps) => {
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukEøs] && åpenBehandling) {
-            settValutakurser(åpenBehandling.valutakurser);
+            settValutakurser(
+                åpenBehandling.valutakurser.sort((periodeA, periodeB) =>
+                    sorterEøsPerioder(periodeA, periodeB, åpenBehandling.personer)
+                )
+            );
         }
     }, [åpenBehandling]);
 
