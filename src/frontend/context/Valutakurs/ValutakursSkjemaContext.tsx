@@ -28,13 +28,20 @@ const erValutakursDatoGyldig = (
 ): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakursdato er påkrevd, men mangler input');
 const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
-    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string')
+    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string') {
         return feil(felt, 'Valutakurs er påkrevd, men mangler input');
-
+    }
     const nyKurs = konverterSkjemaverdiTilDesimal(felt.verdi);
-    if (!nyKurs) return feil(felt, 'Valutakurs er påkrevd, men mangler input');
-    if (!isNumeric(nyKurs))
+    if (!nyKurs) {
+        return feil(felt, 'Valutakurs er påkrevd, men mangler input');
+    }
+    if (!isNumeric(nyKurs)) {
         return feil(felt, `Valutakurs innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    }
+    const kurs = Number(nyKurs);
+    if (kurs < 0) {
+        return feil(felt, `Kan ikke registrere negativt kurs: ${felt.verdi}`);
+    }
     return ok(felt);
 };
 

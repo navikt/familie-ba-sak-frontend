@@ -24,13 +24,20 @@ import {
 } from '../Eøs/EøsContext';
 
 const erBeløpGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
-    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string')
+    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string') {
         return feil(felt, 'Beløp er påkrevd, men mangler input');
-
+    }
     const nyttBeløp = konverterSkjemaverdiTilDesimal(felt.verdi);
-    if (!nyttBeløp) return feil(felt, 'Beløp er påkrevd, men mangler input');
-    if (!isNumeric(nyttBeløp))
-        return feil(felt, `Beløp innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    if (!nyttBeløp) {
+        return feil(felt, 'Beløp er påkrevd, men mangler input');
+    }
+    if (!isNumeric(nyttBeløp)) {
+        return feil(felt, `Beløp innholder ugyldige verdier, beløp: ${felt.verdi}`);
+    }
+    const beløp = Number(nyttBeløp);
+    if (beløp < 0) {
+        return feil(felt, `Kan ikke registrere negativt utbetalt beløp: ${felt.verdi}`);
+    }
     return ok(felt);
 };
 const erValutaGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>

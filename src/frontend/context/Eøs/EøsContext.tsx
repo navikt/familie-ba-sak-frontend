@@ -65,7 +65,7 @@ export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined)
     verdi ? verdi.toString().replace('.', ',') : undefined;
 
 export const konverterSkjemaverdiTilDesimal = (verdi: string | undefined) =>
-    verdi ? verdi.toString().replace(',', '.') : undefined;
+    verdi ? verdi.toString().replace(/\s+/g, '').replace(',', '.') : undefined;
 
 interface IProps {
     åpenBehandling: IBehandling;
