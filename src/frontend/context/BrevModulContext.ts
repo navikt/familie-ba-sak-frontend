@@ -151,11 +151,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         verdi: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
         valideringsfunksjon: (felt: FeltState<number>) => {
             if (isNaN(felt.verdi)) {
-                return feil(felt, 'Må være et tall');
+                return feil(felt, 'Antall uker svarfrist må være et tall');
             }
 
-            if (felt.verdi > 8) {
-                return feil(felt, 'Du kan ikke sette så lang ventefrist');
+            const maksVentefrist = 8;
+            if (felt.verdi > maksVentefrist) {
+                return feil(felt, `Ventefristen kan maksimalt være ${maksVentefrist} uker`);
             }
 
             return ok(felt);
