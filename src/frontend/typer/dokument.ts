@@ -12,7 +12,7 @@ export interface IManueltBrevRequestPåBehandling {
     brevmal: Brevmal;
     datoAvtale?: string;
     barnasFødselsdager?: string[];
-    behandlingKategori: BehandlingKategori | undefined;
+    behandlingKategori?: BehandlingKategori | undefined;
 }
 
 export interface IManueltBrevRequestPåFagsak {
