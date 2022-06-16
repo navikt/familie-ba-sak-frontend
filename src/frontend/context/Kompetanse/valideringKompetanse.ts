@@ -10,7 +10,7 @@ import {
     AnnenForelderAktivitet,
     type IKompetanse,
     type KompetanseResultat,
-    type SøkerAktivitet,
+    type SøkersAktivitet,
 } from '../../typer/eøsPerioder';
 import { isEmpty } from '../../utils/eøsValidators';
 
@@ -19,8 +19,8 @@ const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 const erBarnGyldig = (felt: FeltState<string[]>): FeltState<string[]> =>
     felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 const erSøkersAktivitetGyldig = (
-    felt: FeltState<SøkerAktivitet | undefined>
-): FeltState<SøkerAktivitet | undefined> =>
+    felt: FeltState<SøkersAktivitet | undefined>
+): FeltState<SøkersAktivitet | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 const erAnnenForeldersAktivitetGyldig = (
     felt: FeltState<AnnenForelderAktivitet | undefined>
