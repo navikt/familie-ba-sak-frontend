@@ -78,12 +78,15 @@ export enum EøsPeriodeStatus {
     OK = 'OK',
 }
 
-export interface IRestKompetanse {
+export interface IRestEøsPeriode {
     id: number;
     status: EøsPeriodeStatus;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
+}
+
+export interface IRestKompetanse extends IRestEøsPeriode {
     søkersAktivitet?: SøkersAktivitet;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     annenForeldersAktivitetsland?: string;
@@ -118,15 +121,11 @@ export const utenlandskPeriodeBeløpIntervaller: Record<UtenlandskPeriodeBeløpI
     UKENTLIG: 'per uke',
 };
 
-export interface IRestUtenlandskPeriodeBeløp {
-    id: number;
-    status: EøsPeriodeStatus;
-    fom: YearMonth;
-    tom?: YearMonth;
-    barnIdenter: string[];
+export interface IRestUtenlandskPeriodeBeløp extends IRestEøsPeriode {
     beløp?: string;
     valutakode?: string;
     intervall?: UtenlandskPeriodeBeløpIntervall;
+    utbetalingsland: string;
 }
 
 export interface IUtenlandskPeriodeBeløp {
@@ -139,14 +138,10 @@ export interface IUtenlandskPeriodeBeløp {
     beløp?: string | undefined;
     valutakode?: string | undefined;
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
+    utbetalingsland: string;
 }
 
-export interface IRestValutakurs {
-    id: number;
-    status: EøsPeriodeStatus;
-    fom: YearMonth;
-    tom?: YearMonth;
-    barnIdenter: string[];
+export interface IRestValutakurs extends IRestEøsPeriode {
     valutakode?: string;
     valutakursdato?: string;
     kurs?: string;

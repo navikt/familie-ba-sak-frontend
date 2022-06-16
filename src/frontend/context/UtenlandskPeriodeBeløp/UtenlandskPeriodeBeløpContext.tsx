@@ -5,6 +5,7 @@ import { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../typer/eøsPerioder';
 import { ToggleNavn } from '../../typer/toggles';
 import { useApp } from '../AppContext';
+import { sorterEøsPerioder } from '../Eøs/EøsContext';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -18,7 +19,11 @@ const useUtenlandskPeriodeBeløp = ({ åpenBehandling }: IProps) => {
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukEøs] && åpenBehandling) {
-            settUtbetaltAnnetLandBeløp(åpenBehandling.utenlandskePeriodebeløp);
+            settUtbetaltAnnetLandBeløp(
+                åpenBehandling.utenlandskePeriodebeløp.sort((periodeA, periodeB) =>
+                    sorterEøsPerioder(periodeA, periodeB, åpenBehandling.personer)
+                )
+            );
         }
     }, [åpenBehandling]);
 

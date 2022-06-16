@@ -13,17 +13,37 @@ import {
     erEøsPeriodeGyldig,
     erValutakodeGyldig,
     isEmpty,
+    isNumeric,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
+import {
+    konverterDesimalverdiTilSkjemaVisning,
+    konverterSkjemaverdiTilDesimal,
+} from '../Eøs/EøsContext';
 
 const erValutakursDatoGyldig = (
     felt: FeltState<string | undefined>
 ): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakursdato er påkrevd, men mangler input');
-const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakurs er påkrevd, men mangler input');
+const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
+    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string') {
+        return feil(felt, 'Valutakurs er påkrevd, men mangler input');
+    }
+    const nyKurs = konverterSkjemaverdiTilDesimal(felt.verdi);
+    if (!nyKurs) {
+        return feil(felt, 'Valutakurs er påkrevd, men mangler input');
+    }
+    if (!isNumeric(nyKurs)) {
+        return feil(felt, `Valutakurs innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    }
+    const kurs = Number(nyKurs);
+    if (kurs < 0) {
+        return feil(felt, `Kan ikke registrere negativt kurs: ${felt.verdi}`);
+    }
+    return ok(felt);
+};
 
 export const valutakursFeilmeldingId = (valutakurs: IRestValutakurs): string =>
     `valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${valutakurs.fom}`;
@@ -88,7 +108,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                 valideringsfunksjon: erValutakursDatoGyldig,
             }),
             kurs: useFelt<string | undefined>({
-                verdi: valutakurs.kurs,
+                verdi: konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs),
                 valideringsfunksjon: erValutakursGyldig,
             }),
         },
@@ -97,6 +117,10 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
+            const nyKurs = konverterSkjemaverdiTilDesimal(skjema.felter.kurs?.verdi);
+            if (!nyKurs || !isNumeric(nyKurs)) {
+                throw Error('Skal ikke kunne skje. Valutakurs er validert annen plass i koden.');
+            }
             settSubmitRessurs(byggTomRessurs());
             settVisfeilmeldinger(false);
             onSubmit(
@@ -109,7 +133,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         valutakode: skjema.felter.valutakode?.verdi,
                         valutakursdato: skjema.felter.valutakursdato?.verdi,
-                        kurs: skjema.felter.kurs?.verdi,
+                        kurs: nyKurs,
                     },
                     url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}`,
                 },
@@ -155,7 +179,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
             erTomEndret ||
             skjema.felter.valutakode?.verdi !== valutakurs.valutakode ||
             skjema.felter.valutakursdato?.verdi !== valutakurs.valutakursdato ||
-            skjema.felter.kurs?.verdi !== valutakurs.kurs
+            skjema.felter.kurs?.verdi !== konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs)
         );
     };
 

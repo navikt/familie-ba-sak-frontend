@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 import {
     FamilieInput,
     FamilieKnapp,
@@ -36,7 +36,7 @@ import {
 } from '../EøsPeriode/fellesKomponenter';
 
 const UtbetaltBeløpRad = styled.div`
-    width: 28rem;
+    width: 32rem;
     display: flex;
     justify-content: space-between;
 
@@ -52,15 +52,24 @@ const UtbetaltBeløpRad = styled.div`
         }
 
         &:nth-of-type(1) {
-            width: 4.5rem;
+            width: 6.5rem;
         }
         &:nth-of-type(2) {
-            width: 15rem;
+            width: 16rem;
         }
         &:nth-of-type(3) {
             width: 7rem;
         }
     }
+`;
+
+const UtbetaltBeløpInfo = styled(Alert)`
+    width: 60rem;
+    margin-bottom: var(--navds-spacing-6);
+`;
+
+const UtbetaltBeløpText = styled(BodyShort)`
+    font-weight: bold;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
@@ -121,7 +130,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer>
+            <EøsPeriodeSkjemaContainer maxWidth={34}>
+                <UtbetaltBeløpInfo variant="info" inline>
+                    <UtbetaltBeløpText size="small">
+                        Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna
+                        registreres separat
+                    </UtbetaltBeløpText>
+                </UtbetaltBeløpInfo>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
@@ -141,6 +156,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
+                    maxWidth={32}
                 />
                 <SkjemaGruppe
                     className={lesevisning ? 'lesevisning' : ''}
@@ -152,7 +168,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     </StyledLegend>
                     <UtbetaltBeløpRad>
                         <FamilieInput
-                            label={'Beløp'}
+                            label={'Beløp per barn'}
                             erLesevisning={lesevisning}
                             value={skjema.felter.beløp?.verdi}
                             onChange={event =>
@@ -185,6 +201,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 skjema.felter.intervall?.validerOgSettFelt(
                                     event.target.value as UtenlandskPeriodeBeløpIntervall
                                 )
+                            }
+                            lesevisningVerdi={
+                                skjema.felter.intervall?.verdi
+                                    ? utenlandskPeriodeBeløpIntervaller[
+                                          skjema.felter.intervall.verdi
+                                      ]
+                                    : ''
                             }
                         >
                             <option key={'-'} value={''}>
