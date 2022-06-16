@@ -8,10 +8,15 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import {
+    FamilieInput,
+    FamilieReactSelect,
+    FamilieSelect,
+    FamilieTextarea,
+} from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -370,6 +375,14 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         valgtDato={skjema.felter.datoAvtale.verdi}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
+                    />
+                )}
+                {skjema.felter.brevmal.verdi === Brevmal.FORLENGET_SVARTIDSBREV && (
+                    <FamilieInput
+                        {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        label={'Antall uker svarfrist'}
                     />
                 )}
             </SkjemaGruppe>
