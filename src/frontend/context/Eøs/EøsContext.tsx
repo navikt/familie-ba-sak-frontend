@@ -61,6 +61,12 @@ export const sorterEøsPerioder = (
     }
 };
 
+export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined) =>
+    verdi ? verdi.toString().replace('.', ',') : undefined;
+
+export const konverterSkjemaverdiTilDesimal = (verdi: string | undefined) =>
+    verdi ? verdi.toString().replace(',', '.') : undefined;
+
 interface IProps {
     åpenBehandling: IBehandling;
 }

@@ -18,12 +18,16 @@ import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty, isNumeric } from '../../uti
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
+import {
+    konverterDesimalverdiTilSkjemaVisning,
+    konverterSkjemaverdiTilDesimal,
+} from '../Eøs/EøsContext';
 
 const erBeløpGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
-    if (!felt.verdi || isEmpty(felt.verdi))
+    if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string')
         return feil(felt, 'Beløp er påkrevd, men mangler input');
 
-    const nyttBeløp = felt.verdi.toString().replace(',', '.');
+    const nyttBeløp = konverterSkjemaverdiTilDesimal(felt.verdi);
     if (!nyttBeløp) return feil(felt, 'Beløp er påkrevd, men mangler input');
     if (!isNumeric(nyttBeløp))
         return feil(felt, `Beløp innholder ugyldige verdier, kurs: ${felt.verdi}`);
@@ -35,9 +39,6 @@ const erIntervallGyldig = (
     felt: FeltState<UtenlandskPeriodeBeløpIntervall | undefined>
 ): FeltState<UtenlandskPeriodeBeløpIntervall | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Intervall er påkrevd, men mangler input');
-
-const konverterLagretBeløpTilSkjemaVisning = (beløp: string | undefined) =>
-    beløp ? beløp.toString().replace('.', ',') : undefined;
 
 export const utenlandskPeriodeBeløpFeilmeldingId = (
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp
@@ -99,7 +100,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),
             beløp: useFelt<string | undefined>({
-                verdi: konverterLagretBeløpTilSkjemaVisning(utenlandskPeriodeBeløp.beløp),
+                verdi: konverterDesimalverdiTilSkjemaVisning(utenlandskPeriodeBeløp.beløp),
                 valideringsfunksjon: erBeløpGyldig,
             }),
             valutakode: useFelt<string | undefined>({
@@ -117,7 +118,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
 
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
-            const nyttBeløp = skjema.felter.beløp?.verdi?.toString().replace(',', '.');
+            const nyttBeløp = konverterSkjemaverdiTilDesimal(skjema.felter.beløp?.verdi);
             if (!nyttBeløp || !isNumeric(nyttBeløp)) {
                 throw Error('Skal ikke kunne skje. Beløp er validert annen plass i koden.');
             }
@@ -180,7 +181,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
             skjema.felter.periode?.verdi.fom !== utenlandskPeriodeBeløp.fom ||
             erTomEndret ||
             skjema.felter.beløp?.verdi !==
-                konverterLagretBeløpTilSkjemaVisning(utenlandskPeriodeBeløp.beløp) ||
+                konverterDesimalverdiTilSkjemaVisning(utenlandskPeriodeBeløp.beløp) ||
             skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
             skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall
         );
