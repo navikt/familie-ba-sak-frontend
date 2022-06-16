@@ -293,6 +293,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         }
     }, [brevmal, fritekster]);
 
+    const behandlingKategori =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.kategori : undefined;
+
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
         const erVarselOmRevurderingDeltBosted =
             skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
@@ -322,6 +325,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
                 datoAvtale: skjema.felter.datoAvtale.verdi,
+                behandlingKategori,
             };
         }
     };
@@ -334,6 +338,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             multiselectVerdier: merkedeBarn.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
             barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+            behandlingKategori,
         };
     };
 
