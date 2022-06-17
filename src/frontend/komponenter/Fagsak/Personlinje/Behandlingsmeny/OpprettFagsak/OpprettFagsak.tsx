@@ -36,7 +36,7 @@ const bekreftNyFagsakModal = ({
         tittel:
             nyFagsakEier === FagsakEier.BARN
                 ? 'Opprett fagsak på institusjon eller enslig mindreårig'
-                : 'Opprett ordinær fagsak',
+                : 'Opprett standard fagsak',
         lukkKnapp: true,
         visModal: true,
         onClose: onClose,
