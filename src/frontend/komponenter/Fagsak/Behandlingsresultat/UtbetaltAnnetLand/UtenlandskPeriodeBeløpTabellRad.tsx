@@ -74,6 +74,14 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         }
     };
 
+    const formatterKalkulertBeløp = () => {
+        const beløp = Number(utenlandskPeriodeBeløp.kalkulertMånedligBeløp);
+        const formatter = Intl.NumberFormat('no-NB', {
+            maximumFractionDigits: 2,
+        });
+        return formatter.format(beløp);
+    };
+
     return (
         <>
             <EkspanderbarTr ekspandert={erUtenlandskPeriodeBeløpEkspandert}>
@@ -86,7 +94,11 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                         tom: utenlandskPeriodeBeløp.tom,
                     }}
                 />
-                <td>-</td>
+                <td>
+                    {utenlandskPeriodeBeløp.kalkulertMånedligBeløp
+                        ? formatterKalkulertBeløp()
+                        : '-'}
+                </td>
                 <td>
                     {utenlandskPeriodeBeløp.valutakode ? utenlandskPeriodeBeløp.valutakode : '-'}
                 </td>
