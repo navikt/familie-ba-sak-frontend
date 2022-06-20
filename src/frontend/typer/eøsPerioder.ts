@@ -125,7 +125,7 @@ export interface IRestUtenlandskPeriodeBeløp extends IRestEøsPeriode {
     beløp?: string;
     valutakode?: string;
     intervall?: UtenlandskPeriodeBeløpIntervall;
-    utbetalingsland: string;
+    kalkulertMånedligBeløp?: string;
 }
 
 export interface IUtenlandskPeriodeBeløp {
@@ -138,7 +138,6 @@ export interface IUtenlandskPeriodeBeløp {
     beløp?: string | undefined;
     valutakode?: string | undefined;
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
-    utbetalingsland: string;
 }
 
 export interface IRestValutakurs extends IRestEøsPeriode {
