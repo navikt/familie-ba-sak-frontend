@@ -116,7 +116,7 @@ const useKompetanse = ({ åpenBehandling }: IProps) => {
 
         return request<IRestKompetanse, IBehandling>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}/${redigerbartKompetanse.verdi.id}`,
+            url: `/familie-ba-sak/api/kompetanse/${åpenBehandling?.behandlingId}`,
             data: {
                 id: redigerbartKompetanse.verdi.id,
                 status: redigerbartKompetanse.verdi.status,
