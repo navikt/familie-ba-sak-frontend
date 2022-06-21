@@ -154,9 +154,13 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 return feil(felt, 'Antall uker svarfrist må være et tall');
             }
 
-            const maksVentefrist = 8;
-            if (felt.verdi > maksVentefrist) {
-                return feil(felt, `Ventefristen kan maksimalt være ${maksVentefrist} uker`);
+            // Maksimal saksbehandlingstid er 5 måneder. Svarfristen må derfor være mindre enn dette.
+            const maksSvarfristUker = 4 * 5;
+            if (felt.verdi > maksSvarfristUker) {
+                return feil(
+                    felt,
+                    `Du kan ikke sette antall uker svartid til mer enn ${maksSvarfristUker} uker (5 måneder)`
+                );
             }
 
             return ok(felt);
