@@ -18,7 +18,7 @@ const StyledLegend = styled.legend`
 `;
 
 const FlexDiv = styled.div`
-    width: 28rem;
+    width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '28rem')};
     display: flex;
     justify-content: space-between;
 
@@ -37,6 +37,7 @@ interface IProps {
     initielFom: Felt<string>;
     visFeilmeldinger: boolean;
     lesevisning: boolean;
+    maxWidth?: number;
 }
 
 const EøsPeriodeSkjema: React.FC<IProps> = ({
@@ -45,6 +46,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
     initielFom,
     visFeilmeldinger,
     lesevisning,
+    maxWidth,
 }) => {
     const finnÅrTilbakeTil = (): number => {
         return new Date().getFullYear() - new Date(initielFom.verdi).getFullYear();
@@ -59,7 +61,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
             <StyledLegend>
                 <Label size="small">Periode</Label>
             </StyledLegend>
-            <FlexDiv>
+            <FlexDiv maxWidth={maxWidth}>
                 <MånedÅrVelger
                     lesevisning={lesevisning}
                     id={`periode_fom`}

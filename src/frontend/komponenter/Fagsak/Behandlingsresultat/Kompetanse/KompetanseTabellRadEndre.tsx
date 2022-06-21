@@ -24,8 +24,8 @@ import {
     AnnenForelderAktivitet,
     annenForelderAktiviteter,
     type IKompetanse,
-    SøkerAktivitet,
-    søkerAktiviteter,
+    SøkersAktivitet,
+    søkersAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
     EøsPeriodeStatus,
@@ -194,7 +194,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                     lesevisningVerdi={
                         redigerbartKompetanse.verdi?.søkersAktivitet?.verdi
-                            ? søkerAktiviteter[redigerbartKompetanse.verdi?.søkersAktivitet?.verdi]
+                            ? søkersAktiviteter[redigerbartKompetanse.verdi?.søkersAktivitet?.verdi]
                             : 'Ikke utfylt'
                     }
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -204,7 +204,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 ...redigerbartKompetanse.verdi,
                                 søkersAktivitet: {
                                     ...redigerbartKompetanse.verdi?.søkersAktivitet,
-                                    verdi: event.target.value as SøkerAktivitet,
+                                    verdi: event.target.value as SøkersAktivitet,
                                 },
                             },
                         });
@@ -218,10 +218,10 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                 >
                     <option value={''}>Velg</option>
-                    {Object.values(SøkerAktivitet).map(aktivitet => {
+                    {Object.values(SøkersAktivitet).map(aktivitet => {
                         return (
                             <option key={aktivitet} value={aktivitet}>
-                                {søkerAktiviteter[aktivitet]}
+                                {søkersAktiviteter[aktivitet]}
                             </option>
                         );
                     })}

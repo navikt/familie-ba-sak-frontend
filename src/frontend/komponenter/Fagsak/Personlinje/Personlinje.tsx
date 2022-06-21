@@ -8,6 +8,8 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import { useApp } from '../../../context/AppContext';
+import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import { FagsakEier } from '../../../typer/fagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import {
@@ -33,6 +35,9 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             ident={formaterIdent(bruker?.personIdent ?? '')}
             alder={hentAlder(bruker?.fødselsdato ?? '')}
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
+            ValgfrittIkon={
+                minimalFagsak?.fagsakEier === FagsakEier.BARN ? KontorIkonGrønn : undefined
+            }
         >
             <div className="visittkort__pipe">|</div>
             <Normaltekst>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</Normaltekst>

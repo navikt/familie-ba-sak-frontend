@@ -18,6 +18,8 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
+import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import { FagsakEier } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
 import OpprettFagsakModal from './OpprettFagsakModal';
@@ -90,7 +92,11 @@ const FagsakDeltagerSøk: React.FC = () => {
                           navn: fagsakDeltager.navn,
                           ident: fagsakDeltager.ident,
                           ikon: fagsakDeltager.harTilgang ? (
-                              ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
+                              fagsakDeltager.fagsakEier !== FagsakEier.BARN ? (
+                                  ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
+                              ) : (
+                                  <KontorIkonGrønn heigth={32} width={32} />
+                              )
                           ) : (
                               <IkkeTilgang heigth={30} width={30} />
                           ),

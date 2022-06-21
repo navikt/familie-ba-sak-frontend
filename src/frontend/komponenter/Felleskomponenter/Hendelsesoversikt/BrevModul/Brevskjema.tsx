@@ -78,6 +78,10 @@ const LabelOgEtikett = styled.div`
     justify-content: space-between;
 `;
 
+const FritekstWrapper = styled.div`
+    margin-bottom: 1rem;
+`;
+
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
@@ -120,6 +124,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const skjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
+
+    const behandlingSteg =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.steg : undefined;
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -233,7 +240,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     />
                 )}
                 {skjema.felter.fritekster.erSynlig && (
-                    <>
+                    <FritekstWrapper>
                         <Label htmlFor={skjemaGruppeId}>Legg til kulepunkt</Label>
                         {erLesevisning() ? (
                             <StyledList id={skjemaGruppeId}>
@@ -323,11 +330,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 )}
                             </>
                         )}
-                    </>
+                    </FritekstWrapper>
                 )}
                 {skjema.felter.barnBrevetGjelder.erSynlig && (
                     <BarnBrevetGjelder
                         barnBrevetGjelderFelt={skjema.felter.barnBrevetGjelder}
+                        behandlingsSteg={behandlingSteg}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
                         alternativer={personer

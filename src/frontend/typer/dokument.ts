@@ -2,6 +2,7 @@ import type {
     Brevmal,
     Informasjonsbrev,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { BehandlingKategori } from './behandlingstema';
 import type { Målform } from './søknad';
 
 export interface IManueltBrevRequestPåBehandling {
@@ -11,6 +12,7 @@ export interface IManueltBrevRequestPåBehandling {
     brevmal: Brevmal;
     datoAvtale?: string;
     barnasFødselsdager?: string[];
+    behandlingKategori?: BehandlingKategori | undefined;
 }
 
 export interface IManueltBrevRequestPåFagsak {
@@ -21,4 +23,5 @@ export interface IManueltBrevRequestPåFagsak {
     mottakerNavn: string;
     brevmal: Brevmal | Informasjonsbrev;
     datoAvtale?: string;
+    behandlingKategori?: undefined;
 }
