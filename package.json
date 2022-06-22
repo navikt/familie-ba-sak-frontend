@@ -44,7 +44,7 @@
     "@navikt/familie-skjema": "^3.0.0",
     "@navikt/familie-tidslinje": "1.1.2",
     "@navikt/familie-typer": "^5.0.0",
-    "@navikt/familie-visittkort": "^3.0.0",
+    "@navikt/familie-visittkort": "^3.0.3",
     "@navikt/flagg-ikoner": "^3.2.0",
     "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/hoykontrast": "^3.0.8",
