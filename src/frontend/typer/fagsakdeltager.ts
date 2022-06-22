@@ -1,5 +1,7 @@
 import type { Adressebeskyttelsegradering, kjønnType } from '@navikt/familie-typer';
 
+import type { FagsakEier } from './fagsak';
+
 export enum FagsakDeltagerRolle {
     Barn = 'BARN',
     Forelder = 'FORELDER',
@@ -32,6 +34,7 @@ export interface IFagsakDeltager {
     fagsakId?: number;
     adressebeskyttelseGradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;
+    fagsakEier?: FagsakEier;
 }
 
 export interface ISøkParam {
