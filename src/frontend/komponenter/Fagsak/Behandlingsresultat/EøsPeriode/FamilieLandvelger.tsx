@@ -19,6 +19,8 @@ const EØS_CURRENCY: Array<string> = [
     'HUF',
     'HRK',
     'RON',
+    'GBP',
+    'CHF',
 ];
 
 const Landvelger = styled(CountrySelect)`
