@@ -18,6 +18,7 @@ describe('utils/tidslinje', () => {
         stønadFom: '2020-01',
         stønadTom: '2020-12',
         ytelseType: YtelseType.UTVIDET_BARNETRYGD,
+        skalUtbetales: true,
     };
 
     const småbarnstilleggPeriodeOverlapperStartenAvÅret: IYtelsePeriode = {
@@ -25,18 +26,21 @@ describe('utils/tidslinje', () => {
         stønadFom: '2019-05',
         stønadTom: '2020-03',
         ytelseType: YtelseType.SMÅBARNSTILLEGG,
+        skalUtbetales: true,
     };
     const småbarnstilleggPeriodeMidtIÅret: IYtelsePeriode = {
         beløp: 660,
         stønadFom: '2020-05',
         stønadTom: '2020-07',
         ytelseType: YtelseType.SMÅBARNSTILLEGG,
+        skalUtbetales: true,
     };
     const småbarnstilleggPeriodeOverlapperSluttenAvÅret: IYtelsePeriode = {
         beløp: 660,
         stønadFom: '2020-09',
         stønadTom: '2021-05',
         ytelseType: YtelseType.SMÅBARNSTILLEGG,
+        skalUtbetales: true,
     };
 
     const fom = kalenderDatoTilDate(hentFørsteDagIYearMonth(utvidetYtelsePeriode.stønadFom));
