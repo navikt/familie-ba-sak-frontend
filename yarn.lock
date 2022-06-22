@@ -2695,24 +2695,24 @@
   resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.2.0.tgz#41799586c418bb98bc6b45a62bedbcb5869792a3"
   integrity sha512-WMK+Y+BLw/4qbdKRQCo2TZQDiELidnXNU+GZ3bpk9DdfOi6UbxBDrNYU/s5QOKyzX/Duws1QCnYKm4nz9lq+xw==
 
-"@navikt/hoykontrast@^3.0.8":
-  version "3.0.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.0.8/0d531775c038d1a3ee39533a2135ed9ae2465d5cc8ee38b64a2029719ded3a1e#8469b808ffb1ecbc7c0d6cd53acb2b02e4ccf9ab"
-  integrity sha512-mDmCThzDTFwpG6iA4hMR6bzjcrKhoCdMMab7VQtq0UaxTMlz+OfRD5/m7YVjsQpGJhHlWdQXmfqW8ApLrbGM9A==
+"@navikt/hoykontrast@^3.1.0":
+  version "3.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.1.0/a57192249058e44959c3004e3551cfd8cde30c56aae5e9789602dce37459ecd2#ed7182afd5158872c8d87d6dbe87316f51e99388"
+  integrity sha512-ZO7kPvFYucgriMoryT8dJ5gBpusAO4dvfop5J8e/TnpKW3qtjj8VVFmFxBVxEWLGDm8AyZXeI6n9FG7i7/etmQ==
 
-"@navikt/land-verktoy@^3.0.3":
-  version "3.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/3.0.3/384dfdfa4012fcc558a437e4eae24c98af1a61e1dbfd817222e6345203d52dc9#6d0d32d5b9e06b9d4f680de50486213798abf214"
-  integrity sha512-zCQaznRRYc0xF/AVRZfX/XJulu+XBHUgFmt3wfafjO/yoqVyrpASdr8Z/vcjqdMNMouxsnRDeTEXn/tTrGCsLA==
+"@navikt/land-verktoy@^3.1.1":
+  version "3.1.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/3.1.1/03d1ff2fc7f2dde341aa7b2f86f0eb4e842bfa30753c82b1f100b260f18505f4#5eaa2743977c703899609667587dae7cccf03222"
+  integrity sha512-EdUZUXZ/qZPxU/skvHNzWPWhv3KspA+An11EuvPEFPyLe4eyCBZrl0mpO/3tql79SuvjTFvqIEY9CmSiKjhPyg==
   dependencies:
     "@piotrgorecki/i18n-currency-name" "^1.2.0"
     country-data-list "^1.2.1"
     i18n-iso-countries "^7.4.0"
 
-"@navikt/landvelger@^3.0.7":
-  version "3.0.7"
-  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/3.0.7/bebb28b79c9e0224d1f088063e060110b964816c8758073d959caa240a90a889#2677dc0e16d2ac7be1d45321f71966a298eaf5db"
-  integrity sha512-odSQXrWrIfYTBHcd3Gjk9bTfUdPGsWRQYsirqJCoNNHvbLRZtDYPL/sgDbeg8xfP+QQ1+O7nio/Xcgywv876Vg==
+"@navikt/landvelger@^3.1.0":
+  version "3.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/3.1.0/071174b520751c294aafbbbb5a5bae3626673a1421088bc7b940924c20a216a5#1651ee527c317e330c28b60cc54915b50f79eaa1"
+  integrity sha512-LMzBuxNze9l1ku3Qw5u7+AUF4J1/R5y/2/pW/CMNmfYsjIvY8IrGQ9SS9EigaKlMFFBugzVBM+yTAU46AbqW/A==
 
 "@navikt/nap-bem-utils@1.0.1":
   version "1.0.1"
