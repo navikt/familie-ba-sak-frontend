@@ -20,8 +20,11 @@ describe('BrevmodulContext', () => {
             data: behandling,
         });
 
-        const behandlingSøknad = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
-        test('Skal returnere liste med gyldige brev for når behandlingsårsaken er SØKNAD', () => {
+        const behandlingSøknad = mockBehandling({
+            årsak: BehandlingÅrsak.SØKNAD,
+            type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        });
+        test('Skal returnere liste med gyldige brev for når behandlingsårsaken er SØKNAD og behandlingstypen er FØRSTEGANGSBEHANDLING', () => {
             expect(
                 hentMuligeBrevmalerImplementering(lagBehandlignRessursSuksess(behandlingSøknad))
             ).toEqual([
