@@ -112,7 +112,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                                   id: `${
                                       personMedAndelerTilkjentYtelse.personIdent
                                   }_${fom.getMonth()}_${fom.getDay()}`,
-                                  status: ytelsePeriode.beløp > 0 ? 'suksess' : 'feil',
+                                  status: ytelsePeriode.skalUtbetales ? 'suksess' : 'feil',
                               };
 
                               if (ytelsePeriode.ytelseType === YtelseType.UTVIDET_BARNETRYGD) {
