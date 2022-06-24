@@ -13,6 +13,7 @@ export interface IManueltBrevRequestPåBehandling {
     datoAvtale?: string;
     barnasFødselsdager?: string[];
     behandlingKategori?: BehandlingKategori | undefined;
+    antallUkerSvarfrist?: number;
 }
 
 export interface IManueltBrevRequestPåFagsak {
@@ -24,4 +25,5 @@ export interface IManueltBrevRequestPåFagsak {
     brevmal: Brevmal | Informasjonsbrev;
     datoAvtale?: string;
     behandlingKategori?: undefined;
+    antallUkerSvarfrist?: undefined;
 }

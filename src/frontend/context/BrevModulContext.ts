@@ -57,6 +57,10 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return åpenBehandling.type === Behandlingstype.REVURDERING;
         case Brevmal.SVARTIDSBREV:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        case Brevmal.FORLENGET_SVARTIDSBREV:
+            return [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                åpenBehandling.type
+            );
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             return false;
         case Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS:
@@ -105,6 +109,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
 
+    const behandlingKategori =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.kategori : undefined;
+
     const mottakerIdent = useFelt({
         verdi: '',
         valideringsfunksjon: (felt: FeltState<string>) =>
@@ -135,6 +142,33 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                 ].includes(avhengigheter.brevmal.verdi)
+            );
+        },
+        avhengigheter: { brevmal },
+    });
+
+    const antallUkerSvarfrist = useFelt({
+        verdi: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+        valideringsfunksjon: (felt: FeltState<number>) => {
+            if (isNaN(felt.verdi)) {
+                return feil(felt, 'Antall uker svarfrist må være et tall');
+            }
+
+            // Maksimal saksbehandlingstid er 5 måneder. Svarfristen må derfor være mindre enn dette.
+            const maksSvarfristUker = 4 * 5;
+            if (felt.verdi > maksSvarfristUker) {
+                return feil(
+                    felt,
+                    `Du kan ikke sette antall uker svartid til mer enn ${maksSvarfristUker} uker (5 måneder)`
+                );
+            }
+
+            return ok(felt);
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                [Brevmal.FORLENGET_SVARTIDSBREV].includes(avhengigheter.brevmal.verdi)
             );
         },
         avhengigheter: { brevmal },
@@ -217,6 +251,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
+            antallUkerSvarfrist: number;
         },
         IBehandling
     >({
@@ -229,6 +264,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnBrevetGjelder,
             avtalerOmDeltBostedPerBarn,
             datoAvtale,
+            antallUkerSvarfrist,
         },
         skjemanavn: 'brevmodul',
     });
@@ -293,9 +329,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         }
     }, [brevmal, fritekster]);
 
-    const behandlingKategori =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.kategori : undefined;
-
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
         const erVarselOmRevurderingDeltBosted =
             skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
@@ -326,6 +359,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
                 datoAvtale: skjema.felter.datoAvtale.verdi,
                 behandlingKategori,
+                antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
             };
         }
     };
@@ -339,6 +373,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
             behandlingKategori,
+            antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
         };
     };
 
