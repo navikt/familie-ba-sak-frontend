@@ -381,14 +381,14 @@ export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] =
     {
         label: 'Driver næring i Norge',
         brevtekst: {
-            NB: 'Næringsoppgave eller resultatregnskap som viser at du driver næring i Norge ',
+            NB: 'Næringsspesifikasjon eller resultatregnskap som viser at du driver næring i Norge.',
             NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du driv næring i Noreg.',
         },
     },
     {
         label: 'Har drevet næring i Norge',
         brevtekst: {
-            NB: 'Næringsoppgave eller resultatregnskap som viser at du har drevet næring i Norge ',
+            NB: 'Næringsspesifikasjon eller resultatregnskap som viser at du har drevet næring i Norge.',
             NN: 'Næringsspesifikasjon eller resultatreknskap som viser at du har drive næring i Noreg.',
         },
     },
