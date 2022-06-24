@@ -12,6 +12,7 @@ import type { Etikett } from '@navikt/familie-tidslinje';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
 import type {
+    IEøsPeriodeStatus,
     IKompetanse,
     IRestEøsPeriode,
     IRestUtenlandskPeriodeBeløp,
@@ -62,19 +63,24 @@ const validerUtbetalingsBeløp = (
     const utbetalingsMap = new Map<string, boolean>();
     utbetalingsperiode?.utbetalingsperiodeDetaljer.forEach(upd => {
         const barnIdent = upd.person.personIdent;
-        const kompetanseForBarn = finnKompetanseForBarn(kompetanser, barnIdent);
-        const norgeErSekundærland =
-            kompetanseForBarn?.resultat.verdi === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND;
+        const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
+        const norgeErSekundærland = kompetanserForBarn.find(
+            kompetanseForBarn =>
+                kompetanseForBarn.resultat.verdi === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
+        )
+            ? true
+            : false;
 
         let skalViseUtbetalingsBeløp = !norgeErSekundærland;
 
         if (norgeErSekundærland) {
-            const kompetanseStatusOk = kompetanseForBarn?.status === EøsPeriodeStatus.OK;
-            const utbetaltAnnetLandStatusOk =
-                finnEøsPeriodeForBarn(utbetaltAnnetLandBeløp, barnIdent)?.status ===
-                EøsPeriodeStatus.OK;
-            const valutakursStatusOk =
-                finnEøsPeriodeForBarn(valutakurser, barnIdent)?.status === EøsPeriodeStatus.OK;
+            const kompetanseStatusOk = erAllePerioderUtfyltForBarn(kompetanserForBarn);
+            const utbetaltAnnetLandStatusOk = erAllePerioderUtfyltForBarn(
+                finnEøsPerioderForBarn(utbetaltAnnetLandBeløp, barnIdent)
+            );
+            const valutakursStatusOk = erAllePerioderUtfyltForBarn(
+                finnEøsPerioderForBarn(valutakurser, barnIdent)
+            );
             skalViseUtbetalingsBeløp =
                 kompetanseStatusOk && utbetaltAnnetLandStatusOk && valutakursStatusOk;
         }
@@ -83,18 +89,31 @@ const validerUtbetalingsBeløp = (
     return utbetalingsMap;
 };
 
-const finnEøsPeriodeForBarn = (
+const finnEøsPerioderForBarn = (
     restEøsPerioder: IRestEøsPeriode[],
     barnIdent: string
-): IRestEøsPeriode | undefined => {
-    return restEøsPerioder.find(restEøsPeriode => restEøsPeriode.barnIdenter.includes(barnIdent));
+): IRestEøsPeriode[] => {
+    return (
+        restEøsPerioder.filter(restEøsPeriode => restEøsPeriode.barnIdenter.includes(barnIdent)) ??
+        []
+    );
 };
 
-const finnKompetanseForBarn = (
+const finnKompetanserForBarn = (
     felter: FeltState<IKompetanse>[],
     barnIdent: string
-): IKompetanse | undefined => {
-    return felter.find(felt => felt.verdi.barnIdenter.verdi.includes(barnIdent))?.verdi;
+): IKompetanse[] => {
+    return (
+        felter
+            .filter(felt => felt.verdi.barnIdenter.verdi.includes(barnIdent))
+            ?.map(kompetanse => kompetanse.verdi) ?? []
+    );
+};
+
+const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) => {
+    return eøsPeriodeStatus.find(eøsPeriode => eøsPeriode.status !== EøsPeriodeStatus.OK)
+        ? false
+        : true;
 };
 
 const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
