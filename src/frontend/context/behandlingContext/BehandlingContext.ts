@@ -169,8 +169,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             innloggetSaksbehandlerSkrivetilgang,
             saksbehandlerHarTilgangTilEnhet,
             steg,
-            innloggetSaksbehandler?.displayName ===
-                åpenBehandlingData?.totrinnskontroll?.saksbehandler,
             sjekkTilgangTilEnhet
         );
     };
