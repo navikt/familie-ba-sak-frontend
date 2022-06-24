@@ -26,12 +26,16 @@ describe('BrevmodulContext', () => {
         });
         test('Skal returnere liste med gyldige brev for når behandlingsårsaken er SØKNAD og behandlingstypen er FØRSTEGANGSBEHANDLING', () => {
             expect(
-                hentMuligeBrevmalerImplementering(lagBehandlignRessursSuksess(behandlingSøknad))
-            ).toEqual([
-                Brevmal.INNHENTE_OPPLYSNINGER,
-                Brevmal.FORLENGET_SVARTIDSBREV,
-                Brevmal.SVARTIDSBREV,
-            ]);
+                hentMuligeBrevmalerImplementering(
+                    lagBehandlignRessursSuksess(behandlingSøknad)
+                ).sort()
+            ).toEqual(
+                [
+                    Brevmal.INNHENTE_OPPLYSNINGER,
+                    Brevmal.FORLENGET_SVARTIDSBREV,
+                    Brevmal.SVARTIDSBREV,
+                ].sort()
+            );
         });
 
         const behandlingsårsaker = [
