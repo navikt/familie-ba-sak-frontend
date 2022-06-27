@@ -54,7 +54,7 @@ interface IProps {
     valutakurser: IRestValutakurs[];
 }
 
-const validerUtbetalingsBeløp = (
+const finnUtbetalingsBeløpStatusMap = (
     utbetalingsperiode: Utbetalingsperiode | undefined,
     kompetanser: FeltState<IKompetanse>[],
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[],
@@ -64,13 +64,10 @@ const validerUtbetalingsBeløp = (
     utbetalingsperiode?.utbetalingsperiodeDetaljer.forEach(upd => {
         const barnIdent = upd.person.personIdent;
         const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
-        const norgeErSekundærland = kompetanserForBarn.find(
+        const norgeErSekundærland = kompetanserForBarn.some(
             kompetanseForBarn =>
                 kompetanseForBarn.resultat.verdi === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
-        )
-            ? true
-            : false;
-
+        );
         let skalViseUtbetalingsBeløp = !norgeErSekundærland;
 
         if (norgeErSekundærland) {
@@ -100,20 +97,18 @@ const finnEøsPerioderForBarn = (
 };
 
 const finnKompetanserForBarn = (
-    felter: FeltState<IKompetanse>[],
+    kompetanseFelter: FeltState<IKompetanse>[],
     barnIdent: string
 ): IKompetanse[] => {
     return (
-        felter
-            .filter(felt => felt.verdi.barnIdenter.verdi.includes(barnIdent))
-            ?.map(kompetanse => kompetanse.verdi) ?? []
+        kompetanseFelter
+            .filter(kompetanseFelt => kompetanseFelt.verdi.barnIdenter.verdi.includes(barnIdent))
+            ?.map(kompetanseFelt => kompetanseFelt.verdi) ?? []
     );
 };
 
 const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) => {
-    return eøsPeriodeStatus.find(eøsPeriode => eøsPeriode.status !== EøsPeriodeStatus.OK)
-        ? false
-        : true;
+    return eøsPeriodeStatus.every(eøsPeriode => eøsPeriode.status === EøsPeriodeStatus.OK);
 };
 
 const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
@@ -138,7 +133,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
     React.useEffect(() => {
         setUtbetalingsBeløpStatusMap(
-            validerUtbetalingsBeløp(
+            finnUtbetalingsBeløpStatusMap(
                 utbetalingsperiode,
                 kompetanser,
                 utbetaltAnnetLandBeløp,
