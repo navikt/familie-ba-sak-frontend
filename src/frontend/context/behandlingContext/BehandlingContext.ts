@@ -40,6 +40,8 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, privatSettÅpenBehandling] = useState<Ressurs<IBehandling>>(
         byggTomRessurs()
     );
+    const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
+    const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
 
     const settÅpenBehandling = (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak = true) => {
         if (oppdaterMinimalFagsak && fagsakId) {
@@ -231,6 +233,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         erMigreringsbehandling,
         aktivSettPåVent: hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent,
         erBehandleneEnhetMidlertidig,
+        åpenHøyremeny,
+        settÅpenHøyremeny,
+        åpenVenstremeny,
+        settÅpenVenstremeny,
     };
 });
 
