@@ -383,6 +383,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             skjema.visFeilmeldinger
                         )}
                         label={'Antall uker svarfrist'}
+                        bredde={'S'}
                     />
                 )}
             </SkjemaGruppe>
