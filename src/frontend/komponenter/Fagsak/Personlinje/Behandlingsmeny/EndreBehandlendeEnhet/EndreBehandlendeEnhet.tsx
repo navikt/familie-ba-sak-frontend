@@ -6,7 +6,9 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
 import type { IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
 import { behandendeEnheter } from '../../../../../typer/enhet';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
@@ -21,6 +23,7 @@ interface IProps {
 const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
     const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } = useBehandling();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
+    const { innloggetSaksbehandler } = useApp();
 
     const {
         begrunnelse,
@@ -42,7 +45,20 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
         settVisModal(false);
     };
 
-    const erLesevisningPåBehandling = erLesevisning(false, true);
+    const erLesevisningPåBehandling = () => {
+        const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
+        const steg = åpenBehandlingData?.steg;
+        if (
+            steg &&
+            hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK) &&
+            innloggetSaksbehandler?.displayName !==
+                åpenBehandlingData?.totrinnskontroll?.saksbehandler
+        ) {
+            return false;
+        } else {
+            return erLesevisning(false, true);
+        }
+    };
 
     return (
         <>
@@ -88,7 +104,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
-                        erLesevisning={erLesevisningPåBehandling}
+                        erLesevisning={erLesevisningPåBehandling()}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
                         value={enhetId}
@@ -118,7 +134,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
 
                     <FamilieTextarea
                         disabled={submitRessurs.status === RessursStatus.HENTER}
-                        erLesevisning={erLesevisningPåBehandling}
+                        erLesevisning={erLesevisningPåBehandling()}
                         label={'Begrunnelse'}
                         value={begrunnelse}
                         maxLength={4000}
