@@ -40,86 +40,90 @@ const Venstremeny: React.FunctionComponent = () => {
     const { åpenBehandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } =
         useBehandling();
 
-    return åpenVenstremeny ? (
+    return (
         <ÅpenMenyContainer>
-            <MenyItem>
-                <nav className={'venstremeny'}>
-                    {åpenBehandling.status === RessursStatus.SUKSESS ? (
-                        <>
-                            {Object.entries(trinnPåBehandling).map(
-                                ([sideId, side], index: number) => {
-                                    const tilPath = `/fagsak/${fagsakId}/${åpenBehandling.data.behandlingId}/${side.href}`;
+            {åpenVenstremeny && (
+                <MenyItem>
+                    <nav className={'venstremeny'}>
+                        {åpenBehandling.status === RessursStatus.SUKSESS ? (
+                            <>
+                                {Object.entries(trinnPåBehandling).map(
+                                    ([sideId, side], index: number) => {
+                                        const tilPath = `/fagsak/${fagsakId}/${åpenBehandling.data.behandlingId}/${side.href}`;
 
-                                    const undersider: IUnderside[] = side.undersider
-                                        ? side.undersider(åpenBehandling.data)
-                                        : [];
+                                        const undersider: IUnderside[] = side.undersider
+                                            ? side.undersider(åpenBehandling.data)
+                                            : [];
 
-                                    return (
-                                        <React.Fragment key={sideId}>
-                                            <Link
-                                                active={erSidenAktiv(side, åpenBehandling.data)}
-                                                id={sideId}
-                                                to={tilPath}
-                                                className={classNames(
-                                                    'venstremeny__link',
-                                                    erSidenAktiv(side, åpenBehandling.data) &&
-                                                        'hover-effekt'
-                                                )}
-                                            >
-                                                {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
-                                            </Link>
-                                            {undersider.map((underside: IUnderside) => {
-                                                const antallAksjonspunkter =
-                                                    underside.antallAksjonspunkter();
-                                                return (
-                                                    <Link
-                                                        active={erSidenAktiv(
-                                                            side,
-                                                            åpenBehandling.data
-                                                        )}
-                                                        key={`${sideId}_${underside.hash}`}
-                                                        id={`${sideId}_${underside.hash}`}
-                                                        to={`${tilPath}#${underside.hash}`}
-                                                        className={classNames(
-                                                            'venstremeny__link',
-                                                            'underside',
-                                                            erSidenAktiv(
+                                        return (
+                                            <React.Fragment key={sideId}>
+                                                <Link
+                                                    active={erSidenAktiv(side, åpenBehandling.data)}
+                                                    id={sideId}
+                                                    to={tilPath}
+                                                    className={classNames(
+                                                        'venstremeny__link',
+                                                        erSidenAktiv(side, åpenBehandling.data) &&
+                                                            'hover-effekt'
+                                                    )}
+                                                >
+                                                    {`${side.steg ? `${index + 1}. ` : ''}${
+                                                        side.navn
+                                                    }`}
+                                                </Link>
+                                                {undersider.map((underside: IUnderside) => {
+                                                    const antallAksjonspunkter =
+                                                        underside.antallAksjonspunkter();
+                                                    return (
+                                                        <Link
+                                                            active={erSidenAktiv(
                                                                 side,
                                                                 åpenBehandling.data
-                                                            ) && 'hover-effekt'
-                                                        )}
-                                                    >
-                                                        <>
-                                                            {antallAksjonspunkter > 0 ? (
-                                                                <div
-                                                                    className={
-                                                                        'underside__sirkel-tall'
-                                                                    }
-                                                                >
-                                                                    {antallAksjonspunkter}
-                                                                </div>
-                                                            ) : (
-                                                                <div
-                                                                    className={
-                                                                        'underside__sirkel-plass'
-                                                                    }
-                                                                />
                                                             )}
-                                                            <BodyShort size="small">
-                                                                {underside.navn}
-                                                            </BodyShort>
-                                                        </>
-                                                    </Link>
-                                                );
-                                            })}
-                                        </React.Fragment>
-                                    );
-                                }
-                            )}
-                        </>
-                    ) : null}
-                </nav>
-            </MenyItem>
+                                                            key={`${sideId}_${underside.hash}`}
+                                                            id={`${sideId}_${underside.hash}`}
+                                                            to={`${tilPath}#${underside.hash}`}
+                                                            className={classNames(
+                                                                'venstremeny__link',
+                                                                'underside',
+                                                                erSidenAktiv(
+                                                                    side,
+                                                                    åpenBehandling.data
+                                                                ) && 'hover-effekt'
+                                                            )}
+                                                        >
+                                                            <>
+                                                                {antallAksjonspunkter > 0 ? (
+                                                                    <div
+                                                                        className={
+                                                                            'underside__sirkel-tall'
+                                                                        }
+                                                                    >
+                                                                        {antallAksjonspunkter}
+                                                                    </div>
+                                                                ) : (
+                                                                    <div
+                                                                        className={
+                                                                            'underside__sirkel-plass'
+                                                                        }
+                                                                    />
+                                                                )}
+                                                                <BodyShort size="small">
+                                                                    {underside.navn}
+                                                                </BodyShort>
+                                                            </>
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </React.Fragment>
+                                        );
+                                    }
+                                )}
+                            </>
+                        ) : null}
+                    </nav>
+                </MenyItem>
+            )}
             <MenyItem>
                 <ToggleVisningVenstremeny
                     variant="secondary"
@@ -130,26 +134,16 @@ const Venstremeny: React.FunctionComponent = () => {
                     size="small"
                     aria-label="Skjul venstremeny"
                     åpenvenstremeny={åpenVenstremeny ? 1 : 0}
+                    title={åpenVenstremeny ? 'Skjul venstremeny' : 'Vis venstremeny'}
                 >
-                    <BackFilled />
+                    {åpenVenstremeny ? (
+                        <BackFilled aria-label="Vis venstremeny" />
+                    ) : (
+                        <NextFilled aria-label="Skjul venstremeny" />
+                    )}
                 </ToggleVisningVenstremeny>
             </MenyItem>
         </ÅpenMenyContainer>
-    ) : (
-        <div>
-            <ToggleVisningVenstremeny
-                variant="secondary"
-                onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                onClick={() => {
-                    settÅpenVenstremeny(!åpenVenstremeny);
-                }}
-                size="small"
-                aria-label="Åpne venstremeny"
-                åpenvenstremeny={åpenVenstremeny ? 1 : 0}
-            >
-                <NextFilled />
-            </ToggleVisningVenstremeny>
-        </div>
     );
 };
 

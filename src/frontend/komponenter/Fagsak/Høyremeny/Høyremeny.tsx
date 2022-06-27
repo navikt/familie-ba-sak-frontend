@@ -37,56 +37,48 @@ const Høyremeny: React.FunctionComponent = () => {
 
     return åpenBehandling.status === RessursStatus.SUKSESS ? (
         <>
-            {åpenHøyremeny ? (
-                <div className={'høyremeny'}>
-                    <ToggleVisningHøyremeny
-                        variant="secondary"
-                        onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                        onClick={() => {
-                            settÅpenHøyremeny(!åpenHøyremeny);
-                        }}
-                        size="small"
-                        aria-label="Skjul høyremeny"
-                        åpenhøyremeny={åpenHøyremeny ? 1 : 0}
-                    >
-                        <NextFilled />
-                    </ToggleVisningHøyremeny>
-                    <Behandlingskort åpenBehandling={åpenBehandling.data} />
-                    <Hendelsesoversikt
-                        hendelser={hentDataFraRessursMedFallback(logg, []).map(
-                            (loggElement: ILogg): Hendelse => {
-                                return {
-                                    id: loggElement.id.toString(),
-                                    dato: formaterIsoDato(
-                                        loggElement.opprettetTidspunkt,
-                                        datoformat.DATO_TID
-                                    ),
-                                    utførtAv: loggElement.opprettetAv,
-                                    rolle: loggElement.rolle,
-                                    tittel: loggElement.tittel,
-                                    beskrivelse: loggElement.tekst,
-                                };
-                            }
-                        )}
-                        åpenBehandling={åpenBehandling.data}
-                    />
-                </div>
-            ) : (
-                <div>
-                    <ToggleVisningHøyremeny
-                        variant="secondary"
-                        onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                        onClick={() => {
-                            settÅpenHøyremeny(!åpenHøyremeny);
-                        }}
-                        size="small"
-                        aria-label="Åpne høyremeny"
-                        åpenhøyremeny={åpenHøyremeny ? 1 : 0}
-                    >
-                        <BackFilled />
-                    </ToggleVisningHøyremeny>
-                </div>
-            )}
+            <div className={åpenHøyremeny ? 'høyremeny' : ''}>
+                <ToggleVisningHøyremeny
+                    variant="secondary"
+                    onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                    onClick={() => {
+                        settÅpenHøyremeny(!åpenHøyremeny);
+                    }}
+                    size="small"
+                    aria-label="Skjul høyremeny"
+                    åpenhøyremeny={åpenHøyremeny ? 1 : 0}
+                    title={åpenHøyremeny ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                >
+                    {åpenHøyremeny ? (
+                        <NextFilled aria-label="Skjul høyremeny" />
+                    ) : (
+                        <BackFilled aria-label="Vis høyremeny" />
+                    )}
+                </ToggleVisningHøyremeny>
+                {åpenHøyremeny && (
+                    <>
+                        <Behandlingskort åpenBehandling={åpenBehandling.data} />
+                        <Hendelsesoversikt
+                            hendelser={hentDataFraRessursMedFallback(logg, []).map(
+                                (loggElement: ILogg): Hendelse => {
+                                    return {
+                                        id: loggElement.id.toString(),
+                                        dato: formaterIsoDato(
+                                            loggElement.opprettetTidspunkt,
+                                            datoformat.DATO_TID
+                                        ),
+                                        utførtAv: loggElement.opprettetAv,
+                                        rolle: loggElement.rolle,
+                                        tittel: loggElement.tittel,
+                                        beskrivelse: loggElement.tekst,
+                                    };
+                                }
+                            )}
+                            åpenBehandling={åpenBehandling.data}
+                        />
+                    </>
+                )}
+            </div>
         </>
     ) : null;
 };
