@@ -11,7 +11,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useMottakerType } from '../../../context/MottakerTypeContext';
 
-const VergeWrapper = styled.div`
+const StyledDiv = styled.div`
     margin: 1rem 0;
 `;
 
@@ -35,7 +35,7 @@ const Verge: React.FunctionComponent = () => {
     }, [skjema.felter.fødselsnummer.verdi]);
 
     return (
-        <VergeWrapper className={'mottaker__verge'}>
+        <StyledDiv className={'mottaker__verge'}>
             <Systemtittel children={'Opplysninger om verge'} />
             <br />
             <FamilieInput
@@ -93,7 +93,7 @@ const Verge: React.FunctionComponent = () => {
                 id={'verge-sted'}
                 label={'Sted'}
             />
-        </VergeWrapper>
+        </StyledDiv>
     );
 };
 
