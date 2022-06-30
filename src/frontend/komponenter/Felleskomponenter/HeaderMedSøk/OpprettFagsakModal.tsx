@@ -9,7 +9,7 @@ import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
-import { FagsakEier } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
@@ -39,7 +39,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat;
-    const [fagsakEier, settFagsakeier] = useState<FagsakEier>(FagsakEier.OMSORGSPERSON);
+    const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
 
     return (
         <>
@@ -58,13 +58,13 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                 type={'hoved'}
                                 mini={true}
                                 onClick={async () => {
-                                    settSenderInn(FagsakEier.OMSORGSPERSON);
+                                    settSenderInn(FagsakType.NORMAL);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
                                         opprettFagsak(
                                             {
                                                 personIdent: søkeresultat.ident,
                                                 aktørId: null,
-                                                fagsakEier: FagsakEier.OMSORGSPERSON,
+                                                fagsakType: FagsakType.NORMAL,
                                             },
                                             lukkModal
                                         );
@@ -74,7 +74,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                 }}
                                 children={'Ja, opprett fagsak'}
                                 disabled={senderInn !== null}
-                                spinner={senderInn === FagsakEier.OMSORGSPERSON}
+                                spinner={senderInn === FagsakType.NORMAL}
                             />,
                         ],
                         onClose: lukkModal,
@@ -105,7 +105,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     type={'flat'}
                                     mini={true}
                                     onClick={() => {
-                                        settFagsakeier(FagsakEier.OMSORGSPERSON);
+                                        settFagsakType(FagsakType.NORMAL);
                                         lukkModal();
                                     }}
                                     children={'Avbryt'}
@@ -116,7 +116,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     type={'hoved'}
                                     mini={true}
                                     onClick={async () => {
-                                        settSenderInn(fagsakEier);
+                                        settSenderInn(fagsakType);
                                         if (
                                             søkeresultat &&
                                             (await sjekkTilgang(søkeresultat.ident))
@@ -125,14 +125,14 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                 {
                                                     personIdent: søkeresultat.ident,
                                                     aktørId: null,
-                                                    fagsakEier: fagsakEier,
+                                                    fagsakType: fagsakType,
                                                 },
                                                 lukkModal
                                             );
                                         } else {
                                             settSenderInn(null);
                                         }
-                                        settFagsakeier(FagsakEier.OMSORGSPERSON);
+                                        settFagsakType(FagsakType.NORMAL);
                                     }}
                                     children={'Opprett fagsak'}
                                     disabled={senderInn !== null}
@@ -162,12 +162,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                             id={'gjelder-institusjon'}
                             erLesevisning={false}
                             label={'Gjelder institusjon eller enslig mindreårig'}
-                            checked={fagsakEier === FagsakEier.BARN}
+                            checked={fagsakType !== FagsakType.NORMAL}
                             onChange={() => {
-                                if (fagsakEier === FagsakEier.BARN) {
-                                    settFagsakeier(FagsakEier.OMSORGSPERSON);
+                                if (fagsakType !== FagsakType.NORMAL) {
+                                    settFagsakType(FagsakType.NORMAL);
                                 } else {
-                                    settFagsakeier(FagsakEier.BARN);
+                                    settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRLIG);
                                 }
                             }}
                         />

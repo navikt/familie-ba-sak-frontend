@@ -17,6 +17,12 @@ export enum FagsakEier {
     BARN = 'BARN',
 }
 
+export enum FagsakType {
+    NORMAL = 'NORMAL',
+    BARN_ENSLIG_MINDREÅRLIG = 'BARN_ENSLIG_MINDREÅRLIG',
+    INSTITUSJON = 'INSTITUSJON',
+}
+
 // Interface
 export interface IBaseFagsak {
     id: number;
@@ -28,6 +34,7 @@ export interface IBaseFagsak {
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
     fagsakEier: FagsakEier;
+    fagsakType: FagsakType;
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {

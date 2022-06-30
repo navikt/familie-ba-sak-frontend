@@ -9,7 +9,7 @@ import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
-import { FagsakEier } from '../../../../../typer/fagsak';
+import { FagsakType } from '../../../../../typer/fagsak';
 import useOpprettFagsak from '../../../../Felleskomponenter/HeaderMedSøk/useOpprettFagsak';
 
 interface IProps {
@@ -22,19 +22,19 @@ const StyledDiv = styled.div`
 `;
 
 const bekreftNyFagsakModal = ({
-    nyFagsakEier,
+    nyFagsakType,
     feilmelding,
     onClick,
     onClose,
 }: {
-    nyFagsakEier: FagsakEier;
+    nyFagsakType: FagsakType;
     feilmelding: string;
     onClick: () => void;
     onClose: () => void;
 }) => {
     return {
         tittel:
-            nyFagsakEier === FagsakEier.BARN
+            nyFagsakType !== FagsakType.NORMAL
                 ? 'Opprett fagsak på institusjon eller enslig mindreårig'
                 : 'Opprett standard fagsak',
         lukkKnapp: true,
@@ -68,15 +68,15 @@ const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) 
     const { modal, settModal, lukkModal } = useApp();
     const [visFeilmelding, settVisFeilmelding] = React.useState(false);
     const { hentBruker } = useFagsakRessurser();
-    const nyFagsakEier =
-        minimalFagsak.fagsakEier === FagsakEier.BARN ? FagsakEier.OMSORGSPERSON : FagsakEier.BARN;
+    const nyFagsakType =
+        minimalFagsak.fagsakType === FagsakType.NORMAL ? FagsakType.INSTITUSJON : FagsakType.NORMAL;
 
     const opprettNyFagsak = () => {
         opprettFagsak(
             {
                 personIdent: minimalFagsak.søkerFødselsnummer,
                 aktørId: null,
-                fagsakEier: nyFagsakEier,
+                fagsakType: nyFagsakType,
             },
             () => {
                 settVisFeilmelding(false);
@@ -96,7 +96,7 @@ const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) 
         if (modal.visModal) {
             settModal(
                 bekreftNyFagsakModal({
-                    nyFagsakEier,
+                    nyFagsakType,
                     feilmelding,
                     onClick: opprettNyFagsak,
                     onClose: onClose,
@@ -113,7 +113,7 @@ const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) 
                     onListElementClick();
                     settModal(
                         bekreftNyFagsakModal({
-                            nyFagsakEier,
+                            nyFagsakType,
                             feilmelding: '',
                             onClick: opprettNyFagsak,
                             onClose: onClose,
