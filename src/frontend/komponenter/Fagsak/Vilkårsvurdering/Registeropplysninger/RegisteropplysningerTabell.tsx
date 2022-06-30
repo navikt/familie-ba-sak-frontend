@@ -1,7 +1,10 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
+
+import { Collapse, Expand } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 
 import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
@@ -49,6 +52,11 @@ const OpplysningsIkon = styled.div`
     padding-top: 0.5rem;
 `;
 
+const HøyrejustertKnapperad = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+`;
+
 interface IRegisteropplysningerTabellProps {
     opplysningstype: Registeropplysning;
     ikon: ReactNode;
@@ -65,11 +73,30 @@ const hentDatoHeader = (opplysningstype: Registeropplysning) => {
     }
 };
 
+const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteropplysning) =>
+    kalenderDiff(
+        kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)),
+        kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN))
+    );
+
+export const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;
+
 const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = ({
     opplysningstype,
     ikon,
     historikk,
 }) => {
+    const [erEkspandert, settEkspandert] = useState<boolean>(false);
+    const manglerOpplysninger = historikk.length === 0;
+    const skalVæreEkspanderbar =
+        historikk.length > GRENSE_FOR_EKSPANDERBAR_HISTORIKK &&
+        opplysningstype === Registeropplysning.BOSTEDSADRESSE;
+
+    const synligHistorikk =
+        !skalVæreEkspanderbar || erEkspandert
+            ? historikk.sort(sorterPerioderSynkende)
+            : historikk.sort(sorterPerioderSynkende).slice(0, GRENSE_FOR_EKSPANDERBAR_HISTORIKK);
+
     return (
         <>
             <Container>
@@ -85,53 +112,57 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         </tr>
                     </thead>
                     <tbody>
-                        {historikk.length ? (
-                            historikk
-                                .sort((a, b) =>
-                                    kalenderDiff(
-                                        kalenderDatoTilDate(
-                                            kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)
-                                        ),
-                                        kalenderDatoTilDate(
-                                            kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)
-                                        )
-                                    )
-                                )
-                                .map(periode => {
-                                    return (
-                                        <TabellRad
-                                            key={`${periode.fom}_${periode.tom}_${periode.verdi}`}
-                                        >
-                                            <td children={periode.verdi} />
-                                            <td
-                                                children={
-                                                    opplysningstype ===
-                                                        Registeropplysning.SIVILSTAND ||
-                                                    opplysningstype ===
-                                                        Registeropplysning.DØDSBOADRESSE
-                                                        ? tilVisning(
-                                                              periode.fom
-                                                                  ? kalenderDato(periode.fom)
-                                                                  : undefined
-                                                          )
-                                                        : periodeToString({
-                                                              fom: periode.fom,
-                                                              tom: periode.tom,
-                                                          })
-                                                }
-                                            />
-                                        </TabellRad>
-                                    );
-                                })
-                        ) : (
+                        {manglerOpplysninger && (
                             <TabellRad key={`${opplysningstype}_ukjent`}>
                                 <td children={'Ingen opplysninger'} />
                                 <td children={'-'} />
                             </TabellRad>
                         )}
+                        {!manglerOpplysninger &&
+                            synligHistorikk.map(periode => (
+                                <TabellRad key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
+                                    <td children={periode.verdi} />
+                                    <td
+                                        children={
+                                            opplysningstype === Registeropplysning.SIVILSTAND ||
+                                            opplysningstype === Registeropplysning.DØDSBOADRESSE
+                                                ? tilVisning(
+                                                      periode.fom
+                                                          ? kalenderDato(periode.fom)
+                                                          : undefined
+                                                  )
+                                                : periodeToString({
+                                                      fom: periode.fom,
+                                                      tom: periode.tom,
+                                                  })
+                                        }
+                                    />
+                                </TabellRad>
+                            ))}
                     </tbody>
                 </Tabell>
             </Container>
+            {skalVæreEkspanderbar && (
+                <HøyrejustertKnapperad>
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        onClick={() => settEkspandert(nåverdi => !nåverdi)}
+                    >
+                        {erEkspandert ? (
+                            <>
+                                Skjul
+                                <Collapse />
+                            </>
+                        ) : (
+                            <>
+                                Vis {historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere
+                                <Expand />
+                            </>
+                        )}
+                    </Button>
+                </HøyrejustertKnapperad>
+            )}
         </>
     );
 };
