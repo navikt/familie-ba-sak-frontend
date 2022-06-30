@@ -1,5 +1,5 @@
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../typer/person';

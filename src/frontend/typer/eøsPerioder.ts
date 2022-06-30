@@ -78,9 +78,12 @@ export enum EøsPeriodeStatus {
     OK = 'OK',
 }
 
-export interface IRestEøsPeriode {
-    id: number;
+export interface IEøsPeriodeStatus {
     status: EøsPeriodeStatus;
+}
+
+export interface IRestEøsPeriode extends IEøsPeriodeStatus {
+    id: number;
     fom: YearMonth;
     tom?: YearMonth;
     barnIdenter: string[];
@@ -94,9 +97,8 @@ export interface IRestKompetanse extends IRestEøsPeriode {
     resultat?: KompetanseResultat;
 }
 
-export interface IKompetanse {
+export interface IKompetanse extends IEøsPeriodeStatus {
     id: number;
-    status: EøsPeriodeStatus;
     initielFom: YearMonth;
     periode: FeltState<IYearMonthPeriode>;
     barnIdenter: FeltState<string[]>;
