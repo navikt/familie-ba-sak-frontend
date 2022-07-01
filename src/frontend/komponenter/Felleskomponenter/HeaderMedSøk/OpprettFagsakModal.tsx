@@ -11,6 +11,7 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IInstitusjon } from '../../../typer/mottaker';
+import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
@@ -18,7 +19,8 @@ import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;
-    søkeresultat: ISøkeresultat | undefined;
+    søkeresultat?: ISøkeresultat | undefined;
+    personInfo?: IPersonInfo;
 }
 
 const StyledUndertittel = styled(Undertittel)`
@@ -43,19 +45,20 @@ const institusjoner: IInstitusjon[] = [
     { orgNummer: '456', navn: 'Eksempel 2' },
 ];
 
-const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
+const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
+    lukkModal,
+    søkeresultat,
+    personInfo,
+}) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
-    const visModal = !!søkeresultat;
+    const visModal = !!søkeresultat || !!personInfo;
     const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
 
     const validerInput = () => {
-        if (fagsakType === FagsakType.INSTITUSJON) {
-            return !!valgtInstitusjon?.navn;
-        }
-        return true;
+        return fagsakType === FagsakType.INSTITUSJON ? !!valgtInstitusjon?.navn : true;
     };
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
@@ -79,7 +82,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                 type={'hoved'}
                                 mini={true}
                                 onClick={async () => {
-                                    settSenderInn(FagsakType.NORMAL);
+                                    settSenderInn(true);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
                                         opprettFagsak(
                                             {
@@ -90,12 +93,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                             lukkModal
                                         );
                                     } else {
-                                        settSenderInn(null);
+                                        settSenderInn(false);
                                     }
                                 }}
                                 children={'Ja, opprett fagsak'}
-                                disabled={senderInn !== null}
-                                spinner={senderInn === FagsakType.NORMAL}
+                                disabled={senderInn}
+                                spinner={senderInn}
                             />,
                         ],
                         onClose: lukkModal,
@@ -134,28 +137,30 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     type={'hoved'}
                                     mini={true}
                                     onClick={async () => {
-                                        settSenderInn(fagsakType);
+                                        settSenderInn(true);
+                                        const personIdent =
+                                            søkeresultat?.ident || personInfo?.personIdent;
                                         if (
-                                            søkeresultat &&
+                                            personIdent &&
                                             validerInput() &&
-                                            (await sjekkTilgang(søkeresultat.ident))
+                                            (await sjekkTilgang(personIdent))
                                         ) {
                                             opprettFagsak(
                                                 {
-                                                    personIdent: søkeresultat.ident,
+                                                    personIdent: personIdent,
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
                                                 },
                                                 onClose
                                             );
                                         } else {
-                                            settSenderInn(null);
+                                            settSenderInn(false);
                                             settVisFeilmelding(true);
                                         }
                                     }}
                                     children={'Opprett fagsak'}
-                                    disabled={senderInn !== null}
-                                    spinner={senderInn !== null}
+                                    disabled={senderInn}
+                                    spinner={senderInn}
                                     kompakt={true}
                                 />
                             </StyledKnappContainer>,
@@ -168,12 +173,19 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                     }}
                 >
                     <StyledUndertittel tag={'h3'}>
-                        Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
-                        personen?
+                        {`Personen har ${
+                            (personInfo?.fagsakId?.size || 0) > 0 ? 'en eksisternede' : 'ingen'
+                        } tilknyttet fagsak. Ønsker du å opprette fagsak for denne
+                            personen?`}
                     </StyledUndertittel>
                     {søkeresultat && (
                         <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
                             søkeresultat.ident
+                        )})`}</Normaltekst>
+                    )}
+                    {!søkeresultat && personInfo && (
+                        <Normaltekst>{`${personInfo.navn} (${formaterIdent(
+                            personInfo.personIdent
                         )})`}</Normaltekst>
                     )}
                     <StyledCheckBoxWrapper>

@@ -20,7 +20,7 @@ const useOpprettFagsak = () => {
     const history = useHistory();
     const { request } = useHttp();
     const [feilmelding, settFeilmelding] = useState('');
-    const [senderInn, settSenderInn] = useState<FagsakType | null>(null);
+    const [senderInn, settSenderInn] = useState(false);
 
     const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
         request<IOpprettFagsakData, IMinimalFagsak>({
@@ -30,7 +30,7 @@ const useOpprettFagsak = () => {
             påvirkerSystemLaster: true,
         })
             .then((response: Ressurs<IMinimalFagsak>) => {
-                settSenderInn(null);
+                settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     onSuccess && onSuccess();
                     const aktivBehandling: VisningBehandling | undefined =
@@ -51,7 +51,7 @@ const useOpprettFagsak = () => {
                 }
             })
             .catch(() => {
-                settSenderInn(null);
+                settSenderInn(false);
                 settFeilmelding('Opprettelse av fagsak feilet');
             });
     };
