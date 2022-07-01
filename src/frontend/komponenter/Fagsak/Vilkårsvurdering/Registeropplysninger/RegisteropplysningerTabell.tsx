@@ -89,6 +89,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
     const [erEkspandert, settEkspandert] = useState<boolean>(false);
     const manglerOpplysninger = historikk.length === 0;
     const skalVæreEkspanderbar =
+        !manglerOpplysninger &&
         historikk.length > GRENSE_FOR_EKSPANDERBAR_HISTORIKK &&
         opplysningstype === Registeropplysning.BOSTEDSADRESSE;
 
