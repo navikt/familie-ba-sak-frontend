@@ -28,6 +28,7 @@ const Container = styled.div`
 const TabellHeader = styled.th`
     text-align: left;
     padding: 0.5rem !important;
+
     &:nth-of-type(1) {
         width: 15rem;
     }
