@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
+import type { IInstitusjon } from '../../../typer/mottaker';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
@@ -35,12 +36,32 @@ const StyledCheckBoxWrapper = styled.div`
     margin-bottom: 1rem;
 `;
 
+const institusjoner: IInstitusjon[] = [
+    // TODO Erstattes med liste fra søketjeneste
+    { orgNummer: '', navn: '' },
+    { orgNummer: '123', navn: 'Eksempel 1' },
+    { orgNummer: '456', navn: 'Eksempel 2' },
+];
+
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat;
     const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
+    const [visFeilmelding, settVisFeilmelding] = useState(false);
+    const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
 
+    const validerInput = () => {
+        if (fagsakType === FagsakType.INSTITUSJON) {
+            return !!valgtInstitusjon?.navn;
+        }
+        return true;
+    };
+    const onClose = () => {
+        settFagsakType(FagsakType.NORMAL);
+        settVisFeilmelding(false);
+        lukkModal();
+    };
     return (
         <>
             {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
@@ -104,10 +125,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                     key={'avbryt'}
                                     type={'flat'}
                                     mini={true}
-                                    onClick={() => {
-                                        settFagsakType(FagsakType.NORMAL);
-                                        lukkModal();
-                                    }}
+                                    onClick={onClose}
                                     children={'Avbryt'}
                                     kompakt={true}
                                 />
@@ -119,6 +137,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                         settSenderInn(fagsakType);
                                         if (
                                             søkeresultat &&
+                                            validerInput() &&
                                             (await sjekkTilgang(søkeresultat.ident))
                                         ) {
                                             opprettFagsak(
@@ -127,12 +146,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
                                                 },
-                                                lukkModal
+                                                onClose
                                             );
                                         } else {
                                             settSenderInn(null);
+                                            settVisFeilmelding(true);
                                         }
-                                        settFagsakType(FagsakType.NORMAL);
                                     }}
                                     children={'Opprett fagsak'}
                                     disabled={senderInn !== null}
@@ -141,7 +160,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                                 />
                             </StyledKnappContainer>,
                         ],
-                        onClose: lukkModal,
+                        onClose: onClose,
                         lukkKnapp: true,
                         tittel: 'Opprett fagsak',
                         visModal: visModal,
@@ -159,20 +178,67 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                     )}
                     <StyledCheckBoxWrapper>
                         <FamilieCheckbox
-                            id={'gjelder-institusjon'}
+                            id={'gjelder-enslig-mindreårig'}
                             erLesevisning={false}
-                            label={'Gjelder institusjon eller enslig mindreårig'}
-                            checked={fagsakType !== FagsakType.NORMAL}
+                            label={'Gjelder enslig mindreårig'}
+                            checked={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG}
+                            disabled={fagsakType === FagsakType.INSTITUSJON}
                             onChange={() => {
-                                if (fagsakType !== FagsakType.NORMAL) {
+                                if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG) {
                                     settFagsakType(FagsakType.NORMAL);
                                 } else {
                                     settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRLIG);
                                 }
                             }}
                         />
+                        <br />
+                        <FamilieCheckbox
+                            id={'gjelder-institusjon'}
+                            erLesevisning={false}
+                            label={'Gjelder institusjon'}
+                            checked={fagsakType === FagsakType.INSTITUSJON}
+                            disabled={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG}
+                            onChange={() => {
+                                if (fagsakType === FagsakType.INSTITUSJON) {
+                                    settFagsakType(FagsakType.NORMAL);
+                                } else {
+                                    settFagsakType(FagsakType.INSTITUSJON);
+                                }
+                            }}
+                        />
+                        <br />
+                        {fagsakType === FagsakType.INSTITUSJON && (
+                            <FamilieSelect
+                                erLesevisning={false}
+                                name="institusjon"
+                                value={valgtInstitusjon?.navn}
+                                feil={
+                                    !valgtInstitusjon?.navn &&
+                                    visFeilmelding &&
+                                    'Institusjon er påkrevd'
+                                }
+                                label={'Velg institusjon'}
+                                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                                    settValgtInstitusjon(
+                                        institusjoner.at(event.target.selectedIndex)
+                                    );
+                                }}
+                            >
+                                {institusjoner.map((institusjon: IInstitusjon) => {
+                                    return (
+                                        <option
+                                            aria-selected={institusjon === valgtInstitusjon}
+                                            key={institusjon.orgNummer}
+                                            value={institusjon.navn}
+                                        >
+                                            {`${institusjon.navn}`}
+                                        </option>
+                                    );
+                                })}
+                            </FamilieSelect>
+                        )}
                     </StyledCheckBoxWrapper>
-                    {!!feilmelding && <Feilmelding children={feilmelding} />}
+                    {!!feilmelding && visFeilmelding && <Feilmelding children={feilmelding} />}
                 </UIModalWrapper>
             )}
         </>
