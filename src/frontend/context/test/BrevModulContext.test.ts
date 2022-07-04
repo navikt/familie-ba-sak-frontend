@@ -4,7 +4,7 @@ import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Brevmal } from '../../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../../typer/behandling';
-import { BehandlingÅrsak, Behandlingstype } from '../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
 import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
@@ -20,11 +20,22 @@ describe('BrevmodulContext', () => {
             data: behandling,
         });
 
-        const behandlingSøknad = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
-        test('Skal returnere liste med INNHENTE_OPPLYSNINGER og SVARTIDSBREV når behandlingsårsaken er SØKNAD', () => {
+        const behandlingSøknad = mockBehandling({
+            årsak: BehandlingÅrsak.SØKNAD,
+            type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        });
+        test('Skal returnere liste med gyldige brev for når behandlingsårsaken er SØKNAD og behandlingstypen er FØRSTEGANGSBEHANDLING', () => {
             expect(
-                hentMuligeBrevmalerImplementering(lagBehandlignRessursSuksess(behandlingSøknad))
-            ).toEqual([Brevmal.INNHENTE_OPPLYSNINGER, Brevmal.SVARTIDSBREV]);
+                hentMuligeBrevmalerImplementering(
+                    lagBehandlignRessursSuksess(behandlingSøknad)
+                ).sort()
+            ).toEqual(
+                [
+                    Brevmal.INNHENTE_OPPLYSNINGER,
+                    Brevmal.FORLENGET_SVARTIDSBREV,
+                    Brevmal.SVARTIDSBREV,
+                ].sort()
+            );
         });
 
         const behandlingsårsaker = [

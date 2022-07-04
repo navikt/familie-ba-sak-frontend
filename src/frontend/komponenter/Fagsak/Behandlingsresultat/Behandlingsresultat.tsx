@@ -227,6 +227,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                         åpenBehandling.utbetalingsperioder
                     )}
                     aktivEtikett={aktivEtikett}
+                    kompetanser={kompetanser}
+                    utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
+                    valutakurser={valutakurser}
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
