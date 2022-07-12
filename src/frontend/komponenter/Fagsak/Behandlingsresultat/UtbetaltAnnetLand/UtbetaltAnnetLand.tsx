@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -13,16 +13,7 @@ const UtenlandskPeriodeBeløperContainer = styled.div`
     margin-top: 5rem;
 `;
 
-const Tabell = styled.table`
-    margin-top: 2rem;
-    table-layout: fixed;
-
-    & fieldset.skjemagruppe {
-        margin-bottom: 1.5rem;
-    }
-`;
-
-const TabellHeader = styled.th`
+const TabellHeader = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
@@ -30,10 +21,10 @@ const TabellHeader = styled.th`
         width: 9.5rem;
     }
     &:nth-of-type(4) {
-        width: 5rem;
+        width: 11rem;
     }
     &:nth-of-type(5) {
-        width: 11rem;
+        width: 2.25rem;
     }
 `;
 
@@ -64,17 +55,17 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                     }
                 />
             )}
-            <Tabell className={`tabell`}>
-                <thead>
-                    <tr>
-                        <TabellHeader>Barn</TabellHeader>
-                        <TabellHeader>Periode</TabellHeader>
-                        <TabellHeader>Beløp per måned</TabellHeader>
-                        <TabellHeader>Valuta</TabellHeader>
+            <Table size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <TabellHeader scope="col">Barn</TabellHeader>
+                        <TabellHeader scope="col">Periode</TabellHeader>
+                        <TabellHeader scope="col">Beløp per måned</TabellHeader>
+                        <TabellHeader scope="col">Valuta</TabellHeader>
                         <TabellHeader></TabellHeader>
-                    </tr>
-                </thead>
-                <tbody>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {utbetaltAnnetLandBeløp.map(utenlandskPeriodeBeløp => (
                         <UtenlandskPeriodeBeløpRad
                             key={`${utenlandskPeriodeBeløp.barnIdenter.map(barn => `${barn}-`)}-${
@@ -85,8 +76,8 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     ))}
-                </tbody>
-            </Tabell>
+                </Table.Body>
+            </Table>
         </UtenlandskPeriodeBeløperContainer>
     );
 };
