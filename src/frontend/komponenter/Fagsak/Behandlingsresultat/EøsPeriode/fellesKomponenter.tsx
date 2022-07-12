@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Table } from '@navikt/ds-react';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
@@ -16,7 +16,7 @@ interface IEkspanderbarTrProps {
     ekspandert?: boolean;
 }
 
-export const EkspanderbarTr = styled.tr`
+export const EkspanderbarTr = styled(Table.Row)`
     td {
         border-bottom: ${(props: IEkspanderbarTrProps) =>
             props.ekspandert
@@ -32,7 +32,7 @@ export const EkspanderbarTr = styled.tr`
     }
 `;
 
-export const EkspandertTd = styled.td`
+export const EkspandertTd = styled(Table.DataCell)`
     padding: 0 1rem 1rem 1.6rem;
 `;
 
@@ -89,7 +89,7 @@ interface IStatusBarnCelleOgPeriodeCelleProps {
 export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCelleProps) => {
     return (
         <>
-            <td>
+            <Table.DataCell>
                 <EøsPeriodeVurdertCelle>
                     <div>
                         <StatusIkon
@@ -106,10 +106,10 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                         ))}
                     </BarnDiv>
                 </EøsPeriodeVurdertCelle>
-            </td>
-            <td>
+            </Table.DataCell>
+            <Table.DataCell>
                 <BodyShort size="small">{formatterPeriode(props.periode)}</BodyShort>
-            </td>
+            </Table.DataCell>
         </>
     );
 };
