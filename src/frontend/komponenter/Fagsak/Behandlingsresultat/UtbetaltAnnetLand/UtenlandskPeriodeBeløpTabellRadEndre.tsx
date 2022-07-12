@@ -45,10 +45,12 @@ const UtbetaltBeløpRad = styled.div`
 
         label {
             font-weight: normal;
+            margin-bottom: 0.5rem;
         }
 
         p.navds-label {
             font-weight: normal;
+            margin-bottom: 0.5rem;
         }
 
         &:nth-of-type(1) {

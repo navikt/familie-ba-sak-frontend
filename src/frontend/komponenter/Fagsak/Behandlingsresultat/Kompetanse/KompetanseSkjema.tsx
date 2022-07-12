@@ -14,7 +14,18 @@ const KompetanseContainer = styled.div`
     margin-top: 5rem;
 `;
 
-const TabellHeader = styled(Table.HeaderCell)`
+const StyledTable = styled(Table)`
+    margin-top: 2rem;
+
+    & fieldset.skjemagruppe {
+        margin-bottom: 1.5rem;
+    }
+    & div.skjemaelement {
+        margin-bottom: 1.5rem;
+    }
+`;
+
+const StyledHeaderCell = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
@@ -59,13 +70,13 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                     children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
                 />
             )}
-            <Table size="small">
+            <StyledTable size="small">
                 <Table.Header>
                     <Table.Row>
-                        <TabellHeader scope="col">Barn</TabellHeader>
-                        <TabellHeader scope="col">Periode</TabellHeader>
-                        <TabellHeader scope="col">Kompetanse</TabellHeader>
-                        <TabellHeader />
+                        <StyledHeaderCell scope="col">Barn</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Periode</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Kompetanse</StyledHeaderCell>
+                        <StyledHeaderCell />
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -80,7 +91,7 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                         />
                     ))}
                 </Table.Body>
-            </Table>
+            </StyledTable>
         </KompetanseContainer>
     );
 };

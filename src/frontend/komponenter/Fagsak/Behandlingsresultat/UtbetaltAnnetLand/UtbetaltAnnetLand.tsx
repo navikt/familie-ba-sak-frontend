@@ -13,6 +13,14 @@ const UtenlandskPeriodeBeløperContainer = styled.div`
     margin-top: 5rem;
 `;
 
+const StyledTable = styled(Table)`
+    margin-top: 2rem;
+
+    & fieldset.skjemagruppe {
+        margin-bottom: 1.5rem;
+    }
+`;
+
 const TabellHeader = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
@@ -55,7 +63,7 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                     }
                 />
             )}
-            <Table size="small">
+            <StyledTable size="small">
                 <Table.Header>
                     <Table.Row>
                         <TabellHeader scope="col">Barn</TabellHeader>
@@ -77,7 +85,7 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                         />
                     ))}
                 </Table.Body>
-            </Table>
+            </StyledTable>
         </UtenlandskPeriodeBeløperContainer>
     );
 };
