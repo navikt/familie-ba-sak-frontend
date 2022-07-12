@@ -45,6 +45,7 @@ export const EøsPeriodeSkjemaContainer = styled.div`
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
     border-left: 0.0625rem solid var(--navds-global-color-orange-500);
     padding-left: 2rem;
+    margin-left: -2rem;
 `;
 
 export const StyledLegend = styled.legend`

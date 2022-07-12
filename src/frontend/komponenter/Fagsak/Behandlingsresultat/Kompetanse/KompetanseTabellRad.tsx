@@ -58,7 +58,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
 
     return (
         <Table.ExpandableRow
-            togglePlacement={'right'}
+            togglePlacement="right"
             open={ekspandertKompetanse}
             onOpenChange={() => toggleForm(true)}
             id={kompetanseFeilmeldingId(redigerbartKompetanse)}
