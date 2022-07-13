@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
 import {
@@ -9,12 +10,7 @@ import {
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
-import {
-    EkspanderbarTr,
-    EkspandertTd,
-    EøsPeriodeEkspanderKnapp,
-    StatusBarnCelleOgPeriodeCelle,
-} from '../EøsPeriode/fellesKomponenter';
+import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
 
 interface IProps {
@@ -64,48 +60,38 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     };
 
     return (
-        <>
-            <EkspanderbarTr ekspandert={erValutakursEkspandert}>
-                <StatusBarnCelleOgPeriodeCelle
-                    status={valutakurs.status}
-                    barnIdenter={valutakurs.barnIdenter}
-                    personer={åpenBehandling.personer}
-                    periode={{
-                        fom: valutakurs.fom,
-                        tom: valutakurs.tom,
-                    }}
+        <Table.ExpandableRow
+            togglePlacement="right"
+            open={erValutakursEkspandert}
+            onOpenChange={() => toggleForm(true)}
+            id={valutakursFeilmeldingId(valutakurs)}
+            content={
+                <ValutakursTabellRadEndre
+                    skjema={skjema}
+                    tilgjengeligeBarn={barn}
+                    valideringErOk={valideringErOk}
+                    sendInnSkjema={sendInnSkjema}
+                    toggleForm={toggleForm}
+                    slettValutakurs={slettValutakurs}
                 />
-                <td>
-                    {valutakurs.valutakursdato
-                        ? formaterIsoDato(valutakurs.valutakursdato, datoformat.DATO)
-                        : '-'}
-                </td>
-                <td>{valutakurs.valutakode ? valutakurs.valutakode : '-'}</td>
-                <td>
-                    <EøsPeriodeEkspanderKnapp
-                        feilmeldingId={valutakursFeilmeldingId(valutakurs)}
-                        toggleForm={toggleForm}
-                        erEkspandert={erValutakursEkspandert}
-                        periodeStatus={valutakurs.status}
-                        ikkeUtfyltLabel={'Registrer valutakursdato'}
-                    />
-                </td>
-            </EkspanderbarTr>
-            {erValutakursEkspandert && (
-                <tr>
-                    <EkspandertTd colSpan={5}>
-                        <ValutakursTabellRadEndre
-                            skjema={skjema}
-                            tilgjengeligeBarn={barn}
-                            valideringErOk={valideringErOk}
-                            sendInnSkjema={sendInnSkjema}
-                            toggleForm={toggleForm}
-                            slettValutakurs={slettValutakurs}
-                        />
-                    </EkspandertTd>
-                </tr>
-            )}
-        </>
+            }
+        >
+            <StatusBarnCelleOgPeriodeCelle
+                status={valutakurs.status}
+                barnIdenter={valutakurs.barnIdenter}
+                personer={åpenBehandling.personer}
+                periode={{
+                    fom: valutakurs.fom,
+                    tom: valutakurs.tom,
+                }}
+            />
+            <Table.DataCell>
+                {valutakurs.valutakursdato
+                    ? formaterIsoDato(valutakurs.valutakursdato, datoformat.DATO)
+                    : '-'}
+            </Table.DataCell>
+            <Table.DataCell>{valutakurs.valutakode ? valutakurs.valutakode : '-'}</Table.DataCell>
+        </Table.ExpandableRow>
     );
 };
 

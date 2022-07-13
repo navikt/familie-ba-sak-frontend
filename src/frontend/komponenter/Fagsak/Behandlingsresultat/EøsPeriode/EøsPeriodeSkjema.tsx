@@ -21,6 +21,7 @@ const FlexDiv = styled.div`
     width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '28rem')};
     display: flex;
     justify-content: space-between;
+    font-size: 1rem;
 
     div {
         z-index: 0;

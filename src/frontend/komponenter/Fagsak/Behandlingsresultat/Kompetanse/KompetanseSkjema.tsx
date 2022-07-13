@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
@@ -14,28 +14,26 @@ const KompetanseContainer = styled.div`
     margin-top: 5rem;
 `;
 
-const Tabell = styled.table`
+const StyledTable = styled(Table)`
     margin-top: 2rem;
-    table-layout: fixed;
 
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
-
     & div.skjemaelement {
         margin-bottom: 1.5rem;
     }
 `;
 
-const TabellHeader = styled.th`
+const StyledHeaderCell = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
     &:nth-of-type(3) {
-        width: 9rem;
+        width: 14rem;
     }
     &:nth-of-type(4) {
-        width: 14rem;
+        width: 2.25rem;
     }
 `;
 
@@ -72,16 +70,16 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                     children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
                 />
             )}
-            <Tabell className={`tabell`}>
-                <thead>
-                    <tr>
-                        <TabellHeader>Barn</TabellHeader>
-                        <TabellHeader>Periode</TabellHeader>
-                        <TabellHeader>Kompetanse</TabellHeader>
-                        <TabellHeader></TabellHeader>
-                    </tr>
-                </thead>
-                <tbody>
+            <StyledTable size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <StyledHeaderCell scope="col">Barn</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Periode</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Kompetanse</StyledHeaderCell>
+                        <StyledHeaderCell />
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {kompetanser.map(kompetanse => (
                         <KompetanseTabellRad
                             key={`${kompetanse.verdi?.barnIdenter.verdi.map(barn => `${barn}-`)}-${
@@ -92,8 +90,8 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     ))}
-                </tbody>
-            </Tabell>
+                </Table.Body>
+            </StyledTable>
         </KompetanseContainer>
     );
 };
