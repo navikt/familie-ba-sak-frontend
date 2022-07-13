@@ -29,10 +29,10 @@ const StyledHeaderCell = styled(Table.HeaderCell)`
         width: 7.5rem;
     }
     &:nth-of-type(4) {
-        width: 4rem;
+        width: 14rem;
     }
     &:nth-of-type(5) {
-        width: 15rem;
+        width: 2.25rem;
     }
 `;
 
@@ -58,7 +58,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     }
                 />
             )}
-            <StyledTable className={`tabell`}>
+            <StyledTable size="small">
                 <Table.Header>
                     <Table.Row>
                         <StyledHeaderCell scope="col">Barn</StyledHeaderCell>
