@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
-import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
-
-import { DownFilled, LeftFilled, RightFilled } from '@navikt/ds-icons';
+import { DownFilled, LeftFilled, RightFilled, ExternalLink } from '@navikt/ds-icons';
+import { BodyShort, Heading, Link, Alert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
 import {
@@ -20,9 +17,7 @@ import {
 import 'nav-frontend-tabell-style';
 
 import useDokument from '../../../hooks/useDokument';
-import { EksternLenke } from '../../../ikoner/EksternLenke';
 import type { IPersonInfo } from '../../../typer/person';
-import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import {
     formaterFagsak,
@@ -47,10 +42,6 @@ const IkonWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-right: 0.5rem;
-`;
-
-const StyledSidetittel = styled(Sidetittel)`
-    margin-bottom: 1rem;
 `;
 
 const Td = styled.td`
@@ -79,17 +70,13 @@ const ListeElement = styled.li`
     }
 `;
 
-const EksternLenkeWrapper = styled(FamilieBaseKnapp)`
-    margin-left: 10px;
-`;
-
 const DokumentTittelMedLenkeWrapper = styled.div`
     margin-bottom: 1rem;
     display: flex;
     justify-content: flex-start;
 `;
 
-const EllipsisNormaltekst = styled(Normaltekst)`
+const EllipsisBodyShort = styled(BodyShort)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -97,6 +84,10 @@ const EllipsisNormaltekst = styled(Normaltekst)`
 
 const StyledTabell = styled.table`
     table-layout: fixed;
+`;
+
+const StyledLink = styled(Link)`
+    margin-left: 0.5rem;
 `;
 
 interface IProps {
@@ -166,7 +157,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     ) {
         return (
             <Container>
-                <AlertStripeFeil>Klarte ikke å hente inn journalposter for fagsak.</AlertStripeFeil>
+                <Alert variant="error">Klarte ikke å hente inn journalposter for fagsak.</Alert>
             </Container>
         );
     }
@@ -174,7 +165,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
         return (
             <Container>
-                <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
+                <Heading level="2" size="xlarge" spacing>
+                    Dokumentoversikt
+                </Heading>
 
                 <StyledTabell className="tabell tabell--stripet">
                     <colgroup>
@@ -236,10 +229,10 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 {journalpost.dokumenter?.map(dokument => (
                                                     <ListeElement key={dokument.dokumentInfoId}>
                                                         <DokumentTittelMedLenkeWrapper>
-                                                            <EllipsisNormaltekst
+                                                            <EllipsisBodyShort
                                                                 title={dokument.tittel}
                                                             >
-                                                                <Lenke
+                                                                <Link
                                                                     href="#"
                                                                     onClick={() =>
                                                                         hentPdfDokument(
@@ -249,23 +242,17 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                     }
                                                                 >
                                                                     {dokument.tittel}
-                                                                </Lenke>
-                                                            </EllipsisNormaltekst>
+                                                                </Link>
+                                                            </EllipsisBodyShort>
 
-                                                            {
-                                                                <EksternLenkeWrapper
-                                                                    onClick={() => {
-                                                                        window.open(
-                                                                            `/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`,
-                                                                            '_blank'
-                                                                        );
-                                                                    }}
-                                                                    aria-label="Åpne dokument i ny fane"
-                                                                    title="Åpne dokument i ny fane"
-                                                                >
-                                                                    <EksternLenke />
-                                                                </EksternLenkeWrapper>
-                                                            }
+                                                            <StyledLink
+                                                                href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
+                                                                target="_blank"
+                                                                aria-label="Åpne dokument i ny fane"
+                                                                title="Åpne dokument i ny fane"
+                                                            >
+                                                                <ExternalLink />
+                                                            </StyledLink>
                                                         </DokumentTittelMedLenkeWrapper>
 
                                                         <Vedleggsliste>
@@ -277,13 +264,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                                 vedlegg.logiskVedleggId
                                                                             }
                                                                         >
-                                                                            <EllipsisNormaltekst
+                                                                            <EllipsisBodyShort
                                                                                 title={
                                                                                     vedlegg.tittel
                                                                                 }
                                                                             >
                                                                                 {vedlegg.tittel}
-                                                                            </EllipsisNormaltekst>
+                                                                            </EllipsisBodyShort>
                                                                         </ListeElement>
                                                                     )
                                                                 )}
@@ -292,12 +279,12 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 ))}
                                             </Vedleggsliste>
                                         ) : (
-                                            <Normaltekst>Ingen dokumenter</Normaltekst>
+                                            <BodyShort>Ingen dokumenter</BodyShort>
                                         )}
                                     </Td>
 
                                     <Td>
-                                        <EllipsisNormaltekst
+                                        <EllipsisBodyShort
                                             title={formaterFagsak(
                                                 journalpost.sak?.fagsaksystem,
                                                 journalpost.sak?.fagsakId
@@ -307,26 +294,26 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 journalpost.sak?.fagsaksystem,
                                                 journalpost.sak?.fagsakId
                                             )}
-                                        </EllipsisNormaltekst>
+                                        </EllipsisBodyShort>
                                     </Td>
                                     <Td>
-                                        <EllipsisNormaltekst
+                                        <EllipsisBodyShort
                                             title={journalpost.avsenderMottaker?.navn}
                                         >
                                             {journalpost.avsenderMottaker?.navn}
-                                        </EllipsisNormaltekst>
+                                        </EllipsisBodyShort>
                                     </Td>
                                     <Td>
-                                        <EllipsisNormaltekst title={journalpost.tittel}>
+                                        <EllipsisBodyShort title={journalpost.tittel}>
                                             {journalpost.tittel}
-                                        </EllipsisNormaltekst>
+                                        </EllipsisBodyShort>
                                     </Td>
                                     <Td>
-                                        <EllipsisNormaltekst
+                                        <EllipsisBodyShort
                                             title={journalpoststatus[journalpost.journalstatus]}
                                         >
                                             {journalpoststatus[journalpost.journalstatus]}
-                                        </EllipsisNormaltekst>
+                                        </EllipsisBodyShort>
                                     </Td>
                                 </tr>
                             )
@@ -341,7 +328,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
             </Container>
         );
     } else {
-        return <></>;
+        return null;
     }
 };
 
