@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { DownFilled, LeftFilled, RightFilled, ExternalLink } from '@navikt/ds-icons';
-import { BodyShort, Heading, Link, Alert } from '@navikt/ds-react';
+import { BodyShort, Heading, Link, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
 import {
@@ -21,8 +21,8 @@ import type { IPersonInfo } from '../../../typer/person';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import {
     formaterFagsak,
+    formaterDatoRegistrertSendtMottatt,
     hentDatoRegistrertSendt,
-    hentSorteringsknappCss,
     hentSorterteJournalposter,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
@@ -44,15 +44,43 @@ const IkonWrapper = styled.div`
     margin-right: 0.5rem;
 `;
 
-const Td = styled.td`
+const StyledTable = styled(Table)`
+    table-layout: fixed;
+`;
+
+const StyledDataCell = styled(Table.DataCell)`
     vertical-align: top;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
 
-const Th = styled.th`
+const StyledHeaderCell = styled(Table.HeaderCell)`
     white-space: nowrap;
+
+    &:nth-of-type(1) {
+        width: 3.5rem;
+    }
+    &:nth-of-type(3) {
+        width: 25%;
+    }
+    &:nth-of-type(4) {
+        width: 15%;
+    }
+    &:nth-of-type(5) {
+        width: 20%;
+    }
+    &:nth-of-type(6) {
+        width: 22%;
+    }
+    &:nth-of-type(7) {
+        width: 8%;
+    }
+`;
+
+const StyledColumnHeader = styled(Table.ColumnHeader)`
+    white-space: nowrap;
+    width: 10rem;
 `;
 
 const Vedleggsliste = styled.ul`
@@ -80,10 +108,6 @@ const EllipsisBodyShort = styled(BodyShort)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-`;
-
-const StyledTabell = styled.table`
-    table-layout: fixed;
 `;
 
 const StyledLink = styled(Link)`
@@ -131,11 +155,15 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const settNesteSorteringsrekkefølge = (): void => {
         switch (sortering) {
             case Sorteringsrekkefølge.INGEN_SORTERING:
-                return settSortering(Sorteringsrekkefølge.STIGENDE);
+                settSortering(Sorteringsrekkefølge.STIGENDE);
+                break;
             case Sorteringsrekkefølge.STIGENDE:
-                return settSortering(Sorteringsrekkefølge.SYNKENDE);
+                settSortering(Sorteringsrekkefølge.SYNKENDE);
+                break;
             case Sorteringsrekkefølge.SYNKENDE:
-                return settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
+            default:
+                settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
+                break;
         }
     };
 
@@ -163,163 +191,164 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
+        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(journalpost => ({
+            ...journalpost,
+            datoMottatt:
+                journalpost.datoMottatt ||
+                hentDatoRegistrertSendt(journalpost.relevanteDatoer, journalpost.journalposttype),
+        }));
+        const sorterteJournalPoster = hentSorterteJournalposter(
+            journalposterMedOverstyrtDato,
+            sortering
+        );
         return (
             <Container>
                 <Heading level="2" size="xlarge" spacing>
                     Dokumentoversikt
                 </Heading>
 
-                <StyledTabell className="tabell tabell--stripet">
-                    <colgroup>
-                        <col style={{ width: '3.5rem' }} />
-                        <col style={{ width: '10.5rem' }} />
-                        <col style={{ width: '25%' }} />
-                        <col style={{ width: '15%' }} />
-                        <col style={{ width: '20%' }} />
-                        <col style={{ width: '23%' }} />
-                        <col style={{ width: '7%' }} />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <Th>Inn/ut</Th>
-                            <Th className={hentSorteringsknappCss(sortering)}>
-                                <button onClick={() => settNesteSorteringsrekkefølge()}>
-                                    Registrert/sendt
-                                </button>
-                            </Th>
+                <StyledTable
+                    size="small"
+                    zebraStripes
+                    sort={
+                        sortering === Sorteringsrekkefølge.INGEN_SORTERING
+                            ? undefined
+                            : {
+                                  orderBy: 'datoRegistrertSendt',
+                                  direction:
+                                      sortering === Sorteringsrekkefølge.STIGENDE
+                                          ? 'ascending'
+                                          : 'descending',
+                              }
+                    }
+                    onSortChange={settNesteSorteringsrekkefølge}
+                >
+                    <Table.Header>
+                        <Table.Row>
+                            <StyledHeaderCell>Inn/ut</StyledHeaderCell>
+                            <StyledColumnHeader sortKey="datoRegistrertSendt" sortable>
+                                Registrert/sendt
+                            </StyledColumnHeader>
 
-                            <Th>Dokumenter</Th>
-                            <Th>Fagsystem | Saksid</Th>
-                            <Th>Avsender/Mottaker</Th>
-                            <Th>Journalpost</Th>
-                            <Th>Status</Th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {hentSorterteJournalposter(journalposterRessurs.data, sortering).map(
-                            journalpost => (
-                                <tr key={journalpost.journalpostId}>
-                                    <Td>
-                                        <InnUtWrapper>
-                                            <IkonWrapper>
-                                                {hentIkonForJournalpostType(
-                                                    journalpost.journalposttype
-                                                )}{' '}
-                                            </IkonWrapper>
-                                            {journalpost.journalposttype}
-                                        </InnUtWrapper>
-                                    </Td>
-                                    <Td
-                                        className={
-                                            sortering === Sorteringsrekkefølge.STIGENDE ||
-                                            sortering === Sorteringsrekkefølge.SYNKENDE
-                                                ? 'tabell__StyledTd--sortert'
-                                                : ''
-                                        }
-                                    >
-                                        {hentDatoRegistrertSendt(
-                                            journalpost.relevanteDatoer,
-                                            journalpost.journalposttype
-                                        )}
-                                    </Td>
+                            <StyledHeaderCell>Dokumenter</StyledHeaderCell>
+                            <StyledHeaderCell>Fagsystem | Saksid</StyledHeaderCell>
+                            <StyledHeaderCell>Avsender/Mottaker</StyledHeaderCell>
+                            <StyledHeaderCell>Journalpost</StyledHeaderCell>
+                            <StyledHeaderCell>Status</StyledHeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {sorterteJournalPoster.map(journalpost => (
+                            <Table.Row key={journalpost.journalpostId}>
+                                <StyledDataCell>
+                                    <InnUtWrapper>
+                                        <IkonWrapper>
+                                            {hentIkonForJournalpostType(
+                                                journalpost.journalposttype
+                                            )}{' '}
+                                        </IkonWrapper>
+                                        {journalpost.journalposttype}
+                                    </InnUtWrapper>
+                                </StyledDataCell>
+                                <StyledDataCell>
+                                    {formaterDatoRegistrertSendtMottatt(journalpost.datoMottatt)}
+                                </StyledDataCell>
 
-                                    <Td>
-                                        {(journalpost.dokumenter?.length ?? []) > 0 ? (
-                                            <Vedleggsliste>
-                                                {journalpost.dokumenter?.map(dokument => (
-                                                    <ListeElement key={dokument.dokumentInfoId}>
-                                                        <DokumentTittelMedLenkeWrapper>
-                                                            <EllipsisBodyShort
-                                                                title={dokument.tittel}
-                                                            >
-                                                                <Link
-                                                                    href="#"
-                                                                    onClick={() =>
-                                                                        hentPdfDokument(
-                                                                            journalpost.journalpostId,
-                                                                            dokument.dokumentInfoId
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {dokument.tittel}
-                                                                </Link>
-                                                            </EllipsisBodyShort>
-
-                                                            <StyledLink
-                                                                href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
-                                                                target="_blank"
-                                                                aria-label="Åpne dokument i ny fane"
-                                                                title="Åpne dokument i ny fane"
-                                                            >
-                                                                <ExternalLink />
-                                                            </StyledLink>
-                                                        </DokumentTittelMedLenkeWrapper>
-
-                                                        <Vedleggsliste>
-                                                            {dokument.logiskeVedlegg &&
-                                                                dokument.logiskeVedlegg.map(
-                                                                    vedlegg => (
-                                                                        <ListeElement
-                                                                            key={
-                                                                                vedlegg.logiskVedleggId
-                                                                            }
-                                                                        >
-                                                                            <EllipsisBodyShort
-                                                                                title={
-                                                                                    vedlegg.tittel
-                                                                                }
-                                                                            >
-                                                                                {vedlegg.tittel}
-                                                                            </EllipsisBodyShort>
-                                                                        </ListeElement>
+                                <StyledDataCell>
+                                    {(journalpost.dokumenter?.length ?? []) > 0 ? (
+                                        <Vedleggsliste>
+                                            {journalpost.dokumenter?.map(dokument => (
+                                                <ListeElement key={dokument.dokumentInfoId}>
+                                                    <DokumentTittelMedLenkeWrapper>
+                                                        <EllipsisBodyShort
+                                                            size="small"
+                                                            title={dokument.tittel}
+                                                        >
+                                                            <Link
+                                                                href="#"
+                                                                onClick={() =>
+                                                                    hentPdfDokument(
+                                                                        journalpost.journalpostId,
+                                                                        dokument.dokumentInfoId
                                                                     )
-                                                                )}
-                                                        </Vedleggsliste>
-                                                    </ListeElement>
-                                                ))}
-                                            </Vedleggsliste>
-                                        ) : (
-                                            <BodyShort>Ingen dokumenter</BodyShort>
-                                        )}
-                                    </Td>
+                                                                }
+                                                            >
+                                                                {dokument.tittel}
+                                                            </Link>
+                                                        </EllipsisBodyShort>
 
-                                    <Td>
-                                        <EllipsisBodyShort
-                                            title={formaterFagsak(
-                                                journalpost.sak?.fagsaksystem,
-                                                journalpost.sak?.fagsakId
-                                            )}
-                                        >
-                                            {formaterFagsak(
-                                                journalpost.sak?.fagsaksystem,
-                                                journalpost.sak?.fagsakId
-                                            )}
-                                        </EllipsisBodyShort>
-                                    </Td>
-                                    <Td>
-                                        <EllipsisBodyShort
-                                            title={journalpost.avsenderMottaker?.navn}
-                                        >
-                                            {journalpost.avsenderMottaker?.navn}
-                                        </EllipsisBodyShort>
-                                    </Td>
-                                    <Td>
-                                        <EllipsisBodyShort title={journalpost.tittel}>
-                                            {journalpost.tittel}
-                                        </EllipsisBodyShort>
-                                    </Td>
-                                    <Td>
-                                        <EllipsisBodyShort
-                                            title={journalpoststatus[journalpost.journalstatus]}
-                                        >
-                                            {journalpoststatus[journalpost.journalstatus]}
-                                        </EllipsisBodyShort>
-                                    </Td>
-                                </tr>
-                            )
-                        )}
-                    </tbody>
-                </StyledTabell>
+                                                        <StyledLink
+                                                            href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
+                                                            target="_blank"
+                                                            aria-label="Åpne dokument i ny fane"
+                                                            title="Åpne dokument i ny fane"
+                                                        >
+                                                            <ExternalLink />
+                                                        </StyledLink>
+                                                    </DokumentTittelMedLenkeWrapper>
+
+                                                    <Vedleggsliste>
+                                                        {dokument.logiskeVedlegg &&
+                                                            dokument.logiskeVedlegg.map(vedlegg => (
+                                                                <ListeElement
+                                                                    key={vedlegg.logiskVedleggId}
+                                                                >
+                                                                    <EllipsisBodyShort
+                                                                        size="small"
+                                                                        title={vedlegg.tittel}
+                                                                    >
+                                                                        {vedlegg.tittel}
+                                                                    </EllipsisBodyShort>
+                                                                </ListeElement>
+                                                            ))}
+                                                    </Vedleggsliste>
+                                                </ListeElement>
+                                            ))}
+                                        </Vedleggsliste>
+                                    ) : (
+                                        <BodyShort>Ingen dokumenter</BodyShort>
+                                    )}
+                                </StyledDataCell>
+
+                                <StyledDataCell>
+                                    <EllipsisBodyShort
+                                        size="small"
+                                        title={formaterFagsak(
+                                            journalpost.sak?.fagsaksystem,
+                                            journalpost.sak?.fagsakId
+                                        )}
+                                    >
+                                        {formaterFagsak(
+                                            journalpost.sak?.fagsaksystem,
+                                            journalpost.sak?.fagsakId
+                                        )}
+                                    </EllipsisBodyShort>
+                                </StyledDataCell>
+                                <StyledDataCell>
+                                    <EllipsisBodyShort
+                                        size="small"
+                                        title={journalpost.avsenderMottaker?.navn}
+                                    >
+                                        {journalpost.avsenderMottaker?.navn}
+                                    </EllipsisBodyShort>
+                                </StyledDataCell>
+                                <StyledDataCell>
+                                    <EllipsisBodyShort size="small" title={journalpost.tittel}>
+                                        {journalpost.tittel}
+                                    </EllipsisBodyShort>
+                                </StyledDataCell>
+                                <StyledDataCell>
+                                    <EllipsisBodyShort
+                                        size="small"
+                                        title={journalpoststatus[journalpost.journalstatus]}
+                                    >
+                                        {journalpoststatus[journalpost.journalstatus]}
+                                    </EllipsisBodyShort>
+                                </StyledDataCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </StyledTable>
                 <PdfVisningModal
                     åpen={visDokumentModal}
                     onRequestClose={() => settVisDokumentModal(false)}
