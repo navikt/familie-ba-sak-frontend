@@ -2,16 +2,16 @@ import * as React from 'react';
 
 interface IPluss {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
-const Pluss: React.FunctionComponent<IPluss> = ({ className, heigth = 24, width = 24 }) => {
+const Pluss: React.FunctionComponent<IPluss> = ({ className, height = 24, width = 24 }) => {
     return (
         <svg
             aria-labelledby={'Pluss'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 16 16"
             xmlns="http://www.w3.org/2000/svg"

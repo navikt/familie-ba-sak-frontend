@@ -89,7 +89,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                         <VilkårResultatIkon
                             resultat={annenVurdering.verdi.resultat.verdi}
                             width={20}
-                            heigth={20}
+                            height={20}
                         />
                         <Normaltekst children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
                     </VurderingCelle>

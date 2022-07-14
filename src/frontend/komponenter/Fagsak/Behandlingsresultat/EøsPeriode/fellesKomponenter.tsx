@@ -96,7 +96,7 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                         <StatusIkon
                             status={mapEøsPeriodeStatusTilStatus[props.status]}
                             width={20}
-                            heigth={20}
+                            height={20}
                         />
                     </div>
                     <BarnDiv>
