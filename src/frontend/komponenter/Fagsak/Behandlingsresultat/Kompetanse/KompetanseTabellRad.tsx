@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import deepEqual from 'deep-equal';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -10,12 +10,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse } from '../../../../typer/eøsPerioder';
 import { KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
-import {
-    EkspanderbarTr,
-    EkspandertTd,
-    EøsPeriodeEkspanderKnapp,
-    StatusBarnCelleOgPeriodeCelle,
-} from '../EøsPeriode/fellesKomponenter';
+import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
@@ -62,42 +57,32 @@ const KompetanseTabellRad: React.FC<IProps> = ({
     }));
 
     return (
-        <>
-            <EkspanderbarTr ekspandert={ekspandertKompetanse}>
-                <StatusBarnCelleOgPeriodeCelle
-                    status={kompetanse.verdi.status}
-                    barnIdenter={kompetanse.verdi.barnIdenter.verdi}
-                    personer={åpenBehandling.personer}
-                    periode={kompetanse.verdi.periode.verdi}
+        <Table.ExpandableRow
+            togglePlacement="right"
+            open={ekspandertKompetanse}
+            onOpenChange={() => toggleForm(true)}
+            id={kompetanseFeilmeldingId(redigerbartKompetanse)}
+            content={
+                <KompetanseTabellRadEndre
+                    redigerbartKompetanse={redigerbartKompetanse}
+                    tilgjengeligeBarn={barn}
+                    visFeilmeldinger={visFeilmeldinger}
+                    settRedigerbartKompetanse={settRedigerbartKompetanse}
+                    toggleForm={toggleForm}
+                    settEkspandertKompetanse={settEkspandertKompetanse}
                 />
-                <td>
-                    <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
-                </td>
-                <td>
-                    <EøsPeriodeEkspanderKnapp
-                        feilmeldingId={kompetanseFeilmeldingId(kompetanse)}
-                        toggleForm={toggleForm}
-                        erEkspandert={ekspandertKompetanse}
-                        periodeStatus={kompetanse.verdi.status}
-                        ikkeUtfyltLabel={'Fastsett kompetanse'}
-                    />
-                </td>
-            </EkspanderbarTr>
-            {ekspandertKompetanse && (
-                <tr>
-                    <EkspandertTd colSpan={4}>
-                        <KompetanseTabellRadEndre
-                            redigerbartKompetanse={redigerbartKompetanse}
-                            tilgjengeligeBarn={barn}
-                            visFeilmeldinger={visFeilmeldinger}
-                            settRedigerbartKompetanse={settRedigerbartKompetanse}
-                            toggleForm={toggleForm}
-                            settEkspandertKompetanse={settEkspandertKompetanse}
-                        />
-                    </EkspandertTd>
-                </tr>
-            )}
-        </>
+            }
+        >
+            <StatusBarnCelleOgPeriodeCelle
+                status={kompetanse.verdi.status}
+                barnIdenter={kompetanse.verdi.barnIdenter.verdi}
+                personer={åpenBehandling.personer}
+                periode={kompetanse.verdi.periode.verdi}
+            />
+            <Table.DataCell>
+                <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>
+            </Table.DataCell>
+        </Table.ExpandableRow>
     );
 };
 

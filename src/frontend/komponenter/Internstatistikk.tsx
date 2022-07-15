@@ -2,16 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import 'nav-frontend-tabell-style';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-
+import { Heading, BodyShort, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../context/FagsakContext';
 import { behandlingÅrsak } from '../typer/behandling';
 
 const Container = styled.div`
-    margin: 5rem;
+    padding: 5rem;
+    height: 100%;
+    overflow: auto;
 `;
 
 const Internstatistikk: React.FC = () => {
@@ -19,52 +19,52 @@ const Internstatistikk: React.FC = () => {
     if (internstatistikk.status === RessursStatus.IKKE_HENTET) {
         hentInternstatistikk();
     }
+
     return (
         <Container>
             {internstatistikk.status === RessursStatus.SUKSESS && (
                 <>
-                    <Undertittel children={'Internstatistikk BA-SAK'} />
-                    <Normaltekst>
+                    <Heading level="2" size="large" children={'Internstatistikk BA-SAK'} />
+                    <BodyShort>
                         {`Antall fagsaker totalt: ${internstatistikk.data.antallFagsakerTotalt}`}
-                    </Normaltekst>
+                    </BodyShort>
 
-                    <Normaltekst>
+                    <BodyShort>
                         {`Antall løpende saker: ${internstatistikk.data.antallFagsakerLøpende}`}
-                    </Normaltekst>
+                    </BodyShort>
 
-                    <Normaltekst>
+                    <BodyShort spacing>
                         {`Antall behandlinger som ikke er ferdigstilt: ${internstatistikk.data.antallBehandlingerIkkeFerdigstilt}`}
-                    </Normaltekst>
+                    </BodyShort>
 
-                    <br />
                     <hr />
-                    <Undertittel>Antall behandlinger per årsak</Undertittel>
-                    <table className="tabell tabell--stripet">
-                        <thead>
-                            <tr>
-                                <th>Behandlingsårsak</th>
-                                <th>Antall</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <Heading level="3" size="medium">
+                        Antall behandlinger per årsak
+                    </Heading>
+                    <Table zebraStripes>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell scope="col">Behandlingsårsak</Table.HeaderCell>
+                                <Table.HeaderCell scope="col">Antall</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
                             {Object.entries(internstatistikk.data.antallBehandlingerPerÅrsak).map(
-                                ([behandlingsårsak, antall]) => {
-                                    return (
-                                        <tr>
-                                            <td>
-                                                {
-                                                    // eslint-disable-next-line
-                                                    // @ts-ignore: her får vi riktig type, det er bare ts som ikke skjønner det
-                                                    behandlingÅrsak[behandlingsårsak]
-                                                }
-                                            </td>
-                                            <td>{antall}</td>
-                                        </tr>
-                                    );
-                                }
+                                ([behandlingsårsak, antall]) => (
+                                    <Table.Row key={`tabellrad-${behandlingsårsak}`}>
+                                        <Table.DataCell>
+                                            {
+                                                // eslint-disable-next-line
+                                                // @ts-ignore: her får vi riktig type, det er bare ts som ikke skjønner det
+                                                behandlingÅrsak[behandlingsårsak]
+                                            }
+                                        </Table.DataCell>
+                                        <Table.DataCell>{antall}</Table.DataCell>
+                                    </Table.Row>
+                                )
                             )}
-                        </tbody>
-                    </table>
+                        </Table.Body>
+                    </Table>
                 </>
             )}
         </Container>
