@@ -2,20 +2,20 @@ import * as React from 'react';
 
 interface IKontorIkonGrønn {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
 const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
     className,
-    heigth = 24,
+    height = 24,
     width = 24,
 }) => {
     return (
         <svg
             aria-labelledby={'Kontorikon grønn'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 28 28"
             xmlns="http://www.w3.org/2000/svg"
