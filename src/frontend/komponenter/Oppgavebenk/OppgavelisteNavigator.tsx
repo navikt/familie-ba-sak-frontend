@@ -1,10 +1,12 @@
 import React from 'react';
 
-import Pagination from 'paginering';
-
+import { Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
+import type { IOppgave } from '../../typer/oppgave';
+
+const antallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
     const { oppgaver, tableInstance } = useOppgaver();
@@ -21,11 +23,10 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
             </span>
             |
             <Pagination
-                className={'pagination'}
-                numberOfItems={oppgaver.data.oppgaver.length}
-                itemsPerPage={oppgaveSideLimit}
-                maxPageButtons={5}
-                onChange={(side: number) => gotoPage(side - 1)}
+                size="small"
+                page={pageIndex + 1}
+                count={antallSider(oppgaver.data.oppgaver)}
+                onPageChange={(side: number) => gotoPage(side - 1)}
             />
         </div>
     ) : null;
