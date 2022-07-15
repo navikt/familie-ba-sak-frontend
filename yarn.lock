@@ -2462,10 +2462,10 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/familie-backend@^7.0.3":
-  version "7.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/7.0.3/e9ac4f20717f4ed9ff8bb2461230e772834fb84d4d000a1cdf7656cfa87fb87f#a7db1ffba36ae465e94f173368a5da3873eadc3c"
-  integrity sha512-/dPOks4o3sZxuMnKopDAVPe8izhRgMtmsRxgjyovhqt0GIsRZGaGMAtoH0lV7XSX4gGzXHffrWLu7WkWJdxctA==
+"@navikt/familie-backend@^7.0.4":
+  version "7.0.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/7.0.4/e90fbdf6e9d46822eb3a3dc732acbcabe9ec9703c76dcbb283682be4240c2248#5663b88300cbb453feb4705536d92d3afd19959f"
+  integrity sha512-9oJ8DZS6VKv+8dzQQmG0DtHErD75P/LXk61Ws5r7lZ2O3g1JFhJEr8+JaKAMc2GZbqNawylFGz35MyehyAC8lg==
   dependencies:
     "@navikt/familie-logging" "^3.0.1"
     "@types/connect-redis" "~0.0.18"
@@ -2485,7 +2485,7 @@
     express-session "^1.17.1"
     https-proxy-agent "^5.0.0"
     openid-client "^4.7.2"
-    passport "^0.4.0"
+    passport "^0.6.0"
     prom-client "^13.1.0"
     redis "^3.0.2"
     request-promise "^4.2.5"
@@ -10353,13 +10353,14 @@ passport-strategy@1.x.x:
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
   integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
 
-passport@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/passport/-/passport-0.4.1.tgz#941446a21cb92fc688d97a0861c38ce9f738f270"
-  integrity sha512-IxXgZZs8d7uFSt3eqNjM9NQ3g3uQCW5avD8mRNoXV99Yig50vjuaez6dQK2qC0kVWPRTujxY0dWgGfT09adjYg==
+passport@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/passport/-/passport-0.6.0.tgz#e869579fab465b5c0b291e841e6cc95c005fac9d"
+  integrity sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==
   dependencies:
     passport-strategy "1.x.x"
     pause "0.0.1"
+    utils-merge "^1.0.1"
 
 path-exists@^3.0.0:
   version "3.0.0"
@@ -12967,7 +12968,7 @@ utila@~0.4:
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
 
-utils-merge@1.0.1:
+utils-merge@1.0.1, utils-merge@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
