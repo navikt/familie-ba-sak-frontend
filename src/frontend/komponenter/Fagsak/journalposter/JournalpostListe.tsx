@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { DownFilled, LeftFilled, RightFilled, ExternalLink } from '@navikt/ds-icons';
-import { BodyShort, Heading, Link, Alert, Table } from '@navikt/ds-react';
+import { DownFilled, LeftFilled, RightFilled } from '@navikt/ds-icons';
+import { BodyShort, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
 import {
@@ -19,6 +19,7 @@ import 'nav-frontend-tabell-style';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import { JournalpostDokument } from './JournalpostDokument';
 import {
     formaterFagsak,
     formaterDatoRegistrertSendtMottatt,
@@ -84,7 +85,7 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
     width: 10rem;
 `;
 
-const Vedleggsliste = styled.ul`
+export const Vedleggsliste = styled.ul`
     list-style-type: none;
     margin: 0;
     &:first-child {
@@ -92,27 +93,10 @@ const Vedleggsliste = styled.ul`
     }
 `;
 
-const ListeElement = styled.li`
-    margin-bottom: 1rem;
-    &:last-child {
-        margin-bottom: 0;
-    }
-`;
-
-const DokumentTittelMedLenkeWrapper = styled.div`
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: flex-start;
-`;
-
-const EllipsisBodyShort = styled(BodyShort)`
+export const EllipsisBodyShort = styled(BodyShort)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-`;
-
-const StyledLink = styled(Link)`
-    margin-left: 0.5rem;
 `;
 
 interface IProps {
@@ -138,8 +122,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
-    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
-        useDokument();
+    const { visDokumentModal, hentetDokument, settVisDokumentModal } = useDokument();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -165,17 +148,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
             default:
                 settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
                 break;
-        }
-    };
-
-    const hentPdfDokument = (journalpostId: string, dokumentId: string | undefined) => {
-        if (dokumentId !== undefined) {
-            hentForhåndsvisning({
-                method: 'GET',
-                url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`,
-            });
-        } else {
-            alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
         }
     };
 
@@ -249,51 +221,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     {(journalpost.dokumenter?.length ?? []) > 0 ? (
                                         <Vedleggsliste>
                                             {journalpost.dokumenter?.map(dokument => (
-                                                <ListeElement key={dokument.dokumentInfoId}>
-                                                    <DokumentTittelMedLenkeWrapper>
-                                                        <EllipsisBodyShort
-                                                            size="small"
-                                                            title={dokument.tittel}
-                                                        >
-                                                            <Link
-                                                                href="#"
-                                                                onClick={() =>
-                                                                    hentPdfDokument(
-                                                                        journalpost.journalpostId,
-                                                                        dokument.dokumentInfoId
-                                                                    )
-                                                                }
-                                                            >
-                                                                {dokument.tittel}
-                                                            </Link>
-                                                        </EllipsisBodyShort>
-
-                                                        <StyledLink
-                                                            href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
-                                                            target="_blank"
-                                                            aria-label="Åpne dokument i ny fane"
-                                                            title="Åpne dokument i ny fane"
-                                                        >
-                                                            <ExternalLink />
-                                                        </StyledLink>
-                                                    </DokumentTittelMedLenkeWrapper>
-
-                                                    <Vedleggsliste>
-                                                        {dokument.logiskeVedlegg &&
-                                                            dokument.logiskeVedlegg.map(vedlegg => (
-                                                                <ListeElement
-                                                                    key={vedlegg.logiskVedleggId}
-                                                                >
-                                                                    <EllipsisBodyShort
-                                                                        size="small"
-                                                                        title={vedlegg.tittel}
-                                                                    >
-                                                                        {vedlegg.tittel}
-                                                                    </EllipsisBodyShort>
-                                                                </ListeElement>
-                                                            ))}
-                                                    </Vedleggsliste>
-                                                </ListeElement>
+                                                <JournalpostDokument
+                                                    dokument={dokument}
+                                                    journalpostId={journalpost.journalpostId}
+                                                    key={dokument.dokumentInfoId}
+                                                />
                                             ))}
                                         </Vedleggsliste>
                                     ) : (
