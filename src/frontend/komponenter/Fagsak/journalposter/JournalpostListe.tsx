@@ -24,6 +24,7 @@ import {
     formaterDatoRegistrertSendtMottatt,
     hentDatoRegistrertSendt,
     hentSorterteJournalposter,
+    hentSortState,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
 
@@ -210,17 +211,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 <StyledTable
                     size="small"
                     zebraStripes
-                    sort={
-                        sortering === Sorteringsrekkefølge.INGEN_SORTERING
-                            ? undefined
-                            : {
-                                  orderBy: 'datoRegistrertSendt',
-                                  direction:
-                                      sortering === Sorteringsrekkefølge.STIGENDE
-                                          ? 'ascending'
-                                          : 'descending',
-                              }
-                    }
+                    sort={hentSortState(sortering, 'datoRegistrertSendt')}
                     onSortChange={settNesteSorteringsrekkefølge}
                 >
                     <Table.Header>

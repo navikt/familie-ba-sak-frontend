@@ -1,3 +1,4 @@
+import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
@@ -62,6 +63,17 @@ export const hentDatoRegistrertSendt = (
         }
     })?.dato;
 };
+
+export const hentSortState = (
+    sortering: Sorteringsrekkefølge,
+    sortKey: string
+): SortState | undefined =>
+    sortering === Sorteringsrekkefølge.INGEN_SORTERING
+        ? undefined
+        : {
+              orderBy: sortKey,
+              direction: sortering === Sorteringsrekkefølge.STIGENDE ? 'ascending' : 'descending',
+          };
 
 export const formaterDatoRegistrertSendtMottatt = (dato: string | undefined): string =>
     formaterIsoDato(dato, datoformat.DATO_TID, '-');
