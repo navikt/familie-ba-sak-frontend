@@ -2,16 +2,16 @@ import * as React from 'react';
 
 interface IRødError {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
-const RødError: React.FunctionComponent<IRødError> = ({ className, heigth, width }) => {
+const RødError: React.FunctionComponent<IRødError> = ({ className, height, width }) => {
     return (
         <svg
             aria-labelledby={'Rød Error'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"

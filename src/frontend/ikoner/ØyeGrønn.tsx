@@ -2,16 +2,16 @@ import * as React from 'react';
 
 interface IØyeGrønn {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
-const ØyeGrønn: React.FunctionComponent<IØyeGrønn> = ({ className, heigth, width }) => {
+const ØyeGrønn: React.FunctionComponent<IØyeGrønn> = ({ className, height, width }) => {
     return (
         <svg
             aria-labelledby={'Øye grønn'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 24 25"
             xmlns="http://www.w3.org/2000/svg"
