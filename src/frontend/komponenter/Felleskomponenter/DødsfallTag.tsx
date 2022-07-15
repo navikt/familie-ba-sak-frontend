@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
-import '@navikt/ds-css';
 import { Tag } from '@navikt/ds-react';
 
 const StyletTag = styled(Tag)`
