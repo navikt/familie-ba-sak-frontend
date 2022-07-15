@@ -85,7 +85,7 @@ const Barna: React.FunctionComponent = () => {
                                 <BarnMedDiskresjonskode
                                     key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
                                 >
-                                    <StyledRødError heigth={24} width={24} />
+                                    <StyledRødError height={24} width={24} />
                                     {`Bruker har barn med diskresjonskode ${
                                         adressebeskyttelsestyper[
                                             forelderBarnRelasjonMaskert.adressebeskyttelseGradering

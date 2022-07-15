@@ -182,7 +182,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         return (
                             <Normaltekst>
                                 <IkkeTilgang
-                                    heigth={20}
+                                    height={20}
                                     className={'tilgangmodal-ikke-oppfylt-ikon'}
                                     width={20}
                                 />

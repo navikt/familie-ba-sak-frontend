@@ -61,7 +61,7 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
                             <StyledVilkårResultatIkon
                                 resultat={fødselshendelsefiltreringResultat.resultat}
                                 width={24}
-                                heigth={24}
+                                height={24}
                             />
                             <Normaltekst>
                                 {

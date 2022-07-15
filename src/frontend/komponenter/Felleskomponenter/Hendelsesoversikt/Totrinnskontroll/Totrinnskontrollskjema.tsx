@@ -186,15 +186,15 @@ const TrinnStatus: React.FC<{
     return (
         <Trinn>
             {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && (
-                <ØyeGrå heigth={24} width={24} />
+                <ØyeGrå height={24} width={24} />
             )}
 
             {kontrollertStatus === KontrollertStatus.KONTROLLERT && (
-                <ØyeGrønn heigth={24} width={24} />
+                <ØyeGrønn height={24} width={24} />
             )}
 
             {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && (
-                <ØyeRød heigth={24} width={24} />
+                <ØyeRød height={24} width={24} />
             )}
             <span>{navn}</span>
         </Trinn>
