@@ -6,6 +6,7 @@ import type { Cell, ColumnInstance } from 'react-table';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Systemtittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -112,9 +113,7 @@ const OppgaveList: React.FunctionComponent = () => {
             </div>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
-                <Alertstripe type="advarsel" className="oppgavelist__info">
-                    Ingen oppgaver
-                </Alertstripe>
+                <Alert variant="warning">Ingen oppgaver</Alert>
             )}
             {(oppgaver.status === RessursStatus.FEILET ||
                 oppgaver.status === RessursStatus.FUNKSJONELL_FEIL ||
