@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Redirect, Route, Switch, useHistory } from 'react-router';
 
-import AlertStripe from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
@@ -110,14 +109,14 @@ const BehandlingContainer: React.FunctionComponent = () => {
             );
         case RessursStatus.IKKE_TILGANG:
             return (
-                <AlertStripe
+                <Alert
+                    variant="warning"
                     children={`Du har ikke tilgang til å se denne behandlingen.`}
-                    type={'advarsel'}
                 />
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <AlertStripe children={åpenBehandling.frontendFeilmelding} type={'feil'} />;
+            return <Alert children={åpenBehandling.frontendFeilmelding} variant="error" />;
         default:
             return <div />;
     }
