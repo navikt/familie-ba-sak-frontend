@@ -3,8 +3,7 @@ import React, { useEffect } from 'react';
 import { Redirect, useHistory } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
 
-import AlertStripe from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
@@ -33,6 +32,8 @@ const FagsakContainer: React.FunctionComponent = () => {
     const skalHaHøyremeny = !erPåSaksoversikt && !erPåDokumentutsending;
 
     const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakRessurser();
+
+    console.log(bruker);
 
     useEffect(() => {
         if (fagsakId !== undefined) {
@@ -133,20 +134,17 @@ const FagsakContainer: React.FunctionComponent = () => {
                 case RessursStatus.FEILET:
                 case RessursStatus.FUNKSJONELL_FEIL:
                 case RessursStatus.IKKE_TILGANG:
-                    return <AlertStripe children={bruker.frontendFeilmelding} type={'feil'} />;
+                    return <Alert children={bruker.frontendFeilmelding} variant="error" />;
                 default:
                     return <div />;
             }
         case RessursStatus.IKKE_TILGANG:
             return (
-                <AlertStripe
-                    children={`Du har ikke tilgang til å se denne saken.`}
-                    type={'advarsel'}
-                />
+                <Alert children={`Du har ikke tilgang til å se denne saken.`} variant="warning" />
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <AlertStripe children={minimalFagsak.frontendFeilmelding} type={'feil'} />;
+            return <Alert children={minimalFagsak.frontendFeilmelding} variant="error" />;
         default:
             return <div />;
     }
