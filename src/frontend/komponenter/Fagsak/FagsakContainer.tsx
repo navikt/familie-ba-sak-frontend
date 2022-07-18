@@ -33,8 +33,6 @@ const FagsakContainer: React.FunctionComponent = () => {
 
     const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakRessurser();
 
-    console.log(bruker);
-
     useEffect(() => {
         if (fagsakId !== undefined) {
             if (minimalFagsak.status !== RessursStatus.SUKSESS) {
