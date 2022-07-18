@@ -2,6 +2,7 @@ import React from 'react';
 
 import classNames from 'classnames';
 import type { Cell, ColumnInstance } from 'react-table';
+import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Systemtittel } from 'nav-frontend-typografi';
@@ -48,6 +49,10 @@ export const getSortLenkClassName = (column: ColumnInstance<IOppgaveRad>) => {
     }
     return '';
 };
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1rem;
+`;
 
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, tableInstance } = useOppgaver();
@@ -113,7 +118,7 @@ const OppgaveList: React.FunctionComponent = () => {
             </div>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
-                <Alert variant="warning">Ingen oppgaver</Alert>
+                <StyledAlert variant="warning">Ingen oppgaver</StyledAlert>
             )}
             {(oppgaver.status === RessursStatus.FEILET ||
                 oppgaver.status === RessursStatus.FUNKSJONELL_FEIL ||
