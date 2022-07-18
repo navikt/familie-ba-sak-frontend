@@ -2,11 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -35,7 +35,7 @@ const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
 `;
 
-const StyledAlertStripe = styled(AlertStripe)`
+const StyledAlert = styled(Alert)`
     margin: 1rem 0;
 `;
 
@@ -111,9 +111,9 @@ const DokumentutsendingSkjema: React.FC = () => {
                 </ÅrsakSkjema>
 
                 {visForhåndsvisningBeskjed() && (
-                    <StyledAlertStripe type={'info'}>
+                    <StyledAlert variant="info">
                         Du har gjort endringer i brevet som ikke er forhåndsvist
-                    </StyledAlertStripe>
+                    </StyledAlert>
                 )}
             </StyledSkjemaGruppe>
 
