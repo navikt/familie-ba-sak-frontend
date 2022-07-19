@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import Tabs from 'nav-frontend-tabs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -60,6 +60,12 @@ const StyledTabs = styled(Tabs)`
     margin-bottom: 1rem;
 `;
 
+const StyledAlert = styled(Alert)`
+    .navds-alert__wrapper {
+        flex: 1;
+    }
+`;
+
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
@@ -109,7 +115,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             <Lenke
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
             >
-                Se behandlingsresultat for detaljer
+                Se detaljer
             </Lenke>
         ) : null;
     };
@@ -121,14 +127,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         ) {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
-                <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                <Alert className={'saksoversikt__alert'} variant="info">
                     Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
-                </AlertStripe>
+                </Alert>
             ) : (
                 <>
                     {utbetalingsperiodeNesteMåned &&
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
-                            <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                            <StyledAlert className={'saksoversikt__alert'} variant="info">
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${formaterIsoDato(
                                         serializeIso8601String(nesteMåned),
@@ -136,14 +142,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
-                            </AlertStripe>
+                            </StyledAlert>
                         )}
                     <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
         } else if (utbetalingsperiodeNesteMåned) {
             return (
-                <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                <StyledAlert className={'saksoversikt__alert'} variant="info">
                     <FlexSpaceBetween>
                         {`Utbetalingen starter ${formaterIsoDato(
                             serializeIso8601String(nesteMåned),
@@ -151,14 +157,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         )}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
-                </AlertStripe>
+                </StyledAlert>
             );
         } else {
             return (
-                <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
+                <Alert className={'saksoversikt__alert'} variant="error">
                     Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte
                     hvis problemet vedvarer.
-                </AlertStripe>
+                </Alert>
             );
         }
     };
@@ -176,9 +182,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             infotrygdsakerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
             infotrygdsakerRessurs.status === RessursStatus.FEILET
         ) {
-            return (
-                <AlertStripe children={infotrygdsakerRessurs.frontendFeilmelding} type={'feil'} />
-            );
+            return <Alert children={infotrygdsakerRessurs.frontendFeilmelding} variant="error" />;
         }
     };
 
