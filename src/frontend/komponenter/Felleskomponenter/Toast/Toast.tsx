@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 
 import { useApp } from '../../../context/AppContext';
 import type { IToast } from './typer';
@@ -58,7 +58,7 @@ const Toast: React.FC<{ toastId: string; toast: IToast }> = ({ toastId, toast })
 
     return (
         <Container ref={toastRef}>
-            <AlertStripe type={toast.alertstripeType}>{toast.tekst}</AlertStripe>
+            <Alert variant={toast.alertType}>{toast.tekst}</Alert>
         </Container>
     );
 };

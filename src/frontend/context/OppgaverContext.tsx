@@ -22,7 +22,7 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import { ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
+import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
 import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
@@ -237,14 +237,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     }
                 } else {
                     settToast(ToastTyper.OPPGAVE_PLUKKET, {
-                        alertstripeType: 'feil',
+                        alertType: AlertType.ERROR,
                         tekst: hentFrontendFeilmelding(oppgaveId) ?? 'Fordeling av oppgave feilet',
                     });
                 }
             })
             .catch((_error: AxiosError) => {
                 settToast(ToastTyper.OPPGAVE_PLUKKET, {
-                    alertstripeType: 'feil',
+                    alertType: AlertType.ERROR,
                     tekst: 'Fordeling av oppgave feilet',
                 });
             });
@@ -260,12 +260,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 if (oppgaverRes.status === RessursStatus.SUKSESS) {
                     oppdaterOppgave(oppgaverRes.data);
                     settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
-                        alertstripeType: 'suksess',
+                        alertType: AlertType.SUCCESS,
                         tekst: 'Oppgave er tilbakestilt',
                     });
                 } else {
                     settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
-                        alertstripeType: 'feil',
+                        alertType: AlertType.ERROR,
                         tekst:
                             hentFrontendFeilmelding(oppgaverRes) ??
                             'Tilbakestilling av oppgave feilet',
@@ -274,7 +274,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             })
             .catch((_error: AxiosError) => {
                 settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
-                    alertstripeType: 'feil',
+                    alertType: AlertType.ERROR,
                     tekst: 'Tilbakestilling av oppgave feilet',
                 });
             });
