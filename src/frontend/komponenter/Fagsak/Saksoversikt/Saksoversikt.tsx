@@ -62,7 +62,6 @@ const StyledTabs = styled(Tabs)`
 
 const StyledAlert = styled(Alert)`
     .navds-alert__wrapper {
-        display: block;
         flex: 1;
     }
 `;
