@@ -61,6 +61,13 @@ const StyledTabs = styled(Tabs)`
     margin-bottom: 1rem;
 `;
 
+const StyledAlert = styled(Alert)`
+    .navds-alert__wrapper {
+        display: block;
+        flex: 1;
+    }
+`;
+
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
@@ -110,7 +117,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             <Lenke
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
             >
-                Se behandlingsresultat for detaljer
+                Se detaljer
             </Lenke>
         ) : null;
     };
@@ -129,7 +136,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 <>
                     {utbetalingsperiodeNesteMåned &&
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
-                            <Alert className={'saksoversikt__alert'} variant="info">
+                            <StyledAlert className={'saksoversikt__alert'} variant="info">
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${formaterIsoDato(
                                         serializeIso8601String(nesteMåned),
@@ -137,14 +144,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
-                            </Alert>
+                            </StyledAlert>
                         )}
                     <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
         } else if (utbetalingsperiodeNesteMåned) {
             return (
-                <Alert className={'saksoversikt__alert'} variant="info">
+                <StyledAlert className={'saksoversikt__alert'} variant="info">
                     <FlexSpaceBetween>
                         {`Utbetalingen starter ${formaterIsoDato(
                             serializeIso8601String(nesteMåned),
@@ -152,7 +159,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         )}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
-                </Alert>
+                </StyledAlert>
             );
         } else {
             return (
