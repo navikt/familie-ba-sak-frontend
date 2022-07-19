@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -25,7 +25,7 @@ import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 const StyledNormaltekst = styled(Normaltekst)`
     padding-bottom: 1rem;
 `;
-const StyledAlertStripe = styled(AlertStripe)`
+const StyledAlert = styled(Alert)`
     padding-bottom: 1rem;
 `;
 
@@ -112,9 +112,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
                 <StyledNormaltekst>Ønsker du å fortsette behandlingen?</StyledNormaltekst>
 
                 {submitRessurs.status === RessursStatus.FEILET && (
-                    <StyledAlertStripe className={'saksoversikt__alert'} type={'feil'}>
-                        submitRessurs.feilmelding
-                    </StyledAlertStripe>
+                    <StyledAlert variant="error">{submitRessurs.frontendFeilmelding}</StyledAlert>
                 )}
             </UIModalWrapper>
         </>
