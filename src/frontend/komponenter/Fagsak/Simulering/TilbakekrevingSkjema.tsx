@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
@@ -10,7 +9,7 @@ import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Heading, HelpText } from '@navikt/ds-react';
+import { Alert, BodyLong, Heading, HelpText } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -74,7 +73,7 @@ const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     }
 `;
 
-const StyledAlertstripe = styled(Alertstripe)`
+const StyledAlert = styled(Alert)`
     margin-top: 1.5rem;
 `;
 
@@ -110,10 +109,10 @@ const TilbakekrevingSkjema: React.FC<{
         harÅpenTilbakekrevingRessurs.status === RessursStatus.IKKE_TILGANG
     ) {
         return (
-            <StyledAlertstripe type="feil">
+            <StyledAlert variant="error">
                 Det har skjedd er feil:
                 {harÅpenTilbakekrevingRessurs.frontendFeilmelding}
-            </StyledAlertstripe>
+            </StyledAlert>
         );
     }
 
@@ -125,10 +124,10 @@ const TilbakekrevingSkjema: React.FC<{
         return (
             <>
                 <StyledElement>Tilbakekrevingsvalg</StyledElement>
-                <StyledAlertstripe type="advarsel">
+                <StyledAlert variant="warning">
                     Det foreligger en åpen tilbakekrevingsbehandling. Endringer i vedtaket vil
                     automatisk oppdatere eksisterende feilutbetalte perioder og beløp.
-                </StyledAlertstripe>
+                </StyledAlert>
             </>
         );
     }
@@ -137,10 +136,10 @@ const TilbakekrevingSkjema: React.FC<{
         return (
             <>
                 <StyledElement>Tilbakekrevingsvalg</StyledElement>
-                <StyledAlertstripe type="advarsel">
+                <StyledAlert variant="warning">
                     Tilbakekreving uten varsel er valgt automatisk, da feilutbetailngen ble avdekket
                     etter at saken ble sendt til beslutter.
-                </StyledAlertstripe>
+                </StyledAlert>
             </>
         );
     }
