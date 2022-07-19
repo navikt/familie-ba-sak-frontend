@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import Tabs from 'nav-frontend-tabs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
@@ -163,10 +162,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             );
         } else {
             return (
-                <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
+                <Alert className={'saksoversikt__alert'} variant="error">
                     Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte
                     hvis problemet vedvarer.
-                </AlertStripe>
+                </Alert>
             );
         }
     };
@@ -184,9 +183,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             infotrygdsakerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
             infotrygdsakerRessurs.status === RessursStatus.FEILET
         ) {
-            return (
-                <AlertStripe children={infotrygdsakerRessurs.frontendFeilmelding} type={'feil'} />
-            );
+            return <Alert children={infotrygdsakerRessurs.frontendFeilmelding} variant="error" />;
         }
     };
 
