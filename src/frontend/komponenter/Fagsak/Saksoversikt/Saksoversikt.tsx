@@ -7,6 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import Tabs from 'nav-frontend-tabs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -121,14 +122,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         ) {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
-                <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                <Alert className={'saksoversikt__alert'} variant="info">
                     Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
-                </AlertStripe>
+                </Alert>
             ) : (
                 <>
                     {utbetalingsperiodeNesteMåned &&
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
-                            <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                            <Alert className={'saksoversikt__alert'} variant="info">
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${formaterIsoDato(
                                         serializeIso8601String(nesteMåned),
@@ -136,14 +137,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
-                            </AlertStripe>
+                            </Alert>
                         )}
                     <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
         } else if (utbetalingsperiodeNesteMåned) {
             return (
-                <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                <Alert className={'saksoversikt__alert'} variant="info">
                     <FlexSpaceBetween>
                         {`Utbetalingen starter ${formaterIsoDato(
                             serializeIso8601String(nesteMåned),
@@ -151,7 +152,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         )}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
-                </AlertStripe>
+                </Alert>
             );
         } else {
             return (
