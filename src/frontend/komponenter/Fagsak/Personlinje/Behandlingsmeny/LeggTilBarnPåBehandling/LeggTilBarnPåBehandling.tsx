@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -171,10 +171,10 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                         label={'Fødselsnummer'}
                         placeholder={'11 siffer'}
                     />
-                    <Alertstripe type="info" form="inline">
+                    <Alert variant="info" inline={true}>
                         Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke
                         reverseres uten å henlegge.
-                    </Alertstripe>
+                    </Alert>
                 </SkjemaGruppe>
             </UIModalWrapper>
         </>
