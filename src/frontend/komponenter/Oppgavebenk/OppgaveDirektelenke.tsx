@@ -13,7 +13,7 @@ import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { ToggleNavn } from '../../typer/toggles';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import { ToastTyper } from '../Felleskomponenter/Toast/typer';
+import { AlertType, ToastTyper } from '../Felleskomponenter/Toast/typer';
 
 interface IOppgaveDirektelenke {
     oppgave: IOppgave;
@@ -52,14 +52,14 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
                 } else {
                     settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                        alertstripeType: 'advarsel',
+                        alertType: AlertType.WARNING,
                         tekst: 'Fant ikke fagsak',
                     });
                 }
             }
         } else {
             settToast(ToastTyper.MANGLER_TILGANG, {
-                alertstripeType: 'advarsel',
+                alertType: AlertType.WARNING,
                 tekst: 'Mangler tilgang',
             });
         }
