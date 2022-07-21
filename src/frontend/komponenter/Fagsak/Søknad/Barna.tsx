@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -37,7 +37,7 @@ const StyledCheckboxGruppe = styled(CheckboxGruppe)`
     min-width: 0;
 `;
 
-const IngenBarnRegistrertInfo = styled(AlertStripe)`
+const IngenBarnRegistrertInfo = styled(Alert)`
     margin-bottom: 1.25rem;
 `;
 
@@ -119,7 +119,7 @@ const Barna: React.FunctionComponent = () => {
 
                 {sorterteBarnMedOpplysninger.length === 0 && (
                     <IngenBarnRegistrertInfo
-                        type="info"
+                        variant="info"
                         children={'Folkeregisteret har ikke registrerte barn på denne søkeren'}
                     />
                 )}

@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
+import { Alert } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -163,7 +163,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             </>
             <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             {uregistrerteBarn.length > 0 && (
-                <AlertStripeInfo>
+                <Alert variant="info">
                     <Normaltekst>
                         Du har registrert følgende barn som ikke er registrert i Folkeregisteret:
                     </Normaltekst>
@@ -181,7 +181,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     </UregistrerteBarnListe>
 
                     <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
-                </AlertStripeInfo>
+                </Alert>
             )}
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (

@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -141,7 +141,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             {visGenerellSakInfoStripe && (
                 <>
                     <br />
-                    <AlertStripe type="info">
+                    <Alert variant="info">
                         <GenerellSakInfoStripeTittel>
                             {hentSorterteBehandlinger().length > 0
                                 ? `Du velger å journalføre uten å knytte til behandling(er).`
@@ -151,7 +151,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             {`Journalposten knyttes kun til person (tilsvarende "Knytt til generell
                             sak" i Gosys)`}
                         </div>
-                    </AlertStripe>
+                    </Alert>
                 </>
             )}
         </KnyttDiv>
