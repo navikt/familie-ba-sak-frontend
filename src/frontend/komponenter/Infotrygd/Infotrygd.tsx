@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -76,9 +76,9 @@ export const Infotrygd: React.FC = () => {
             migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
         ) {
             return (
-                <AlertStripe
+                <Alert
                     children="Saken kan ikke migreres. Du må behandle saken i Infotrygd."
-                    type={'feil'}
+                    variant="error"
                 />
             );
         }
