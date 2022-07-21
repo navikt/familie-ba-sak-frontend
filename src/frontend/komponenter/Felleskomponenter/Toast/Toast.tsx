@@ -19,10 +19,6 @@ const Container = styled.div`
         outline: none;
     }
 
-    alertstripe {
-        padding: 0.3rem 0.5rem;
-    }
-
     span {
         color: black;
         font-family: 'Source Sans Pro', Arial, sans-serif;
