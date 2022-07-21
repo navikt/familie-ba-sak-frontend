@@ -2,10 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erBehandlingHenlagt } from '../../typer/behandling';
@@ -40,7 +40,7 @@ const FlyttSakKnapp = styled(Knapp)`
     height: 40px;
 `;
 
-const Feilmelding = styled(AlertStripe)`
+const Feilmelding = styled(Alert)`
     margin-top: 10px;
 `;
 
@@ -72,7 +72,7 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                 <>
                     <Feilmelding
                         children="Saken kan ikke migreres. Du må behandle saken i Infotrygd."
-                        type={'feil'}
+                        variant="error"
                     />
                 </>
             );
@@ -126,8 +126,8 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
             )}
 
             {minimalFagsak?.migreringsdato !== null && (
-                <AlertStripe
-                    type={'info'}
+                <Alert
+                    variant="info"
                     children={`Saken ble migrert fra Infotrygd ${formaterIsoDato(
                         minimalFagsak?.migreringsdato,
                         datoformat.DATO_FORKORTTET
