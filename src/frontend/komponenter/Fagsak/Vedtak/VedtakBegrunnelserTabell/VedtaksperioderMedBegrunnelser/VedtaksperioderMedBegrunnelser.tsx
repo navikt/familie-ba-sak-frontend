@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -33,7 +32,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
         vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
-        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>;
+        return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</Alert>;
     }
 
     const avslagOgResterende = partition(
