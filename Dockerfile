@@ -1,4 +1,4 @@
-FROM navikt/node-express:14-alpine
+FROM navikt/node-express:16
 USER root
 RUN apk --no-cache add curl
 USER apprunner
