@@ -1,12 +1,24 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
+import type { FeltState } from '@navikt/familie-skjema';
 import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
+import type {
+    IEøsPeriodeStatus,
+    IKompetanse,
+    IRestEøsPeriode,
+    IRestUtenlandskPeriodeBeløp,
+    IRestValutakurs,
+} from '../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, KompetanseResultat } from '../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import {
     datoformat,
@@ -18,16 +30,98 @@ import {
 } from '../../../utils/formatter';
 import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 
+const TableHeaderAlignedRight = styled.th`
+    text-align: right;
+`;
+
+const TableDataAlignedRight = styled.td`
+    text-align: right;
+`;
+
+const AlertAlignedRight = styled(Alert)`
+    float: right;
+`;
+
+const UtbetalingsbeløpTable = styled.table`
+    width: 100%;
+`;
+
 interface IProps {
     utbetalingsperiode: Utbetalingsperiode | undefined;
     aktivEtikett: Etikett;
+    kompetanser: FeltState<IKompetanse>[];
+    utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
+    valutakurser: IRestValutakurs[];
 }
+
+const finnUtbetalingsBeløpStatusMap = (
+    utbetalingsperiode: Utbetalingsperiode | undefined,
+    kompetanser: FeltState<IKompetanse>[],
+    utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[],
+    valutakurser: IRestValutakurs[]
+): Map<string, boolean> => {
+    const utbetalingsMap = new Map<string, boolean>();
+    utbetalingsperiode?.utbetalingsperiodeDetaljer.forEach(upd => {
+        const barnIdent = upd.person.personIdent;
+        const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
+        const norgeErSekundærland = kompetanserForBarn.some(
+            kompetanseForBarn =>
+                kompetanseForBarn.resultat.verdi === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
+        );
+        let skalViseUtbetalingsBeløp = !norgeErSekundærland;
+
+        if (norgeErSekundærland) {
+            const kompetanseStatusOk = erAllePerioderUtfyltForBarn(kompetanserForBarn);
+            const utbetaltAnnetLandStatusOk = erAllePerioderUtfyltForBarn(
+                finnEøsPerioderForBarn(utbetaltAnnetLandBeløp, barnIdent)
+            );
+            const valutakursStatusOk = erAllePerioderUtfyltForBarn(
+                finnEøsPerioderForBarn(valutakurser, barnIdent)
+            );
+            skalViseUtbetalingsBeløp =
+                kompetanseStatusOk && utbetaltAnnetLandStatusOk && valutakursStatusOk;
+        }
+        utbetalingsMap.set(barnIdent, skalViseUtbetalingsBeløp);
+    });
+    return utbetalingsMap;
+};
+
+const finnEøsPerioderForBarn = (
+    restEøsPerioder: IRestEøsPeriode[],
+    barnIdent: string
+): IRestEøsPeriode[] => {
+    return (
+        restEøsPerioder.filter(restEøsPeriode => restEøsPeriode.barnIdenter.includes(barnIdent)) ??
+        []
+    );
+};
+
+const finnKompetanserForBarn = (
+    kompetanseFelter: FeltState<IKompetanse>[],
+    barnIdent: string
+): IKompetanse[] => {
+    return (
+        kompetanseFelter
+            .filter(kompetanseFelt => kompetanseFelt.verdi.barnIdenter.verdi.includes(barnIdent))
+            ?.map(kompetanseFelt => kompetanseFelt.verdi) ?? []
+    );
+};
+
+const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) => {
+    return eøsPeriodeStatus.every(eøsPeriode => eøsPeriode.status === EøsPeriodeStatus.OK);
+};
 
 const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     utbetalingsperiode,
     aktivEtikett,
+    kompetanser,
+    utbetaltAnnetLandBeløp,
+    valutakurser,
 }) => {
     const { settAktivEtikett } = useTidslinje();
+    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(
+        new Map<string, boolean>()
+    );
 
     const månedNavnOgÅr = () => {
         const navn = formaterIsoDato(
@@ -36,6 +130,17 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         );
         return navn[0].toUpperCase() + navn.substr(1);
     };
+
+    React.useEffect(() => {
+        setUtbetalingsBeløpStatusMap(
+            finnUtbetalingsBeløpStatusMap(
+                utbetalingsperiode,
+                kompetanser,
+                utbetaltAnnetLandBeløp,
+                valutakurser
+            )
+        );
+    }, [utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser]);
 
     return (
         <div className={'behandlingsresultat-informasjonsboks'}>
@@ -65,7 +170,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                 />
             </div>
             {utbetalingsperiode !== undefined && (
-                <table>
+                <UtbetalingsbeløpTable>
                     <thead>
                         <tr>
                             <th>
@@ -74,9 +179,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             <th>
                                 <Normaltekst>Sats</Normaltekst>
                             </th>
-                            <th>
+                            <TableHeaderAlignedRight>
                                 <Normaltekst>Beløp</Normaltekst>
-                            </th>
+                            </TableHeaderAlignedRight>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,16 +204,27 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                                 {ytelsetype[detalj.ytelseType].navn}
                                             </Normaltekst>
                                         </td>
-                                        <td>
-                                            <Normaltekst>
-                                                {formaterBeløp(detalj.utbetaltPerMnd)}
-                                            </Normaltekst>
-                                        </td>
+                                        <TableDataAlignedRight>
+                                            {utbetalingsBeløpStatusMap.get(
+                                                detalj.person.personIdent
+                                            ) ? (
+                                                <Normaltekst>
+                                                    {formaterBeløp(detalj.utbetaltPerMnd)}
+                                                </Normaltekst>
+                                            ) : (
+                                                <AlertAlignedRight
+                                                    variant="warning"
+                                                    children={'Må beregnes'}
+                                                    size={'small'}
+                                                    inline
+                                                />
+                                            )}
+                                        </TableDataAlignedRight>
                                     </tr>
                                 );
                             })}
                     </tbody>
-                </table>
+                </UtbetalingsbeløpTable>
             )}
         </div>
     );

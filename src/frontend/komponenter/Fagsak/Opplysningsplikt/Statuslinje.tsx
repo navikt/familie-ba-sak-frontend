@@ -27,7 +27,7 @@ const Linje = styled.span`
 
 const Statuslinje: React.FC<StatuslinjeProps> = ({ resultat }) => (
     <StatuslinjeWrapper>
-        <VilkårResultatIkon resultat={resultat} width={20} heigth={20} />
+        <VilkårResultatIkon resultat={resultat} width={20} height={20} />
         <Linje />
     </StatuslinjeWrapper>
 );

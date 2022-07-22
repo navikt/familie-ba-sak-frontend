@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
-
 import { AddCircle } from '@navikt/ds-icons';
+import { Alert } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -188,8 +187,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                         opplysninger={personResultat.person.registerhistorikk}
                                     />
                                 ) : (
-                                    <AlertStripe
-                                        type={'advarsel'}
+                                    <Alert
+                                        variant="warning"
                                         children={'Klarte ikke hente registeropplysninger'}
                                     />
                                 )}

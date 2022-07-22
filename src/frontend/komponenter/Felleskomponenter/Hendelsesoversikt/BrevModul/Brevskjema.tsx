@@ -8,10 +8,15 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import {
+    FamilieInput,
+    FamilieReactSelect,
+    FamilieSelect,
+    FamilieTextarea,
+} from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -78,6 +83,10 @@ const LabelOgEtikett = styled.div`
     justify-content: space-between;
 `;
 
+const FritekstWrapper = styled.div`
+    margin-bottom: 1rem;
+`;
+
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
@@ -95,6 +104,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         maksAntallKulepunkter,
         leggTilFritekst,
         settVisfeilmeldinger,
+        erBrevmalMedObligatoriskFritekst,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -120,11 +130,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const skjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const erBrevmalMedObligatoriskFritekst = () =>
-        [
-            Brevmal.VARSEL_OM_REVURDERING,
-            Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
-        ].includes(skjema.felter.brevmal.verdi as Brevmal);
+    const behandlingSteg =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.steg : undefined;
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -238,7 +245,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     />
                 )}
                 {skjema.felter.fritekster.erSynlig && (
-                    <>
+                    <FritekstWrapper>
                         <Label htmlFor={skjemaGruppeId}>Legg til kulepunkt</Label>
                         {erLesevisning() ? (
                             <StyledList id={skjemaGruppeId}>
@@ -284,8 +291,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         autoFocus
                                                     />
                                                     {!(
-                                                        erBrevmalMedObligatoriskFritekst() &&
-                                                        index === 0
+                                                        erBrevmalMedObligatoriskFritekst(
+                                                            skjema.felter.brevmal.verdi as Brevmal
+                                                        ) && index === 0
                                                     ) && (
                                                         <SletteKnapp
                                                             erLesevisning={false}
@@ -327,11 +335,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 )}
                             </>
                         )}
-                    </>
+                    </FritekstWrapper>
                 )}
                 {skjema.felter.barnBrevetGjelder.erSynlig && (
                     <BarnBrevetGjelder
                         barnBrevetGjelderFelt={skjema.felter.barnBrevetGjelder}
+                        behandlingsSteg={behandlingSteg}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
                         alternativer={personer
@@ -341,7 +350,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     ident: person.personIdent,
                                     fødselsdato: person.fødselsdato,
                                     navn: person.navn,
-                                    merket: false,
+                                    merket:
+                                        skjema.felter.barnBrevetGjelder.verdi.find(
+                                            markertFelt => markertFelt.ident === person.personIdent
+                                        )?.merket ?? false,
                                     manueltRegistrert: false,
                                     erFolkeregistrert: true,
                                 })
@@ -363,6 +375,15 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         valgtDato={skjema.felter.datoAvtale.verdi}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
+                    />
+                )}
+                {skjema.felter.brevmal.verdi === Brevmal.FORLENGET_SVARTIDSBREV && (
+                    <FamilieInput
+                        {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        label={'Antall uker svarfrist'}
+                        bredde={'S'}
                     />
                 )}
             </SkjemaGruppe>

@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import Modal from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -73,7 +73,8 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
             return (
-                <AlertStripeFeil
+                <Alert
+                    variant="error"
                     className={'pdfvisning-modal__document--feil'}
                     children={pdfdata.frontendFeilmelding}
                 />

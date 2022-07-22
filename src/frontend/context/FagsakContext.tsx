@@ -6,6 +6,7 @@ import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
 import {
+    byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
@@ -15,6 +16,7 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
+import { FagsakEier } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
@@ -89,7 +91,21 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             },
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-            settBruker(sjekkTilgangTilPerson(hentetPerson));
+            const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
+            if (brukerEtterTilgangssjekk.status === RessursStatus.FEILET) {
+                settBruker(sjekkTilgangTilPerson(hentetPerson));
+            } else if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
+                const brukerMedFagsakId = brukerEtterTilgangssjekk.data;
+                brukerMedFagsakId.fagsakId = new Map<FagsakEier, number>();
+                hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
+                    if (fagsaker.status === RessursStatus.SUKSESS) {
+                        fagsaker.data.map(it =>
+                            brukerMedFagsakId.fagsakId?.set(it.fagsakEier, it.id)
+                        );
+                    }
+                    settBruker(sjekkTilgangTilPerson(byggDataRessurs(brukerMedFagsakId)));
+                });
+            }
         });
     };
 
@@ -107,21 +123,28 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const hentFagsakForPerson = async (
-        personId: string,
-        erEnsligMindreårig = false,
-        erPåInstitusjon = false
-    ) => {
+    const hentFagsakForPerson = async (personId: string, fagsakEier = FagsakEier.OMSORGSPERSON) => {
         return request<{ personIdent: string }, IMinimalFagsak | undefined>({
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
             data: {
                 personIdent: personId,
-                erEnsligMindreårig: erEnsligMindreårig,
-                erPåInstitusjon: erPåInstitusjon,
+                fagsakEier: fagsakEier,
             },
         }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
             return fagsak;
+        });
+    };
+
+    const hentFagsakerForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IMinimalFagsak[]>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
+            return fagsaker;
         });
     };
 
@@ -133,6 +156,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
+        hentBruker,
     };
 });
 

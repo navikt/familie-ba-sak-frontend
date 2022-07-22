@@ -1,7 +1,5 @@
-import type { AlertStripeType } from 'nav-frontend-alertstriper';
-
 export interface IToast {
-    alertstripeType: AlertStripeType;
+    alertType: AlertType;
     tekst: string;
 }
 
@@ -10,4 +8,11 @@ export enum ToastTyper {
     OPPGAVE_TILBAKESTILT = 'OPPGAVE_TILBAKESTILT',
     FANT_IKKE_FAGSAK = 'FANT_IKKE_FAGSAK',
     MANGLER_TILGANG = 'MANGLER_TILGANG',
+}
+
+export enum AlertType {
+    ERROR = 'error',
+    WARNING = 'warning',
+    INFO = 'info',
+    SUCCESS = 'success',
 }

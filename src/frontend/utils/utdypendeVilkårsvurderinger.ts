@@ -87,6 +87,9 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
     const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
         bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
 
+    if (muligeUtdypendeVilkårsvurderinger.length === 0) {
+        return;
+    }
     if (
         !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
     ) {

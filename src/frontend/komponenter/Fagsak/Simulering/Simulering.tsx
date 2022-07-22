@@ -3,8 +3,7 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -26,7 +25,7 @@ interface ISimuleringProps {
     åpenBehandling: IBehandling;
 }
 
-const StyledAlertstripe = styled(Alertstripe)`
+const StyledAlert = styled(Alert)`
     margin-bottom: 2rem;
 `;
 
@@ -93,9 +92,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
-                    <Alertstripe type="info">
+                    <Alert variant="info">
                         Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                    </Alertstripe>
+                    </Alert>
                 ) : (
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
@@ -109,28 +108,28 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 />
                             )}
                         {erMigreringMedStoppISimulering && (
-                            <Alertstripe type="feil">
+                            <Alert variant="error">
                                 Utbetalingen må være lik utbetalingen i Infotrygd.
                                 <br />
                                 Du må tilbake og gjøre nødvendige endringer for å komme videre i
                                 behandlingen
-                            </Alertstripe>
+                            </Alert>
                         )}
                     </>
                 )
             ) : (
-                <Alertstripe type="info">
+                <Alert variant="info">
                     Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
-                </Alertstripe>
+                </Alert>
             )}
 
             {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                <StyledAlertstripe type="feil">
+                <StyledAlert variant="error">
                     Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget:{' '}
                     {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
-                </StyledAlertstripe>
+                </StyledAlert>
             )}
         </Skjemasteg>
     );

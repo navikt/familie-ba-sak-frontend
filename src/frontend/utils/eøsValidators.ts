@@ -1,3 +1,4 @@
+import type { OptionType } from '@navikt/familie-form-elements';
 import { type Avhengigheter, feil, type FeltState, ok } from '@navikt/familie-skjema';
 
 import {
@@ -6,6 +7,8 @@ import {
     type YearMonth,
     yearMonthTilKalenderMåned,
     iDag,
+    leggTil,
+    KalenderEnhet,
 } from './kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
@@ -24,6 +27,11 @@ const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: Må
     valgtDato.år > today.år || (valgtDato.år === today.år && valgtDato.måned > today.måned);
 const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
     valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
+const valgtDatoErSenereEnnNesteMåned = (valgtDato: YearMonth) =>
+    valgtÅrMånedErNesteMånedEllerSenere(
+        yearMonthTilKalenderMåned(valgtDato),
+        leggTil(iDag(), 1, KalenderEnhet.MÅNED)
+    );
 
 const erEøsPeriodeGyldig = (
     felt: FeltState<IYearMonthPeriode>,
@@ -37,10 +45,10 @@ const erEøsPeriodeGyldig = (
     if (!fom || isEmpty(fom)) {
         return feil(felt, 'Fra og med måned må være utfylt');
     }
-    if (fom && valgtDatoErNesteMånedEllerSenere(fom)) {
+    if (fom && valgtDatoErSenereEnnNesteMåned(fom)) {
         return feil(
             felt,
-            'Du kan ikke legge inn fra og med måned som er i neste måned eller senere'
+            'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere'
         );
     }
     if (initielFom && !erEtter(fom, initielFom)) {
@@ -50,13 +58,21 @@ const erEøsPeriodeGyldig = (
         );
     }
     if (tom && valgtDatoErNesteMånedEllerSenere(tom)) {
-        return feil(
-            felt,
-            'Du kan ikke legge inn til og med måned som er i neste måned eller senere'
-        );
+        return feil(felt, 'Du kan ikke sette til og med (t.o.m.) til neste måned eller senere');
     }
 
     return ok(felt);
 };
 
-export { isEmpty, erEøsPeriodeGyldig };
+const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
+    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
+
+const erValutakodeGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valuta er påkrevd, men mangler input');
+
+const isNumeric = (val: string): boolean => {
+    if (typeof val != 'string') return false;
+    return !isNaN(Number(val));
+};
+
+export { isEmpty, erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig, isNumeric };

@@ -101,7 +101,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     ? Status.OK
                                     : Status.ADVARSEL
                             }
-                            heigth={20}
+                            height={20}
                             width={20}
                         />
                         {endretUtbetalingAndel.personIdent

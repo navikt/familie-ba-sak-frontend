@@ -12,6 +12,11 @@ export enum FagsakStatus {
     AVSLUTTET = 'AVSLUTTET',
 }
 
+export enum FagsakEier {
+    OMSORGSPERSON = 'OMSORGSPERSON',
+    BARN = 'BARN',
+}
+
 // Interface
 export interface IBaseFagsak {
     id: number;
@@ -22,6 +27,7 @@ export interface IBaseFagsak {
     underBehandling: boolean;
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
+    fagsakEier: FagsakEier;
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {

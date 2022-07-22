@@ -87,6 +87,7 @@ export const mockBehandling = ({
         skalBehandlesAutomatisk,
         kompetanser: [],
         utenlandskePeriodebeløp: [],
+        valutakurser: [],
     };
 };
 

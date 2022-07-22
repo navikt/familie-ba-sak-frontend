@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'react';
 import React from 'react';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 
+import { Alert } from '@navikt/ds-react';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -90,7 +90,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
     );
 
     if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
-        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
+        return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vilkår.</Alert>;
     }
 
     return (

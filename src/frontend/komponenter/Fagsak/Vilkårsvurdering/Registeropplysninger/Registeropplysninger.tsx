@@ -2,10 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
 import { Ingress } from 'nav-frontend-typografi';
 
 import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
+import { Alert } from '@navikt/ds-react';
 
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
@@ -30,9 +30,9 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         <>
             <Ingress children={'Registeropplysninger'} />
             {manglerRegisteropplysninger ? (
-                <Alertstripe type="info" style={{ marginTop: '1rem' }}>
+                <Alert variant="info" style={{ marginTop: '1rem' }}>
                     Det ble ikke hentet inn registeropplysninger på denne behandlingen.
-                </Alertstripe>
+                </Alert>
             ) : (
                 <Container>
                     <HentetLabel
