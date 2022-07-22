@@ -51,7 +51,7 @@
     "@navikt/landvelger": "^3.1.0",
     "@sentry/browser": "^6.19.1",
     "@sentry/core": "^7.6.0",
-    "@sentry/tracing": "^6.19.1",
+    "@sentry/tracing": "^7.7.0",
     "@sentry/webpack-plugin": "^1.18.9",
     "@svgr/webpack": "^6.2.0",
     "@types/amplitude-js": "^8.16.0",
