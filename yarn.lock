@@ -2814,10 +2814,10 @@
   resolved "https://registry.yarnpkg.com/@piotrgorecki/i18n-currency-name/-/i18n-currency-name-1.2.0.tgz#2be4792936a1a4e8e64c11913d1ecbdb92b08b0e"
   integrity sha512-zPv1D/EXxyeS5PfetB/JsCNVw+kIZBzDDdTjRkF/VHoQH8WlfsrmSfcoLg0EUj+tbjh7kRcbNkDVuUjI0092Cg==
 
-"@pmmmwh/react-refresh-webpack-plugin@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.0.tgz#ca24a418c3b69cb87fd0dd95cca2c4bfa5683904"
-  integrity sha512-VRmiCnVHudkmzGh4gD1eW42matvNL8Y0OZ8FCEWs79iPTldihsuEi5GTMFjU+UfKRQxinN2e0/MDhJzExuiIyA==
+"@pmmmwh/react-refresh-webpack-plugin@^0.5.5":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.7.tgz#58f8217ba70069cc6a73f5d7e05e85b458c150e2"
+  integrity sha512-bcKCAzF0DV2IIROp9ZHkRJa6O4jy7NlnHdWL3GmcUxYWNjLXkK5kfELELwEfSP5hXPfVL/qOGMAROuMQb9GG8Q==
   dependencies:
     ansi-html-community "^0.0.8"
     common-path-prefix "^3.0.0"
@@ -10981,10 +10981,10 @@ react-popper@^2.2.5:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-refresh@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
-  integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
+react-refresh@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
+  integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
 react-router-dom@^5.3.0:
   version "5.3.0"
