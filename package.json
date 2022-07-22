@@ -136,7 +136,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.17.12",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^27.4.0",
     "@types/react-table": "^7.7.6",
