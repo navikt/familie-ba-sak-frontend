@@ -144,7 +144,7 @@
     "@types/webpack-env": "^1.17.0",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
-    "@typescript-eslint/parser": "^5.25.0",
+    "@typescript-eslint/parser": "^5.30.7",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react-app": "^10.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
