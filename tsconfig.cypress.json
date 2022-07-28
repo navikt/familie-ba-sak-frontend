@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "skipLibCheck": true,
+        "outDir": "node_dist",
+        "rootDir": "./cypress",
+        "resolveJsonModule": true,
+        "types": ["express-session"],
+    },
+    "lib": ["es2015"]
+  }
