@@ -50,10 +50,10 @@ const KompetanseTabellRad: React.FC<IProps> = ({
     }, [åpenBehandling]);
 
     React.useEffect(() => {
-        if (visFeilmeldinger) {
+        if (visFeilmeldinger && erKompetanseEkspandert) {
             kanSendeSkjema();
         }
-    }, [visFeilmeldinger]);
+    }, [visFeilmeldinger, erKompetanseEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
         if (erKompetanseEkspandert && visAlert && erKompetanseSkjemaEndret()) {

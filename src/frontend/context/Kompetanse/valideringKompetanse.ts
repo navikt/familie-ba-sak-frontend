@@ -15,8 +15,6 @@ import { isEmpty } from '../../utils/eøsValidators';
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 
-const erBarnGyldig = (felt: FeltState<string[]>): FeltState<string[]> =>
-    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Minst ett barn må være valgt');
 const erSøkersAktivitetGyldig = (
     felt: FeltState<SøkersAktivitet | undefined>
 ): FeltState<SøkersAktivitet | undefined> =>
@@ -48,7 +46,6 @@ const erKompetanseResultatGyldig = (
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 
 export {
-    erBarnGyldig,
     erSøkersAktivitetGyldig,
     erAnnenForeldersAktivitetGyldig,
     erAnnenForeldersAktivitetslandGyldig,

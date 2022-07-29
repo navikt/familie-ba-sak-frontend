@@ -45,10 +45,10 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     });
 
     React.useEffect(() => {
-        if (visFeilmeldinger) {
+        if (visFeilmeldinger && erValutakursEkspandert) {
             kanSendeSkjema();
         }
-    }, [visFeilmeldinger]);
+    }, [visFeilmeldinger, erValutakursEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
         if (erValutakursEkspandert && visAlert && erValutakursSkjemaEndret()) {

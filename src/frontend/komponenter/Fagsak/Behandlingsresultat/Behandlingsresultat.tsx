@@ -256,7 +256,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     åpenBehandling={åpenBehandling}
                 />
             )}
-            {visFeilmeldinger && toggles[ToggleNavn.brukEøs] && (
+            {visFeilmeldinger && toggles[ToggleNavn.brukEøs] && !erEøsInformasjonGyldig() && (
                 <StyledFeiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
                     feil={[
