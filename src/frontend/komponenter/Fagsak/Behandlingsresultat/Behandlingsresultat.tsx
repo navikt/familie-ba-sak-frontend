@@ -11,13 +11,13 @@ import { Element, Feilmelding } from 'nav-frontend-typografi';
 import { Edit } from '@navikt/ds-icons';
 import { Alert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
+import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/KompetanseSkjemaContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import { valutakursFeilmeldingId } from '../../../context/Valutakurs/ValutakursSkjemaContext';
@@ -25,7 +25,7 @@ import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../typer/behandling';
 import type {
-    IKompetanse,
+    IRestKompetanse,
     IRestUtenlandskPeriodeBeløp,
     IRestValutakurs,
 } from '../../../typer/eøsPerioder';
@@ -37,7 +37,7 @@ import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
-import KompetanseSkjema, { kompetanseFeilmeldingId } from './Kompetanse/KompetanseSkjema';
+import KompetanseSkjema from './Kompetanse/KompetanseSkjema';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
@@ -260,8 +260,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 <StyledFeiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
                     feil={[
-                        ...hentKompetanserMedFeil().map((kompetanse: FeltState<IKompetanse>) => ({
-                            feilmelding: `Kompetanse barn: ${kompetanse.verdi.barnIdenter.verdi}, f.o.m.: ${kompetanse.verdi.periode.verdi.fom} er ikke fullstendig.`,
+                        ...hentKompetanserMedFeil().map((kompetanse: IRestKompetanse) => ({
+                            feilmelding: `Kompetanse barn: ${kompetanse.barnIdenter}, f.o.m.: ${kompetanse.fom} er ikke fullstendig.`,
                             skjemaelementId: kompetanseFeilmeldingId(kompetanse),
                         })),
                         ...hentUtbetaltAnnetLandBeløpMedFeil().map(
