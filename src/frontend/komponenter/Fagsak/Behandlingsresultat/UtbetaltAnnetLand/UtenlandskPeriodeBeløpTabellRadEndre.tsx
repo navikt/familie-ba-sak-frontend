@@ -198,7 +198,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         <FamilieSelect
                             label={'Intervall'}
                             erLesevisning={lesevisning}
-                            value={skjema.felter.intervall?.verdi}
+                            value={skjema.felter.intervall?.verdi || undefined}
                             onChange={event =>
                                 skjema.felter.intervall?.validerOgSettFelt(
                                     event.target.value as UtenlandskPeriodeBeløpIntervall

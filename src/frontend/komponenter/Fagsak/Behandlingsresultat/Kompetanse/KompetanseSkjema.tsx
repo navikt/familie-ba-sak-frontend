@@ -3,10 +3,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Alert, Heading, Table } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse } from '../../../../typer/eøsPerioder';
+import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import KompetanseTabellRad from './KompetanseTabellRad';
 
@@ -37,18 +36,8 @@ const StyledHeaderCell = styled(Table.HeaderCell)`
     }
 `;
 
-export const kompetanseFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
-    `kompetanse_${kompetanse.verdi.barnIdenter.verdi.map(barn => `${barn}-`)}_${
-        kompetanse.verdi.periode.verdi.fom
-    }`;
-
-export const kompetansePeriodeFeilmeldingId = (kompetanse: FeltState<IKompetanse>): string =>
-    `kompetanse-periode_${kompetanse.verdi.barnIdenter.verdi.map(barn => `${barn}-`)}_${
-        kompetanse.verdi.periode.verdi.fom
-    }`;
-
 interface IProps {
-    kompetanser: FeltState<IKompetanse>[];
+    kompetanser: IRestKompetanse[];
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
@@ -82,9 +71,9 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                 <Table.Body>
                     {kompetanser.map(kompetanse => (
                         <KompetanseTabellRad
-                            key={`${kompetanse.verdi?.barnIdenter.verdi.map(barn => `${barn}-`)}-${
-                                kompetanse.verdi.periode.verdi.fom
-                            }-${kompetanse.verdi.periode.verdi.tom}`}
+                            key={`${kompetanse.barnIdenter.map(barn => `${barn}-`)}-${
+                                kompetanse.fom
+                            }-${kompetanse.tom}`}
                             kompetanse={kompetanse}
                             åpenBehandling={åpenBehandling}
                             visFeilmeldinger={visFeilmeldinger}

@@ -41,7 +41,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         erUtenlandskPeriodeBeløpSkjemaEndret,
     } = useUtenlandskPeriodeBeløpSkjema({
         utenlandskPeriodeBeløp,
-        tilgjengeligeBarn: barn,
+        barnIUtenlandskPeriodeBeløp: barn,
     });
 
     React.useEffect(() => {
@@ -52,10 +52,10 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     }, [åpenBehandling]);
 
     React.useEffect(() => {
-        if (visFeilmeldinger) {
+        if (visFeilmeldinger && erUtenlandskPeriodeBeløpEkspandert) {
             kanSendeSkjema();
         }
-    }, [visFeilmeldinger]);
+    }, [visFeilmeldinger, erUtenlandskPeriodeBeløpEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
         if (

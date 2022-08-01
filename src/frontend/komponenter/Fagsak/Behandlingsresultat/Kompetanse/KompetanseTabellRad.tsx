@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-
-import deepEqual from 'deep-equal';
+import React from 'react';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
-import type { FeltState } from '@navikt/familie-skjema';
 
+import {
+    kompetanseFeilmeldingId,
+    useKompetansePeriodeSkjema,
+} from '../../../../context/Kompetanse/KompetanseSkjemaContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse } from '../../../../typer/eøsPerioder';
+import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
 import { KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
-import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
 interface IProps {
-    kompetanse: FeltState<IKompetanse>;
+    kompetanse: IRestKompetanse;
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
@@ -25,12 +25,47 @@ const KompetanseTabellRad: React.FC<IProps> = ({
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const [ekspandertKompetanse, settEkspandertKompetanse] = React.useState<boolean>(false);
-    const [redigerbartKompetanse, settRedigerbartKompetanse] =
-        useState<FeltState<IKompetanse>>(kompetanse);
+    const barn: OptionType[] = kompetanse.barnIdenter.map(barn => ({
+        value: barn,
+        label: lagPersonLabel(barn, åpenBehandling.personer),
+    }));
+
+    const {
+        erKompetanseEkspandert,
+        settErKompetanseEkspandert,
+        skjema,
+        valideringErOk,
+        sendInnSkjema,
+        slettKompetanse,
+        nullstillSkjema,
+        kanSendeSkjema,
+        erKompetanseSkjemaEndret,
+    } = useKompetansePeriodeSkjema({ barnIKompetanse: barn, kompetanse });
+
+    React.useEffect(() => {
+        if (åpenBehandling) {
+            nullstillSkjema();
+            settErKompetanseEkspandert(false);
+        }
+    }, [åpenBehandling]);
+
+    React.useEffect(() => {
+        if (visFeilmeldinger && erKompetanseEkspandert) {
+            kanSendeSkjema();
+        }
+    }, [visFeilmeldinger, erKompetanseEkspandert]);
+
+    const toggleForm = (visAlert: boolean) => {
+        if (erKompetanseEkspandert && visAlert && erKompetanseSkjemaEndret()) {
+            alert('Kompetansen har endringer som ikke er lagret!');
+        } else {
+            settErKompetanseEkspandert(!erKompetanseEkspandert);
+            nullstillSkjema();
+        }
+    };
 
     const visVurdertKompetanse = () => {
-        switch (kompetanse.verdi?.resultat?.verdi) {
+        switch (kompetanse.resultat) {
             case KompetanseResultat.NORGE_ER_PRIMÆRLAND:
                 return 'Primærland';
             case KompetanseResultat.NORGE_ER_SEKUNDÆRLAND:
@@ -42,42 +77,28 @@ const KompetanseTabellRad: React.FC<IProps> = ({
         }
     };
 
-    const toggleForm = (visAlert: boolean) => {
-        if (ekspandertKompetanse && visAlert && !deepEqual(kompetanse, redigerbartKompetanse)) {
-            alert('Kompetansen har endringer som ikke er lagret!');
-        } else {
-            settEkspandertKompetanse(!ekspandertKompetanse);
-            settRedigerbartKompetanse(kompetanse);
-        }
-    };
-
-    const barn: OptionType[] = kompetanse.verdi?.barnIdenter.verdi.map(barn => ({
-        value: barn,
-        label: lagPersonLabel(barn, åpenBehandling.personer),
-    }));
-
     return (
         <Table.ExpandableRow
             togglePlacement="right"
-            open={ekspandertKompetanse}
+            open={erKompetanseEkspandert}
             onOpenChange={() => toggleForm(true)}
-            id={kompetanseFeilmeldingId(redigerbartKompetanse)}
+            id={kompetanseFeilmeldingId(kompetanse)}
             content={
                 <KompetanseTabellRadEndre
-                    redigerbartKompetanse={redigerbartKompetanse}
+                    skjema={skjema}
                     tilgjengeligeBarn={barn}
-                    visFeilmeldinger={visFeilmeldinger}
-                    settRedigerbartKompetanse={settRedigerbartKompetanse}
+                    valideringErOk={valideringErOk}
+                    sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}
-                    settEkspandertKompetanse={settEkspandertKompetanse}
+                    slettKompetanse={slettKompetanse}
                 />
             }
         >
             <StatusBarnCelleOgPeriodeCelle
-                status={kompetanse.verdi.status}
-                barnIdenter={kompetanse.verdi.barnIdenter.verdi}
+                status={kompetanse.status}
+                barnIdenter={kompetanse.barnIdenter}
                 personer={åpenBehandling.personer}
-                periode={kompetanse.verdi.periode.verdi}
+                periode={{ fom: kompetanse.fom, tom: kompetanse.tom }}
             />
             <Table.DataCell>
                 <BodyShort size="small">{visVurdertKompetanse()}</BodyShort>

@@ -41,14 +41,14 @@ const ValutakursTabellRad: React.FC<IProps> = ({
         slettValutakurs,
     } = useValutakursSkjema({
         valutakurs,
-        tilgjengeligeBarn: barn,
+        barnIValutakurs: barn,
     });
 
     React.useEffect(() => {
-        if (visFeilmeldinger) {
+        if (visFeilmeldinger && erValutakursEkspandert) {
             kanSendeSkjema();
         }
-    }, [visFeilmeldinger]);
+    }, [visFeilmeldinger, erValutakursEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
         if (erValutakursEkspandert && visAlert && erValutakursSkjemaEndret()) {
