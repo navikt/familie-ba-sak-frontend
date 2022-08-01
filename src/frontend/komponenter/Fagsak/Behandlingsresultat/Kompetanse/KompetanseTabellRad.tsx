@@ -40,7 +40,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
         nullstillSkjema,
         kanSendeSkjema,
         erKompetanseSkjemaEndret,
-    } = useKompetansePeriodeSkjema({ tilgjengeligeBarn: barn, kompetanse });
+    } = useKompetansePeriodeSkjema({ barnIKompetanse: barn, kompetanse });
 
     React.useEffect(() => {
         if (åpenBehandling) {

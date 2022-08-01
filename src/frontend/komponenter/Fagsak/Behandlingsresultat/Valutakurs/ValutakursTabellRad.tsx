@@ -41,7 +41,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
         slettValutakurs,
     } = useValutakursSkjema({
         valutakurs,
-        tilgjengeligeBarn: barn,
+        barnIValutakurs: barn,
     });
 
     React.useEffect(() => {

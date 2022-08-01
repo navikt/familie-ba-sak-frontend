@@ -50,29 +50,16 @@ export const valutakursFeilmeldingId = (valutakurs: IRestValutakurs): string =>
 
 interface IProps {
     valutakurs: IRestValutakurs;
-    tilgjengeligeBarn: OptionType[];
+    barnIValutakurs: OptionType[];
 }
 
-const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
+const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const initelFom = useFelt<string>({ verdi: valutakurs.fom });
     const { request } = useHttp();
-
-    const valgteBarn = valutakurs.barnIdenter.map(barn => {
-        const tilBarn = tilgjengeligeBarn.find(opt => {
-            return opt.value.match(barn);
-        });
-        if (tilBarn) {
-            return tilBarn;
-        } else {
-            throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke er registrert frå før i valutakurs'
-            );
-        }
-    });
 
     const {
         skjema,
@@ -91,7 +78,7 @@ const useValutakursSkjema = ({ tilgjengeligeBarn, valutakurs }: IProps) => {
             status: useFelt<EøsPeriodeStatus>({ verdi: valutakurs.status }),
             initielFom: initelFom,
             barnIdenter: useFelt<OptionType[]>({
-                verdi: valgteBarn,
+                verdi: barnIValutakurs,
                 valideringsfunksjon: erBarnGyldig,
             }),
             periode: useFelt<IYearMonthPeriode>({

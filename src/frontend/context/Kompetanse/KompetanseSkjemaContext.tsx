@@ -30,28 +30,15 @@ export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
 
 interface IProps {
     kompetanse: IRestKompetanse;
-    tilgjengeligeBarn: OptionType[];
+    barnIKompetanse: OptionType[];
 }
 
-const useKompetansePeriodeSkjema = ({ tilgjengeligeBarn, kompetanse }: IProps) => {
+const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => {
     const [erKompetanseEkspandert, settErKompetanseEkspandert] = React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const { request } = useHttp();
-
-    const valgteBarn = kompetanse.barnIdenter.map(barn => {
-        const tilBarn = tilgjengeligeBarn.find(opt => {
-            return opt.value.match(barn);
-        });
-        if (tilBarn) {
-            return tilBarn;
-        } else {
-            throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i original kompetanse'
-            );
-        }
-    });
 
     const initelFom = useFelt<string>({ verdi: kompetanse.fom });
     const annenForeldersAktivitet = useFelt<AnnenForelderAktivitet | undefined>({
@@ -76,7 +63,7 @@ const useKompetansePeriodeSkjema = ({ tilgjengeligeBarn, kompetanse }: IProps) =
             status: useFelt<EøsPeriodeStatus>({ verdi: kompetanse.status }),
             initielFom: initelFom,
             barnIdenter: useFelt<OptionType[]>({
-                verdi: valgteBarn,
+                verdi: barnIKompetanse,
                 valideringsfunksjon: erBarnGyldig,
             }),
             periode: useFelt<IYearMonthPeriode>({

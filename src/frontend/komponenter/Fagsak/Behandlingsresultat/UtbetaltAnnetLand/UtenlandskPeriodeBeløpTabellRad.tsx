@@ -41,7 +41,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         erUtenlandskPeriodeBeløpSkjemaEndret,
     } = useUtenlandskPeriodeBeløpSkjema({
         utenlandskPeriodeBeløp,
-        tilgjengeligeBarn: barn,
+        barnIUtenlandskPeriodeBeløp: barn,
     });
 
     React.useEffect(() => {
