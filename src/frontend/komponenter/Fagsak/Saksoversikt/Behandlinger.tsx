@@ -7,6 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import {
     behandlingsresultater,
@@ -93,7 +94,23 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Systemtittel children={'Behandlinger'} />
+            <Systemtittel
+                children={
+                    <>
+                        Behandlinger
+                        <FamilieCheckbox
+                            id={'vis-henlagte-behandlinger'}
+                            erLesevisning={false}
+                            label={'Vis henlagte behandlinger'}
+                            checked={minimalFagsak.visHenlagteBehandlinger}
+                            onChange={() => {
+                                minimalFagsak.visHenlagteBehandlinger =
+                                    !minimalFagsak.visHenlagteBehandlinger || false;
+                            }}
+                        />
+                    </>
+                }
+            />
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
