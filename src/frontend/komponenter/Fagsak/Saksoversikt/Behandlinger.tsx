@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import classNames from 'classnames';
 
@@ -6,8 +6,11 @@ import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
+import type { BehandlingResultat } from '../../../typer/behandling';
+import { erBehandlingHenlagt } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
+import { Behandlingsresultatstype } from '../../../typer/tilbakekrevingsbehandling';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
 import { BehandlingEllerTilbakebetaling } from './BehandlingEllerTilbakebetaling';
@@ -17,19 +20,13 @@ interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-function konverterBehandling(visningBehandling: VisningBehandling): BehandlingTabellobjekt {
-    return {
-        behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling.BEHANDLING,
-        faktiskObjekt: visningBehandling,
-    };
-}
-
-function konverterTilbakekrevingsbehandling(
-    tilbakekrevingsbehandling: ITilbakekrevingsbehandling
+function konverterBehandling(
+    faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling,
+    behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling
 ): BehandlingTabellobjekt {
     return {
-        behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling.TIlBAKEBETALING,
-        faktiskObjekt: tilbakekrevingsbehandling,
+        behandlingEllerTilbakemelding: behandlingEllerTilbakemelding,
+        faktiskObjekt: faktiskObjekt,
     };
 }
 
@@ -40,11 +37,26 @@ interface BehandlingTabellobjekt {
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
     const behandlinger: BehandlingTabellobjekt[] = [
-        ...minimalFagsak.behandlinger.map(b => konverterBehandling(b)),
+        ...minimalFagsak.behandlinger.map(b =>
+            konverterBehandling(b, BehandlingEllerTilbakebetaling.BEHANDLING)
+        ),
         ...minimalFagsak.tilbakekrevingsbehandlinger.map(b =>
-            konverterTilbakekrevingsbehandling(b)
+            konverterBehandling(b, BehandlingEllerTilbakebetaling.TIlBAKEBETALING)
         ),
     ];
+
+    const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
+
+    function visRad(behandling: BehandlingTabellobjekt) {
+        if (visHenlagteBehandlinger) return true;
+        if (!behandling.faktiskObjekt.resultat) return false;
+        if (
+            behandling.behandlingEllerTilbakemelding === BehandlingEllerTilbakebetaling.BEHANDLING
+        ) {
+            return !erBehandlingHenlagt(behandling.faktiskObjekt.resultat as BehandlingResultat);
+        }
+        return Behandlingsresultatstype.HENLAGT !== behandling.faktiskObjekt.resultat;
+    }
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
@@ -56,10 +68,9 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             id={'vis-henlagte-behandlinger'}
                             erLesevisning={false}
                             label={'Vis henlagte behandlinger'}
-                            checked={minimalFagsak.visHenlagteBehandlinger}
+                            checked={visHenlagteBehandlinger}
                             onChange={() => {
-                                minimalFagsak.visHenlagteBehandlinger =
-                                    !minimalFagsak.visHenlagteBehandlinger || false;
+                                setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
                             }}
                         />
                     </>
@@ -82,6 +93,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </thead>
                     <tbody>
                         {behandlinger
+                            .filter(behandling => visRad(behandling))
                             .sort((a, b) =>
                                 kalenderDiff(
                                     new Date(b.faktiskObjekt.opprettetTidspunkt),
