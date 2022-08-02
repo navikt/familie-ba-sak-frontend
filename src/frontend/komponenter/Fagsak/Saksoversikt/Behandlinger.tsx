@@ -10,16 +10,40 @@ import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
+import { BehandlingEllerTilbakebetaling } from './BehandlingEllerTilbakebetaling';
 import type { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
+function konverterBehandling(visningBehandling: VisningBehandling): BehandlingTabellobjekt {
+    return {
+        behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling.BEHANDLING,
+        faktiskObjekt: visningBehandling,
+    };
+}
+
+function konverterTilbakekrevingsbehandling(
+    tilbakekrevingsbehandling: ITilbakekrevingsbehandling
+): BehandlingTabellobjekt {
+    return {
+        behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling.TIlBAKEBETALING,
+        faktiskObjekt: tilbakekrevingsbehandling,
+    };
+}
+
+interface BehandlingTabellobjekt {
+    behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling;
+    faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling;
+}
+
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const behandlinger: (VisningBehandling | ITilbakekrevingsbehandling)[] = [
-        ...minimalFagsak.behandlinger,
-        ...minimalFagsak.tilbakekrevingsbehandlinger,
+    const behandlinger: BehandlingTabellobjekt[] = [
+        ...minimalFagsak.behandlinger.map(b => konverterBehandling(b)),
+        ...minimalFagsak.tilbakekrevingsbehandlinger.map(b =>
+            konverterTilbakekrevingsbehandling(b)
+        ),
     ];
 
     return (
@@ -60,12 +84,15 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                         {behandlinger
                             .sort((a, b) =>
                                 kalenderDiff(
-                                    new Date(b.opprettetTidspunkt),
-                                    new Date(a.opprettetTidspunkt)
+                                    new Date(b.faktiskObjekt.opprettetTidspunkt),
+                                    new Date(a.faktiskObjekt.opprettetTidspunkt)
                                 )
                             )
-                            .map((behandling: VisningBehandling | ITilbakekrevingsbehandling) => (
-                                <Behandling behandling={behandling} minimalFagsak={minimalFagsak} />
+                            .map((behandling: BehandlingTabellobjekt) => (
+                                <Behandling
+                                    behandling={behandling.faktiskObjekt}
+                                    minimalFagsak={minimalFagsak}
+                                />
                             ))}
                     </tbody>
                 </table>
