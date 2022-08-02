@@ -44,6 +44,7 @@ describe('utils/validators', () => {
     const mockBarn = {
         personIdent: '12345678930',
         fødselsdato: '2000-05-17',
+        dødsfallDato: '2020-12-12',
         type: PersonType.BARN,
         kjønn: 'KVINNE',
         navn: 'Mock Barn',
@@ -120,6 +121,18 @@ describe('utils/validators', () => {
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
         expect(valideringsresultat.feilmelding).toEqual(
             'Du kan ikke legge til periode før barnets fødselsdato'
+        );
+    });
+
+    test('Periode med tom-dato etter barnets dødsfalldato gir feil', () => {
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2021-05-17'));
+        const valideringsresultat = erPeriodeGyldig(periode, {
+            person: mockBarn,
+            erEksplisittAvslagPåSøknad: false,
+        });
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringsresultat.feilmelding).toEqual(
+            'Du kan ikke sette til og med dato etter dødsfalldato'
         );
     });
 
