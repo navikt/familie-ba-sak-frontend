@@ -2,8 +2,10 @@ import { act, renderHook } from '@testing-library/react-hooks';
 
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
+import { kjønnType } from '@navikt/familie-typer';
 
 import generator from '../../testverktøy/fnr/fnr-generator';
+import type { IGrunnlagPerson } from '../../typer/person';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import type { UtdypendeVilkårsvurdering } from '../../typer/vilkår';
@@ -41,20 +43,23 @@ describe('utils/validators', () => {
         verdi,
     });
 
-    const mockBarn = {
-        personIdent: '12345678930',
-        fødselsdato: '2000-05-17',
-        dødsfallDato: '2020-12-12',
-        type: PersonType.BARN,
-        kjønn: 'KVINNE',
-        navn: 'Mock Barn',
-        målform: Målform.NB,
+    const grunnlagPersonFixture = (overstyrendeProps: Partial<IGrunnlagPerson> = {}) => {
+        const defaults: IGrunnlagPerson = {
+            personIdent: '12345678930',
+            fødselsdato: '2000-05-17',
+            type: PersonType.BARN,
+            kjønn: kjønnType.KVINNE,
+            navn: 'Mock Barn',
+            målform: Målform.NB,
+        };
+
+        return { ...defaults, ...overstyrendeProps };
     };
 
     test('Periode med ugyldig fom gir feil', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('400220', undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -64,7 +69,7 @@ describe('utils/validators', () => {
     test('Periode med ugyldig tom gir feil', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2020-06-17', '400220'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -74,7 +79,7 @@ describe('utils/validators', () => {
     test('Periode uten datoer gir feil hvis ikke avslag', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode(undefined, undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -84,7 +89,7 @@ describe('utils/validators', () => {
     test('Periode uten fom-dato gir feil hvis avslag og tom-dato er satt', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode(undefined, '2010-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -96,7 +101,7 @@ describe('utils/validators', () => {
     test('Periode uten fom-dato, tom-dato og som er avslag gir ok', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode(undefined, undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
@@ -105,7 +110,7 @@ describe('utils/validators', () => {
     test('Periode med fom-dato på oppfylt periode senere enn tom', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2010-06-17', '2010-01-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -115,7 +120,7 @@ describe('utils/validators', () => {
     test('Periode med fom-dato før barnets fødselsdato på oppfylt periode gir feil', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('1999-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -127,7 +132,7 @@ describe('utils/validators', () => {
     test('Periode med tom-dato etter barnets dødsfalldato gir feil', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2021-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture({ dødsfallDato: '2020-12-12' }),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
@@ -139,7 +144,7 @@ describe('utils/validators', () => {
     test('Periode med etter barnets fødselsdato gir feil på 18 årsvilkåret', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
             er18ÅrsVilkår: true,
         });
@@ -152,7 +157,7 @@ describe('utils/validators', () => {
     test('Periode med etter barnets fødselsdato gir ok på andre vilkår', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-18'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
@@ -161,7 +166,7 @@ describe('utils/validators', () => {
     test('Periode med innenfor 18 år gir ok på 18 årsvilkåret', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-16'));
         const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
+            person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
             er18ÅrsVilkår: true,
         });
