@@ -55,25 +55,33 @@ const lagLenkePåType = (
 const lagLenkePåResultat = (
     minimalFagsak: IMinimalFagsak,
     behandling: VisningBehandling | ITilbakekrevingsbehandling
-): ReactNode =>
-    !behandling.resultat ? (
-        '-'
-    ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
-        <Lenke
-            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
-            onMouseDown={e => e.preventDefault()}
-            target="_blank"
-        >
-            <span>{behandlingsresultater[behandling.resultat]}</span>
-            <ExternalLink />
-        </Lenke>
-    ) : behandling.status === BehandlingStatus.AVSLUTTET ? (
-        <Lenke href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
-            {behandling ? behandlingsresultater[behandling.resultat] : '-'}
-        </Lenke>
-    ) : (
-        behandlingsresultater[behandling.resultat]
-    );
+): ReactNode => {
+    if (!behandling.resultat) {
+        return '-';
+    }
+    if (tilbakekrevingstyper.some(type => type === behandling.type)) {
+        return (
+            <Lenke
+                href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
+                onMouseDown={e => e.preventDefault()}
+                target="_blank"
+            >
+                <span>{behandlingsresultater[behandling.resultat]}</span>
+                <ExternalLink />
+            </Lenke>
+        );
+    } else {
+        if (behandling.status === BehandlingStatus.AVSLUTTET) {
+            return (
+                <Lenke href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
+                    {behandling ? behandlingsresultater[behandling.resultat] : '-'}
+                </Lenke>
+            );
+        } else {
+            return behandlingsresultater[behandling.resultat];
+        }
+    }
+};
 
 const finnÅrsak = (behandling: VisningBehandling | ITilbakekrevingsbehandling): ReactNode =>
     behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
