@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Menyknapp } from 'nav-frontend-ikonknapper';
 import KnappBase from 'nav-frontend-knapper';
@@ -30,7 +30,7 @@ interface IProps {
 
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
     const { toggles } = useApp();
 
@@ -140,7 +140,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         <KnappBase
                             mini={true}
                             onClick={() => {
-                                history.push(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
+                                navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
                                 settAnker(undefined);
                             }}
                         >

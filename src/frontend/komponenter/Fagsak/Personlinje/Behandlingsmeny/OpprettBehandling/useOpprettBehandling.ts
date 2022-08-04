@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
 import {
@@ -32,7 +32,7 @@ const useOpprettBehandling = (
     const { settÅpenBehandling } = useBehandling();
     const { bruker: brukerRessurs } = useFagsakRessurser();
     const { innloggetSaksbehandler } = useApp();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
@@ -219,11 +219,11 @@ const useOpprettBehandling = (
                                 hentDataFraRessurs(response);
 
                             if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                                history.push(
+                                navigate(
                                     `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                                 );
                             } else {
-                                history.push(
+                                navigate(
                                     `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                                 );
                             }

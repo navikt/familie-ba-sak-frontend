@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -24,7 +24,7 @@ const useBehandlingApi = (
     const { request } = useHttp();
     const { fagsakId, behandlingId } = useSakOgBehandlingParams();
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const [logg, settLogg] = useState<Ressurs<ILogg[]>>(byggTomRessurs());
 
     useEffect(() => {
@@ -53,11 +53,11 @@ const useBehandlingApi = (
                     const behandling = response.data;
 
                     if (behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                        history.push(
+                        navigate(
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
-                        history.push(
+                        navigate(
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,7 +17,7 @@ export interface IOpprettFagsakData {
 }
 
 const useOpprettFagsak = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { request } = useHttp();
     const [feilmelding, settFeilmelding] = useState('');
     const [senderInn, settSenderInn] = useState<FagsakEier | null>(null);
@@ -36,10 +36,8 @@ const useOpprettFagsak = () => {
                     const aktivBehandling: VisningBehandling | undefined =
                         hentAktivBehandlingPåMinimalFagsak(response.data);
                     aktivBehandling
-                        ? history.push(
-                              `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`
-                          )
-                        : history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                        ? navigate(`/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`)
+                        : navigate(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||

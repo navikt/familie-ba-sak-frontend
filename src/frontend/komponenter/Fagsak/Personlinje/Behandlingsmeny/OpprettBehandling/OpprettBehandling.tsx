@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
@@ -23,7 +23,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
     const [visModal, settVisModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker } =
         useOpprettBehandling(
@@ -118,7 +118,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                                 mini={true}
                                 onClick={() => {
                                     settVisBekreftelseTilbakekrevingModal(false);
-                                    history.push(`/fagsak/${minimalFagsak.id}/saksoversikt`);
+                                    navigate(`/fagsak/${minimalFagsak.id}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
@@ -128,7 +128,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                                 mini={true}
                                 onClick={() => {
                                     settVisBekreftelseTilbakekrevingModal(false);
-                                    history.push('/oppgaver');
+                                    navigate('/oppgaver');
                                 }}
                                 children={'Gå til oppgavebenken'}
                             />,

@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,7 +17,7 @@ const useFagsakApi = (
     const { settMinimalFagsak } = useFagsakRessurser();
     const { request } = useHttp();
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
         request<IOpprettEllerHentFagsakData, IMinimalFagsak>({
@@ -33,10 +33,8 @@ const useFagsakApi = (
                     const aktivBehandling: VisningBehandling | undefined =
                         hentAktivBehandlingPåMinimalFagsak(response.data);
                     aktivBehandling
-                        ? history.push(
-                              `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`
-                          )
-                        : history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                        ? navigate(`/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`)
+                        : navigate(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||

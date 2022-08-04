@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { AxiosError } from 'axios';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useHttp } from '@navikt/familie-http';
@@ -82,7 +82,7 @@ export const useInfotrygdRequest = () => {
 };
 
 export const useInfotrygdMigrering = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { request } = useHttp();
     const [migrerInfotrygdSakRessurs, settMigrerInfotrygdSakRessurs] = useState<
         Ressurs<IMigreringResponseDto>
@@ -112,8 +112,7 @@ export const useInfotrygdMigrering = () => {
     const gåTilSaksoversiktVedSuksess = (fagsakId?: number) => {
         settVisMigrertModal(false);
         if (fagsakId) {
-            history.push(`/fagsak/${fagsakId}/saksoversikt`);
-            history.go(0);
+            navigate(`/fagsak/${fagsakId}/saksoversikt`);
         }
     };
 
