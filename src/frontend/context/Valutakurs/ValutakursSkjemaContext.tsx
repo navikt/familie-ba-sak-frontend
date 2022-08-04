@@ -14,6 +14,7 @@ import {
     erValutakodeGyldig,
     isEmpty,
     isNumeric,
+    tellAntallDesimaler,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
@@ -27,7 +28,6 @@ const erValutakursDatoGyldig = (
     felt: FeltState<string | undefined>
 ): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakursdato er påkrevd, men mangler input');
-
 const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
     if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string') {
         return feil(felt, 'Valutakurs er påkrevd, men mangler input');
@@ -39,7 +39,7 @@ const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<stri
     if (!isNumeric(nyKurs)) {
         return feil(felt, `Valutakurs innholder ugyldige verdier, kurs: ${felt.verdi}`);
     }
-    if (!valutakursHarGyldigAntallDesimaler(nyKurs)) {
+    if (tellAntallDesimaler(nyKurs) !== 4) {
         return feil(felt, `Valutakurs må ha 4 desimaler, kurs: ${felt.verdi}`);
     }
     const kurs = Number(nyKurs);
@@ -48,9 +48,6 @@ const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<stri
     }
     return ok(felt);
 };
-
-export const valutakursHarGyldigAntallDesimaler = (valutakurs: string) =>
-    valutakurs?.split('.')[1]?.length === 4;
 
 export const valutakursFeilmeldingId = (valutakurs: IRestValutakurs): string =>
     `valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${valutakurs.fom}`;
