@@ -30,13 +30,17 @@ interface IBehandlingshistorikkProps {
     behandling: VisningBehandling | ITilbakekrevingsbehandling;
 }
 
+const erTilbakekrevingsbetaling = (behandling: VisningBehandling | ITilbakekrevingsbehandling) => {
+    return tilbakekrevingstyper.some(type => type === behandling.type);
+};
+
 const lagLenkePåType = (
     fagsakId: number,
     behandling: VisningBehandling | ITilbakekrevingsbehandling
 ): ReactNode =>
     behandling.status === BehandlingStatus.AVSLUTTET ? (
         behandlingstyper[behandling.type].navn
-    ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
+    ) : erTilbakekrevingsbetaling(behandling) ? (
         <Link
             href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
             onMouseDown={e => e.preventDefault()}
@@ -58,7 +62,7 @@ const lagLenkePåResultat = (
     if (!behandling.resultat) {
         return '-';
     }
-    if (tilbakekrevingstyper.some(type => type === behandling.type)) {
+    if (erTilbakekrevingsbetaling(behandling)) {
         return (
             <Link
                 href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
@@ -82,12 +86,12 @@ const lagLenkePåResultat = (
     }
 };
 
-const finnÅrsak = (behandling: VisningBehandling | ITilbakekrevingsbehandling): ReactNode =>
-    behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
-        ? 'Feilutbetaling'
-        : behandling.årsak
-        ? behandlingÅrsak[behandling.årsak]
-        : '-';
+const finnÅrsak = (behandling: VisningBehandling | ITilbakekrevingsbehandling): ReactNode => {
+    if (behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
+        return 'Feilutbetaling';
+    }
+    return behandling.årsak ? behandlingÅrsak[behandling.årsak] : '-';
+};
 
 export const Behandling: React.FC<IBehandlingshistorikkProps> = ({ behandling, minimalFagsak }) => {
     const kategorier = hentKategorierHvisVisningBehandling(behandling);

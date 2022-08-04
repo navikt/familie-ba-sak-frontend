@@ -20,20 +20,29 @@ interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-function konverterBehandling(
+const konverterBehandling = (
     faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling,
     behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling
-): BehandlingTabellobjekt {
+): BehandlingTabellobjekt => {
     return {
         behandlingEllerTilbakemelding: behandlingEllerTilbakemelding,
         faktiskObjekt: faktiskObjekt,
     };
-}
+};
 
 interface BehandlingTabellobjekt {
     behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling;
     faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling;
 }
+
+const visRad = (behandling: BehandlingTabellobjekt, visHenlagteBehandlinger: boolean) => {
+    if (visHenlagteBehandlinger) return true;
+    if (!behandling.faktiskObjekt.resultat) return false;
+    if (behandling.behandlingEllerTilbakemelding === BehandlingEllerTilbakebetaling.BEHANDLING) {
+        return !erBehandlingHenlagt(behandling.faktiskObjekt.resultat as BehandlingResultat);
+    }
+    return Behandlingsresultatstype.HENLAGT !== behandling.faktiskObjekt.resultat;
+};
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
     const behandlinger: BehandlingTabellobjekt[] = [
@@ -46,17 +55,6 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
     ];
 
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
-
-    function visRad(behandling: BehandlingTabellobjekt) {
-        if (visHenlagteBehandlinger) return true;
-        if (!behandling.faktiskObjekt.resultat) return false;
-        if (
-            behandling.behandlingEllerTilbakemelding === BehandlingEllerTilbakebetaling.BEHANDLING
-        ) {
-            return !erBehandlingHenlagt(behandling.faktiskObjekt.resultat as BehandlingResultat);
-        }
-        return Behandlingsresultatstype.HENLAGT !== behandling.faktiskObjekt.resultat;
-    }
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
@@ -93,7 +91,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </thead>
                     <tbody>
                         {behandlinger
-                            .filter(behandling => visRad(behandling))
+                            .filter(behandling => visRad(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
                                 kalenderDiff(
                                     new Date(b.faktiskObjekt.opprettetTidspunkt),
