@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
-import Lenke from 'nav-frontend-lenker';
-
 import { ExternalLink } from '@navikt/ds-icons';
+import { Link } from '@navikt/ds-react';
 
 import {
     behandlingsresultater,
@@ -18,11 +17,11 @@ import {
     tilBehandlingstema,
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
     Tilbakekrevingsbehandlingstype,
     tilbakekrevingstyper,
 } from '../../../typer/tilbakekrevingsbehandling';
-import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import type { VisningBehandling } from './visningBehandling';
 
@@ -38,18 +37,18 @@ const lagLenkePåType = (
     behandling.status === BehandlingStatus.AVSLUTTET ? (
         behandlingstyper[behandling.type].navn
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
-        <Lenke
+        <Link
             href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
             onMouseDown={e => e.preventDefault()}
             target="_blank"
         >
             <span>{behandlingstyper[behandling.type].navn}</span>
             <ExternalLink />
-        </Lenke>
+        </Link>
     ) : (
-        <Lenke href={`/fagsak/${fagsakId}/${behandling.behandlingId}`}>
+        <Link href={`/fagsak/${fagsakId}/${behandling.behandlingId}`}>
             {behandlingstyper[behandling.type].navn}
-        </Lenke>
+        </Link>
     );
 
 const lagLenkePåResultat = (
@@ -61,21 +60,21 @@ const lagLenkePåResultat = (
     }
     if (tilbakekrevingstyper.some(type => type === behandling.type)) {
         return (
-            <Lenke
+            <Link
                 href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
                 onMouseDown={e => e.preventDefault()}
                 target="_blank"
             >
                 <span>{behandlingsresultater[behandling.resultat]}</span>
                 <ExternalLink />
-            </Lenke>
+            </Link>
         );
     } else {
         if (behandling.status === BehandlingStatus.AVSLUTTET) {
             return (
-                <Lenke href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
+                <Link href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
                     {behandling ? behandlingsresultater[behandling.resultat] : '-'}
-                </Lenke>
+                </Link>
             );
         } else {
             return behandlingsresultater[behandling.resultat];
