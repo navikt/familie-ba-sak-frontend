@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Edit } from '@navikt/ds-icons';
 import { Alert, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -30,6 +31,7 @@ import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonK
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { KorrigerEtterbetalingModal } from './KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
@@ -85,6 +87,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisDokumentModal,
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
+        React.useState<boolean>(false);
 
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
@@ -168,6 +172,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         }}
                         pdfdata={hentetDokument}
                     />
+                    <KorrigerEtterbetalingModal
+                        visModal={visKorrigerEtterbetalingModal}
+                        setVisModal={() =>
+                            setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
+                        }
+                    />
                     <Container>
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect
@@ -212,6 +222,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             ikon={<DokumentIkon />}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             spinner={hentetDokument.status === RessursStatus.HENTER}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                            mini={true}
+                        />
+                        <IkonKnapp
+                            id={'korriger-etterbetaling'}
+                            erLesevisning={false}
+                            label={'Korriger etterbetaling'}
+                            ikon={<Edit />}
+                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
                             ikonPosisjon={IkonPosisjon.VENSTRE}
                             mini={true}
                         />
