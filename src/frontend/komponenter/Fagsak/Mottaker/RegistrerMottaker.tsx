@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -18,7 +17,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;
 `;
 
-const StyledAlertstripe = styled(Alertstripe)`
+const StyledAlert = styled(Alert)`
     margin: 2rem;
 `;
 
@@ -41,9 +40,9 @@ const RegistrerMottaker: React.FC = () => {
                 </StyledSkjemasteg>
             )}
             {fagsakType.feilmelding && (
-                <StyledAlertstripe type="info">
+                <StyledAlert variant="info">
                     Det har skjedd en feil: {fagsakType.feilmelding}
-                </StyledAlertstripe>
+                </StyledAlert>
             )}
         </>
     );
