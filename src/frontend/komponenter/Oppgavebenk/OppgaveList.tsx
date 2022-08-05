@@ -2,10 +2,11 @@ import React from 'react';
 
 import classNames from 'classnames';
 import type { Cell, ColumnInstance } from 'react-table';
+import styled from 'styled-components';
 
-import Alertstripe from 'nav-frontend-alertstriper';
 import { Systemtittel } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -47,6 +48,10 @@ export const getSortLenkClassName = (column: ColumnInstance<IOppgaveRad>) => {
     }
     return '';
 };
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1rem;
+`;
 
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, tableInstance } = useOppgaver();
@@ -112,21 +117,15 @@ const OppgaveList: React.FunctionComponent = () => {
             </div>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
-                <Alertstripe type="advarsel" className="oppgavelist__info">
-                    Ingen oppgaver
-                </Alertstripe>
+                <StyledAlert variant="warning">Ingen oppgaver</StyledAlert>
             )}
             {(oppgaver.status === RessursStatus.FEILET ||
                 oppgaver.status === RessursStatus.FUNKSJONELL_FEIL ||
                 oppgaver.status === RessursStatus.IKKE_TILGANG) && (
-                <Alertstripe type="feil" className="oppgavelist__info">
-                    {oppgaver.frontendFeilmelding}
-                </Alertstripe>
+                <StyledAlert variant="error">{oppgaver.frontendFeilmelding}</StyledAlert>
             )}
             {oppgaver.status === RessursStatus.HENTER && (
-                <Alertstripe type="info" className="oppgavelist__info">
-                    Henter...
-                </Alertstripe>
+                <StyledAlert variant="info">Henter...</StyledAlert>
             )}
         </div>
     );

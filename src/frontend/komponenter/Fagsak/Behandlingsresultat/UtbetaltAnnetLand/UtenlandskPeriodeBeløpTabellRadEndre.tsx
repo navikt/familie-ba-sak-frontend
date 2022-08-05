@@ -45,10 +45,12 @@ const UtbetaltBeløpRad = styled.div`
 
         label {
             font-weight: normal;
+            margin-bottom: 0.5rem;
         }
 
         p.navds-label {
             font-weight: normal;
+            margin-bottom: 0.5rem;
         }
 
         &:nth-of-type(1) {
@@ -196,7 +198,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         <FamilieSelect
                             label={'Intervall'}
                             erLesevisning={lesevisning}
-                            value={skjema.felter.intervall?.verdi}
+                            value={skjema.felter.intervall?.verdi || undefined}
                             onChange={event =>
                                 skjema.felter.intervall?.validerOgSettFelt(
                                     event.target.value as UtenlandskPeriodeBeløpIntervall

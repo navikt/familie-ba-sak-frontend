@@ -3,12 +3,11 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { Back } from '@navikt/ds-icons';
-import { Heading } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -86,7 +85,7 @@ export const JournalpostSkjema: React.FC = () => {
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                     skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
+                    <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <Feiloppsummering

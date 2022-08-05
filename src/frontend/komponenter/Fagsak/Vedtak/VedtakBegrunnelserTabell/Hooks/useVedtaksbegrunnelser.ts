@@ -1,6 +1,6 @@
 import type { GroupType, ISelectOption } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
 import type {
@@ -48,7 +48,11 @@ export const useVilkårBegrunnelser = ({
                     Vedtaksperiodetype.ENDRET_UTBETALING,
                 ];
             case Vedtaksperiodetype.OPPHØR:
-                return [VedtakBegrunnelseType.OPPHØR];
+                return [
+                    VedtakBegrunnelseType.OPPHØR,
+                    VedtakBegrunnelseType.EØS_OPPHØR,
+                    VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
+                ];
             case Vedtaksperiodetype.ENDRET_UTBETALING:
                 return [VedtakBegrunnelseType.ENDRET_UTBETALING];
             default:

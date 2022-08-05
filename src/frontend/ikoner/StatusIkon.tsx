@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import styled from 'styled-components';
-import '@navikt/ds-css-internal';
 
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
 
@@ -17,7 +16,7 @@ const StyledWarning = styled(WarningFilled)`
 
 interface IProps {
     status?: Status;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
@@ -27,15 +26,15 @@ export enum Status {
     OK,
 }
 
-const StatusIkon: React.FC<IProps> = ({ status, heigth = 24, width = 24 }) => {
+const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
     switch (status) {
         case Status.OK:
-            return <StyledSuccess height={heigth} width={width} />;
+            return <StyledSuccess height={height} width={width} />;
         case Status.FEIL:
-            return <StyledError height={heigth} width={width} />;
+            return <StyledError height={height} width={width} />;
         case Status.ADVARSEL:
         default:
-            return <StyledWarning height={heigth} width={width} />;
+            return <StyledWarning height={height} width={width} />;
     }
 };
 

@@ -95,10 +95,10 @@ const FagsakDeltagerSøk: React.FC = () => {
                               fagsakDeltager.fagsakType !== FagsakType.INSTITUSJON ? (
                                   ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
                               ) : (
-                                  <KontorIkonGrønn heigth={32} width={32} />
+                                  <KontorIkonGrønn height={32} width={32} />
                               )
                           ) : (
-                              <IkkeTilgang heigth={30} width={30} />
+                              <IkkeTilgang height={30} width={30} />
                           ),
                           rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
                               fagsakDeltager.kjønn ?? kjønnType.UKJENT

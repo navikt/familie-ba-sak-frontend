@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -13,16 +13,15 @@ const ValutakurserContainer = styled.div`
     margin-top: 5rem;
 `;
 
-const Tabell = styled.table`
+const StyledTable = styled(Table)`
     margin-top: 2rem;
-    table-layout: fixed;
 
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
 `;
 
-const TabellHeader = styled.th`
+const StyledHeaderCell = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
@@ -30,10 +29,10 @@ const TabellHeader = styled.th`
         width: 7.5rem;
     }
     &:nth-of-type(4) {
-        width: 4rem;
+        width: 14rem;
     }
     &:nth-of-type(5) {
-        width: 15rem;
+        width: 2.25rem;
     }
 `;
 
@@ -59,17 +58,17 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     }
                 />
             )}
-            <Tabell className={`tabell`}>
-                <thead>
-                    <tr>
-                        <TabellHeader>Barn</TabellHeader>
-                        <TabellHeader>Periode</TabellHeader>
-                        <TabellHeader>Valutakursdato</TabellHeader>
-                        <TabellHeader>Valuta</TabellHeader>
-                        <TabellHeader></TabellHeader>
-                    </tr>
-                </thead>
-                <tbody>
+            <StyledTable size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <StyledHeaderCell scope="col">Barn</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Periode</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Valutakursdato</StyledHeaderCell>
+                        <StyledHeaderCell scope="col">Valuta</StyledHeaderCell>
+                        <StyledHeaderCell></StyledHeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {valutakurser.map(valutakurs => (
                         <ValutakursTabellRad
                             key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
@@ -80,8 +79,8 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     ))}
-                </tbody>
-            </Tabell>
+                </Table.Body>
+            </StyledTable>
         </ValutakurserContainer>
     );
 };

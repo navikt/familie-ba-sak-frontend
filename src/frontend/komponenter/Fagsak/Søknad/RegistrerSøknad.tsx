@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -54,7 +54,8 @@ const RegistrerSøknad: React.FC = () => {
             {søknadErLastetFraBackend && !erLesevisning() && (
                 <>
                     <br />
-                    <AlertStripeAdvarsel
+                    <Alert
+                        variant="warning"
                         children={
                             'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
                         }
@@ -77,7 +78,7 @@ const RegistrerSøknad: React.FC = () => {
 
             {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                 skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
+                <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
             )}
             {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                 <Feiloppsummering

@@ -1,3 +1,4 @@
+import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
@@ -37,17 +38,6 @@ export const hentSorterteJournalposter = (
     }
 };
 
-export const hentSorteringsknappCss = (sortering: Sorteringsrekkefølge) => {
-    switch (sortering) {
-        case Sorteringsrekkefølge.INGEN_SORTERING:
-            return '';
-        case Sorteringsrekkefølge.STIGENDE:
-            return 'tabell__th--sortert-asc';
-        case Sorteringsrekkefølge.SYNKENDE:
-            return 'tabell__th--sortert-desc';
-    }
-};
-
 export const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
     switch (kode) {
         case 'BA':
@@ -65,16 +55,28 @@ export const hentDatoRegistrertSendt = (
     relevanteDatoer: IJournalpostRelevantDato[],
     journalposttype: string
 ) => {
-    const datoMottatt = relevanteDatoer.find(dato => {
+    return relevanteDatoer.find(dato => {
         if (journalposttype === 'I') {
             return dato.datotype === JournalpostDatotype.DATO_REGISTRERT;
         } else {
             return dato.datotype === JournalpostDatotype.DATO_JOURNALFOERT;
         }
     })?.dato;
-
-    return datoMottatt ? formaterIsoDato(datoMottatt, datoformat.DATO_TID) : '-';
 };
+
+export const hentSortState = (
+    sortering: Sorteringsrekkefølge,
+    sortKey: string
+): SortState | undefined =>
+    sortering === Sorteringsrekkefølge.INGEN_SORTERING
+        ? undefined
+        : {
+              orderBy: sortKey,
+              direction: sortering === Sorteringsrekkefølge.STIGENDE ? 'ascending' : 'descending',
+          };
+
+export const formaterDatoRegistrertSendtMottatt = (dato: string | undefined): string =>
+    formaterIsoDato(dato, datoformat.DATO_TID, '-');
 
 export const formaterFagsak = (fagsystemKode: string | undefined, fagsakId: string | undefined) => {
     const fagsystem = mapFagsystemkodeTilTekst(fagsystemKode);

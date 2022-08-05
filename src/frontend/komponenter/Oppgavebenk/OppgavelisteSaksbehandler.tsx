@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
@@ -47,7 +46,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     }, [oppgave]);
 
     if (innloggetSaksbehandler == null) {
-        return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
+        return <Alert variant="error">Klarte ikke hente innlogget saksbehandler</Alert>;
     }
 
     let oppgaveTypeErStøttet =

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Feilmelding } from 'nav-frontend-typografi';
 
+import { Alert } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
@@ -12,7 +12,7 @@ export const Dokumenter: React.FC = () => {
     const { skjema } = useManuellJournalfør();
 
     return skjema.felter.dokumenter.verdi.length === 0 ? (
-        <AlertStripeAdvarsel children={'Ingen innhold'} />
+        <Alert variant="warning" children={'Ingen innhold'} />
     ) : (
         <div id={skjema.felter.dokumenter.id}>
             {skjema.felter.dokumenter.verdi.map((dokument, index) => (

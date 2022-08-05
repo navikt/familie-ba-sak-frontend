@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import {
@@ -44,7 +43,8 @@ const ManuellJournalførContent: React.FC = () => {
                     {dataForManuellJournalføring.data.journalpost.journalstatus !==
                         Journalstatus.MOTTATT && (
                         <>
-                            <AlertStripeAdvarsel
+                            <Alert
+                                variant="warning"
                                 children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede journalført.`}
                             />
                             <br />
@@ -60,7 +60,9 @@ const ManuellJournalførContent: React.FC = () => {
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
-            return <AlertStripeFeil children={dataForManuellJournalføring.frontendFeilmelding} />;
+            return (
+                <Alert variant="error" children={dataForManuellJournalføring.frontendFeilmelding} />
+            );
         default:
             return <div />;
     }

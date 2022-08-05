@@ -2,20 +2,20 @@ import * as React from 'react';
 
 interface IInformasjonSirkel {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
 const InformasjonSirkel: React.FunctionComponent<IInformasjonSirkel> = ({
     className,
-    heigth = 24,
+    height = 24,
     width = 24,
 }) => {
     return (
         <svg
             aria-labelledby={'Info'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
