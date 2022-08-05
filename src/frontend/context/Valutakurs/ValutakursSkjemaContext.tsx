@@ -14,6 +14,7 @@ import {
     erValutakodeGyldig,
     isEmpty,
     isNumeric,
+    tellAntallDesimaler,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
@@ -37,6 +38,9 @@ const erValutakursGyldig = (felt: FeltState<string | undefined>): FeltState<stri
     }
     if (!isNumeric(nyKurs)) {
         return feil(felt, `Valutakurs innholder ugyldige verdier, kurs: ${felt.verdi}`);
+    }
+    if (tellAntallDesimaler(nyKurs) !== 4) {
+        return feil(felt, `Valutakurs må ha 4 desimaler, kurs: ${felt.verdi}`);
     }
     const kurs = Number(nyKurs);
     if (kurs < 0) {
