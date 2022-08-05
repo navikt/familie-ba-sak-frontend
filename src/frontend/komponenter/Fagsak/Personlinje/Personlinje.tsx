@@ -9,7 +9,7 @@ import Visittkort from '@navikt/familie-visittkort';
 
 import { useApp } from '../../../context/AppContext';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
-import { FagsakEier } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import {
@@ -36,7 +36,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             alder={hentAlder(bruker?.fødselsdato ?? '')}
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
             ValgfrittIkon={
-                minimalFagsak?.fagsakEier === FagsakEier.BARN ? KontorIkonGrønn : undefined
+                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? KontorIkonGrønn : undefined
             }
         >
             <div className="visittkort__pipe">|</div>
