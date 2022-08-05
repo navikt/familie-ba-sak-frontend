@@ -50,7 +50,7 @@ describe('utils/eøsValidators', () => {
         );
     });
 
-    test('erEøsPeriodeGyldig skal kaste feilmelding hvis fom dato er lengre fram i tid enn initielFom', () => {
+    test('erEøsPeriodeGyldig skal kaste feilmelding hvis fom dato er satt før initielFom dato', () => {
         const eøsPeriode: FeltState<IYearMonthPeriode> = nyFeltState(
             nyYearMonthPeriode('2010-12', '2009-05')
         );
@@ -61,6 +61,16 @@ describe('utils/eøsValidators', () => {
         expect(valideringsresultat.feilmelding).toEqual(
             'Du kan ikke legge inn fra og med måned som er før: 2011-10'
         );
+    });
+
+    test('erEøsPeriodeGyldig skal returnere OK dersom alle felter er fylt inn korrekt', () => {
+        const eøsPeriode: FeltState<IYearMonthPeriode> = nyFeltState(
+            nyYearMonthPeriode('2010-12', '2012-05')
+        );
+
+        const valideringsresultat = erEøsPeriodeGyldig(eøsPeriode, { initielFom: '2009-10' });
+
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
     test('isNumeric skal sjekke at string er numerisk', () => {
