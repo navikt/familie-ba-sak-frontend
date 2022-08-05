@@ -44,10 +44,10 @@ export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
     const { flyttBrukerTilBaSak, migrerInfotrygdSakRessurs } = useInfotrygdMigrering();
 
-    const history = useLocation();
+    const location = useLocation();
     useEffect(() => {
-        if (history.state) {
-            const state = history.state as { bruker: string };
+        if (location.state) {
+            const state = location.state as { bruker: string };
             skjema.felter.ident.verdi = state.bruker;
             onSubmitWrapper();
         }
