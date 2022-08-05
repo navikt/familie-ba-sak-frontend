@@ -72,15 +72,9 @@ interface IProps {
 }
 
 const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
-    const {
-        kompetanser,
-        kompetanseSubmit,
-        settKompetanseSubmit,
-        putKompetanse,
-        deleteKompetanse,
-        erKompetanserGyldige,
-        hentKompetanserMedFeil,
-    } = useKompetanse({ åpenBehandling });
+    const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse({
+        åpenBehandling,
+    });
 
     const {
         utbetaltAnnetLandBeløp,
@@ -103,10 +97,6 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
     return {
         erEøsInformasjonGyldig,
         kompetanser,
-        kompetanseSubmit,
-        settKompetanseSubmit,
-        putKompetanse,
-        deleteKompetanse,
         hentKompetanserMedFeil,
         utbetaltAnnetLandBeløp,
         erUtbetaltAnnetLandBeløpGyldige,

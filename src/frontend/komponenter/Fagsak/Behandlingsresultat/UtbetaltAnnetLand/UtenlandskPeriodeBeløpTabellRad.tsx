@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
 import {
@@ -9,12 +10,7 @@ import {
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
-import {
-    EkspanderbarTr,
-    EkspandertTd,
-    EøsPeriodeEkspanderKnapp,
-    StatusBarnCelleOgPeriodeCelle,
-} from '../EøsPeriode/fellesKomponenter';
+import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 
 interface IProps {
@@ -45,7 +41,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
         erUtenlandskPeriodeBeløpSkjemaEndret,
     } = useUtenlandskPeriodeBeløpSkjema({
         utenlandskPeriodeBeløp,
-        tilgjengeligeBarn: barn,
+        barnIUtenlandskPeriodeBeløp: barn,
     });
 
     React.useEffect(() => {
@@ -56,10 +52,10 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     }, [åpenBehandling]);
 
     React.useEffect(() => {
-        if (visFeilmeldinger) {
+        if (visFeilmeldinger && erUtenlandskPeriodeBeløpEkspandert) {
             kanSendeSkjema();
         }
-    }, [visFeilmeldinger]);
+    }, [visFeilmeldinger, erUtenlandskPeriodeBeløpEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
         if (
@@ -83,50 +79,38 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
     };
 
     return (
-        <>
-            <EkspanderbarTr ekspandert={erUtenlandskPeriodeBeløpEkspandert}>
-                <StatusBarnCelleOgPeriodeCelle
-                    status={utenlandskPeriodeBeløp.status}
-                    barnIdenter={utenlandskPeriodeBeløp.barnIdenter}
-                    personer={åpenBehandling.personer}
-                    periode={{
-                        fom: utenlandskPeriodeBeløp.fom,
-                        tom: utenlandskPeriodeBeløp.tom,
-                    }}
+        <Table.ExpandableRow
+            open={erUtenlandskPeriodeBeløpEkspandert}
+            togglePlacement="right"
+            onOpenChange={() => toggleForm(true)}
+            id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
+            content={
+                <UtenlandskPeriodeBeløpTabellRadEndre
+                    skjema={skjema}
+                    tilgjengeligeBarn={barn}
+                    valideringErOk={valideringErOk}
+                    sendInnSkjema={sendInnSkjema}
+                    toggleForm={toggleForm}
+                    slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
                 />
-                <td>
-                    {utenlandskPeriodeBeløp.kalkulertMånedligBeløp
-                        ? formatterKalkulertBeløp()
-                        : '-'}
-                </td>
-                <td>
-                    {utenlandskPeriodeBeløp.valutakode ? utenlandskPeriodeBeløp.valutakode : '-'}
-                </td>
-                <td>
-                    <EøsPeriodeEkspanderKnapp
-                        feilmeldingId={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
-                        toggleForm={toggleForm}
-                        erEkspandert={erUtenlandskPeriodeBeløpEkspandert}
-                        periodeStatus={utenlandskPeriodeBeløp.status}
-                        ikkeUtfyltLabel={'Registrer beløp'}
-                    />
-                </td>
-            </EkspanderbarTr>
-            {erUtenlandskPeriodeBeløpEkspandert && (
-                <tr>
-                    <EkspandertTd colSpan={5}>
-                        <UtenlandskPeriodeBeløpTabellRadEndre
-                            skjema={skjema}
-                            tilgjengeligeBarn={barn}
-                            valideringErOk={valideringErOk}
-                            sendInnSkjema={sendInnSkjema}
-                            toggleForm={toggleForm}
-                            slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
-                        />
-                    </EkspandertTd>
-                </tr>
-            )}
-        </>
+            }
+        >
+            <StatusBarnCelleOgPeriodeCelle
+                status={utenlandskPeriodeBeløp.status}
+                barnIdenter={utenlandskPeriodeBeløp.barnIdenter}
+                personer={åpenBehandling.personer}
+                periode={{
+                    fom: utenlandskPeriodeBeløp.fom,
+                    tom: utenlandskPeriodeBeløp.tom,
+                }}
+            />
+            <Table.DataCell>
+                {utenlandskPeriodeBeløp.kalkulertMånedligBeløp ? formatterKalkulertBeløp() : '-'}
+            </Table.DataCell>
+            <Table.DataCell>
+                {utenlandskPeriodeBeløp.valutakode ? utenlandskPeriodeBeløp.valutakode : '-'}
+            </Table.DataCell>
+        </Table.ExpandableRow>
     );
 };
 

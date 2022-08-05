@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
@@ -13,10 +12,9 @@ const DokumentDiv = styled.div`
     height: 100%;
 `;
 
-const DokumentDataAlert = styled(AlertStripeFeil)`
+const DokumentDataAlert = styled(Alert)`
     margin-top: 10px;
     width: 100%;
-    height: 3rem;
 `;
 
 export const DokumentPanel: React.FC = () => {
@@ -29,14 +27,14 @@ export const DokumentPanel: React.FC = () => {
                     src={hentetDokument.data}
                     width={'100%'}
                     height={'100%'}
-                ></iframe>
+                />
             )}
             {(hentetDokument.status === RessursStatus.FEILET ||
                 hentetDokument.status === RessursStatus.FUNKSJONELL_FEIL) && (
-                <DokumentDataAlert children={hentetDokument.frontendFeilmelding} />
+                <DokumentDataAlert variant="error" children={hentetDokument.frontendFeilmelding} />
             )}
             {hentetDokument.status === RessursStatus.IKKE_TILGANG && (
-                <DokumentDataAlert children={'Ikke tilgang til dokument'} />
+                <DokumentDataAlert variant="error" children={'Ikke tilgang til dokument'} />
             )}
         </DokumentDiv>
     );

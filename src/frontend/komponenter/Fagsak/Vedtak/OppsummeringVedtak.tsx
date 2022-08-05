@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
@@ -252,13 +251,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     )}
                 </>
             ) : erMigreringFraInfotrygd ? (
-                <AlertStripeInfo>
+                <Alert variant="info">
                     {`Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.`}
-                </AlertStripeInfo>
+                </Alert>
             ) : (
-                <AlertStripeInfo>
+                <Alert variant="info">
                     {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}
-                </AlertStripeInfo>
+                </Alert>
             )}
         </StyledSkjemaSteg>
     );

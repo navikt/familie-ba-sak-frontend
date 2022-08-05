@@ -1,5 +1,4 @@
 import type { OptionType } from '@navikt/familie-form-elements';
-import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
@@ -98,15 +97,16 @@ export interface IRestKompetanse extends IRestEøsPeriode {
 }
 
 export interface IKompetanse extends IEøsPeriodeStatus {
+    periodeId: string;
     id: number;
     initielFom: YearMonth;
-    periode: FeltState<IYearMonthPeriode>;
-    barnIdenter: FeltState<string[]>;
-    søkersAktivitet: FeltState<SøkersAktivitet | undefined>;
-    annenForeldersAktivitet: FeltState<AnnenForelderAktivitet | undefined>;
-    annenForeldersAktivitetsland: FeltState<string | undefined>;
-    barnetsBostedsland: FeltState<string | undefined>;
-    resultat: FeltState<KompetanseResultat | undefined>;
+    periode: IYearMonthPeriode;
+    barnIdenter: OptionType[];
+    søkersAktivitet: SøkersAktivitet | undefined;
+    annenForeldersAktivitet: AnnenForelderAktivitet | undefined;
+    annenForeldersAktivitetsland: string | undefined;
+    barnetsBostedsland: string | undefined;
+    resultat: KompetanseResultat | undefined;
 }
 
 export enum UtenlandskPeriodeBeløpIntervall {

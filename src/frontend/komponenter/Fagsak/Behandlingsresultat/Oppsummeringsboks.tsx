@@ -6,15 +6,14 @@ import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Alert } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
 import type {
     IEøsPeriodeStatus,
-    IKompetanse,
     IRestEøsPeriode,
+    IRestKompetanse,
     IRestUtenlandskPeriodeBeløp,
     IRestValutakurs,
 } from '../../../typer/eøsPerioder';
@@ -49,14 +48,14 @@ const UtbetalingsbeløpTable = styled.table`
 interface IProps {
     utbetalingsperiode: Utbetalingsperiode | undefined;
     aktivEtikett: Etikett;
-    kompetanser: FeltState<IKompetanse>[];
+    kompetanser: IRestKompetanse[];
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
 }
 
 const finnUtbetalingsBeløpStatusMap = (
     utbetalingsperiode: Utbetalingsperiode | undefined,
-    kompetanser: FeltState<IKompetanse>[],
+    kompetanser: IRestKompetanse[],
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[],
     valutakurser: IRestValutakurs[]
 ): Map<string, boolean> => {
@@ -66,7 +65,7 @@ const finnUtbetalingsBeløpStatusMap = (
         const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
         const norgeErSekundærland = kompetanserForBarn.some(
             kompetanseForBarn =>
-                kompetanseForBarn.resultat.verdi === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
+                kompetanseForBarn.resultat === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
         );
         let skalViseUtbetalingsBeløp = !norgeErSekundærland;
 
@@ -97,13 +96,12 @@ const finnEøsPerioderForBarn = (
 };
 
 const finnKompetanserForBarn = (
-    kompetanseFelter: FeltState<IKompetanse>[],
+    kompetanseFelter: IRestKompetanse[],
     barnIdent: string
-): IKompetanse[] => {
+): IRestKompetanse[] => {
     return (
-        kompetanseFelter
-            .filter(kompetanseFelt => kompetanseFelt.verdi.barnIdenter.verdi.includes(barnIdent))
-            ?.map(kompetanseFelt => kompetanseFelt.verdi) ?? []
+        kompetanseFelter.filter(kompetanseFelt => kompetanseFelt.barnIdenter.includes(barnIdent)) ??
+        []
     );
 };
 

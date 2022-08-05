@@ -56,10 +56,13 @@ export const utenlandskPeriodeBeløpFeilmeldingId = (
 
 interface IProps {
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;
-    tilgjengeligeBarn: OptionType[];
+    barnIUtenlandskPeriodeBeløp: OptionType[];
 }
 
-const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriodeBeløp }: IProps) => {
+const useUtenlandskPeriodeBeløpSkjema = ({
+    barnIUtenlandskPeriodeBeløp,
+    utenlandskPeriodeBeløp,
+}: IProps) => {
     const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] =
         React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
@@ -67,19 +70,6 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
     const initelFom = useFelt<string>({ verdi: utenlandskPeriodeBeløp.fom });
     const { request } = useHttp();
-
-    const valgteBarn = utenlandskPeriodeBeløp.barnIdenter.map(barn => {
-        const tilBarn = tilgjengeligeBarn.find(opt => {
-            return opt.value.match(barn);
-        });
-        if (tilBarn) {
-            return tilBarn;
-        } else {
-            throw new Error(
-                'Skulle ikke være mulig å velge et barn,  som ikke er registrert frå før i utenlandsk beløp'
-            );
-        }
-    });
 
     const {
         skjema,
@@ -98,7 +88,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ tilgjengeligeBarn, utenlandskPeriode
             status: useFelt<EøsPeriodeStatus>({ verdi: utenlandskPeriodeBeløp.status }),
             initielFom: initelFom,
             barnIdenter: useFelt<OptionType[]>({
-                verdi: valgteBarn,
+                verdi: barnIUtenlandskPeriodeBeløp,
                 valideringsfunksjon: erBarnGyldig,
             }),
             periode: useFelt<IYearMonthPeriode>({

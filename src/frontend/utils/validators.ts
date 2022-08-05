@@ -121,6 +121,14 @@ export const erPeriodeGyldig = (
             );
         }
 
+        if (tom && person?.dødsfallDato) {
+            const dødsfallKalenderDato = kalenderDato(person.dødsfallDato);
+
+            if (erEtter(tomKalenderDato, dødsfallKalenderDato)) {
+                return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
+            }
+        }
+
         return fomDatoErFørTomDato ? ok(felt) : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
     } else {
         if (erEksplisittAvslagPåSøknad) {

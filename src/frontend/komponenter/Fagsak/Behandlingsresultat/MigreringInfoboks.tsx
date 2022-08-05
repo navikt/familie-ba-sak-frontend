@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-
+import { Alert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -14,7 +13,7 @@ interface IProps {
     behandlingId: number;
 }
 
-const StyledAlertStripeInfo = styled(AlertStripeInfo)`
+const StyledAlert = styled(Alert)`
     margin: 1rem 0;
 `;
 
@@ -34,7 +33,7 @@ const MigreringInfoboks: React.FC<IProps> = ({ behandlingId }) => {
     const feilmelding = hentFrontendFeilmelding(melding);
 
     if (feilmelding !== undefined) {
-        return <StyledAlertStripeInfo>{feilmelding}</StyledAlertStripeInfo>;
+        return <StyledAlert variant="info">{feilmelding}</StyledAlert>;
     } else return null;
 };
 

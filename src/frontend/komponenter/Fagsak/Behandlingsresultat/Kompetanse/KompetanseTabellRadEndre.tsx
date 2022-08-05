@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
@@ -10,15 +10,12 @@ import {
     FamilieSelect,
     type OptionType,
 } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus, type ISkjema } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useEøs } from '../../../../context/Eøs/EøsContext';
-import { KompetanseSubmit } from '../../../../context/Kompetanse/KompetanseContext';
-import { validerKompetanse } from '../../../../context/Kompetanse/valideringKompetanse';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     AnnenForelderAktivitet,
@@ -32,189 +29,86 @@ import {
 } from '../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../typer/toggles';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
-import EndreKompetansePeriode from './EndreKompetansePeriode';
-import { kompetanseFeilmeldingId } from './KompetanseSkjema';
 
+const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
+    `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${
+        kompetanse.felter.periode.verdi.fom
+    }`;
 interface IProps {
-    redigerbartKompetanse: FeltState<IKompetanse>;
-    settRedigerbartKompetanse: (redigerbartKompetanse: FeltState<IKompetanse>) => void;
+    skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: OptionType[];
-    visFeilmeldinger: boolean;
+    valideringErOk: () => boolean;
+    sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
-    settEkspandertKompetanse: (ekspandertKompetanse: boolean) => void;
+    slettKompetanse: () => void;
 }
 
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
-    redigerbartKompetanse,
+    skjema,
     tilgjengeligeBarn,
-    settRedigerbartKompetanse,
-    visFeilmeldinger,
+    valideringErOk,
+    sendInnSkjema,
     toggleForm,
-    settEkspandertKompetanse,
+    slettKompetanse,
 }) => {
-    const { erLesevisning, settÅpenBehandling } = useBehandling();
-    const { kompetanseSubmit, putKompetanse, deleteKompetanse, settKompetanseSubmit } = useEøs();
+    const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning(true);
     const { toggles } = useApp();
 
-    const valgteBarn = redigerbartKompetanse.verdi?.barnIdenter.verdi.map(barn => {
-        const tilBarn = tilgjengeligeBarn.find(opt => {
-            return opt.value.match(barn);
-        });
-        if (tilBarn) {
-            return tilBarn;
+    const visSubmitFeilmelding = () => {
+        if (
+            skjema.submitRessurs.status === RessursStatus.FEILET ||
+            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
+        ) {
+            return skjema.submitRessurs.frontendFeilmelding;
         } else {
-            throw new Error(
-                'Skulle ikke være mulig å velge et barn, som ikke eksisterer i original kompetanse'
-            );
-        }
-    });
-
-    const [visFeilmeldingerForEnKompetanse, settVisFeilmeldingerForEnKompetanse] = useState(false);
-
-    const skalViseFeilmeldinger = () => {
-        return visFeilmeldinger || visFeilmeldingerForEnKompetanse;
-    };
-
-    const validerOgSettRedigerbartKompetanse = (endretKompetanse: FeltState<IKompetanse>) => {
-        settRedigerbartKompetanse(validerKompetanse(endretKompetanse));
-    };
-
-    const onEndretBarn = (valgteOptions: OptionType[]) => {
-        validerOgSettRedigerbartKompetanse({
-            ...redigerbartKompetanse,
-            verdi: {
-                ...redigerbartKompetanse.verdi,
-                barnIdenter: {
-                    ...redigerbartKompetanse.verdi?.barnIdenter,
-                    verdi: valgteOptions.map(option => option.value),
-                },
-            },
-        });
-    };
-
-    const håndterEndringPåKompetanse = (promise: Promise<Ressurs<IBehandling>>) => {
-        promise
-            .then((respons: Ressurs<IBehandling>) => {
-                settKompetanseSubmit(KompetanseSubmit.NONE);
-                if (respons.status === RessursStatus.SUKSESS) {
-                    settVisFeilmeldingerForEnKompetanse(false);
-                    settEkspandertKompetanse(false);
-                    settÅpenBehandling(respons);
-                } else if (
-                    respons.status === RessursStatus.FEILET ||
-                    respons.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    respons.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settRedigerbartKompetanse({
-                        ...redigerbartKompetanse,
-                        valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding: respons.frontendFeilmelding,
-                    });
-                    settVisFeilmeldingerForEnKompetanse(true);
-                } else {
-                    settRedigerbartKompetanse({
-                        ...redigerbartKompetanse,
-                        valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding:
-                            'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
-                    });
-                    settVisFeilmeldingerForEnKompetanse(true);
-                }
-            })
-            .catch(() => {
-                settKompetanseSubmit(KompetanseSubmit.NONE);
-                settRedigerbartKompetanse({
-                    ...redigerbartKompetanse,
-                    valideringsstatus: Valideringsstatus.FEIL,
-                    feilmelding:
-                        'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
-                });
-                settVisFeilmeldingerForEnKompetanse(true);
-            });
-    };
-
-    const lagreKompetanse = () => {
-        const validertKompetanse = redigerbartKompetanse.valider(redigerbartKompetanse);
-
-        if (validertKompetanse.valideringsstatus === Valideringsstatus.OK) {
-            const promise = putKompetanse(validertKompetanse);
-            håndterEndringPåKompetanse(promise);
-        } else {
-            settRedigerbartKompetanse(validertKompetanse);
-            settVisFeilmeldingerForEnKompetanse(true);
+            return null;
         }
     };
 
-    const toPrimærland =
-        redigerbartKompetanse.verdi.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
+    const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
 
     return (
-        <SkjemaGruppe
-            feil={
-                skalViseFeilmeldinger() &&
-                redigerbartKompetanse.valideringsstatus === Valideringsstatus.FEIL &&
-                redigerbartKompetanse.feilmelding
-            }
-        >
+        <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
             <EøsPeriodeSkjemaContainer>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
+                        {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                         erLesevisning={lesevisning}
                         label={'Barn'}
                         isMulti
                         options={tilgjengeligeBarn}
-                        value={valgteBarn}
-                        onChange={options => onEndretBarn(options as OptionType[])}
-                        feil={
-                            skalViseFeilmeldinger() &&
-                            redigerbartKompetanse.verdi.barnIdenter.valideringsstatus ===
-                                Valideringsstatus.FEIL
-                                ? redigerbartKompetanse.verdi.barnIdenter.feilmelding
-                                : ''
+                        value={skjema.felter.barnIdenter.verdi}
+                        onChange={options =>
+                            skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
                         }
                     />
                 </div>
-                <EndreKompetansePeriode
+                <EøsPeriodeSkjema
+                    periode={skjema.felter.periode}
+                    periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
+                    initielFom={skjema.felter.initielFom}
+                    visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
-                    visFeilmeldinger={skalViseFeilmeldinger()}
-                    redigerbartKompetanse={redigerbartKompetanse}
-                    validerOgSettRedigerbartKompetanse={validerOgSettRedigerbartKompetanse}
                 />
-
                 <FamilieSelect
+                    {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
                     label={'Søkers aktivitet'}
-                    value={
-                        redigerbartKompetanse.verdi?.søkersAktivitet?.verdi
-                            ? redigerbartKompetanse.verdi?.søkersAktivitet?.verdi
-                            : undefined
-                    }
+                    value={skjema.felter.søkersAktivitet.verdi || undefined}
                     lesevisningVerdi={
-                        redigerbartKompetanse.verdi?.søkersAktivitet?.verdi
-                            ? søkersAktiviteter[redigerbartKompetanse.verdi?.søkersAktivitet?.verdi]
+                        skjema.felter.søkersAktivitet.verdi
+                            ? søkersAktiviteter[skjema.felter.søkersAktivitet.verdi]
                             : 'Ikke utfylt'
                     }
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigerbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                søkersAktivitet: {
-                                    ...redigerbartKompetanse.verdi?.søkersAktivitet,
-                                    verdi: event.target.value as SøkersAktivitet,
-                                },
-                            },
-                        });
-                    }}
-                    feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.søkersAktivitet?.valideringsstatus ===
-                            Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.søkersAktivitet.feilmelding
-                            : ''
+                    onChange={event =>
+                        skjema.felter.søkersAktivitet.validerOgSettFelt(
+                            event.target.value as SøkersAktivitet
+                        )
                     }
                 >
                     <option value={''}>Velg</option>
@@ -227,39 +121,22 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     })}
                 </FamilieSelect>
                 <FamilieSelect
+                    {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
+                        skjema.visFeilmeldinger
+                    )}
                     erLesevisning={lesevisning}
                     label={'Annen forelders aktivitet'}
-                    value={
-                        redigerbartKompetanse.verdi?.annenForeldersAktivitet?.verdi
-                            ? redigerbartKompetanse.verdi?.annenForeldersAktivitet?.verdi
-                            : undefined
-                    }
+                    value={skjema.felter.annenForeldersAktivitet.verdi || undefined}
                     lesevisningVerdi={
-                        redigerbartKompetanse.verdi?.annenForeldersAktivitet?.verdi
-                            ? annenForelderAktiviteter[
-                                  redigerbartKompetanse.verdi?.annenForeldersAktivitet?.verdi
-                              ]
+                        skjema.felter.annenForeldersAktivitet?.verdi
+                            ? annenForelderAktiviteter[skjema.felter.annenForeldersAktivitet?.verdi]
                             : 'Ikke utfylt'
                     }
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigerbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                annenForeldersAktivitet: {
-                                    ...redigerbartKompetanse.verdi?.annenForeldersAktivitet,
-                                    verdi: event.target.value as AnnenForelderAktivitet,
-                                },
-                            },
-                        });
+                    onChange={event => {
+                        skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
+                            event.target.value as AnnenForelderAktivitet
+                        );
                     }}
-                    feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.annenForeldersAktivitet?.valideringsstatus ===
-                            Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.annenForeldersAktivitet?.feilmelding
-                            : ''
-                    }
                 >
                     <option value={''}>Velg</option>
                     {Object.values(AnnenForelderAktivitet).map(aktivitet => {
@@ -278,25 +155,15 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     medFlag
                     size="medium"
                     kanNullstilles
-                    value={redigerbartKompetanse.verdi?.annenForeldersAktivitetsland?.verdi}
+                    value={skjema.felter.annenForeldersAktivitetsland.verdi}
                     onChange={(value: Country) => {
                         const nyVerdi = value ? value.value : undefined;
-                        validerOgSettRedigerbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                annenForeldersAktivitetsland: {
-                                    ...redigerbartKompetanse.verdi?.annenForeldersAktivitetsland,
-                                    verdi: nyVerdi,
-                                },
-                            },
-                        });
+                        skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(nyVerdi);
                     }}
                     feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.annenForeldersAktivitetsland
-                            ?.valideringsstatus === Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.annenForeldersAktivitetsland?.feilmelding?.toString()
+                        skjema.felter.annenForeldersAktivitetsland.valideringsstatus ===
+                        Valideringsstatus.FEIL
+                            ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
                 />
@@ -308,60 +175,34 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     medFlag
                     size="medium"
                     kanNullstilles
-                    value={redigerbartKompetanse.verdi?.barnetsBostedsland?.verdi}
+                    value={skjema.felter.barnetsBostedsland?.verdi}
                     onChange={(value: Country) => {
                         const nyVerdi = value ? value.value : undefined;
-                        validerOgSettRedigerbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                barnetsBostedsland: {
-                                    ...redigerbartKompetanse.verdi?.barnetsBostedsland,
-                                    verdi: nyVerdi,
-                                },
-                            },
-                        });
+                        skjema.felter.barnetsBostedsland.validerOgSettFelt(nyVerdi);
                     }}
                     feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.barnetsBostedsland?.valideringsstatus ===
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.barnetsBostedsland.valideringsstatus ===
                             Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.barnetsBostedsland?.feilmelding?.toString()
+                            ? skjema.felter.barnetsBostedsland?.feilmelding?.toString()
                             : ''
                     }
                 />
                 <FamilieSelect
+                    {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
                     label={'Kompetanse'}
-                    value={
-                        redigerbartKompetanse.verdi?.resultat?.verdi
-                            ? redigerbartKompetanse.verdi?.resultat?.verdi
-                            : undefined
-                    }
+                    value={skjema.felter.resultat.verdi || undefined}
                     lesevisningVerdi={
-                        redigerbartKompetanse.verdi?.resultat?.verdi
-                            ? kompetanseResultater[redigerbartKompetanse.verdi?.resultat?.verdi]
+                        skjema.felter.resultat.verdi
+                            ? kompetanseResultater[skjema.felter.resultat.verdi]
                             : 'Ikke utfylt'
                     }
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        validerOgSettRedigerbartKompetanse({
-                            ...redigerbartKompetanse,
-                            verdi: {
-                                ...redigerbartKompetanse.verdi,
-                                resultat: {
-                                    ...redigerbartKompetanse.verdi?.resultat,
-                                    verdi: event.target.value as KompetanseResultat,
-                                },
-                            },
-                        });
+                    onChange={event => {
+                        skjema.felter.resultat.validerOgSettFelt(
+                            event.target.value as KompetanseResultat
+                        );
                     }}
-                    feil={
-                        skalViseFeilmeldinger() &&
-                        redigerbartKompetanse.verdi?.resultat?.valideringsstatus ===
-                            Valideringsstatus.FEIL
-                            ? redigerbartKompetanse.verdi.resultat?.feilmelding
-                            : ''
-                    }
                 >
                     <option value={''}>Velg</option>
                     <option
@@ -401,15 +242,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     <div>
                         <FamilieKnapp
                             erLesevisning={lesevisning}
-                            onClick={lagreKompetanse}
+                            onClick={() => sendInnSkjema()}
                             mini={true}
-                            type={
-                                redigerbartKompetanse.valideringsstatus === Valideringsstatus.OK
-                                    ? 'hoved'
-                                    : 'standard'
-                            }
-                            spinner={kompetanseSubmit === KompetanseSubmit.PUT}
-                            disabled={kompetanseSubmit === KompetanseSubmit.PUT}
+                            type={valideringErOk() ? 'hoved' : 'standard'}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >
                             Ferdig
                         </FamilieKnapp>
@@ -424,16 +261,15 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {redigerbartKompetanse.verdi.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                    {skjema.felter.status.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
                         <IkonKnapp
                             erLesevisning={lesevisning}
-                            onClick={() => {
-                                const promise = deleteKompetanse(redigerbartKompetanse.verdi.id);
-                                håndterEndringPåKompetanse(promise);
-                            }}
-                            id={kompetanseFeilmeldingId(redigerbartKompetanse)}
-                            spinner={kompetanseSubmit === KompetanseSubmit.DELETE}
-                            disabled={kompetanseSubmit === KompetanseSubmit.DELETE}
+                            onClick={() => slettKompetanse()}
+                            id={`slett_kompetanse_${skjema.felter.barnIdenter.verdi.map(
+                                barn => `${barn}-`
+                            )}_${skjema.felter.initielFom.verdi}`}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             mini={true}
                             label={'Fjern'}
                             ikonPosisjon={IkonPosisjon.VENSTRE}

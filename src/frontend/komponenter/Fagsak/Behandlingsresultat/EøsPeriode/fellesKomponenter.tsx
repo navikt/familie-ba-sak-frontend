@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Table } from '@navikt/ds-react';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
@@ -16,7 +16,7 @@ interface IEkspanderbarTrProps {
     ekspandert?: boolean;
 }
 
-export const EkspanderbarTr = styled.tr`
+export const EkspanderbarTr = styled(Table.Row)`
     td {
         border-bottom: ${(props: IEkspanderbarTrProps) =>
             props.ekspandert
@@ -32,7 +32,7 @@ export const EkspanderbarTr = styled.tr`
     }
 `;
 
-export const EkspandertTd = styled.td`
+export const EkspandertTd = styled(Table.DataCell)`
     padding: 0 1rem 1rem 1.6rem;
 `;
 
@@ -45,6 +45,7 @@ export const EøsPeriodeSkjemaContainer = styled.div`
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
     border-left: 0.0625rem solid var(--navds-global-color-orange-500);
     padding-left: 2rem;
+    margin-left: -2rem;
 `;
 
 export const StyledLegend = styled.legend`
@@ -89,13 +90,13 @@ interface IStatusBarnCelleOgPeriodeCelleProps {
 export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCelleProps) => {
     return (
         <>
-            <td>
+            <Table.DataCell>
                 <EøsPeriodeVurdertCelle>
                     <div>
                         <StatusIkon
                             status={mapEøsPeriodeStatusTilStatus[props.status]}
                             width={20}
-                            heigth={20}
+                            height={20}
                         />
                     </div>
                     <BarnDiv>
@@ -106,10 +107,10 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                         ))}
                     </BarnDiv>
                 </EøsPeriodeVurdertCelle>
-            </td>
-            <td>
+            </Table.DataCell>
+            <Table.DataCell>
                 <BodyShort size="small">{formatterPeriode(props.periode)}</BodyShort>
-            </td>
+            </Table.DataCell>
         </>
     );
 };

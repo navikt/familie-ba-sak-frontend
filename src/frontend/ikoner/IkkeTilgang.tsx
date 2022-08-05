@@ -2,20 +2,20 @@ import * as React from 'react';
 
 interface IIkkeTilgang {
     className?: string;
-    heigth?: number;
+    height?: number;
     width?: number;
 }
 
 const IkkeTilgang: React.FunctionComponent<IIkkeTilgang> = ({
     className,
-    heigth = 24,
+    height = 24,
     width = 24,
 }) => {
     return (
         <svg
             aria-labelledby={'ikkeTilgang'}
             className={className}
-            height={heigth}
+            height={height}
             width={width}
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
