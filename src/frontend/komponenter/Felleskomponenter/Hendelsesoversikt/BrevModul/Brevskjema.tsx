@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Tag } from '@navikt/ds-react';
 import {
     FamilieInput,
     FamilieReactSelect,
@@ -73,7 +73,7 @@ const SletteKnapp = styled(IkonKnapp)`
     height: 2.75rem;
 `;
 
-const StyledEtikettInfo = styled(EtikettInfo)`
+const StyledTag = styled(Tag)`
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
 `;
@@ -226,9 +226,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 >
                                     Velg dokumenter
                                 </Label>
-                                <StyledEtikettInfo mini={true}>
+                                <StyledTag variant="info" size="small">
                                     Skriv {målform[mottakersMålform()].toLowerCase()}
-                                </StyledEtikettInfo>
+                                </StyledTag>
                             </LabelOgEtikett>
                         }
                         creatable={false}

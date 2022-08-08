@@ -3,11 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Heading, HelpText, Link } from '@navikt/ds-react';
+import { BodyLong, Heading, HelpText, Link, Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -59,7 +58,7 @@ const InfoBoks = styled.div`
     text-align: center;
 `;
 
-const StyledEtikettInfo = styled(EtikettInfo)`
+const StyledTag = styled(Tag)`
     margin-left: auto;
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
@@ -145,9 +144,9 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg
                     </ItalicText>
                 </StyledHelpText>
-                <StyledEtikettInfo mini={true}>
+                <StyledTag variant="info" size="small">
                     Skriv {målform[søkersMålform].toLowerCase()}
-                </StyledEtikettInfo>
+                </StyledTag>
             </InfoBoks>
 
             {erLesevisning() ? (
