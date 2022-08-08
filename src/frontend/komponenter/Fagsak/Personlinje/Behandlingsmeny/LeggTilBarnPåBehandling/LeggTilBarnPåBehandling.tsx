@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, HelpText } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -134,12 +133,11 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                     tittel: (
                         <LeggTilBarnLegend>
                             <Undertittel children={'Legg til barn'} />
-                            <Hjelpetekst
-                                children={
-                                    'Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger ligger på behandlingen fordi vi tidligere har avslått eller opphørt.'
-                                }
-                                style={{ marginLeft: '0.5rem' }}
-                            />
+                            <HelpText style={{ marginLeft: '0.5rem' }}>
+                                Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn
+                                som ikke lenger ligger på behandlingen fordi vi tidligere har
+                                avslått eller opphørt.
+                            </HelpText>
                         </LeggTilBarnLegend>
                     ),
                     visModal: visModal,
