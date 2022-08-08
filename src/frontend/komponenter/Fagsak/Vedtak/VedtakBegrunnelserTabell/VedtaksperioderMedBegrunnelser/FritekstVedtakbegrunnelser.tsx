@@ -3,12 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -62,7 +62,7 @@ const InfoBoks = styled.div`
     text-align: center;
 `;
 
-const StyledEtikettInfo = styled(EtikettInfo)`
+const StyledTag = styled(Tag)`
     margin-left: auto;
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
@@ -153,9 +153,9 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         </div>
                     }
                 />
-                <StyledEtikettInfo mini={true}>
+                <StyledTag variant="info" size="small">
                     Skriv {målform[søkersMålform].toLowerCase()}
-                </StyledEtikettInfo>
+                </StyledTag>
             </InfoBoks>
 
             {erLesevisning() ? (

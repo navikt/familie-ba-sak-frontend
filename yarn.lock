@@ -9612,16 +9612,6 @@ nav-frontend-ekspanderbartpanel@^4.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-4.0.1.tgz#9847cbe816eb3a0100e4f82d9e98e5f21dc0edb4"
   integrity sha512-MZQOKZc97Z0+kmU0nqC6y8GQyNFLUJhrYEoTwFWrVP+Uf2x0olqsKqaB5dHNjaxUdWBsZmw53749VweBUjzyhg==
 
-nav-frontend-etiketter-style@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-2.0.1.tgz#65d8c7fed802d87cb79b43f8b08bb8bec5493c1e"
-  integrity sha512-AOHQ8O9crd5YKoRV774tSqNFaw8VfbZqwYGEDLI60VQXlv6F06G3XuMH5yMBDMFw1yiy0HuAG6Lef8rq01cxxA==
-
-nav-frontend-etiketter@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-3.0.1.tgz#576403726b6eb08d24c55121de0efeaa827af446"
-  integrity sha512-MrTGwtyZLJFh/5W4dEROERAGQT2c0tH6DkJoak5fRspUaEXM5NS5duSsJYlnNUF19I2KAb/5lvB7PeDtyz87zQ==
-
 nav-frontend-hjelpetekst-style@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-3.0.1.tgz#9540aa2bb637bdd252a2dba3309b506906169ab4"
