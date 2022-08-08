@@ -4,23 +4,20 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
-import Lenke from 'nav-frontend-lenker';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { ExternalLink } from '@navikt/ds-icons';
+import { BodyLong, Heading, HelpText, Link } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
@@ -73,14 +70,16 @@ const SletteKnapp = styled(IkonKnapp)`
     height: 2.75rem;
 `;
 
-const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
-    .popover {
+const StyledHelpText = styled(HelpText)`
+    margin: 0.6rem;
+
+    & + .navds-popover {
         max-width: 25rem;
         text-align: left;
     }
 `;
 
-const ItalicText = styled(Normaltekst)`
+const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
@@ -124,35 +123,28 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
                 <StyledLabel htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</StyledLabel>
-                <StyledHjelpetekst44px
-                    type={PopoverOrientering.OverVenstre}
-                    innhold={
-                        <div>
-                            <Normaltekst>
-                                Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
-                                <Lenke
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
-                                >
-                                    Se retningslinjer for klarspråk.
-                                    <EksternLenke />
-                                </Lenke>
-                            </Normaltekst>
-                            <br />
-                            <Element>Eksempler på formulering:</Element>
-                            <ItalicText>
-                                Barnevernet har bekreftet at de overtok omsorgen for barnet mars
-                                2021
-                            </ItalicText>
-                            <br />
-                            <ItalicText>
-                                Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen
-                                med deg
-                            </ItalicText>
-                        </div>
-                    }
-                />
+                <StyledHelpText>
+                    <BodyLong size="small" spacing>
+                        Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
+                        <Link
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
+                        >
+                            Se retningslinjer for klarspråk.
+                            <ExternalLink />
+                        </Link>
+                    </BodyLong>
+                    <Heading level="3" size="xsmall">
+                        Eksempler på formulering:
+                    </Heading>
+                    <ItalicText size="small" spacing>
+                        Barnevernet har bekreftet at de overtok omsorgen for barnet mars 2021
+                    </ItalicText>
+                    <ItalicText size="small">
+                        Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg
+                    </ItalicText>
+                </StyledHelpText>
                 <StyledEtikettInfo mini={true}>
                     Skriv {målform[søkersMålform].toLowerCase()}
                 </StyledEtikettInfo>
