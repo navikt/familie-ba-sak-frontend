@@ -16,7 +16,7 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
-import { FagsakEier } from '../typer/fagsak';
+import { FagsakType } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
@@ -96,11 +96,11 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 settBruker(sjekkTilgangTilPerson(hentetPerson));
             } else if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
                 const brukerMedFagsakId = brukerEtterTilgangssjekk.data;
-                brukerMedFagsakId.fagsakId = new Map<FagsakEier, number>();
+                brukerMedFagsakId.fagsakId = new Map<FagsakType, number>();
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
                     if (fagsaker.status === RessursStatus.SUKSESS) {
                         fagsaker.data.map(it =>
-                            brukerMedFagsakId.fagsakId?.set(it.fagsakEier, it.id)
+                            brukerMedFagsakId.fagsakId?.set(it.fagsakType, it.id)
                         );
                     }
                     settBruker(sjekkTilgangTilPerson(byggDataRessurs(brukerMedFagsakId)));
@@ -123,13 +123,13 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const hentFagsakForPerson = async (personId: string, fagsakEier = FagsakEier.OMSORGSPERSON) => {
+    const hentFagsakForPerson = async (personId: string, fagsakType = FagsakType.NORMAL) => {
         return request<{ personIdent: string }, IMinimalFagsak | undefined>({
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
             data: {
                 personIdent: personId,
-                fagsakEier: fagsakEier,
+                fagsakType: fagsakType,
             },
         }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
             return fagsak;
