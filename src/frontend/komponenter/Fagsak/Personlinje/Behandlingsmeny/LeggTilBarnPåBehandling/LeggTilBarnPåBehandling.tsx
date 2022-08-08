@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
 
 import { Alert, HelpText } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
@@ -132,7 +131,7 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                 modal={{
                     tittel: (
                         <LeggTilBarnLegend>
-                            <Undertittel children={'Legg til barn'} />
+                            Legg til barn
                             <HelpText style={{ marginLeft: '0.5rem' }}>
                                 Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn
                                 som ikke lenger ligger på behandlingen fordi vi tidligere har

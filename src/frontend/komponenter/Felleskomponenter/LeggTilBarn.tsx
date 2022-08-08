@@ -248,7 +248,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 modal={{
                     tittel: (
                         <LeggTilBarnLegend>
-                            <Heading level="2" size="small" children={'Legg til barn'} />
+                            Legg til barn
                             <StyledHelpText placement="top">
                                 <Heading level="3" size="xsmall">
                                     Nasjonale saker:
