@@ -21,6 +21,10 @@ const StyledHeading = styled(Heading)`
 const StyledHelpText = styled(HelpText)`
     margin-top: 0.1rem;
     margin-left: 0.6rem;
+
+    & + .navds-popover {
+        max-width: 20rem;
+    }
 `;
 
 interface IVedtakBegrunnelserTabell {
@@ -89,7 +93,7 @@ const VedtaksperiodeListe: React.FC<{
         <>
             <StyledHeading level="2" size="small" spacing>
                 {overskrift}
-                <StyledHelpText>{hjelpetekst}</StyledHelpText>
+                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
             </StyledHeading>
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (

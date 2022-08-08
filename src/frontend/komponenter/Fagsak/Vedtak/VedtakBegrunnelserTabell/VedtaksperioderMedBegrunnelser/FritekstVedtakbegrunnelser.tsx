@@ -122,7 +122,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
                 <StyledLabel htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</StyledLabel>
-                <StyledHelpText>
+                <StyledHelpText placement="top-start">
                     <BodyLong size="small" spacing>
                         Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
                         <Link
