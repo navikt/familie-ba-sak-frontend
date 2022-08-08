@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 
-import { Alert } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { Alert, Heading, HelpText } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -10,8 +12,20 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
+
+const StyledHeading = styled(Heading)`
+    display: flex;
+`;
+
+const StyledHelpText = styled(HelpText)`
+    margin-top: 0.1rem;
+    margin-left: 0.6rem;
+
+    & + .navds-popover {
+        max-width: 20rem;
+    }
+`;
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
@@ -77,7 +91,10 @@ const VedtaksperiodeListe: React.FC<{
 
     return (
         <>
-            <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
+            <StyledHeading level="2" size="small" spacing>
+                {overskrift}
+                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
+            </StyledHeading>
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
