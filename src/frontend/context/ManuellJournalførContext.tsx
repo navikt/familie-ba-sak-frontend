@@ -22,7 +22,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import type { IBehandlingstema } from '../typer/behandlingstema';
 import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakEier } from '../typer/fagsak';
+import { FagsakType } from '../typer/fagsak';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -238,7 +238,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
         const restFagsak = await hentFagsakForPerson(
             hentetPerson.data.personIdent,
-            erEnsligMindreårig || erPåInstitusjon ? FagsakEier.BARN : FagsakEier.OMSORGSPERSON
+            erEnsligMindreårig
+                ? FagsakType.BARN_ENSLIG_MINDREÅRLIG
+                : erPåInstitusjon
+                ? FagsakType.INSTITUSJON
+                : FagsakType.NORMAL
         );
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {

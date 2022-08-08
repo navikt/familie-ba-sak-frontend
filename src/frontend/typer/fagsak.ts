@@ -12,11 +12,6 @@ export enum FagsakStatus {
     AVSLUTTET = 'AVSLUTTET',
 }
 
-export enum FagsakEier {
-    OMSORGSPERSON = 'OMSORGSPERSON',
-    BARN = 'BARN',
-}
-
 export enum FagsakType {
     NORMAL = 'NORMAL',
     BARN_ENSLIG_MINDREÅRIG = 'BARN_ENSLIG_MINDREÅRIG',
@@ -33,7 +28,6 @@ export interface IBaseFagsak {
     underBehandling: boolean;
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
-    fagsakEier: FagsakEier;
     fagsakType: FagsakType;
 }
 

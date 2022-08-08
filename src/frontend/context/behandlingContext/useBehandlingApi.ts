@@ -14,7 +14,7 @@ import {
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
-import { BehandlingÅrsak } from '../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak } from '../../typer/behandling';
 import type { ILogg } from '../../typer/logg';
 
 const useBehandlingApi = (
@@ -54,7 +54,9 @@ const useBehandlingApi = (
 
                     if (behandling.årsak === BehandlingÅrsak.SØKNAD) {
                         history.push(
-                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                            behandling.steg === BehandlingSteg.REGISTRERE_MOTTAKER
+                                ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                                : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
                         history.push(
