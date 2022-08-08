@@ -3,13 +3,12 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
+import { HelpText, BodyLong, Heading } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -41,7 +40,7 @@ const LeggTilBarnLegend = styled.div`
     display: flex;
 `;
 
-const StyledHjelpetekst = styled(Hjelpetekst)`
+const StyledHelpText = styled(HelpText)`
     margin-left: 0.5rem;
 
     .hjelpetekst__innhold {
@@ -249,29 +248,29 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 modal={{
                     tittel: (
                         <LeggTilBarnLegend>
-                            <Undertittel children={'Legg til barn'} />
-                            <StyledHjelpetekst>
-                                <Normaltekst>Nasjonale saker:</Normaltekst>
-                                <br />
-                                <Normaltekst>
+                            <Heading level="2" size="small" children={'Legg til barn'} />
+                            <StyledHelpText placement="top">
+                                <Heading level="3" size="xsmall">
+                                    Nasjonale saker:
+                                </Heading>
+                                <BodyLong size="small" spacing>
                                     Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
                                     bruker først.
-                                </Normaltekst>
-                                <br />
-                                <Normaltekst>
+                                </BodyLong>
+                                <BodyLong size="small" spacing>
                                     Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
                                     registrere barnet med fødselsdato og/eller navn. Det vil føre
                                     til et avslag, uten at vilkårene skal vurderes. Har du ikke
                                     navnet på barnet kan du skrive “ukjent”.
-                                </Normaltekst>
-                                <br />
-                                <Normaltekst>EØS-saker:</Normaltekst>
-                                <br />
-                                <Normaltekst>
+                                </BodyLong>
+                                <Heading level="3" size="xsmall">
+                                    EØS-saker:
+                                </Heading>
+                                <BodyLong size="small">
                                     Dersom Folkeregisteret ikke har registrerte barn tilknyttet
                                     denne søkeren kan du registrere D-nummer i DREK.
-                                </Normaltekst>
-                            </StyledHjelpetekst>
+                                </BodyLong>
+                            </StyledHelpText>
                         </LeggTilBarnLegend>
                     ),
                     visModal: visModal,
