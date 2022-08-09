@@ -1,4 +1,4 @@
-export enum BehandlingEllerTilbakebetaling {
+export enum BehandlingEllerTilbakekreving {
     BEHANDLING = 'BEHANDLING',
     TIlBAKEBETALING = 'TILBAKBETALING',
 }

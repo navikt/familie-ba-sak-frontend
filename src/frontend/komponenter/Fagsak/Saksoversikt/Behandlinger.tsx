@@ -13,7 +13,7 @@ import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsb
 import { Behandlingsresultatstype } from '../../../typer/tilbakekrevingsbehandling';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
-import { BehandlingEllerTilbakebetaling } from './BehandlingEllerTilbakebetaling';
+import { BehandlingEllerTilbakekreving } from './BehandlingEllerTilbakekreving';
 import type { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingshistorikkProps {
@@ -21,36 +21,38 @@ interface IBehandlingshistorikkProps {
 }
 
 const konverterBehandling = (
-    faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling,
-    behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling
+    behandlingEllerTilbakekreving: VisningBehandling | ITilbakekrevingsbehandling,
+    type: BehandlingEllerTilbakekreving
 ): BehandlingTabellobjekt => {
     return {
-        behandlingEllerTilbakemelding: behandlingEllerTilbakemelding,
-        faktiskObjekt: faktiskObjekt,
+        type: type,
+        behandlingEllerTilbakekreving: behandlingEllerTilbakekreving,
     };
 };
 
 interface BehandlingTabellobjekt {
-    behandlingEllerTilbakemelding: BehandlingEllerTilbakebetaling;
-    faktiskObjekt: VisningBehandling | ITilbakekrevingsbehandling;
+    type: BehandlingEllerTilbakekreving;
+    behandlingEllerTilbakekreving: VisningBehandling | ITilbakekrevingsbehandling;
 }
 
 const visRad = (behandling: BehandlingTabellobjekt, visHenlagteBehandlinger: boolean) => {
     if (visHenlagteBehandlinger) return true;
-    if (!behandling.faktiskObjekt.resultat) return false;
-    if (behandling.behandlingEllerTilbakemelding === BehandlingEllerTilbakebetaling.BEHANDLING) {
-        return !erBehandlingHenlagt(behandling.faktiskObjekt.resultat as BehandlingResultat);
+    if (!behandling.behandlingEllerTilbakekreving.resultat) return false;
+    if (behandling.type === BehandlingEllerTilbakekreving.BEHANDLING) {
+        return !erBehandlingHenlagt(
+            behandling.behandlingEllerTilbakekreving.resultat as BehandlingResultat
+        );
     }
-    return Behandlingsresultatstype.HENLAGT !== behandling.faktiskObjekt.resultat;
+    return Behandlingsresultatstype.HENLAGT !== behandling.behandlingEllerTilbakekreving.resultat;
 };
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
     const behandlinger: BehandlingTabellobjekt[] = [
         ...minimalFagsak.behandlinger.map(b =>
-            konverterBehandling(b, BehandlingEllerTilbakebetaling.BEHANDLING)
+            konverterBehandling(b, BehandlingEllerTilbakekreving.BEHANDLING)
         ),
         ...minimalFagsak.tilbakekrevingsbehandlinger.map(b =>
-            konverterBehandling(b, BehandlingEllerTilbakebetaling.TIlBAKEBETALING)
+            konverterBehandling(b, BehandlingEllerTilbakekreving.TIlBAKEBETALING)
         ),
     ];
 
@@ -94,13 +96,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             .filter(behandling => visRad(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
                                 kalenderDiff(
-                                    new Date(b.faktiskObjekt.opprettetTidspunkt),
-                                    new Date(a.faktiskObjekt.opprettetTidspunkt)
+                                    new Date(b.behandlingEllerTilbakekreving.opprettetTidspunkt),
+                                    new Date(a.behandlingEllerTilbakekreving.opprettetTidspunkt)
                                 )
                             )
                             .map((behandling: BehandlingTabellobjekt) => (
                                 <Behandling
-                                    behandling={behandling.faktiskObjekt}
+                                    behandling={behandling.behandlingEllerTilbakekreving}
                                     minimalFagsak={minimalFagsak}
                                 />
                             ))}
