@@ -32,6 +32,7 @@
     "@navikt/ds-css": "0.18.27",
     "@navikt/ds-icons": "^0.8.20",
     "@navikt/ds-react": "0.19.25",
+    "@navikt/ds-tokens": "^0.9.8",
     "@navikt/familie-backend": "^7.0.4",
     "@navikt/familie-clipboard": "^4.0.0",
     "@navikt/familie-endringslogg": "^2.0.0",

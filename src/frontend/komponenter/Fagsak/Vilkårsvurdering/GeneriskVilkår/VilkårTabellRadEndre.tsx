@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
+import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
@@ -58,7 +58,7 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 0.0625rem solid ${navFarger.navBla};
+    border-left: 0.0625rem solid ${NavdsSemanticColorInteractionPrimary};
     padding-left: 2rem;
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
