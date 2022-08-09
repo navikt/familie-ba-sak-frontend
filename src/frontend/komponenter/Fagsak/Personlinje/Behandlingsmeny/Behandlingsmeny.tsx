@@ -85,15 +85,14 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             minimalFagsak={minimalFagsak}
                         />
                     </li>
-                    {toggles[ToggleNavn.støtterInstitusjon].valueOf() &&
-                        (!bruker?.fagsakId || bruker.fagsakId.size < 2) && (
-                            <li>
-                                <OpprettFagsak
-                                    onListElementClick={() => settAnker(undefined)}
-                                    minimalFagsak={minimalFagsak}
-                                />
-                            </li>
-                        )}
+                    {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
+                        <li>
+                            <OpprettFagsak
+                                onListElementClick={() => settAnker(undefined)}
+                                personInfo={bruker}
+                            />
+                        </li>
+                    )}
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
                         <li>
                             <HenleggBehandling
