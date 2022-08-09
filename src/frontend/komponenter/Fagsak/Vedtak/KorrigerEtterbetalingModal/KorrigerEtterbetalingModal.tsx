@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Cancel } from '@navikt/ds-icons';
-import { Heading, Modal } from '@navikt/ds-react';
+import { Alert, Heading, Modal } from '@navikt/ds-react';
 import {
     FamilieInput,
     FamilieKnapp,
@@ -29,14 +29,11 @@ const Knapperad = styled.div`
     width: 100%;
 `;
 
-const familieKnappStyle: React.CSSProperties = {
-    float: 'right',
-    margin: '1rem 0px 2rem 1rem',
-};
-
-const ikonKnappStyle: React.CSSProperties = {
-    float: 'left',
-    margin: '1rem 0px 2rem 0px',
+const modalKnappStyle = (float: 'left' | 'right' | undefined): React.CSSProperties => {
+    return {
+        float,
+        margin: '2rem 0px 2rem 1rem',
+    };
 };
 
 export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
@@ -51,9 +48,20 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
         lagreKorrigering,
         angreKorrigering,
         visAngreKorrigering,
+        settVisfeilmeldinger,
+        settRestFeil,
+        restFeil,
+        nullstillSkjema,
     } = useKorrigerEtterbetalingSkjemaContext();
+
+    const lukkModal = () => {
+        nullstillSkjema();
+        settVisfeilmeldinger(false);
+        settRestFeil(undefined);
+        setVisModal();
+    };
     return (
-        <Modal open={visModal} onClose={setVisModal}>
+        <Modal open={visModal} onClose={lukkModal}>
             <Modal.Content style={{ minWidth: '30rem' }}>
                 <Heading spacing size="medium">
                     Korriger etterbetaling
@@ -64,6 +72,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         id={'korrigering-aarsak'}
                         erLesevisning={erLesevisning}
                         options={aarsakOptions}
+                        value={skjema.felter.aarsak.verdi}
                         onChange={option =>
                             skjema.felter.aarsak.validerOgSettFelt(option as OptionType)
                         }
@@ -80,6 +89,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         erLesevisning={erLesevisning}
                         type={'number'}
                         bredde={'S'}
+                        value={skjema.felter.etterbetalingsbeløp.verdi}
                         onChange={changeEvent =>
                             skjema.felter.etterbetalingsbeløp.validerOgSettFelt(
                                 changeEvent.target.value
@@ -103,10 +113,18 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         maxLength={1000}
                         style={{ minHeight: '5rem' }}
                     />
+                    <Alert variant="info" size="small" style={{ marginBottom: '1rem' }} inline>
+                        Husk å sende korrigeringsmelding til NØS
+                    </Alert>
+                    {restFeil && (
+                        <Alert variant="error" size="small" inline>
+                            {restFeil}
+                        </Alert>
+                    )}
                     <Knapperad>
                         {visAngreKorrigering && (
                             <IkonKnapp
-                                style={ikonKnappStyle}
+                                style={modalKnappStyle('left')}
                                 id={'angre-korrigering'}
                                 erLesevisning={erLesevisning}
                                 label={'Angre korrigering'}
@@ -117,7 +135,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                             />
                         )}
                         <FamilieKnapp
-                            style={familieKnappStyle}
+                            style={modalKnappStyle('right')}
                             erLesevisning={false}
                             onClick={lagreKorrigering}
                             mini={true}
@@ -128,9 +146,9 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                             Korriger beløp
                         </FamilieKnapp>
                         <FamilieKnapp
-                            style={familieKnappStyle}
+                            style={modalKnappStyle('right')}
                             erLesevisning={false}
-                            onClick={setVisModal}
+                            onClick={lukkModal}
                             mini={true}
                             type={'flat'}
                         >
