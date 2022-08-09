@@ -17,7 +17,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import { useKorrigerEtterbetalingSkjema } from './KorrigerEtterbetalingModalSkjema';
+import { useKorrigerEtterbetalingSkjemaContext } from './KorrigerEtterbetalingModalSkjemaContext';
 
 interface IKorrigerEtterbetalingModal {
     erLesevisning: boolean;
@@ -51,7 +51,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
         lagreKorrigering,
         angreKorrigering,
         visAngreKorrigering,
-    } = useKorrigerEtterbetalingSkjema();
+    } = useKorrigerEtterbetalingSkjemaContext();
     return (
         <Modal open={visModal} onClose={setVisModal}>
             <Modal.Content style={{ minWidth: '30rem' }}>

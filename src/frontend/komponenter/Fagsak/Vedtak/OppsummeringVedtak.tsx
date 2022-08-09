@@ -43,9 +43,6 @@ interface IVedtakProps {
 
 const Container = styled.div`
     max-width: 49rem;
-    #forhandsvis-vedtaksbrev {
-        float: right;
-    }
 `;
 
 const StyledSkjemaSteg = styled(Skjemasteg)`
@@ -215,7 +212,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
-
+                        <IkonKnapp
+                            id={'korriger-etterbetaling'}
+                            erLesevisning={false}
+                            label={'Korriger etterbetaling'}
+                            ikon={<Edit />}
+                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                            mini={true}
+                            style={{ float: 'right' }}
+                        />
                         <IkonKnapp
                             id={'forhandsvis-vedtaksbrev'}
                             erLesevisning={false}
@@ -223,15 +229,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             ikon={<DokumentIkon />}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             spinner={hentetDokument.status === RessursStatus.HENTER}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            mini={true}
-                        />
-                        <IkonKnapp
-                            id={'korriger-etterbetaling'}
-                            erLesevisning={false}
-                            label={'Korriger etterbetaling'}
-                            ikon={<Edit />}
-                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
                             ikonPosisjon={IkonPosisjon.VENSTRE}
                             mini={true}
                         />

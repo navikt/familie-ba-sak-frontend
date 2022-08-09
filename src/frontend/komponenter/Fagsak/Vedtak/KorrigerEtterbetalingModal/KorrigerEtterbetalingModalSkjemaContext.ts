@@ -2,9 +2,11 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IKorrigertEtterbetaling } from '../../../../typer/vedtak';
 import { KorrigertEtterbetalingÅrsak } from '../../../../typer/vedtak';
+import { ToastTyper, AlertType } from '../../../Felleskomponenter/Toast/typer';
 import {
     erEtterbetalingsbeløpGyldig,
     erÅrsakForKorrigeringGyldig,
@@ -16,8 +18,9 @@ export interface IKorrigerEtterbetalingSkjema {
     begrunnelse: string;
 }
 
-export const useKorrigerEtterbetalingSkjema = () => {
+export const useKorrigerEtterbetalingSkjemaContext = () => {
     const { åpenBehandling } = useBehandling();
+    const { settToast } = useApp();
 
     const korrigertEtterbetaling =
         åpenBehandling.status === RessursStatus.SUKSESS
@@ -73,7 +76,7 @@ export const useKorrigerEtterbetalingSkjema = () => {
             settVisfeilmeldinger(false);
             onSubmit(
                 {
-                    method: 'PUT',
+                    method: 'POST',
                     data: {
                         aarsak: skjema.felter.aarsak.verdi.value,
                         etterbetalingsbeløp: skjema.felter.etterbetalingsbeløp.verdi,
@@ -83,6 +86,10 @@ export const useKorrigerEtterbetalingSkjema = () => {
                 },
                 (response: Ressurs<IKorrigertEtterbetaling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
+                        settToast(ToastTyper.ETTERBETALING_KORRIGERT, {
+                            alertType: AlertType.SUCCESS,
+                            tekst: 'Etterbetaling korrigert',
+                        });
                         nullstillSkjema();
                     }
                 }
@@ -93,7 +100,22 @@ export const useKorrigerEtterbetalingSkjema = () => {
     };
 
     const angreKorrigering = () => {
-        console.log('angre korrigering');
+        settSubmitRessurs(byggTomRessurs());
+        onSubmit(
+            {
+                method: 'PUT',
+                url: `/familie-ba-sak/api/korrigertEtterbetaling/${behandlingId}`,
+            },
+            (response: Ressurs<IKorrigertEtterbetaling>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settToast(ToastTyper.ETTERBETALING_KORRIGERT, {
+                        alertType: AlertType.SUCCESS,
+                        tekst: 'Korrigering av etterbetaling fjernet',
+                    });
+                    nullstillSkjema();
+                }
+            }
+        );
     };
 
     return {
