@@ -68,3 +68,13 @@ export enum Standardbegrunnelse {
     REDUKSJON_UNDER_18_ÅR = 'REDUKSJON_UNDER_18_ÅR',
     ETTER_ENDRET_UTBETALING_ETTERBETALING = 'ETTER_ENDRET_UTBETALING_ETTERBETALING',
 }
+
+export interface IKorrigertEtterbetaling {
+    aarsak: KorrigertEtterbetalingÅrsak;
+    etterbetalingsbeløp?: number;
+    begrunnelse: string;
+}
+
+export enum KorrigertEtterbetalingÅrsak {
+    FEIL_TIDLIGERE_UTBETALT_BELØP = 'FEIL_TIDLIGERE_UTBETALT_BELØP',
+}

@@ -31,7 +31,7 @@ import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonK
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { KorrigerEtterbetalingModal } from './KorrigerEtterbetalingModal';
+import { KorrigerEtterbetalingModal } from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
@@ -173,6 +173,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         pdfdata={hentetDokument}
                     />
                     <KorrigerEtterbetalingModal
+                        erLesevisning={erLesevisning()}
                         visModal={visKorrigerEtterbetalingModal}
                         setVisModal={() =>
                             setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
