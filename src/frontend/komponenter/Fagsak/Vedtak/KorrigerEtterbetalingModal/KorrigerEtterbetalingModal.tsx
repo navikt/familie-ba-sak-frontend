@@ -29,10 +29,10 @@ const Knapperad = styled.div`
     width: 100%;
 `;
 
-const modalKnappStyle = (float: 'left' | 'right' | undefined): React.CSSProperties => {
+const modalKnappStyle = (float: 'left' | 'right'): React.CSSProperties => {
     return {
         float,
-        margin: '2rem 0px 2rem 1rem',
+        margin: '2rem 0px 2rem ' + float === 'left' ? '1rem' : '0px',
     };
 };
 
@@ -70,7 +70,6 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                     <FamilieReactSelect
                         label={'Årsak for korrigering'}
                         id={'korrigering-aarsak'}
-                        erLesevisning={erLesevisning}
                         options={aarsakOptions}
                         value={skjema.felter.aarsak.verdi}
                         onChange={option =>
@@ -82,11 +81,11 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                                 ? skjema.felter.aarsak.feilmelding?.toString()
                                 : ''
                         }
+                        isDisabled={erLesevisning}
                     />
                     <FamilieInput
                         label={'Nytt etterbetalingsbeløp'}
                         id={'korrigering-belop'}
-                        erLesevisning={erLesevisning}
                         type={'number'}
                         bredde={'S'}
                         value={skjema.felter.etterbetalingsbeløp.verdi}
@@ -101,26 +100,38 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                                 ? skjema.felter.etterbetalingsbeløp.feilmelding?.toString()
                                 : ''
                         }
+                        disabled={erLesevisning}
                     />
                     <FamilieTextarea
                         label={'Begrunnelse (valgfri)'}
                         id={'korrigering-begrunnelse'}
-                        erLesevisning={erLesevisning}
+                        erLesevisning={false}
                         value={skjema.felter.begrunnelse.verdi}
                         onChange={changeEvent =>
                             skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
                         }
-                        maxLength={1000}
+                        maxLength={erLesevisning ? 0 : 1000}
                         style={{ minHeight: '5rem' }}
+                        disabled={erLesevisning}
                     />
-                    <Alert variant="info" size="small" style={{ marginBottom: '1rem' }} inline>
-                        Husk å sende korrigeringsmelding til NØS
-                    </Alert>
-                    {restFeil && (
-                        <Alert variant="error" size="small" inline>
-                            {restFeil}
-                        </Alert>
+                    {!erLesevisning && (
+                        <>
+                            <Alert
+                                variant="info"
+                                size="small"
+                                style={{ marginBottom: '1rem' }}
+                                inline
+                            >
+                                Husk å sende korrigeringsmelding til NØS
+                            </Alert>
+                            {restFeil && (
+                                <Alert variant="error" size="small" inline>
+                                    {restFeil}
+                                </Alert>
+                            )}
+                        </>
                     )}
+
                     <Knapperad>
                         {visAngreKorrigering && (
                             <IkonKnapp
@@ -136,7 +147,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         )}
                         <FamilieKnapp
                             style={modalKnappStyle('right')}
-                            erLesevisning={false}
+                            erLesevisning={erLesevisning}
                             onClick={lagreKorrigering}
                             mini={true}
                             type={valideringErOk() ? 'hoved' : 'standard'}
@@ -147,12 +158,20 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         </FamilieKnapp>
                         <FamilieKnapp
                             style={modalKnappStyle('right')}
-                            erLesevisning={false}
+                            erLesevisning={erLesevisning}
                             onClick={lukkModal}
                             mini={true}
                             type={'flat'}
                         >
                             Avbryt
+                        </FamilieKnapp>
+                        <FamilieKnapp
+                            style={modalKnappStyle('left')}
+                            erLesevisning={!erLesevisning}
+                            onClick={lukkModal}
+                            mini={true}
+                        >
+                            Lukk
                         </FamilieKnapp>
                     </Knapperad>
                 </SkjemaGruppe>
