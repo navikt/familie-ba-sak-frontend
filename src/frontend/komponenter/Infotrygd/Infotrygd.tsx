@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
@@ -44,10 +44,11 @@ export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
     const { flyttBrukerTilBaSak, migrerInfotrygdSakRessurs } = useInfotrygdMigrering();
 
-    const history = useHistory<{ bruker: string } | undefined>();
+    const location = useLocation();
     useEffect(() => {
-        if (history.location.state) {
-            skjema.felter.ident.verdi = history.location.state.bruker;
+        if (location.state) {
+            const state = location.state as { bruker: string };
+            skjema.felter.ident.verdi = state.bruker;
             onSubmitWrapper();
         }
     }, []);

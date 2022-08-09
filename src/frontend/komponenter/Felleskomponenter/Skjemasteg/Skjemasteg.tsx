@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 
-import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
@@ -74,7 +74,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     skalViseForrigeKnapp = true,
     feilmelding = '',
 }) => {
-    const history = useHistory();
+    const location = useLocation();
     const { forrigeÅpneSide, åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } =
         useBehandling();
     const erBehandlingSattPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
@@ -83,7 +83,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
         const element = document.getElementById('skjemasteg');
 
         const index: number = Object.values(sider).findIndex((side: ISide) =>
-            history.location.pathname.includes(side.href)
+            location.pathname.includes(side.href)
         );
         const forrigeSide: ISide | undefined = Object.values(sider)[index - 1];
 

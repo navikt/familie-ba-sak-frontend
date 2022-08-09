@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
@@ -51,7 +51,7 @@ const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
 `;
 
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, behandling }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
     const {
         hentForhåndsvisning,
@@ -212,7 +212,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                             key={'Gå til saksoversikten'}
                             mini={true}
                             onClick={() => {
-                                history.push(`/fagsak/${fagsakId}/saksoversikt`);
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
                             }}
                             children={'Gå til saksoversikten'}
                         />,
@@ -220,7 +220,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                             key={'Gå til oppgavebenken'}
                             mini={true}
                             onClick={() => {
-                                history.push('/oppgaver');
+                                navigate('/oppgaver');
                             }}
                             children={'Gå til oppgavebenken'}
                         />,
