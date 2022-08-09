@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-
+import { BodyShort, Heading } from '@navikt/ds-react';
 import Clipboard from '@navikt/familie-clipboard';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
@@ -12,47 +11,52 @@ import DødsfallTag from '../DødsfallTag';
 
 interface IProps {
     person: IGrunnlagPerson;
-    tag?: string;
-    tekstType?: 'UNDERTITTEL' | 'NORMALTEKST';
+    somOverskrift?: boolean;
     width?: string;
 }
 
-const PersonInformasjon: React.FunctionComponent<IProps> = ({
-    person,
-    tag,
-    tekstType = 'NORMALTEKST',
-}) => {
+const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskrift = false }) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
 
     return (
         <div className={'personinformasjon'}>
-            {tekstType === 'UNDERTITTEL' && (
+            {somOverskrift && (
                 <>
                     <FamilieIkonVelger
                         className={'familie-ikon'}
                         alder={alder}
                         kjønn={person.kjønn}
                     />
-                    <Undertittel className={'navn'} tag={tag} title={navnOgAlder}>
+                    <Heading level="2" size="small" className={'navn'} title={navnOgAlder}>
                         {navnOgAlder}
-                    </Undertittel>
-                    <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
+                    </Heading>
+                    <Heading level="2" size="small" as="span">
+                        &ensp;|&ensp;
+                    </Heading>
                     <Clipboard>
-                        <Undertittel tag={tag}>{formaterIdent(person.personIdent)}</Undertittel>
+                        <Heading level="2" size="small" as="span">
+                            {formaterIdent(person.personIdent)}
+                        </Heading>
                     </Clipboard>
-                    <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
-                    <Undertittel tag={tag}>{`${personTypeMap[person.type]} `}</Undertittel>
+                    <Heading level="2" size="small" as="span">
+                        &ensp;|&ensp;
+                    </Heading>
+                    <Heading level="2" size="small" as="span">{`${
+                        personTypeMap[person.type]
+                    } `}</Heading>
                     {person.dødsfallDato?.length && (
                         <>
-                            <Undertittel tag={tag}>&ensp;&ensp;</Undertittel>
+                            <Heading level="2" size="small" as="span">
+                                &ensp;&ensp;
+                            </Heading>
                             <DødsfallTag dødsfallDato={person.dødsfallDato} />
                         </>
                     )}
                 </>
             )}
 
-            {tekstType === 'NORMALTEKST' && (
+            {!somOverskrift && (
                 <>
                     <FamilieIkonVelger
                         className={'familie-ikon--for-normaltekst'}
@@ -61,15 +65,15 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                         alder={alder}
                         kjønn={person.kjønn}
                     />
-                    <Normaltekst className={'navn'} tag={tag} title={navnOgAlder}>
+                    <BodyShort className={'navn'} title={navnOgAlder}>
                         {navnOgAlder}
-                    </Normaltekst>
-                    <Normaltekst>&ensp;|&ensp;</Normaltekst>
+                    </BodyShort>
+                    <BodyShort>&ensp;|&ensp;</BodyShort>
                     <Clipboard>
-                        <Normaltekst>{formaterIdent(person.personIdent)}</Normaltekst>
+                        <BodyShort>{formaterIdent(person.personIdent)}</BodyShort>
                     </Clipboard>
-                    <Normaltekst>&ensp;|&ensp;</Normaltekst>
-                    <Normaltekst>{`${personTypeMap[person.type]} `}</Normaltekst>
+                    <BodyShort>&ensp;|&ensp;</BodyShort>
+                    <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>
                 </>
             )}
         </div>

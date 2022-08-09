@@ -124,11 +124,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
                         <PersonLinje>
-                            <PersonInformasjon
-                                person={personResultat.person}
-                                tag={'h3'}
-                                tekstType={'UNDERTITTEL'}
-                            />
+                            <PersonInformasjon person={personResultat.person} somOverskrift />
 
                             {!erLesevisning() &&
                                 personErEkspandert[personResultat.personIdent] &&
