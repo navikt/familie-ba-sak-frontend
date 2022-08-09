@@ -73,16 +73,14 @@ const lagLenkePåResultat = (
                 <ExternalLink />
             </Link>
         );
+    } else if (behandling.status === BehandlingStatus.AVSLUTTET) {
+        return (
+            <Link href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
+                {behandling ? behandlingsresultater[behandling.resultat] : '-'}
+            </Link>
+        );
     } else {
-        if (behandling.status === BehandlingStatus.AVSLUTTET) {
-            return (
-                <Link href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
-                    {behandling ? behandlingsresultater[behandling.resultat] : '-'}
-                </Link>
-            );
-        } else {
-            return behandlingsresultater[behandling.resultat];
-        }
+        return behandlingsresultater[behandling.resultat];
     }
 };
 
