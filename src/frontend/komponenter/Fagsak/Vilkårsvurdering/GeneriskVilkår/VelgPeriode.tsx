@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
+import { HelpText } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -29,10 +29,6 @@ const StyledLegend = styled.legend`
     && {
         display: flex;
         margin-bottom: 0;
-    }
-    .hjelpetekst .popover {
-        z-index: 1000;
-        margin-left: 1rem;
     }
 `;
 
@@ -81,11 +77,11 @@ const VelgPeriode: React.FC<IProps> = ({
             {!lesevisning && (
                 <StyledLegend>
                     <StyledElement>Velg periode</StyledElement>
-                    <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
-                        {
-                            'Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut fra dette. Dersom vurderingen gjelder et avslag er ikke periode påkrevd.'
-                        }
-                    </Hjelpetekst>
+                    <HelpText title="Hvordan fastsette periode">
+                        Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt.
+                        Virkningstidspunktet vil bli beregnet ut fra dette. Dersom vurderingen
+                        gjelder et avslag er ikke periode påkrevd.
+                    </HelpText>
                 </StyledLegend>
             )}
 

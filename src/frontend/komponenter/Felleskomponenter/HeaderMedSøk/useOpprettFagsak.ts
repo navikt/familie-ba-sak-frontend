@@ -1,26 +1,26 @@
 import { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { IMinimalFagsak, FagsakEier } from '../../../typer/fagsak';
+import type { IMinimalFagsak, FagsakType } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
 export interface IOpprettFagsakData {
     personIdent: string | null;
     aktørId: string | null;
-    fagsakEier: FagsakEier | null;
+    fagsakType: FagsakType | null;
 }
 
 const useOpprettFagsak = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { request } = useHttp();
     const [feilmelding, settFeilmelding] = useState('');
-    const [senderInn, settSenderInn] = useState<FagsakEier | null>(null);
+    const [senderInn, settSenderInn] = useState(false);
 
     const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
         request<IOpprettFagsakData, IMinimalFagsak>({
@@ -30,16 +30,14 @@ const useOpprettFagsak = () => {
             påvirkerSystemLaster: true,
         })
             .then((response: Ressurs<IMinimalFagsak>) => {
-                settSenderInn(null);
+                settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     onSuccess && onSuccess();
                     const aktivBehandling: VisningBehandling | undefined =
                         hentAktivBehandlingPåMinimalFagsak(response.data);
                     aktivBehandling
-                        ? history.push(
-                              `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`
-                          )
-                        : history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                        ? navigate(`/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`)
+                        : navigate(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -51,7 +49,7 @@ const useOpprettFagsak = () => {
                 }
             })
             .catch(() => {
-                settSenderInn(null);
+                settSenderInn(false);
                 settFeilmelding('Opprettelse av fagsak feilet');
             });
     };

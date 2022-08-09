@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import classNames from 'classnames';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
@@ -67,7 +67,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const uregistrerteBarn =
         åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(
@@ -89,20 +89,16 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
                 if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
-                    history.push(
-                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/registrer-soknad`
-                    );
+                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/registrer-soknad`);
                 } else {
-                    history.push(
+                    navigate(
                         `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/filtreringsregler`
                     );
                 }
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
-                    history.push(
-                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
-                    );
+                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/tilkjent-ytelse`);
                 } else if (erVilkårsvurderingenGyldig()) {
                     vilkårsvurderingNesteOnClick();
                 } else {

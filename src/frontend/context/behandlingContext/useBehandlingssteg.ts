@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -25,7 +25,7 @@ const useBehandlingssteg = (
     const { innloggetSaksbehandler } = useApp();
     const { fagsakId, behandlingId } = useSakOgBehandlingParams();
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
 
@@ -42,7 +42,7 @@ const useBehandlingssteg = (
                     const behandling = response.data;
                     oppdaterBehandling(response);
 
-                    history.push(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
+                    navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
                 }
             })
             .catch(() => {
@@ -65,9 +65,9 @@ const useBehandlingssteg = (
                     oppdaterBehandling(response);
 
                     if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
-                        history.push(`/fagsak/${fagsakId}/${behandlingId}/simulering`);
+                        navigate(`/fagsak/${fagsakId}/${behandlingId}/simulering`);
                     } else {
-                        history.push(`/fagsak/${fagsakId}/${behandlingId}/vedtak`);
+                        navigate(`/fagsak/${fagsakId}/${behandlingId}/vedtak`);
                     }
                 }
             })

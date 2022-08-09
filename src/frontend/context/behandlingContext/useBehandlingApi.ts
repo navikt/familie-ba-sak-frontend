@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -14,7 +14,7 @@ import {
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
-import { BehandlingÅrsak } from '../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak } from '../../typer/behandling';
 import type { ILogg } from '../../typer/logg';
 
 const useBehandlingApi = (
@@ -24,7 +24,7 @@ const useBehandlingApi = (
     const { request } = useHttp();
     const { fagsakId, behandlingId } = useSakOgBehandlingParams();
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const [logg, settLogg] = useState<Ressurs<ILogg[]>>(byggTomRessurs());
 
     useEffect(() => {
@@ -53,11 +53,13 @@ const useBehandlingApi = (
                     const behandling = response.data;
 
                     if (behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                        history.push(
-                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                        navigate(
+                            behandling.steg === BehandlingSteg.REGISTRERE_MOTTAKER
+                                ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                                : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
-                        history.push(
+                        navigate(
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
