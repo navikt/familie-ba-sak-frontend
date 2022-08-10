@@ -59,7 +59,7 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                     children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
                 />
             )}
-            <StyledTable size="small">
+            <StyledTable>
                 <Table.Header>
                     <Table.Row>
                         <StyledHeaderCell scope="col">Barn</StyledHeaderCell>

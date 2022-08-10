@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 import { BodyShort, Button, Table } from '@navikt/ds-react';
+import { NavdsGlobalColorOrange500 } from '@navikt/ds-tokens/dist/tokens';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
@@ -43,9 +44,9 @@ interface IEøsPeriodeSkjemaContainerProps {
 export const EøsPeriodeSkjemaContainer = styled.div`
     max-width: ${(props: IEøsPeriodeSkjemaContainerProps) =>
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
-    border-left: 0.0625rem solid var(--navds-global-color-orange-500);
+    border-left: 2px solid ${NavdsGlobalColorOrange500};
     padding-left: 2rem;
-    margin-left: -2rem;
+    margin-left: -3rem;
 `;
 
 export const StyledLegend = styled.legend`
