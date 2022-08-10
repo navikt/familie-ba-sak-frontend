@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertittel } from 'nav-frontend-typografi';
 
+import { Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -36,15 +36,6 @@ const Container = styled.div`
     margin-top: 1rem;
     :not(:first-child) {
         margin-top: 2.5rem;
-    }
-`;
-
-const VilkårTittel = styled(Undertittel)`
-    display: flex;
-    align-items: center;
-
-    > *:not(:first-child) {
-        margin-left: 0.75rem;
     }
 `;
 
@@ -120,9 +111,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
     return (
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-                <VilkårTittel tag={'h4'}>
-                    <Element children={vilkårFraConfig.tittel} />
-                </VilkårTittel>
+                <Heading size="medium" level="3">
+                    {vilkårFraConfig.tittel}
+                </Heading>
                 <VilkårTabell
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
