@@ -33,6 +33,7 @@ const BeskrivelseCelle = styled(BodyShort)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 20rem;
 `;
 
 const VurderingCelle = styled.div`
