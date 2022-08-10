@@ -69,6 +69,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                 <ValutakursTabellRadEndre
                     skjema={skjema}
                     tilgjengeligeBarn={barn}
+                    status={valutakurs.status}
                     valideringErOk={valideringErOk}
                     sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}

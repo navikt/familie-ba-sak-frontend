@@ -4,7 +4,12 @@ import styled from 'styled-components';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 import { BodyShort, Button, Table } from '@navikt/ds-react';
-import { NavdsGlobalColorOrange500 } from '@navikt/ds-tokens/dist/tokens';
+import {
+    NavdsSemanticColorBorderMuted,
+    NavdsSemanticColorFeedbackDangerBorder,
+    NavdsSemanticColorFeedbackWarningBorder,
+    NavdsSemanticColorInteractionPrimary,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
@@ -39,12 +44,22 @@ export const EkspandertTd = styled(Table.DataCell)`
 
 interface IEøsPeriodeSkjemaContainerProps {
     maxWidth?: number;
+    lesevisning: boolean;
+    status: EøsPeriodeStatus;
 }
 
 export const EøsPeriodeSkjemaContainer = styled.div`
     max-width: ${(props: IEøsPeriodeSkjemaContainerProps) =>
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
-    border-left: 2px solid ${NavdsGlobalColorOrange500};
+    border-left: 2px solid
+        ${(props: IEøsPeriodeSkjemaContainerProps) => {
+            if (props.lesevisning) return NavdsSemanticColorBorderMuted;
+            if (props.status === EøsPeriodeStatus.IKKE_UTFYLT)
+                return NavdsSemanticColorFeedbackWarningBorder;
+            if (props.status === EøsPeriodeStatus.UFULLSTENDIG)
+                return NavdsSemanticColorFeedbackDangerBorder;
+            return NavdsSemanticColorInteractionPrimary;
+        }};
     padding-left: 2rem;
     margin-left: -3rem;
 `;

@@ -76,6 +76,7 @@ const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandl
 interface IProps {
     skjema: ISkjema<IValutakurs, IBehandling>;
     tilgjengeligeBarn: OptionType[];
+    status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
@@ -85,6 +86,7 @@ interface IProps {
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
+    status,
     sendInnSkjema,
     valideringErOk,
     toggleForm,
@@ -117,7 +119,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer maxWidth={34}>
+            <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
