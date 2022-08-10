@@ -102,6 +102,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     settRedigerbartVilkår={settRedigerbartVilkår}
                     settEkspandertVilkår={settEkspandertVilkår}
                     settFokusPåKnapp={settFokusPåKnapp}
+                    lesevisning={erLesevisning()}
                 />
             }
         >

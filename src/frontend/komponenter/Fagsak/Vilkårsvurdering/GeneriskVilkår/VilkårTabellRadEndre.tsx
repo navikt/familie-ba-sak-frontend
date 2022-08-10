@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 
-import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -54,8 +53,9 @@ interface IProps {
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
-    toggleForm: (visAlert: boolean) => void;
+    lesevisning: boolean;
     redigerbartVilkår: FeltState<IVilkårResultat>;
+    toggleForm: (visAlert: boolean) => void;
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     settEkspandertVilkår: (ekspandertVilkår: boolean) => void;
     settFokusPåKnapp: () => void;
@@ -63,16 +63,18 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 2px solid ${NavdsSemanticColorInteractionPrimary};
+    border-left: 2px solid
+        ${(props: { lesevisning: boolean; vilkårResultat: Resultat }) => {
+            if (props.lesevisning) {
+                return NavdsSemanticColorBorderMuted;
+            }
+            if (props.vilkårResultat === Resultat.IKKE_VURDERT) {
+                return NavdsSemanticColorFeedbackWarningBorder;
+            }
+            return NavdsSemanticColorInteractionPrimary;
+        }};
     padding-left: 2rem;
     margin-left: -3rem;
-
-    &.tilstand-ikke-vurdert {
-        border-left-color: ${NavdsSemanticColorFeedbackWarningBorder};
-    }
-    &.tilstand-lesevisning {
-        border-left-color: ${NavdsSemanticColorBorderMuted};
-    }
 
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
@@ -98,14 +100,14 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settRedigerbartVilkår,
     settEkspandertVilkår,
     settFokusPåKnapp,
+    lesevisning,
 }) => {
     const { toggles } = useApp();
 
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { erLesevisning, åpenBehandling, settÅpenBehandling } = useBehandling();
-    const leseVisning = erLesevisning();
+    const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const årsakErSøknad =
         åpenBehandling.status !== RessursStatus.SUKSESS ||
         åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
@@ -239,16 +241,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             utenFeilPropagering={true}
         >
             <Container
-                className={classNames({
-                    'tilstand-lesevisning': leseVisning,
-                    'tilstand-ikke-vurdert':
-                        !leseVisning &&
-                        vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT,
-                })}
+                lesevisning={lesevisning}
+                vilkårResultat={vilkårResultat.verdi.resultat.verdi}
             >
                 {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
                     <FamilieSelect
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         lesevisningVerdi={
                             redigerbartVilkår.verdi.vurderesEtter
                                 ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
@@ -291,7 +289,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     </FamilieSelect>
                 )}
                 <FamilieRadioGruppe
-                    erLesevisning={leseVisning}
+                    erLesevisning={lesevisning}
                     verdi={
                         redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
                             ? vilkårResultatForEkteskapVisning(
@@ -348,7 +346,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 <UtdypendeVilkårsvurderingMultiselect
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                    erLesevisning={leseVisning}
+                    erLesevisning={lesevisning}
                     personType={person.type}
                     feilhåndtering={
                         redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
@@ -373,7 +371,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 />
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
-                    erLesevisning={leseVisning}
+                    erLesevisning={lesevisning}
                     defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
@@ -402,7 +400,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 <Knapperad>
                     <div>
                         <FamilieKnapp
-                            erLesevisning={leseVisning}
+                            erLesevisning={lesevisning}
                             onClick={onClickVilkårFerdig}
                             mini={true}
                             type={'standard'}
@@ -413,7 +411,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                         <FamilieKnapp
                             style={{ marginLeft: '1rem' }}
-                            erLesevisning={leseVisning}
+                            erLesevisning={lesevisning}
                             onClick={() => toggleForm(false)}
                             mini={true}
                             type={'flat'}
@@ -423,7 +421,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     </div>
 
                     <IkonKnapp
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         onClick={() => {
                             const promise = deleteVilkår(
                                 person.personIdent,
