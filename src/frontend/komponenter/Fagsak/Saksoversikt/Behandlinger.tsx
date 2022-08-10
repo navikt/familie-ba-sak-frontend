@@ -37,7 +37,7 @@ interface BehandlingTabellobjekt {
 
 const visRad = (behandling: BehandlingTabellobjekt, visHenlagteBehandlinger: boolean) => {
     if (visHenlagteBehandlinger) return true;
-    if (!behandling.behandlingEllerTilbakekreving.resultat) return false;
+    if (!behandling.behandlingEllerTilbakekreving.resultat) return true;
     if (behandling.type === BehandlingEllerTilbakekreving.BEHANDLING) {
         return !erBehandlingHenlagt(
             behandling.behandlingEllerTilbakekreving.resultat as BehandlingResultat
