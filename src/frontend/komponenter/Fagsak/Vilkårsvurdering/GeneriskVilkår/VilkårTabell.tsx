@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
@@ -30,17 +31,7 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-const Tabell = styled.table`
-    table-layout: fixed;
-    min-width: 64rem;
-    td:first-child .checkboks + .skjemaelement__label {
-        text-indent: 2rem;
-        width: 13rem;
-    }
-`;
-// Midlertidig styling. Se issue: https://github.com/navikt/nav-frontend-moduler/issues/997
-
-const TabellHeader = styled.th`
+const TabellHeader = styled(Table.HeaderCell)`
     &:nth-of-type(1) {
         width: 10rem;
     }
@@ -67,20 +58,19 @@ const VilkårTabell: React.FC<IProps> = ({
 }) => {
     const { toggles } = useApp();
     return (
-        <Tabell className={'tabell'}>
-            <thead>
-                <tr>
-                    <TabellHeader>Vurdering</TabellHeader>
-                    <TabellHeader>Periode</TabellHeader>
-                    <TabellHeader>Begrunnelse</TabellHeader>
-                    <TabellHeader>
+        <Table>
+            <Table.Header>
+                <Table.Row>
+                    <TabellHeader scope="col">Vurdering</TabellHeader>
+                    <TabellHeader scope="col">Periode</TabellHeader>
+                    <TabellHeader scope="col">Begrunnelse</TabellHeader>
+                    <TabellHeader scope="col">
                         {toggles[ToggleNavn.brukEøs] ? 'Vurderes etter' : ''}
                     </TabellHeader>
-                    <TabellHeader>Vurdert av</TabellHeader>
-                    <TabellHeader />
-                </tr>
-            </thead>
-            <tbody>
+                    <TabellHeader scope="col">Vurdert av</TabellHeader>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
                 {vilkårResultater.map(
                     (vilkårResultat: FeltState<IVilkårResultat>, index: number) => {
                         return (
@@ -95,8 +85,8 @@ const VilkårTabell: React.FC<IProps> = ({
                         );
                     }
                 )}
-            </tbody>
-        </Tabell>
+            </Table.Body>
+        </Table>
     );
 };
 

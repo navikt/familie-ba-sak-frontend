@@ -58,8 +58,9 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 0.0625rem solid ${NavdsSemanticColorInteractionPrimary};
+    border-left: 2px solid ${NavdsSemanticColorInteractionPrimary};
     padding-left: 2rem;
+    margin-left: -3rem;
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
     }
