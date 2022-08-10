@@ -190,7 +190,8 @@
     "globals": {
       "ts-jest": {
         "tsconfig": "<rootDir>/src/frontend/tsconfig.json"
-      }
+      },
+      "window": {}
     },
     "moduleNameMapper": {
       "\\.(css|less|svg)$": "<rootDir>/src/mockFile.js",
