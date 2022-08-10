@@ -45,7 +45,7 @@ const TabellHeader = styled(Table.HeaderCell)`
         width: 17rem;
     }
     &:nth-of-type(6) {
-        width: 6rem;
+        width: 2.25rem;
     }
 `;
 
@@ -68,6 +68,7 @@ const VilkårTabell: React.FC<IProps> = ({
                         {toggles[ToggleNavn.brukEøs] ? 'Vurderes etter' : ''}
                     </TabellHeader>
                     <TabellHeader scope="col">Vurdert av</TabellHeader>
+                    <TabellHeader />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

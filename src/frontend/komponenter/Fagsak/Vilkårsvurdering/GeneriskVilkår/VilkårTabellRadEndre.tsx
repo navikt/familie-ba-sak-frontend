@@ -1,12 +1,17 @@
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
+import {
+    NavdsSemanticColorBorderMuted,
+    NavdsSemanticColorFeedbackWarningBorder,
+    NavdsSemanticColorInteractionPrimary,
+} from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
@@ -61,6 +66,14 @@ const Container = styled.div`
     border-left: 2px solid ${NavdsSemanticColorInteractionPrimary};
     padding-left: 2rem;
     margin-left: -3rem;
+
+    &.tilstand-ikke-vurdert {
+        border-left-color: ${NavdsSemanticColorFeedbackWarningBorder};
+    }
+    &.tilstand-lesevisning {
+        border-left-color: ${NavdsSemanticColorBorderMuted};
+    }
+
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
     }
@@ -225,7 +238,14 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
             utenFeilPropagering={true}
         >
-            <Container>
+            <Container
+                className={classNames({
+                    'tilstand-lesevisning': leseVisning,
+                    'tilstand-ikke-vurdert':
+                        !leseVisning &&
+                        vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT,
+                })}
+            >
                 {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
