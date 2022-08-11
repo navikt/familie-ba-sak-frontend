@@ -193,13 +193,13 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             id={'gjelder-enslig-mindreårig'}
                             erLesevisning={false}
                             label={'Gjelder enslig mindreårig'}
-                            checked={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG}
+                            checked={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
                             disabled={fagsakType === FagsakType.INSTITUSJON}
                             onChange={() => {
-                                if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG) {
+                                if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
                                     settFagsakType(FagsakType.NORMAL);
                                 } else {
-                                    settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRLIG);
+                                    settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRIG);
                                 }
                             }}
                         />
@@ -209,7 +209,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             erLesevisning={false}
                             label={'Gjelder institusjon'}
                             checked={fagsakType === FagsakType.INSTITUSJON}
-                            disabled={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRLIG}
+                            disabled={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
                             onChange={() => {
                                 if (fagsakType === FagsakType.INSTITUSJON) {
                                     settFagsakType(FagsakType.NORMAL);
