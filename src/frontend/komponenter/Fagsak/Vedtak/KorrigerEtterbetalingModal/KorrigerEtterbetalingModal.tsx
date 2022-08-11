@@ -16,13 +16,16 @@ import {
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import type { IKorrigertEtterbetaling } from '../../../../typer/vedtak';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { useKorrigerEtterbetalingSkjemaContext } from './KorrigerEtterbetalingModalSkjemaContext';
 
 interface IKorrigerEtterbetalingModal {
+    korrigertEtterbetaling?: IKorrigertEtterbetaling;
+    behandlingId: number;
     erLesevisning: boolean;
     visModal: boolean;
-    setVisModal: () => void;
+    onClose: () => void;
 }
 
 const Knapperad = styled.div`
@@ -30,36 +33,49 @@ const Knapperad = styled.div`
 `;
 
 const modalKnappStyle = (float: 'left' | 'right'): React.CSSProperties => {
+    const margin =
+        '2rem ' +
+        (float === 'left' ? '1rem' : '0px') +
+        ' 2rem ' +
+        (float === 'right' ? '1rem' : '0px');
     return {
         float,
-        margin: '2rem 0px 2rem ' + float === 'left' ? '1rem' : '0px',
+        margin,
     };
 };
 
 export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
+    korrigertEtterbetaling,
+    behandlingId,
     erLesevisning,
     visModal,
-    setVisModal,
+    onClose,
 }) => {
     const {
         skjema,
-        aarsakOptions,
+        årsaker,
         valideringErOk,
         lagreKorrigering,
         angreKorrigering,
         visAngreKorrigering,
+        angrerKorrigering,
         settVisfeilmeldinger,
         settRestFeil,
         restFeil,
         nullstillSkjema,
-    } = useKorrigerEtterbetalingSkjemaContext();
+    } = useKorrigerEtterbetalingSkjemaContext({
+        onSuccess: onClose,
+        korrigertEtterbetaling,
+        behandlingId,
+    });
 
     const lukkModal = () => {
         nullstillSkjema();
         settVisfeilmeldinger(false);
         settRestFeil(undefined);
-        setVisModal();
+        onClose();
     };
+
     return (
         <Modal open={visModal} onClose={lukkModal}>
             <Modal.Content style={{ minWidth: '30rem' }}>
@@ -70,15 +86,15 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                     <FamilieReactSelect
                         label={'Årsak for korrigering'}
                         id={'korrigering-aarsak'}
-                        options={aarsakOptions}
-                        value={skjema.felter.aarsak.verdi}
+                        options={årsaker}
+                        value={skjema.felter.årsak.verdi}
                         onChange={option =>
-                            skjema.felter.aarsak.validerOgSettFelt(option as OptionType)
+                            skjema.felter.årsak.validerOgSettFelt(option as OptionType)
                         }
                         feil={
-                            skjema.felter.aarsak.valideringsstatus === Valideringsstatus.FEIL &&
+                            skjema.felter.årsak.valideringsstatus === Valideringsstatus.FEIL &&
                             skjema.visFeilmeldinger
-                                ? skjema.felter.aarsak.feilmelding?.toString()
+                                ? skjema.felter.årsak.feilmelding?.toString()
                                 : ''
                         }
                         isDisabled={erLesevisning}
@@ -88,16 +104,14 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         id={'korrigering-belop'}
                         type={'number'}
                         bredde={'S'}
-                        value={skjema.felter.etterbetalingsbeløp.verdi}
+                        value={skjema.felter.beløp.verdi}
                         onChange={changeEvent =>
-                            skjema.felter.etterbetalingsbeløp.validerOgSettFelt(
-                                changeEvent.target.value
-                            )
+                            skjema.felter.beløp.validerOgSettFelt(changeEvent.target.value)
                         }
                         feil={
-                            skjema.felter.etterbetalingsbeløp.valideringsstatus ===
-                                Valideringsstatus.FEIL && skjema.visFeilmeldinger
-                                ? skjema.felter.etterbetalingsbeløp.feilmelding?.toString()
+                            skjema.felter.beløp.valideringsstatus === Valideringsstatus.FEIL &&
+                            skjema.visFeilmeldinger
+                                ? skjema.felter.beløp.feilmelding?.toString()
                                 : ''
                         }
                         disabled={erLesevisning}
@@ -143,6 +157,8 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                                 onClick={angreKorrigering}
                                 ikonPosisjon={IkonPosisjon.VENSTRE}
                                 mini={true}
+                                spinner={angrerKorrigering}
+                                disabled={angrerKorrigering}
                             />
                         )}
                         <FamilieKnapp
@@ -154,7 +170,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                             spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >
-                            Korriger beløp
+                            {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
                         </FamilieKnapp>
                         <FamilieKnapp
                             style={modalKnappStyle('right')}

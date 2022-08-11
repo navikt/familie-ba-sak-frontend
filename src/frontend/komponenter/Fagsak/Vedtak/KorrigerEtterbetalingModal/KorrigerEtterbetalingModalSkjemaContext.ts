@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { useFelt, useSkjema } from '@navikt/familie-skjema';
+import { useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
@@ -17,25 +17,28 @@ import {
 } from './ValideringKorrigertEtterbetaling';
 
 export interface IKorrigerEtterbetalingSkjema {
-    aarsak: OptionType;
-    etterbetalingsbeløp: string;
+    årsak: OptionType;
+    beløp: string;
     begrunnelse: string;
 }
 
-export const useKorrigerEtterbetalingSkjemaContext = () => {
-    const { åpenBehandling } = useBehandling();
+interface IProps {
+    onSuccess: () => void;
+    korrigertEtterbetaling?: IKorrigertEtterbetaling;
+    behandlingId: number;
+}
+
+export const useKorrigerEtterbetalingSkjemaContext = ({
+    onSuccess,
+    korrigertEtterbetaling,
+    behandlingId,
+}: IProps) => {
+    const { settÅpenBehandling } = useBehandling();
     const { settToast } = useApp();
     const { request } = useHttp();
 
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
-
-    const korrigertEtterbetaling: IKorrigertEtterbetaling | null | undefined =
-        åpenBehandling.status === RessursStatus.SUKSESS
-            ? åpenBehandling.data.korrigertEtterbetaling
-            : null;
-
-    const behandlingId: number | null =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
+    const [angrerKorrigering, settAngrerKorrigering] = useState<boolean>(false);
 
     const årsaker: OptionType[] = [
         {
@@ -57,7 +60,7 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
     ];
 
     const valgtÅrsak: OptionType = (korrigertEtterbetaling &&
-        årsaker.find(option => option.value === korrigertEtterbetaling.aarsak.toString())) ?? {
+        årsaker.find(option => option.value === korrigertEtterbetaling.årsak.toString())) ?? {
         label: '',
         value: '',
     };
@@ -70,14 +73,15 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
         nullstillSkjema,
         settSubmitRessurs,
         settVisfeilmeldinger,
+        validerAlleSynligeFelter,
     } = useSkjema<IKorrigerEtterbetalingSkjema, IBehandling>({
         felter: {
-            aarsak: useFelt<OptionType>({
+            årsak: useFelt<OptionType>({
                 verdi: valgtÅrsak,
                 valideringsfunksjon: erÅrsakForKorrigeringGyldig,
             }),
-            etterbetalingsbeløp: useFelt<string>({
-                verdi: korrigertEtterbetaling?.etterbetalingsbeløp?.toString() ?? '',
+            beløp: useFelt<string>({
+                verdi: korrigertEtterbetaling?.beløp?.toString() ?? '',
                 valideringsfunksjon: erEtterbetalingsbeløpGyldig,
             }),
             begrunnelse: useFelt<string>({
@@ -86,6 +90,28 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
         },
         skjemanavn: 'KorrigerEtterbetalingSkjema',
     });
+
+    const valideringsstatuser = [
+        skjema.felter.årsak.valideringsstatus,
+        skjema.felter.beløp.valideringsstatus,
+        skjema.felter.begrunnelse.valideringsstatus,
+    ];
+
+    // Nullstiller skjema dersom korrigert etterbetaling på behandling er endret (trigges etter lagring/angring av korrigering)
+    useEffect(() => {
+        nullstillSkjema();
+    }, [korrigertEtterbetaling?.årsak, korrigertEtterbetaling?.beløp]);
+
+    // Sørger for at alle felter valideres etter at de er initialisert
+    useEffect(() => {
+        if (
+            valideringsstatuser.some(
+                valideringsstatus => valideringsstatus === Valideringsstatus.IKKE_VALIDERT
+            )
+        ) {
+            validerAlleSynligeFelter();
+        }
+    }, [valideringsstatuser]);
 
     const visAngreKorrigering = korrigertEtterbetaling != null;
 
@@ -97,11 +123,11 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
                 {
                     method: 'POST',
                     data: {
-                        aarsak: skjema.felter.aarsak.verdi.value,
-                        etterbetalingsbeløp: skjema.felter.etterbetalingsbeløp.verdi,
+                        årsak: skjema.felter.årsak.verdi.value,
+                        beløp: skjema.felter.beløp.verdi,
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
-                    url: `/familie-ba-sak/api/korrigertEtterbetaling/${behandlingId}`,
+                    url: `/familie-ba-sak/api/etterbetalingkorrigering/behandling/${behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -110,7 +136,8 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
                             tekst: 'Etterbetaling korrigert',
                         });
                         settRestFeil(undefined);
-                        nullstillSkjema();
+                        settÅpenBehandling(response);
+                        onSuccess();
                     }
                 },
                 () => {
@@ -123,17 +150,20 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
     };
 
     const angreKorrigering = () => {
+        settAngrerKorrigering(true);
         request<void, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/korrigertEtterbetaling/${behandlingId}`,
+            method: 'PATCH',
+            url: `/familie-ba-sak/api/etterbetalingkorrigering/behandling/${behandlingId}`,
         }).then((response: Ressurs<IBehandling>) => {
+            settAngrerKorrigering(false);
             if (response.status === RessursStatus.SUKSESS) {
                 settToast(ToastTyper.ETTERBETALING_KORRIGERT, {
                     alertType: AlertType.SUCCESS,
                     tekst: 'Korrigering av etterbetaling fjernet',
                 });
                 settRestFeil(undefined);
-                nullstillSkjema();
+                settÅpenBehandling(response);
+                onSuccess();
             } else {
                 settRestFeil('Teknisk feil ved fjerning av korrigert etterbetalingsbeløp');
             }
@@ -142,11 +172,12 @@ export const useKorrigerEtterbetalingSkjemaContext = () => {
 
     return {
         skjema,
-        aarsakOptions: årsaker,
+        årsaker,
         valideringErOk,
         lagreKorrigering,
         angreKorrigering,
         visAngreKorrigering,
+        angrerKorrigering,
         settVisfeilmeldinger,
         settRestFeil,
         restFeil,

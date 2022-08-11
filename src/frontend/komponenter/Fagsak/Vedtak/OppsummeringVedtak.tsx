@@ -171,8 +171,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     />
                     <KorrigerEtterbetalingModal
                         erLesevisning={erLesevisning()}
+                        korrigertEtterbetaling={åpenBehandling.etterbetalingKorrigering}
+                        behandlingId={åpenBehandling.behandlingId}
                         visModal={visKorrigerEtterbetalingModal}
-                        setVisModal={() =>
+                        onClose={() =>
                             setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
                         }
                     />
@@ -229,8 +231,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             ikon={<DokumentIkon />}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             spinner={hentetDokument.status === RessursStatus.HENTER}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                            type={'standard'}
                             mini={true}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
                         />
                     </Container>
                     {visModal && (

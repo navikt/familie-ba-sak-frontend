@@ -241,7 +241,7 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    korrigertEtterbetaling?: IKorrigertEtterbetaling;
+    etterbetalingKorrigering?: IKorrigertEtterbetaling;
 }
 
 export interface IArbeidsfordelingPåBehandling {

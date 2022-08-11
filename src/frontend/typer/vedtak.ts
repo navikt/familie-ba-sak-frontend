@@ -70,8 +70,8 @@ export enum Standardbegrunnelse {
 }
 
 export interface IKorrigertEtterbetaling {
-    aarsak: KorrigertEtterbetalingÅrsak;
-    etterbetalingsbeløp?: number;
+    årsak: KorrigertEtterbetalingÅrsak;
+    beløp: number;
     begrunnelse: string;
 }
 
