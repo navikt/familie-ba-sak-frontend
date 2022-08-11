@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Edit } from '@navikt/ds-icons';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Edit, FileContent } from '@navikt/ds-icons';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -15,7 +15,6 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
@@ -27,7 +26,6 @@ import {
     hentStegNummer,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -214,27 +212,24 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
-                        <IkonKnapp
-                            id={'korriger-etterbetaling'}
-                            erLesevisning={false}
-                            label={'Korriger etterbetaling'}
-                            ikon={<Edit />}
-                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            mini={true}
-                            style={{ float: 'right' }}
-                        />
-                        <IkonKnapp
+                        <Button
                             id={'forhandsvis-vedtaksbrev'}
-                            erLesevisning={false}
-                            label={'Vis vedtaksbrev'}
-                            ikon={<DokumentIkon />}
+                            variant={'secondary'}
+                            size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
-                            spinner={hentetDokument.status === RessursStatus.HENTER}
-                            type={'standard'}
-                            mini={true}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                        />
+                            loading={hentetDokument.status === RessursStatus.HENTER}
+                        >
+                            <FileContent aria-hidden /> Vis vedtaksbrev
+                        </Button>
+                        <Button
+                            id={'korriger-etterbetaling'}
+                            variant={'tertiary'}
+                            size={'small'}
+                            style={{ float: 'right' }}
+                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
+                        >
+                            <Edit aria-hidden /> Korriger etterbetaling
+                        </Button>
                     </Container>
                     {visModal && (
                         <UIModalWrapper
