@@ -9,7 +9,6 @@ import { SkjemafeltLesevisning } from './SkjemaFeltLesevisning';
 export interface IProps extends Omit<SelectProps, 'children'> {
     lesevisning: boolean;
     options: OptionType[];
-    children?: React.ReactNode;
 }
 
 export const SelectMedLesevisning: React.FC<IProps> = props => {

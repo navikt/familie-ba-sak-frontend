@@ -5,15 +5,14 @@ import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IKorrigertEtterbetaling } from '../../../../typer/vedtak';
-import { KorrigertEtterbetalingÅrsak } from '../../../../typer/vedtak';
-import { ToastTyper, AlertType } from '../../../Felleskomponenter/Toast/typer';
+import { ToastTyper, AlertType } from '../../komponenter/Felleskomponenter/Toast/typer';
+import type { IBehandling } from '../../typer/behandling';
+import { type IKorrigertEtterbetaling, KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
+import { useApp } from '../AppContext';
+import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
-    erEtterbetalingsbeløpGyldig,
     erÅrsakForKorrigeringGyldig,
+    erEtterbetalingsbeløpGyldig,
 } from './ValideringKorrigertEtterbetaling';
 
 export interface IKorrigerEtterbetalingSkjema {

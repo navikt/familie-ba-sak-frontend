@@ -9,11 +9,11 @@ import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useKorrigerEtterbetalingSkjemaContext } from '../../../../context/KorrigertEtterbetaling/KorrigerEtterbetalingModalSkjemaContext';
 import type { IKorrigertEtterbetaling } from '../../../../typer/vedtak';
-import { useKorrigerEtterbetalingSkjemaContext } from './KorrigerEtterbetalingModalSkjemaContext';
-import { SelectMedLesevisning } from './SelectMedLesevisning';
-import { TextAreaMedLesevisning } from './TextAreaMedLesevisning';
-import { TextFieldMedLesevisning } from './TextFieldMedLesevisning';
+import { SelectMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/SelectMedLesevisning';
+import { TextAreaMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextAreaMedLesevisning';
+import { TextFieldMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextFieldMedLesevisning';
 
 interface IKorrigerEtterbetalingModal {
     korrigertEtterbetaling?: IKorrigertEtterbetaling;
@@ -56,12 +56,16 @@ const StyledTextarea = styled(TextAreaMedLesevisning)`
 `;
 
 const StyledSkjema = styled(SkjemaGruppe)`
-    margin-bottom: var(--navds-spacing-14);
+    margin-bottom: 2.5rem;
 `;
 
 const StyledModalContent = styled(Modal.Content)`
     padding: 2.5rem;
     width: 35rem;
+`;
+
+const StyledModalHeader = styled(Heading)`
+    margin-bottom: 2rem;
 `;
 
 const LukkKnapp = styled(Button)`
@@ -104,9 +108,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
     return (
         <Modal open={visModal} onClose={lukkModal}>
             <StyledModalContent>
-                <Heading size="medium" style={{ marginBottom: '2rem' }}>
-                    Korriger etterbetaling
-                </Heading>
+                <StyledModalHeader size="medium">Korriger etterbetaling</StyledModalHeader>
                 <StyledSkjema feil={false}>
                     <div>
                         <StyledSelect
