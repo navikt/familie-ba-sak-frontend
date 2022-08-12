@@ -11,11 +11,11 @@ import {
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
-        test('REGISTRERE_MOTTAKER returneres når behandling.stegTilstand inneholder steget', () => {
+        test('REGISTRERE_MOTTAKER returneres når behandling.stegTilstand inneholder steget REGISTRERE_INSTITUSJON_OG_VERGE', () => {
             const behandling = mockBehandling({
                 stegTilstand: [
                     {
-                        behandlingSteg: BehandlingSteg.REGISTRERE_MOTTAKER,
+                        behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE,
                         behandlingStegStatus: BehandlingStegStatus.IKKE_UTFØRT,
                     },
                 ],

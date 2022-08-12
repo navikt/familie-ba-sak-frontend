@@ -22,8 +22,8 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerMottaker: React.FC = () => {
-    const { fagsakType, onSubmitMottaker } = useMottakerType();
-    const { erLesevisning, behandlingsstegSubmitressurs } = useBehandling();
+    const { fagsakType, lesevisning, onSubmitMottaker } = useMottakerType();
+    const { behandlingsstegSubmitressurs } = useBehandling();
 
     return (
         <>
@@ -32,9 +32,9 @@ const RegistrerMottaker: React.FC = () => {
                     className={'mottaker'}
                     tittel={'Registrer mottaker'}
                     nesteOnClick={onSubmitMottaker}
-                    nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
+                    nesteKnappTittel={lesevisning() ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-                    steg={BehandlingSteg.REGISTRERE_MOTTAKER}
+                    steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
                     {fagsakType.data === FagsakType.INSTITUSJON ? <Institusjon /> : <Verge />}
                 </StyledSkjemasteg>

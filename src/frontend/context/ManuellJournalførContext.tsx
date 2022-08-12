@@ -239,7 +239,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         const restFagsak = await hentFagsakForPerson(
             hentetPerson.data.personIdent,
             erEnsligMindreårig
-                ? FagsakType.BARN_ENSLIG_MINDREÅRLIG
+                ? FagsakType.BARN_ENSLIG_MINDREÅRIG
                 : erPåInstitusjon
                 ? FagsakType.INSTITUSJON
                 : FagsakType.NORMAL

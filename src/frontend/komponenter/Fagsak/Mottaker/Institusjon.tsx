@@ -31,7 +31,7 @@ const Institusjon: React.FunctionComponent = () => {
                 verdi={skjema.felter.institusjon.verdi}
             />
             <StyledFamilieInpunt
-                {...skjema.felter.mottaker.hentNavInputProps(skjema.visFeilmeldinger)}
+                {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 id={'valgfri-mottaker'}
                 label={'Mottaker (valgfritt)'}
@@ -40,7 +40,7 @@ const Institusjon: React.FunctionComponent = () => {
                 {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 id={'institusjon-adresse'}
-                label={'Addresse'}
+                label={'Adresse'}
             />
             <StyledFamilieInpunt
                 {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}

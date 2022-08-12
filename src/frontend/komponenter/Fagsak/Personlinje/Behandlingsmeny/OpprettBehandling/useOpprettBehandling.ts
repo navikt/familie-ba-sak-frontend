@@ -222,7 +222,8 @@ const useOpprettBehandling = (
 
                             if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
                                 history.push(
-                                    behandling.steg === BehandlingSteg.REGISTRERE_MOTTAKER
+                                    behandling.steg ===
+                                        BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE
                                         ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
                                         : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                                 );

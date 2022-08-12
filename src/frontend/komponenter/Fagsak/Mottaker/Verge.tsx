@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
 import { Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useMottakerType } from '../../../context/MottakerTypeContext';
 
 const StyledDiv = styled.div`
@@ -25,73 +23,67 @@ const StyledFamilieInpunt = styled(FamilieInput)`
 `;
 
 const Verge: React.FunctionComponent = () => {
-    const { erLesevisning } = useBehandling();
-    const { hentPerson, skjema } = useMottakerType();
-    const [feilMelding, settFeilMelding] = useState<string | undefined>('');
+    const { hentPerson, lesevisning, registrertVerge, skjema } = useMottakerType();
     const [spinner, settSpinner] = useState(false);
 
-    useEffect(() => {
-        settFeilMelding('');
-    }, [skjema.felter.fødselsnummer.verdi]);
+    if (registrertVerge) {
+        const adresse = registrertVerge.adresse.split('\n').at(0);
+        const postnummerOgSted = registrertVerge.adresse.split('\n').at(1);
+        skjema.felter.fødselsnummer.validerOgSettFelt(registrertVerge.ident || ' ');
+        skjema.felter.navn.validerOgSettFelt(registrertVerge.navn);
+        skjema.felter.adresse.validerOgSettFelt(adresse || '');
+        skjema.felter.postnummer.validerOgSettFelt(postnummerOgSted?.split(' ')?.at(0) || '');
+        skjema.felter.sted.validerOgSettFelt(postnummerOgSted?.split(' ')?.at(1) || '');
+    }
 
     return (
         <StyledDiv className={'mottaker__verge'}>
             <Systemtittel children={'Opplysninger om verge'} />
             <br />
             <FamilieInput
-                {...skjema.felter.fødselsnummer.hentNavInputProps(!!feilMelding)}
-                feil={
-                    skjema.felter.fødselsnummer.hentNavInputProps(!!feilMelding).feil || feilMelding
-                }
-                erLesevisning={erLesevisning()}
+                {...skjema.felter.fødselsnummer.hentNavInputProps(true)}
+                erLesevisning={lesevisning()}
                 id={'hent-verge-person'}
                 label={'Fødselsnummer (valgfritt)'}
             />
             <StyledKnapp
                 onClick={() => {
-                    if (skjema.felter.fødselsnummer.valideringsstatus === Valideringsstatus.OK) {
-                        settSpinner(true);
-                        hentPerson(skjema.felter.fødselsnummer.verdi)
-                            .then((feilmelding: string) => {
-                                settFeilMelding(feilmelding);
-                            })
-                            .finally(() => {
-                                settSpinner(false);
-                            });
-                    } else {
-                        settFeilMelding('Person ident er ugyldig');
-                    }
+                    settSpinner(true);
+                    hentPerson().finally(() => {
+                        settSpinner(false);
+                    });
                 }}
                 children={'Hent informasjon fra folkeregisteret'}
                 spinner={spinner}
                 mini={true}
                 kompakt={true}
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning()}
             />
             <StyledFamilieInpunt
-                {...skjema.felter.mottaker.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
+                {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
+                erLesevisning={lesevisning()}
                 id={'verge-navn'}
                 label={'Vergens navn'}
             />
             <StyledFamilieInpunt
                 {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning()}
                 id={'verge-adresse'}
-                label={'Addresse'}
+                label={'Adresse'}
             />
             <StyledFamilieInpunt
                 {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning()}
                 id={'verge-postnummer'}
                 label={'Postnummer'}
                 bredde={'S'}
             />
             <StyledFamilieInpunt
                 {...skjema.felter.sted.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning()}
                 id={'verge-sted'}
                 label={'Sted'}
+                tekstLesevisning={''}
             />
         </StyledDiv>
     );
