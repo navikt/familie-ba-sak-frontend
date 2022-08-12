@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Redirect, Route, Switch, useHistory } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -26,10 +26,10 @@ import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 
 const BehandlingContainer: React.FunctionComponent = () => {
     const { loggSidevisning } = useAmplitude();
-    const history = useHistory();
+    const location = useLocation();
     const { åpenBehandling, leggTilBesøktSide } = useBehandling();
 
-    const sidevisning = hentSideHref(history.location.pathname);
+    const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
         if (sidevisning) {
             loggSidevisning(sidevisning);
@@ -42,83 +42,58 @@ const BehandlingContainer: React.FunctionComponent = () => {
     switch (åpenBehandling.status) {
         case RessursStatus.SUKSESS:
             return (
-                <Switch>
+                <Routes>
                     <Route
-                        exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/registrer-mottaker"
-                        render={() => {
-                            return (
-                                <MottakerTypeProvider åpenBehandling={åpenBehandling.data}>
-                                    <RegistrerMottaker />
-                                </MottakerTypeProvider>
-                            );
-                        }}
+                        element={
+                            <MottakerTypeProvider åpenBehandling={åpenBehandling.data}>
+                                <RegistrerMottaker />
+                            </MottakerTypeProvider>
+                        }
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/registrer-soknad"
-                        render={() => {
-                            return (
-                                <SøknadProvider åpenBehandling={åpenBehandling.data}>
-                                    <RegistrerSøknad />
-                                </SøknadProvider>
-                            );
-                        }}
+                        path="/registrer-soknad"
+                        element={
+                            <SøknadProvider åpenBehandling={åpenBehandling.data}>
+                                <RegistrerSøknad />
+                            </SøknadProvider>
+                        }
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/filtreringsregler"
-                        render={() => {
-                            return <Filtreringsregler åpenBehandling={åpenBehandling.data} />;
-                        }}
+                        path="/filtreringsregler"
+                        element={<Filtreringsregler åpenBehandling={åpenBehandling.data} />}
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
-                        render={() => {
-                            return (
-                                <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
-                                    <Vilkårsvurdering åpenBehandling={åpenBehandling.data} />
-                                </VilkårsvurderingProvider>
-                            );
-                        }}
+                        path="/vilkaarsvurdering"
+                        element={
+                            <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
+                                <Vilkårsvurdering åpenBehandling={åpenBehandling.data} />
+                            </VilkårsvurderingProvider>
+                        }
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/tilkjent-ytelse"
-                        render={() => {
-                            return (
-                                <TidslinjeProvider>
-                                    <EøsProvider åpenBehandling={åpenBehandling.data}>
-                                        <Behandlingsresultat åpenBehandling={åpenBehandling.data} />
-                                    </EøsProvider>
-                                </TidslinjeProvider>
-                            );
-                        }}
+                        path="/tilkjent-ytelse"
+                        element={
+                            <TidslinjeProvider>
+                                <EøsProvider åpenBehandling={åpenBehandling.data}>
+                                    <Behandlingsresultat åpenBehandling={åpenBehandling.data} />
+                                </EøsProvider>
+                            </TidslinjeProvider>
+                        }
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/simulering"
-                        render={() => {
-                            return (
-                                <SimuleringProvider åpenBehandling={åpenBehandling.data}>
-                                    <Simulering åpenBehandling={åpenBehandling.data} />
-                                </SimuleringProvider>
-                            );
-                        }}
+                        path="/simulering"
+                        element={
+                            <SimuleringProvider åpenBehandling={åpenBehandling.data}>
+                                <Simulering åpenBehandling={åpenBehandling.data} />
+                            </SimuleringProvider>
+                        }
                     />
                     <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/:behandlingId/vedtak"
-                        render={() => {
-                            return <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />;
-                        }}
+                        path="/vedtak"
+                        element={<OppsummeringVedtak åpenBehandling={åpenBehandling.data} />}
                     />
-                    <Redirect
-                        from="/fagsak/:fagsakId/:behandlingId/"
-                        to="/fagsak/:fagsakId/:behandlingId"
-                    />
-                </Switch>
+                </Routes>
             );
         case RessursStatus.IKKE_TILGANG:
             return (

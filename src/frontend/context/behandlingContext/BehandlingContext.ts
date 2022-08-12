@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
-import { useHistory } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -70,7 +70,8 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         hentSaksbehandlerRolle,
     } = useApp();
 
-    const history = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
     const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{
         [sideId: string]: ITrinn;
@@ -82,7 +83,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 ? hentTrinnForBehandling(åpenBehandling.data)
                 : [];
 
-        const sideHref = hentSideHref(history.location.pathname);
+        const sideHref = hentSideHref(location.pathname);
         settTrinnPåBehandling(
             Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
                 return {
@@ -103,11 +104,9 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     useEffect(() => {
         settForrigeÅpneSide(
-            Object.values(sider).find((side: ISide) =>
-                history.location.pathname.includes(side.href)
-            )
+            Object.values(sider).find((side: ISide) => location.pathname.includes(side.href))
         );
-    }, [history.location.pathname]);
+    }, [location.pathname]);
 
     const leggTilBesøktSide = (besøktSide: SideId) => {
         if (kanBeslutteVedtak) {
@@ -180,11 +179,11 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(åpenBehandling.data);
 
             if (
-                (erViPåUdefinertFagsakSide(history.location.pathname) ||
-                    erViPåUlovligSteg(history.location.pathname, sideForSteg)) &&
+                (erViPåUdefinertFagsakSide(location.pathname) ||
+                    erViPåUlovligSteg(location.pathname, sideForSteg)) &&
                 sideForSteg
             ) {
-                history.push(
+                navigate(
                     `/fagsak/${fagsakId}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
                 );
             }

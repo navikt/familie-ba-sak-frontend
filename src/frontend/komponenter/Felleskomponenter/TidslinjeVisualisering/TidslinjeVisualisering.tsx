@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useRouteMatch } from 'react-router';
+import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Normaltekst, Sidetittel, Undertittel } from 'nav-frontend-typografi';
@@ -94,7 +94,7 @@ const tidslinjerLabels = [
 ];
 
 const TidslinjeVisualisering: React.FC = () => {
-    const matchBehandlingId = useRouteMatch<{ behandlingId: string }>('/tidslinjer/:behandlingId');
+    const matchBehandlingId = useMatch('/tidslinjer/:behandlingId');
     const behandlingId = matchBehandlingId?.params.behandlingId;
 
     const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } = useTidslinje();

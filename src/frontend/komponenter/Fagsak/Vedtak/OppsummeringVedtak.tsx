@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
@@ -75,7 +75,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         åpenBehandling,
     });
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {
         hentForhåndsvisning,
@@ -143,7 +143,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 </StyledFlexiDiv>
             }
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
+                navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={erMigreringFraInfotrygd ? 'Bekreft migrering' : 'Til godkjenning'}
@@ -228,7 +228,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         mini={true}
                                         onClick={() => {
                                             settVisModal(false);
-                                            history.push(`/fagsak/${fagsakId}/saksoversikt`);
+                                            navigate(`/fagsak/${fagsakId}/saksoversikt`);
                                             window.location.reload();
                                         }}
                                         children={'Gå til saksoversikten'}
@@ -239,7 +239,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         mini={true}
                                         onClick={() => {
                                             settVisModal(false);
-                                            history.push('/oppgaver');
+                                            navigate('/oppgaver');
                                         }}
                                         children={'Gå til oppgavebenken'}
                                     />,

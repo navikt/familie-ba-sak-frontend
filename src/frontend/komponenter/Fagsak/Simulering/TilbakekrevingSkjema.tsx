@@ -3,13 +3,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
 import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Alert, BodyLong, Heading, HelpText } from '@navikt/ds-react';
+import { Alert, BodyLong, Heading, HelpText, Tag } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -56,11 +55,10 @@ const StyledHelpTextContainer = styled.div`
     max-width: 20rem;
 `;
 
-const StyledEtikettInfo = styled(EtikettInfo)`
+const StyledTag = styled(Tag)`
     margin-left: auto;
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
-    padding: 0 0.5rem;
 `;
 
 const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
@@ -308,11 +306,9 @@ const TilbakekrevingSkjema: React.FC<{
                                                         </StyledHelpTextContainer>
                                                     </StyledHelpText>
                                                 </FlexRad>
-                                                <StyledEtikettInfo>
-                                                    <Undertekst>
-                                                        Skriv {målform[søkerMålform].toLowerCase()}
-                                                    </Undertekst>
-                                                </StyledEtikettInfo>
+                                                <StyledTag variant="info" size="small">
+                                                    Skriv {målform[søkerMålform].toLowerCase()}
+                                                </StyledTag>
                                             </FritektsVarselLabel>
                                         }
                                         {...fritekstVarsel.hentNavInputProps(

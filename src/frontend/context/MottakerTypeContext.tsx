@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
@@ -25,7 +25,7 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
         const { erLesevisning, settÅpenBehandling } = useBehandling();
         const { minimalFagsak } = useFagsakRessurser();
         const { fagsakId } = useSakOgBehandlingParams();
-        const history = useHistory();
+        const navigate = useNavigate();
         const { request } = useHttp();
         const [feilMelding, settFeilMelding] = useState<string | undefined>('');
         const lesevisning = () =>
@@ -157,9 +157,7 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
 
         const onSubmitMottaker = () => {
             if (lesevisning()) {
-                history.push(
-                    `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
-                );
+                navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
             } else {
                 onSubmit<IRegistrerInstitusjonOgVerge | undefined>(
                     {
@@ -190,7 +188,7 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
                     (ressurs: Ressurs<IBehandling>) => {
                         if (ressurs.status === RessursStatus.SUKSESS) {
                             settÅpenBehandling(ressurs);
-                            history.push(
+                            navigate(
                                 `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
                             );
                         }

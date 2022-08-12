@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';
@@ -69,7 +69,7 @@ interface IBehandlingsresultatProps {
 const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({
     åpenBehandling,
 }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
     const { toggles } = useApp();
 
@@ -118,7 +118,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     }, [åpenBehandling]);
 
     const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+        navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
     };
 
     const finnUtbetalingsperiodeForAktivEtikett = (
@@ -182,7 +182,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
                 if (erLesevisning()) {
-                    history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
+                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {

@@ -3,7 +3,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import Modal from 'nav-frontend-modal';
-import { Undertittel } from 'nav-frontend-typografi';
+
+import { Heading } from '@navikt/ds-react';
 
 import type { IModal } from '../../../context/AppContext';
 import { useApp } from '../../../context/AppContext';
@@ -29,7 +30,9 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
             {...style}
         >
             <div className="uimodal__content">
-                <Undertittel children={tittel} className="uimodal__tittel" />
+                <Heading level="2" size="small">
+                    {tittel}
+                </Heading>
                 <div className="uimodal__content--inner-content">
                     {innhold ? innhold() : children}
                 </div>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import type { AxiosError } from 'axios';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
@@ -52,7 +52,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
         useBehandling();
     const { request } = useHttp();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IBehandling>>(
         byggTomRessurs()
@@ -161,7 +161,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                                 mini={true}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
-                                    history.push(`/fagsak/${fagsakId}/saksoversikt`);
+                                    navigate(`/fagsak/${fagsakId}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
@@ -171,7 +171,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                                 mini={true}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
-                                    history.push('/oppgaver');
+                                    navigate('/oppgaver');
                                 }}
                                 children={'Gå til oppgavebenken'}
                             />,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
@@ -24,7 +24,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { hentFagsakForPerson } = useFagsakRessurser();
     const { sjekkTilgang, toggles } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
-    const history = useHistory();
+    const navigate = useNavigate();
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
@@ -33,10 +33,10 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
         if (brukerident) {
             if (await sjekkTilgang(brukerident, false)) {
-                history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                navigate(`/oppgaver/journalfor/${oppgave.id}`);
             }
         } else {
-            history.push(`/oppgaver/journalfør/${oppgave.id}`);
+            navigate(`/oppgaver/journalfor/${oppgave.id}`);
         }
         settLaster(false);
     };
@@ -49,7 +49,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             if (await sjekkTilgang(brukerident, false)) {
                 const fagsak = await hentFagsakForPerson(brukerident);
                 if (fagsak.status === RessursStatus.SUKSESS && fagsak.data?.id) {
-                    history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
+                    navigate(`/fagsak/${fagsak.data.id}/saksoversikt`);
                 } else {
                     settToast(ToastTyper.FANT_IKKE_FAGSAK, {
                         alertType: AlertType.WARNING,
