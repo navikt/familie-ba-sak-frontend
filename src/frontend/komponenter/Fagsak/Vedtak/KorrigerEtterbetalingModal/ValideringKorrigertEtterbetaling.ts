@@ -1,16 +1,15 @@
-import type { OptionType } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok } from '@navikt/familie-skjema';
 
 import { KorrigertEtterbetalingÅrsak } from '../../../../typer/vedtak';
 import { isEmpty, isNumeric } from '../../../../utils/eøsValidators';
 
-export const erÅrsakForKorrigeringGyldig = (felt: FeltState<OptionType>) => {
+export const erÅrsakForKorrigeringGyldig = (felt: FeltState<string>) => {
     if (felt.verdi) {
-        if (isEmpty(felt.verdi.value)) {
+        if (isEmpty(felt.verdi)) {
             return feil(felt, 'Velg en årsak');
         }
-        return Object.keys(KorrigertEtterbetalingÅrsak).some(aarsak => aarsak === felt.verdi.value)
+        return Object.keys(KorrigertEtterbetalingÅrsak).some(aarsak => aarsak === felt.verdi)
             ? ok(felt)
             : feil(felt, 'Ugyldig årsak');
     }

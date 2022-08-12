@@ -17,7 +17,7 @@ import {
 } from './ValideringKorrigertEtterbetaling';
 
 export interface IKorrigerEtterbetalingSkjema {
-    årsak: OptionType;
+    årsak: string;
     beløp: string;
     begrunnelse: string;
 }
@@ -42,6 +42,10 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
 
     const årsaker: OptionType[] = [
         {
+            label: 'Velg',
+            value: '',
+        },
+        {
             label: 'Feil i tidligere utebetalt beløp',
             value: KorrigertEtterbetalingÅrsak.FEIL_TIDLIGERE_UTBETALT_BELØP,
         },
@@ -59,11 +63,11 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
         },
     ];
 
-    const valgtÅrsak: OptionType = (korrigertEtterbetaling &&
-        årsaker.find(option => option.value === korrigertEtterbetaling.årsak.toString())) ?? {
-        label: '',
-        value: '',
-    };
+    const valgtÅrsak: string =
+        (
+            korrigertEtterbetaling &&
+            årsaker.find(option => option.value === korrigertEtterbetaling.årsak.toString())
+        )?.value ?? '';
 
     const {
         skjema,
@@ -76,7 +80,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
         validerAlleSynligeFelter,
     } = useSkjema<IKorrigerEtterbetalingSkjema, IBehandling>({
         felter: {
-            årsak: useFelt<OptionType>({
+            årsak: useFelt<string>({
                 verdi: valgtÅrsak,
                 valideringsfunksjon: erÅrsakForKorrigeringGyldig,
             }),
@@ -100,7 +104,11 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
     // Nullstiller skjema dersom korrigert etterbetaling på behandling er endret (trigges etter lagring/angring av korrigering)
     useEffect(() => {
         nullstillSkjema();
-    }, [korrigertEtterbetaling?.årsak, korrigertEtterbetaling?.beløp]);
+    }, [
+        korrigertEtterbetaling?.årsak,
+        korrigertEtterbetaling?.beløp,
+        korrigertEtterbetaling?.begrunnelse,
+    ]);
 
     // Sørger for at alle felter valideres etter at de er initialisert
     useEffect(() => {
@@ -123,7 +131,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
                 {
                     method: 'POST',
                     data: {
-                        årsak: skjema.felter.årsak.verdi.value,
+                        årsak: skjema.felter.årsak.verdi,
                         beløp: skjema.felter.beløp.verdi,
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
@@ -133,7 +141,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
                     if (response.status === RessursStatus.SUKSESS) {
                         settToast(ToastTyper.ETTERBETALING_KORRIGERT, {
                             alertType: AlertType.SUCCESS,
-                            tekst: 'Etterbetaling korrigert',
+                            tekst: 'Etterbetalingsbeløp i brevet er korrigert',
                         });
                         settRestFeil(undefined);
                         settÅpenBehandling(response);
@@ -159,7 +167,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
             if (response.status === RessursStatus.SUKSESS) {
                 settToast(ToastTyper.ETTERBETALING_KORRIGERT, {
                     alertType: AlertType.SUCCESS,
-                    tekst: 'Korrigering av etterbetaling fjernet',
+                    tekst: 'Korrigering av etterbetalingsbeløp fjernet',
                 });
                 settRestFeil(undefined);
                 settÅpenBehandling(response);

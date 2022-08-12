@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Edit, FileContent } from '@navikt/ds-icons';
+import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -177,6 +177,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         }
                     />
                     <Container>
+                        {åpenBehandling.etterbetalingKorrigering && (
+                            <Alert variant="info">
+                                Etterbetalingsbeløp i brevet er manuelt korrigert
+                            </Alert>
+                        )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect
                                 label="Velg brev med eller uten perioder"
@@ -228,7 +233,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             style={{ float: 'right' }}
                             onClick={() => setVisKorrigerEtterbetalingModal(true)}
                         >
-                            <Edit aria-hidden /> Korriger etterbetaling
+                            {åpenBehandling.etterbetalingKorrigering ? (
+                                <>
+                                    <InformationColored aria-hidden /> Vis korrigert etterbetaling
+                                </>
+                            ) : (
+                                <>
+                                    <Edit aria-hidden /> Korriger etterbetaling
+                                </>
+                            )}
                         </Button>
                     </Container>
                     {visModal && (
