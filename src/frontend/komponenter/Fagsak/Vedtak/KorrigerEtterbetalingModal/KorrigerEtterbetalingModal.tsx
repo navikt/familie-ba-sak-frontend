@@ -198,9 +198,7 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
                         </KnappHøyre>
                     </Knapperad>
                 )}
-                <LukkKnapp erLesevisning={!erLesevisning} onClick={lukkModal} mini={true}>
-                    Lukk
-                </LukkKnapp>
+                {erLesevisning && <LukkKnapp onClick={lukkModal}>Lukk</LukkKnapp>}
             </StyledModalContent>
         </Modal>
     );
