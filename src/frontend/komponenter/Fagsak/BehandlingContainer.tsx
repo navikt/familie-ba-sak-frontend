@@ -18,7 +18,7 @@ import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
 import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
-import RegistrerMottaker from './Mottaker/RegistrerMottaker';
+import RegistrerMottaker from './InstitusjonOgVerge/RegistrerMottaker';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
