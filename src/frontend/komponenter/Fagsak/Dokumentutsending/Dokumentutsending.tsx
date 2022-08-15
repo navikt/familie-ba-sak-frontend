@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 
 const Dokumentutsending: React.FC = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =
         useDokumentutsending();
@@ -38,7 +38,7 @@ const Dokumentutsending: React.FC = () => {
                                 key={'til oppgavebenken'}
                                 mini={true}
                                 onClick={() => {
-                                    history.push('/oppgaver');
+                                    navigate('/oppgaver');
                                 }}
                                 children={'Gå til oppgavebenken'}
                             />,
@@ -46,7 +46,7 @@ const Dokumentutsending: React.FC = () => {
                                 key={'til dokumentoversikt'}
                                 mini={true}
                                 onClick={() => {
-                                    history.push(`/fagsak/${fagsakId}/dokumenter`);
+                                    navigate(`/fagsak/${fagsakId}/dokumenter`);
                                 }}
                                 children={'Gå til Dokumentoversikt'}
                             />,

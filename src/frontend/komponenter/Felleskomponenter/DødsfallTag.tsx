@@ -6,6 +6,8 @@ import navFarger from 'nav-frontend-core';
 
 import { Tag } from '@navikt/ds-react';
 
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
+
 const StyletTag = styled(Tag)`
     color: white;
     background-color: ${navFarger.navMorkGra};
@@ -17,9 +19,8 @@ interface IDødsfallTagProps {
 }
 
 const DødsfallTag: React.FC<IDødsfallTagProps> = ({ dødsfallDato }) => {
-    return (
-        <StyletTag variant="info">{`Død ${new Date(dødsfallDato).toLocaleDateString()}`}</StyletTag>
-    );
+    const formatertDato = formaterIsoDato(dødsfallDato, datoformat.DATO);
+    return <StyletTag variant="info">{`Død ${formatertDato}`}</StyletTag>;
 };
 
 export default DødsfallTag;

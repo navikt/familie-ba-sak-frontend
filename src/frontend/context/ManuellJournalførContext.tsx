@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -22,7 +22,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import type { IBehandlingstema } from '../typer/behandlingstema';
 import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakEier } from '../typer/fagsak';
+import { FagsakType } from '../typer/fagsak';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -41,7 +41,7 @@ import { useFagsakRessurser } from './FagsakContext';
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler, toggles } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
-    const history = useHistory();
+    const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
@@ -238,7 +238,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
         const restFagsak = await hentFagsakForPerson(
             hentetPerson.data.personIdent,
-            erEnsligMindreårig || erPåInstitusjon ? FagsakEier.BARN : FagsakEier.OMSORGSPERSON
+            erEnsligMindreårig
+                ? FagsakType.BARN_ENSLIG_MINDREÅRIG
+                : erPåInstitusjon
+                ? FagsakType.INSTITUSJON
+                : FagsakType.NORMAL
         );
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
@@ -404,9 +408,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 },
                 (fagsakId: Ressurs<string>) => {
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                        navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                        history.push('/oppgaver');
+                        navigate('/oppgaver');
                     }
                 }
             );
@@ -431,7 +435,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     },
                     (respons: Ressurs<string>) => {
                         if (respons.status === RessursStatus.SUKSESS) {
-                            history.push('/oppgaver');
+                            navigate('/oppgaver');
                         }
                     }
                 );
@@ -468,9 +472,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     },
                     (fagsakId: Ressurs<string>) => {
                         if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                            history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                            navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
                         } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                            history.push('/oppgaver');
+                            navigate('/oppgaver');
                         }
                     }
                 );

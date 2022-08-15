@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import type {
     Column,
     TableInstance,
@@ -47,7 +47,7 @@ export const oppgaveSideLimit = 15;
 export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { innloggetSaksbehandler, settToast, toggles } = useApp();
     const { request } = useHttp();
 
@@ -152,7 +152,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
             settOppgaveFelter(oppdaterteOppgaveFelter);
 
-            history.push({
+            navigate({
                 search: Object.values(oppdaterteOppgaveFelter)
                     .filter(
                         (mapOppgaveFelt: IOppgaveFelt) =>
@@ -223,7 +223,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                         (oppgavetypeFilter === OppgavetypeFilter.BEH_SED &&
                             toggles[ToggleNavn.brukEøs])
                     ) {
-                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                        navigate(`/oppgaver/journalfor/${oppgave.id}`);
                     } else {
                         if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
                             // tilbakekreving

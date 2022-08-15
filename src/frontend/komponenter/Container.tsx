@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useApp } from '../context/AppContext';
 import { BehandlingProvider } from '../context/behandlingContext/BehandlingContext';
@@ -37,27 +37,31 @@ const Container: React.FC = () => {
                         />
                         <FagsakProvider>
                             <BehandlingProvider>
-                                <Switch>
-                                    <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
+                                <Routes>
                                     <Route
-                                        exact={true}
-                                        path="/oppgaver/journalfør/:oppgaveId"
-                                        component={ManuellJournalfør}
+                                        path="/fagsak/:fagsakId/*"
+                                        element={<FagsakContainer />}
                                     />
-                                    <Route exact={true} path="/oppgaver" component={Oppgaver} />
-                                    <Route path="/internstatistikk" component={Internstatistikk} />
-                                    <Route path="/infotrygd" component={Infotrygd} />
                                     <Route
-                                        exact={true}
+                                        path="/oppgaver/journalfor/:oppgaveId"
+                                        element={<ManuellJournalfør />}
+                                    />
+                                    <Route
                                         path="/tidslinjer/:behandlingId"
-                                        render={() => (
+                                        element={
                                             <TidslinjeProvider>
                                                 <TidslinjeVisualisering />
                                             </TidslinjeProvider>
-                                        )}
+                                        }
                                     />
-                                    <Redirect to="/oppgaver" />
-                                </Switch>
+                                    <Route
+                                        path="/internstatistikk"
+                                        element={<Internstatistikk />}
+                                    />
+                                    <Route path="/infotrygd" element={<Infotrygd />} />
+                                    <Route path="/oppgaver" element={<Oppgaver />} />
+                                    <Route path="/" element={<Navigate to="/oppgaver" />} />
+                                </Routes>
                             </BehandlingProvider>
                         </FagsakProvider>
                     </main>

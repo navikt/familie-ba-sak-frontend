@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
@@ -31,7 +31,7 @@ const StyledAlert = styled(Alert)`
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const history = useHistory();
+    const navigate = useNavigate();
     const {
         hentSkjemadata,
         onSubmit,
@@ -48,7 +48,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const nesteOnClick = () => {
         if (erLesevisning()) {
-            history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
+            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
         } else {
             onSubmit<ITilbakekreving | undefined>(
                 {
@@ -59,7 +59,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 (ressurs: Ressurs<IBehandling>) => {
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(ressurs);
-                        history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
+                        navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
                     }
                 }
             );
@@ -67,7 +67,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     };
 
     const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
+        navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
     };
 
     if (
