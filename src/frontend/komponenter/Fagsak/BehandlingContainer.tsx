@@ -7,7 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { EøsProvider } from '../../context/Eøs/EøsContext';
-import { MottakerTypeProvider } from '../../context/MottakerTypeContext';
+import { InstitusjonOgVergeProvider } from '../../context/InstitusjonOgVergeContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -44,11 +44,11 @@ const BehandlingContainer: React.FunctionComponent = () => {
             return (
                 <Routes>
                     <Route
-                        path="/fagsak/:fagsakId/:behandlingId/registrer-mottaker"
+                        path="/registrer-mottaker"
                         element={
-                            <MottakerTypeProvider åpenBehandling={åpenBehandling.data}>
+                            <InstitusjonOgVergeProvider åpenBehandling={åpenBehandling.data}>
                                 <RegistrerMottaker />
-                            </MottakerTypeProvider>
+                            </InstitusjonOgVergeProvider>
                         }
                     />
                     <Route

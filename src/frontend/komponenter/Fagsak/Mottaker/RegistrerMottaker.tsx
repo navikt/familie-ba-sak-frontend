@@ -6,7 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useMottakerType } from '../../../context/MottakerTypeContext';
+import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { FagsakType } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -22,7 +22,8 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerMottaker: React.FC = () => {
-    const { fagsakType, lesevisning, onSubmitMottaker } = useMottakerType();
+    const { fagsakType, lesevisning, onSubmitMottaker, submitFeilmelding } =
+        useInstitusjonOgVerge();
     const { behandlingsstegSubmitressurs } = useBehandling();
 
     return (
@@ -37,12 +38,11 @@ const RegistrerMottaker: React.FC = () => {
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
                     {fagsakType.data === FagsakType.INSTITUSJON ? <Institusjon /> : <Verge />}
+                    {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>
             )}
             {fagsakType.feilmelding && (
-                <StyledAlert variant="info">
-                    Det har skjedd en feil: {fagsakType.feilmelding}
-                </StyledAlert>
+                <StyledAlert variant="info" children={fagsakType.feilmelding} />
             )}
         </>
     );

@@ -4,7 +4,7 @@ import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -20,14 +20,15 @@ import { identValidator } from '../utils/validators';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
-const [MottakerTypeProvider, useMottakerType] = createUseContext(
+const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
         const { erLesevisning, settÅpenBehandling } = useBehandling();
         const { minimalFagsak } = useFagsakRessurser();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { request } = useHttp();
-        const [feilMelding, settFeilMelding] = useState<string | undefined>('');
+        const [hentPersonFeilmelding, settHentPersonFeilmelding] = useState<string | undefined>('');
+        const [submitFeilmelding, settSubmitFeilmelding] = useState<string | undefined>('');
         const lesevisning = () =>
             erLesevisning() ||
             åpenBehandling?.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE;
@@ -57,10 +58,10 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
             felter: {
                 fødselsnummer: useFelt<string>({
                     verdi: '',
-                    avhengigheter: { feilMelding },
+                    avhengigheter: { feilmelding: hentPersonFeilmelding },
                     valideringsfunksjon: (felt, avhengigheter) => {
-                        if (avhengigheter?.feilMelding) {
-                            return feil(felt, avhengigheter?.feilMelding);
+                        if (avhengigheter?.feilmelding) {
+                            return feil(felt, avhengigheter?.feilmelding);
                         } else {
                             return felt.verdi === '' ? ok(felt) : identValidator(felt);
                         }
@@ -105,14 +106,11 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
         });
 
         useEffect(() => {
-            settFeilMelding('');
+            settHentPersonFeilmelding('');
         }, [skjema.felter.fødselsnummer.verdi]);
 
         const hentPerson = async () => {
-            if (
-                skjema.felter.fødselsnummer.verdi.length > 0 &&
-                skjema.felter.fødselsnummer.valideringsstatus === Valideringsstatus.OK
-            ) {
+            if (skjema.felter.fødselsnummer.verdi.length > 0) {
                 const hentetPerson = await request<void, IPersonInfo>({
                     method: 'GET',
                     url: '/familie-ba-sak/api/person/adresse',
@@ -122,20 +120,23 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
                 });
 
                 if (hentetPerson.status !== RessursStatus.SUKSESS) {
-                    settFeilMelding('Ukjent feil ved henting av person');
+                    settHentPersonFeilmelding(
+                        hentFrontendFeilmelding(hentetPerson) || 'Ukjent feil ved henting av person'
+                    );
                     return;
                 } else if (!hentetPerson.data.harTilgang) {
                     const adressebeskyttelsegradering =
                         hentetPerson.data.adressebeskyttelseGradering.includes('strengt')
                             ? 'strengt fortrolig'
                             : 'fortrolig';
-                    settFeilMelding(
+                    settHentPersonFeilmelding(
                         `Personen har adresse med diskresjonskode ${adressebeskyttelsegradering}`
                     );
                     return;
                 } else if (hentAlder(hentetPerson.data.fødselsdato) < 18) {
-                    settFeilMelding('Fødselsdato er under myndighetsalder');
+                    settHentPersonFeilmelding('Fødselsdato er under myndighetsalder');
                 }
+                settHentPersonFeilmelding('');
                 skjema.felter.navn.validerOgSettFelt(hentetPerson.data.navn);
 
                 if (hentetPerson.data.bostedsadresse) {
@@ -147,11 +148,7 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
                     );
                 }
             } else {
-                settFeilMelding(
-                    skjema.felter.fødselsnummer.verdi.length > 0
-                        ? 'Ugyldig fødselsnummer'
-                        : 'Fødselsnummer er ikke satt'
-                );
+                settHentPersonFeilmelding('Fødselsnummer er ikke satt');
             }
         };
 
@@ -191,7 +188,12 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
                             navigate(
                                 `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
                             );
+                        } else {
+                            settSubmitFeilmelding(hentFrontendFeilmelding(ressurs));
                         }
+                    },
+                    (ressurs: Ressurs<IBehandling>) => {
+                        settSubmitFeilmelding(hentFrontendFeilmelding(ressurs));
                     }
                 );
             }
@@ -204,8 +206,9 @@ const [MottakerTypeProvider, useMottakerType] = createUseContext(
             skjema,
             lesevisning,
             registrertVerge: åpenBehandling.verge,
+            submitFeilmelding,
         };
     }
 );
 
-export { MottakerTypeProvider, useMottakerType };
+export { InstitusjonOgVergeProvider, useInstitusjonOgVerge };

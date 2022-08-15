@@ -7,7 +7,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import { FamilieInput, FamilieLesefelt } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useMottakerType } from '../../../context/MottakerTypeContext';
+import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 
 const StyledDiv = styled.div`
     margin: 1rem 0;
@@ -19,7 +19,7 @@ const StyledFamilieInpunt = styled(FamilieInput)`
 
 const Institusjon: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
-    const { skjema } = useMottakerType();
+    const { skjema } = useInstitusjonOgVerge();
 
     return (
         <StyledDiv className={'mottaker__institusjon'}>
