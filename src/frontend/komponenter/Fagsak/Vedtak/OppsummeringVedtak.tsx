@@ -58,6 +58,10 @@ const StyleHeading = styled(Heading)`
     display: flex;
 `;
 
+const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
+    margin-bottom: 1.5rem;
+`;
+
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
     value: PeriodetypeIVedtaksbrev;
 }
@@ -178,9 +182,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     />
                     <Container>
                         {åpenBehandling.korrigertEtterbetaling && (
-                            <Alert variant="info">
+                            <KorrigertEtterbetalingsbeløpAlert variant="info">
                                 Etterbetalingsbeløp i brevet er manuelt korrigert
-                            </Alert>
+                            </KorrigertEtterbetalingsbeløpAlert>
                         )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect

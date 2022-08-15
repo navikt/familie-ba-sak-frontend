@@ -2,9 +2,15 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+export interface ILesevisningStyle {
+    label?: React.CSSProperties;
+    value?: React.CSSProperties;
+}
+
 interface IProps {
     label: React.ReactNode;
     value?: string;
+    lesevisningStyle?: ILesevisningStyle;
 }
 
 const Label = styled.h2`
@@ -34,11 +40,11 @@ const SkjemaGruppe = styled.div`
     }
 `;
 
-export const SkjemafeltLesevisning: React.FC<IProps> = ({ label, value }) => {
+export const SkjemafeltLesevisning: React.FC<IProps> = ({ label, value, lesevisningStyle }) => {
     return (
         <SkjemaGruppe>
-            <Label>{label}</Label>
-            <Value>{value}</Value>
+            <Label style={lesevisningStyle?.label}>{label}</Label>
+            <Value style={lesevisningStyle?.value}>{value}</Value>
         </SkjemaGruppe>
     );
 };

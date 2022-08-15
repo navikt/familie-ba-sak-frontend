@@ -3,17 +3,22 @@ import * as React from 'react';
 import type { TextFieldProps } from '@navikt/ds-react';
 import { TextField } from '@navikt/ds-react';
 
-import { SkjemafeltLesevisning } from './SkjemaFeltLesevisning';
+import { type ILesevisningStyle, SkjemafeltLesevisning } from './SkjemaFeltLesevisning';
 
 export interface IProps extends TextFieldProps {
     lesevisning: boolean;
+    lesevisningStyle?: ILesevisningStyle;
 }
 
 export const TextFieldMedLesevisning: React.FC<IProps> = props => {
-    const { lesevisning, ...textFieldProps } = props;
+    const { lesevisning, lesevisningStyle, ...textFieldProps } = props;
 
     return lesevisning ? (
-        <SkjemafeltLesevisning label={props.label} value={props.value} />
+        <SkjemafeltLesevisning
+            label={props.label}
+            value={props.value}
+            lesevisningStyle={lesevisningStyle}
+        />
     ) : (
         <TextField {...textFieldProps} />
     );
