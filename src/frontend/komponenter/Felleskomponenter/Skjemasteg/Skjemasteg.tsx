@@ -4,12 +4,12 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
+import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
 import {
     NavdsSpacing4,
+    NavdsSpacing6,
     NavdsSpacing8,
     NavdsSpacing10,
     NavdsSpacing24,
@@ -47,8 +47,8 @@ const StyledInnholdstittel = styled(Innholdstittel)`
     padding-bottom: ${NavdsSpacing4};
 `;
 
-const StyledFeilmelding = styled(Feilmelding)`
-    margin-top: 1rem;
+const StyledErrorMessage = styled(ErrorMessage)`
+    margin-top: ${NavdsSpacing4};
 `;
 
 const StyledAlert = styled(Alert)`
@@ -62,7 +62,7 @@ const Navigering = styled.div`
     flex-direction: row-reverse;
     justify-content: flex-end;
     button:not(:first-child) {
-        margin-right: ${NavdsSpacing4};
+        margin-right: ${NavdsSpacing6};
     }
 `;
 
@@ -125,32 +125,30 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
 
                 {children}
 
-                {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
+                {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
 
                 <Navigering>
                     {nesteOnClick &&
                         skalViseNesteKnapp &&
                         (!erLesevisning() || kanGåVidereILesevisning) && (
-                            <Knapp
-                                type={'hoved'}
-                                spinner={senderInn}
+                            <Button
+                                loading={senderInn}
                                 disabled={senderInn}
                                 onClick={() => {
                                     if (!senderInn) {
                                         nesteOnClick();
                                     }
                                 }}
-                                mini={true}
-                                children={nesteKnappTittel ?? 'Neste'}
+                                children={nesteKnappTittel ?? 'Neste steg'}
                             />
                         )}
                     {forrigeOnClick && skalViseForrigeKnapp && (
-                        <Knapp
+                        <Button
                             onClick={() => {
                                 forrigeOnClick();
                             }}
-                            mini={true}
-                            children={forrigeKnappTittel ?? 'Forrige'}
+                            variant="secondary"
+                            children={forrigeKnappTittel ?? 'Forrige steg'}
                         />
                     )}
                 </Navigering>
