@@ -8,6 +8,12 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
 
 import { Alert } from '@navikt/ds-react';
+import {
+    NavdsSpacing4,
+    NavdsSpacing8,
+    NavdsSpacing10,
+    NavdsSpacing24,
+} from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -33,12 +39,12 @@ interface IProps {
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
-    padding: 2rem;
+    padding: ${NavdsSpacing10};
     max-width: ${({ maxWidthStyle }) => maxWidthStyle};
 `;
 
 const StyledInnholdstittel = styled(Innholdstittel)`
-    padding-bottom: 1rem;
+    padding-bottom: ${NavdsSpacing4};
 `;
 
 const StyledFeilmelding = styled(Feilmelding)`
@@ -46,17 +52,17 @@ const StyledFeilmelding = styled(Feilmelding)`
 `;
 
 const StyledAlert = styled(Alert)`
-    margin: 2rem 2rem 0 2rem;
+    margin: ${NavdsSpacing8} ${NavdsSpacing8} 0 ${NavdsSpacing8};
     width: fit-content;
 `;
 
 const Navigering = styled.div`
-    margin: 4rem 0 1rem;
+    margin: ${NavdsSpacing24} 0 ${NavdsSpacing4};
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
     button:not(:first-child) {
-        margin-right: 1rem;
+        margin-right: ${NavdsSpacing4};
     }
 `;
 

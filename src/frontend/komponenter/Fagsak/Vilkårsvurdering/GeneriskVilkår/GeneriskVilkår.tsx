@@ -4,7 +4,14 @@ import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Heading } from '@navikt/ds-react';
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading } from '@navikt/ds-react';
+import {
+    NavdsSpacing5,
+    NavdsSpacing8,
+    NavdsSpacing16,
+    NavdsFontWeightRegular,
+} from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -14,13 +21,11 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import Pluss from '../../../../ikoner/Pluss';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../typer/vilkår';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
 
@@ -33,14 +38,18 @@ interface IProps {
 }
 
 const Container = styled.div`
-    margin-top: 1rem;
-    :not(:first-child) {
-        margin-top: 2.5rem;
+    margin-top: ${NavdsSpacing16};
+    &:last-child {
+        margin-bottom: ${NavdsSpacing8};
     }
 `;
 
-const UtførKnapp = styled(IkonKnapp)`
-    margin-top: 0.5rem;
+const UtførKnapp = styled(Button)`
+    margin-top: ${NavdsSpacing5};
+`;
+
+const SemiBoldHeading = styled(Heading)`
+    font-weight: ${NavdsFontWeightRegular};
 `;
 
 const GeneriskVilkår: React.FC<IProps> = ({
@@ -90,6 +99,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseLeggTilKnapp = () => {
+        if (erLesevisning()) {
+            return false;
+        }
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
             vilkår => vilkår.verdi.resultat.verdi === Resultat.IKKE_VURDERT
         );
@@ -97,6 +109,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseFjernUtvidetBarnetrygdKnapp = () => {
+        if (erLesevisning()) {
+            return false;
+        }
         const utvidetVilkår = vilkårResultater.filter(
             vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
         );
@@ -111,9 +126,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
     return (
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-                <Heading size="medium" level="3">
+                <SemiBoldHeading size="medium" level="3">
                     {vilkårFraConfig.tittel}
-                </Heading>
+                </SemiBoldHeading>
                 <VilkårTabell
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
@@ -121,9 +136,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     visFeilmeldinger={visFeilmeldinger}
                     settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
                 />
-                {skalViseLeggTilKnapp() ? (
+                {skalViseLeggTilKnapp() && (
                     <UtførKnapp
-                        erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
                                 person.personIdent,
@@ -132,17 +146,17 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             håndterNyPeriodeVilkårsvurdering(promise);
                         }}
                         id={leggTilPeriodeKnappId}
-                        ikon={<Pluss />}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                        label={'Legg til periode'}
-                        mini={true}
-                        spinner={vilkårSubmit === VilkårSubmit.POST}
+                        loading={vilkårSubmit === VilkårSubmit.POST}
                         disabled={vilkårSubmit === VilkårSubmit.POST}
-                    />
-                ) : null}
+                        variant="tertiary"
+                        size="small"
+                    >
+                        <AddCircle />
+                        Legg til periode
+                    </UtførKnapp>
+                )}
                 {skalViseFjernUtvidetBarnetrygdKnapp() && (
                     <FjernUtvidetBarnetrygdVilkår
-                        erLesevisning={erLesevisning()}
                         personIdent={person.personIdent}
                         slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                     />
