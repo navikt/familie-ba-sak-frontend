@@ -7,7 +7,7 @@ import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typ
 
 import { ToastTyper, AlertType } from '../../komponenter/Felleskomponenter/Toast/typer';
 import type { IBehandling } from '../../typer/behandling';
-import { type IKorrigertEtterbetaling, KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
+import { type IRestKorrigertEtterbetaling, KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
 import { useApp } from '../AppContext';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
@@ -15,7 +15,7 @@ import {
     erEtterbetalingsbeløpGyldig,
 } from './ValideringKorrigertEtterbetaling';
 
-export interface IKorrigerEtterbetalingSkjema {
+interface IKorrigerEtterbetalingSkjema {
     årsak: string;
     beløp: string;
     begrunnelse: string;
@@ -23,7 +23,7 @@ export interface IKorrigerEtterbetalingSkjema {
 
 interface IProps {
     onSuccess: () => void;
-    korrigertEtterbetaling?: IKorrigertEtterbetaling;
+    korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     behandlingId: number;
 }
 
@@ -134,7 +134,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
                         beløp: skjema.felter.beløp.verdi,
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
-                    url: `/familie-ba-sak/api/etterbetalingkorrigering/behandling/${behandlingId}`,
+                    url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -160,7 +160,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
         settAngrerKorrigering(true);
         request<void, IBehandling>({
             method: 'PATCH',
-            url: `/familie-ba-sak/api/etterbetalingkorrigering/behandling/${behandlingId}`,
+            url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
         }).then((response: Ressurs<IBehandling>) => {
             settAngrerKorrigering(false);
             if (response.status === RessursStatus.SUKSESS) {

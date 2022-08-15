@@ -69,7 +69,7 @@ export enum Standardbegrunnelse {
     ETTER_ENDRET_UTBETALING_ETTERBETALING = 'ETTER_ENDRET_UTBETALING_ETTERBETALING',
 }
 
-export interface IKorrigertEtterbetaling {
+export interface IRestKorrigertEtterbetaling {
     årsak: KorrigertEtterbetalingÅrsak;
     beløp: number;
     begrunnelse: string;

@@ -10,13 +10,13 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerEtterbetalingSkjemaContext } from '../../../../context/KorrigertEtterbetaling/KorrigerEtterbetalingModalSkjemaContext';
-import type { IKorrigertEtterbetaling } from '../../../../typer/vedtak';
+import type { IRestKorrigertEtterbetaling } from '../../../../typer/vedtak';
 import { SelectMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/SelectMedLesevisning';
 import { TextAreaMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextAreaMedLesevisning';
 import { TextFieldMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextFieldMedLesevisning';
 
 interface IKorrigerEtterbetalingModal {
-    korrigertEtterbetaling?: IKorrigertEtterbetaling;
+    korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     behandlingId: number;
     erLesevisning: boolean;
     visModal: boolean;
@@ -73,7 +73,7 @@ const LukkKnapp = styled(Button)`
     display: block;
 `;
 
-export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
+const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
     korrigertEtterbetaling,
     behandlingId,
     erLesevisning,
@@ -205,3 +205,5 @@ export const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> =
         </Modal>
     );
 };
+
+export default KorrigerEtterbetalingModal;

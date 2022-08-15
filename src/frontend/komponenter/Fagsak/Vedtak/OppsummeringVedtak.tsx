@@ -29,7 +29,7 @@ import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { KorrigerEtterbetalingModal } from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
+import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
@@ -169,7 +169,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     />
                     <KorrigerEtterbetalingModal
                         erLesevisning={erLesevisning()}
-                        korrigertEtterbetaling={åpenBehandling.etterbetalingKorrigering}
+                        korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                         behandlingId={åpenBehandling.behandlingId}
                         visModal={visKorrigerEtterbetalingModal}
                         onClose={() =>
@@ -177,7 +177,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         }
                     />
                     <Container>
-                        {åpenBehandling.etterbetalingKorrigering && (
+                        {åpenBehandling.korrigertEtterbetaling && (
                             <Alert variant="info">
                                 Etterbetalingsbeløp i brevet er manuelt korrigert
                             </Alert>
@@ -233,7 +233,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             style={{ float: 'right' }}
                             onClick={() => setVisKorrigerEtterbetalingModal(true)}
                         >
-                            {åpenBehandling.etterbetalingKorrigering ? (
+                            {åpenBehandling.korrigertEtterbetaling ? (
                                 <>
                                     <InformationColored aria-hidden /> Vis korrigert etterbetaling
                                 </>
