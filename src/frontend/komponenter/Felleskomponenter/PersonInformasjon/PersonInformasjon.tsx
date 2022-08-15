@@ -28,26 +28,26 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                         alder={alder}
                         kjønn={person.kjønn}
                     />
-                    <Heading level="2" size="small" className={'navn'} title={navnOgAlder}>
+                    <Heading level="2" size="medium" className={'navn'} title={navnOgAlder}>
                         {navnOgAlder}
                     </Heading>
-                    <Heading level="2" size="small" as="span">
+                    <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
                     <Clipboard>
-                        <Heading level="2" size="small" as="span">
+                        <Heading level="2" size="medium" as="span">
                             {formaterIdent(person.personIdent)}
                         </Heading>
                     </Clipboard>
-                    <Heading level="2" size="small" as="span">
+                    <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
-                    <Heading level="2" size="small" as="span">{`${
+                    <Heading level="2" size="medium" as="span">{`${
                         personTypeMap[person.type]
                     } `}</Heading>
                     {person.dødsfallDato?.length && (
                         <>
-                            <Heading level="2" size="small" as="span">
+                            <Heading level="2" size="medium" as="span">
                                 &ensp;&ensp;
                             </Heading>
                             <DødsfallTag dødsfallDato={person.dødsfallDato} />
