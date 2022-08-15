@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
 import {
@@ -18,8 +18,9 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
-import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
+import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
+import type { FagsakType } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
@@ -32,7 +33,7 @@ const useOpprettBehandling = (
     const { settÅpenBehandling } = useBehandling();
     const { bruker: brukerRessurs } = useFagsakRessurser();
     const { innloggetSaksbehandler } = useApp();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
@@ -162,7 +163,7 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
-    const onBekreft = (søkersIdent: string) => {
+    const onBekreft = (søkersIdent: string, fagsakType: FagsakType) => {
         const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
             if (
@@ -205,6 +206,7 @@ const useOpprettBehandling = (
                             barnasIdenter: erHelmanuellMigrering
                                 ? skjema.felter.valgteBarn.verdi.map(option => option.value)
                                 : undefined,
+                            fagsakType: fagsakType,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',
@@ -219,11 +221,13 @@ const useOpprettBehandling = (
                                 hentDataFraRessurs(response);
 
                             if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                                history.push(
-                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                                navigate(
+                                    behandling.steg === BehandlingSteg.REGISTRERE_MOTTAKER
+                                        ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                                        : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                                 );
                             } else {
-                                history.push(
+                                navigate(
                                     `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                                 );
                             }

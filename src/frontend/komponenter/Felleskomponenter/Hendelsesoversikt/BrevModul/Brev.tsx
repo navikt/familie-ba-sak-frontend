@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Knapp } from 'nav-frontend-knapper';
 
@@ -25,7 +25,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <div className={'brev'}>
@@ -47,7 +47,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                                 onClick={() => {
                                     onOkIModalClick();
                                     navigerTilOpplysningsplikt &&
-                                        history.push(
+                                        navigate(
                                             `/fagsak/${fagsakId}/${behandlingId}/vilkaarsvurdering`
                                         );
                                     settVisInnsendtBrevModal(false);

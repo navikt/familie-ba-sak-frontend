@@ -2,7 +2,7 @@ import type { ReactChild } from 'react';
 import React from 'react';
 
 import classNames from 'classnames';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { NavHashLink as NavLink } from 'react-router-hash-link';
 
 interface Props {
@@ -25,7 +25,6 @@ const Link: React.FC<Props> = ({ active = true, id, to, children, className }) =
             to={to}
             tabIndex={0}
             onClick={onClick}
-            activeClassName={''}
             className={classNames(
                 className,
                 `${location.pathname}${location.hash}` === to ? 'active' : ''

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -32,16 +32,14 @@ const StyledVilkårResultatIkon = styled(VilkårResultatIkon)`
 
 const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <Skjemasteg
             skalViseForrigeKnapp={false}
             tittel={'Filtreringsregler'}
             nesteOnClick={() => {
-                history.push(
-                    `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                );
+                navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
             }}
             maxWidthStyle={'80rem'}
             senderInn={false}

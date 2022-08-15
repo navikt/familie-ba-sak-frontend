@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
@@ -19,7 +19,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
-import { FagsakEier } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
 import OpprettFagsakModal from './OpprettFagsakModal';
@@ -30,7 +30,7 @@ const validator = require('@navikt/fnrvalidator');
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
     const { innloggetSaksbehandler } = useApp();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
         byggTomRessurs()
@@ -92,7 +92,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                           navn: fagsakDeltager.navn,
                           ident: fagsakDeltager.ident,
                           ikon: fagsakDeltager.harTilgang ? (
-                              fagsakDeltager.fagsakEier !== FagsakEier.BARN ? (
+                              fagsakDeltager.fagsakType !== FagsakType.INSTITUSJON ? (
                                   ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
                               ) : (
                                   <KontorIkonGrønn height={32} width={32} />
@@ -119,7 +119,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 søkeresultater={mapTilSøkeresultater()}
                 søkeresultatOnClick={(søkeresultat: ISøkeresultat) =>
                     søkeresultat.fagsakId
-                        ? history.push(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
+                        ? navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
                         : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
                 }
             />

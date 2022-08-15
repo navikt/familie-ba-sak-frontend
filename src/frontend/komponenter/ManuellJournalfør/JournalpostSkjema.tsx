@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
@@ -53,7 +53,7 @@ export const JournalpostSkjema: React.FC = () => {
         kanKnytteJournalpostTilBehandling,
     } = useManuellJournalfør();
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <Container>
@@ -99,7 +99,7 @@ export const JournalpostSkjema: React.FC = () => {
                 <FamilieKnapp
                     mini={true}
                     erLesevisning={false}
-                    onClick={() => history.push(`/oppgaver`)}
+                    onClick={() => navigate(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
                     {erLesevisning() ? tilbakeKnappInnhold : 'Avbryt'}

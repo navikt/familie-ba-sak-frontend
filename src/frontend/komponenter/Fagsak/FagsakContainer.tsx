@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Redirect, useHistory } from 'react-router';
-import { Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -21,11 +20,11 @@ import Saksoversikt from './Saksoversikt/Saksoversikt';
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
 
-    const history = useHistory();
+    const location = useLocation();
     const { loggSidevisning } = useAmplitude();
-    const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
-    const erPåDokumentliste = history.location.pathname.includes('dokumenter');
-    const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
+    const erPåSaksoversikt = location.pathname.includes('saksoversikt');
+    const erPåDokumentliste = location.pathname.includes('dokumenter');
+    const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
 
     const skalHaVenstremeny = !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending;
 
@@ -74,52 +73,41 @@ const FagsakContainer: React.FunctionComponent = () => {
                                     id={'fagsak-main'}
                                     className={'fagsakcontainer__content--main'}
                                 >
-                                    <Switch>
+                                    <Routes>
                                         <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/saksoversikt"
-                                            render={() => {
-                                                return (
-                                                    <Saksoversikt
-                                                        minimalFagsak={minimalFagsak.data}
-                                                    />
-                                                );
-                                            }}
+                                            path="/saksoversikt"
+                                            element={
+                                                <Saksoversikt minimalFagsak={minimalFagsak.data} />
+                                            }
                                         />
 
                                         <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/dokumentutsending"
-                                            render={() => {
-                                                return (
-                                                    <DokumentutsendingProvider
-                                                        fagsakId={minimalFagsak.data.id}
-                                                    >
-                                                        <Dokumentutsending />
-                                                    </DokumentutsendingProvider>
-                                                );
-                                            }}
+                                            path="/dokumentutsending"
+                                            element={
+                                                <DokumentutsendingProvider
+                                                    fagsakId={minimalFagsak.data.id}
+                                                >
+                                                    <Dokumentutsending />
+                                                </DokumentutsendingProvider>
+                                            }
                                         />
 
                                         <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/dokumenter"
-                                            render={() => {
-                                                return <JournalpostListe bruker={bruker.data} />;
-                                            }}
+                                            path="/dokumenter"
+                                            element={<JournalpostListe bruker={bruker.data} />}
                                         />
 
                                         <Route
-                                            path="/fagsak/:fagsakId/:behandlingId"
-                                            render={() => {
-                                                return <BehandlingContainer />;
-                                            }}
+                                            path="/:behandlingId/*"
+                                            element={<BehandlingContainer />}
                                         />
-                                        <Redirect
-                                            from="/fagsak/:fagsakId"
-                                            to="/fagsak/:fagsakId/saksoversikt"
+                                        <Route
+                                            path="/"
+                                            element={
+                                                <Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />
+                                            }
                                         />
-                                    </Switch>
+                                    </Routes>
                                 </div>
                                 {skalHaHøyremeny && (
                                     <div className={'fagsakcontainer__content--høyremeny'}>
