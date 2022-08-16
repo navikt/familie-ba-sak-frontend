@@ -1,7 +1,7 @@
 import React from 'react';
 
 import createUseContext from 'constate';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema';
@@ -49,7 +49,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
         const { erLesevisning, settÅpenBehandling } = useBehandling();
         const { fagsakId } = useSakOgBehandlingParams();
-        const history = useHistory();
+        const navigate = useNavigate();
         const { bruker, minimalFagsak } = useFagsakRessurser();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
@@ -156,7 +156,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
                 if (erLesevisning()) {
-                    history.push(
+                    navigate(
                         `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
                     );
                 } else {
@@ -189,7 +189,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         (response: Ressurs<IBehandling>) => {
                             if (response.status === RessursStatus.SUKSESS) {
                                 settÅpenBehandling(response);
-                                history.push(
+                                navigate(
                                     `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
                                 );
                             }

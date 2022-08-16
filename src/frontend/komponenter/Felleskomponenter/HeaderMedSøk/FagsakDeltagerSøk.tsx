@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
@@ -30,7 +30,7 @@ const validator = require('@navikt/fnrvalidator');
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
     const { innloggetSaksbehandler } = useApp();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
         byggTomRessurs()
@@ -119,7 +119,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 søkeresultater={mapTilSøkeresultater()}
                 søkeresultatOnClick={(søkeresultat: ISøkeresultat) =>
                     søkeresultat.fagsakId
-                        ? history.push(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
+                        ? navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
                         : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
                 }
             />

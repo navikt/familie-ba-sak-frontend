@@ -1,20 +1,16 @@
-import { useRouteMatch } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 
 const useSakOgBehandlingParams = (): { fagsakId?: string; behandlingId?: string } => {
-    const matchFagsakIdOgBehandlingId = useRouteMatch<{
-        fagsakId: string;
-        behandlingId: string;
-    }>('/fagsak/:fagsakId/:behandlingId');
-
-    const matchBareFagsakId = useRouteMatch<{
-        fagsakId: string;
-    }>('/fagsak/:fagsakId');
+    const matchFagsakIdOgBehandlingId = useMatch('/fagsak/:fagsakId/:behandlingId/*');
+    const matchBareFagsakId = useMatch('/fagsak/:fagsakId/*');
 
     if (matchFagsakIdOgBehandlingId) {
         return {
-            fagsakId: isNaN(parseInt(matchFagsakIdOgBehandlingId.params.fagsakId))
-                ? undefined
-                : matchFagsakIdOgBehandlingId.params.fagsakId,
+            fagsakId:
+                matchFagsakIdOgBehandlingId.params.fagsakId &&
+                isNaN(parseInt(matchFagsakIdOgBehandlingId.params.fagsakId))
+                    ? undefined
+                    : matchFagsakIdOgBehandlingId.params.fagsakId,
             behandlingId:
                 matchFagsakIdOgBehandlingId.params.behandlingId &&
                 isNaN(parseInt(matchFagsakIdOgBehandlingId.params.behandlingId))
@@ -25,9 +21,11 @@ const useSakOgBehandlingParams = (): { fagsakId?: string; behandlingId?: string 
 
     if (matchBareFagsakId) {
         return {
-            fagsakId: isNaN(parseInt(matchBareFagsakId.params.fagsakId))
-                ? undefined
-                : matchBareFagsakId.params.fagsakId,
+            fagsakId:
+                matchBareFagsakId.params.fagsakId &&
+                isNaN(parseInt(matchBareFagsakId.params.fagsakId))
+                    ? undefined
+                    : matchBareFagsakId.params.fagsakId,
             behandlingId: undefined,
         };
     }

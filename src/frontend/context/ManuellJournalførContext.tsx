@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -41,7 +41,7 @@ import { useFagsakRessurser } from './FagsakContext';
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler, toggles } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
-    const history = useHistory();
+    const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
@@ -239,7 +239,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         const restFagsak = await hentFagsakForPerson(
             hentetPerson.data.personIdent,
             erEnsligMindreårig
-                ? FagsakType.BARN_ENSLIG_MINDREÅRLIG
+                ? FagsakType.BARN_ENSLIG_MINDREÅRIG
                 : erPåInstitusjon
                 ? FagsakType.INSTITUSJON
                 : FagsakType.NORMAL
@@ -408,9 +408,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 },
                 (fagsakId: Ressurs<string>) => {
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                        navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                        history.push('/oppgaver');
+                        navigate('/oppgaver');
                     }
                 }
             );
@@ -435,7 +435,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     },
                     (respons: Ressurs<string>) => {
                         if (respons.status === RessursStatus.SUKSESS) {
-                            history.push('/oppgaver');
+                            navigate('/oppgaver');
                         }
                     }
                 );
@@ -472,9 +472,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     },
                     (fagsakId: Ressurs<string>) => {
                         if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                            history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                            navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
                         } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                            history.push('/oppgaver');
+                            navigate('/oppgaver');
                         }
                     }
                 );
