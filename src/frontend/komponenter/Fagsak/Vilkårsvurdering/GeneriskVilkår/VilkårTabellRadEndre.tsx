@@ -63,7 +63,7 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 2px solid
+    border-left: 0.125rem solid
         ${(props: { lesevisning: boolean; vilkårResultat: Resultat }) => {
             if (props.lesevisning) {
                 return NavdsSemanticColorBorderMuted;

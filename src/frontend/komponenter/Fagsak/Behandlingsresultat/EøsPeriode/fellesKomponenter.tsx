@@ -51,7 +51,7 @@ interface IEøsPeriodeSkjemaContainerProps {
 export const EøsPeriodeSkjemaContainer = styled.div`
     max-width: ${(props: IEøsPeriodeSkjemaContainerProps) =>
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
-    border-left: 2px solid
+    border-left: 0.125rem solid
         ${(props: IEøsPeriodeSkjemaContainerProps) => {
             if (props.lesevisning) return NavdsSemanticColorBorderMuted;
             if (props.status === EøsPeriodeStatus.IKKE_UTFYLT)
