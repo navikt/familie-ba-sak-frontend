@@ -42,15 +42,19 @@ const baseSkjemaelementStyle = css`
     margin-bottom: 1.5rem;
 `;
 
+//TODO: Bytt ut med Select fra familie-felles-frontend etter oppgradering.
+//TODO: Må sikkert slenge inn custom styling for å få riktige margins osv i lesevisning.
 const StyledSelect = styled(SelectMedLesevisning)`
     ${baseSkjemaelementStyle}
 `;
 
+//TODO: Bytt ut med TextField fra familie-felles-frontend etter oppgradering.
 const StyledTextField = styled(TextFieldMedLesevisning)`
     ${baseSkjemaelementStyle}
     width: 25%;
 `;
 
+//TODO: Bytt ut med TextArea fra familie-felles-frontend etter oppgradering.
 const StyledTextarea = styled(TextAreaMedLesevisning)`
     ${baseSkjemaelementStyle}
 `;

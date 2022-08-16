@@ -12,6 +12,7 @@ export interface IProps extends Omit<SelectProps, 'children'> {
     options: OptionType[];
 }
 
+// TODO: Kan fjernes etter oppgradering av famile-felles-frontend
 export const SelectMedLesevisning: React.FC<IProps> = props => {
     const { lesevisning, lesevisningStyle, options, ...selectProps } = props;
 

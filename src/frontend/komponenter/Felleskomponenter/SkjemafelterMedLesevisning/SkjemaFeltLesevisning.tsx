@@ -39,7 +39,7 @@ const SkjemaGruppe = styled.div`
         margin-bottom: 0;
     }
 `;
-
+// TODO: Kan fjernes etter oppgradering av famile-felles-frontend
 export const SkjemafeltLesevisning: React.FC<IProps> = ({ label, value, lesevisningStyle }) => {
     return (
         <SkjemaGruppe>

@@ -10,6 +10,7 @@ export interface IProps extends TextFieldProps {
     lesevisningStyle?: ILesevisningStyle;
 }
 
+// TODO: Kan fjernes etter oppgradering av famile-felles-frontend
 export const TextFieldMedLesevisning: React.FC<IProps> = props => {
     const { lesevisning, lesevisningStyle, ...textFieldProps } = props;
 

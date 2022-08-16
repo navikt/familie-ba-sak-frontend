@@ -10,6 +10,7 @@ export interface IProps extends TextareaProps {
     lesevisningStyle?: ILesevisningStyle;
 }
 
+// TODO: Kan fjernes etter oppgradering av famile-felles-frontend
 export const TextAreaMedLesevisning: React.FC<IProps> = props => {
     const { lesevisning, lesevisningStyle, ...textAreaProps } = props;
 
