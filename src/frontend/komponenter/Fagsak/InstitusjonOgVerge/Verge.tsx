@@ -18,16 +18,13 @@ const StyledKnapp = styled(FamilieKnapp)`
     height: 1rem;
 `;
 
-const StyledFamilieInpunt = styled(FamilieInput)`
+const StyledFamilieInput = styled(FamilieInput)`
     margin-top: 1.8rem;
 `;
 
 const Verge: React.FunctionComponent = () => {
-    const { hentPerson, lesevisning, registrertVerge, skjema } = useInstitusjonOgVerge();
+    const { hentPerson, lesevisning, skjema } = useInstitusjonOgVerge();
     const [spinner, settSpinner] = useState(false);
-
-    const adresse = registrertVerge?.adresse.split('\n').at(0);
-    const postnummerOgSted = registrertVerge?.adresse.split('\n').at(1);
 
     return (
         <StyledDiv className={'mottaker__verge'}>
@@ -35,7 +32,6 @@ const Verge: React.FunctionComponent = () => {
             <br />
             <FamilieInput
                 {...skjema.felter.fødselsnummer.hentNavInputProps(true)}
-                value={registrertVerge?.ident || ''}
                 erLesevisning={lesevisning()}
                 id={'hent-verge-person'}
                 label={'Fødselsnummer (valgfritt)'}
@@ -53,31 +49,27 @@ const Verge: React.FunctionComponent = () => {
                 kompakt={true}
                 erLesevisning={lesevisning()}
             />
-            <StyledFamilieInpunt
+            <StyledFamilieInput
                 {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
-                value={registrertVerge?.navn || ''}
                 erLesevisning={lesevisning()}
                 id={'verge-navn'}
                 label={'Vergens navn'}
             />
-            <StyledFamilieInpunt
+            <StyledFamilieInput
                 {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
-                value={adresse || ''}
                 erLesevisning={lesevisning()}
                 id={'verge-adresse'}
                 label={'Adresse'}
             />
-            <StyledFamilieInpunt
+            <StyledFamilieInput
                 {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}
-                value={postnummerOgSted?.split(' ')?.at(0) || ''}
                 erLesevisning={lesevisning()}
                 id={'verge-postnummer'}
                 label={'Postnummer'}
                 bredde={'S'}
             />
-            <StyledFamilieInpunt
+            <StyledFamilieInput
                 {...skjema.felter.sted.hentNavInputProps(skjema.visFeilmeldinger)}
-                value={postnummerOgSted?.split(' ')?.at(1) || ''}
                 erLesevisning={lesevisning()}
                 id={'verge-sted'}
                 label={'Sted'}

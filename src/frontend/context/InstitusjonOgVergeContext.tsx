@@ -12,13 +12,26 @@ import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { BehandlingSteg } from '../typer/behandling';
 import type { IBehandling } from '../typer/behandling';
 import { FagsakType } from '../typer/fagsak';
-import type { IRegistrerInstitusjonOgVerge } from '../typer/institusjon-og-verge';
+import type { IRegistrerInstitusjonOgVerge, IVerge } from '../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../typer/person';
 import { hentAlder, kunSiffer } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { identValidator } from '../utils/validators';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
+
+const brytOppLagretAdresseinfo = (verge?: IVerge) => {
+    // til preliminær bruk
+    const adresse = verge?.adresse.split('\n').at(0);
+    const postnummerOgSted = verge?.adresse.split('\n').at(1);
+    const postnummer = postnummerOgSted?.split(' ')?.at(0);
+    const sted = postnummerOgSted?.split(' ')?.at(1);
+    return {
+        adresse,
+        postnummer,
+        sted,
+    };
+};
 
 const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
@@ -44,6 +57,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         const institusjon = useFelt<string | undefined>({
             verdi: undefined,
         });
+        const { adresse, postnummer, sted } = brytOppLagretAdresseinfo(åpenBehandling.verge);
         const { skjema, onSubmit } = useSkjema<
             {
                 fødselsnummer: string;
@@ -57,7 +71,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         >({
             felter: {
                 fødselsnummer: useFelt<string>({
-                    verdi: '',
+                    verdi: åpenBehandling.verge?.ident || '',
                     avhengigheter: { feilmelding: hentPersonFeilmelding },
                     valideringsfunksjon: (felt, avhengigheter) => {
                         if (avhengigheter?.feilmelding) {
@@ -69,7 +83,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                 }),
                 institusjon: institusjon,
                 navn: useFelt<string | undefined>({
-                    verdi: '',
+                    verdi: åpenBehandling.verge?.navn || '', // TODO Kan også brukes til oppgitt kontaktperson for en institusjon
                     avhengigheter: institusjon,
                     valideringsfunksjon: (felt, avhengigheter) => {
                         if (
@@ -83,10 +97,10 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                     },
                 }),
                 adresse: useFelt<string>({
-                    verdi: '',
+                    verdi: adresse || '',
                 }),
                 postnummer: useFelt<string>({
-                    verdi: '',
+                    verdi: postnummer || '',
                     valideringsfunksjon: felt => {
                         if (kunSiffer(felt.verdi)) {
                             return ok(felt);
@@ -99,7 +113,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                     },
                 }),
                 sted: useFelt<string>({
-                    verdi: '',
+                    verdi: sted || '',
                 }),
             },
             skjemanavn: 'Registrer mottaker',
@@ -205,7 +219,6 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
             onSubmitMottaker,
             skjema,
             lesevisning,
-            registrertVerge: åpenBehandling.verge,
             submitFeilmelding,
         };
     }
