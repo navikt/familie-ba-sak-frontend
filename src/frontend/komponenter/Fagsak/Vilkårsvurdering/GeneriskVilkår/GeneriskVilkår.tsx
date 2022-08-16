@@ -6,12 +6,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import {
-    NavdsSpacing5,
-    NavdsSpacing8,
-    NavdsSpacing16,
-    NavdsFontWeightRegular,
-} from '@navikt/ds-tokens/dist/tokens';
+import { NavdsSpacing5, NavdsSpacing8, NavdsSpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -46,10 +41,6 @@ const Container = styled.div`
 
 const UtførKnapp = styled(Button)`
     margin-top: ${NavdsSpacing5};
-`;
-
-const SemiBoldHeading = styled(Heading)`
-    font-weight: ${NavdsFontWeightRegular};
 `;
 
 const GeneriskVilkår: React.FC<IProps> = ({
@@ -126,9 +117,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
     return (
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-                <SemiBoldHeading size="medium" level="3">
+                <Heading size="medium" level="3">
                     {vilkårFraConfig.tittel}
-                </SemiBoldHeading>
+                </Heading>
                 <VilkårTabell
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
