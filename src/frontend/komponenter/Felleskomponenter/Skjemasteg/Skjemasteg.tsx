@@ -43,10 +43,6 @@ const Container = styled.div<{ maxWidthStyle: string }>`
     max-width: ${({ maxWidthStyle }) => maxWidthStyle};
 `;
 
-const StyledInnholdstittel = styled(Innholdstittel)`
-    padding-bottom: ${NavdsSpacing4};
-`;
-
 const StyledErrorMessage = styled(ErrorMessage)`
     margin-top: ${NavdsSpacing4};
 `;
@@ -121,7 +117,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             )}
 
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
-                <StyledInnholdstittel children={tittel} />
+                <Innholdstittel children={tittel} />
 
                 {children}
 
