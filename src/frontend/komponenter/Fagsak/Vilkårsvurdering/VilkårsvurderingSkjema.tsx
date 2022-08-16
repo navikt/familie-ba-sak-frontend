@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
-import { Alert } from '@navikt/ds-react';
+import { AddCircle, ExpandFilled, CollapseFilled } from '@navikt/ds-icons';
+import { Alert, Button } from '@navikt/ds-react';
 import { NavdsSpacing14, NavdsSpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -15,7 +15,6 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import FamilieChevron from '../../../ikoner/FamilieChevron';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
@@ -144,9 +143,9 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     </VilkårDiv>
                                 )}
 
-                            <IkonKnapp
-                                erLesevisning={false}
+                            <Button
                                 id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
+                                variant="tertiary"
                                 onClick={() =>
                                     settPersonErEkspandert({
                                         ...personErEkspandert,
@@ -154,22 +153,19 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                             !personErEkspandert[personResultat.personIdent],
                                     })
                                 }
-                                mini={true}
-                                label={
-                                    personErEkspandert[personResultat.personIdent]
-                                        ? 'Skjul vilkårsvurdering'
-                                        : 'Vis vilkårsvurdering'
-                                }
-                                ikon={
-                                    <FamilieChevron
-                                        retning={
-                                            personErEkspandert[personResultat.personIdent]
-                                                ? 'opp'
-                                                : 'ned'
-                                        }
-                                    />
-                                }
-                            />
+                            >
+                                {personErEkspandert[personResultat.personIdent] ? (
+                                    <>
+                                        Skjul vilkårsvurdering
+                                        <CollapseFilled />
+                                    </>
+                                ) : (
+                                    <>
+                                        Vis vilkårsvurdering
+                                        <ExpandFilled />
+                                    </>
+                                )}
+                            </Button>
                         </PersonLinje>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
