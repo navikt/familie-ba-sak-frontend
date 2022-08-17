@@ -45,7 +45,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
             value: '',
         },
         {
-            label: 'Feil i tidligere utebetalt beløp',
+            label: 'Feil i tidligere utbetalt beløp',
             value: KorrigertEtterbetalingÅrsak.FEIL_TIDLIGERE_UTBETALT_BELØP,
         },
         {
@@ -122,6 +122,8 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
 
     const visAngreKorrigering = korrigertEtterbetaling != null;
 
+    const korrigertEtterbetalingURL = `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`;
+
     const lagreKorrigering = () => {
         if (kanSendeSkjema()) {
             settSubmitRessurs(byggTomRessurs());
@@ -134,7 +136,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
                         beløp: skjema.felter.beløp.verdi,
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
-                    url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
+                    url: korrigertEtterbetalingURL,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -160,7 +162,7 @@ export const useKorrigerEtterbetalingSkjemaContext = ({
         settAngrerKorrigering(true);
         request<void, IBehandling>({
             method: 'PATCH',
-            url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
+            url: korrigertEtterbetalingURL,
         }).then((response: Ressurs<IBehandling>) => {
             settAngrerKorrigering(false);
             if (response.status === RessursStatus.SUKSESS) {

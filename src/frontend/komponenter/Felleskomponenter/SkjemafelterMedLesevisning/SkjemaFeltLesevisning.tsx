@@ -15,19 +15,19 @@ interface IProps {
 
 const Label = styled.h2`
     font-family: Source Sans Pro;
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 600;
-    line-height: 24px;
-    letter-spacing: 0px;
+    line-height: 1.5rem;
+    letter-spacing: 0em;
     text-align: left;
     margin-bottom: 1.5rem;
 `;
 
 const Value = styled.p`
     font-family: Source Sans Pro;
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 1.5rem;
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 0;
