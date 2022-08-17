@@ -19,7 +19,7 @@ const StyledTable = styled(Table)`
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
-    & div.skjemaelement {
+    & div.skjemaelement:not(.unset-margin-bottom) {
         margin-bottom: 1.5rem;
     }
 `;
