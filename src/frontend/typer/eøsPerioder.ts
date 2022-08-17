@@ -56,7 +56,7 @@ export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = 
     FORSIKRET_I_BOSTEDSLAND: 'Forsikret i bostedsland',
     MOTTAR_PENSJON: 'Mottar pensjon',
     INAKTIV: 'Inaktiv',
-    IKKE_AKTUELT: 'Ikke aktuelt',
+    IKKE_AKTUELT: 'Ikke aktuelt (aleneomsorg for egne barn eller forsørger andre barn)',
 };
 
 export enum KompetanseResultat {
