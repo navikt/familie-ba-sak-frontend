@@ -4,10 +4,16 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
+import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
+import {
+    NavdsSpacing4,
+    NavdsSpacing6,
+    NavdsSpacing8,
+    NavdsSpacing10,
+    NavdsSpacing24,
+} from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -33,30 +39,26 @@ interface IProps {
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
-    padding: 2rem;
+    padding: ${NavdsSpacing10};
     max-width: ${({ maxWidthStyle }) => maxWidthStyle};
 `;
 
-const StyledInnholdstittel = styled(Innholdstittel)`
-    padding-bottom: 1rem;
-`;
-
-const StyledFeilmelding = styled(Feilmelding)`
-    margin-top: 1rem;
+const StyledErrorMessage = styled(ErrorMessage)`
+    margin-top: ${NavdsSpacing4};
 `;
 
 const StyledAlert = styled(Alert)`
-    margin: 2rem 2rem 0 2rem;
+    margin: ${NavdsSpacing8} ${NavdsSpacing8} 0 ${NavdsSpacing8};
     width: fit-content;
 `;
 
 const Navigering = styled.div`
-    margin: 4rem 0 1rem;
+    margin: ${NavdsSpacing24} 0 ${NavdsSpacing4};
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
     button:not(:first-child) {
-        margin-right: 1rem;
+        margin-right: ${NavdsSpacing6};
     }
 `;
 
@@ -115,36 +117,34 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             )}
 
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
-                <StyledInnholdstittel children={tittel} />
+                <Innholdstittel children={tittel} />
 
                 {children}
 
-                {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
+                {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
 
                 <Navigering>
                     {nesteOnClick &&
                         skalViseNesteKnapp &&
                         (!erLesevisning() || kanGåVidereILesevisning) && (
-                            <Knapp
-                                type={'hoved'}
-                                spinner={senderInn}
+                            <Button
+                                loading={senderInn}
                                 disabled={senderInn}
                                 onClick={() => {
                                     if (!senderInn) {
                                         nesteOnClick();
                                     }
                                 }}
-                                mini={true}
-                                children={nesteKnappTittel ?? 'Neste'}
+                                children={nesteKnappTittel ?? 'Neste steg'}
                             />
                         )}
                     {forrigeOnClick && skalViseForrigeKnapp && (
-                        <Knapp
+                        <Button
                             onClick={() => {
                                 forrigeOnClick();
                             }}
-                            mini={true}
-                            children={forrigeKnappTittel ?? 'Forrige'}
+                            variant="secondary"
+                            children={forrigeKnappTittel ?? 'Forrige steg'}
                         />
                     )}
                 </Navigering>

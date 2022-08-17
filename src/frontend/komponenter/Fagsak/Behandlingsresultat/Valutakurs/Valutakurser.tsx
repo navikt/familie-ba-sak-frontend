@@ -58,7 +58,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     }
                 />
             )}
-            <StyledTable size="small">
+            <StyledTable>
                 <Table.Header>
                     <Table.Row>
                         <StyledHeaderCell scope="col">Barn</StyledHeaderCell>

@@ -92,6 +92,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
                     sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}
                     slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
+                    status={utenlandskPeriodeBeløp.status}
                 />
             }
         >

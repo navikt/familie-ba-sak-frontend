@@ -40,6 +40,7 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
 interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: OptionType[];
+    status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
@@ -49,6 +50,7 @@ interface IProps {
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
+    status,
     valideringErOk,
     sendInnSkjema,
     toggleForm,
@@ -74,7 +76,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer>
+            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}

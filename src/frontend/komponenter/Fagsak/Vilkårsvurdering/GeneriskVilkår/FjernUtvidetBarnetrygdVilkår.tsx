@@ -1,11 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import { Feilmelding } from 'nav-frontend-typografi';
-
 import { Delete } from '@navikt/ds-icons';
+import { Button, ErrorMessage } from '@navikt/ds-react';
+import { NavdsSpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -13,30 +12,24 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VilkårType } from '../../../../typer/vilkår';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
 
-const UtførKnapp = styled(IkonKnapp)`
-    margin-top: 0.5rem;
+const UtførKnapp = styled(Button)`
+    margin-top: ${NavdsSpacing5};
 `;
 
 interface IProps {
-    erLesevisning: boolean;
     personIdent: string;
     slettVilkårId: string;
 }
 
-const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({
-    erLesevisning,
-    personIdent,
-    slettVilkårId,
-}) => {
+const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVilkårId }) => {
     const { request } = useHttp();
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
-    const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [disabled, settDisabled] = React.useState<boolean>(false);
-    const [visFrontendFeilmelding, settVisFrontendFeilmelding] = React.useState<boolean>(false);
-    const [feilmelding, settFeilmelding] = React.useState<string>();
+    const [visModal, settVisModal] = useState<boolean>(false);
+    const [disabled, settDisabled] = useState<boolean>(false);
+    const [visFrontendFeilmelding, settVisFrontendFeilmelding] = useState<boolean>(false);
+    const [feilmelding, settFeilmelding] = useState<string>();
 
     const fjernVilkårUtvidet = () => {
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
@@ -69,15 +62,9 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({
 
     return (
         <>
-            <UtførKnapp
-                id={slettVilkårId}
-                onClick={() => settVisModal(true)}
-                mini={true}
-                erLesevisning={erLesevisning}
-                ikonPosisjon={IkonPosisjon.VENSTRE}
-                ikon={<Delete title="Fjern vilkår" />}
-                label={`Fjern vilkår`}
-            />
+            <UtførKnapp id={slettVilkårId} onClick={() => settVisModal(true)} size="small">
+                <Delete title="Fjern vilkår" /> Fjern vilkår
+            </UtførKnapp>
 
             {visModal && (
                 <UIModalWrapper
@@ -86,31 +73,33 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({
                         visModal: visModal,
                         lukkKnapp: false,
                         actions: [
-                            <Flatknapp
+                            <Button
+                                variant="tertiary"
                                 key={'avbryt'}
                                 onClick={() => {
                                     settVisFrontendFeilmelding(false);
                                     settFeilmelding(undefined);
                                     settVisModal(false);
                                 }}
-                                mini={true}
+                                size="small"
                             >
                                 Avbryt
-                            </Flatknapp>,
-                            <Knapp
+                            </Button>,
+                            <Button
                                 disabled={disabled}
-                                type={'hoved'}
                                 key={'bekreft'}
                                 onClick={() => fjernVilkårUtvidet()}
-                                mini={true}
+                                size="small"
                             >
                                 Bekreft
-                            </Knapp>,
+                            </Button>,
                         ],
                     }}
                 >
                     Er du sikker?
-                    {visFrontendFeilmelding && <Feilmelding>{feilmelding}</Feilmelding>}
+                    {visFrontendFeilmelding && (
+                        <ErrorMessage size="small">{feilmelding}</ErrorMessage>
+                    )}
                 </UIModalWrapper>
             )}
         </>

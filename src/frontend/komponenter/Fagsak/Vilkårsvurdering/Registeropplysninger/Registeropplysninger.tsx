@@ -2,10 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Ingress } from 'nav-frontend-typografi';
-
 import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
+import { NavdsFontWeightRegular, NavdsSpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
@@ -14,7 +13,11 @@ import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
 const Container = styled.div`
-    width: 32rem; ;
+    width: 32rem;
+`;
+
+const SemiBoldHeading = styled(Heading)`
+    font-weight: ${NavdsFontWeightRegular};
 `;
 
 interface IRegisteropplysningerProps {
@@ -28,15 +31,17 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
 
     return (
         <>
-            <Ingress children={'Registeropplysninger'} />
+            <SemiBoldHeading level={3} size="medium">
+                Registeropplysninger
+            </SemiBoldHeading>
             {manglerRegisteropplysninger ? (
-                <Alert variant="info" style={{ marginTop: '1rem' }}>
+                <Alert variant="info" style={{ marginTop: NavdsSpacing4 }}>
                     Det ble ikke hentet inn registeropplysninger på denne behandlingen.
                 </Alert>
             ) : (
                 <Container>
                     <HentetLabel
-                        style={{ marginBottom: '1rem' }}
+                        style={{ marginBottom: NavdsSpacing4 }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +
                             formaterIsoDato(
