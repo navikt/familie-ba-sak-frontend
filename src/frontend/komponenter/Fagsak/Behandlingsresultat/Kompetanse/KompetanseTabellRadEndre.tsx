@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
@@ -46,6 +48,10 @@ interface IProps {
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
 }
+
+const StyledAlert = styled(Alert)`
+    margin-bottom: 1.5rem;
+`;
 
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
@@ -123,6 +129,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     })}
                 </FamilieSelect>
                 <FamilieSelect
+                    className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
                         skjema.visFeilmeldinger
                     )}
@@ -149,6 +156,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
+                {skjema.felter.annenForeldersAktivitet.verdi ===
+                    AnnenForelderAktivitet.IKKE_AKTUELT && (
+                    <StyledAlert variant="info" size="small" inline>
+                        Søker har enten aleneomsorg for egne barn eller forsørger andre barn
+                    </StyledAlert>
+                )}
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'annenForeldersAktivitetsland'}
