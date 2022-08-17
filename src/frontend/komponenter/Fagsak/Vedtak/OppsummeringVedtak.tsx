@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -14,7 +15,6 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
@@ -26,10 +26,10 @@ import {
     hentStegNummer,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
@@ -41,9 +41,6 @@ interface IVedtakProps {
 
 const Container = styled.div`
     max-width: 49rem;
-    #forhandsvis-vedtaksbrev {
-        float: right;
-    }
 `;
 
 const StyledSkjemaSteg = styled(Skjemasteg)`
@@ -59,6 +56,10 @@ const StyledFlexiDiv = styled(FlexDiv)`
 
 const StyleHeading = styled(Heading)`
     display: flex;
+`;
+
+const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
+    margin-bottom: 1.5rem;
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -85,6 +86,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisDokumentModal,
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
+        React.useState<boolean>(false);
 
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
@@ -168,7 +171,21 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         }}
                         pdfdata={hentetDokument}
                     />
+                    <KorrigerEtterbetalingModal
+                        erLesevisning={erLesevisning()}
+                        korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
+                        behandlingId={åpenBehandling.behandlingId}
+                        visModal={visKorrigerEtterbetalingModal}
+                        onClose={() =>
+                            setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
+                        }
+                    />
                     <Container>
+                        {åpenBehandling.korrigertEtterbetaling && (
+                            <KorrigertEtterbetalingsbeløpAlert variant="info">
+                                Etterbetalingsbeløp i brevet er manuelt korrigert
+                            </KorrigertEtterbetalingsbeløpAlert>
+                        )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect
                                 label="Velg brev med eller uten perioder"
@@ -204,17 +221,32 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
-
-                        <IkonKnapp
+                        <Button
                             id={'forhandsvis-vedtaksbrev'}
-                            erLesevisning={false}
-                            label={'Vis vedtaksbrev'}
-                            ikon={<DokumentIkon />}
+                            variant={'secondary'}
+                            size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
-                            spinner={hentetDokument.status === RessursStatus.HENTER}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            mini={true}
-                        />
+                            loading={hentetDokument.status === RessursStatus.HENTER}
+                        >
+                            <FileContent aria-hidden /> Vis vedtaksbrev
+                        </Button>
+                        <Button
+                            id={'korriger-etterbetaling'}
+                            variant={'tertiary'}
+                            size={'small'}
+                            style={{ float: 'right' }}
+                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
+                        >
+                            {åpenBehandling.korrigertEtterbetaling ? (
+                                <>
+                                    <InformationColored aria-hidden /> Vis korrigert etterbetaling
+                                </>
+                            ) : (
+                                <>
+                                    <Edit aria-hidden /> Korriger etterbetaling
+                                </>
+                            )}
+                        </Button>
                     </Container>
                     {visModal && (
                         <UIModalWrapper
