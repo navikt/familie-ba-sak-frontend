@@ -63,7 +63,7 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                     }
                 />
             )}
-            <StyledTable size="small">
+            <StyledTable>
                 <Table.Header>
                     <Table.Row>
                         <TabellHeader scope="col">Barn</TabellHeader>

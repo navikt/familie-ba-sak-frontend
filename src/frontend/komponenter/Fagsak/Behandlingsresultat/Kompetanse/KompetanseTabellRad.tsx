@@ -91,6 +91,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}
                     slettKompetanse={slettKompetanse}
+                    status={kompetanse.status}
                 />
             }
         >
