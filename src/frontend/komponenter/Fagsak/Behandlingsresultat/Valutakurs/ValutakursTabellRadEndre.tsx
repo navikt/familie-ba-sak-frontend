@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Label } from '@navikt/ds-react';
+import { Alert, Label, Link, Heading } from '@navikt/ds-react';
 import {
     FamilieDatovelger,
     FamilieInput,
@@ -55,12 +55,16 @@ const ValutakursRad = styled.div`
         }
 
         &:nth-of-type(3) {
-            width: 16rem;
+            width: 7.5rem;
         }
         &:nth-of-type(2) {
-            width: 4.5rem;
+            width: 13rem;
         }
     }
+`;
+
+const StyledISKAlert = styled(Alert)`
+    margin-top: 2rem;
 `;
 
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
@@ -81,6 +85,7 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettValutakurs: () => void;
+    erManuellInputAvKurs: boolean;
 }
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
@@ -91,6 +96,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     valideringErOk,
     toggleForm,
     slettValutakurs,
+    erManuellInputAvKurs,
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning(true);
@@ -169,14 +175,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                     : undefined
                             }
                         />
-                        <FamilieInput
-                            label={'Valutakurs'}
-                            erLesevisning={lesevisning}
-                            value={skjema.felter.kurs?.verdi}
-                            onChange={event =>
-                                skjema.felter.kurs?.validerOgSettFelt(event.target.value)
-                            }
-                        />
                         <FamilieValutavelger
                             erLesevisning={true}
                             id={'valuta'}
@@ -195,7 +193,32 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             utenMargin
                             kanNullstilles
                         />
+                        <FamilieInput
+                            label={'Valutakurs'}
+                            erLesevisning={lesevisning}
+                            value={skjema.felter.kurs?.verdi}
+                            onChange={event =>
+                                skjema.felter.kurs?.validerOgSettFelt(event.target.value)
+                            }
+                            disabled={!erManuellInputAvKurs}
+                        />
                     </ValutakursRad>
+                    {erManuellInputAvKurs && (
+                        <StyledISKAlert variant="warning" size="small" inline>
+                            <Heading size="small">
+                                Manuell innhenting av valutakurs for Islandske kroner (ISK)
+                            </Heading>
+                            Systemet har ikke valutakurser for valutakursdatoer før 1. februar 2018.
+                            Disse må hentes fra{' '}
+                            <Link
+                                href="https://navno.sharepoint.com/:x:/r/sites/fag-og-ytelser-familie-barnetrygd/Delte%20dokumenter/E%C3%98S/Valutakalkulator%202022.xlsm?d=w200955f53e1d4323ae72f9d1b15f617c&csf=1&web=1&e=w3OE5N"
+                                target="_blank"
+                            >
+                                Valutakalkulator
+                            </Link>
+                            .
+                        </StyledISKAlert>
+                    )}
                 </SkjemaGruppe>
 
                 <Knapperad>
