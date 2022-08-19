@@ -64,6 +64,7 @@ export interface IPersonInfo {
     type: PersonType;
     dødsfallDato?: string;
     fagsakId?: Map<FagsakType, number>;
+    bostedsadresse?: IBostedsadresse;
 }
 
 export interface IForelderBarnRelasjon {
@@ -77,6 +78,11 @@ export interface IForelderBarnRelasjon {
 export interface IForelderBarnRelasjonMaskert {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     relasjonRolle: ForelderBarnRelasjonRolle;
+}
+
+export interface IBostedsadresse {
+    adresse?: string;
+    postnummer: string;
 }
 
 export interface IRestTilgang {
