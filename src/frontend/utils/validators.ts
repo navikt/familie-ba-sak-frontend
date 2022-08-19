@@ -54,6 +54,21 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
     return validerIdent(identFelt);
 };
 
+const harFyltInnOrgnr = (felt: FeltState<string>): FeltState<string> => {
+    return /^\d{9}$/.test(felt.verdi.replace(' ', ''))
+        ? ok(felt)
+        : feil(felt, 'Orgnummer har ikke 9 tall');
+};
+
+export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<string> => {
+    const validated = harFyltInnOrgnr(orgnummerFelt);
+    if (validated.valideringsstatus !== Valideringsstatus.OK) {
+        return validated;
+    }
+
+    return ok(orgnummerFelt);
+};
+
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
     const fødselsdatoPluss18 = leggTil(kalenderDato(person.fødselsdato), 18, KalenderEnhet.ÅR);
     const fomDato = kalenderDato(fom);
@@ -107,6 +122,7 @@ export const erPeriodeGyldig = (
                 }
             }
         }
+
         const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
         const fomDatoErFørTomDato = erFør(
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
