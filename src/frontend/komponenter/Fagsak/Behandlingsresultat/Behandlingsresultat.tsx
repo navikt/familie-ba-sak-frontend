@@ -47,7 +47,7 @@ import Valutakurser from './Valutakurs/Valutakurser';
 const EndretUtbetalingAndel = styled.div`
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 `;
 
 const StyledEditIkon = styled(Edit)`
