@@ -230,7 +230,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         }
     };
 
-    const kanFjerneSmåbarnstilleggFraPeriode = (utbetalingsperiode: Utbetalingsperiode): boolean => {
+    const kanFjerneSmåbarnstilleggFraPeriode = (
+        utbetalingsperiode: Utbetalingsperiode
+    ): boolean => {
         return utbetalingsperiode.utbetalingsperiodeDetaljer.some(
             detalj => detalj.ytelseType === YtelseType.SMÅBARNSTILLEGG
         );
