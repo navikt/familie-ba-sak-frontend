@@ -230,7 +230,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         }
     };
 
-    const kanFjerneSmåbarnstilleggFraMåned = (utbetalingsperiode: Utbetalingsperiode): boolean => {
+    const kanFjerneSmåbarnstilleggFraPeriode = (utbetalingsperiode: Utbetalingsperiode): boolean => {
         return utbetalingsperiode.utbetalingsperiodeDetaljer.some(
             detalj => detalj.ytelseType === YtelseType.SMÅBARNSTILLEGG
         );
@@ -245,7 +245,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         return antallMndForskjell < 36;
     };
 
-    const kanLeggeSmåbarnstilleggTilMåned = (utbetalingsperiode: Utbetalingsperiode): boolean => {
+    const kanLeggeSmåbarnstilleggTilPeriode = (utbetalingsperiode: Utbetalingsperiode): boolean => {
         const harUtvidetYtelse = utbetalingsperiode.ytelseTyper.some(
             ytelsetype => ytelsetype === YtelseType.UTVIDET_BARNETRYGD
         );
@@ -258,7 +258,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         return (
             harUtvidetYtelse &&
             harPersonUnder3ÅrIPeriode &&
-            !kanFjerneSmåbarnstilleggFraMåned(utbetalingsperiode)
+            !kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode)
         );
     };
 
@@ -373,7 +373,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         <HøyreTekst>{formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}</HøyreTekst>
                     </FlexDiv>
 
-                    {kanFjerneSmåbarnstilleggFraMåned(utbetalingsperiode) &&
+                    {kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode) &&
                         erMigreringsBehandling() && (
                             <Button
                                 id={'fjern-småbarnstillegg'}
@@ -388,7 +388,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 <Delete /> Fjern småbarnstillegg
                             </Button>
                         )}
-                    {kanLeggeSmåbarnstilleggTilMåned(utbetalingsperiode) &&
+                    {kanLeggeSmåbarnstilleggTilPeriode(utbetalingsperiode) &&
                         erMigreringsBehandling() && (
                             <Button
                                 id={'legg-til-småbarnstillegg'}
