@@ -9,7 +9,7 @@ import {
     BehandlingÅrsak,
 } from '../../../typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
-import type { IRestPersonResultat } from '../../../typer/vilkår';
+import type { IRestPersonResultat, IRestStegTilstand } from '../../../typer/vilkår';
 import { mockBarn, mockSøker } from '../person/person.mock';
 import { mockRestPersonResultat } from '../vilkårsvurdering/vilkår.mock';
 
@@ -22,6 +22,7 @@ interface IMockBehandling {
     årsak?: BehandlingÅrsak;
     type?: Behandlingstype;
     skalBehandlesAutomatisk?: boolean;
+    stegTilstand?: IRestStegTilstand[];
 }
 
 export const mockBehandling = ({
@@ -32,6 +33,16 @@ export const mockBehandling = ({
     årsak = BehandlingÅrsak.SØKNAD,
     type = Behandlingstype.FØRSTEGANGSBEHANDLING,
     skalBehandlesAutomatisk = false,
+    stegTilstand = [
+        {
+            behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
+            behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+        },
+        {
+            behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+            behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+        },
+    ],
 }: IMockBehandling = {}): IBehandling => {
     const barn = mockBarn;
 
@@ -54,16 +65,7 @@ export const mockBehandling = ({
             manueltOverstyrt: false,
         },
         steg: steg,
-        stegTilstand: [
-            {
-                behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
-                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
-            },
-            {
-                behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
-                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
-            },
-        ],
+        stegTilstand: stegTilstand,
         type: type,
         personer: [barn, søker],
         resultat: BehandlingResultat.INNVILGET,

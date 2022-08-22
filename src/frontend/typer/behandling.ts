@@ -6,6 +6,7 @@ import type { INøkkelPar } from './common';
 import type { IRestValutakurs } from './eøsPerioder';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
+import type { IVerge } from './institusjon-og-verge';
 import type { IGrunnlagPerson } from './person';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
@@ -95,7 +96,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
 
 export enum BehandlingSteg {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
-    REGISTRERE_MOTTAKER = 'REGISTRERE_MOTTAKER',
+    REGISTRERE_INSTITUSJON_OG_VERGE = 'REGISTRERE_INSTITUSJON_OG_VERGE',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
@@ -242,6 +243,7 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
+    verge?: IVerge;
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
 }
 
