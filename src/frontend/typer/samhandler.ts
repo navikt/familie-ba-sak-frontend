@@ -16,5 +16,5 @@ export interface ISamhandlerAdresse {
 export interface ISamhandlerInfo {
     tssEksternId: string;
     navn: string;
-    adressser: ISamhandlerAdresse[];
+    adresser: ISamhandlerAdresse[];
 }

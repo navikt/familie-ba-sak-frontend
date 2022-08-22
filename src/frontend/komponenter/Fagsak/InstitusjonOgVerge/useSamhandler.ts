@@ -4,8 +4,8 @@ import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../typer/samhandler';
-import { orgnummerValidator } from '../../utils/validators';
+import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../../typer/samhandler';
+import { orgnummerValidator } from '../../../utils/validators';
 
 export const useSamhandlerSkjema = () => {
     const [orgnr, settOrgnr] = useState('');

@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieCheckbox, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
@@ -14,6 +15,7 @@ import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
+import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import useOpprettFagsak from './useOpprettFagsak';
 
@@ -38,13 +40,6 @@ const StyledCheckBoxWrapper = styled.div`
     margin-bottom: 1rem;
 `;
 
-const institusjoner: IInstitusjon[] = [
-    // TODO Erstattes med liste fra søketjeneste
-    { orgNummer: '', navn: '', eksternTssNummer: '' },
-    { orgNummer: '123', navn: 'Eksempel 1', eksternTssNummer: '' },
-    { orgNummer: '456', navn: 'Eksempel 2', eksternTssNummer: '' },
-];
-
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
@@ -56,10 +51,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
-
-    const validerInput = () => {
-        return fagsakType === FagsakType.INSTITUSJON ? !!valgtInstitusjon?.navn : true;
-    };
+    const { onSubmitWrapper, skjema } = useSamhandlerSkjema();
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
         settVisFeilmelding(false);
@@ -89,6 +81,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                 personIdent: søkeresultat.ident,
                                                 aktørId: null,
                                                 fagsakType: FagsakType.NORMAL,
+                                                tssEksternId: null,
+                                                orgnr: null,
                                             },
                                             lukkModal
                                         );
@@ -140,16 +134,16 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                         settSenderInn(true);
                                         const personIdent =
                                             søkeresultat?.ident || personInfo?.personIdent;
-                                        if (
-                                            personIdent &&
-                                            validerInput() &&
-                                            (await sjekkTilgang(personIdent))
-                                        ) {
+
+                                        if (personIdent && (await sjekkTilgang(personIdent))) {
                                             opprettFagsak(
                                                 {
                                                     personIdent: personIdent,
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
+                                                    tssEksternId:
+                                                        valgtInstitusjon?.eksternTssNummer || null,
+                                                    orgnr: valgtInstitusjon?.orgNummer || null,
                                                 },
                                                 onClose
                                             );
@@ -219,36 +213,35 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             }}
                         />
                         <br />
-                        {fagsakType === FagsakType.INSTITUSJON && (
-                            <FamilieSelect
-                                erLesevisning={false}
-                                name="institusjon"
-                                value={valgtInstitusjon?.navn}
-                                feil={
-                                    !valgtInstitusjon?.navn &&
-                                    visFeilmelding &&
-                                    'Institusjon er påkrevd'
+                        <FamilieInput
+                            {...skjema.felter.orgnr.hentNavInputProps(skjema.visFeilmeldinger)}
+                            erLesevisning={false}
+                            id={'hent-samhandler'}
+                            label={'Orgnummer på Institusjon (valgfritt)'}
+                            onKeyDown={(event): void => {
+                                if (event.key === 'Enter') {
+                                    onSubmitWrapper();
+                                    const tssEksternId =
+                                        skjema.submitRessurs.status === RessursStatus.SUKSESS
+                                            ? skjema.submitRessurs.data.tssEksternId
+                                            : undefined;
+                                    const institusjon: IInstitusjon = {
+                                        orgNummer: skjema.felter.orgnr.verdi,
+                                        eksternTssNummer: tssEksternId,
+                                    };
+                                    settValgtInstitusjon(institusjon);
                                 }
-                                label={'Velg institusjon'}
-                                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                                    settValgtInstitusjon(
-                                        institusjoner.at(event.target.selectedIndex)
-                                    );
-                                }}
-                            >
-                                {institusjoner.map((institusjon: IInstitusjon) => {
-                                    return (
-                                        <option
-                                            aria-selected={institusjon === valgtInstitusjon}
-                                            key={institusjon.orgNummer}
-                                            value={institusjon.navn}
-                                        >
-                                            {`${institusjon.navn}`}
-                                        </option>
-                                    );
-                                })}
-                            </FamilieSelect>
-                        )}
+                            }}
+                        />
+
+                        <br />
+
+                        {fagsakType === FagsakType.INSTITUSJON &&
+                            skjema.submitRessurs.status === RessursStatus.SUKSESS && (
+                                <StyledUndertittel tag={'h3'}>
+                                    {`tssEksternId=${skjema.submitRessurs.data.tssEksternId} ${skjema.submitRessurs.data.navn} ${skjema.submitRessurs.data.adresser[0].postSted} `}
+                                </StyledUndertittel>
+                            )}
                     </StyledCheckBoxWrapper>
                     {!!feilmelding && visFeilmelding && <Feilmelding children={feilmelding} />}
                 </UIModalWrapper>

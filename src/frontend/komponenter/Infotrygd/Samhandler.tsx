@@ -10,7 +10,7 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-import { useSamhandlerSkjema } from './useSamhandler';
+import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 
 const SamhandlerContainer = styled.div`
     padding: 1rem;
