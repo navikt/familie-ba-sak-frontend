@@ -33,20 +33,15 @@ import {
     formaterBeløp,
     formaterIdent,
     formaterIsoDato,
-    hentAlder,
     hentAlderSomString,
-    millisekunderIEttÅr,
     sorterUtbetaling,
 } from '../../../utils/formatter';
 import {
     kalenderDato,
     kalenderDatoFraDate,
-    kalenderDatoMedFallback,
-    kalenderDiff,
     kalenderDiffMåned,
     serializeIso8601String,
 } from '../../../utils/kalender';
-import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
 
 const TableHeaderAlignedRight = styled.th`
@@ -61,9 +56,27 @@ const AlertAlignedRight = styled(Alert)`
     float: right;
 `;
 
+const FlexDiv = styled.div`
+    display: flex;
+`;
+
 const UtbetalingsbeløpTable = styled.table`
     width: 100%;
-    padding-bottom: 1.25rem;
+    padding-bottom: 1rem;
+`;
+
+const VenstreTekst = styled(Normaltekst)`
+    text-align: left;
+    font-weight: bold;
+    width: 50%;
+    margin: 1.25rem 0rem;
+`;
+
+const HøyreTekst = styled(Normaltekst)`
+    text-align: right;
+    font-weight: bold;
+    width: 50%;
+    margin: 1.25rem 2.5rem 1.25rem 0rem;
 `;
 
 interface IProps {
@@ -74,8 +87,8 @@ interface IProps {
     valutakurser: IRestValutakurs[];
 }
 
-export interface ISmåbarnstilleggJustering {
-    måned: string;
+interface ISmåbarnstilleggkorrigering {
+    årMåned: string;
 }
 
 const finnUtbetalingsBeløpStatusMap = (
@@ -146,17 +159,16 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();
 
-    const aktivMåned = formaterIsoDato(
-        serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
-        datoformat.ISO_MÅNED
-    );
-
     const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(
         new Map<string, boolean>()
     );
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
+    const aktivÅrOgMåned = formaterIsoDato(
+        serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
+        datoformat.ISO_MÅNED
+    );
     const månedNavnOgÅr = () => {
         const navn = formaterIsoDato(
             serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
@@ -164,49 +176,56 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         );
         return navn[0].toUpperCase() + navn.substr(1);
     };
+    const småbarnstilleggkorrigeringUrl = `/familie-ba-sak/api/småbarnstilleggkorrigering/behandling`;
 
-    const fjernSmåbarnstilleggFraMåned = (småbarnstilleggJustering: ISmåbarnstilleggJustering) => {
+    const fjernSmåbarnstilleggFraMåned = (
+        småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering
+    ) => {
         setJustererSmåbarnstillegg(true);
 
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            request<ISmåbarnstilleggJustering, IBehandling>({
+            request<ISmåbarnstilleggkorrigering, IBehandling>({
                 method: 'DELETE',
-                data: småbarnstilleggJustering,
-                url: `/familie-ba-sak/api/småbarnstillegg/behandling/${åpenBehandling.data.behandlingId}`,
+                data: småbarnstilleggkorrigering,
+                url: `${småbarnstilleggkorrigeringUrl}/${åpenBehandling.data.behandlingId}`,
             }).then((response: Ressurs<IBehandling>) => {
-                settToast(ToastTyper.SMÅBARNSTILLEGG_JUSTERT, {
-                    alertType: AlertType.SUCCESS,
-                    tekst: 'Småbarnstillegg er fjernet',
-                });
-                settRestFeil(undefined);
+                if (response.status === RessursStatus.SUKSESS) {
+                    settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
+                        alertType: AlertType.SUCCESS,
+                        tekst: 'Småbarnstillegg er fjernet',
+                    });
+                    settRestFeil(undefined);
+                    settÅpenBehandling(response);
+                } else {
+                    settRestFeil('Teknisk feil ved fjerning av småbarnstillegg');
+                }
                 setJustererSmåbarnstillegg(false);
-                settÅpenBehandling(response);
             });
-        } else {
-            settRestFeil('Teknisk feil ved fjerning av småbarnstillegg');
         }
     };
 
-    const leggSmåbarnstilleggTilIMåned = (måned: ISmåbarnstilleggJustering) => {
+    const leggSmåbarnstilleggTilIMåned = (
+        småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering
+    ) => {
         setJustererSmåbarnstillegg(true);
 
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            request<ISmåbarnstilleggJustering, IBehandling>({
+            request<ISmåbarnstilleggkorrigering, IBehandling>({
                 method: 'POST',
-                data: måned,
-                url: `/familie-ba-sak/api/småbarnstillegg/behandling/${åpenBehandling.data.behandlingId}`,
+                data: småbarnstilleggkorrigering,
+                url: `${småbarnstilleggkorrigeringUrl}/${åpenBehandling.data.behandlingId}`,
             }).then((response: Ressurs<IBehandling>) => {
                 if (response.status === RessursStatus.SUKSESS) {
-                    settToast(ToastTyper.SMÅBARNSTILLEGG_JUSTERT, {
+                    settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
                         alertType: AlertType.SUCCESS,
                         tekst: 'Småbarnstillegg er lagt til',
                     });
                     settRestFeil(undefined);
-                    setJustererSmåbarnstillegg(false);
                     settÅpenBehandling(response);
                 } else {
                     settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg');
                 }
+                setJustererSmåbarnstillegg(false);
             });
         }
     };
@@ -217,32 +236,30 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         );
     };
 
-    const kanLeggeSmåbarnstilleggTilMåned = (utbetalingsperiode: Utbetalingsperiode): boolean => {
-        const harUtvidet = utbetalingsperiode.ytelseTyper.some(
-            ytelsetype => ytelsetype === YtelseType.UTVIDET_BARNETRYGD
-        );
-
-        const harBarnUnder3ÅrIPeriode = utbetalingsperiode.utbetalingsperiodeDetaljer.some(
-            utbetalingsPerideDetalj =>
-                sjekkOmUnder3ÅrIPeriode(utbetalingsPerideDetalj.person.fødselsdato)
-        );
-
-        return (
-            harUtvidet &&
-            harBarnUnder3ÅrIPeriode &&
-            !kanFjerneSmåbarnstilleggFraMåned(utbetalingsperiode)
-        );
-    };
-
     const sjekkOmUnder3ÅrIPeriode = (fødselsdato: string): boolean => {
         const antallMndForskjell = kalenderDiffMåned(
             kalenderDato(fødselsdato),
             kalenderDatoFraDate(aktivEtikett.date)
         );
 
-        console.log(antallMndForskjell);
-
         return antallMndForskjell < 36;
+    };
+
+    const kanLeggeSmåbarnstilleggTilMåned = (utbetalingsperiode: Utbetalingsperiode): boolean => {
+        const harUtvidetYtelse = utbetalingsperiode.ytelseTyper.some(
+            ytelsetype => ytelsetype === YtelseType.UTVIDET_BARNETRYGD
+        );
+
+        const harPersonUnder3ÅrIPeriode = utbetalingsperiode.utbetalingsperiodeDetaljer.some(
+            utbetalingsPerideDetalj =>
+                sjekkOmUnder3ÅrIPeriode(utbetalingsPerideDetalj.person.fødselsdato)
+        );
+
+        return (
+            harUtvidetYtelse &&
+            harPersonUnder3ÅrIPeriode &&
+            !kanFjerneSmåbarnstilleggFraMåned(utbetalingsperiode)
+        );
     };
 
     const erMigreringsBehandling = (): boolean => {
@@ -264,8 +281,8 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         );
     }, [utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser]);
 
-    const småbarnstillegJustering: ISmåbarnstilleggJustering = {
-        måned: aktivMåned,
+    const småbarnstilleggKorrigering: ISmåbarnstilleggkorrigering = {
+        årMåned: aktivÅrOgMåned,
     };
 
     return (
@@ -348,32 +365,15 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         </tbody>
                     </UtbetalingsbeløpTable>
 
-                    <DashedHr />
-                    <div style={{ display: 'flex' }}>
-                        <Normaltekst
-                            style={{
-                                textAlign: 'left',
-                                fontWeight: 'bold',
-                                width: '50%',
-                                margin: '1.25rem 0rem',
-                            }}
-                        >
-                            Totalt utbetalt per mnd
-                        </Normaltekst>
-                        <Normaltekst
-                            style={{
-                                textAlign: 'right',
-                                fontWeight: 'bold',
-                                width: '50%',
-                                margin: '1.25rem 2.5rem 1.25rem 0rem',
-                            }}
-                        >
-                            {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
-                        </Normaltekst>
+                    <div className="dashed-hr" style={{ marginRight: '2.5rem' }}>
+                        <div className="line" />
                     </div>
+                    <FlexDiv>
+                        <VenstreTekst>Totalt utbetalt per mnd</VenstreTekst>
+                        <HøyreTekst>{formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}</HøyreTekst>
+                    </FlexDiv>
 
                     {kanFjerneSmåbarnstilleggFraMåned(utbetalingsperiode) &&
-                        erMigreringsBehandling() &&
                         erMigreringsBehandling() && (
                             <Button
                                 id={'fjern-småbarnstillegg'}
@@ -382,7 +382,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning()}
                                 onClick={() =>
-                                    fjernSmåbarnstilleggFraMåned(småbarnstillegJustering)
+                                    fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
                             >
                                 <Delete /> Fjern småbarnstillegg
@@ -391,13 +391,13 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                     {kanLeggeSmåbarnstilleggTilMåned(utbetalingsperiode) &&
                         erMigreringsBehandling() && (
                             <Button
-                                id={'Legg- til-småbarnstillegg'}
+                                id={'legg-til-småbarnstillegg'}
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning()}
                                 onClick={() =>
-                                    leggSmåbarnstilleggTilIMåned(småbarnstillegJustering)
+                                    leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }
                             >
                                 <AddCircle aria-hidden /> Legg til småbarnstillegg
