@@ -17,13 +17,14 @@ import { Behandling } from './Behandling';
 import { BehandlingEllerTilbakekreving } from './BehandlingEllerTilbakekreving';
 import type { VisningBehandling } from './visningBehandling';
 
+const SwitchHøyre = styled(Switch)`
+    margin-top: 1rem;
+    float: right;
+`;
+
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
-
-const SwitchHøyre = styled(Switch)`
-    float: right;
-`;
 
 const konverterBehandling = (
     behandlingEllerTilbakekreving: VisningBehandling | ITilbakekrevingsbehandling,
