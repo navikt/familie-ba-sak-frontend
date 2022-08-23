@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import classNames from 'classnames';
+import styled from 'styled-components';
 
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Switch } from '@navikt/ds-react';
 
 import type { BehandlingResultat } from '../../../typer/behandling';
 import { erBehandlingHenlagt } from '../../../typer/behandling';
@@ -15,6 +16,11 @@ import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
 import { BehandlingEllerTilbakekreving } from './BehandlingEllerTilbakekreving';
 import type { VisningBehandling } from './visningBehandling';
+
+const SwitchHøyre = styled(Switch)`
+    margin-top: 1rem;
+    float: right;
+`;
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
@@ -56,26 +62,15 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
         ),
     ];
 
+    const henlagtBehandlingEksisterer = behandlinger.some((behandling: BehandlingTabellobjekt) =>
+        erBehandlingHenlagt(behandling.behandlingEllerTilbakekreving.resultat as BehandlingResultat)
+    );
+
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Systemtittel
-                children={
-                    <>
-                        Behandlinger
-                        <FamilieCheckbox
-                            id={'vis-henlagte-behandlinger'}
-                            erLesevisning={false}
-                            label={'Vis henlagte behandlinger'}
-                            checked={visHenlagteBehandlinger}
-                            onChange={() => {
-                                setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                            }}
-                        />
-                    </>
-                }
-            />
+            <Systemtittel children={<>Behandlinger</>} />
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
@@ -110,6 +105,19 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 </table>
             ) : (
                 <Normaltekst children={'Ingen tidligere behandlinger'} />
+            )}
+            {henlagtBehandlingEksisterer && (
+                <SwitchHøyre
+                    size="small"
+                    position="left"
+                    id={'vis-henlagte-behandlinger'}
+                    checked={visHenlagteBehandlinger}
+                    onChange={() => {
+                        setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
+                    }}
+                >
+                    Vis henlagte behandlinger
+                </SwitchHøyre>
             )}
         </div>
     );
