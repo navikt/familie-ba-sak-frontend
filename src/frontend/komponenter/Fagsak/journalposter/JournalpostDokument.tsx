@@ -41,7 +41,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
         if (dokumentId !== undefined) {
             hentForhåndsvisning({
                 method: 'GET',
-                url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`
+                url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`,
             });
         } else {
             alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
