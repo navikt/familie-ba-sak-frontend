@@ -1,4 +1,4 @@
-import { BehandlingÅrsak, BehandlingSteg } from '../../../typer/behandling';
+import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../typer/behandling';
 import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
 import {
     SideId,
@@ -11,6 +11,19 @@ import {
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
+        test('REGISTRERE_MOTTAKER returneres når behandling.stegTilstand inneholder steget REGISTRERE_INSTITUSJON_OG_VERGE', () => {
+            const behandling = mockBehandling({
+                stegTilstand: [
+                    {
+                        behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE,
+                        behandlingStegStatus: BehandlingStegStatus.IKKE_UTFØRT,
+                    },
+                ],
+            });
+            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
+                SideId.REGISTRERE_MOTTAKER
+            );
+        });
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
             const behandling = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
             expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
@@ -39,7 +52,8 @@ describe('sider.ts', () => {
                 Object.values(SideId).filter(
                     side =>
                         side !== SideId.FILTRERING_FØDSELSHENDELSER &&
-                        side !== SideId.REGISTRERE_SØKNAD
+                        side !== SideId.REGISTRERE_SØKNAD &&
+                        side !== SideId.REGISTRERE_MOTTAKER
                 )
             );
         });
@@ -48,6 +62,7 @@ describe('sider.ts', () => {
     describe('Sjekk ved endring av sider', () => {
         test('Oppdater siderForBehandling-tester ved nye/fjernede sider', () => {
             const sider = [
+                SideId.REGISTRERE_MOTTAKER,
                 SideId.REGISTRERE_SØKNAD,
                 SideId.FILTRERING_FØDSELSHENDELSER,
                 SideId.VILKÅRSVURDERING,
