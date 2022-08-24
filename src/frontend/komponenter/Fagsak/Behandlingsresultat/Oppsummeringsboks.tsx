@@ -17,8 +17,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IBehandling } from '../../../typer/behandling';
-import { Behandlingstype } from '../../../typer/behandling';
-import { YtelseType, ytelsetype } from '../../../typer/beregning';
+import { ytelsetype } from '../../../typer/beregning';
 import type {
     IEøsPeriodeStatus,
     IRestEøsPeriode,
@@ -36,13 +35,13 @@ import {
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../utils/formatter';
-import {
-    kalenderDato,
-    kalenderDatoFraDate,
-    kalenderDiffMåned,
-    serializeIso8601String,
-} from '../../../utils/kalender';
+import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
+import {
+    erMigreringsBehandling,
+    kanFjerneSmåbarnstilleggFraPeriode,
+    kanLeggeSmåbarnstilleggTilPeriode,
+} from './OppsummeringsboksUtils';
 
 const TableHeaderAlignedRight = styled.th`
     text-align: right;
@@ -77,6 +76,10 @@ const HøyreTekst = styled(Normaltekst)`
     font-weight: bold;
     width: 50%;
     margin: 1.25rem 2.5rem 1.25rem 0rem;
+`;
+
+const AlertWithBottomMargin = styled(Alert)`
+    margin-bottom: 1.5rem;
 `;
 
 interface IProps {
@@ -230,48 +233,6 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         }
     };
 
-    const kanFjerneSmåbarnstilleggFraPeriode = (
-        utbetalingsperiode: Utbetalingsperiode
-    ): boolean => {
-        return utbetalingsperiode.utbetalingsperiodeDetaljer.some(
-            detalj => detalj.ytelseType === YtelseType.SMÅBARNSTILLEGG
-        );
-    };
-
-    const sjekkOmUnder3ÅrIPeriode = (fødselsdato: string): boolean => {
-        const antallMndForskjell = kalenderDiffMåned(
-            kalenderDato(fødselsdato),
-            kalenderDatoFraDate(aktivEtikett.date)
-        );
-
-        return antallMndForskjell < 36;
-    };
-
-    const kanLeggeSmåbarnstilleggTilPeriode = (utbetalingsperiode: Utbetalingsperiode): boolean => {
-        const harUtvidetYtelse = utbetalingsperiode.ytelseTyper.some(
-            ytelsetype => ytelsetype === YtelseType.UTVIDET_BARNETRYGD
-        );
-
-        const harPersonUnder3ÅrIPeriode = utbetalingsperiode.utbetalingsperiodeDetaljer.some(
-            utbetalingsPerideDetalj =>
-                sjekkOmUnder3ÅrIPeriode(utbetalingsPerideDetalj.person.fødselsdato)
-        );
-
-        return (
-            harUtvidetYtelse &&
-            harPersonUnder3ÅrIPeriode &&
-            !kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode)
-        );
-    };
-
-    const erMigreringsBehandling = (): boolean => {
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            return åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-        } else {
-            return false;
-        }
-    };
-
     React.useEffect(() => {
         setUtbetalingsBeløpStatusMap(
             finnUtbetalingsBeløpStatusMap(
@@ -292,9 +253,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
             <div className={'behandlingsresultat-informasjonsboks__header'}>
                 <div className={'behandlingsresultat-informasjonsboks__header__info'}>
                     {restFeil && (
-                        <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
+                        <AlertWithBottomMargin variant="error" inline>
                             {restFeil}
-                        </Alert>
+                        </AlertWithBottomMargin>
                     )}
 
                     <Element>{månedNavnOgÅr()}</Element>
@@ -376,7 +337,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                     </FlexDiv>
 
                     {kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode) &&
-                        erMigreringsBehandling() && (
+                        erMigreringsBehandling(åpenBehandling) && (
                             <Button
                                 id={'fjern-småbarnstillegg'}
                                 variant={'tertiary'}
@@ -387,11 +348,11 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
                             >
-                                <Delete /> Fjern småbarnstillegg
+                                <Delete aria-hidden /> Fjern småbarnstillegg
                             </Button>
                         )}
-                    {kanLeggeSmåbarnstilleggTilPeriode(utbetalingsperiode) &&
-                        erMigreringsBehandling() && (
+                    {kanLeggeSmåbarnstilleggTilPeriode(utbetalingsperiode, aktivEtikett.date) &&
+                        erMigreringsBehandling(åpenBehandling) && (
                             <Button
                                 id={'legg-til-småbarnstillegg'}
                                 variant={'tertiary'}
