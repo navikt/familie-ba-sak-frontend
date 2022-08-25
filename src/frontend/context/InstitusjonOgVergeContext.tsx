@@ -4,34 +4,20 @@ import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { feil, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg } from '../typer/behandling';
 import type { IBehandling } from '../typer/behandling';
 import { FagsakType } from '../typer/fagsak';
-import type { IRegistrerInstitusjonOgVerge, IVerge } from '../typer/institusjon-og-verge';
+import type { IRegistrerInstitusjonOgVerge } from '../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../typer/person';
-import { hentAlder, kunSiffer } from '../utils/formatter';
+import { hentAlder } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { identValidator } from '../utils/validators';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
-
-const brytOppLagretAdresseinfo = (verge?: IVerge) => {
-    // til preliminær bruk
-    const adresse = verge?.adresse.split('\n').at(0);
-    const postnummerOgSted = verge?.adresse.split('\n').at(1);
-    const postnummer = postnummerOgSted?.split(' ')?.at(0);
-    const sted = postnummerOgSted?.split(' ')?.at(1);
-    return {
-        adresse,
-        postnummer,
-        sted,
-    };
-};
 
 const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
@@ -42,9 +28,6 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         const { request } = useHttp();
         const [hentPersonFeilmelding, settHentPersonFeilmelding] = useState<string | undefined>('');
         const [submitFeilmelding, settSubmitFeilmelding] = useState<string | undefined>('');
-        const lesevisning = () =>
-            erLesevisning() ||
-            åpenBehandling?.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE;
 
         const fagsakType: { [key: string]: string } = {
             data:
@@ -54,10 +37,6 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                     ? hentFrontendFeilmelding(minimalFagsak) || 'Ukjent feil ved henting av fagsak'
                     : '',
         };
-        const institusjon = useFelt<string | undefined>({
-            verdi: undefined,
-        });
-        const { adresse, postnummer, sted } = brytOppLagretAdresseinfo(åpenBehandling.verge);
         const { skjema, onSubmit } = useSkjema<
             {
                 fødselsnummer: string;
@@ -77,43 +56,24 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                         if (avhengigheter?.feilmelding) {
                             return feil(felt, avhengigheter?.feilmelding);
                         } else {
-                            return felt.verdi === '' ? ok(felt) : identValidator(felt);
+                            return identValidator(felt);
                         }
                     },
                 }),
-                institusjon: institusjon,
+                institusjon: useFelt<string | undefined>({
+                    verdi: undefined,
+                }),
                 navn: useFelt<string | undefined>({
-                    verdi: åpenBehandling.verge?.navn || '', // TODO Kan også brukes til oppgitt kontaktperson for en institusjon
-                    avhengigheter: institusjon,
-                    valideringsfunksjon: (felt, avhengigheter) => {
-                        if (
-                            avhengigheter?.institusjon?.verdi ||
-                            (felt.verdi && felt.verdi.length > 0)
-                        ) {
-                            return ok(felt);
-                        } else {
-                            return feil(felt, 'Vergens navn er ikke satt');
-                        }
-                    },
+                    verdi: '',
                 }),
                 adresse: useFelt<string>({
-                    verdi: adresse || '',
+                    verdi: '',
                 }),
                 postnummer: useFelt<string>({
-                    verdi: postnummer || '',
-                    valideringsfunksjon: felt => {
-                        if (kunSiffer(felt.verdi)) {
-                            return ok(felt);
-                        } else {
-                            return feil(
-                                felt,
-                                felt.verdi === '' ? 'Postnummer er ikke satt' : 'Ugyldig postnummer'
-                            );
-                        }
-                    },
+                    verdi: '',
                 }),
                 sted: useFelt<string>({
-                    verdi: sted || '',
+                    verdi: '',
                 }),
             },
             skjemanavn: 'Registrer mottaker',
@@ -167,7 +127,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         };
 
         const onSubmitMottaker = () => {
-            if (lesevisning()) {
+            if (erLesevisning()) {
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
             } else {
                 onSubmit<IRegistrerInstitusjonOgVerge | undefined>(
@@ -183,13 +143,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                             vergeInfo:
                                 fagsakType.data !== FagsakType.INSTITUSJON
                                     ? {
-                                          navn: skjema.felter.navn.verdi || '',
-                                          adresse:
-                                              skjema.felter.adresse.verdi +
-                                              `\n${skjema.felter.postnummer.verdi} ${skjema.felter.sted.verdi}`,
-                                          ident: skjema.felter.fødselsnummer.verdi
-                                              ? skjema.felter.fødselsnummer.verdi
-                                              : undefined,
+                                          ident: skjema.felter.fødselsnummer.verdi,
                                       }
                                     : undefined,
                         },
@@ -218,7 +172,6 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
             hentPerson,
             onSubmitMottaker,
             skjema,
-            lesevisning,
             submitFeilmelding,
         };
     }

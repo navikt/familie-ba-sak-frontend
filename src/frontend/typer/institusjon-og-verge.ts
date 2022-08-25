@@ -1,7 +1,5 @@
 export interface IVerge {
-    navn: string;
-    adresse: string;
-    ident?: string;
+    ident: string;
 }
 
 export interface IInstitusjon {
