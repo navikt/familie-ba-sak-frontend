@@ -198,7 +198,7 @@ const useOpprettBehandling = (
                             søkersIdent,
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
-                            navident: innloggetSaksbehandler?.navIdent,
+                            navIdent: innloggetSaksbehandler?.navIdent,
                             nyMigreringsdato: erMigreringFraInfoTrygd
                                 ? skjema.felter.migreringsdato.verdi
                                 : undefined,
