@@ -82,7 +82,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                 aktørId: null,
                                                 fagsakType: FagsakType.NORMAL,
                                                 tssEksternId: null,
-                                                orgnr: null,
+                                                orgNummer: null,
                                             },
                                             lukkModal
                                         );
@@ -143,7 +143,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                     fagsakType: fagsakType,
                                                     tssEksternId:
                                                         valgtInstitusjon?.eksternTssNummer || null,
-                                                    orgnr: valgtInstitusjon?.orgNummer || null,
+                                                    orgNummer: valgtInstitusjon?.orgNummer || null,
                                                 },
                                                 onClose
                                             );

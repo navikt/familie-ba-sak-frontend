@@ -15,7 +15,7 @@ export interface IOpprettFagsakData {
     aktørId: string | null;
     fagsakType: FagsakType | null;
     tssEksternId: string | null;
-    orgnr: string | null;
+    orgNummer: string | null;
 }
 
 const useOpprettFagsak = () => {
