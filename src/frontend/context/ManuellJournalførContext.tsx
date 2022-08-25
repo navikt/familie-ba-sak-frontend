@@ -23,6 +23,7 @@ import type { IBehandlingstema } from '../typer/behandlingstema';
 import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
+import type { IInstitusjon } from '../typer/institusjon-og-verge';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -107,6 +108,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: number[];
             erEnsligMindreårig: boolean;
             erPåInstitusjon: boolean;
+            institusjon: IInstitusjon | null;
         },
         string
     >({
@@ -164,6 +166,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             erPåInstitusjon: useFelt<boolean>({
                 verdi: false,
+            }),
+            institusjon: useFelt<IInstitusjon | undefined>({
+                verdi: undefined,
             }),
         },
         skjemanavn: 'Journalfør dokument',
@@ -404,6 +409,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
                         erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
+                        institusjone: skjema.felter.institusjon.verdi,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
@@ -495,6 +501,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 !tilordnetInnloggetSaksbehandler())
         );
     };
+
+    // const erLesevisning = () => {
+    //     return false;
+    // };
 
     const kanKnytteJournalpostTilBehandling = () => {
         return dataForManuellJournalføring.status !== RessursStatus.SUKSESS

@@ -36,7 +36,7 @@ export const useSamhandlerSkjema = () => {
     return {
         orgnr,
         onSubmitWrapper,
-        skjema,
+        samhandlerSkjema: skjema,
     };
 };
 

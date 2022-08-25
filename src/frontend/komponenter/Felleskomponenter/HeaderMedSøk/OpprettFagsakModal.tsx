@@ -51,7 +51,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
-    const { onSubmitWrapper, skjema } = useSamhandlerSkjema();
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
         settVisFeilmelding(false);
@@ -142,7 +142,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
                                                     tssEksternId:
-                                                        valgtInstitusjon?.eksternTssNummer || null,
+                                                        valgtInstitusjon?.tssEksternId || null,
                                                     orgNummer: valgtInstitusjon?.orgNummer || null,
                                                 },
                                                 onClose
@@ -214,20 +214,23 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         />
                         <br />
                         <FamilieInput
-                            {...skjema.felter.orgnr.hentNavInputProps(skjema.visFeilmeldinger)}
+                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                samhandlerSkjema.visFeilmeldinger
+                            )}
                             erLesevisning={false}
                             id={'hent-samhandler'}
-                            label={'Orgnummer på Institusjon (valgfritt)'}
+                            label={'Orgnummer på Institusjon'}
                             onKeyDown={(event): void => {
                                 if (event.key === 'Enter') {
                                     onSubmitWrapper();
                                     const tssEksternId =
-                                        skjema.submitRessurs.status === RessursStatus.SUKSESS
-                                            ? skjema.submitRessurs.data.tssEksternId
+                                        samhandlerSkjema.submitRessurs.status ===
+                                        RessursStatus.SUKSESS
+                                            ? samhandlerSkjema.submitRessurs.data.tssEksternId
                                             : undefined;
                                     const institusjon: IInstitusjon = {
-                                        orgNummer: skjema.felter.orgnr.verdi,
-                                        eksternTssNummer: tssEksternId,
+                                        orgNummer: samhandlerSkjema.felter.orgnr.verdi,
+                                        tssEksternId: tssEksternId,
                                     };
                                     settValgtInstitusjon(institusjon);
                                 }
@@ -237,9 +240,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         <br />
 
                         {fagsakType === FagsakType.INSTITUSJON &&
-                            skjema.submitRessurs.status === RessursStatus.SUKSESS && (
+                            samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS && (
                                 <StyledUndertittel tag={'h3'}>
-                                    {`tssEksternId=${skjema.submitRessurs.data.tssEksternId} ${skjema.submitRessurs.data.navn} ${skjema.submitRessurs.data.adresser[0].postSted} `}
+                                    {`tssEksternId=${samhandlerSkjema.submitRessurs.data.tssEksternId} ${samhandlerSkjema.submitRessurs.data.navn} ${samhandlerSkjema.submitRessurs.data.adresser[0].postSted} `}
                                 </StyledUndertittel>
                             )}
                     </StyledCheckBoxWrapper>

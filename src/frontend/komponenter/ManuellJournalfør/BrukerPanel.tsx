@@ -2,15 +2,20 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import type { IInstitusjon } from '../../typer/institusjon-og-verge';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
+import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
@@ -46,6 +51,7 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
     useEffect(() => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
@@ -126,6 +132,48 @@ export const BrukerPanel: React.FC = () => {
                     </StyledCheckBoxWrapper>
                 </div>
             )}
+            {skjema.felter.erPåInstitusjon.verdi && (
+                <StyledDiv>
+                    {!erLesevisning() && (
+                        <FamilieInput
+                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                samhandlerSkjema.visFeilmeldinger
+                            )}
+                            erLesevisning={erLesevisning()}
+                            id={'hent-samhandler'}
+                            label={'Skriv orgnr'}
+                            bredde={'XL'}
+                            placeholder={'orgnr'}
+                        />
+                    )}
+                    <StyledKnapp
+                        onClick={() => {
+                            settSpinner(true);
+                            onSubmitWrapper();
+                            const tssEksternId =
+                                samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
+                                    ? samhandlerSkjema.submitRessurs.data.tssEksternId
+                                    : '';
+                            const institusjon: IInstitusjon = {
+                                orgNummer: samhandlerSkjema.felter.orgnr.verdi,
+                                tssEksternId: tssEksternId,
+                            };
+
+                            skjema.felter.institusjon.validerOgSettFelt(institusjon);
+                            // settValgtInstitusjon(institusjon);
+                            settSpinner(false);
+                        }}
+                        children={'Sett orgnr'}
+                        spinner={spinner}
+                        mini={true}
+                        erLesevisning={erLesevisning()}
+                    />
+                </StyledDiv>
+            )}
+            {skjema.felter.institusjon.verdi !== undefined && (
+                <Normaltekst>legg inn tekst for tss ekstern id</Normaltekst>
+            )}
+            <br />
             <StyledDiv>
                 {!erLesevisning() && (
                     <FamilieInput
