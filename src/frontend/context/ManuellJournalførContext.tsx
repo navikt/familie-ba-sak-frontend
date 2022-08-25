@@ -108,7 +108,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: number[];
             erEnsligMindreårig: boolean;
             erPåInstitusjon: boolean;
-            institusjon: IInstitusjon | null;
+            institusjon: IInstitusjon | undefined;
         },
         string
     >({
@@ -409,7 +409,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
                         erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
-                        institusjone: skjema.felter.institusjon.verdi,
+                        institusjon: skjema.felter.institusjon.verdi,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {

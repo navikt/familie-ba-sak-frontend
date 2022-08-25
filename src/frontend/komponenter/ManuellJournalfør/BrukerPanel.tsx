@@ -46,6 +46,7 @@ export const BrukerPanel: React.FC = () => {
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
+    const [samhandler, settSamhandler] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
     const nyIdent = useFelt({
         verdi: '',
@@ -92,6 +93,7 @@ export const BrukerPanel: React.FC = () => {
                             erLesevisning={false}
                             label={'Bruker er enslig mindreårig'}
                             checked={skjema.felter.erEnsligMindreårig.verdi}
+                            disabled={skjema.felter.erPåInstitusjon.verdi}
                             onChange={() => {
                                 if (erLesevisning()) {
                                     return;
@@ -114,6 +116,7 @@ export const BrukerPanel: React.FC = () => {
                             erLesevisning={false}
                             label={'Bruker er på institusjon'}
                             checked={skjema.felter.erPåInstitusjon.verdi}
+                            disabled={skjema.felter.erEnsligMindreårig.verdi}
                             onChange={() => {
                                 if (erLesevisning()) {
                                     return;
@@ -160,7 +163,9 @@ export const BrukerPanel: React.FC = () => {
                             };
 
                             skjema.felter.institusjon.validerOgSettFelt(institusjon);
-                            // settValgtInstitusjon(institusjon);
+                            settSamhandler(
+                                `Samhandler satt til orgnummer ${institusjon.orgNummer} og tssEksternId ${institusjon.tssEksternId}`
+                            );
                             settSpinner(false);
                         }}
                         children={'Sett orgnr'}
@@ -170,9 +175,7 @@ export const BrukerPanel: React.FC = () => {
                     />
                 </StyledDiv>
             )}
-            {skjema.felter.institusjon.verdi !== undefined && (
-                <Normaltekst>legg inn tekst for tss ekstern id</Normaltekst>
-            )}
+            {samhandler !== undefined && <Normaltekst>{samhandler}</Normaltekst>}
             <br />
             <StyledDiv>
                 {!erLesevisning() && (
