@@ -6,7 +6,7 @@ import { ExternalLink } from '@navikt/ds-icons';
 import { Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import useDokument from '../../../hooks/useDokument';
+import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
 
 const ListeElement = styled.li`
@@ -29,10 +29,14 @@ const StyledLink = styled(Link)`
 interface IProps {
     dokument: IDokumentInfo;
     journalpostId: string;
+    hentForhåndsvisning: <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => void;
 }
 
-export const JournalpostDokument: React.FC<IProps> = ({ dokument, journalpostId }) => {
-    const { hentForhåndsvisning } = useDokument();
+export const JournalpostDokument: React.FC<IProps> = ({
+    dokument,
+    journalpostId,
+    hentForhåndsvisning,
+}) => {
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
             hentForhåndsvisning({
