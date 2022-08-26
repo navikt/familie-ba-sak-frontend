@@ -21,7 +21,7 @@ interface IProps {
 }
 
 const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
-    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } = useBehandling();
+    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig, erBehandlingAvsluttet } = useBehandling();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
     const { innloggetSaksbehandler } = useApp();
 
@@ -98,7 +98,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                     onClose: lukkBehandlendeEnhetModal,
                     lukkKnapp: true,
                     tittel: 'Endre enhet for denne behandlingen',
-                    visModal,
+                    visModal: visModal && !erBehandlingAvsluttet,
                 }}
             >
                 <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
