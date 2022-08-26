@@ -85,6 +85,7 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettValutakurs: () => void;
+    sletterValutakurs: boolean;
     erManuellInputAvKurs: boolean;
 }
 
@@ -96,6 +97,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     valideringErOk,
     toggleForm,
     slettValutakurs,
+    sletterValutakurs,
     erManuellInputAvKurs,
 }) => {
     const { erLesevisning } = useBehandling();
@@ -252,8 +254,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
                                 barn => `${barn}-`
                             )}_${skjema.felter.initielFom.verdi}`}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            spinner={sletterValutakurs}
+                            disabled={sletterValutakurs}
                             mini={true}
                             label={'Fjern'}
                             ikonPosisjon={IkonPosisjon.VENSTRE}
