@@ -66,6 +66,7 @@ interface IProps {
 
 const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
+    const [sletterValutakurs, settSletterValutakurs] = React.useState<boolean>(false);
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
@@ -161,10 +162,12 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const slettValutakurs = () => {
         settSubmitRessurs(byggTomRessurs());
         settVisfeilmeldinger(false);
+        settSletterValutakurs(true);
         request<void, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}/${valutakurs.id}`,
         }).then((response: Ressurs<IBehandling>) => {
+            settSletterValutakurs(false);
             if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
                 settErValutakursEkspandert(false);
@@ -209,6 +212,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         erValutakursSkjemaEndret,
         nullstillSkjema,
         slettValutakurs,
+        sletterValutakurs,
         erManuellInputAvKurs,
     };
 };
