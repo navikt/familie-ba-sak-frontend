@@ -21,7 +21,8 @@ interface IProps {
 }
 
 const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
-    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig, erBehandlingAvsluttet } = useBehandling();
+    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig, erBehandlingAvsluttet } =
+        useBehandling();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
     const { innloggetSaksbehandler } = useApp();
 
