@@ -176,9 +176,9 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         parterDetteGjelderFor: [PersonType.BARN],
     },
     GIFT_PARTNERSKAP: {
-        beskrivelse: 'ugift og ikke partnerskap',
+        beskrivelse: 'inngått ekteskap eller partnerskap',
         key: 'GIFT_PARTNERSKAP',
-        tittel: 'Ugift og ikke partnerskap',
+        tittel: 'Inngått ekteskap eller partnerskap',
         spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
         parterDetteGjelderFor: [PersonType.BARN],
     },
