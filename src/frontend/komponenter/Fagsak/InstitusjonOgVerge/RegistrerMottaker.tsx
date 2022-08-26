@@ -22,9 +22,8 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerMottaker: React.FC = () => {
-    const { fagsakType, lesevisning, onSubmitMottaker, submitFeilmelding } =
-        useInstitusjonOgVerge();
-    const { behandlingsstegSubmitressurs } = useBehandling();
+    const { fagsakType, onSubmitMottaker, submitFeilmelding } = useInstitusjonOgVerge();
+    const { behandlingsstegSubmitressurs, erLesevisning } = useBehandling();
 
     return (
         <>
@@ -33,11 +32,15 @@ const RegistrerMottaker: React.FC = () => {
                     className={'mottaker'}
                     tittel={'Registrer mottaker'}
                     nesteOnClick={onSubmitMottaker}
-                    nesteKnappTittel={lesevisning() ? 'Neste' : 'Bekreft og fortsett'}
+                    nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
-                    {fagsakType.data === FagsakType.INSTITUSJON ? <Institusjon /> : <Verge />}
+                    {fagsakType.data === FagsakType.INSTITUSJON ? (
+                        <Institusjon />
+                    ) : (
+                        <Verge erLesevisning={erLesevisning()} />
+                    )}
                     {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>
             )}
