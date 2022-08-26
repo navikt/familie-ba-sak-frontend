@@ -81,8 +81,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                 personIdent: søkeresultat.ident,
                                                 aktørId: null,
                                                 fagsakType: FagsakType.NORMAL,
-                                                tssEksternId: null,
-                                                orgNummer: null,
+                                                institusjon: null,
                                             },
                                             lukkModal
                                         );
@@ -141,16 +140,20 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                     personIdent: personIdent,
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
-                                                    tssEksternId:
-                                                        valgtInstitusjon?.tssEksternId || null,
-                                                    orgNummer: valgtInstitusjon?.orgNummer || null,
+                                                    institusjon: valgtInstitusjon
+                                                        ? {
+                                                              orgNummer: valgtInstitusjon.orgNummer,
+                                                              tssEksternId:
+                                                                  valgtInstitusjon.tssEksternId,
+                                                          }
+                                                        : null,
                                                 },
                                                 onClose
                                             );
                                         } else {
                                             settSenderInn(false);
-                                            settVisFeilmelding(true);
                                         }
+                                        settVisFeilmelding(true);
                                     }}
                                     children={'Opprett fagsak'}
                                     disabled={senderInn}
@@ -195,6 +198,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 } else {
                                     settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRIG);
                                 }
+                                settVisFeilmelding(false);
                             }}
                         />
                         <br />
@@ -210,6 +214,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 } else {
                                     settFagsakType(FagsakType.INSTITUSJON);
                                 }
+                                settVisFeilmelding(false);
                             }}
                         />
                         <br />
@@ -227,7 +232,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                         samhandlerSkjema.submitRessurs.status ===
                                         RessursStatus.SUKSESS
                                             ? samhandlerSkjema.submitRessurs.data.tssEksternId
-                                            : undefined;
+                                            : '';
                                     const institusjon: IInstitusjon = {
                                         orgNummer: samhandlerSkjema.felter.orgnr.verdi,
                                         tssEksternId: tssEksternId,

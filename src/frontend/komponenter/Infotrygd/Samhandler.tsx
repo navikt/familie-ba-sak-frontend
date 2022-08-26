@@ -32,26 +32,28 @@ const HentSakerKnapp = styled(Knapp)`
 `;
 
 export const Samhandler: React.FC = () => {
-    const { onSubmitWrapper, skjema } = useSamhandlerSkjema();
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
 
     const location = useLocation();
     useEffect(() => {
         if (location.state) {
             const state = location.state as { bruker: string };
-            skjema.felter.orgnr.verdi = state.bruker;
+            samhandlerSkjema.felter.orgnr.verdi = state.bruker;
             onSubmitWrapper();
         }
     }, []);
 
-    const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
+    const skjemaErLåst = samhandlerSkjema.submitRessurs.status === RessursStatus.HENTER;
 
     return (
         <SamhandlerContainer>
             <Innholdstittel>Søk samhandler</Innholdstittel>
             <HentSakerFlex>
-                <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
+                <SkjemaGruppe feil={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}>
                     <Input
-                        {...skjema.felter.orgnr.hentNavInputProps(skjema.visFeilmeldinger)}
+                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                            samhandlerSkjema.visFeilmeldinger
+                        )}
                         id={'hent-samhandler'}
                         label={'Skriv inn orgnr'}
                         bredde={'XL'}
@@ -67,11 +69,12 @@ export const Samhandler: React.FC = () => {
                     Hent samhandler
                 </HentSakerKnapp>
             </HentSakerFlex>
-            {skjema.submitRessurs.status === RessursStatus.SUKSESS ? (
+            {samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS ? (
                 <Innholdstittel>
-                    {skjema.submitRessurs.data.tssEksternId} {skjema.submitRessurs.data.navn} <br />
-                    {skjema.submitRessurs.data.adressser[0].adresseType}{' '}
-                    {skjema.submitRessurs.data.adressser[0].postSted}
+                    {samhandlerSkjema.submitRessurs.data.tssEksternId}{' '}
+                    {samhandlerSkjema.submitRessurs.data.navn} <br />
+                    {samhandlerSkjema.submitRessurs.data.adresser[0].adresseType}{' '}
+                    {samhandlerSkjema.submitRessurs.data.adresser[0].postSted}
                 </Innholdstittel>
             ) : undefined}
         </SamhandlerContainer>

@@ -177,7 +177,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                                 fagsakType.data === FagsakType.INSTITUSJON
                                     ? {
                                           orgNummer: '',
-                                          eksternTssNummer: '',
+                                          tssEksternId: '',
                                       }
                                     : undefined,
                             vergeInfo:
