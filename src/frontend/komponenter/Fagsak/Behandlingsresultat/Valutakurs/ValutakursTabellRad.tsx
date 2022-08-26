@@ -39,6 +39,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
         kanSendeSkjema,
         erValutakursSkjemaEndret,
         slettValutakurs,
+        sletterValutakurs,
         erManuellInputAvKurs,
     } = useValutakursSkjema({
         valutakurs,
@@ -83,6 +84,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                     sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}
                     slettValutakurs={slettValutakurs}
+                    sletterValutakurs={sletterValutakurs}
                     erManuellInputAvKurs={erManuellInputAvKurs}
                 />
             }
