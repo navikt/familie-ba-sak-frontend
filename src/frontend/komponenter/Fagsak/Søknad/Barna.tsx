@@ -66,35 +66,33 @@ const Barna: React.FunctionComponent = () => {
         }
     );
 
+    const maskerteRelasjoner =
+        bruker.status === RessursStatus.SUKSESS
+            ? bruker.data.forelderBarnRelasjonMaskert.filter(
+                  (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert) =>
+                      forelderBarnRelasjonMaskert.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+              )
+            : [];
+
     return (
         <BarnaWrapper className={'søknad__barna'}>
             <Systemtittel children={'Opplysninger om barn'} />
-            {bruker.status === RessursStatus.SUKSESS &&
-                bruker.data.forelderBarnRelasjonMaskert
-                    .filter(
-                        (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert) =>
-                            forelderBarnRelasjonMaskert.relasjonRolle ===
-                            ForelderBarnRelasjonRolle.BARN
-                    )
-                    .map(
-                        (
-                            forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert,
-                            index: number
-                        ) => {
-                            return (
-                                <BarnMedDiskresjonskode
-                                    key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
-                                >
-                                    <StyledRødError height={24} width={24} />
-                                    {`Bruker har barn med diskresjonskode ${
-                                        adressebeskyttelsestyper[
-                                            forelderBarnRelasjonMaskert.adressebeskyttelseGradering
-                                        ] ?? 'ukjent'
-                                    }`}
-                                </BarnMedDiskresjonskode>
-                            );
-                        }
-                    )}
+            {maskerteRelasjoner.map(
+                (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
+                    return (
+                        <BarnMedDiskresjonskode
+                            key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
+                        >
+                            <StyledRødError height={24} width={24} />
+                            {`Bruker har barn med diskresjonskode ${
+                                adressebeskyttelsestyper[
+                                    forelderBarnRelasjonMaskert.adressebeskyttelseGradering
+                                ] ?? 'ukjent'
+                            }`}
+                        </BarnMedDiskresjonskode>
+                    );
+                }
+            )}
 
             <br />
             <StyledCheckboxGruppe
@@ -117,7 +115,7 @@ const Barna: React.FunctionComponent = () => {
                     />
                 ))}
 
-                {sorterteBarnMedOpplysninger.length === 0 && (
+                {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
                     <IngenBarnRegistrertInfo
                         variant="info"
                         children={'Folkeregisteret har ikke registrerte barn på denne søkeren'}

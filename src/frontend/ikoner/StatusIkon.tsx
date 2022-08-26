@@ -1,18 +1,6 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
-import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
-
-const StyledSuccess = styled(SuccessFilled)`
-    color: var(--navds-semantic-color-feedback-success-icon);
-`;
-const StyledError = styled(ErrorFilled)`
-    color: var(--navds-semantic-color-feedback-danger-icon);
-`;
-const StyledWarning = styled(WarningFilled)`
-    color: var(--navds-semantic-color-feedback-warning-border);
-`;
+import { ErrorColored, SuccessColored, WarningColored } from '@navikt/ds-icons';
 
 interface IProps {
     status?: Status;
@@ -29,12 +17,12 @@ export enum Status {
 const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
     switch (status) {
         case Status.OK:
-            return <StyledSuccess height={height} width={width} />;
+            return <SuccessColored height={height} width={width} />;
         case Status.FEIL:
-            return <StyledError height={height} width={width} />;
+            return <ErrorColored height={height} width={width} />;
         case Status.ADVARSEL:
         default:
-            return <StyledWarning height={height} width={width} />;
+            return <WarningColored height={height} width={width} />;
     }
 };
 

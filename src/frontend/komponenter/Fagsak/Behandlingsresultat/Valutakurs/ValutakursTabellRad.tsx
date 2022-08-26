@@ -46,6 +46,14 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     });
 
     React.useEffect(() => {
+        if (valutakurs.valutakode !== skjema.felter.valutakode?.verdi) {
+            skjema.felter.kurs?.validerOgSettFelt('');
+            skjema.felter.valutakursdato?.validerOgSettFelt('');
+            skjema.felter.valutakode?.validerOgSettFelt(valutakurs.valutakode);
+        }
+    }, [valutakurs]);
+
+    React.useEffect(() => {
         if (visFeilmeldinger && erValutakursEkspandert) {
             kanSendeSkjema();
         }
@@ -70,6 +78,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                 <ValutakursTabellRadEndre
                     skjema={skjema}
                     tilgjengeligeBarn={barn}
+                    status={valutakurs.status}
                     valideringErOk={valideringErOk}
                     sendInnSkjema={sendInnSkjema}
                     toggleForm={toggleForm}

@@ -7,6 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { EøsProvider } from '../../context/Eøs/EøsContext';
+import { InstitusjonOgVergeProvider } from '../../context/InstitusjonOgVergeContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -17,6 +18,7 @@ import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
 import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
+import RegistrerMottaker from './InstitusjonOgVerge/RegistrerMottaker';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
@@ -41,6 +43,14 @@ const BehandlingContainer: React.FunctionComponent = () => {
         case RessursStatus.SUKSESS:
             return (
                 <Routes>
+                    <Route
+                        path="/registrer-mottaker"
+                        element={
+                            <InstitusjonOgVergeProvider åpenBehandling={åpenBehandling.data}>
+                                <RegistrerMottaker />
+                            </InstitusjonOgVergeProvider>
+                        }
+                    />
                     <Route
                         path="/registrer-soknad"
                         element={

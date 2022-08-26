@@ -91,6 +91,7 @@ const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
 interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
     tilgjengeligeBarn: OptionType[];
+    status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
@@ -100,6 +101,7 @@ interface IProps {
 const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
+    status,
     valideringErOk,
     sendInnSkjema,
     toggleForm,
@@ -132,7 +134,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer maxWidth={34}>
+            <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
                 <UtbetaltBeløpInfo variant="info" inline>
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna

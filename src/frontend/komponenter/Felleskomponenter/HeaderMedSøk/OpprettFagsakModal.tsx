@@ -10,7 +10,7 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
-import type { IInstitusjon } from '../../../typer/mottaker';
+import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
@@ -40,9 +40,9 @@ const StyledCheckBoxWrapper = styled.div`
 
 const institusjoner: IInstitusjon[] = [
     // TODO Erstattes med liste fra søketjeneste
-    { orgNummer: '', navn: '' },
-    { orgNummer: '123', navn: 'Eksempel 1' },
-    { orgNummer: '456', navn: 'Eksempel 2' },
+    { orgNummer: '', navn: '', eksternTssNummer: '' },
+    { orgNummer: '123', navn: 'Eksempel 1', eksternTssNummer: '' },
+    { orgNummer: '456', navn: 'Eksempel 2', eksternTssNummer: '' },
 ];
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({

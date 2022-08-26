@@ -172,7 +172,6 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
             value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}
-            placeholder={'Velg utdypende vilkårsvurdering(er)'}
             propSelectStyles={{
                 menu: (provided: CSSProperties) => ({
                     ...provided,

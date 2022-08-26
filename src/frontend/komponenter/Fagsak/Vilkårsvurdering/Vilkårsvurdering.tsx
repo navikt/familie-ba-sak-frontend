@@ -9,6 +9,7 @@ import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
 import { Alert } from '@navikt/ds-react';
+import { NavdsSpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -29,7 +30,7 @@ import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
-    margin: 0.5rem 0;
+    margin: ${NavdsSpacing2} 0;
 `;
 
 const HentetLabelOgKnappDiv = styled.div`
@@ -39,6 +40,7 @@ const HentetLabelOgKnappDiv = styled.div`
     .knapp__spinner {
         margin: 0 !important;
     }
+    margin-bottom: ${NavdsSpacing2};
 `;
 
 interface IProps {

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
@@ -40,15 +42,21 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
 interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: OptionType[];
+    status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
 }
 
+const StyledAlert = styled(Alert)`
+    margin-bottom: 1.5rem;
+`;
+
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
+    status,
     valideringErOk,
     sendInnSkjema,
     toggleForm,
@@ -74,7 +82,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
-            <EøsPeriodeSkjemaContainer>
+            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
                 <div className={'skjemaelement'}>
                     <FamilieReactSelect
                         {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
@@ -121,6 +129,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     })}
                 </FamilieSelect>
                 <FamilieSelect
+                    className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
                         skjema.visFeilmeldinger
                     )}
@@ -147,6 +156,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
+                {skjema.felter.annenForeldersAktivitet.verdi ===
+                    AnnenForelderAktivitet.IKKE_AKTUELT && (
+                    <StyledAlert variant="info" size="small" inline>
+                        Søker har enten aleneomsorg for egne barn eller forsørger andre barn
+                    </StyledAlert>
+                )}
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'annenForeldersAktivitetsland'}

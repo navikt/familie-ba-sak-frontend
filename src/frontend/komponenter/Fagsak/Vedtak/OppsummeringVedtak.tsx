@@ -209,12 +209,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                         åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
                             <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
-                                <b>
-                                    {hentInfostripeTekst(
-                                        åpenBehandling.årsak,
-                                        åpenBehandling.status
-                                    )}
-                                </b>
+                                {hentInfostripeTekst(åpenBehandling.årsak, åpenBehandling.status)}
                             </Alert>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>

@@ -122,7 +122,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
-    const { visDokumentModal, hentetDokument, settVisDokumentModal } = useDokument();
+    const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
+        useDokument();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -225,6 +226,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                     dokument={dokument}
                                                     journalpostId={journalpost.journalpostId}
                                                     key={dokument.dokumentInfoId}
+                                                    hentForhåndsvisning={hentForhåndsvisning}
                                                 />
                                             ))}
                                         </Vedleggsliste>
