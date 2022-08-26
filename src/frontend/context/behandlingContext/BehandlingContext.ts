@@ -211,6 +211,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         åpenBehandling.data.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
             MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
 
+    const erBehandlingAvsluttet =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.status === BehandlingStatus.AVSLUTTET;
+
     return {
         erLesevisning,
         forrigeÅpneSide,
@@ -236,6 +240,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         settÅpenHøyremeny,
         åpenVenstremeny,
         settÅpenVenstremeny,
+        erBehandlingAvsluttet,
     };
 });
 
