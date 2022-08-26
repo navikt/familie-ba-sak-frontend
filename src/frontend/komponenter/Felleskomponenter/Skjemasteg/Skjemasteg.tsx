@@ -77,8 +77,13 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     feilmelding = '',
 }) => {
     const location = useLocation();
-    const { forrigeÅpneSide, åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig } =
-        useBehandling();
+    const {
+        forrigeÅpneSide,
+        åpenBehandling,
+        erLesevisning,
+        erBehandleneEnhetMidlertidig,
+        erBehandlingAvsluttet,
+    } = useBehandling();
     const erBehandlingSattPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
@@ -109,8 +114,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 </StyledAlert>
             )}
 
-            {erBehandleneEnhetMidlertidig && (
-                <StyledAlert variant="info">
+            {erBehandleneEnhetMidlertidig && !erBehandlingAvsluttet && (
+                <StyledAlert variant="warning">
                     Denne behandlingen er låst fordi vi ikke har klart å sette behandlende enhet. Du
                     må endre dette i menyen før du kan fortsette.
                 </StyledAlert>
