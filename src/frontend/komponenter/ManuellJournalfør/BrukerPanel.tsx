@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
-
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -12,9 +10,11 @@ import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import type { IInstitusjon } from '../../typer/institusjon-og-verge';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
+import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
@@ -46,7 +46,7 @@ export const BrukerPanel: React.FC = () => {
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
-    const [samhandler, settSamhandler] = useState<string | undefined>('');
+    const [samhandler, settSamhandler] = useState<ISamhandlerInfo | null>(null);
     const [spinner, settSpinner] = useState(false);
     const nyIdent = useFelt({
         verdi: '',
@@ -144,7 +144,7 @@ export const BrukerPanel: React.FC = () => {
                             )}
                             erLesevisning={erLesevisning()}
                             id={'hent-samhandler'}
-                            label={'Skriv orgnr'}
+                            label={'Institusjonens organisasjonsnummer'}
                             bredde={'XL'}
                             placeholder={'orgnr'}
                         />
@@ -153,6 +153,10 @@ export const BrukerPanel: React.FC = () => {
                         onClick={() => {
                             settSpinner(true);
                             onSubmitWrapper();
+                            const s =
+                                samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
+                                    ? samhandlerSkjema.submitRessurs.data
+                                    : null;
                             const tssEksternId =
                                 samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
                                     ? samhandlerSkjema.submitRessurs.data.tssEksternId
@@ -163,19 +167,18 @@ export const BrukerPanel: React.FC = () => {
                             };
 
                             skjema.felter.institusjon.validerOgSettFelt(institusjon);
-                            settSamhandler(
-                                `Samhandler satt til orgnummer ${institusjon.orgNummer} og tssEksternId ${institusjon.tssEksternId}`
-                            );
+                            settSamhandler(s);
                             settSpinner(false);
                         }}
-                        children={'Sett orgnr'}
+                        children={'Hent institusjon'}
                         spinner={spinner}
                         mini={true}
                         erLesevisning={erLesevisning()}
                     />
                 </StyledDiv>
             )}
-            {samhandler !== undefined && <Normaltekst>{samhandler}</Normaltekst>}
+
+            {samhandler !== null && <SamhandlerTabell samhandler={samhandler}></SamhandlerTabell>}
             <br />
             <StyledDiv>
                 {!erLesevisning() && (
