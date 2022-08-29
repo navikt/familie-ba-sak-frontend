@@ -64,6 +64,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 barnaMedOpplysninger: IBarnMedOpplysninger[];
                 endringAvOpplysningerBegrunnelse: string;
                 målform: Målform | undefined;
+                søkerForSegSelv: boolean;
             },
             IBehandling
         >({
@@ -91,6 +92,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     verdi: undefined,
                     valideringsfunksjon: felt =>
                         felt.verdi !== undefined ? ok(felt) : feil(felt, 'Målform er ikke valgt.'),
+                }),
+                søkerForSegSelv: useFelt<boolean>({
+                    verdi: false,
+                    skalFeltetVises: (avhengigheter: Avhengigheter) => {
+                        const { kanLeggeTilUregistrerteBarn } = avhengigheter;
+                        return kanLeggeTilUregistrerteBarn;
+                    },
                 }),
             },
             skjemanavn: 'Registrer søknad',

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Switch } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -18,6 +18,7 @@ import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;
@@ -39,6 +40,10 @@ const StyledCheckboxGruppe = styled(CheckboxGruppe)`
 
 const IngenBarnRegistrertInfo = styled(Alert)`
     margin-bottom: 1.25rem;
+`;
+
+const SøkerForSegSelvKnapp = styled(Switch)`
+    margin-left: 1rem;
 `;
 
 const Barna: React.FunctionComponent = () => {
@@ -125,6 +130,20 @@ const Barna: React.FunctionComponent = () => {
                 {!lesevisning && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
+
+                <SøkerForSegSelvKnapp
+                    size="small"
+                    // position="left"
+                    id={'vis-henlagte-behandlinger'}
+                    checked={skjema.felter.søkerForSegSelv.verdi}
+                    onChange={() => {
+                        skjema.felter.søkerForSegSelv.validerOgSettFelt(
+                            !skjema.felter.søkerForSegSelv.verdi
+                        );
+                    }}
+                >
+                    Søker søker for seg selv
+                </SøkerForSegSelvKnapp>
             </StyledCheckboxGruppe>
         </BarnaWrapper>
     );
