@@ -18,7 +18,7 @@ export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ sa
                     </tr>
                     <tr>
                         <td>Organisasjonsnummer</td>
-                        <td></td>
+                        <td>{samhandler.orgNummer}</td>
                     </tr>
                     <tr>
                         <td>TSS-ident</td>
@@ -31,7 +31,8 @@ export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ sa
                                 {samhandler.adresser.map(adresse => (
                                     <>
                                         {adresse.adresseType}: <br />
-                                        {adresse.adresselinjer} {adresse.postNr} {adresse.postSted}
+                                        {adresse.adresselinjer} {adresse.postNr} {adresse.postSted}{' '}
+                                        <br />
                                     </>
                                 ))}
                             </div>

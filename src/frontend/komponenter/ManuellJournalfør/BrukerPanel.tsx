@@ -9,8 +9,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import type { IInstitusjon } from '../../typer/institusjon-og-verge';
-import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
@@ -46,7 +44,6 @@ export const BrukerPanel: React.FC = () => {
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
-    const [samhandler, settSamhandler] = useState<ISamhandlerInfo | null>(null);
     const [spinner, settSpinner] = useState(false);
     const nyIdent = useFelt({
         verdi: '',
@@ -146,28 +143,18 @@ export const BrukerPanel: React.FC = () => {
                             id={'hent-samhandler'}
                             label={'Institusjonens organisasjonsnummer'}
                             bredde={'XL'}
-                            placeholder={'orgnr'}
+                            placeholder={'organisasjonsnummer'}
                         />
                     )}
                     <StyledKnapp
                         onClick={() => {
                             settSpinner(true);
                             onSubmitWrapper();
-                            const s =
+                            const samhandlerInfo =
                                 samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
                                     ? samhandlerSkjema.submitRessurs.data
                                     : null;
-                            const tssEksternId =
-                                samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
-                                    ? samhandlerSkjema.submitRessurs.data.tssEksternId
-                                    : '';
-                            const institusjon: IInstitusjon = {
-                                orgNummer: samhandlerSkjema.felter.orgnr.verdi,
-                                tssEksternId: tssEksternId,
-                            };
-
-                            skjema.felter.institusjon.validerOgSettFelt(institusjon);
-                            settSamhandler(s);
+                            skjema.felter.samhandler.validerOgSettFelt(samhandlerInfo);
                             settSpinner(false);
                         }}
                         children={'Hent institusjon'}
@@ -178,7 +165,9 @@ export const BrukerPanel: React.FC = () => {
                 </StyledDiv>
             )}
 
-            {samhandler !== null && <SamhandlerTabell samhandler={samhandler}></SamhandlerTabell>}
+            {skjema.felter.samhandler.verdi !== null && (
+                <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
+            )}
             <br />
             <StyledDiv>
                 {!erLesevisning() && (

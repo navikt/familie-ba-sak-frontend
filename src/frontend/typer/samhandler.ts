@@ -14,6 +14,7 @@ export interface ISamhandlerAdresse {
 }
 
 export interface ISamhandlerInfo {
+    orgNummer: string;
     tssEksternId: string;
     navn: string;
     adresser: ISamhandlerAdresse[];

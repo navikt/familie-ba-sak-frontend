@@ -23,7 +23,6 @@ import type { IBehandlingstema } from '../typer/behandlingstema';
 import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
-import type { IInstitusjon } from '../typer/institusjon-og-verge';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -32,6 +31,7 @@ import { JournalpostKanal } from '../typer/manuell-journalføring';
 import { type IRestLukkOppgaveOgKnyttJournalpost, OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
+import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
@@ -108,7 +108,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: number[];
             erEnsligMindreårig: boolean;
             erPåInstitusjon: boolean;
-            institusjon: IInstitusjon | undefined;
+            samhandler: ISamhandlerInfo | null;
         },
         string
     >({
@@ -167,8 +167,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             erPåInstitusjon: useFelt<boolean>({
                 verdi: false,
             }),
-            institusjon: useFelt<IInstitusjon | undefined>({
-                verdi: undefined,
+            samhandler: useFelt<ISamhandlerInfo | null>({
+                verdi: null,
             }),
         },
         skjemanavn: 'Journalfør dokument',
@@ -409,7 +409,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
                         erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
-                        institusjon: skjema.felter.institusjon.verdi,
+                        institusjon: skjema.felter.samhandler
+                            ? {
+                                  orgNummer: skjema.felter.samhandler.verdi?.orgNummer,
+                                  tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
+                              }
+                            : null,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
