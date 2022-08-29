@@ -59,14 +59,3 @@ export const sisteDagIInneværendeMåned = () => {
         dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
     };
 };
-
-export const sammenlignDatoer = (dato1: string, dato2: Date): number => {
-    const dato1SomKalenderdato = kalenderDatoTilDate(kalenderDato(dato1));
-    if (dato1SomKalenderdato < dato2) {
-        return -1;
-    } else if (dato1SomKalenderdato > dato2) {
-        return 1;
-    } else {
-        return 0;
-    }
-};
