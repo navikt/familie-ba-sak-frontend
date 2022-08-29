@@ -189,6 +189,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                         ),
                                     endringAvOpplysningerBegrunnelse:
                                         skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                                    søkerForSegSelv: skjema.felter.søkerForSegSelv.verdi,
                                 },
                                 bekreftEndringerViaFrontend,
                             },

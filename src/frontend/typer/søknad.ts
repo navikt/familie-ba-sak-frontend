@@ -10,6 +10,7 @@ export interface ISøknadDTO {
     søkerMedOpplysninger: ISøkerMedOpplysninger;
     barnaMedOpplysninger: IBarnMedOpplysningerBackend[];
     endringAvOpplysningerBegrunnelse: string;
+    søkerForSegSelv: boolean;
 }
 
 export interface ISøkerMedOpplysninger {

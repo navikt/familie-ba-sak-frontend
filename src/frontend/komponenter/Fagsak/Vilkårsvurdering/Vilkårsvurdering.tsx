@@ -20,7 +20,7 @@ import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
 import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
-import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
+import { annenVurderingConfig, IPersonResultat, vilkårConfig } from '../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -179,6 +179,30 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     </UregistrerteBarnListe>
 
                     <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
+                </Alert>
+            )}
+            {!åpenBehandling.søknadsgrunnlag?.søkerForSegSelv && (
+                <Alert variant="info">
+                    <Normaltekst>Søker søker for seg selv</Normaltekst>
+                    <UregistrerteBarnListe>
+                        {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
+                            <li
+                                key={`${personResultat.person.navn}_${personResultat.person.fødselsdato}`}
+                            >
+                                <Normaltekst>
+                                    {`${personResultat.person.navn} - ${formaterIsoDato(
+                                        personResultat.person.fødselsdato,
+                                        datoformat.DATO
+                                    )}`}
+                                </Normaltekst>
+                            </li>;
+                        })}
+                    </UregistrerteBarnListe>
+
+                    <Normaltekst>
+                        Dette vil føre til avslag for søkeren. Eventuelle barn i søknaden vil bli
+                        vurdert som vanlig.
+                    </Normaltekst>
                 </Alert>
             )}
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
