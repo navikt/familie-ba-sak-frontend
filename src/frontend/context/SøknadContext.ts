@@ -58,6 +58,14 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 ? hentBarnMedLøpendeUtbetaling(minimalFagsak.data)
                 : new Set();
 
+        const søkerForSegSelv = useFelt<boolean>({
+            verdi: true,
+            skalFeltetVises: (avhengigheter: Avhengigheter) => {
+                const { kanLeggeTilUregistrerteBarn } = avhengigheter;
+                return kanLeggeTilUregistrerteBarn;
+            },
+        });
+
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
                 underkategori: BehandlingUnderkategori;
@@ -79,11 +87,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     verdi: [],
                     valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
                         return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
+                            avhengigheter?.søkerForSegSelv.verdi ||
                             (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
                             ? ok(felt)
                             : feil(felt, 'Ingen av barna er valgt.');
                     },
-                    avhengigheter: { barnMedLøpendeUtbetaling },
+                    avhengigheter: { barnMedLøpendeUtbetaling, søkerForSegSelv },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
                     verdi: '',
@@ -93,13 +102,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     valideringsfunksjon: felt =>
                         felt.verdi !== undefined ? ok(felt) : feil(felt, 'Målform er ikke valgt.'),
                 }),
-                søkerForSegSelv: useFelt<boolean>({
-                    verdi: false,
-                    skalFeltetVises: (avhengigheter: Avhengigheter) => {
-                        const { kanLeggeTilUregistrerteBarn } = avhengigheter;
-                        return kanLeggeTilUregistrerteBarn;
-                    },
-                }),
+                søkerForSegSelv: søkerForSegSelv,
             },
             skjemanavn: 'Registrer søknad',
         });
