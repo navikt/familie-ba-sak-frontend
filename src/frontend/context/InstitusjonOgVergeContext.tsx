@@ -12,7 +12,11 @@ import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { BehandlingSteg } from '../typer/behandling';
 import type { IBehandling } from '../typer/behandling';
 import { FagsakType } from '../typer/fagsak';
-import type { IRegistrerInstitusjonOgVerge, IVerge } from '../typer/institusjon-og-verge';
+import type {
+    IInstitusjon,
+    IRegistrerInstitusjonOgVerge,
+    IVerge,
+} from '../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../typer/person';
 import { hentAlder, kunSiffer } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
@@ -54,14 +58,17 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                     ? hentFrontendFeilmelding(minimalFagsak) || 'Ukjent feil ved henting av fagsak'
                     : '',
         };
-        const institusjon = useFelt<string | undefined>({
-            verdi: undefined,
+        const institusjon = useFelt<IInstitusjon | undefined>({
+            verdi:
+                minimalFagsak.status === RessursStatus.SUKSESS
+                    ? minimalFagsak.data.institusjon
+                    : undefined,
         });
         const { adresse, postnummer, sted } = brytOppLagretAdresseinfo(åpenBehandling.verge);
         const { skjema, onSubmit } = useSkjema<
             {
                 fødselsnummer: string;
-                institusjon: string | undefined;
+                institusjon: IInstitusjon | undefined;
                 navn: string | undefined;
                 adresse: string;
                 postnummer: string;

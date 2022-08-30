@@ -63,6 +63,12 @@ export const BrukerPanel: React.FC = () => {
         }
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
+    useEffect(() => {
+        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
+            skjema.felter.samhandler.validerOgSettFelt(samhandlerSkjema.submitRessurs.data);
+        }
+    }, [samhandlerSkjema.submitRessurs.status]);
+
     return (
         <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
@@ -150,11 +156,6 @@ export const BrukerPanel: React.FC = () => {
                         onClick={() => {
                             settSpinner(true);
                             onSubmitWrapper();
-                            const samhandlerInfo =
-                                samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS
-                                    ? samhandlerSkjema.submitRessurs.data
-                                    : null;
-                            skjema.felter.samhandler.validerOgSettFelt(samhandlerInfo);
                             settSpinner(false);
                         }}
                         children={'Hent institusjon'}

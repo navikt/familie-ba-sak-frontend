@@ -2,61 +2,37 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Alert } from '@navikt/ds-react';
+import { RessursStatus } from '@navikt/familie-typer';
 
-import { FamilieInput, FamilieLesefelt } from '@navikt/familie-form-elements';
-
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
+import { SamhandlerTabell } from './SamhandlerTabell';
+import { useSamhandlerRequest } from './useSamhandler';
 
 const StyledDiv = styled.div`
-    margin: 1rem 0;
-`;
-
-const StyledFamilieInpunt = styled(FamilieInput)`
-    margin-top: 1.8rem;
+    margin: 2rem 0;
 `;
 
 const Institusjon: React.FunctionComponent = () => {
-    const { erLesevisning } = useBehandling();
     const { skjema } = useInstitusjonOgVerge();
+    const { hentSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
-    return (
-        <StyledDiv className={'mottaker__institusjon'}>
-            <Systemtittel children={'Opplysninger om institusjon'} />
-            <br />
-            <FamilieLesefelt
-                {...skjema.felter.institusjon.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                label={'Institusjon'}
-                verdi={skjema.felter.institusjon.verdi}
-            />
-            <StyledFamilieInpunt
-                {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
-                id={'valgfri-mottaker'}
-                label={'Mottaker (valgfritt)'}
-            />
-            <StyledFamilieInpunt
-                {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
-                id={'institusjon-adresse'}
-                label={'Adresse'}
-            />
-            <StyledFamilieInpunt
-                {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
-                id={'institusjon-postnummer'}
-                label={'Postnummer'}
-                bredde={'S'}
-            />
-            <StyledFamilieInpunt
-                {...skjema.felter.sted.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
-                id={'institusjon-sted'}
-                label={'Sted'}
-            />
-        </StyledDiv>
-    );
+    if (skjema.felter.institusjon.verdi && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+        hentSamhandler(skjema.felter.institusjon.verdi.orgNummer);
+    }
+
+    const visInstitusjon = () => {
+        if (samhandlerRessurs.status === RessursStatus.SUKSESS) {
+            return <SamhandlerTabell samhandler={samhandlerRessurs.data} />;
+        } else if (
+            samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+            samhandlerRessurs.status === RessursStatus.FEILET
+        ) {
+            return <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />;
+        }
+    };
+
+    return <StyledDiv className={'mottaker__institusjon'}> {visInstitusjon()} </StyledDiv>;
 };
 
 export default Institusjon;
