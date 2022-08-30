@@ -181,23 +181,17 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
                 </Alert>
             )}
-            {!åpenBehandling.søknadsgrunnlag?.søkerForSegSelv && (
+            {åpenBehandling.søknadsgrunnlag?.søkerForSegSelv && (
                 <Alert variant="info">
                     <Normaltekst>Søker søker for seg selv</Normaltekst>
-                    <UregistrerteBarnListe>
-                        {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
-                            <li
-                                key={`${personResultat.person.navn}_${personResultat.person.fødselsdato}`}
-                            >
-                                <Normaltekst>
-                                    {`${personResultat.person.navn} - ${formaterIsoDato(
-                                        personResultat.person.fødselsdato,
-                                        datoformat.DATO
-                                    )}`}
-                                </Normaltekst>
-                            </li>;
-                        })}
-                    </UregistrerteBarnListe>
+                    {vilkårsvurdering.map((personResultat: IPersonResultat) => (
+                        <Normaltekst>
+                            {`${personResultat.person.navn} - ${formaterIsoDato(
+                                personResultat.person.fødselsdato,
+                                datoformat.DATO
+                            )}`}
+                        </Normaltekst>
+                    ))}
 
                     <Normaltekst>
                         Dette vil føre til avslag for søkeren. Eventuelle barn i søknaden vil bli
