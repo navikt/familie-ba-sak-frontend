@@ -141,6 +141,16 @@ describe('utils/validators', () => {
         );
     });
 
+    test('Periode med fom-dato lik som tom-dato skal ikke være mulig dersom det ikke er barnets dødsfallsdato', () => {
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2020-12-12', '2020-12-12'));
+        const valideringsresultat = erPeriodeGyldig(periode, {
+            person: grunnlagPersonFixture(),
+            erEksplisittAvslagPåSøknad: false,
+        });
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringsresultat.feilmelding).toEqual('F.o.m må settes tidligere enn t.o.m');
+    });
+
     test('Periode med fom-dato lik som tom-dato skal være mulig dersom det er barnets dødsfallsdato', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2020-12-12', '2020-12-12'));
         const valideringsresultat = erPeriodeGyldig(periode, {
