@@ -183,7 +183,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             )}
             {åpenBehandling.søknadsgrunnlag?.søkerForSegSelv && (
                 <Alert variant="info">
-                    <Normaltekst>Søker søker for seg selv</Normaltekst>
+                    <Normaltekst>Du har registrert følgende barn som også er søker:</Normaltekst>
                     {vilkårsvurdering.map((personResultat: IPersonResultat) => (
                         <Normaltekst>
                             {`${personResultat.person.navn} - ${formaterIsoDato(
@@ -193,10 +193,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         </Normaltekst>
                     ))}
 
-                    <Normaltekst>
-                        Dette vil føre til avslag for søkeren. Eventuelle barn i søknaden vil bli
-                        vurdert som vanlig.
-                    </Normaltekst>
+                    <Normaltekst>Dette vil føre til avslag på barnet.</Normaltekst>
                 </Alert>
             )}
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
