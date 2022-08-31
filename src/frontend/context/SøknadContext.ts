@@ -59,7 +59,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 : new Set();
 
         const søkerForSegSelv = useFelt<boolean>({
-            verdi: true,
+            verdi: false,
             skalFeltetVises: (avhengigheter: Avhengigheter) => {
                 const { kanLeggeTilUregistrerteBarn } = avhengigheter;
                 return kanLeggeTilUregistrerteBarn;
