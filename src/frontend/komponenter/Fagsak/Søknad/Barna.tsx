@@ -8,6 +8,7 @@ import { Element, Systemtittel } from 'nav-frontend-typografi';
 import { Alert, Switch } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
@@ -15,6 +16,7 @@ import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
+import { ToggleNavn } from '../../../typer/toggles';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
@@ -50,6 +52,8 @@ const Barna: React.FunctionComponent = () => {
     const lesevisning = erLesevisning();
     const { bruker } = useFagsakRessurser();
     const { skjema } = useSøknad();
+
+    const { toggles } = useApp();
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -130,19 +134,21 @@ const Barna: React.FunctionComponent = () => {
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
 
-                <SøkerForSegSelvKnapp
-                    size="small"
-                    // position="left"
-                    id={'vis-henlagte-behandlinger'}
-                    checked={skjema.felter.søkerForSegSelv.verdi}
-                    onChange={() => {
-                        skjema.felter.søkerForSegSelv.validerOgSettFelt(
-                            !skjema.felter.søkerForSegSelv.verdi
-                        );
-                    }}
-                >
-                    Søker søker for seg selv
-                </SøkerForSegSelvKnapp>
+                {toggles[ToggleNavn.søkerForSegSelv] && (
+                    <SøkerForSegSelvKnapp
+                        size="small"
+                        // position="left"
+                        id={'vis-henlagte-behandlinger'}
+                        checked={skjema.felter.søkerForSegSelv.verdi}
+                        onChange={() => {
+                            skjema.felter.søkerForSegSelv.validerOgSettFelt(
+                                !skjema.felter.søkerForSegSelv.verdi
+                            );
+                        }}
+                    >
+                        Søker søker for seg selv
+                    </SøkerForSegSelvKnapp>
+                )}
             </StyledCheckboxGruppe>
         </BarnaWrapper>
     );

@@ -12,6 +12,7 @@ export enum ToggleNavn {
     støtterInstitusjon = 'familie-ba-sak.stotter-institusjon',
     kanBehandleEøsSekunderland = 'familie-ba-sak.behandling.eos-sekunderland',
     kanBehandleEøsToPrimerland = 'familie-ba-sak.behandling.eos-to-primerland',
+    søkerForSegSelv = 'familie-ba-sak.behandling.soker-for-seg-selv',
 }
 
 export const alleTogglerAv = (): IToggles => {
