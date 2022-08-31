@@ -18,7 +18,6 @@ import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;
