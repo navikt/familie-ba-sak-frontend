@@ -141,6 +141,15 @@ describe('utils/validators', () => {
         );
     });
 
+    test('Periode med fom-dato lik som tom-dato skal være mulig dersom det er barnets dødsfallsdato', () => {
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2020-12-12', '2020-12-12'));
+        const valideringsresultat = erPeriodeGyldig(periode, {
+            person: grunnlagPersonFixture({ dødsfallDato: '2020-12-12' }),
+            erEksplisittAvslagPåSøknad: false,
+        });
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
+    });
+
     test('Periode med etter barnets fødselsdato gir feil på 18 årsvilkåret', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
