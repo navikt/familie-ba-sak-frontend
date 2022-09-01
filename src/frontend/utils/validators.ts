@@ -112,6 +112,7 @@ export const erPeriodeGyldig = (
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
             tomKalenderDato
         );
+        const fomDatoErLikDødsfallDato = fom === person?.dødsfallDato;
 
         const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
         if (tom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)) {
@@ -129,7 +130,9 @@ export const erPeriodeGyldig = (
             }
         }
 
-        return fomDatoErFørTomDato ? ok(felt) : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
+        return fomDatoErFørTomDato || fomDatoErLikDødsfallDato
+            ? ok(felt)
+            : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
     } else {
         if (erEksplisittAvslagPåSøknad) {
             return !tom
