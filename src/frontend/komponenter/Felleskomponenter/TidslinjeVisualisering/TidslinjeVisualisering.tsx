@@ -34,7 +34,7 @@ import Vinduvelger from '../../Fagsak/Behandlingsresultat/VinduVelger';
 const Container = styled.div`
     padding: 2rem;
     overflow: auto;
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 3rem);
 `;
 
 const TidslinjeHeader = styled.div`

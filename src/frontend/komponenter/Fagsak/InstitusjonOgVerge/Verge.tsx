@@ -9,6 +9,10 @@ import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 
+interface IProps {
+    erLesevisning: boolean;
+}
+
 const StyledDiv = styled.div`
     margin: 1rem 0;
 `;
@@ -22,8 +26,8 @@ const StyledFamilieInput = styled(FamilieInput)`
     margin-top: 1.8rem;
 `;
 
-const Verge: React.FunctionComponent = () => {
-    const { hentPerson, lesevisning, skjema } = useInstitusjonOgVerge();
+const Verge: React.FunctionComponent<IProps> = ({ erLesevisning }) => {
+    const { hentPerson, skjema } = useInstitusjonOgVerge();
     const [spinner, settSpinner] = useState(false);
 
     return (
@@ -32,9 +36,9 @@ const Verge: React.FunctionComponent = () => {
             <br />
             <FamilieInput
                 {...skjema.felter.fødselsnummer.hentNavInputProps(true)}
-                erLesevisning={lesevisning()}
+                erLesevisning={erLesevisning}
                 id={'hent-verge-person'}
-                label={'Fødselsnummer (valgfritt)'}
+                label={'Fødselsnummer'}
             />
             <StyledKnapp
                 onClick={() => {
@@ -47,30 +51,33 @@ const Verge: React.FunctionComponent = () => {
                 spinner={spinner}
                 mini={true}
                 kompakt={true}
-                erLesevisning={lesevisning()}
+                erLesevisning={false}
             />
             <StyledFamilieInput
                 {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={lesevisning()}
+                erLesevisning={true}
                 id={'verge-navn'}
                 label={'Vergens navn'}
+                tekstLesevisning={''}
             />
             <StyledFamilieInput
                 {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={lesevisning()}
+                erLesevisning={true}
                 id={'verge-adresse'}
                 label={'Adresse'}
+                tekstLesevisning={''}
             />
             <StyledFamilieInput
                 {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={lesevisning()}
+                erLesevisning={true}
                 id={'verge-postnummer'}
                 label={'Postnummer'}
                 bredde={'S'}
+                tekstLesevisning={''}
             />
             <StyledFamilieInput
                 {...skjema.felter.sted.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={lesevisning()}
+                erLesevisning={true}
                 id={'verge-sted'}
                 label={'Sted'}
                 tekstLesevisning={''}
