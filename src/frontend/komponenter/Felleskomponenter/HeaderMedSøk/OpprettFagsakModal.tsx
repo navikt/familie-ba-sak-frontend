@@ -52,6 +52,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
         settVisFeilmelding(false);
