@@ -15,13 +15,13 @@ export const kanFjerneSmåbarnstilleggFraPeriode = (
     );
 };
 
-const sjekkOmUnder3ÅrIPeriode = (fødselsdato: string, periode: Date): boolean => {
+const sjekkOmTilOgMed3ÅrIPeriode = (fødselsdato: string, periode: Date): boolean => {
     const antallMndForskjell = kalenderDiffMåned(
         kalenderDato(fødselsdato),
         kalenderDatoFraDate(periode)
     );
 
-    return antallMndForskjell < 36;
+    return antallMndForskjell <= 36;
 };
 
 export const kanLeggeSmåbarnstilleggTilPeriode = (
@@ -32,14 +32,14 @@ export const kanLeggeSmåbarnstilleggTilPeriode = (
         ytelsetype => ytelsetype === YtelseType.UTVIDET_BARNETRYGD
     );
 
-    const harPersonUnder3ÅrIPeriode = utbetalingsperiode.utbetalingsperiodeDetaljer.some(
+    const harPersonTilOgMed3ÅrIPeriode = utbetalingsperiode.utbetalingsperiodeDetaljer.some(
         utbetalingsPerideDetalj =>
-            sjekkOmUnder3ÅrIPeriode(utbetalingsPerideDetalj.person.fødselsdato, periode)
+            sjekkOmTilOgMed3ÅrIPeriode(utbetalingsPerideDetalj.person.fødselsdato, periode)
     );
 
     return (
         harUtvidetYtelse &&
-        harPersonUnder3ÅrIPeriode &&
+        harPersonTilOgMed3ÅrIPeriode &&
         !kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode)
     );
 };
