@@ -12,7 +12,7 @@ import {
     FamilieSelect,
     type OptionType,
 } from '@navikt/familie-form-elements';
-import { Valideringsstatus, type ISkjema } from '@navikt/familie-skjema';
+import { type ISkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
@@ -22,12 +22,12 @@ import type { IBehandling } from '../../../../typer/behandling';
 import {
     AnnenForelderAktivitet,
     annenForelderAktiviteter,
+    EøsPeriodeStatus,
     type IKompetanse,
-    SøkersAktivitet,
-    søkersAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
-    EøsPeriodeStatus,
+    SøkersAktivitet,
+    søkersAktiviteter,
 } from '../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../typer/toggles';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -164,6 +164,27 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
+                    id={'skøersAktivitetsland'}
+                    label={'Søkers aktivitetsland'}
+                    kunEøs
+                    medFlag
+                    size="medium"
+                    kanNullstilles
+                    value={skjema.felter.søkersAktivitetsland.verdi}
+                    onChange={(value: Country) => {
+                        const nyVerdi = value ? value.value : undefined;
+                        skjema.felter.søkersAktivitetsland.validerOgSettFelt(nyVerdi);
+                    }}
+                    feil={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.søkersAktivitetsland.valideringsstatus ===
+                            Valideringsstatus.FEIL
+                            ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
+                            : ''
+                    }
+                />
+                <FamilieLandvelger
+                    erLesevisning={lesevisning}
                     id={'annenForeldersAktivitetsland'}
                     label={'Annen forelders aktivitetsland'}
                     kunEøs
@@ -176,8 +197,9 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(nyVerdi);
                     }}
                     feil={
+                        skjema.visFeilmeldinger &&
                         skjema.felter.annenForeldersAktivitetsland.valideringsstatus ===
-                        Valideringsstatus.FEIL
+                            Valideringsstatus.FEIL
                             ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
                             : ''
                     }

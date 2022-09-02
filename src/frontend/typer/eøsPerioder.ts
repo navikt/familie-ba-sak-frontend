@@ -90,6 +90,7 @@ export interface IRestEøsPeriode extends IEøsPeriodeStatus {
 
 export interface IRestKompetanse extends IRestEøsPeriode {
     søkersAktivitet?: SøkersAktivitet;
+    søkersAktivitetsland?: string;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
@@ -103,6 +104,7 @@ export interface IKompetanse extends IEøsPeriodeStatus {
     periode: IYearMonthPeriode;
     barnIdenter: OptionType[];
     søkersAktivitet: SøkersAktivitet | undefined;
+    søkersAktivitetsland: string | undefined;
     annenForeldersAktivitet: AnnenForelderAktivitet | undefined;
     annenForeldersAktivitetsland: string | undefined;
     barnetsBostedsland: string | undefined;
