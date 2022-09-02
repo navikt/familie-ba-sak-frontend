@@ -507,10 +507,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         );
     };
 
-    // const erLesevisning = () => {
-    //     return false;
-    // };
-
     const kanKnytteJournalpostTilBehandling = () => {
         return dataForManuellJournalføring.status !== RessursStatus.SUKSESS
             ? false
