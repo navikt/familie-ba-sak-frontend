@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -70,6 +70,14 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
         settValgtSamhandler(undefined);
         lukkModal();
     };
+
+    useEffect(() => {
+        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
+            settValgtSamhandler(samhandlerSkjema.submitRessurs.data);
+            settVisFeilmelding(false);
+        }
+    }, [samhandlerSkjema.submitRessurs.status]);
+
     return (
         <>
             {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
@@ -247,12 +255,6 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 <StyledKnapp
                                     onClick={() => {
                                         onSubmitWrapper();
-                                        const samhandler =
-                                            samhandlerSkjema.submitRessurs.status ===
-                                            RessursStatus.SUKSESS
-                                                ? samhandlerSkjema.submitRessurs.data
-                                                : undefined;
-                                        settValgtSamhandler(samhandler);
                                     }}
                                     children={'Hent institusjon'}
                                     erLesevisning={false}

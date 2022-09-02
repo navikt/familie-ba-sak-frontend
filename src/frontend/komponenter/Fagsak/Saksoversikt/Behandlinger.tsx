@@ -100,8 +100,9 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                     new Date(a.behandlingEllerTilbakekreving.opprettetTidspunkt)
                                 )
                             )
-                            .map((behandling: BehandlingTabellobjekt) => (
+                            .map((behandling: BehandlingTabellobjekt, index) => (
                                 <Behandling
+                                    key={index}
                                     behandling={behandling.behandlingEllerTilbakekreving}
                                     minimalFagsak={minimalFagsak}
                                 />

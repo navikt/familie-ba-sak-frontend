@@ -10,6 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
+import { BehandlingSteg } from '../typer/behandling';
 import { FagsakType } from '../typer/fagsak';
 import type { IInstitusjon, IRegistrerInstitusjonOgVerge } from '../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../typer/person';
@@ -137,7 +138,11 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         };
 
         const onSubmitMottaker = () => {
-            if (erLesevisning() || erSkjemaUendret()) {
+            if (
+                erLesevisning() ||
+                (erSkjemaUendret() &&
+                    åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE)
+            ) {
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
             } else {
                 onSubmit<IRegistrerInstitusjonOgVerge | undefined>(

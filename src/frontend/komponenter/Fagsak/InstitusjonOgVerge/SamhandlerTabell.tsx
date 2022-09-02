@@ -28,12 +28,12 @@ export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ sa
                         <td>Adresse</td>
                         <td>
                             <div>
-                                {samhandler.adresser.map(adresse => (
-                                    <>
+                                {samhandler.adresser.map((adresse, index) => (
+                                    <div key={index}>
                                         {adresse.adresseType}: <br />
                                         {adresse.adresselinjer} {adresse.postNr} {adresse.postSted}{' '}
                                         <br />
-                                    </>
+                                    </div>
                                 ))}
                             </div>
                         </td>
