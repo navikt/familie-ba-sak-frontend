@@ -5,16 +5,17 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieCheckbox, FamilieInput } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
-import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../../../typer/person';
+import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent } from '../../../utils/formatter';
+import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import useOpprettFagsak from './useOpprettFagsak';
@@ -24,6 +25,16 @@ export interface IOpprettFagsakModal {
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
 }
+
+const StyledDiv = styled.div`
+    display: flex;
+`;
+
+const StyledKnapp = styled(FamilieKnapp)`
+    margin-left: 1rem;
+    margin-top: auto;
+    height: 1rem;
+`;
 
 const StyledUndertittel = styled(Undertittel)`
     font-size: 1rem;
@@ -50,12 +61,13 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const visModal = !!søkeresultat || !!personInfo;
     const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
     const [visFeilmelding, settVisFeilmelding] = useState(false);
-    const [valgtInstitusjon, settValgtInstitusjon] = useState<IInstitusjon | undefined>(undefined);
+    const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
 
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
         settVisFeilmelding(false);
+        settValgtSamhandler(undefined);
         lukkModal();
     };
     return (
@@ -141,11 +153,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                                     personIdent: personIdent,
                                                     aktørId: null,
                                                     fagsakType: fagsakType,
-                                                    institusjon: valgtInstitusjon
+                                                    institusjon: valgtSamhandler
                                                         ? {
-                                                              orgNummer: valgtInstitusjon.orgNummer,
+                                                              orgNummer: valgtSamhandler.orgNummer,
                                                               tssEksternId:
-                                                                  valgtInstitusjon.tssEksternId,
+                                                                  valgtSamhandler.tssEksternId,
                                                           }
                                                         : null,
                                                 },
@@ -219,38 +231,39 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             }}
                         />
                         <br />
-                        <FamilieInput
-                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                                samhandlerSkjema.visFeilmeldinger
-                            )}
-                            erLesevisning={false}
-                            id={'hent-samhandler'}
-                            label={'Orgnummer på Institusjon'}
-                            onKeyDown={(event): void => {
-                                if (event.key === 'Enter') {
-                                    onSubmitWrapper();
-                                    const tssEksternId =
-                                        samhandlerSkjema.submitRessurs.status ===
-                                        RessursStatus.SUKSESS
-                                            ? samhandlerSkjema.submitRessurs.data.tssEksternId
-                                            : '';
-                                    const institusjon: IInstitusjon = {
-                                        orgNummer: samhandlerSkjema.felter.orgnr.verdi,
-                                        tssEksternId: tssEksternId,
-                                    };
-                                    settValgtInstitusjon(institusjon);
-                                }
-                            }}
-                        />
+                        {fagsakType === FagsakType.INSTITUSJON && (
+                            <StyledDiv>
+                                <FamilieInput
+                                    {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                        samhandlerSkjema.visFeilmeldinger
+                                    )}
+                                    erLesevisning={false}
+                                    id={'hent-samhandler'}
+                                    label={'Institusjonens organisasjonsnummer'}
+                                    bredde={'XL'}
+                                    placeholder={'organisasjonsnummer'}
+                                />
 
+                                <StyledKnapp
+                                    onClick={() => {
+                                        onSubmitWrapper();
+                                        const samhandler =
+                                            samhandlerSkjema.submitRessurs.status ===
+                                            RessursStatus.SUKSESS
+                                                ? samhandlerSkjema.submitRessurs.data
+                                                : undefined;
+                                        settValgtSamhandler(samhandler);
+                                    }}
+                                    children={'Hent institusjon'}
+                                    erLesevisning={false}
+                                />
+                            </StyledDiv>
+                        )}
                         <br />
 
-                        {fagsakType === FagsakType.INSTITUSJON &&
-                            samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS && (
-                                <StyledUndertittel tag={'h3'}>
-                                    {`tssEksternId=${samhandlerSkjema.submitRessurs.data.tssEksternId} ${samhandlerSkjema.submitRessurs.data.navn} ${samhandlerSkjema.submitRessurs.data.adresser[0].postSted} `}
-                                </StyledUndertittel>
-                            )}
+                        {fagsakType === FagsakType.INSTITUSJON && valgtSamhandler !== undefined && (
+                            <SamhandlerTabell samhandler={valgtSamhandler}></SamhandlerTabell>
+                        )}
                     </StyledCheckBoxWrapper>
                     {!!feilmelding && visFeilmelding && <Feilmelding children={feilmelding} />}
                 </UIModalWrapper>
