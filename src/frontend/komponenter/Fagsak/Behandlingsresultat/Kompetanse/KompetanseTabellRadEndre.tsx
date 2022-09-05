@@ -164,7 +164,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
-                    id={'skøersAktivitetsland'}
+                    id={'søkersAktivitetsland'}
                     label={'Søkers aktivitetsland'}
                     kunEøs
                     medFlag
