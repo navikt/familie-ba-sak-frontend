@@ -132,9 +132,8 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         const erSkjemaUendret = () => {
             if (fagsakType === FagsakType.INSTITUSJON) {
                 return skjema.felter.institusjon.verdi === fagsak?.institusjon;
-            } else {
-                return skjema.felter.fødselsnummer.verdi === åpenBehandling.verge?.ident || '';
             }
+            return skjema.felter.fødselsnummer.verdi === åpenBehandling.verge?.ident || '';
         };
 
         const onSubmitMottaker = () => {

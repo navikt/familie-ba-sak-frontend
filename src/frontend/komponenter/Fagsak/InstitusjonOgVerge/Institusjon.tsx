@@ -32,7 +32,7 @@ const Institusjon: React.FunctionComponent = () => {
         }
     };
 
-    return <StyledDiv className={'mottaker__institusjon'}> {visInstitusjon()} </StyledDiv>;
+    return <StyledDiv> {visInstitusjon()} </StyledDiv>;
 };
 
 export default Institusjon;
