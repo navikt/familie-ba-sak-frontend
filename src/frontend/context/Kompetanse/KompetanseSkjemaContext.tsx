@@ -166,7 +166,8 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
             skjema.felter.annenForeldersAktivitet?.verdi !== kompetanse.annenForeldersAktivitet ||
             skjema.felter.annenForeldersAktivitetsland?.verdi !==
                 kompetanse.annenForeldersAktivitetsland ||
-            skjema.felter.barnetsBostedsland?.verdi !== kompetanse.barnetsBostedsland
+            skjema.felter.barnetsBostedsland?.verdi !== kompetanse.barnetsBostedsland ||
+            skjema.felter.søkersAktivitetsland?.verdi !== kompetanse.søkersAktivitetsland
         );
     };
 
