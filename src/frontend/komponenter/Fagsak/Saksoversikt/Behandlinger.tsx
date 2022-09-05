@@ -19,7 +19,12 @@ import type { VisningBehandling } from './visningBehandling';
 
 const SwitchHøyre = styled(Switch)`
     margin-top: 1rem;
+    margin-right: 0.3rem;
     float: right;
+`;
+
+const StyledResultatKolonne = styled.th`
+    width: 22%;
 `;
 
 interface IBehandlingshistorikkProps {
@@ -62,8 +67,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
         ),
     ];
 
-    const henlagtBehandlingEksisterer = behandlinger.some((behandling: BehandlingTabellobjekt) =>
-        erBehandlingHenlagt(behandling.behandlingEllerTilbakekreving.resultat as BehandlingResultat)
+    const finnesRadSomKanFiltreresBort = behandlinger.some(
+        (behandling: BehandlingTabellobjekt) => !visRad(behandling, false)
     );
 
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
@@ -83,7 +88,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             <th children={'Behandlingstema'} />
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
-                            <th children={'Resultat'} />
+                            <StyledResultatKolonne children={'Resultat'} />
                         </tr>
                     </thead>
                     <tbody>
@@ -106,7 +111,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
             ) : (
                 <Normaltekst children={'Ingen tidligere behandlinger'} />
             )}
-            {henlagtBehandlingEksisterer && (
+            {finnesRadSomKanFiltreresBort && (
                 <SwitchHøyre
                     size="small"
                     position="left"
