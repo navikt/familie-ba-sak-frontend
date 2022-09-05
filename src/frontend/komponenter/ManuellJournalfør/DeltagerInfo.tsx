@@ -18,7 +18,7 @@ const HSplit = styled.div`
 `;
 
 const MarginedDiv = styled.div`
-    margin-right: 16px;
+    margin-right: 1rem;
 `;
 
 export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
