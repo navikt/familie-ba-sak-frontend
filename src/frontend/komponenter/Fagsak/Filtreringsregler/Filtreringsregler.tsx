@@ -26,8 +26,8 @@ const StyledLi = styled.li`
     padding-bottom: 1rem;
 `;
 
-const StyledVilkårResultatIkon = styled(VilkårResultatIkon)`
-    margin-right: 1rem;
+const StyledNormalTekst = styled(Normaltekst)`
+    margin-left: 0.5rem;
 `;
 
 const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
@@ -56,18 +56,18 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
 
                     return (
                         <StyledLi key={filtreringsregel}>
-                            <StyledVilkårResultatIkon
+                            <VilkårResultatIkon
                                 resultat={fødselshendelsefiltreringResultat.resultat}
-                                width={24}
-                                height={24}
+                                width={20}
+                                height={20}
                             />
-                            <Normaltekst>
+                            <StyledNormalTekst>
                                 {
                                     filtreringsregler[
                                         fødselshendelsefiltreringResultat.filtreringsregel
                                     ]
                                 }
-                            </Normaltekst>
+                            </StyledNormalTekst>
                         </StyledLi>
                     );
                 })}

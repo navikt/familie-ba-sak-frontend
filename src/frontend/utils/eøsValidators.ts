@@ -70,8 +70,7 @@ const erBarnGyldig = (felt: FeltState<OptionType[]>): FeltState<OptionType[]> =>
 const erValutakodeGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valuta er påkrevd, men mangler input');
 
-const tellAntallDesimaler = (verdi: string): number | undefined =>
-    verdi.split(/,|\./)[1]?.length ?? 0;
+const tellAntallDesimaler = (verdi: string): number => verdi.split(/,|\./)[1]?.length ?? 0;
 
 const isNumeric = (val: string): boolean => !isNaN(Number(val));
 
