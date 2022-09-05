@@ -26,9 +26,9 @@ const HentSakerFlex = styled.div`
 
 const HentSakerKnapp = styled(Knapp)`
     margin-left: 1rem;
-    margin-top: 30px;
+    margin-top: 1.9rem;
     margin-bottom: auto;
-    height: 40px;
+    height: 2.5rem;
 `;
 
 export const Samhandler: React.FC = () => {
@@ -38,7 +38,7 @@ export const Samhandler: React.FC = () => {
     useEffect(() => {
         if (location.state) {
             const state = location.state as { bruker: string };
-            samhandlerSkjema.felter.orgnr.verdi = state.bruker;
+            samhandlerSkjema.felter.orgnr.validerOgSettFelt(state.bruker);
             onSubmitWrapper();
         }
     }, []);
