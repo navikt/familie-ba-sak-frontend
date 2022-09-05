@@ -23,6 +23,7 @@ import {
     erBarnetsBostedslandGyldig,
     erKompetanseResultatGyldig,
     erSøkersAktivitetGyldig,
+    erSøkersAktivitetslandGyldig,
 } from './valideringKompetanse';
 
 export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
@@ -46,6 +47,10 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
         valideringsfunksjon: erAnnenForeldersAktivitetGyldig,
     });
 
+    const søkersAktivitet = useFelt<SøkersAktivitet | undefined>({
+        verdi: kompetanse.søkersAktivitet,
+        valideringsfunksjon: erSøkersAktivitetGyldig,
+    });
     const {
         skjema,
         valideringErOk,
@@ -71,9 +76,11 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
                 avhengigheter: { initelFom },
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),
-            søkersAktivitet: useFelt<SøkersAktivitet | undefined>({
-                verdi: kompetanse.søkersAktivitet,
-                valideringsfunksjon: erSøkersAktivitetGyldig,
+            søkersAktivitet: søkersAktivitet,
+            søkersAktivitetsland: useFelt<string | undefined>({
+                verdi: kompetanse.søkersAktivitetsland,
+                avhengigheter: { søkersAktivitet },
+                valideringsfunksjon: erSøkersAktivitetslandGyldig,
             }),
             annenForeldersAktivitet: annenForeldersAktivitet,
             annenForeldersAktivitetsland: useFelt<string | undefined>({
@@ -106,6 +113,7 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
                         tom: skjema.felter.periode.verdi.tom,
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         søkersAktivitet: skjema.felter.søkersAktivitet.verdi,
+                        søkersAktivitetsland: skjema.felter.søkersAktivitetsland.verdi,
                         annenForeldersAktivitet: skjema.felter.annenForeldersAktivitet.verdi,
                         annenForeldersAktivitetsland:
                             skjema.felter.annenForeldersAktivitetsland.verdi,
@@ -158,7 +166,8 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
             skjema.felter.annenForeldersAktivitet?.verdi !== kompetanse.annenForeldersAktivitet ||
             skjema.felter.annenForeldersAktivitetsland?.verdi !==
                 kompetanse.annenForeldersAktivitetsland ||
-            skjema.felter.barnetsBostedsland?.verdi !== kompetanse.barnetsBostedsland
+            skjema.felter.barnetsBostedsland?.verdi !== kompetanse.barnetsBostedsland ||
+            skjema.felter.søkersAktivitetsland?.verdi !== kompetanse.søkersAktivitetsland
         );
     };
 
