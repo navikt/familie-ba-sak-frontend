@@ -11,8 +11,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk } from '../typer/vilkår';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -141,7 +140,7 @@ export const erPeriodeGyldig = (
         if (tom && person?.dødsfallDato) {
             const dødsfallKalenderDato = kalenderDato(person.dødsfallDato);
 
-            if (erEtter(tomKalenderDato, dødsfallKalenderDato)) {
+            if (!er18ÅrsVilkår && erEtter(tomKalenderDato, dødsfallKalenderDato)) {
                 return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
             }
         }
