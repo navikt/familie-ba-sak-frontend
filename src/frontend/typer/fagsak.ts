@@ -2,6 +2,7 @@ import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visni
 import type { BehandlingÅrsak } from './behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
+import type { IInstitusjon } from './institusjon-og-verge';
 import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 
@@ -29,6 +30,7 @@ export interface IBaseFagsak {
     løpendeKategori?: BehandlingKategori;
     løpendeUnderkategori?: BehandlingUnderkategori;
     fagsakType: FagsakType;
+    institusjon?: IInstitusjon;
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {

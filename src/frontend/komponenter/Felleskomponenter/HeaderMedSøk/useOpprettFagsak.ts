@@ -7,6 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak, FagsakType } from '../../../typer/fagsak';
+import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
@@ -14,6 +15,7 @@ export interface IOpprettFagsakData {
     personIdent: string | null;
     aktørId: string | null;
     fagsakType: FagsakType | null;
+    institusjon: IInstitusjon | null;
 }
 
 const useOpprettFagsak = () => {

@@ -22,12 +22,13 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerMottaker: React.FC = () => {
-    const { fagsakType, onSubmitMottaker, submitFeilmelding } = useInstitusjonOgVerge();
+    const { fagsakType, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
+        useInstitusjonOgVerge();
     const { behandlingsstegSubmitressurs, erLesevisning } = useBehandling();
 
     return (
         <>
-            {!fagsakType.feilmelding && (
+            {!fagsakFeilmelding && (
                 <StyledSkjemasteg
                     className={'mottaker'}
                     tittel={'Registrer mottaker'}
@@ -36,7 +37,7 @@ const RegistrerMottaker: React.FC = () => {
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
-                    {fagsakType.data === FagsakType.INSTITUSJON ? (
+                    {fagsakType === FagsakType.INSTITUSJON ? (
                         <Institusjon />
                     ) : (
                         <Verge erLesevisning={erLesevisning()} />
@@ -44,9 +45,7 @@ const RegistrerMottaker: React.FC = () => {
                     {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>
             )}
-            {fagsakType.feilmelding && (
-                <StyledAlert variant="info" children={fagsakType.feilmelding} />
-            )}
+            {fagsakFeilmelding && <StyledAlert variant="info" children={fagsakFeilmelding} />}
         </>
     );
 };
