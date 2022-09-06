@@ -5,12 +5,12 @@ import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 export const LandkodeNorge = 'NO';
 
 export enum SøkersAktivitet {
-    ARBEIDER_I_NORGE = 'ARBEIDER_I_NORGE',
+    ARBEIDER = 'ARBEIDER',
     SELVSTENDIG_NÆRINGSDRIVENDE = 'SELVSTENDIG_NÆRINGSDRIVENDE',
-    MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN',
+    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN',
     UTSENDT_ARBEIDSTAKER_FRA_NORGE = 'UTSENDT_ARBEIDSTAKER_FRA_NORGE',
-    MOTTAR_UFØRETRYGD_FRA_NORGE = 'MOTTAR_UFØRETRYGD_FRA_NORGE',
-    MOTTAR_PENSJON_FRA_NORGE = 'MOTTAR_PENSJON_FRA_NORGE',
+    MOTTAR_UFØRETRYGD = 'MOTTAR_UFØRETRYGD',
+    MOTTAR_PENSJON = 'MOTTAR_PENSJON',
     ARBEIDER_PÅ_NORSKREGISTRERT_SKIP = 'ARBEIDER_PÅ_NORSKREGISTRERT_SKIP',
     ARBEIDER_PÅ_NORSK_SOKKEL = 'ARBEIDER_PÅ_NORSK_SOKKEL',
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP = 'ARBEIDER_FOR_ET_NORSK_FLYSELSKAP',
@@ -22,12 +22,12 @@ export enum SøkersAktivitet {
 }
 
 export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
-    ARBEIDER_I_NORGE: 'Arbeider i Norge',
+    ARBEIDER: 'Arbeider',
     SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
-    MOTTAR_UTBETALING_FRA_NAV_SOM_ERSTATTER_LØNN: 'Mottar utbetaling fra NAV som erstatter lønn',
+    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
     UTSENDT_ARBEIDSTAKER_FRA_NORGE: 'Utsendt arbeidstaker fra Norge',
-    MOTTAR_UFØRETRYGD_FRA_NORGE: 'Mottar uføretrygd fra Norge',
-    MOTTAR_PENSJON_FRA_NORGE: 'Mottar pensjon fra Norge',
+    MOTTAR_UFØRETRYGD: 'Mottar uføretrygd',
+    MOTTAR_PENSJON: 'Mottar pensjon',
     ARBEIDER_PÅ_NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
     ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
@@ -90,6 +90,7 @@ export interface IRestEøsPeriode extends IEøsPeriodeStatus {
 
 export interface IRestKompetanse extends IRestEøsPeriode {
     søkersAktivitet?: SøkersAktivitet;
+    søkersAktivitetsland?: string;
     annenForeldersAktivitet?: AnnenForelderAktivitet;
     annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
@@ -103,6 +104,7 @@ export interface IKompetanse extends IEøsPeriodeStatus {
     periode: IYearMonthPeriode;
     barnIdenter: OptionType[];
     søkersAktivitet: SøkersAktivitet | undefined;
+    søkersAktivitetsland: string | undefined;
     annenForeldersAktivitet: AnnenForelderAktivitet | undefined;
     annenForeldersAktivitetsland: string | undefined;
     barnetsBostedsland: string | undefined;
