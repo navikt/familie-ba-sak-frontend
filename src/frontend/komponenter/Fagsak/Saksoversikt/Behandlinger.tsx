@@ -19,8 +19,12 @@ import type { VisningBehandling } from './visningBehandling';
 
 const SwitchHøyre = styled(Switch)`
     margin-top: 1rem;
-    margin-right: 0.3rem;
+    margin-right: 0.275rem;
     float: right;
+`;
+
+const StyledOpprettetKolonne = styled.th`
+    width: 10%;
 `;
 
 const StyledResultatKolonne = styled.th`
@@ -82,7 +86,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 >
                     <thead>
                         <tr>
-                            <th children={'Opprettet'} />
+                            <StyledOpprettetKolonne children={'Opprettet'} />
                             <th children={'Årsak'} />
                             <th children={'Type'} />
                             <th children={'Behandlingstema'} />
