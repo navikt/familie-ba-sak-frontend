@@ -31,6 +31,7 @@ import { JournalpostKanal } from '../typer/manuell-journalføring';
 import { type IRestLukkOppgaveOgKnyttJournalpost, OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
+import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
@@ -107,6 +108,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             tilknyttedeBehandlingIder: number[];
             erEnsligMindreårig: boolean;
             erPåInstitusjon: boolean;
+            samhandler: ISamhandlerInfo | null;
         },
         string
     >({
@@ -164,6 +166,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             erPåInstitusjon: useFelt<boolean>({
                 verdi: false,
+            }),
+            samhandler: useFelt<ISamhandlerInfo | null>({
+                verdi: null,
             }),
         },
         skjemanavn: 'Journalfør dokument',
@@ -404,6 +409,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
                         erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
+                        institusjon: skjema.felter.samhandler
+                            ? {
+                                  orgNummer: skjema.felter.samhandler.verdi?.orgNummer,
+                                  tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
+                              }
+                            : null,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {

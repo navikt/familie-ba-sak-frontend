@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -11,6 +12,8 @@ import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
+import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
+import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
@@ -46,6 +49,7 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
     useEffect(() => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
@@ -58,6 +62,12 @@ export const BrukerPanel: React.FC = () => {
             settÅpen(true);
         }
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
+
+    useEffect(() => {
+        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
+            skjema.felter.samhandler.validerOgSettFelt(samhandlerSkjema.submitRessurs.data);
+        }
+    }, [samhandlerSkjema.submitRessurs.status]);
 
     return (
         <StyledEkspanderbartpanelBaseMedMargin
@@ -86,6 +96,7 @@ export const BrukerPanel: React.FC = () => {
                             erLesevisning={false}
                             label={'Bruker er enslig mindreårig'}
                             checked={skjema.felter.erEnsligMindreårig.verdi}
+                            disabled={skjema.felter.erPåInstitusjon.verdi}
                             onChange={() => {
                                 if (erLesevisning()) {
                                     return;
@@ -108,6 +119,7 @@ export const BrukerPanel: React.FC = () => {
                             erLesevisning={false}
                             label={'Bruker er på institusjon'}
                             checked={skjema.felter.erPåInstitusjon.verdi}
+                            disabled={skjema.felter.erEnsligMindreårig.verdi}
                             onChange={() => {
                                 if (erLesevisning()) {
                                     return;
@@ -126,6 +138,38 @@ export const BrukerPanel: React.FC = () => {
                     </StyledCheckBoxWrapper>
                 </div>
             )}
+            {skjema.felter.erPåInstitusjon.verdi && (
+                <StyledDiv>
+                    {!erLesevisning() && (
+                        <FamilieInput
+                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                samhandlerSkjema.visFeilmeldinger
+                            )}
+                            erLesevisning={erLesevisning()}
+                            id={'hent-samhandler'}
+                            label={'Institusjonens organisasjonsnummer'}
+                            bredde={'XL'}
+                            placeholder={'organisasjonsnummer'}
+                        />
+                    )}
+                    <StyledKnapp
+                        onClick={() => {
+                            settSpinner(true);
+                            onSubmitWrapper();
+                            settSpinner(false);
+                        }}
+                        children={'Hent institusjon'}
+                        spinner={spinner}
+                        mini={true}
+                        erLesevisning={erLesevisning()}
+                    />
+                </StyledDiv>
+            )}
+
+            {skjema.felter.samhandler.verdi !== null && (
+                <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
+            )}
+            <br />
             <StyledDiv>
                 {!erLesevisning() && (
                     <FamilieInput
