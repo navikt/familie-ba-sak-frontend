@@ -409,12 +409,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
                         erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
-                        institusjon: skjema.felter.samhandler
-                            ? {
-                                  orgNummer: skjema.felter.samhandler.verdi?.orgNummer,
-                                  tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
-                              }
-                            : null,
+                        institusjon:
+                            skjema.felter.samhandler && skjema.felter.samhandler.verdi?.orgNummer
+                                ? {
+                                      orgNummer: skjema.felter.samhandler.verdi?.orgNummer,
+                                      tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
+                                  }
+                                : null,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
