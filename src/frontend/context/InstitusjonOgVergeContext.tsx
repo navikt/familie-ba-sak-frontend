@@ -4,14 +4,15 @@ import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
+import { BehandlingSteg } from '../typer/behandling';
 import { FagsakType } from '../typer/fagsak';
-import type { IRegistrerInstitusjonOgVerge } from '../typer/institusjon-og-verge';
+import type { IInstitusjon, IRegistrerInstitusjonOgVerge } from '../typer/institusjon-og-verge';
 import type { IPersonInfo } from '../typer/person';
 import { hentAlder } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
@@ -29,18 +30,18 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         const [hentPersonFeilmelding, settHentPersonFeilmelding] = useState<string | undefined>('');
         const [submitFeilmelding, settSubmitFeilmelding] = useState<string | undefined>('');
 
-        const fagsakType: { [key: string]: string } = {
-            data:
-                minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data.fagsakType : '',
-            feilmelding:
-                minimalFagsak.status !== RessursStatus.SUKSESS
-                    ? hentFrontendFeilmelding(minimalFagsak) || 'Ukjent feil ved henting av fagsak'
-                    : '',
-        };
+        const fagsak =
+            minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data : undefined;
+        const fagsakFeilmelding =
+            minimalFagsak.status !== RessursStatus.SUKSESS
+                ? hentFrontendFeilmelding(minimalFagsak) || 'Ukjent feil ved henting av fagsak'
+                : '';
+        const fagsakType = fagsak?.fagsakType;
+
         const { skjema, onSubmit } = useSkjema<
             {
                 fødselsnummer: string;
-                institusjon: string | undefined;
+                institusjon: IInstitusjon | undefined;
                 navn: string | undefined;
                 adresse: string;
                 postnummer: string;
@@ -56,12 +57,14 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
                         if (avhengigheter?.feilmelding) {
                             return feil(felt, avhengigheter?.feilmelding);
                         } else {
-                            return identValidator(felt);
+                            return fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG
+                                ? identValidator(felt)
+                                : ok(felt);
                         }
                     },
                 }),
-                institusjon: useFelt<string | undefined>({
-                    verdi: undefined,
+                institusjon: useFelt<IInstitusjon | undefined>({
+                    verdi: fagsak?.institusjon,
                 }),
                 navn: useFelt<string | undefined>({
                     verdi: '',
@@ -126,22 +129,30 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
             }
         };
 
+        const erSkjemaUendret = () => {
+            if (fagsakType === FagsakType.INSTITUSJON) {
+                return skjema.felter.institusjon.verdi === fagsak?.institusjon;
+            }
+            return skjema.felter.fødselsnummer.verdi === åpenBehandling.verge?.ident || '';
+        };
+
         const onSubmitMottaker = () => {
-            if (erLesevisning()) {
+            if (
+                erLesevisning() ||
+                (erSkjemaUendret() &&
+                    åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE)
+            ) {
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
             } else {
                 onSubmit<IRegistrerInstitusjonOgVerge | undefined>(
                     {
                         data: {
                             institusjonInfo:
-                                fagsakType.data === FagsakType.INSTITUSJON
-                                    ? {
-                                          orgNummer: '',
-                                          eksternTssNummer: '',
-                                      }
+                                fagsakType === FagsakType.INSTITUSJON
+                                    ? skjema.felter.institusjon.verdi
                                     : undefined,
                             vergeInfo:
-                                fagsakType.data !== FagsakType.INSTITUSJON
+                                fagsakType !== FagsakType.INSTITUSJON
                                     ? {
                                           ident: skjema.felter.fødselsnummer.verdi,
                                       }
@@ -168,6 +179,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
         };
 
         return {
+            fagsakFeilmelding,
             fagsakType,
             hentPerson,
             onSubmitMottaker,

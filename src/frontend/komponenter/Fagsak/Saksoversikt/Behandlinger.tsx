@@ -102,6 +102,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             )
                             .map((behandling: BehandlingTabellobjekt) => (
                                 <Behandling
+                                    key={behandling.behandlingEllerTilbakekreving.behandlingId}
                                     behandling={behandling.behandlingEllerTilbakekreving}
                                     minimalFagsak={minimalFagsak}
                                 />
