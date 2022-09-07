@@ -5,7 +5,7 @@ export interface IVerge {
 export interface IInstitusjon {
     navn?: string;
     orgNummer: string;
-    eksternTssNummer: string;
+    tssEksternId: string;
 }
 
 export interface IRegistrerInstitusjonOgVerge {

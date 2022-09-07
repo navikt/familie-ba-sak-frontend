@@ -17,11 +17,11 @@ const HSplit = styled.div`
     flex-direction: row;
 `;
 
-export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
-    const MarginedDiv = styled.div`
-        margin-right: 16px;
-    `;
+const MarginedDiv = styled.div`
+    margin-right: 1rem;
+`;
 
+export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
     return (
         <div>
             <HSplit>

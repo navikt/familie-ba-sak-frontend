@@ -11,8 +11,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk } from '../typer/vilkår';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -52,6 +51,21 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
     }
 
     return validerIdent(identFelt);
+};
+
+const harFyltInnOrgnr = (felt: FeltState<string>): FeltState<string> => {
+    return /^\d{9}$/.test(felt.verdi.replace(' ', ''))
+        ? ok(felt)
+        : feil(felt, 'Orgnummer har ikke 9 tall');
+};
+
+export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<string> => {
+    const validated = harFyltInnOrgnr(orgnummerFelt);
+    if (validated.valideringsstatus !== Valideringsstatus.OK) {
+        return validated;
+    }
+
+    return ok(orgnummerFelt);
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
@@ -107,6 +121,7 @@ export const erPeriodeGyldig = (
                 }
             }
         }
+
         const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
         const fomDatoErFørTomDato = erFør(
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
@@ -125,7 +140,7 @@ export const erPeriodeGyldig = (
         if (tom && person?.dødsfallDato) {
             const dødsfallKalenderDato = kalenderDato(person.dødsfallDato);
 
-            if (erEtter(tomKalenderDato, dødsfallKalenderDato)) {
+            if (!er18ÅrsVilkår && erEtter(tomKalenderDato, dødsfallKalenderDato)) {
                 return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
             }
         }
