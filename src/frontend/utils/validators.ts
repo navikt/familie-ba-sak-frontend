@@ -129,7 +129,7 @@ export const erPeriodeGyldig = (
         const fomDatoErLikDødsfallDato = fom === person?.dødsfallDato;
 
         const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
-        if (fom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(fomKalenderDato, idag)) {
+        if (fom && valgtDatoErNesteMånedEllerSenere(fomKalenderDato, idag)) {
             return feil(
                 felt,
                 'Du kan ikke legge inn fra og med dato som er i neste måned eller senere'
