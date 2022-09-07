@@ -208,7 +208,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     </ValutakursRad>
                     {erManuellInputAvKurs && (
                         <StyledISKAlert variant="warning" size="small" inline>
-                            <Heading size="small">
+                            <Heading size="xsmall">
                                 Manuell innhenting av valutakurs for Islandske kroner (ISK)
                             </Heading>
                             Systemet har ikke valutakurser for valutakursdatoer før 1. februar 2018.
