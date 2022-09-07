@@ -122,14 +122,19 @@ export const erPeriodeGyldig = (
             }
         }
 
+        const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
         const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
-        const fomDatoErFørTomDato = erFør(
-            kalenderDatoMedFallback(fom, TIDENES_MORGEN),
-            tomKalenderDato
-        );
+
+        const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
         const fomDatoErLikDødsfallDato = fom === person?.dødsfallDato;
 
         const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
+        if (fom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(fomKalenderDato, idag)) {
+            return feil(
+                felt,
+                'Du kan ikke legge inn fra og med dato som er i neste måned eller senere'
+            );
+        }
         if (tom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)) {
             return feil(
                 felt,
