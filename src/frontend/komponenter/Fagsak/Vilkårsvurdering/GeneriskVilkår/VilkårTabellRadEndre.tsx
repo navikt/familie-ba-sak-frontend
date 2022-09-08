@@ -107,7 +107,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
+    const { åpenBehandling, settÅpenBehandling, gjelderInstitusjon } = useBehandling();
     const årsakErSøknad =
         åpenBehandling.status !== RessursStatus.SUKSESS ||
         åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
@@ -231,6 +231,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET);
 
     const visRegelverkValg = (): boolean =>
+        !gjelderInstitusjon &&
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
             vilkårFraConfig.key as VilkårType
         );
@@ -343,18 +344,21 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                <UtdypendeVilkårsvurderingMultiselect
-                    redigerbartVilkår={redigerbartVilkår}
-                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                    erLesevisning={lesevisning}
-                    personType={person.type}
-                    feilhåndtering={
-                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                            ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
-                            : ''
-                    }
-                />
+                {!gjelderInstitusjon && (
+                    <UtdypendeVilkårsvurderingMultiselect
+                        redigerbartVilkår={redigerbartVilkår}
+                        validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                        erLesevisning={lesevisning}
+                        personType={person.type}
+                        feilhåndtering={
+                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger
+                                .valideringsstatus === Valideringsstatus.FEIL &&
+                            skalViseFeilmeldinger()
+                                ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
+                                : ''
+                        }
+                    />
+                )}
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (
                         <AvslagSkjema

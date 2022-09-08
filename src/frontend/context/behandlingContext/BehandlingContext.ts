@@ -24,6 +24,7 @@ import {
     BehandlingÅrsak,
 } from '../../typer/behandling';
 import { harTilgangTilEnhet } from '../../typer/enhet';
+import { FagsakType } from '../../typer/fagsak';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
@@ -36,7 +37,7 @@ import { saksbehandlerHarKunLesevisning } from './util';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentMinimalFagsak } = useFagsakRessurser();
+    const { hentMinimalFagsak, minimalFagsak } = useFagsakRessurser();
     const [åpenBehandling, privatSettÅpenBehandling] = useState<Ressurs<IBehandling>>(
         byggTomRessurs()
     );
@@ -215,6 +216,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         åpenBehandling.status === RessursStatus.SUKSESS &&
         åpenBehandling.data.status === BehandlingStatus.AVSLUTTET;
 
+    const gjelderInstitusjon =
+        minimalFagsak.status === RessursStatus.SUKSESS &&
+        minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
+
     return {
         erLesevisning,
         forrigeÅpneSide,
@@ -241,6 +246,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         åpenVenstremeny,
         settÅpenVenstremeny,
         erBehandlingAvsluttet,
+        gjelderInstitusjon,
     };
 });
 
