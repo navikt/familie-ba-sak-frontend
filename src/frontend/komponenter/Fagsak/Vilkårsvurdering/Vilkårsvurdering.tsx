@@ -144,10 +144,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                                 }
                             );
                         }}
-                        spinner={hentOpplysningerRessurs.status === RessursStatus.HENTER}
-                        type={'flat'}
-                        mini={true}
-                        kompakt={true}
+                        loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
+                        variant="tertiary"
+                        size="small"
                         erLesevisning={erLesevisning()}
                     >
                         {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (

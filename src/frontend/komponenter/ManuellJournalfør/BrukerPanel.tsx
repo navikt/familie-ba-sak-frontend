@@ -159,8 +159,8 @@ export const BrukerPanel: React.FC = () => {
                             settSpinner(false);
                         }}
                         children={'Hent institusjon'}
-                        spinner={spinner}
-                        mini={true}
+                        loading={spinner}
+                        size="small"
                         erLesevisning={erLesevisning()}
                     />
                 </StyledDiv>
@@ -198,8 +198,8 @@ export const BrukerPanel: React.FC = () => {
                         }
                     }}
                     children={'Endre bruker'}
-                    spinner={spinner}
-                    mini={true}
+                    loading={spinner}
+                    size="small"
                     erLesevisning={erLesevisning()}
                 />
             </StyledDiv>

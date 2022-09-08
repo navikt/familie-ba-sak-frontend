@@ -243,9 +243,9 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={leseVisning}
                             onClick={onClickFerdig}
-                            mini={true}
-                            type={'standard'}
-                            spinner={vilkårSubmit === VilkårSubmit.PUT}
+                            size="small"
+                            variant="secondary"
+                            loading={vilkårSubmit === VilkårSubmit.PUT}
                             disabled={vilkårSubmit === VilkårSubmit.PUT}
                         >
                             Ferdig
@@ -254,8 +254,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={leseVisning}
                             onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
+                            size="small"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>

@@ -280,9 +280,9 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={lesevisning}
                             onClick={() => sendInnSkjema()}
-                            mini={true}
-                            type={valideringErOk() ? 'hoved' : 'standard'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            size="small"
+                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >
                             Ferdig
@@ -291,8 +291,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={lesevisning}
                             onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
+                            size="small"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>

@@ -391,8 +391,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <StyledFamilieTextarea
                         {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                         erLesevisning={erLesevisning()}
-                        placeholder={'Begrunn hvorfor utbetalingsperioden er endret.'}
                         label={'Begrunnelse'}
+                        resize
                         value={
                             skjema.felter.begrunnelse.verdi !== null &&
                             skjema.felter.begrunnelse.verdi !== undefined

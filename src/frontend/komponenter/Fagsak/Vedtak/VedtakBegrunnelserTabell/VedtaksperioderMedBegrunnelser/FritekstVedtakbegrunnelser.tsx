@@ -222,9 +222,9 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             onClick={() => {
                                 putVedtaksperiodeMedFritekster();
                             }}
-                            mini={true}
-                            type={'standard'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            size="small"
+                            variant="secondary"
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >
                             Lagre
@@ -234,8 +234,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             onClick={() => {
                                 onPanelClose(false);
                             }}
-                            mini={true}
-                            type={'flat'}
+                            size="small"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>

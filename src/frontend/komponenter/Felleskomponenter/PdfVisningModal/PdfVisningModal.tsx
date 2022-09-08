@@ -53,7 +53,7 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
 };
 
 const IframePdfVisning = styled.iframe`
-    maring: 0 auto;
+    margin: 0 auto;
     height: 100%;
     width: 100%;
 `;
