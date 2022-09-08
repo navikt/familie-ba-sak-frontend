@@ -2,11 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -44,7 +43,7 @@ const Handlinger = styled.div`
     justify-content: space-between;
 `;
 
-const SendBrevKnapp = styled(Knapp)`
+const SendBrevKnapp = styled(Button)`
     margin-right: 2rem;
 `;
 
@@ -132,18 +131,18 @@ const DokumentutsendingSkjema: React.FC = () => {
 
                 <div>
                     <SendBrevKnapp
-                        mini
-                        spinner={senderBrev()}
+                        size="small"
+                        variant="primary"
+                        loading={senderBrev()}
                         disabled={skjemaErLåst()}
                         onClick={sendBrevPåFagsak}
-                        type={'hoved'}
                     >
                         Send brev
                     </SendBrevKnapp>
 
-                    <Knapp mini onClick={nullstillSkjema} type={'flat'}>
+                    <Button size="small" variant="tertiary" onClick={nullstillSkjema}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </div>
             </Handlinger>
         </Container>

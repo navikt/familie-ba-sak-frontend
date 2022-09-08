@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import variables from 'nav-frontend-core';
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -68,7 +68,7 @@ const Feltmargin = styled.div`
     margin-bottom: 1rem;
 `;
 
-const StyledFerdigKnapp = styled(Knapp)`
+const StyledFerdigKnapp = styled(Button)`
     margin-right: 0.5rem;
 `;
 
@@ -408,16 +408,21 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <Knapperekke>
                         <KnapperekkeVenstre>
                             <StyledFerdigKnapp
-                                mini
+                                size="small"
+                                variant="secondary"
                                 onClick={() =>
                                     oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)
                                 }
                             >
                                 Bekreft
                             </StyledFerdigKnapp>
-                            <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
+                            <Button
+                                variant="tertiary"
+                                size="small"
+                                onClick={avbrytEndringAvUtbetalingsperiode}
+                            >
                                 Avbryt
-                            </Flatknapp>
+                            </Button>
                         </KnapperekkeVenstre>
 
                         <IkonKnapp

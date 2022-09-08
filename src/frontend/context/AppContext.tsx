@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { Button } from '@navikt/ds-react';
 import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { ISaksbehandler } from '@navikt/familie-typer';
@@ -107,16 +107,17 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         visModal: true,
                         onClose: () => lukkModal(),
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'avbryt'}
-                                mini={true}
+                                variant="secondary"
+                                size="small"
                                 onClick={() => lukkModal()}
                                 children={'Avbryt'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'oppdater'}
-                                type={'hoved'}
-                                mini={true}
+                                variant="primary"
+                                size="small"
                                 onClick={() => {
                                     window.location.reload();
                                 }}
@@ -195,10 +196,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         );
                     },
                     actions: [
-                        <Knapp
+                        <Button
                             key={'lukk'}
-                            type={'hoved'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             onClick={lukkModal}
                             children={'Lukk'}
                         />,

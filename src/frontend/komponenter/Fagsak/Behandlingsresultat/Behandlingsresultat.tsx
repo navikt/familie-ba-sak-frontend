@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Flatknapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -212,10 +211,14 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             />
             {!erLesevisning() && (
                 <EndretUtbetalingAndel>
-                    <Flatknapp mini onClick={() => opprettEndretUtbetaling()}>
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        onClick={() => opprettEndretUtbetaling()}
+                    >
                         <StyledEditIkon />
                         <Element>Endre utbetalingsperiode</Element>
-                    </Flatknapp>
+                    </Button>
                     {visFeilmeldinger && opprettelseFeilmelding !== '' && (
                         <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
                     )}
