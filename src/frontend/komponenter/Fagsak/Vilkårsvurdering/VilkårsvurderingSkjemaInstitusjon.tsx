@@ -8,19 +8,22 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../typer/person';
-import type { IPersonResultat, IVilkårConfig } from '../../../typer/vilkår';
-import {
-    annenVurderingConfig,
-    AnnenVurderingType,
-    vilkårConfig,
-    VilkårType,
-} from '../../../typer/vilkår';
+import type { IPersonResultat } from '../../../typer/vilkår';
+import { annenVurderingConfig, AnnenVurderingType, vilkårConfig } from '../../../typer/vilkår';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
 import { useSamhandlerRequest } from '../InstitusjonOgVerge/useSamhandler';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
+
+const vilkårTilVurdering = [
+    vilkårConfig.BOSATT_I_RIKET,
+    vilkårConfig.LOVLIG_OPPHOLD,
+    vilkårConfig.BOR_FAST_PÅ_INSTITUSJON,
+    vilkårConfig.UNDER_18_ÅR,
+    vilkårConfig.GIFT_PARTNERSKAP,
+];
 
 const AktørLinje = styled.div`
     display: flex;
@@ -63,22 +66,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
-    const opplysningspliktConfig = annenVurderingConfig['OPPLYSNINGSPLIKT'];
-    const index = 0;
-    const iVilkårConfigs = Object.values(vilkårConfig).filter((vc: IVilkårConfig) =>
-        vc.parterDetteGjelderFor.includes(PersonType.BARN)
-    );
-    iVilkårConfigs.splice(
-        iVilkårConfigs.findIndex(value => value.key === VilkårType.BOR_MED_SØKER),
-        1,
-        {
-            beskrivelse: 'bor fast på institusjon',
-            key: 'BOR_FAST_PÅ_INSTITUSJON',
-            tittel: 'Bor fast på institusjon',
-            spørsmål: () => `Bor barnet fast på institusjon?`,
-            parterDetteGjelderFor: [PersonType.BARN],
-        }
-    );
+
     return personResultat ? (
         <>
             {opplysningsplikt && (
@@ -98,10 +86,12 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                     </AktørLinje>
                     <IndentertInnhold className={'samhandler-innhold'}>
                         <GeneriskAnnenVurdering
-                            key={`${index}_${personResultat.person.fødselsdato}_${opplysningspliktConfig.key}`}
+                            key={`${orgNummer}_${AnnenVurderingType.OPPLYSNINGSPLIKT}`}
                             person={personResultat.person}
                             andreVurderinger={personResultat.andreVurderinger}
-                            annenVurderingConfig={opplysningspliktConfig}
+                            annenVurderingConfig={
+                                annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]
+                            }
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     </IndentertInnhold>
@@ -117,16 +107,17 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                 ) : (
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                 )}
-                {iVilkårConfigs.map((vc: IVilkårConfig) => {
+                {vilkårTilVurdering.map(vilkårConfig => {
                     return (
                         <GeneriskVilkår
-                            key={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
-                            generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
+                            key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
+                            generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
                             person={personResultat.person}
                             vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat => vilkårResultat.verdi.vilkårType === vc.key
+                                vilkårResultat =>
+                                    vilkårResultat.verdi.vilkårType === vilkårConfig.key
                             )}
-                            vilkårFraConfig={vc}
+                            vilkårFraConfig={vilkårConfig}
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     );
