@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
 import { BodyShort, Heading } from '@navikt/ds-react';
 import Clipboard from '@navikt/familie-clipboard';
 
@@ -13,13 +15,36 @@ interface IProps {
     width?: string;
 }
 
+const FlexDiv = styled.div`
+    display: flex;
+    align-items: center;
+
+    & .kontor-ikon {
+        margin-right: 1.5rem;
+
+        &--for-normaltekst {
+            margin-right: 0.5rem;
+        }
+    }
+
+    & .typo-normal {
+        font-weight: 600;
+    }
+
+    & .navn {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+`;
+
 const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
     samhandler,
     somOverskrift = false,
 }) => {
     const navn = samhandler.navn;
     return (
-        <div className={'samhandlerinformasjon'}>
+        <FlexDiv>
             {somOverskrift && (
                 <>
                     <KontorIkonGrønn className={'kontor-ikon'} height={32} width={32} />
@@ -61,7 +86,7 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                     <BodyShort>Institusjon</BodyShort>
                 </>
             )}
-        </div>
+        </FlexDiv>
     );
 };
 

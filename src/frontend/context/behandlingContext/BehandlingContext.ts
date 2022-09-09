@@ -220,6 +220,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         minimalFagsak.status === RessursStatus.SUKSESS &&
         minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
 
+    const samhandlerOrgnr = gjelderInstitusjon
+        ? minimalFagsak.data.institusjon?.orgNummer
+        : undefined;
+
     return {
         erLesevisning,
         forrigeÅpneSide,
@@ -247,6 +251,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         settÅpenVenstremeny,
         erBehandlingAvsluttet,
         gjelderInstitusjon,
+        samhandlerOrgnr,
     };
 });
 
