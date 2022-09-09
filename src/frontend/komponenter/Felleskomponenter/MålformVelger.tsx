@@ -3,8 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Radio } from 'nav-frontend-skjema';
-import { Systemtittel } from 'nav-frontend-typografi';
 
+import { Heading } from '@navikt/ds-react';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
 
@@ -29,7 +29,7 @@ const MålformVelger: React.FC<IProps> = ({
     målformFelt,
     visFeilmeldinger,
     erLesevisning,
-    Legend = <Systemtittel children={'Målform'} />,
+    Legend = <Heading size={'medium'} children={'Målform'} />,
 }) => {
     const radioOnChange = (målform: Målform) => {
         målformFelt.validerOgSettFelt(målform);

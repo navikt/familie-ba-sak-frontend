@@ -5,10 +5,9 @@ import styled from 'styled-components';
 
 import variables from 'nav-frontend-core';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -38,7 +37,7 @@ import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import {
     StyledFamilieDatovelger,
-    StyledFeilmelding,
+    StyledErrorMessage,
 } from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const KnapperekkeVenstre = styled.div`
@@ -180,7 +179,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 <Feltmargin>
                     <StyledPersonvelger
                         {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<Element>Velg hvem det gjelder</Element>}
+                        label={<Label>Velg hvem det gjelder</Label>}
                         value={skjema.felter.person.verdi}
                         placeholder={'Velg person'}
                         onChange={(event): void => {
@@ -207,7 +206,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Feltmargin>
-                    <Element>Fastsett periode</Element>
+                    <Label>Fastsett periode</Label>
                     <Feltmargin>
                         <MånedÅrVelger
                             {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
@@ -246,7 +245,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <FamilieSelect
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         value={skjema.felter.årsak.verdi}
-                        label={<Element>Årsak</Element>}
+                        label={<Label>Årsak</Label>}
                         placeholder={'Velg årsak'}
                         onChange={(event): void => {
                             skjema.felter.årsak.validerOgSettFelt(
@@ -269,7 +268,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
                 <Feltmargin>
                     <FamilieRadioGruppe
-                        legend={<Element>Utbetaling</Element>}
+                        legend={<Label>Utbetaling</Label>}
                         erLesevisning={erLesevisning()}
                         verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
                     >
@@ -307,7 +306,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 ? skjema.felter.søknadstidspunkt.verdi
                                 : undefined
                         }
-                        label={<Element>Søknadstidspunkt</Element>}
+                        label={<Label>Søknadstidspunkt</Label>}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.søknadstidspunkt.validerOgSettFelt(dato)
@@ -315,9 +314,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         erLesesvisning={erLesevisning()}
                     />
                     {skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger && (
-                        <StyledFeilmelding>
+                        <StyledErrorMessage>
                             {skjema.felter.søknadstidspunkt.feilmelding}
-                        </StyledFeilmelding>
+                        </StyledErrorMessage>
                     )}
                 </Feltmargin>
 
@@ -336,7 +335,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     ? skjema.felter.avtaletidspunktDeltBosted.verdi
                                     : undefined
                             }
-                            label={<Element>Avtale om delt bosted</Element>}
+                            label={<Label>Avtale om delt bosted</Label>}
                             placeholder={datoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) =>
                                 skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(dato)
@@ -345,9 +344,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         />
                         {skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
                             skjema.visFeilmeldinger && (
-                                <StyledFeilmelding>
+                                <StyledErrorMessage>
                                     {skjema.felter.avtaletidspunktDeltBosted.feilmelding}
-                                </StyledFeilmelding>
+                                </StyledErrorMessage>
                             )}
                     </Feltmargin>
                 )}
@@ -357,7 +356,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
                                 skjema.visFeilmeldinger
                             )}
-                            label={<Element>Sats</Element>}
+                            label={<Label>Sats</Label>}
                             value={
                                 skjema.felter.fullSats.verdi !== undefined &&
                                 skjema.felter.fullSats.verdi !== null

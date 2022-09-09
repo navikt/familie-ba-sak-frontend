@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Sidetittel } from 'nav-frontend-typografi';
-
 import { Globe as Eu, Home as NorwegianFlag } from '@navikt/ds-icons';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
@@ -227,7 +225,7 @@ const TidslinjeVisualisering: React.FC = () => {
 
             return (
                 <Container>
-                    <Sidetittel>Tidslinjer</Sidetittel>
+                    <Heading size="xlarge">Tidslinjer</Heading>
                     {barna.map((barn, index) => (
                         <div key={`barn_${index}`}>
                             <TidslinjeHeader>

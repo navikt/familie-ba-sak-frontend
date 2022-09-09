@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Element, Feilmelding } from 'nav-frontend-typografi';
-
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
@@ -65,7 +63,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
                 genererteBrevbegrunnelser.data.length > 0 && (
                     <>
-                        <Element>Begrunnelse(r)</Element>
+                        <Label>Begrunnelse(r)</Label>
                         <ul>
                             {genererteBrevbegrunnelser.data.map(
                                 (begrunnelse: string, index: number) => (
@@ -79,7 +77,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                 )}
             {genererteBrevbegrunnelser.status === RessursStatus.FEILET && (
                 <>
-                    <Feilmelding>{genererteBrevbegrunnelser.frontendFeilmelding}</Feilmelding>
+                    <ErrorMessage>{genererteBrevbegrunnelser.frontendFeilmelding}</ErrorMessage>
                 </>
             )}
             {visFritekster() && <FritekstVedtakbegrunnelser />}

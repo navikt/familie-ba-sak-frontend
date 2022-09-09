@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import Lenke from 'nav-frontend-lenker';
 import Tabs from 'nav-frontend-tabs';
-import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -188,7 +187,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Innholdstittel children={'Saksoversikt'} />
+            <Heading size={'large'} children={'Saksoversikt'} />
             <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
                 onChange={(_, tabnr) => {
@@ -205,7 +204,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
                         <>
-                            <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
+                            <Heading size={'medium'}>Løpende månedlig utbetaling</Heading>
                             {løpendeMånedligUtbetaling()}
                         </>
                     )}

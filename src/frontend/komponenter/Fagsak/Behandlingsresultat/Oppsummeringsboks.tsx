@@ -4,10 +4,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Xknapp } from 'nav-frontend-ikonknapper';
-import { Element } from 'nav-frontend-typografi';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Alert, BodyShort, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -258,7 +257,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         </AlertWithBottomMargin>
                     )}
 
-                    <Element>{månedNavnOgÅr()}</Element>
+                    <Label>{månedNavnOgÅr()}</Label>
 
                     {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
                 </div>

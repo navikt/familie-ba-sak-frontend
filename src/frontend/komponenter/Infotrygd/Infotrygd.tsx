@@ -5,9 +5,8 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -87,7 +86,7 @@ export const Infotrygd: React.FC = () => {
 
     return (
         <InfotrygdContainer>
-            <Innholdstittel>Visningsside for Infotrygd</Innholdstittel>
+            <Heading size={'large'}>Visningsside for Infotrygd</Heading>
             <HentSakerFlex>
                 <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
                     <Input

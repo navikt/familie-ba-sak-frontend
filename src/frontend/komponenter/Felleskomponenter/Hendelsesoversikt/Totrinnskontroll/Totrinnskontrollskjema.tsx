@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
-import { Element, Systemtittel } from 'nav-frontend-typografi';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -31,7 +30,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const KontrollerteTrinnOverskrift = styled(Element)`
+const KontrollerteTrinnOverskrift = styled(Label)`
     margin-bottom: 1rem;
 `;
 
@@ -73,7 +72,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     egetVedtak ? (
                         <SendtTilBeslutterContainer>
                             <div>
-                                <Systemtittel>Totrinnskontroll</Systemtittel>
+                                <Heading size={'medium'}>Totrinnskontroll</Heading>
                                 <br />
                                 <BodyShort>
                                     {formaterIsoDato(

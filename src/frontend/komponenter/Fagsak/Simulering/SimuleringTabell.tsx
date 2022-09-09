@@ -5,9 +5,8 @@ import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import { Element } from 'nav-frontend-typografi';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, Label } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
@@ -74,7 +73,7 @@ const SimuleringTabellOverskrift = styled.div`
     margin-bottom: 1rem;
 `;
 
-const ElementMedFarge = styled(Element)`
+const LabelMedFarge = styled(Label)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
 
@@ -136,12 +135,12 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     return (
         <>
             <SimuleringTabellOverskrift>
-                <Element>
+                <Label>
                     Simuleringsresultat for{' '}
                     {perioder.length === 1
                         ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`
                         : `perioden ${tilOgFraDatoForSimulering}`}
-                </Element>
+                </Label>
             </SimuleringTabellOverskrift>
 
             <StyledTable
@@ -202,14 +201,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                     <React.Fragment key={'måned - ' + periode.fom}>
                                         {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
                                         <HøyresiltTh>
-                                            <Element>
+                                            <Label>
                                                 {kapitaliserTekst(
                                                     formaterIsoDato(
                                                         periode.fom,
                                                         datoformat.MÅNED_NAVN
                                                     )
                                                 )}
-                                            </Element>
+                                            </Label>
                                         </HøyresiltTh>
                                     </React.Fragment>
                                 )
@@ -261,7 +260,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             {fomDatoNestePeriode === periode.fom ? (
-                                                <ElementMedFarge
+                                                <LabelMedFarge
                                                     farge={
                                                         periode.resultat && periode.resultat < 0
                                                             ? navFarger.navRod
@@ -269,7 +268,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                     }
                                                 >
                                                     {formaterBeløpUtenValutakode(periode.resultat)}
-                                                </ElementMedFarge>
+                                                </LabelMedFarge>
                                             ) : (
                                                 <BodyshortMedFarge
                                                     farge={

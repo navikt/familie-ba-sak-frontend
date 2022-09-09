@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding } from 'nav-frontend-typografi';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -131,7 +130,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             søkeresultat.ident
                         )})`}</BodyShort>
                     )}
-                    {!!feilmelding && <Feilmelding children={feilmelding} />}
+                    {!!feilmelding && <ErrorMessage children={feilmelding} />}
                 </UIModalWrapper>
             )}
             {toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
@@ -268,7 +267,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             <SamhandlerTabell samhandler={valgtSamhandler}></SamhandlerTabell>
                         )}
                     </StyledCheckBoxWrapper>
-                    {!!feilmelding && visFeilmelding && <Feilmelding children={feilmelding} />}
+                    {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
                 </UIModalWrapper>
             )}
         </>

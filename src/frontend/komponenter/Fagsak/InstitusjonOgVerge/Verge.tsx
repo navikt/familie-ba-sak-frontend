@@ -3,8 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Systemtittel } from 'nav-frontend-typografi';
-
+import { Heading } from '@navikt/ds-react';
 import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
@@ -32,7 +31,7 @@ const Verge: React.FunctionComponent<IProps> = ({ erLesevisning }) => {
 
     return (
         <StyledDiv className={'mottaker__verge'}>
-            <Systemtittel children={'Opplysninger om verge'} />
+            <Heading size={'medium'} children={'Opplysninger om verge'} />
             <br />
             <FamilieInput
                 {...skjema.felter.fødselsnummer.hentNavInputProps(true)}

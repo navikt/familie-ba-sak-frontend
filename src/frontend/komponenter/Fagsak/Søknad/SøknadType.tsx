@@ -3,8 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Radio } from 'nav-frontend-skjema';
-import { Systemtittel } from 'nav-frontend-typografi';
 
+import { Heading } from '@navikt/ds-react';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -33,7 +33,7 @@ const SøknadType: React.FunctionComponent = () => {
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             erLesevisning={lesevisning}
             verdi={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
-            legend={<Systemtittel children={'Hva har bruker søkt om?'} />}
+            legend={<Heading size={'medium'} children={'Hva har bruker søkt om?'} />}
         >
             <StyledRadio
                 label={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR]}

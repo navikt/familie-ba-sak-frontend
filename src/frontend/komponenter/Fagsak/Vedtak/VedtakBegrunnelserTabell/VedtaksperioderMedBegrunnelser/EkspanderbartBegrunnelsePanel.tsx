@@ -3,9 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Element } from 'nav-frontend-typografi';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
@@ -67,14 +66,14 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
             tittel={
                 <PanelTittel>
                     {periode.fom && (
-                        <Element>
+                        <Label>
                             {periodeToString({
                                 fom: periode.fom,
                                 tom: slutterSenereEnnInneværendeMåned(periode.tom)
                                     ? ''
                                     : periode.tom,
                             })}
-                        </Element>
+                        </Label>
                     )}
                     <BodyShort>{vedtaksperiodeTittel}</BodyShort>
                     {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||

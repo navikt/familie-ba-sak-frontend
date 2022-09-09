@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 
-import { Heading } from '@navikt/ds-react';
+import { Heading, Label } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IGrunnlagPerson } from '../../../../typer/person';
@@ -48,7 +47,7 @@ const GeneriskAnnenVurdering: React.FC<IProps> = ({
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForAnnenVurdering ? feilmelding : undefined}>
                 <VilkårTittel size={'small'} level={'4'}>
-                    <Element children={annenVurderingConfig.tittel} />
+                    <Label children={annenVurderingConfig.tittel} />
                 </VilkårTittel>
                 <AnnenVurderingTabell
                     person={person}

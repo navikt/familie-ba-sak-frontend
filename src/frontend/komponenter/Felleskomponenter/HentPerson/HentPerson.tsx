@@ -4,9 +4,8 @@ import classNames from 'classnames';
 
 import { Knapp } from 'nav-frontend-knapper';
 import PanelBase from 'nav-frontend-paneler';
-import { Feilmelding } from 'nav-frontend-typografi';
 
-import { Heading } from '@navikt/ds-react';
+import { ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
@@ -114,7 +113,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                 person.status === RessursStatus.IKKE_TILGANG) && (
                 <>
                     <br />
-                    <Feilmelding children={person.frontendFeilmelding} />
+                    <ErrorMessage children={person.frontendFeilmelding} />
                 </>
             )}
         </div>

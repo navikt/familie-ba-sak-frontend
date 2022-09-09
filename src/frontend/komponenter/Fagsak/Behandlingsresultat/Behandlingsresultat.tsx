@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -217,10 +216,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                         onClick={() => opprettEndretUtbetaling()}
                     >
                         <StyledEditIkon />
-                        <Element>Endre utbetalingsperiode</Element>
+                        <Label>Endre utbetalingsperiode</Label>
                     </Button>
                     {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                        <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+                        <ErrorMessage>{opprettelseFeilmelding}</ErrorMessage>
                     )}
                 </EndretUtbetalingAndel>
             )}

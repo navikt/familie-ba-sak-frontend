@@ -3,9 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -63,7 +62,7 @@ const DokumentutsendingSkjema: React.FC = () => {
 
     return (
         <Container>
-            <Innholdstittel children={'Send informasjonsbrev'} />
+            <Heading size={'large'} children={'Send informasjonsbrev'} />
 
             <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
                 <FamilieSelect
@@ -92,7 +91,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     målformFelt={skjema.felter.målform}
                     visFeilmeldinger={false}
                     erLesevisning={false}
-                    Legend={<Element children={'Målform'} />}
+                    Legend={<Label children={'Målform'} />}
                 />
 
                 <ÅrsakSkjema>

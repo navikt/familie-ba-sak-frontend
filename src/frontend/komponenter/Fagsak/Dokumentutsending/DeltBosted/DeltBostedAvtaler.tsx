@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Feilmelding } from 'nav-frontend-typografi';
 
+import { ErrorMessage } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
@@ -50,7 +50,7 @@ const DatovelgerOgSlettknapp = styled.div<{ feil: boolean }>`
     }
 `;
 
-export const StyledFeilmelding = styled(Feilmelding)`
+export const StyledErrorMessage = styled(ErrorMessage)`
     margin-bottom: 1rem;
 `;
 
@@ -151,7 +151,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                             )}
                         </DatovelgerOgSlettknapp>
 
-                        {feilmelding && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
+                        {feilmelding && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
                     </div>
                 );
             })}

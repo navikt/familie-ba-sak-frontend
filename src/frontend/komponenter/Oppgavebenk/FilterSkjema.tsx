@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -18,7 +17,7 @@ import type { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
 import type { IOppgaveFelt } from './oppgavefelter';
 
-const StyledElement = styled(Element)`
+const StyledLabel = styled(Label)`
     margin-top: 0.5rem;
     color: ${navFarger.redError};
 `;
@@ -76,7 +75,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         />
                                         {oppgaveFelt.valideringsstatus ===
                                             Valideringsstatus.FEIL && (
-                                            <StyledElement>{oppgaveFelt.feilmelding}</StyledElement>
+                                            <StyledLabel>{oppgaveFelt.feilmelding}</StyledLabel>
                                         )}
                                     </DatoVelgerContainer>
                                 );

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import classNames from 'classnames';
 
-import { Systemtittel } from 'nav-frontend-typografi';
-
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import type { BehandlingResultat } from '../../../typer/behandling';
@@ -61,7 +59,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Systemtittel
+            <Heading
+                size={'medium'}
                 children={
                     <>
                         Behandlinger

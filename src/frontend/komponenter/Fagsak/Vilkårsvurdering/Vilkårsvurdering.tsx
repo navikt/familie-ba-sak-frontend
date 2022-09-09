@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort, ErrorMessage } from '@navikt/ds-react';
 import { NavdsSpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -114,6 +113,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             <>
                 {åpenBehandling?.migreringsdato !== null && (
                     <HentetLabel
+                        size={'small'}
                         children={`Saken ble migrert fra Infotrygd: ${formaterIsoDato(
                             åpenBehandling?.migreringsdato,
                             datoformat.DATO
@@ -122,6 +122,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
                 <HentetLabelOgKnappDiv>
                     <HentetLabel
+                        size={'small'}
                         children={
                             registeropplysningerHentetTidpsunkt
                                 ? `Registeropplysninger hentet ${formaterIsoDato(
@@ -155,7 +156,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     </FamilieKnapp>
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
-                    <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
+                    <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>
                 )}
             </>
             <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
@@ -203,7 +204,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     />
                 )}
             {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
-                <Feilmelding>{skjemaFeilmelding}</Feilmelding>
+                <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
             )}
         </Skjemasteg>
     );

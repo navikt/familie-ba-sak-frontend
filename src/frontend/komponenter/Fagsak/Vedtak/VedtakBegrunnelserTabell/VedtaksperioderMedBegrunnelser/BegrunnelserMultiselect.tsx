@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Element } from 'nav-frontend-typografi';
-
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import type {
     ActionMeta,
     FormatOptionLabelMeta,
@@ -136,7 +134,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             formatGroupLabel={(group: GroupType<ISelectOption>) => {
                 return (
                     <GroupLabel>
-                        <Element>{group.label}</Element>
+                        <Label>{group.label}</Label>
                         <hr />
                     </GroupLabel>
                 );

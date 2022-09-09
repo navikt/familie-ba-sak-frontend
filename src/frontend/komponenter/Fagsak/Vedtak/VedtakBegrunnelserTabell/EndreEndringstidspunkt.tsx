@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Element } from 'nav-frontend-typografi';
-
 import { Edit } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -62,7 +60,7 @@ const EndreEndringstidspunkt: React.FC<{
                 }}
             >
                 <StyledEditIkon />
-                <Element>Oppdater endringstidspunkt</Element>
+                <Label>Oppdater endringstidspunkt</Label>
             </Button>
             <OppdaterEndringstidspunktModal
                 visModal={visModal}
