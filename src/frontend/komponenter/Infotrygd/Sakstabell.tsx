@@ -2,11 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import type { IInfotrygdSak } from '../../typer/infotrygd';
 
-const IngenSakerTekst = styled(Normaltekst)`
+const IngenSakerTekst = styled(BodyShort)`
     margin: 1rem;
 `;
 

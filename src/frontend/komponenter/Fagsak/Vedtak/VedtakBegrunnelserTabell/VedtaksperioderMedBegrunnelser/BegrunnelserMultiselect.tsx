@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import type {
     ActionMeta,
     FormatOptionLabelMeta,
@@ -124,12 +125,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     const type =
                         vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType];
                     return (
-                        <Normaltekst>
+                        <BodyShort>
                             <b>{type}</b>: {option.label}
-                        </Normaltekst>
+                        </BodyShort>
                     );
                 } else {
-                    return <Normaltekst>{option.label}</Normaltekst>;
+                    return <BodyShort>{option.label}</BodyShort>;
                 }
             }}
             formatGroupLabel={(group: GroupType<ISelectOption>) => {

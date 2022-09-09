@@ -3,9 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erBehandlingHenlagt } from '../../typer/behandling';
@@ -23,12 +22,12 @@ interface InfotrygdtabellerProps {
     minimalFagsak?: IMinimalFagsak;
 }
 
-const SakerTekst = styled(Undertittel)`
+const SakerTekst = styled(Heading)`
     margin-top: 4rem;
     margin-bottom: 1rem;
 `;
 
-const VedtakTekst = styled(Undertittel)`
+const VedtakTekst = styled(Heading)`
     margin-top: 4rem;
     margin-bottom: 1rem;
 `;
@@ -118,10 +117,10 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                         ],
                     }}
                 >
-                    <Normaltekst>
+                    <BodyShort>
                         Migrering tar 1-2 minutter. Du vil se behandlingen i saksoversikten så fort
                         migreringen er ferdig.
-                    </Normaltekst>
+                    </BodyShort>
                 </UIModalWrapper>
             )}
 
@@ -134,9 +133,9 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                     )}`}
                 />
             )}
-            <SakerTekst>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
+            <SakerTekst size={'small'}>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
-            <VedtakTekst>Vedtak</VedtakTekst>
+            <VedtakTekst size={'small'}>Vedtak</VedtakTekst>
             <Vedtakstabell saker={saker} />
         </>
     );

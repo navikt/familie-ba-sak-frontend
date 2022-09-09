@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import IkonMeldinger from '../ikoner/IkonMeldinger';
 import Filterknapp from '../komponenter/Filterknapp';
@@ -14,7 +14,7 @@ interface IMeldingerknappProps {
 const Meldingerknapp = ({ aktiv, disabled, onClick }: IMeldingerknappProps) => (
     <Filterknapp disabled={disabled} onClick={onClick} aktiv={aktiv}>
         <IkonMeldinger />
-        <Normaltekst>Send brev</Normaltekst>
+        <BodyShort>Send brev</BodyShort>
     </Filterknapp>
 );
 

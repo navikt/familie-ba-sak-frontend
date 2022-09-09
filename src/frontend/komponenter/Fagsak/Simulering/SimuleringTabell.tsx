@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
+
+import { BodyShort, Heading } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
@@ -35,7 +37,7 @@ const HøyresiltTh = styled.th`
     text-align: right !important;
 `;
 
-const NormaltekstMedFarge = styled(Normaltekst)`
+const BodyshortMedFarge = styled(BodyShort)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
 
@@ -187,7 +189,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                             aktueltÅr - 1
                                         }`}
                                     >
-                                        <Undertekst>{årISimuleringen[indexFramvistÅr]}</Undertekst>
+                                        <Heading size={'small'}>
+                                            {årISimuleringen[indexFramvistÅr]}
+                                        </Heading>
                                     </TidslinjeNavigering>
                                 </Årsvelger>
                             )}
@@ -222,9 +226,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                     <React.Fragment key={'nytt beløp - ' + periode.fom}>
                                         {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
-                                            <Normaltekst>
+                                            <BodyShort>
                                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
-                                            </Normaltekst>
+                                            </BodyShort>
                                         </HøyresiltTd>
                                     </React.Fragment>
                                 )
@@ -238,11 +242,11 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                     <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
                                         {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
-                                            <Normaltekst>
+                                            <BodyShort>
                                                 {formaterBeløpUtenValutakode(
                                                     periode.tidligereUtbetalt
                                                 )}
-                                            </Normaltekst>
+                                            </BodyShort>
                                         </HøyresiltTd>
                                     </React.Fragment>
                                 )
@@ -267,7 +271,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                     {formaterBeløpUtenValutakode(periode.resultat)}
                                                 </ElementMedFarge>
                                             ) : (
-                                                <NormaltekstMedFarge
+                                                <BodyshortMedFarge
                                                     farge={
                                                         periode.resultat && periode.resultat < 0
                                                             ? navFarger.navRod
@@ -275,7 +279,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                     }
                                                 >
                                                     {formaterBeløpUtenValutakode(periode.resultat)}
-                                                </NormaltekstMedFarge>
+                                                </BodyshortMedFarge>
                                             )}
                                         </HøyresiltTd>
                                     </React.Fragment>

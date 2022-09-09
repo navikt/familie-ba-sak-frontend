@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -21,7 +21,7 @@ import { hentAlleÅrsaker } from './settPåVentUtils';
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
 `;
-const StyledNormaltekst = styled(Normaltekst)`
+const StyledBodyShort = styled(BodyShort)`
     margin-bottom: 2.5rem;
     margin-top: 0.5rem;
 `;
@@ -74,7 +74,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                 utenFeilPropagering={true}
             >
                 {erBehandlingAlleredePåVent && (
-                    <StyledNormaltekst>Behandlingen er satt på vent.</StyledNormaltekst>
+                    <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>
                 )}
 
                 <Feltmargin>

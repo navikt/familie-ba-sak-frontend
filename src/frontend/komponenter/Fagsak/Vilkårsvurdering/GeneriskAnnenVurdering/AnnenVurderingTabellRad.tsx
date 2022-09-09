@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
-
+import { BodyShort } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -30,7 +29,7 @@ interface IEkspanderbarTrProps {
     ekspandert?: boolean;
 }
 
-const BeskrivelseCelle = styled(Normaltekst)`
+const BeskrivelseCelle = styled(BodyShort)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -91,7 +90,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                             width={20}
                             height={20}
                         />
-                        <Normaltekst children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
+                        <BodyShort children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
                     </VurderingCelle>
                 </td>
                 <td />

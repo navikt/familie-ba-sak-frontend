@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
-
+import { BodyShort } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
@@ -70,7 +69,7 @@ export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
                     </StyledÅpenDokument>
                 </DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (
-                    <Normaltekst key={index}>{it.tittel}</Normaltekst>
+                    <BodyShort key={index}>{it.tittel}</BodyShort>
                 ))}
             </DokumentTittelContainer>
         </DokumentInfoStripeContainer>

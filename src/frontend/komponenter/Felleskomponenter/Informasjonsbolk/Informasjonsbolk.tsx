@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import navFarger from 'nav-frontend-core';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
+
+import { BodyShort } from '@navikt/ds-react';
 
 export interface IInformasjon {
     label: string;
@@ -18,7 +20,7 @@ const Informasjonsbolk: React.FC<IProps> = ({ informasjon, infoTeksFarve }) => {
     return (
         <div className={'informasjonsbolk'}>
             {informasjon.map((info: IInformasjon) => {
-                return <Normaltekst key={info.label + info.tekst} children={info.label} />;
+                return <BodyShort key={info.label + info.tekst} children={info.label} />;
             })}
             {informasjon.map((info: IInformasjon) => {
                 return (

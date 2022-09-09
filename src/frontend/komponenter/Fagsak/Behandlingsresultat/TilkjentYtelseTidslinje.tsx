@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -70,7 +69,7 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
     return (
         <>
             <TidslinjeHeader>
-                <Undertittel>{genererFormatertÅrstall()}</Undertittel>
+                <Heading size={'small'}>{genererFormatertÅrstall()}</Heading>
                 <TidslinjeControls>
                     <Vinduvelger />
                     <TidslinjeNavigering naviger={naviger} />
@@ -80,9 +79,9 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                 <TidslinjeLabels>
                     {grunnlagPersoner.map((person, index) => {
                         return (
-                            <Normaltekst key={index} title={person.navn}>
+                            <BodyShort key={index} title={person.navn}>
                                 {formaterIdent(person.personIdent)}
-                            </Normaltekst>
+                            </BodyShort>
                         );
                     })}
                 </TidslinjeLabels>

@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
 
+import { Heading } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -25,7 +25,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
         skjema.felter;
     return (
         <SkjemaGruppe>
-            <Undertittel>Knytt til ny behandling</Undertittel>
+            <Heading size={'small'}>Knytt til ny behandling</Heading>
             <br />
             <StyledCheckboxDiv>
                 <FamilieCheckbox

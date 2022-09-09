@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
 
 import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -273,7 +272,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 ],
                             }}
                         >
-                            <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
+                            <BodyShort>Behandlingen er nå sendt til totrinnskontroll</BodyShort>
                         </UIModalWrapper>
                     )}
                 </>

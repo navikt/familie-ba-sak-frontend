@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import UIModalWrapper from './UIModalWrapper';
 
@@ -13,7 +13,7 @@ const UgyldigSesjon: React.FC = () => {
                 visModal: true,
             }}
         >
-            <Normaltekst>Prøv å last siden på nytt</Normaltekst>
+            <BodyShort>Prøv å last siden på nytt</BodyShort>
         </UIModalWrapper>
     );
 };

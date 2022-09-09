@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import IkonHistorikk from '../ikoner/IkonHistorikk';
 import Filterknapp from '../komponenter/Filterknapp';
@@ -13,7 +13,7 @@ interface IHistorikkknappProps {
 const Historikkknapp = ({ aktiv, onClick }: IHistorikkknappProps) => (
     <Filterknapp onClick={onClick} aktiv={aktiv}>
         <IkonHistorikk />
-        <Normaltekst>Historikk</Normaltekst>
+        <BodyShort>Historikk</BodyShort>
     </Filterknapp>
 );
 

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
 
 import { Back } from '@navikt/ds-icons';
 import { Alert, Heading } from '@navikt/ds-react';
@@ -69,11 +68,11 @@ export const JournalpostSkjema: React.FC = () => {
             )}
             <Journalpost />
             <StyledSectionDiv>
-                <Undertittel children={'Dokumenter'} />
+                <Heading size={'small'} children={'Dokumenter'} />
                 <Dokumenter />
             </StyledSectionDiv>
             <StyledSectionDiv>
-                <Undertittel children={'Bruker og avsender'} />
+                <Heading size={'small'} children={'Bruker og avsender'} />
                 <BrukerPanel />
                 <br />
                 <AvsenderPanel />

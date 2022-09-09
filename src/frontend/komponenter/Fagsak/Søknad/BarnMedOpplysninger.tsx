@@ -4,8 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -138,10 +138,10 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     ],
                 }}
             >
-                <Normaltekst>
+                <BodyShort>
                     Barnet ({formaterIdent(barn.ident)}) har løpende barnetrygd. Du skal kun velge
                     barn som det ikke utbetales barnetrygd for.
-                </Normaltekst>
+                </BodyShort>
             </UIModalWrapper>
         </CheckboxOgSlettknapp>
     );

@@ -5,7 +5,8 @@ import classNames from 'classnames';
 import type { KnappBaseProps } from 'nav-frontend-knapper';
 import KnappBase from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Normaltekst } from 'nav-frontend-typografi';
+
+import { BodyShort } from '@navikt/ds-react';
 
 export enum IkonPosisjon {
     VENSTRE = 'venstre',
@@ -49,7 +50,7 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
             {ikonPosisjon === IkonPosisjon.VENSTRE && (
                 <IkonTilKnapp ikon={ikon} spinner={spinner} />
             )}
-            <Normaltekst>{label}</Normaltekst>
+            <BodyShort>{label}</BodyShort>
             {ikonPosisjon === IkonPosisjon.HØYRE ? (
                 <IkonTilKnapp ikon={ikon} spinner={spinner} />
             ) : null}

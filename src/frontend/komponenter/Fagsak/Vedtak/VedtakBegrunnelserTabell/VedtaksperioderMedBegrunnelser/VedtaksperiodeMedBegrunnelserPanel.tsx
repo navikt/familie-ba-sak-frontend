@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Element, Feilmelding } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
@@ -69,7 +70,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                             {genererteBrevbegrunnelser.data.map(
                                 (begrunnelse: string, index: number) => (
                                     <li key={`begrunnelse-${index}`}>
-                                        <Normaltekst children={begrunnelse} />
+                                        <BodyShort children={begrunnelse} />
                                     </li>
                                 )
                             )}

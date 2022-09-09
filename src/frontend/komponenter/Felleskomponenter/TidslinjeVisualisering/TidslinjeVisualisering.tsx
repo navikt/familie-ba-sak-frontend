@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Normaltekst, Sidetittel, Undertittel } from 'nav-frontend-typografi';
+import { Sidetittel } from 'nav-frontend-typografi';
 
 import { Globe as Eu, Home as NorwegianFlag } from '@navikt/ds-icons';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { type Periode, Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 import { byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -230,9 +231,9 @@ const TidslinjeVisualisering: React.FC = () => {
                     {barna.map((barn, index) => (
                         <div key={`barn_${index}`}>
                             <TidslinjeHeader>
-                                <Undertittel>{`${formaterIdent(
+                                <Heading size={'small'}>{`${formaterIdent(
                                     barn
-                                )}: ${genererFormatertÅrstall()}`}</Undertittel>
+                                )}: ${genererFormatertÅrstall()}`}</Heading>
                                 <TidslinjeControls>
                                     <Vinduvelger />
                                     <TidslinjeNavigering naviger={naviger} />
@@ -242,9 +243,9 @@ const TidslinjeVisualisering: React.FC = () => {
                                 <TidslinjeLabels>
                                     {tidslinjerLabels.map((label, index) => {
                                         return (
-                                            <Normaltekst key={index} title={label}>
+                                            <BodyShort key={index} title={label}>
                                                 {label}
-                                            </Normaltekst>
+                                            </BodyShort>
                                         );
                                     })}
                                 </TidslinjeLabels>

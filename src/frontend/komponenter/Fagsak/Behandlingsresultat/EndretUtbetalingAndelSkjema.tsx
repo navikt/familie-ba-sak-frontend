@@ -5,10 +5,10 @@ import styled from 'styled-components';
 
 import variables from 'nav-frontend-core';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -211,7 +211,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <Feltmargin>
                         <MånedÅrVelger
                             {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                            label={<Normaltekst>F.o.m</Normaltekst>}
+                            label={<BodyShort>F.o.m</BodyShort>}
                             value={skjema.felter.fom.verdi}
                             antallÅrFrem={finnÅrFremTilStønadTom()}
                             antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
@@ -227,7 +227,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     </Feltmargin>
                     <MånedÅrVelger
                         {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<Normaltekst>T.o.m (valgfri)</Normaltekst>}
+                        label={<BodyShort>T.o.m (valgfri)</BodyShort>}
                         value={skjema.felter.tom.verdi}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}

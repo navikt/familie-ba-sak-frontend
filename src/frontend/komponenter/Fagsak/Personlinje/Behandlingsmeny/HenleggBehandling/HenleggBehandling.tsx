@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -34,7 +34,7 @@ interface HenleggÅrsakSelect extends HTMLSelectElement {
     value: HenleggÅrsak | '';
 }
 
-const StyledVeivalgTekst = styled(Normaltekst)`
+const StyledVeivalgTekst = styled(BodyShort)`
     position: relative;
     top: -32px;
     svg {

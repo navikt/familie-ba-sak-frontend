@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 interface IIngenOpplysningerValgtProps {
     minimumOpplysning: boolean[];
@@ -13,7 +13,7 @@ const IngenOpplysningerValgt: React.FC<IIngenOpplysningerValgtProps> = ({
 }) => {
     const harOpplysningerÅVise = minimumOpplysning.filter(Boolean).length === 0;
     return erLesevisning && harOpplysningerÅVise ? (
-        <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger valgt.'} />
+        <BodyShort className={'skjemaelement'} children={'Ingen opplysninger valgt.'} />
     ) : null;
 };
 

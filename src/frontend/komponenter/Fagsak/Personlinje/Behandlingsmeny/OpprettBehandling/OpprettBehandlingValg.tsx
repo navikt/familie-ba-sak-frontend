@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
 import {
     FamilieDatovelger,
@@ -43,7 +43,7 @@ const FixedDatoVelger = styled(FamilieDatovelger)`
     }
 `;
 
-const FeltFeilmelding = styled(Normaltekst)`
+const FeltFeilmelding = styled(BodyShort)`
     margin-top: 0.5rem;
     font-weight: 600;
     color: ${navFarger.redError};
@@ -267,12 +267,12 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     ) => {
                         if (formatOptionLabelMeta.context === 'menu') {
                             return (
-                                <Normaltekst>
+                                <BodyShort>
                                     <b>{option.label}</b> | {option.value}
-                                </Normaltekst>
+                                </BodyShort>
                             );
                         } else {
-                            return <Normaltekst>{option.value}</Normaltekst>;
+                            return <BodyShort>{option.value}</BodyShort>;
                         }
                     }}
                     onChange={valgteOptions => {

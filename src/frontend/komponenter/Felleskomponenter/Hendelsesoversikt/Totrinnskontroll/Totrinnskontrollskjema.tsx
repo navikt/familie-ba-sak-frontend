@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typografi';
+import { Element, Systemtittel } from 'nav-frontend-typografi';
 
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -74,23 +75,23 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                             <div>
                                 <Systemtittel>Totrinnskontroll</Systemtittel>
                                 <br />
-                                <Normaltekst>
+                                <BodyShort>
                                     {formaterIsoDato(
                                         opprettetTidspunkt,
                                         datoformat.DATO_FORLENGET_MED_TID,
                                         'UKJENT OPPRETTELSESTIDSPUNKT'
                                     )}
-                                </Normaltekst>
-                                <Normaltekst>{saksbehandler}</Normaltekst>
+                                </BodyShort>
+                                <BodyShort>{saksbehandler}</BodyShort>
                                 <br />
-                                <UndertekstBold>Vedtaket er sendt til godkjenning</UndertekstBold>
+                                <Heading size={'small'}>Vedtaket er sendt til godkjenning</Heading>
                             </div>
                         </SendtTilBeslutterContainer>
                     ) : (
                         <>
-                            <Normaltekst>
+                            <BodyShort>
                                 Kontrollér opplysninger og faglige vurderinger som er gjort
-                            </Normaltekst>
+                            </BodyShort>
 
                             <br />
                             <KontrollerteTrinnOverskrift>

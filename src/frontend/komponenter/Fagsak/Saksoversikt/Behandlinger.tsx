@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 import classNames from 'classnames';
 
-import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import type { BehandlingResultat } from '../../../typer/behandling';
@@ -110,7 +111,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </tbody>
                 </table>
             ) : (
-                <Normaltekst children={'Ingen tidligere behandlinger'} />
+                <BodyShort children={'Ingen tidligere behandlinger'} />
             )}
         </div>
     );

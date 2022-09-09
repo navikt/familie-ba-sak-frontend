@@ -3,8 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../context/FagsakContext';
@@ -76,7 +76,7 @@ const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
     border-left-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
 `;
 
-const StyledUndertittel = styled(Undertittel)`
+const StyledHeading = styled(Heading)`
     font-size: 1rem;
     margin-bottom: 0.2rem;
 `;
@@ -102,8 +102,8 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
 
     return (
         <Container behandlingResultat={åpenBehandling.resultat}>
-            <StyledUndertittel>{tittel}</StyledUndertittel>
-            <Normaltekst>{behandlingÅrsak[åpenBehandling.årsak]}</Normaltekst>
+            <StyledHeading size={'small'}>{tittel}</StyledHeading>
+            <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
             <StyledHr />
             <Informasjonsbolk
                 informasjon={[

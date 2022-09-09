@@ -2,11 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import type { IInfotrygdSak, IInfotrygdStønad } from '../../typer/infotrygd';
 
-const IngenVedtakTekst = styled(Normaltekst)`
+const IngenVedtakTekst = styled(BodyShort)`
     margin: 1rem;
 `;
 
@@ -31,7 +31,7 @@ const visBeløp = (stønad: IInfotrygdStønad) => {
         beløp += ', ';
         beløp += delytelse.typeUtbetaling ?? '?';
         beløp += ')';
-        return <Normaltekst key={beløp + index}>{beløp}</Normaltekst>;
+        return <BodyShort key={beløp + index}>{beløp}</BodyShort>;
     });
 };
 
@@ -39,7 +39,7 @@ const visDelytelseFom = (stønad: IInfotrygdStønad) => {
     return stønad.delytelse.map((delytelse, index) => {
         let fom = '';
         fom += delytelse.fom ?? '?';
-        return <Normaltekst key={fom + index}>{fom}</Normaltekst>;
+        return <BodyShort key={fom + index}>{fom}</BodyShort>;
     });
 };
 
@@ -47,7 +47,7 @@ const visDelytelseTom = (stønad: IInfotrygdStønad) => {
     return stønad.delytelse.map((delytelse, index) => {
         let tom = '';
         tom += delytelse.tom ?? '-';
-        return <Normaltekst key={tom + index}>{tom}</Normaltekst>;
+        return <BodyShort key={tom + index}>{tom}</BodyShort>;
     });
 };
 

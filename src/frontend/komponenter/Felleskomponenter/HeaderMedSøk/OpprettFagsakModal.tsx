@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Feilmelding } from 'nav-frontend-typografi';
 
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -36,7 +37,7 @@ const StyledKnapp = styled(FamilieKnapp)`
     height: 1rem;
 `;
 
-const StyledUndertittel = styled(Undertittel)`
+const StyledHeading = styled(Heading)`
     font-size: 1rem;
     margin-bottom: 1.5rem;
 `;
@@ -121,14 +122,14 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         visModal: visModal,
                     }}
                 >
-                    <StyledUndertittel tag={'h3'}>
+                    <StyledHeading size={'small'} level={'3'}>
                         Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                         personen?
-                    </StyledUndertittel>
+                    </StyledHeading>
                     {søkeresultat && (
-                        <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
+                        <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
                             søkeresultat.ident
-                        )})`}</Normaltekst>
+                        )})`}</BodyShort>
                     )}
                     {!!feilmelding && <Feilmelding children={feilmelding} />}
                 </UIModalWrapper>
@@ -190,21 +191,21 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         className: 'uimodal-wider',
                     }}
                 >
-                    <StyledUndertittel tag={'h3'}>
+                    <StyledHeading level={'3'}>
                         {`Personen har ${
                             (personInfo?.fagsakId?.size || 0) > 0 ? 'en eksisternede' : 'ingen'
                         } tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                             personen?`}
-                    </StyledUndertittel>
+                    </StyledHeading>
                     {søkeresultat && (
-                        <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
+                        <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
                             søkeresultat.ident
-                        )})`}</Normaltekst>
+                        )})`}</BodyShort>
                     )}
                     {!søkeresultat && personInfo && (
-                        <Normaltekst>{`${personInfo.navn} (${formaterIdent(
+                        <BodyShort>{`${personInfo.navn} (${formaterIdent(
                             personInfo.personIdent
-                        )})`}</Normaltekst>
+                        )})`}</BodyShort>
                     )}
                     <StyledCheckBoxWrapper>
                         <FamilieCheckbox

@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -19,7 +18,7 @@ import Annet from './Annet';
 import Barna from './Barna';
 import SøknadType from './SøknadType';
 
-const FjernVilkårAdvarsel = styled(Normaltekst)`
+const FjernVilkårAdvarsel = styled(BodyShort)`
     white-space: pre-wrap;
     padding-bottom: 3.5rem;
 `;

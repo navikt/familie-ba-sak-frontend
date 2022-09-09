@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { Normaltekst } from 'nav-frontend-typografi';
-
-import { Button } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { ISaksbehandler } from '@navikt/familie-typer';
@@ -96,10 +94,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                             return (
                                 <div className={'utdatert-losning'}>
                                     <InformasjonSirkel />
-                                    <Normaltekst>
+                                    <BodyShort>
                                         Det finnes en oppdatert versjon av løsningen. Det anbefales
                                         at du oppdaterer med en gang.
-                                    </Normaltekst>
+                                    </BodyShort>
                                 </div>
                             );
                         },
@@ -181,7 +179,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                     onClose: () => lukkModal(),
                     innhold: () => {
                         return (
-                            <Normaltekst>
+                            <BodyShort>
                                 <IkkeTilgang
                                     height={20}
                                     className={'tilgangmodal-ikke-oppfylt-ikon'}
@@ -192,7 +190,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                                         ressurs.data.adressebeskyttelsegradering
                                     ]
                                 }`}
-                            </Normaltekst>
+                            </BodyShort>
                         );
                     },
                     actions: [

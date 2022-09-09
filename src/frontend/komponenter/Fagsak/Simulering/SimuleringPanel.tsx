@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import Panel from 'nav-frontend-paneler';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
+
+import { BodyShort } from '@navikt/ds-react';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
@@ -96,7 +98,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                     </tr>
                     <tr>
                         <StyledTd>
-                            <Normaltekst>Feilutbetaling</Normaltekst>
+                            <BodyShort>Feilutbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
                             <ElementMedFarge
@@ -109,7 +111,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
 
                     <tr>
                         <StyledTd>
-                            <Normaltekst>Etterbetaling</Normaltekst>
+                            <BodyShort>Etterbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
                             <ElementMedFarge>
@@ -137,14 +139,14 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                     {nestePeriode && (
                         <tr>
                             <StyledTd>
-                                <Normaltekst>
+                                <BodyShort>
                                     {kapitaliserTekst(
                                         formaterIsoDato(
                                             fomDatoNestePeriode,
                                             datoformat.MÅNED_ÅR_NAVN
                                         )
                                     )}
-                                </Normaltekst>
+                                </BodyShort>
                             </StyledTd>
 
                             <StyledTd erHøyrestilt={true}>

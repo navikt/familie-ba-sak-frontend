@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
@@ -26,7 +26,7 @@ const StyledLi = styled.li`
     padding-bottom: 1rem;
 `;
 
-const StyledNormalTekst = styled(Normaltekst)`
+const StyledBodyShort = styled(BodyShort)`
     margin-left: 0.5rem;
 `;
 
@@ -61,13 +61,13 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
                                 width={20}
                                 height={20}
                             />
-                            <StyledNormalTekst>
+                            <StyledBodyShort>
                                 {
                                     filtreringsregler[
                                         fødselshendelsefiltreringResultat.filtreringsregel
                                     ]
                                 }
-                            </StyledNormalTekst>
+                            </StyledBodyShort>
                         </StyledLi>
                     );
                 })}
