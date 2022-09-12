@@ -8,22 +8,19 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../typer/person';
-import type { IPersonResultat } from '../../../typer/vilkår';
-import { annenVurderingConfig, AnnenVurderingType, vilkårConfig } from '../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig } from '../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    AnnenVurderingType,
+    vilkårConfig,
+    VilkårType,
+} from '../../../typer/vilkår';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
 import { useSamhandlerRequest } from '../InstitusjonOgVerge/useSamhandler';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
-
-const vilkårTilVurdering = [
-    vilkårConfig.BOSATT_I_RIKET,
-    vilkårConfig.LOVLIG_OPPHOLD,
-    vilkårConfig.BOR_FAST_PÅ_INSTITUSJON,
-    vilkårConfig.UNDER_18_ÅR,
-    vilkårConfig.GIFT_PARTNERSKAP,
-];
 
 const AktørLinje = styled.div`
     display: flex;
@@ -66,6 +63,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
+
+    const vilkårTilVurdering = Object.values(vilkårConfig).filter(vilkår =>
+        vilkår.parterDetteGjelderFor.includes(PersonType.BARN)
+    );
+    endreVilkårBorMedSøkerTilBorFastPåInstitusjon(vilkårTilVurdering);
 
     return personResultat ? (
         <>
@@ -126,6 +128,14 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
         </>
     ) : (
         <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
+    );
+};
+
+const endreVilkårBorMedSøkerTilBorFastPåInstitusjon = (vilkårTilVurdering: IVilkårConfig[]) => {
+    vilkårTilVurdering.splice(
+        vilkårTilVurdering.findIndex(vilkår => vilkår.key === VilkårType.BOR_MED_SØKER),
+        1,
+        vilkårConfig[VilkårType.BOR_FAST_PÅ_INSTITUSJON]
     );
 };
 

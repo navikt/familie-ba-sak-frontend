@@ -27,10 +27,6 @@ const FlexDiv = styled.div`
         }
     }
 
-    & .typo-normal {
-        font-weight: 600;
-    }
-
     & .navn {
         white-space: nowrap;
         overflow: hidden;
