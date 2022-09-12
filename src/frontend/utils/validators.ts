@@ -11,8 +11,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk } from '../typer/vilkår';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -123,14 +122,19 @@ export const erPeriodeGyldig = (
             }
         }
 
+        const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
         const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
-        const fomDatoErFørTomDato = erFør(
-            kalenderDatoMedFallback(fom, TIDENES_MORGEN),
-            tomKalenderDato
-        );
+
+        const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
         const fomDatoErLikDødsfallDato = fom === person?.dødsfallDato;
 
         const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
+        if (fom && valgtDatoErNesteMånedEllerSenere(fomKalenderDato, idag)) {
+            return feil(
+                felt,
+                'Du kan ikke legge inn fra og med dato som er i neste måned eller senere'
+            );
+        }
         if (tom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)) {
             return feil(
                 felt,
@@ -141,7 +145,7 @@ export const erPeriodeGyldig = (
         if (tom && person?.dødsfallDato) {
             const dødsfallKalenderDato = kalenderDato(person.dødsfallDato);
 
-            if (erEtter(tomKalenderDato, dødsfallKalenderDato)) {
+            if (!er18ÅrsVilkår && erEtter(tomKalenderDato, dødsfallKalenderDato)) {
                 return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
             }
         }
