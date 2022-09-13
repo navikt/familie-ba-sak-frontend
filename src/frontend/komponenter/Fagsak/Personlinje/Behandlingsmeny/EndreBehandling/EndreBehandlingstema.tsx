@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Button } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -12,11 +13,7 @@ import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 
-interface IProps {
-    onListElementClick: () => void;
-}
-
-const EndreBehandlingstema: React.FC<IProps> = ({ onListElementClick }) => {
+const EndreBehandlingstema: React.FC = () => {
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
@@ -30,36 +27,35 @@ const EndreBehandlingstema: React.FC<IProps> = ({ onListElementClick }) => {
     };
     return (
         <>
-            <KnappBase
-                mini={true}
+            <Dropdown.Menu.List.Item
                 onClick={() => {
                     settVisModal(true);
-                    onListElementClick();
                 }}
             >
                 Endre behandlingstema
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
 
             <UIModalWrapper
                 modal={{
                     actions: [
-                        <Knapp
+                        <Button
                             key={'avbryt'}
-                            mini={true}
+                            variant="secondary"
+                            size="small"
                             onClick={lukkEndreBehandlingModal}
                             children={'Avbryt'}
                         />,
-                        <Knapp
+                        <Button
                             key={'bekreft'}
-                            mini={true}
-                            type={'hoved'}
+                            variant="primary"
+                            size="small"
                             onClick={() => {
                                 if (åpenBehandling.status === RessursStatus.SUKSESS) {
                                     endreBehandlingstema(åpenBehandling.data.behandlingId);
                                 }
                             }}
                             children={'Bekreft'}
-                            spinner={ressurs.status === RessursStatus.HENTER}
+                            loading={ressurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     onClose: lukkEndreBehandlingModal,

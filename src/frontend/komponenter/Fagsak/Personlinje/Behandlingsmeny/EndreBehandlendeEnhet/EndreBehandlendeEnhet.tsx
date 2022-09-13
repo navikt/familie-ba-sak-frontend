@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Button } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -16,11 +17,7 @@ import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
-interface IProps {
-    onListElementClick: () => void;
-}
-
-const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
+const EndreBehandlendeEnhet: React.FC = () => {
     const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig, erBehandlingAvsluttet } =
         useBehandling();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
@@ -63,29 +60,23 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    settVisModal(true);
-                    onListElementClick();
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Endre behandlende enhet
-            </KnappBase>
-
+            </Dropdown.Menu.List.Item>
             <UIModalWrapper
                 modal={{
                     actions: [
-                        <Knapp
+                        <Button
                             key={'avbryt'}
-                            mini={true}
+                            size="small"
+                            variant="secondary"
                             onClick={lukkBehandlendeEnhetModal}
                             children={'Avbryt'}
                         />,
-                        <Knapp
+                        <Button
                             key={'bekreft'}
-                            type={'hoved'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             disabled={submitRessurs.status === RessursStatus.HENTER}
                             onClick={() => {
                                 if (åpenBehandling.status === RessursStatus.SUKSESS) {
@@ -93,7 +84,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                                 }
                             }}
                             children={'Bekreft'}
-                            spinner={submitRessurs.status === RessursStatus.HENTER}
+                            loading={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     onClose: lukkBehandlendeEnhetModal,

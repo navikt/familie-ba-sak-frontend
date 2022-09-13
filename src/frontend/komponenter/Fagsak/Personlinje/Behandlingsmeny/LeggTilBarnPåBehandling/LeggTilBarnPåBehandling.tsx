@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Alert, HelpText } from '@navikt/ds-react';
+import { Alert, Button, HelpText } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -31,11 +31,10 @@ const LeggTilBarnLegend = styled.div`
 `;
 
 interface IProps {
-    onListElementClick: () => void;
     behandling: IBehandling;
 }
 
-const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
+const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
@@ -118,15 +117,9 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    settVisModal(true);
-                    onListElementClick();
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Legg til barn
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
             <UIModalWrapper
                 modal={{
                     tittel: (
@@ -143,14 +136,20 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                     lukkKnapp: true,
                     onClose: onAvbryt,
                     actions: [
-                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
-                        <Knapp
-                            type={'hoved'}
+                        <Button
+                            key={'Avbryt'}
+                            variant="tertiary"
+                            size="small"
+                            onClick={onAvbryt}
+                            children={'Avbryt'}
+                        />,
+                        <Button
                             key={'Legg til'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             onClick={leggTilOnClick}
                             children={'Legg til'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],

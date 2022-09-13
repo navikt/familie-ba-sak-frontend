@@ -1,29 +1,22 @@
 import React from 'react';
 
-import KnappBase from 'nav-frontend-knapper';
+import { Dropdown } from '@navikt/ds-react-internal';
 
 import type { IPersonInfo } from '../../../../../typer/person';
 import OpprettFagsakModal from '../../../../Felleskomponenter/HeaderMedSøk/OpprettFagsakModal';
 
 interface IProps {
-    onListElementClick: () => void;
     personInfo: IPersonInfo;
 }
 
-const OpprettFagsak: React.FC<IProps> = ({ onListElementClick, personInfo }) => {
+const OpprettFagsak: React.FC<IProps> = ({ personInfo }) => {
     const [visModal, settVisModal] = React.useState(false);
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    onListElementClick();
-                    settVisModal(true);
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Opprett ny fagsak
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
             {visModal && (
                 <OpprettFagsakModal
                     personInfo={personInfo}

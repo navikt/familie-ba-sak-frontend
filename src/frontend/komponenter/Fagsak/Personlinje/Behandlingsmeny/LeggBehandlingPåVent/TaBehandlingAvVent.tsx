@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
-
-import { Alert, BodyShort, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
@@ -29,11 +28,10 @@ const StyledAlert = styled(Alert)`
 `;
 
 interface IProps {
-    onListElementClick: () => void;
     behandling: IBehandling;
 }
 
-const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }) => {
+const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
@@ -63,15 +61,9 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    settVisModal(true);
-                    onListElementClick();
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Fortsett behandling
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
 
             <UIModalWrapper
                 modal={{
@@ -80,14 +72,19 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
                     lukkKnapp: true,
                     onClose: lukkModal,
                     actions: [
-                        <Flatknapp key={'Nei'} mini onClick={lukkModal} children={'Nei'} />,
-                        <Knapp
-                            type={'hoved'}
+                        <Button
+                            key={'Nei'}
+                            variant="tertiary"
+                            onClick={lukkModal}
+                            children={'Nei'}
+                        />,
+                        <Button
                             key={'Bekreft'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             onClick={deaktiverVentingPåBehandling}
                             children={'Ja, fortsett'}
-                            spinner={submitRessurs.status === RessursStatus.HENTER}
+                            loading={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     style: {
