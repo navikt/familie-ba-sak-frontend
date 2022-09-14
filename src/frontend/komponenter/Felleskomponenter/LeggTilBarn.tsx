@@ -3,12 +3,11 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { HelpText, BodyLong, Heading } from '@navikt/ds-react';
+import { HelpText, BodyLong, Heading, Button } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -277,14 +276,20 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                     lukkKnapp: true,
                     onClose: onAvbryt,
                     actions: [
-                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
-                        <Knapp
-                            type={'hoved'}
+                        <Button
+                            variant={'tertiary'}
+                            key={'Avbryt'}
+                            size={'small'}
+                            onClick={onAvbryt}
+                            children={'Avbryt'}
+                        />,
+                        <Button
+                            variant={'primary'}
                             key={'Legg til'}
-                            mini={true}
+                            size={'small'}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
-                            spinner={
+                            loading={
                                 registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
                             }
                             disabled={

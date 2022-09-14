@@ -4,8 +4,7 @@ import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
+import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -156,19 +155,20 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                         lukkKnapp: false,
                         visModal: modalVerdi.skalVises,
                         actions: [
-                            <Knapp
+                            <Button
+                                variant={'secondary'}
                                 key={'saksoversikt'}
-                                mini={true}
+                                size={'small'}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
                                     navigate(`/fagsak/${fagsakId}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'oppgavebenk'}
-                                type={'hoved'}
-                                mini={true}
+                                variant={'primary'}
+                                size={'small'}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
                                     navigate('/oppgaver');

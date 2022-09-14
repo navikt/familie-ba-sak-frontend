@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Knapp } from 'nav-frontend-knapper';
-
+import { Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -41,9 +40,9 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                         lukkKnapp: false,
                         visModal: visInnsendtBrevModal,
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'ok'}
-                                mini={true}
+                                size={'small'}
                                 onClick={() => {
                                     onOkIModalClick();
                                     navigerTilOpplysningsplikt &&

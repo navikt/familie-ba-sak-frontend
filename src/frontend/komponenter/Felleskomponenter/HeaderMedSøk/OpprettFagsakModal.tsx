@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
-import { BodyShort, ErrorMessage, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -84,16 +82,17 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 <UIModalWrapper
                     modal={{
                         actions: [
-                            <Knapp
+                            <Button
+                                variant={'secondary'}
                                 key={'avbryt'}
-                                mini={true}
+                                size={'small'}
                                 onClick={lukkModal}
                                 children={'Avbryt'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'bekreft'}
-                                type={'hoved'}
-                                mini={true}
+                                variant={'primary'}
+                                size={'small'}
                                 onClick={async () => {
                                     settSenderInn(true);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
@@ -112,7 +111,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 }}
                                 children={'Ja, opprett fagsak'}
                                 disabled={senderInn}
-                                spinner={senderInn}
+                                loading={senderInn}
                             />,
                         ],
                         onClose: lukkModal,
@@ -138,18 +137,17 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                     modal={{
                         actions: [
                             <StyledKnappContainer key={'OpprettFagsakModal knapper'}>
-                                <Knapp
+                                <Button
                                     key={'avbryt'}
-                                    type={'flat'}
-                                    mini={true}
+                                    variant={'tertiary'}
+                                    size={'small'}
                                     onClick={onClose}
                                     children={'Avbryt'}
-                                    kompakt={true}
                                 />
-                                <Knapp
+                                <Button
                                     key={'Bekreft'}
-                                    type={'hoved'}
-                                    mini={true}
+                                    variant={'primary'}
+                                    size={'small'}
                                     onClick={async () => {
                                         settSenderInn(true);
                                         const personIdent =
@@ -178,8 +176,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                     }}
                                     children={'Opprett fagsak'}
                                     disabled={senderInn}
-                                    spinner={senderInn}
-                                    kompakt={true}
+                                    loading={senderInn}
                                 />
                             </StyledKnappContainer>,
                         ],

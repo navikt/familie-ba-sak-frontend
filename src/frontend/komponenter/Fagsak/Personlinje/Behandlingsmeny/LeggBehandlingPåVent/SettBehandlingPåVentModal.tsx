@@ -2,10 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -56,14 +55,20 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                 lukkKnapp: true,
                 onClose: onAvbryt,
                 actions: [
-                    <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
-                    <Knapp
-                        type={'hoved'}
+                    <Button
+                        variant={'tertiary'}
+                        key={'Avbryt'}
+                        size="small"
+                        onClick={onAvbryt}
+                        children={'Avbryt'}
+                    />,
+                    <Button
+                        variant={'primary'}
                         key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                        mini={true}
+                        size={'small'}
                         onClick={settBehandlingPåVent}
                         children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                         disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                     />,
                 ],

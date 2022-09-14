@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Button } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -39,14 +39,20 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                 lukkKnapp: true,
                 onClose: onAvbryt,
                 actions: [
-                    <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
-                    <Knapp
-                        type={'hoved'}
+                    <Button
+                        variant={'tertiary'}
+                        key={'Avbryt'}
+                        size={'small'}
+                        onClick={onAvbryt}
+                        children={'Avbryt'}
+                    />,
+                    <Button
+                        variant={'primary'}
                         key={'Oppdater'}
-                        mini={true}
+                        size={'small'}
                         onClick={oppdaterEndringstidspunkt}
                         children={'Oppdater'}
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                         disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                     />,
                 ],

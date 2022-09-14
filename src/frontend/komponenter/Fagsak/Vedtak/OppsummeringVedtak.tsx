@@ -3,8 +3,6 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
 import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
@@ -249,9 +247,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 lukkKnapp: false,
                                 visModal: visModal,
                                 actions: [
-                                    <Knapp
+                                    <Button
                                         key={'saksoversikt'}
-                                        mini={true}
+                                        variant={'secondary'}
+                                        size={'small'}
                                         onClick={() => {
                                             settVisModal(false);
                                             navigate(`/fagsak/${fagsakId}/saksoversikt`);
@@ -259,10 +258,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         }}
                                         children={'Gå til saksoversikten'}
                                     />,
-                                    <Knapp
+                                    <Button
                                         key={'oppgavebenk'}
-                                        type={'hoved'}
-                                        mini={true}
+                                        variant={'primary'}
+                                        size={'small'}
                                         onClick={() => {
                                             settVisModal(false);
                                             navigate('/oppgaver');

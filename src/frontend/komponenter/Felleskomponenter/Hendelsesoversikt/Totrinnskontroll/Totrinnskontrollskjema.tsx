@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 
-import { BodyShort, Heading, Label } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -145,11 +144,11 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 </div>
             )}
 
-            <Knapp
-                type={'hoved'}
-                spinner={senderInn}
+            <Button
+                variant={'primary'}
+                loading={senderInn}
                 disabled={senderInn}
-                mini={true}
+                size={'small'}
                 onClick={() => {
                     if (!senderInn) {
                         sendInnVedtak(

@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 
-import { Knapp } from 'nav-frontend-knapper';
 import PanelBase from 'nav-frontend-paneler';
 
-import { ErrorMessage, Heading } from '@navikt/ds-react';
+import { Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
@@ -53,7 +52,8 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                     placeholder={'fnr/dnr'}
                 />
                 {!erLesevisning && (
-                    <Knapp
+                    <Button
+                        variant={'secondary'}
                         onClick={() => {
                             if (
                                 ident.valideringsstatus === Valideringsstatus.OK ||
@@ -82,7 +82,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                             }
                         }}
                         children={'Hent'}
-                        spinner={person.status === RessursStatus.HENTER}
+                        loading={person.status === RessursStatus.HENTER}
                     />
                 )}
             </div>

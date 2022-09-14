@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Knapp } from 'nav-frontend-knapper';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Tag } from '@navikt/ds-react';
+import { Button, Tag } from '@navikt/ds-react';
 import {
     FamilieInput,
     FamilieReactSelect,
@@ -407,9 +406,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         }
                     }}
                 />
-                <Knapp
-                    mini
-                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                <Button
+                    size={'small'}
+                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
@@ -436,7 +435,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     }}
                 >
                     Send brev
-                </Knapp>
+                </Button>
             </Knapperekke>
         </div>
     );

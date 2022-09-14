@@ -3,9 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -118,17 +116,19 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     lukkKnapp: true,
                     visModal: visHarLøpendeModal,
                     actions: [
-                        <Knapp
+                        <Button
+                            variant={'secondary'}
                             key={'avbryt'}
-                            mini={true}
+                            size={'small'}
                             onClick={() => {
                                 settVisHarLøpendeModal(false);
                             }}
                             children={'Avbryt'}
                         />,
-                        <Knapp
+                        <Button
+                            variant={'secondary'}
                             key={'velg-barnet'}
-                            mini={true}
+                            size={'small'}
                             onClick={() => {
                                 settVisHarLøpendeModal(false);
                                 oppdaterBarnMerket(true);
