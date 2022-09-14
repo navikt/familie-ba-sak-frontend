@@ -39,7 +39,6 @@ export enum VilkårType {
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
     UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
-    BOR_FAST_PÅ_INSTITUSJON = 'BOR_FAST_PÅ_INSTITUSJON',
 }
 
 export enum Regelverk {
@@ -165,8 +164,8 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
         key: 'BOR_MED_SØKER',
-        tittel: 'Bor med søker',
-        spørsmål: () => `Bor barnet med søker?`,
+        tittel: 'Bor fast hos søker',
+        spørsmål: () => `Bor barnet fast hos søker?`,
         parterDetteGjelderFor: [PersonType.BARN],
     },
     UNDER_18_ÅR: {
@@ -182,13 +181,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         tittel: 'Inngått ekteskap eller partnerskap',
         spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
         parterDetteGjelderFor: [PersonType.BARN],
-    },
-    BOR_FAST_PÅ_INSTITUSJON: {
-        beskrivelse: 'bor fast på institusjon',
-        key: 'BOR_FAST_PÅ_INSTITUSJON',
-        tittel: 'Bor fast på institusjon',
-        spørsmål: () => `Bor barnet fast på institusjon?`,
-        parterDetteGjelderFor: [],
     },
 };
 
