@@ -11,7 +11,6 @@ import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
-import { ToggleNavn } from '../../typer/toggles';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 interface IOppgavelisteSaksbehandler {
@@ -35,7 +34,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
-    const { sjekkTilgang, toggles } = useApp();
+    const { sjekkTilgang } = useApp();
     const oppgaveRef = useRef<IOppgave | null>(null);
 
     useEffect(() => {
@@ -49,20 +48,18 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         return <Alert variant="error">Klarte ikke hente innlogget saksbehandler</Alert>;
     }
 
-    let oppgaveTypeErStøttet =
+    const oppgaveTypeErStøttet =
         [
             OppgavetypeFilter.JFR,
             OppgavetypeFilter.BEH_SAK,
             OppgavetypeFilter.BEH_UND_VED,
             OppgavetypeFilter.GOD_VED,
             OppgavetypeFilter.VURD_LIVS,
+            OppgavetypeFilter.BEH_SED,
         ].find(
             (type: OppgavetypeFilter) =>
                 OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
         ) !== undefined;
-    oppgaveTypeErStøttet =
-        oppgaveTypeErStøttet ||
-        (toggles[ToggleNavn.brukEøs] && oppgave.oppgavetype === OppgavetypeFilter.BEH_SED);
 
     return oppgave.tilordnetRessurs ? (
         <div className={'kolonne'}>
