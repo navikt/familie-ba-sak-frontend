@@ -164,8 +164,8 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
         key: 'BOR_MED_SØKER',
-        tittel: 'Bor med søker',
-        spørsmål: () => `Bor barnet med søker?`,
+        tittel: 'Bor fast hos søker',
+        spørsmål: () => `Bor barnet fast hos søker?`,
         parterDetteGjelderFor: [PersonType.BARN],
     },
     UNDER_18_ÅR: {
