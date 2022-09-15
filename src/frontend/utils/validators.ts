@@ -265,7 +265,6 @@ export const erUtdypendeVilkårsvurderingerGyldig = (
         personType: avhengigheter.personType,
         vilkårType: avhengigheter.vilkårType,
         vurderesEtter: avhengigheter.vurderesEtter,
-        brukEøs: avhengigheter.brukEøs,
     });
     return feilmelding ? feil(felt, feilmelding) : ok(felt);
 };
