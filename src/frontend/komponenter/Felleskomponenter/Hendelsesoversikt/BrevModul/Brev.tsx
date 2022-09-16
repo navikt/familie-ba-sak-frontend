@@ -41,6 +41,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                         visModal: visInnsendtBrevModal,
                         actions: [
                             <Button
+                                variant={'secondary'}
                                 key={'ok'}
                                 size={'small'}
                                 onClick={() => {

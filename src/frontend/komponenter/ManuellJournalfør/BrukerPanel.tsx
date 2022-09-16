@@ -153,6 +153,7 @@ export const BrukerPanel: React.FC = () => {
                         />
                     )}
                     <StyledKnapp
+                        variant={'secondary'}
                         onClick={() => {
                             settSpinner(true);
                             onSubmitWrapper();
@@ -183,6 +184,7 @@ export const BrukerPanel: React.FC = () => {
                     />
                 )}
                 <StyledKnapp
+                    variant={'secondary'}
                     onClick={() => {
                         if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                             settSpinner(true);

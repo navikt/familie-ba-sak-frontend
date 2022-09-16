@@ -97,6 +97,7 @@ export const JournalpostSkjema: React.FC = () => {
             <Knapperekke>
                 <FamilieKnapp
                     size="small"
+                    variant={'secondary'}
                     erLesevisning={false}
                     onClick={() => navigate(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}

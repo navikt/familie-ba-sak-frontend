@@ -410,6 +410,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     </Button>
                 ) : null}
                 <Button
+                    variant={'secondary'}
                     size={'small'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
