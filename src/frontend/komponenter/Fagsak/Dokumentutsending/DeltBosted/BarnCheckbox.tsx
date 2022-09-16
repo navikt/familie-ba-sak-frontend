@@ -2,13 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Button } from '@navikt/ds-react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
 
 import Slett from '../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 const CheckboxOgSlettknapp = styled.div`
@@ -39,7 +39,7 @@ const LabelTekst = styled.p`
     overflow: hidden;
 `;
 
-const FjernBarnKnapp = styled(IkonKnapp)`
+const FjernBarnKnapp = styled(Button)`
     margin-left: 1rem;
 `;
 
@@ -104,11 +104,9 @@ const BarnCheckbox: React.FC<IProps> = ({
                 />
                 {barn.manueltRegistrert && (
                     <FjernBarnKnapp
-                        erLesevisning={false}
+                        variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
-                        mini={true}
-                        ikon={<Slett />}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
+                        size={'small'}
                         onClick={() => {
                             barnMedDeltBostedFelt.validerOgSettFelt([
                                 ...barnMedDeltBostedFelt.verdi.filter(
@@ -119,8 +117,10 @@ const BarnCheckbox: React.FC<IProps> = ({
                                 ),
                             ]);
                         }}
-                        label={'Fjern barn'}
-                    />
+                    >
+                        <Slett />
+                        {'Fjern barn'}
+                    </FjernBarnKnapp>
                 )}
             </CheckboxOgSlettknapp>
 

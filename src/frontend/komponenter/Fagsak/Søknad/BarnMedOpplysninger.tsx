@@ -11,7 +11,6 @@ import { useSøknad } from '../../../context/SøknadContext';
 import Slett from '../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../utils/formatter';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
@@ -41,7 +40,7 @@ const LabelTekst = styled.p`
     overflow: hidden;
 `;
 
-const FjernBarnKnapp = styled(IkonKnapp)`
+const FjernBarnKnapp = styled(Button)`
     margin-left: 1rem;
 `;
 
@@ -90,26 +89,26 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     }
                 }}
             />
-            {barn.manueltRegistrert && (
-                <FjernBarnKnapp
-                    erLesevisning={erLesevisning()}
-                    id={`fjern__${barn.ident}`}
-                    mini={true}
-                    ikon={<Slett />}
-                    ikonPosisjon={IkonPosisjon.VENSTRE}
-                    onClick={() => {
-                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                            ...skjema.felter.barnaMedOpplysninger.verdi.filter(
-                                barnMedOpplysninger =>
-                                    barnMedOpplysninger.ident !== barn.ident ||
-                                    barnMedOpplysninger.navn !== barn.navn ||
-                                    barnMedOpplysninger.fødselsdato !== barn.fødselsdato
-                            ),
-                        ]);
-                    }}
-                    label={'Fjern barn'}
-                />
-            )}
+            {barn.manueltRegistrert &&
+                (!erLesevisning ? (
+                    <FjernBarnKnapp
+                        variant={'tertiary'}
+                        id={`fjern__${barn.ident}`}
+                        size={'small'}
+                        onClick={() => {
+                            skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                                ...skjema.felter.barnaMedOpplysninger.verdi.filter(
+                                    barnMedOpplysninger =>
+                                        barnMedOpplysninger.ident !== barn.ident ||
+                                        barnMedOpplysninger.navn !== barn.navn ||
+                                        barnMedOpplysninger.fødselsdato !== barn.fødselsdato
+                                ),
+                            ]);
+                        }}
+                    >
+                        <Slett /> {'Fjern barn'}
+                    </FjernBarnKnapp>
+                ) : null)}
             <UIModalWrapper
                 modal={{
                     tittel: 'Søker mottar allerede barnetrygd for dette barnet',

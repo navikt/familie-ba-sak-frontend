@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
-import { ErrorMessage } from '@navikt/ds-react';
+import { Button, ErrorMessage } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
@@ -14,7 +14,6 @@ import Slett from '../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -54,11 +53,11 @@ export const StyledErrorMessage = styled(ErrorMessage)`
     margin-bottom: 1rem;
 `;
 
-const FjernAvtaleKnapp = styled(IkonKnapp)`
+const FjernAvtaleKnapp = styled(Button)`
     margin-left: 1rem;
 `;
 
-const LeggTilAvtaleKnapp = styled(IkonKnapp)`
+const LeggTilAvtaleKnapp = styled(Button)`
     margin: 1rem 0;
 `;
 
@@ -122,11 +121,9 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                             />
                             {index !== 0 && (
                                 <FjernAvtaleKnapp
-                                    erLesevisning={false}
+                                    variant={'tertiary'}
                                     id={`fjern_avtale__${barn.ident}`}
-                                    mini={true}
-                                    ikon={<Slett />}
-                                    ikonPosisjon={IkonPosisjon.VENSTRE}
+                                    size={'small'}
                                     onClick={() => {
                                         avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
                                             ...avtalerOmDeltBostedPerBarnFelt.verdi,
@@ -146,8 +143,10 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                             ),
                                         });
                                     }}
-                                    label={'Fjern'}
-                                />
+                                >
+                                    <Slett />
+                                    {'Fjern'}
+                                </FjernAvtaleKnapp>
                             )}
                         </DatovelgerOgSlettknapp>
 
@@ -158,19 +157,18 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
 
             {barn.merket && (
                 <LeggTilAvtaleKnapp
-                    erLesevisning={false}
+                    variant={'tertiary'}
                     id={`legg_til_avtale__${barn.ident}`}
-                    mini={true}
-                    ikon={<Pluss />}
-                    ikonPosisjon={IkonPosisjon.VENSTRE}
+                    size={'small'}
                     onClick={() =>
                         avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
                             ...avtalerOmDeltBostedPerBarnFelt.verdi,
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }
-                    label={'Legg til dato for avtale'}
-                />
+                >
+                    <Pluss /> {'Legg til dato for avtale'}
+                </LeggTilAvtaleKnapp>
             )}
         </Container>
     );

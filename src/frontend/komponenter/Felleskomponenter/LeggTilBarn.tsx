@@ -23,10 +23,9 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-import IkonKnapp, { IkonPosisjon } from './IkonKnapp/IkonKnapp';
 import UIModalWrapper from './Modal/UIModalWrapper';
 
-const LeggTilBarnKnapp = styled(IkonKnapp)`
+const LeggTilBarnKnapp = styled(Button)`
     margin-left: 1rem;
 `;
 
@@ -232,16 +231,16 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     return (
         <>
             <LeggTilBarnKnapp
+                variant={'tertiary'}
                 id={'legg-til-barn'}
-                mini
-                erLesevisning={false}
+                size={'small'}
                 onClick={() => {
                     settVisModal(true);
                 }}
-                ikon={<Pluss />}
-                label={'Legg til barn'}
-                ikonPosisjon={IkonPosisjon.VENSTRE}
-            />
+            >
+                <Pluss />
+                {'Legg til barn'}
+            </LeggTilBarnKnapp>
 
             <StyledUIModalWrapper
                 modal={{
