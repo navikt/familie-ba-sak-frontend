@@ -32,7 +32,6 @@ import {
 import { datoformatNorsk, lagPersonLabel } from '../../../utils/formatter';
 import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import {
@@ -424,15 +423,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             </Button>
                         </KnapperekkeVenstre>
 
-                        <IkonKnapp
-                            id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
-                            erLesevisning={erLesevisning()}
-                            label="Fjern Periode"
-                            mini
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            onClick={slettEndretUtbetaling}
-                            ikon={<Delete />}
-                        />
+                        {!erLesevisning ? (
+                            <Button
+                                variant={'tertiary'}
+                                id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
+                                size={'small'}
+                                onClick={slettEndretUtbetaling}
+                            >
+                                <Delete />
+                                {'Fjern Periode'}
+                            </Button>
+                        ) : null}
                     </Knapperekke>
                 )}
             </StyledSkjemaGruppe>

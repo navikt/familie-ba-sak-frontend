@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Alert, Label, Link, Heading } from '@navikt/ds-react';
+import { Alert, Label, Link, Heading, Button } from '@navikt/ds-react';
 import {
     FamilieDatovelger,
     FamilieInput,
@@ -23,7 +23,6 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import { EøsPeriodeStatus, type IValutakurs } from '../../../../typer/eøsPerioder';
 import { datoformatNorsk } from '../../../../utils/formatter';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import {
@@ -247,21 +246,22 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
-                        <IkonKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => slettValutakurs()}
-                            id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                barn => `${barn}-`
-                            )}_${skjema.felter.initielFom.verdi}`}
-                            spinner={sletterValutakurs}
-                            disabled={sletterValutakurs}
-                            mini={true}
-                            label={'Fjern'}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            ikon={<Delete />}
-                        />
-                    )}
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
+                        (!lesevisning ? (
+                            <Button
+                                variant={'tertiary'}
+                                onClick={() => slettValutakurs()}
+                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                    barn => `${barn}-`
+                                )}_${skjema.felter.initielFom.verdi}`}
+                                loading={sletterValutakurs}
+                                disabled={sletterValutakurs}
+                                size={'small'}
+                            >
+                                <Delete />
+                                {'Fjern'}
+                            </Button>
+                        ) : null)}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
         </SkjemaGruppe>

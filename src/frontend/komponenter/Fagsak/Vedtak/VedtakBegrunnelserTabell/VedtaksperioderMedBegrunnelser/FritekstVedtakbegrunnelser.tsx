@@ -6,7 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Heading, HelpText, Link, Tag } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, HelpText, Link, Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,7 +17,6 @@ import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
@@ -64,7 +63,7 @@ const StyledTag = styled(Tag)`
     border-color: ${navFarger.navGra60};
 `;
 
-const SletteKnapp = styled(IkonKnapp)`
+const SletteKnapp = styled(Button)`
     margin-left: 0.5rem;
     height: 2.75rem;
 `;
@@ -183,7 +182,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             autoFocus
                                         />
                                         <SletteKnapp
-                                            erLesevisning={false}
+                                            variant={'tertiary'}
                                             onClick={() => {
                                                 skjema.felter.fritekster.validerOgSettFelt([
                                                     ...skjema.felter.fritekster.verdi.filter(
@@ -194,28 +193,29 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                                 ]);
                                             }}
                                             id={`fjern_fritekst-${fritekstId}`}
-                                            mini={true}
-                                            label={'Fjern'}
+                                            size={'small'}
                                             aria-label={'Fjern fritekst'}
-                                            ikon={<Slett />}
-                                        />
+                                        >
+                                            {'Fjern'} <Slett />
+                                        </SletteKnapp>
                                     </StyledFamilieFritekstFelt>
                                 );
                             }
                         )}
                     </SkjemaGruppe>
 
-                    {!erMaksAntallKulepunkter && (
-                        <IkonKnapp
-                            erLesevisning={erLesevisning()}
-                            onClick={leggTilFritekst}
-                            id={`legg-til-fritekst`}
-                            ikon={<Pluss />}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            label={'Legg til fritekst'}
-                            mini={true}
-                        />
-                    )}
+                    {!erMaksAntallKulepunkter &&
+                        (!erLesevisning ? (
+                            <Button
+                                variant={'tertiary'}
+                                onClick={leggTilFritekst}
+                                id={`legg-til-fritekst`}
+                                size={'small'}
+                            >
+                                <Pluss />
+                                {'Legg til fritekst'}
+                            </Button>
+                        ) : null)}
                     <Knapperekke>
                         <FamilieKnapp
                             erLesevisning={erLesevisning()}
@@ -243,17 +243,16 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : (
-        <IkonKnapp
-            erLesevisning={erLesevisning()}
+    ) : !erLesevisning ? (
+        <Button
+            variant={'tertiary'}
             onClick={leggTilFritekst}
             id={`legg-til-fritekst`}
-            ikon={<Pluss />}
-            ikonPosisjon={IkonPosisjon.VENSTRE}
-            label={'Legg til fritekst'}
-            mini={true}
-        />
-    );
+            size={'small'}
+        >
+            <Pluss /> {'Legg til fritekst'}
+        </Button>
+    ) : null;
 };
 
 export default FritekstVedtakbegrunnelser;

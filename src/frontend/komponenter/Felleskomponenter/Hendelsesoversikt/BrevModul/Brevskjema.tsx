@@ -35,7 +35,6 @@ import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
@@ -67,7 +66,7 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     }
 `;
 
-const SletteKnapp = styled(IkonKnapp)`
+const SletteKnapp = styled(Button)`
     margin-left: 0.5rem;
     height: 2.75rem;
 `;
@@ -295,7 +294,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         ) && index === 0
                                                     ) && (
                                                         <SletteKnapp
-                                                            erLesevisning={false}
+                                                            variant={'tertiary'}
                                                             onClick={() => {
                                                                 skjema.felter.fritekster.validerOgSettFelt(
                                                                     [
@@ -309,11 +308,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                                 );
                                                             }}
                                                             id={`fjern_fritekst-${fritekstId}`}
-                                                            mini={true}
-                                                            label={'Fjern'}
+                                                            size={'small'}
                                                             aria-label={'Fjern fritekst'}
-                                                            ikon={<Slett />}
-                                                        />
+                                                        >
+                                                            {'Fjern'}
+                                                            <Slett />
+                                                        </SletteKnapp>
                                                     )}
                                                 </StyledFamilieFritekstFelt>
                                             );
@@ -321,17 +321,18 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     )}
                                 </SkjemaGruppe>
 
-                                {!erMaksAntallKulepunkter && (
-                                    <IkonKnapp
-                                        erLesevisning={erLesevisning()}
-                                        onClick={() => leggTilFritekst()}
-                                        id={`legg-til-fritekst`}
-                                        ikon={<Pluss />}
-                                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                                        label={'Legg til kulepunkt'}
-                                        mini={true}
-                                    />
-                                )}
+                                {!erMaksAntallKulepunkter &&
+                                    (!erLesevisning ? (
+                                        <Button
+                                            variant={'tertiary'}
+                                            onClick={() => leggTilFritekst()}
+                                            id={`legg-til-fritekst`}
+                                            size={'small'}
+                                        >
+                                            <Pluss />
+                                            {'Legg til kulepunkt'}
+                                        </Button>
+                                    ) : null)}
                             </>
                         )}
                     </FritekstWrapper>
@@ -387,25 +388,27 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 )}
             </SkjemaGruppe>
             <Knapperekke>
-                <IkonKnapp
-                    id={'forhandsvis-vedtaksbrev'}
-                    erLesevisning={erLesevisning()}
-                    label={'Forhåndsvis'}
-                    ikonPosisjon={IkonPosisjon.VENSTRE}
-                    ikon={<DokumentIkon />}
-                    mini={true}
-                    spinner={hentetDokument.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst}
-                    onClick={() => {
-                        if (kanSendeSkjema()) {
-                            hentForhåndsvisning<IManueltBrevRequestPåBehandling>({
-                                method: 'POST',
-                                data: hentSkjemaData(),
-                                url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
-                            });
-                        }
-                    }}
-                />
+                {!erLesevisning ? (
+                    <Button
+                        variant={'tertiary'}
+                        id={'forhandsvis-vedtaksbrev'}
+                        size={'small'}
+                        loading={hentetDokument.status === RessursStatus.HENTER}
+                        disabled={skjemaErLåst}
+                        onClick={() => {
+                            if (kanSendeSkjema()) {
+                                hentForhåndsvisning<IManueltBrevRequestPåBehandling>({
+                                    method: 'POST',
+                                    data: hentSkjemaData(),
+                                    url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                });
+                            }
+                        }}
+                    >
+                        <DokumentIkon />
+                        {'Forhåndsvis'}
+                    </Button>
+                ) : null}
                 <Button
                     size={'small'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}

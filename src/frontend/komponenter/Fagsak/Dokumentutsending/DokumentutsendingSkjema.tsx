@@ -14,7 +14,6 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
@@ -116,17 +115,17 @@ const DokumentutsendingSkjema: React.FC = () => {
             </StyledSkjemaGruppe>
 
             <Handlinger>
-                <IkonKnapp
+                <Button
+                    variant={'tertiary'}
                     id={'forhandsvis-vedtaksbrev'}
-                    erLesevisning={false}
-                    label={'Forhåndsvis'}
-                    ikonPosisjon={IkonPosisjon.VENSTRE}
-                    ikon={<DokumentIkon />}
-                    mini={true}
-                    spinner={hentetDokument.status === RessursStatus.HENTER}
+                    size={'small'}
+                    loading={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
-                />
+                >
+                    <DokumentIkon />
+                    {'Forhåndsvis'}
+                </Button>
 
                 <div>
                     <SendBrevKnapp

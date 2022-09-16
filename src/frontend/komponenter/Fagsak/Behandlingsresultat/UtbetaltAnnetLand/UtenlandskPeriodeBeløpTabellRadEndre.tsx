@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import {
     FamilieInput,
     FamilieKnapp,
@@ -26,7 +26,6 @@ import {
     UtenlandskPeriodeBeløpIntervall,
 } from '../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import {
@@ -251,21 +250,22 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
-                        <IkonKnapp
-                            erLesevisning={lesevisning}
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
+                    !erLesevisning ? (
+                        <Button
+                            variant={'tertiary'}
                             onClick={() => slettUtenlandskPeriodeBeløp()}
                             id={`slett_utd_beløp_${skjema.felter.barnIdenter.verdi.map(
                                 barn => `${barn}-`
                             )}_${skjema.felter.initielFom.verdi}`}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            mini={true}
-                            label={'Fjern'}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            ikon={<Delete />}
-                        />
-                    )}
+                            size={'small'}
+                        >
+                            <Delete />
+                            {'Fjern'}
+                        </Button>
+                    ) : null}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
         </SkjemaGruppe>

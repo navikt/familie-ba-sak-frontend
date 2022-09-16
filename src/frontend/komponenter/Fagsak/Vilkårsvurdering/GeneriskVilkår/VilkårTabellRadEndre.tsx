@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import {
     NavdsSemanticColorBorderMuted,
     NavdsSemanticColorFeedbackWarningBorder,
@@ -38,7 +39,6 @@ import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../..
 import { Regelverk } from '../../../../typer/vilkår';
 import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
@@ -420,23 +420,25 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    <IkonKnapp
-                        erLesevisning={lesevisning}
-                        onClick={() => {
-                            const promise = deleteVilkår(
-                                person.personIdent,
-                                redigerbartVilkår.verdi.id
-                            );
-                            håndterEndringPåVilkårsvurdering(promise);
-                        }}
-                        id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        spinner={vilkårSubmit === VilkårSubmit.DELETE}
-                        disabled={vilkårSubmit === VilkårSubmit.DELETE}
-                        mini={true}
-                        label={'Fjern'}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                        ikon={<Delete />}
-                    />
+                    {!lesevisning ? (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={() => {
+                                const promise = deleteVilkår(
+                                    person.personIdent,
+                                    redigerbartVilkår.verdi.id
+                                );
+                                håndterEndringPåVilkårsvurdering(promise);
+                            }}
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            loading={vilkårSubmit === VilkårSubmit.DELETE}
+                            disabled={vilkårSubmit === VilkårSubmit.DELETE}
+                            size={'small'}
+                        >
+                            <Delete />
+                            {'Fjern'}
+                        </Button>
+                    ) : null}
                 </Knapperad>
             </Container>
         </SkjemaGruppe>

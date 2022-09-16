@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -14,7 +14,6 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
 import { Resultat, uiResultat } from '../../../../typer/vilkår';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 
@@ -98,20 +97,21 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                     <BeskrivelseCelle children={annenVurdering.verdi.begrunnelse.verdi} />
                 </td>
                 <td>
-                    <IkonKnapp
-                        erLesevisning={erLesevisning()}
-                        onClick={() => toggleForm(true)}
-                        id={annenVurderingFeilmeldingId(annenVurdering.verdi)}
-                        label={
-                            !ekspandertAnnenVurdering
+                    {!erLesevisning ? (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={() => toggleForm(true)}
+                            id={annenVurderingFeilmeldingId(annenVurdering.verdi)}
+                            size={'small'}
+                        >
+                            {!ekspandertAnnenVurdering
                                 ? annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
                                     ? 'Vurder'
                                     : 'Endre'
-                                : 'Lukk'
-                        }
-                        mini={true}
-                        ikon={<FamilieChevron retning={ekspandertAnnenVurdering ? 'opp' : 'ned'} />}
-                    />
+                                : 'Lukk'}
+                            <FamilieChevron retning={ekspandertAnnenVurdering ? 'opp' : 'ned'} />
+                        </Button>
+                    ) : null}
                 </td>
                 <td>
                     <ManuellVurdering />

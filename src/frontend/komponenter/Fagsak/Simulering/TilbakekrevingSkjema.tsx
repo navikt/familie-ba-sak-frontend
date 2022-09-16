@@ -7,7 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Alert, BodyLong, Heading, HelpText, Label, Tag } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HelpText, Label, Tag } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -20,7 +20,6 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
@@ -319,11 +318,9 @@ const TilbakekrevingSkjema: React.FC<{
                                     />
 
                                     <ForhåndsvisVarselKnappContainer>
-                                        <IkonKnapp
+                                        <Button
+                                            variant={'tertiary'}
                                             id={'forhandsvis-varsel'}
-                                            erLesevisning={false}
-                                            label={'Forhåndsvis varsel'}
-                                            ikon={<DokumentIkon />}
                                             onClick={() =>
                                                 åpenBehandling.status === RessursStatus.SUKSESS &&
                                                 hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
@@ -336,10 +333,12 @@ const TilbakekrevingSkjema: React.FC<{
                                                     }
                                                 )
                                             }
-                                            spinner={hentetDokument.status === RessursStatus.HENTER}
-                                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                                            mini={true}
-                                        />
+                                            loading={hentetDokument.status === RessursStatus.HENTER}
+                                            size={'small'}
+                                        >
+                                            <DokumentIkon />
+                                            {'Forhåndsvis varsel'}
+                                        </Button>
                                     </ForhåndsvisVarselKnappContainer>
                                 </FritekstVarsel>
                             )}
