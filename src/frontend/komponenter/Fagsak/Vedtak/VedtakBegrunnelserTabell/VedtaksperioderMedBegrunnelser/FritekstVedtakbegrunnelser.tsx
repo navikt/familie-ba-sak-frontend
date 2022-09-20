@@ -168,12 +168,13 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
 
                                 return (
                                     <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                                        <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                         <FamilieTextareaBegrunnelseFritekst
                                             erLesevisning={false}
                                             key={`fritekst-${fritekstId}`}
                                             id={`${fritekstId}`}
                                             className={'fritekst-textarea'}
+                                            label={`Kulepunkt ${fritekstId}`}
+                                            hideLabel
                                             value={fritekst.verdi.tekst}
                                             maxLength={makslengdeFritekst}
                                             onChange={event => onChangeFritekst(event, fritekstId)}
