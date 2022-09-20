@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Radio } from 'nav-frontend-skjema';
-
-import { Heading } from '@navikt/ds-react';
+import { Heading, Radio } from '@navikt/ds-react';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
 
@@ -39,22 +37,26 @@ const MålformVelger: React.FC<IProps> = ({
         <StyledFamilieRadioGruppe
             {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             erLesevisning={erLesevisning}
-            verdi={målformFelt.verdi ? målform[målformFelt.verdi] : undefined}
+            value={målformFelt.verdi ? målform[målformFelt.verdi] : undefined}
             legend={Legend}
         >
             <StyledRadio
-                label={målform[Målform.NB]}
+                value={målform[Målform.NB]}
                 name={'registrer-søknad-målform'}
                 checked={målformFelt.verdi === Målform.NB}
                 onChange={() => radioOnChange(Målform.NB)}
                 id={'målform-nb'}
-            />
+            >
+                {målform[Målform.NB]}
+            </StyledRadio>
             <StyledRadio
-                label={målform[Målform.NN]}
+                value={målform[Målform.NN]}
                 name={'registrer-søknad-målform'}
                 checked={målformFelt.verdi === Målform.NN}
                 onChange={() => radioOnChange(Målform.NN)}
-            />
+            >
+                {målform[Målform.NN]}
+            </StyledRadio>
         </StyledFamilieRadioGruppe>
     );
 };

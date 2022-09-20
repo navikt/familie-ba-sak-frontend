@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import Lenke from 'nav-frontend-lenker';
-import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Alert, BodyLong, Button, Heading, HelpText, Label, Tag } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HelpText, Label, Radio, Tag } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -208,7 +208,7 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger
                     )}
                     erLesevisning={erLesevisning()}
-                    verdi={
+                    value={
                         tilbakekrevingsvalg.verdi
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
@@ -249,7 +249,7 @@ const TilbakekrevingSkjema: React.FC<{
                     {bruker && !bruker.dødsfallDato && (
                         <>
                             <Radio
-                                label={'Opprett tilbakekreving, send varsel'}
+                                value={'Opprett tilbakekreving, send varsel'}
                                 name={'tilbakekreving'}
                                 checked={
                                     tilbakekrevingsvalg.verdi ===
@@ -261,7 +261,9 @@ const TilbakekrevingSkjema: React.FC<{
                                     )
                                 }
                                 id={'Opprett-tilbakekreving-send-varsel'}
-                            />
+                            >
+                                {'Opprett tilbakekreving, send varsel'}
+                            </Radio>
                             {fritekstVarsel.erSynlig && (
                                 <FritekstVarsel>
                                     <FamilieTextarea
@@ -345,7 +347,7 @@ const TilbakekrevingSkjema: React.FC<{
                         </>
                     )}
                     <Radio
-                        label={'Opprett tilbakekreving, ikke send varsel'}
+                        value={'Opprett tilbakekreving, ikke send varsel'}
                         name={'tilbakekreving'}
                         checked={
                             tilbakekrevingsvalg.verdi ===
@@ -355,16 +357,20 @@ const TilbakekrevingSkjema: React.FC<{
                             radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
                         }
                         id={'Opprett-tilbakekreving-ikke-send-varsel'}
-                    />
+                    >
+                        {'Opprett tilbakekreving, ikke send varsel'}
+                    </Radio>
                     <Radio
-                        label={'Avvent tilbakekreving'}
+                        value={'Avvent tilbakekreving'}
                         name={'tilbakekreving'}
                         checked={
                             tilbakekrevingsvalg.verdi === Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
                         }
                         onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
                         id={'avvent-tilbakekreving'}
-                    />
+                    >
+                        {'Avvent tilbakekreving'}
+                    </Radio>
                 </FamilieRadioGruppe>
                 {erLesevisning() && fritekstVarsel.erSynlig && (
                     <FamilieTextarea

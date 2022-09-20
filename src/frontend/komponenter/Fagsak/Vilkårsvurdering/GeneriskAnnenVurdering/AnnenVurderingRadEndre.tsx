@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Radio } from '@navikt/ds-react';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
@@ -175,38 +176,40 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             <Container>
                 <FamilieRadioGruppe
                     erLesevisning={leseVisning}
-                    verdi={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
+                    value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
                         annenVurderingConfig.spørsmål
                             ? annenVurderingConfig.spørsmål(person.type.toLowerCase())
                             : annenVurderingConfig.beskrivelse
                     }
-                    feil={
+                    error={
                         redigerbartAnnenVurdering.verdi.resultat.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.resultat.feilmelding
                             : ''
                     }
-                    feilmeldingId={annenVurderingResultatFeilmeldingId(
-                        redigerbartAnnenVurdering.verdi
-                    )}
+                    errorId={annenVurderingResultatFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                 >
                     <Radio
-                        label={'Ja'}
+                        value={'Ja'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
                         checked={
                             redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.OPPFYLT
                         }
                         onChange={() => radioOnChange(Resultat.OPPFYLT)}
-                    />
+                    >
+                        {'Ja'}
+                    </Radio>
                     <Radio
-                        label={'Nei'}
+                        value={'Nei'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
                         checked={
                             redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
                         }
                         onChange={() => radioOnChange(Resultat.IKKE_OPPFYLT)}
-                    />
+                    >
+                        {'Nei'}
+                    </Radio>
                 </FamilieRadioGruppe>
 
                 <FamilieTextareaControlled

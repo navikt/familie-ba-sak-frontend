@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Radio } from '@navikt/ds-react';
 import {
     NavdsSemanticColorBorderMuted,
     NavdsSemanticColorFeedbackWarningBorder,
@@ -290,7 +290,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <FamilieRadioGruppe
                     erLesevisning={lesevisning}
-                    verdi={
+                    value={
                         redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
                             ? vilkårResultatForEkteskapVisning(
                                   redigerbartVilkår.verdi.resultat.verdi
@@ -302,16 +302,16 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
                             : ''
                     }
-                    feil={
+                    error={
                         redigerbartVilkår.verdi.resultat.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.resultat.feilmelding
                             : ''
                     }
-                    feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                    errorId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
                 >
                     <Radio
-                        label={'Ja'}
+                        value={'Ja'}
                         name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                         checked={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
@@ -325,9 +325,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                     : Resultat.OPPFYLT
                             )
                         }
-                    />
+                    >
+                        {'Ja'}
+                    </Radio>
                     <Radio
-                        label={'Nei'}
+                        value={'Nei'}
                         name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                         checked={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
@@ -341,7 +343,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                     : Resultat.IKKE_OPPFYLT
                             )
                         }
-                    />
+                    >
+                        {'Nei'}
+                    </Radio>
                 </FamilieRadioGruppe>
                 <UtdypendeVilkårsvurderingMultiselect
                     redigerbartVilkår={redigerbartVilkår}

@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import variables from 'nav-frontend-core';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieRadioGruppe, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -269,26 +269,30 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <FamilieRadioGruppe
                         legend={<Label>Utbetaling</Label>}
                         erLesevisning={erLesevisning()}
-                        verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
+                        value={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
                     >
                         <Radio
-                            label={'Perioden skal utbetales'}
+                            value={'Perioden skal utbetales'}
                             name={'utbetaling'}
                             checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
                             onChange={() =>
                                 skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
                             }
                             id={'ja-perioden-utbetales-til-søker'}
-                        />
+                        >
+                            {'Perioden skal utbetales'}
+                        </Radio>
                         <Radio
-                            label={'Perioden skal ikke utbetales'}
+                            value={'Perioden skal ikke utbetales'}
                             name={'utbetaling'}
                             checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
                             onChange={() =>
                                 skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
                             }
                             id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                        />
+                        >
+                            {'Perioden skal ikke utbetales'}
+                        </Radio>
                     </FamilieRadioGruppe>
                 </Feltmargin>
 
