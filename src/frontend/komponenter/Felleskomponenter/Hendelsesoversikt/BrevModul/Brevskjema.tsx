@@ -270,18 +270,19 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                 <StyledFamilieFritekstFelt
                                                     key={`fritekst-${fritekstId}`}
                                                 >
-                                                    <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                                     <FamilieTextareaBegrunnelseFritekst
                                                         erLesevisning={false}
                                                         key={`fritekst-${fritekstId}`}
                                                         id={`${fritekstId}`}
-                                                        textareaClass={'fritekst-textarea'}
+                                                        label={`Kulepunkt ${fritekstId}`}
+                                                        hideLabel
+                                                        className={'fritekst-textarea'}
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekst}
                                                         onChange={event =>
                                                             onChangeFritekst(event, fritekstId)
                                                         }
-                                                        feil={
+                                                        error={
                                                             skjema.visFeilmeldinger &&
                                                             fritekst.feilmelding
                                                         }
