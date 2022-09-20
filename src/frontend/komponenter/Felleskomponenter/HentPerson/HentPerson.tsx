@@ -48,7 +48,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                     erLesevisning={erLesevisning}
                     id={'hent-person'}
                     label={'Ident'}
-                    bredde={'XL'}
+                    size={'medium'}
                     placeholder={'fnr/dnr'}
                 />
                 {!erLesevisning && (

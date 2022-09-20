@@ -73,7 +73,7 @@ export const AvsenderPanel: React.FC = () => {
                 {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 label={'Navn'}
-                bredde={'XL'}
+                size={'medium'}
                 placeholder={'navn'}
                 disabled={brukerErAvsender}
             />
@@ -83,7 +83,7 @@ export const AvsenderPanel: React.FC = () => {
                 {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 label={'Ident'}
-                bredde={'XL'}
+                size={'medium'}
                 placeholder={'Fnr/dnr/orgnr'}
                 disabled={brukerErAvsender}
             />

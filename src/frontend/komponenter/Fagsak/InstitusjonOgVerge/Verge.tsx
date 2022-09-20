@@ -70,7 +70,7 @@ const Verge: React.FunctionComponent<IProps> = ({ erLesevisning }) => {
                 erLesevisning={true}
                 id={'verge-postnummer'}
                 label={'Postnummer'}
-                bredde={'S'}
+                size={'small'}
                 tekstLesevisning={''}
             />
             <StyledFamilieInput

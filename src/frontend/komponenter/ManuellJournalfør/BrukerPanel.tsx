@@ -148,7 +148,7 @@ export const BrukerPanel: React.FC = () => {
                             erLesevisning={erLesevisning()}
                             id={'hent-samhandler'}
                             label={'Institusjonens organisasjonsnummer'}
-                            bredde={'XL'}
+                            size={'medium'}
                             placeholder={'organisasjonsnummer'}
                         />
                     )}
@@ -175,11 +175,11 @@ export const BrukerPanel: React.FC = () => {
                 {!erLesevisning() && (
                     <FamilieInput
                         {...nyIdent.hentNavInputProps(!!feilMelding)}
-                        feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                        error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
                         erLesevisning={erLesevisning()}
                         id={'hent-person'}
                         label={'Skriv inn fødselsnummer/D-nummer'}
-                        bredde={'XL'}
+                        size={'medium'}
                         placeholder={'fnr/dnr'}
                     />
                 )}

@@ -245,7 +245,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                     erLesevisning={false}
                                     id={'hent-samhandler'}
                                     label={'Institusjonens organisasjonsnummer'}
-                                    bredde={'XL'}
+                                    size={'medium'}
                                     placeholder={'organisasjonsnummer'}
                                 />
 
