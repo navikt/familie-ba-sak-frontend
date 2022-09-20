@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, ErrorMessage, Heading } from '@navikt/ds-react';
-import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { BodyShort, Button, Checkbox, ErrorMessage, Heading } from '@navikt/ds-react';
+import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -204,10 +204,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         )})`}</BodyShort>
                     )}
                     <StyledCheckBoxWrapper>
-                        <FamilieCheckbox
+                        <Checkbox
                             id={'gjelder-enslig-mindreårig'}
-                            erLesevisning={false}
-                            label={'Gjelder enslig mindreårig'}
+                            value={'Gjelder enslig mindreårig'}
                             checked={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
                             disabled={fagsakType === FagsakType.INSTITUSJON}
                             onChange={() => {
@@ -218,12 +217,13 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 }
                                 settVisFeilmelding(false);
                             }}
-                        />
+                        >
+                            {'Gjelder enslig mindreårig'}
+                        </Checkbox>
                         <br />
-                        <FamilieCheckbox
+                        <Checkbox
                             id={'gjelder-institusjon'}
-                            erLesevisning={false}
-                            label={'Gjelder institusjon'}
+                            value={'Gjelder institusjon'}
                             checked={fagsakType === FagsakType.INSTITUSJON}
                             disabled={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
                             onChange={() => {
@@ -234,7 +234,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 }
                                 settVisFeilmelding(false);
                             }}
-                        />
+                        >
+                            {'Gjelder institusjon'}
+                        </Checkbox>
                         <br />
                         {fagsakType === FagsakType.INSTITUSJON && (
                             <StyledDiv>

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import classNames from 'classnames';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { BodyShort, Checkbox, Heading } from '@navikt/ds-react';
 
 import type { BehandlingResultat } from '../../../typer/behandling';
 import { erBehandlingHenlagt } from '../../../typer/behandling';
@@ -64,15 +63,16 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 children={
                     <>
                         Behandlinger
-                        <FamilieCheckbox
+                        <Checkbox
                             id={'vis-henlagte-behandlinger'}
-                            erLesevisning={false}
-                            label={'Vis henlagte behandlinger'}
+                            value={'Vis henlagte behandlinger'}
                             checked={visHenlagteBehandlinger}
                             onChange={() => {
                                 setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
                             }}
-                        />
+                        >
+                            {'Vis henlagte behandlinger'}
+                        </Checkbox>
                     </>
                 }
             />

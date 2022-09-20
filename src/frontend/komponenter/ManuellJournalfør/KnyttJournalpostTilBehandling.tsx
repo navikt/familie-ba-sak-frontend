@@ -1,9 +1,9 @@
 import React from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Alert, BodyShort, Checkbox, Heading } from '@navikt/ds-react';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import type { BehandlingÅrsak } from '../../typer/behandling';
@@ -89,28 +89,43 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         )}
                                     >
                                         <KnyttTilBehandlingTd>
-                                            <FamilieCheckbox
-                                                id={behandlingId.toString()}
-                                                erLesevisning={!kanKnytteJournalpostTilBehandling()}
-                                                label={'-'}
-                                                checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                            {!kanKnytteJournalpostTilBehandling() ? (
+                                                skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
                                                     behandlingId
-                                                )}
-                                                onChange={() => {
-                                                    skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
-                                                        [
-                                                            ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                                it => it !== behandlingId
-                                                            ),
-                                                            ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                                behandlingId
-                                                            )
-                                                                ? []
-                                                                : [behandlingId]),
-                                                        ]
-                                                    );
-                                                }}
-                                            />
+                                                ) ? (
+                                                    <BodyShort
+                                                        className={classNames(
+                                                            'skjemaelement',
+                                                            'lese-felt'
+                                                        )}
+                                                        children={'Knytt til ny behandling'}
+                                                    />
+                                                ) : null
+                                            ) : (
+                                                <Checkbox
+                                                    id={behandlingId.toString()}
+                                                    value={'-'}
+                                                    checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                        behandlingId
+                                                    )}
+                                                    onChange={() => {
+                                                        skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                            [
+                                                                ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
+                                                                    it => it !== behandlingId
+                                                                ),
+                                                                ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                                    behandlingId
+                                                                )
+                                                                    ? []
+                                                                    : [behandlingId]),
+                                                            ]
+                                                        );
+                                                    }}
+                                                >
+                                                    {'-'}
+                                                </Checkbox>
+                                            )}
                                         </KnyttTilBehandlingTd>
                                         <td>
                                             {formaterIsoDato(

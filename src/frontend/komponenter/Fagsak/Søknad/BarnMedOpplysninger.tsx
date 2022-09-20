@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { BodyShort, Button } from '@navikt/ds-react';
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { BodyShort, Button, Checkbox } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
@@ -22,7 +22,7 @@ const CheckboxOgSlettknapp = styled.div`
     text-align: center;
 `;
 
-const StyledFamilieCheckbox = styled(FamilieCheckbox)`
+const StyledCheckbox = styled(Checkbox)`
     margin-left: 1rem;
     > label {
         width: 100%;
@@ -71,24 +71,40 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
 
     return (
         <CheckboxOgSlettknapp>
-            <StyledFamilieCheckbox
-                erLesevisning={erLesevisning()}
-                label={
+            {erLesevisning() ? (
+                barn.merket ? (
+                    <BodyShort
+                        className={classNames('skjemaelement', 'lese-felt')}
+                        children={
+                            <LabelContent>
+                                <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
+                            </LabelContent>
+                        }
+                    />
+                ) : null
+            ) : (
+                <StyledCheckbox
+                    value={
+                        <LabelContent>
+                            <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
+                        </LabelContent>
+                    }
+                    checked={barn.merket}
+                    onChange={() => {
+                        const nyMerketStatus = !barn.merket;
+
+                        if (barnetHarLøpendeUtbetaling && nyMerketStatus) {
+                            settVisHarLøpendeModal(true);
+                        } else {
+                            oppdaterBarnMerket(nyMerketStatus);
+                        }
+                    }}
+                >
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
                     </LabelContent>
-                }
-                checked={barn.merket}
-                onChange={() => {
-                    const nyMerketStatus = !barn.merket;
-
-                    if (barnetHarLøpendeUtbetaling && nyMerketStatus) {
-                        settVisHarLøpendeModal(true);
-                    } else {
-                        oppdaterBarnMerket(nyMerketStatus);
-                    }
-                }}
-            />
+                </StyledCheckbox>
+            )}
             {barn.manueltRegistrert &&
                 (!erLesevisning ? (
                     <FjernBarnKnapp

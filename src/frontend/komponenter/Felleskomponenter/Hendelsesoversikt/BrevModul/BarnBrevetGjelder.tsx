@@ -4,8 +4,7 @@ import styled from 'styled-components';
 
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 
-import { Alert } from '@navikt/ds-react';
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Alert, Checkbox } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
@@ -13,7 +12,7 @@ import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 
-const StyledFamilieCheckbox = styled(FamilieCheckbox)`
+const StyledCheckbox = styled(Checkbox)`
     margin-left: 1rem;
 
     > label {
@@ -79,9 +78,8 @@ const BarnBrevetGjelder = (props: IProps) => {
             {alternativer.map((barn: IBarnMedOpplysninger, index: number) => {
                 const barnLabel = lagBarnLabel(barn);
                 return (
-                    <StyledFamilieCheckbox
-                        erLesevisning={false}
-                        label={
+                    <StyledCheckbox
+                        value={
                             <LabelContent>
                                 <LabelTekst title={barnLabel}>{barnLabel}</LabelTekst>
                             </LabelContent>
@@ -104,7 +102,11 @@ const BarnBrevetGjelder = (props: IProps) => {
                             }
                             settVisFeilmeldinger(false);
                         }}
-                    />
+                    >
+                        <LabelContent>
+                            <LabelTekst title={barnLabel}>{barnLabel}</LabelTekst>
+                        </LabelContent>
+                    </StyledCheckbox>
                 );
             })}
             {skalViseVarselOmManglendeBarn && (

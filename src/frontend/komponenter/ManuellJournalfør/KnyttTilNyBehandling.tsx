@@ -1,11 +1,11 @@
 import React from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Heading } from '@navikt/ds-react';
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { BodyShort, Checkbox, Heading } from '@navikt/ds-react';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import OpprettBehandlingValg from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
@@ -28,15 +28,25 @@ export const KnyttTilNyBehandling: React.FC = () => {
             <Heading size={'small'}>Knytt til ny behandling</Heading>
             <br />
             <StyledCheckboxDiv>
-                <FamilieCheckbox
-                    id={knyttTilNyBehandling.id}
-                    erLesevisning={!kanKnytteJournalpostTilBehandling()}
-                    label={'Knytt til ny behandling'}
-                    checked={knyttTilNyBehandling.verdi}
-                    onChange={() => {
-                        knyttTilNyBehandling.validerOgSettFelt(!knyttTilNyBehandling.verdi);
-                    }}
-                />
+                {!kanKnytteJournalpostTilBehandling() ? (
+                    knyttTilNyBehandling.verdi ? (
+                        <BodyShort
+                            className={classNames('skjemaelement', 'lese-felt')}
+                            children={'Knytt til ny behandling'}
+                        />
+                    ) : null
+                ) : (
+                    <Checkbox
+                        id={knyttTilNyBehandling.id}
+                        value={'Knytt til ny behandling'}
+                        checked={knyttTilNyBehandling.verdi}
+                        onChange={() => {
+                            knyttTilNyBehandling.validerOgSettFelt(!knyttTilNyBehandling.verdi);
+                        }}
+                    >
+                        {'Knytt til ny behandling'}
+                    </Checkbox>
+                )}
             </StyledCheckboxDiv>
             {behandlingstype.erSynlig && (
                 <OpprettBehandlingValg
