@@ -71,7 +71,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         skjema.felter.årsak.onChange(event.target.value as DokumentÅrsak);
                     }}
-                    bredde={'m'}
+                    size={'medium'}
                 >
                     {Object.values(DokumentÅrsak).map(årsak => {
                         return (

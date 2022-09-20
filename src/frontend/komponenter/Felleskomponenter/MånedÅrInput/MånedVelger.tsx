@@ -39,13 +39,14 @@ const MånedVelger: React.FC<MånedProps> = ({
             erLesevisning={lesevisning}
             lesevisningVerdi={måned ? månedValg.find(mnd => mnd.mndNr === måned)?.verdi : ''}
             value={måned ?? ''}
+            label={'Måned'}
             className={className}
             onChange={event => {
                 event.persist();
                 settMåned(event.target.value !== '' ? event.target.value : undefined);
             }}
             disabled={disabled}
-            feil={feil}
+            error={feil}
         >
             <option value="">Måned</option>
             {månedValg.map(mnd => (
