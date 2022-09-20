@@ -6,11 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Radio } from '@navikt/ds-react';
-import {
-    FamilieKnapp,
-    FamilieRadioGruppe,
-    FamilieTextareaControlled,
-} from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -212,16 +208,16 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     </Radio>
                 </FamilieRadioGruppe>
 
-                <FamilieTextareaControlled
+                <FamilieTextarea
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
                     defaultValue={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}
-                    textareaClass={'begrunnelse-textarea'}
+                    className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på annen vurdering'}
                     value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
-                    feil={
+                    error={
                         redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.begrunnelse.feilmelding

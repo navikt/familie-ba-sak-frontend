@@ -16,7 +16,7 @@ import {
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieSelect,
-    FamilieTextareaControlled,
+    FamilieTextarea,
 } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -373,16 +373,16 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-                <FamilieTextareaControlled
+                <FamilieTextarea
                     tekstLesevisning={''}
                     erLesevisning={lesevisning}
                     defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
-                    textareaClass={'begrunnelse-textarea'}
+                    className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     value={redigerbartVilkår.verdi.begrunnelse.verdi}
-                    feil={
+                    error={
                         redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.begrunnelse.feilmelding
