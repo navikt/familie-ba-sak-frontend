@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { Office1Filled } from '@navikt/ds-icons';
+import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -69,6 +71,8 @@ export const BrukerPanel: React.FC = () => {
         }
     }, [samhandlerSkjema.submitRessurs.status]);
 
+    const erBrukerPåInstitusjon = !!skjema.felter.erPåInstitusjon.verdi;
+
     return (
         <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
@@ -81,9 +85,21 @@ export const BrukerPanel: React.FC = () => {
             }}
             tittel={
                 <DeltagerInfo
-                    ikon={<KontoSirkel filled={åpen} width={48} height={48} />}
+                    ikon={
+                        erBrukerPåInstitusjon ? (
+                            <Office1Filled
+                                color={NavdsSemanticColorInteractionPrimary}
+                                width={48}
+                                height={48}
+                            />
+                        ) : (
+                            <KontoSirkel filled={åpen} width={48} height={48} />
+                        )
+                    }
                     navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
-                    undertittel={'Søker/Bruker'}
+                    undertittel={
+                        erBrukerPåInstitusjon ? 'Søker/Bruker er på institusjon' : 'Søker/Bruker'
+                    }
                     ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                 />
             }
