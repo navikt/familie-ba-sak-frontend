@@ -2301,12 +2301,32 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.6.1.tgz#aed861a1b6dbebadf14a9dd829ba67f4f3ae795c"
   integrity sha512-Y30eVMcZva8o84c0HcXAtDO4BEzPJMvF6+B7x7urL2xbAqVsGJhojOyHLaoQHQYjb6OkqRq5kO+zeySycQwKqg==
 
+"@floating-ui/core@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.0.1.tgz#00e64d74e911602c8533957af0cce5af6b2e93c8"
+  integrity sha512-bO37brCPfteXQfFY0DyNDGB3+IMe4j150KFQcgJ5aBP295p9nBGeHEs/p0czrRbtlHq4Px/yoPXO/+dOCcF4uA==
+
 "@floating-ui/dom@^0.4.0":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.4.4.tgz#e0919d23e40bcc84ce2ebe1b9701b211f2d84b3c"
   integrity sha512-0Ulu3B/dqQplUUSqnTx0foSrlYuMN+GTtlJWvNJwt6Fr7/PqmlR/Y08o6/+bxDWr6p3roBJRaQ51MDZsNmEhhw==
   dependencies:
     "@floating-ui/core" "^0.6.1"
+
+"@floating-ui/dom@^1.0.0":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.2.tgz#c5184c52c6f50abd11052d71204f4be2d9245237"
+  integrity sha512-5X9WSvZ8/fjy3gDu8yx9HAA4KG1lazUN2P4/VnaXLxTO9Dz53HI1oYoh1OlhqFNlHgGDiwFX5WhFCc2ljbW3yA==
+  dependencies:
+    "@floating-ui/core" "^1.0.1"
+
+"@floating-ui/react-dom-interactions@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom-interactions/-/react-dom-interactions-0.9.2.tgz#9a364cc44ecbc242b5218dff0e0d071de115e13a"
+  integrity sha512-1I0urs4jlGuo4FRukvjtMmdUwxqvgwtTlESEPVwEvFGHXVh1PKkKaPZJ0Dcp9B8DQt4ewQEbwJxsoker2pDYTQ==
+  dependencies:
+    "@floating-ui/react-dom" "^1.0.0"
+    aria-hidden "^1.1.3"
 
 "@floating-ui/react-dom@0.6.0":
   version "0.6.0"
@@ -2315,6 +2335,13 @@
   dependencies:
     "@floating-ui/dom" "^0.4.0"
     use-isomorphic-layout-effect "^1.1.1"
+
+"@floating-ui/react-dom@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.0.0.tgz#e0975966694433f1f0abffeee5d8e6bb69b7d16e"
+  integrity sha512-uiOalFKPG937UCLm42RxjESTWUVpbbatvlphQAU6bsv+ence6IoVG8JOUZcy8eW81NkU+Idiwvx10WFLmR4MIg==
+  dependencies:
+    "@floating-ui/dom" "^1.0.0"
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
@@ -2902,34 +2929,59 @@
     hey-listen "^1.0.8"
     tslib "^2.3.1"
 
-"@navikt/ds-css-internal@0.7.7", "@navikt/ds-css-internal@^0.7.x":
+"@navikt/ds-css-internal@1.3.x":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css-internal/1.3.4/92ec41173bc0c3bc964cca0053cc27d42813a34d#92ec41173bc0c3bc964cca0053cc27d42813a34d"
+  integrity sha512-dojPn1k8kyLqw4mCynzEE5IqVXnytM6FZaa/6hrYVV3Hi9EVEv2e65iOVO720UBJKJ6fMkCUxV0zHoDj7xqQnQ==
+
+"@navikt/ds-css-internal@^0.7.x":
   version "0.7.7"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css-internal/0.7.7/ff5df8ad05bf734863dec441178200b680a41c41#ff5df8ad05bf734863dec441178200b680a41c41"
   integrity sha512-GiWQ4m9ksagS8GN/ifCgVksOttiOW2eSfqnsuL9GNQaDbRQLpxSvmej2c2uTkgj3+fgpJi7f9rHdcQfDplOL0A==
-
-"@navikt/ds-css@0.18.29", "@navikt/ds-css@^0.18.26", "@navikt/ds-css@^0.18.x":
-  version "0.18.29"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.18.29/c8727d6240f87bdc41d83d1306b34ab892afbd96#c8727d6240f87bdc41d83d1306b34ab892afbd96"
-  integrity sha512-nzJvSI5AYEYJhWqvYuWqnDWDpMkaPAfY/uL/4LLkdpsgyOnOfcLbZu3jrXMVrKMvpD2AKYNSDSG7f/r6bA+jpg==
 
 "@navikt/ds-css@1.2.x":
   version "1.2.5"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.2.5/e79ec7adf613fbb0a76cdb87aec4160acc4ef521#e79ec7adf613fbb0a76cdb87aec4160acc4ef521"
   integrity sha512-MO49OG+aANM5PEsmwAx7vr9ZZZdkeS+LlBvk/F6oOqKcnDnJALHiSZKV2neqJtu0BqNCm5WTBmsFJxyTbEg2/A==
 
-"@navikt/ds-icons@0.8.20", "@navikt/ds-icons@^0.8.18", "@navikt/ds-icons@^0.8.20", "@navikt/ds-icons@^0.8.x":
-  version "0.8.20"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.20/b3c52f1839929d2e755b1ce6da44b4e02caf6f7e#b3c52f1839929d2e755b1ce6da44b4e02caf6f7e"
-  integrity sha512-ftX5GHpH8WdGXfw94P5M3Nn1Bma/MI3TaL1zlMnXBoqs/lFo6V3BeKNTcGoFTE7mJLJDE8qrcvewCWK2E6pkgw==
-  dependencies:
-    uuid "^8.3.2"
+"@navikt/ds-css@1.3.x":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.3.4/6fbbe9294884cc7d66c9f95bd2b89a9f1ab4628d#6fbbe9294884cc7d66c9f95bd2b89a9f1ab4628d"
+  integrity sha512-3ADdeHyBql12T2q6iF3NpNqJjGjIiY8Y0bDoVmFmK9Q/Mi6X3TFBlJgP7f7Bm2UmtNbP4skcwgtWxESx23MJoA==
+
+"@navikt/ds-css@^0.18.26", "@navikt/ds-css@^0.18.x":
+  version "0.18.29"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.18.29/c8727d6240f87bdc41d83d1306b34ab892afbd96#c8727d6240f87bdc41d83d1306b34ab892afbd96"
+  integrity sha512-nzJvSI5AYEYJhWqvYuWqnDWDpMkaPAfY/uL/4LLkdpsgyOnOfcLbZu3jrXMVrKMvpD2AKYNSDSG7f/r6bA+jpg==
 
 "@navikt/ds-icons@1.2.x":
   version "1.2.5"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.2.5/fd5c7d1770734c582f476fed5cb263655586fe46#fd5c7d1770734c582f476fed5cb263655586fe46"
   integrity sha512-F8WiPhYuZ5Ecfbdt1ubLAZDRlr09whCJzELBDKH687knYwqHvPNPPU52q0lELfMYNRwaIFtivk6ZUcieQYqHaw==
 
-"@navikt/ds-react-internal@0.14.28", "@navikt/ds-react-internal@^0.14.20", "@navikt/ds-react-internal@^0.14.x":
+"@navikt/ds-icons@1.3.x", "@navikt/ds-icons@^1.3.4":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.4/58670a8c1a7277eafbb0a7b5e4d8ee60f31ad23d#58670a8c1a7277eafbb0a7b5e4d8ee60f31ad23d"
+  integrity sha512-oGuajg5U6wAgqvwIKkLjA+dq4wbLZY4otLHvfgcUJyz5uNmFtYFsjdO1dP+G0+PqK5630vlKRbfYpeTbJY4cWQ==
+
+"@navikt/ds-icons@^0.8.18", "@navikt/ds-icons@^0.8.20", "@navikt/ds-icons@^0.8.x":
+  version "0.8.20"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.20/b3c52f1839929d2e755b1ce6da44b4e02caf6f7e#b3c52f1839929d2e755b1ce6da44b4e02caf6f7e"
+  integrity sha512-ftX5GHpH8WdGXfw94P5M3Nn1Bma/MI3TaL1zlMnXBoqs/lFo6V3BeKNTcGoFTE7mJLJDE8qrcvewCWK2E6pkgw==
+  dependencies:
+    uuid "^8.3.2"
+
+"@navikt/ds-react-internal@1.3.x":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react-internal/1.3.4/63d1953ed3f19b2d04f913583684ed7c72133253#63d1953ed3f19b2d04f913583684ed7c72133253"
+  integrity sha512-CiV/p7J6tYBoOiLU0F52kkIN3+ggEL0qpH9+kp7huxpmiN6vT3w/xo/eE6COQkowaSv1MXE6KRaY5MitZPL/NA==
+  dependencies:
+    "@navikt/ds-icons" "^1.3.4"
+    "@navikt/ds-react" "^1.3.4"
+    clsx "^1.1.1"
+    copy-to-clipboard "^3.3.1"
+
+"@navikt/ds-react-internal@^0.14.20", "@navikt/ds-react-internal@^0.14.x":
   version "0.14.28"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-react-internal/0.14.28/e0d8c27dee0b0d2ee0c85310f21941d602d6ffb2#e0d8c27dee0b0d2ee0c85310f21941d602d6ffb2"
   integrity sha512-aEld4Env9kZHmGD+SH+fia59RdHT7NiO+oMzh3Q26ML28UIpbiNM72bLmcu/6mkyBjxlUQD09T8JoiYxczUejQ==
@@ -2941,7 +2993,19 @@
     copy-to-clipboard "^3.3.1"
     react-merge-refs "^1.1.0"
 
-"@navikt/ds-react@0.19.27", "@navikt/ds-react@^0.19.19", "@navikt/ds-react@^0.19.27", "@navikt/ds-react@^0.19.x":
+"@navikt/ds-react@1.3.x", "@navikt/ds-react@^1.3.4":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.3.4/c33a6c9a2b4f6ede4e769d5b80f1fa68883ddac8#c33a6c9a2b4f6ede4e769d5b80f1fa68883ddac8"
+  integrity sha512-VK5HfZGoUPAyUpiGXHKDuEN0v5hfuPvzI5CxEQZyceM8A/+TybacMX2EcYqNlJAOcbHHMOiBRgej/hnj75AHOA==
+  dependencies:
+    "@floating-ui/react-dom-interactions" "0.9.2"
+    "@navikt/ds-icons" "^1.3.4"
+    "@radix-ui/react-tabs" "1.0.0"
+    "@radix-ui/react-toggle-group" "1.0.0"
+    clsx "^1.1.1"
+    react-modal "3.15.1"
+
+"@navikt/ds-react@^0.19.19", "@navikt/ds-react@^0.19.27", "@navikt/ds-react@^0.19.x":
   version "0.19.27"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.19.27/b04406abd8a5669841638c1fdc01db0962dcfb03#b04406abd8a5669841638c1fdc01db0962dcfb03"
   integrity sha512-CqiS6Lqhe2IaWTaZ8b4ZNx6lOAZ1+GcY1o2dh0xHUgjo9PGd3iHfSHevuekOxs/nHXHuvBWjne6bqZtBZ3JRUQ==
@@ -2959,15 +3023,20 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/ds-tokens@0.9.8", "@navikt/ds-tokens@^0.9.x":
-  version "0.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/0.9.8/2f3226abe39844915337395390159235bb9fd1cc#2f3226abe39844915337395390159235bb9fd1cc"
-  integrity sha512-44I4NS19RU9xQMgIBNZu2kLerhRN4BtnxOP40haqgo7n83XYVaJExSmwtspbnkzB9NUvvECjKkAsFNfZLjRqNQ==
-
 "@navikt/ds-tokens@1.2.x":
   version "1.2.5"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/1.2.5/3aad5dffdd27a8a52f8892479851773f95288767#3aad5dffdd27a8a52f8892479851773f95288767"
   integrity sha512-bgAFPiOk4Zp7ZyNRD13zkyEoyJKx67ucEmLet5Vvoz9JctK6lcGDxiX6lIZ5FQaUndn9ITRpEo9z/Q8oPSp0rg==
+
+"@navikt/ds-tokens@1.3.x":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/1.3.4/a0d9ef50ffde4a9844b0f33bc58f190354fe103f#a0d9ef50ffde4a9844b0f33bc58f190354fe103f"
+  integrity sha512-IY6lDLr8T7NQXrgCodQ5O+9GE31NmLgOaxx7rVw0GFMxakjjxxRobqnbtchSF+J+4svPESiJL59Tpmsj+JHh7g==
+
+"@navikt/ds-tokens@^0.9.x":
+  version "0.9.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/0.9.8/2f3226abe39844915337395390159235bb9fd1cc#2f3226abe39844915337395390159235bb9fd1cc"
+  integrity sha512-44I4NS19RU9xQMgIBNZu2kLerhRN4BtnxOP40haqgo7n83XYVaJExSmwtspbnkzB9NUvvECjKkAsFNfZLjRqNQ==
 
 "@navikt/familie-backend@^7.0.4":
   version "7.0.4"
@@ -3348,7 +3417,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "1.0.0"
 
-"@radix-ui/react-tabs@^1.0.0":
+"@radix-ui/react-tabs@1.0.0", "@radix-ui/react-tabs@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-tabs/-/react-tabs-1.0.0.tgz#135c67f1f2bd9ada69a3f6e38dd897d459af5fe5"
   integrity sha512-oKUwEDsySVC0uuSEH7SHCVt1+ijmiDFAI9p+fHCtuZdqrRDKIFs09zp5nrmu4ggP6xqSx9lj1VSblnDH+n3IBA==
@@ -3363,7 +3432,7 @@
     "@radix-ui/react-roving-focus" "1.0.0"
     "@radix-ui/react-use-controllable-state" "1.0.0"
 
-"@radix-ui/react-toggle-group@^1.0.0":
+"@radix-ui/react-toggle-group@1.0.0", "@radix-ui/react-toggle-group@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-toggle-group/-/react-toggle-group-1.0.0.tgz#6e78ffb13e0b4c1f789828930330638f4ba9c06d"
   integrity sha512-R/5sK4/BPgOYWAsheFaFpNFh0sLPHdqsBcqO5KW2+Foy36B2KBYrGd6Hu4HnzgivawVX+mSmVNhAwHA8Yb1hLA==
@@ -4942,6 +5011,13 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+aria-hidden@^1.1.3:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/aria-hidden/-/aria-hidden-1.2.1.tgz#ad8c1edbde360b454eb2bf717ea02da00bfee0f8"
+  integrity sha512-PN344VAf9j1EAi+jyVHOJ8XidQdPVssGco39eNcsGdM4wcsILtxrKLkbuiMfLWYROK1FjRQasMWCBttrhjnr6A==
+  dependencies:
+    tslib "^2.0.0"
+
 aria-query@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-4.2.2.tgz#0d2ca6c9aceb56b8977e9fed6aed7e15bbd2f83b"
@@ -5835,6 +5911,11 @@ clsx@^1.0.4:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
+
+clsx@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
 co@^4.6.0:
   version "4.6.0"
@@ -13603,15 +13684,15 @@ tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@^2.0.0, tslib@^2.3.1:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
 tslib@^2.0.3, tslib@^2.1.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
-
-tslib@^2.3.1:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tsutils@^3.17.1, tsutils@^3.21.0:
   version "3.21.0"
