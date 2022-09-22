@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
@@ -66,15 +65,15 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             id={`${id}`}
             value={standardbegrunnelser}
             propSelectStyles={{
-                container: (provided: CSSProperties) => ({
+                container: provided => ({
                     ...provided,
                     maxWidth: '50rem',
                 }),
-                groupHeading: (provided: CSSProperties) => ({
+                groupHeading: provided => ({
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided: CSSProperties, props: MultiValueProps<ISelectOption>) => {
+                multiValue: (provided, props: MultiValueProps<ISelectOption>) => {
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined =
                         finnVedtakBegrunnelseType(
                             vedtaksbegrunnelseTekster,
@@ -88,7 +87,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                         borderRadius: '0.5rem',
                     };
                 },
-                multiValueLabel: (provided: CSSProperties) => ({
+                multiValueLabel: provided => ({
                     ...provided,
                     whiteSpace: 'pre-wrap',
                     textOverflow: 'hidden',

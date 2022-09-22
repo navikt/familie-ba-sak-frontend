@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
@@ -173,7 +173,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                 mapUtdypendeVilkårsvurderingTilOption
             )}
             propSelectStyles={{
-                menu: (provided: CSSProperties) => ({
+                menu: provided => ({
                     ...provided,
                     zIndex: '3',
                 }),

@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import React from 'react';
 
 import navFarger from 'nav-frontend-core';
@@ -108,15 +107,15 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
             }}
             options={muligeOptions}
             propSelectStyles={{
-                container: (provided: CSSProperties) => ({
+                container: provided => ({
                     ...provided,
                     maxWidth: '25rem',
                 }),
-                groupHeading: (provided: CSSProperties) => ({
+                groupHeading: provided => ({
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided: CSSProperties) => {
+                multiValue: provided => {
                     return {
                         ...provided,
                         backgroundColor: hentBakgrunnsfarge(VedtakBegrunnelseType.AVSLAG),
@@ -124,13 +123,13 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
                         borderRadius: '0.5rem',
                     };
                 },
-                multiValueLabel: (provided: CSSProperties) => ({
+                multiValueLabel: provided => ({
                     ...provided,
                     whiteSpace: 'pre-wrap',
                     textOverflow: 'hidden',
                     overflow: 'hidden',
                 }),
-                multiValueRemove: (provided: CSSProperties) => ({
+                multiValueRemove: provided => ({
                     ...provided,
                     ':hover': {
                         backgroundColor: navFarger.navBla,

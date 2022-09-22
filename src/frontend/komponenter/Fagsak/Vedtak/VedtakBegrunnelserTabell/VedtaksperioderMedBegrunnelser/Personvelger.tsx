@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import React from 'react';
 
 import navFarger from 'nav-frontend-core';
@@ -24,21 +23,21 @@ const Personvelger: React.FC = () => {
     return (
         <FamilieReactSelect
             propSelectStyles={{
-                container: (provided: CSSProperties) => ({
+                container: provided => ({
                     ...provided,
                     maxWidth: '50rem',
                 }),
-                groupHeading: (provided: CSSProperties) => ({
+                groupHeading: provided => ({
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided: CSSProperties) => {
+                multiValue: provided => {
                     return {
                         ...provided,
                         borderRadius: '0.5rem',
                     };
                 },
-                multiValueRemove: (provided: CSSProperties) => ({
+                multiValueRemove: provided => ({
                     ...provided,
                     ':hover': {
                         backgroundColor: navFarger.navBla,
