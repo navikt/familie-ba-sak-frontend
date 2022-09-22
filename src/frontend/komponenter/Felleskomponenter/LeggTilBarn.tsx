@@ -7,7 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { HelpText, BodyLong, Heading, Button } from '@navikt/ds-react';
+import { BodyLong, Heading, Button } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -23,6 +23,7 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
+import HelpText from './HelpText';
 import UIModalWrapper from './Modal/UIModalWrapper';
 
 const LeggTilBarnKnapp = styled(Button)`

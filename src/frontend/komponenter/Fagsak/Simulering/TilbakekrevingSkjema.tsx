@@ -7,7 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import { Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Alert, BodyLong, Button, Heading, HelpText, Label, Radio, Tag } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, Label, Radio, Tag } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -20,6 +20,7 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
+import HelpText from '../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
