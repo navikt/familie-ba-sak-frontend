@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Office1Filled } from '@navikt/ds-icons';
+import { Button, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieCheckbox, FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieInput } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -19,7 +20,7 @@ import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler'
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
-const StyledDiv = styled.div`
+const FlexDiv = styled.div`
     display: flex;
 `;
 
@@ -27,10 +28,9 @@ const StyledCheckBoxWrapper = styled.div`
     margin-bottom: 1rem;
 `;
 
-const StyledKnapp = styled(FamilieKnapp)`
+const StyledButton = styled(Button)`
     margin-left: 1rem;
-    margin-top: auto;
-    height: 1rem;
+    margin-top: auto; // todo trengs denne?
 `;
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
@@ -154,71 +154,67 @@ export const BrukerPanel: React.FC = () => {
                     </StyledCheckBoxWrapper>
                 </div>
             )}
-            {skjema.felter.erPåInstitusjon.verdi && (
-                <StyledDiv>
-                    {!erLesevisning() && (
-                        <FamilieInput
-                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                                samhandlerSkjema.visFeilmeldinger
-                            )}
-                            erLesevisning={erLesevisning()}
-                            id={'hent-samhandler'}
-                            label={'Institusjonens organisasjonsnummer'}
-                            bredde={'XL'}
-                            placeholder={'organisasjonsnummer'}
-                        />
-                    )}
-                    <StyledKnapp
+            {skjema.felter.erPåInstitusjon.verdi && !erLesevisning() && (
+                <FlexDiv>
+                    <FamilieInput
+                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                            samhandlerSkjema.visFeilmeldinger
+                        )}
+                        erLesevisning={erLesevisning()}
+                        id={'hent-samhandler'}
+                        label={'Institusjonens organisasjonsnummer'}
+                        bredde={'XL'}
+                        placeholder={'organisasjonsnummer'}
+                    />
+                    <StyledButton
                         onClick={() => {
                             settSpinner(true);
                             onSubmitWrapper();
                             settSpinner(false);
                         }}
                         children={'Hent institusjon'}
-                        spinner={spinner}
-                        mini={true}
-                        erLesevisning={erLesevisning()}
+                        loading={spinner}
+                        size="small"
                     />
-                </StyledDiv>
+                </FlexDiv>
             )}
 
             {skjema.felter.samhandler.verdi !== null && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
             <br />
-            <StyledDiv>
+            <FlexDiv>
                 {!erLesevisning() && (
-                    <FamilieInput
-                        {...nyIdent.hentNavInputProps(!!feilMelding)}
-                        feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                        erLesevisning={erLesevisning()}
-                        id={'hent-person'}
-                        label={'Skriv inn fødselsnummer/D-nummer'}
-                        bredde={'XL'}
-                        placeholder={'fnr/dnr'}
-                    />
+                    <>
+                        <TextField
+                            {...nyIdent.hentNavInputProps(!!feilMelding)}
+                            error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                            label={'Endre bruker'}
+                            description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
+                        />
+                        <StyledButton
+                            onClick={() => {
+                                if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
+                                    settSpinner(true);
+                                    endreBruker(nyIdent.verdi)
+                                        .then((feilmelding: string) => {
+                                            settFeilMelding(feilmelding);
+                                        })
+                                        .finally(() => {
+                                            settSpinner(false);
+                                        });
+                                } else {
+                                    settFeilMelding('Person ident er ugyldig');
+                                }
+                            }}
+                            children={'Endre bruker'}
+                            loading={spinner}
+                            size="small"
+                            variant="secondary"
+                        />
+                    </>
                 )}
-                <StyledKnapp
-                    onClick={() => {
-                        if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                            settSpinner(true);
-                            endreBruker(nyIdent.verdi)
-                                .then((feilmelding: string) => {
-                                    settFeilMelding(feilmelding);
-                                })
-                                .finally(() => {
-                                    settSpinner(false);
-                                });
-                        } else {
-                            settFeilMelding('Person ident er ugyldig');
-                        }
-                    }}
-                    children={'Endre bruker'}
-                    spinner={spinner}
-                    mini={true}
-                    erLesevisning={erLesevisning()}
-                />
-            </StyledDiv>
+            </FlexDiv>
         </StyledEkspanderbartpanelBaseMedMargin>
     );
 };
