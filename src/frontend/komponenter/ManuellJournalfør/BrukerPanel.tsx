@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Office1Filled } from '@navikt/ds-icons';
-import { Button, TextField } from '@navikt/ds-react';
+import { Button, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieCheckbox, FamilieInput } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
@@ -104,6 +104,53 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
+            {erLesevisning() ? (
+                <>Lesevisning</>
+            ) : (
+                <>
+                    <FlexDiv>
+                        <TextField
+                            {...nyIdent.hentNavInputProps(!!feilMelding)}
+                            error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                            label={'Endre bruker'}
+                            description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
+                        />
+                        <StyledButton
+                            onClick={() => {
+                                if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
+                                    settSpinner(true);
+                                    endreBruker(nyIdent.verdi)
+                                        .then((feilmelding: string) => {
+                                            settFeilMelding(feilmelding);
+                                        })
+                                        .finally(() => {
+                                            settSpinner(false);
+                                        });
+                                } else {
+                                    settFeilMelding('Person ident er ugyldig');
+                                }
+                            }}
+                            children={'Endre bruker'}
+                            loading={spinner}
+                            size="small"
+                            variant="secondary"
+                        />
+                    </FlexDiv>
+                    {toggles[ToggleNavn.støtterInstitusjon] && skjema.felter.erPåInstitusjon.verdi && (
+                        <ReadMore
+                            size="medium"
+                            header="Søker er en institusjon eller enslig mindreårig"
+                        >
+                            <Select label="Fagsaktype" size="small">
+                                <option value="">Velg</option>
+                                <option value="institusjon">Institusjon</option>
+                                <option value="enslig-mindreårig">Enslig mindreårig</option>
+                            </Select>
+                        </ReadMore>
+                    )}
+                </>
+            )}
+
             {toggles[ToggleNavn.støtterInstitusjon] && (
                 <div>
                     <StyledCheckBoxWrapper>
@@ -114,9 +161,6 @@ export const BrukerPanel: React.FC = () => {
                             checked={skjema.felter.erEnsligMindreårig.verdi}
                             disabled={skjema.felter.erPåInstitusjon.verdi}
                             onChange={() => {
-                                if (erLesevisning()) {
-                                    return;
-                                }
                                 const oppdatertVerdi = !skjema.felter.erEnsligMindreårig.verdi;
                                 skjema.felter.erEnsligMindreårig.validerOgSettFelt(oppdatertVerdi);
                                 if (skjema.felter.bruker.verdi) {
@@ -137,9 +181,6 @@ export const BrukerPanel: React.FC = () => {
                             checked={skjema.felter.erPåInstitusjon.verdi}
                             disabled={skjema.felter.erEnsligMindreårig.verdi}
                             onChange={() => {
-                                if (erLesevisning()) {
-                                    return;
-                                }
                                 const oppdatertVerdi = !skjema.felter.erPåInstitusjon.verdi;
                                 skjema.felter.erPåInstitusjon.validerOgSettFelt(oppdatertVerdi);
                                 if (skjema.felter.bruker.verdi) {
@@ -154,7 +195,7 @@ export const BrukerPanel: React.FC = () => {
                     </StyledCheckBoxWrapper>
                 </div>
             )}
-            {skjema.felter.erPåInstitusjon.verdi && !erLesevisning() && (
+            {skjema.felter.erPåInstitusjon.verdi && (
                 <FlexDiv>
                     <FamilieInput
                         {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
@@ -182,39 +223,6 @@ export const BrukerPanel: React.FC = () => {
             {skjema.felter.samhandler.verdi !== null && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
-            <br />
-            <FlexDiv>
-                {!erLesevisning() && (
-                    <>
-                        <TextField
-                            {...nyIdent.hentNavInputProps(!!feilMelding)}
-                            error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                            label={'Endre bruker'}
-                            description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
-                        />
-                        <StyledButton
-                            onClick={() => {
-                                if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                                    settSpinner(true);
-                                    endreBruker(nyIdent.verdi)
-                                        .then((feilmelding: string) => {
-                                            settFeilMelding(feilmelding);
-                                        })
-                                        .finally(() => {
-                                            settSpinner(false);
-                                        });
-                                } else {
-                                    settFeilMelding('Person ident er ugyldig');
-                                }
-                            }}
-                            children={'Endre bruker'}
-                            loading={spinner}
-                            size="small"
-                            variant="secondary"
-                        />
-                    </>
-                )}
-            </FlexDiv>
         </StyledEkspanderbartpanelBaseMedMargin>
     );
 };
