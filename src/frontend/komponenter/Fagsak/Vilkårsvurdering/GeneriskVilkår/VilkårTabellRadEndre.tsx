@@ -22,7 +22,6 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import {
@@ -33,7 +32,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
-import { ToggleNavn } from '../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Regelverk } from '../../../../typer/vilkår';
 import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
@@ -102,8 +100,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settFokusPåKnapp,
     lesevisning,
 }) => {
-    const { toggles } = useApp();
-
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
@@ -115,9 +111,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(
-            validerVilkår(endretVilkår, { person, brukEøs: toggles[ToggleNavn.brukEøs] })
-        );
+        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -145,7 +139,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const onClickVilkårFerdig = () => {
         const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, {
             person,
-            brukEøs: toggles[ToggleNavn.brukEøs],
         });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
@@ -245,7 +238,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 lesevisning={lesevisning}
                 vilkårResultat={vilkårResultat.verdi.resultat.verdi}
             >
-                {toggles[ToggleNavn.brukEøs] && visRegelverkValg() && (
+                {visRegelverkValg() && (
                     <FamilieSelect
                         erLesevisning={lesevisning}
                         lesevisningVerdi={

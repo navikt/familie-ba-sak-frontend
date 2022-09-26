@@ -34,7 +34,6 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import { ToggleNavn } from '../typer/toggles';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
@@ -48,7 +47,7 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const navigate = useNavigate();
-    const { innloggetSaksbehandler, settToast, toggles } = useApp();
+    const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
@@ -220,8 +219,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                         OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter];
                     if (
                         oppgavetypeFilter === OppgavetypeFilter.JFR ||
-                        (oppgavetypeFilter === OppgavetypeFilter.BEH_SED &&
-                            toggles[ToggleNavn.brukEøs])
+                        oppgavetypeFilter === OppgavetypeFilter.BEH_SED
                     ) {
                         navigate(`/oppgaver/journalfor/${oppgave.id}`);
                     } else {

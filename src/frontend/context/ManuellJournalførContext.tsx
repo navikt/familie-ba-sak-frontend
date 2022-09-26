@@ -33,14 +33,13 @@ import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { innloggetSaksbehandler, toggles } = useApp();
+    const { innloggetSaksbehandler } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const navigate = useNavigate();
     const { request } = useHttp();
@@ -512,8 +511,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return dataForManuellJournalføring.status !== RessursStatus.SUKSESS
             ? false
             : dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.BEH_SED &&
-              tilordnetInnloggetSaksbehandler() &&
-              toggles[ToggleNavn.brukEøs]
+              tilordnetInnloggetSaksbehandler()
             ? true
             : !erLesevisning();
     };
