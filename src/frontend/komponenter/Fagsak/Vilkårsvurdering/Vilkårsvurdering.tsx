@@ -27,6 +27,7 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
+import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${NavdsSpacing2} 0;
@@ -60,6 +61,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         oppdaterRegisteropplysninger,
         vilkårsvurderingNesteOnClick,
         behandlingsstegSubmitressurs,
+        samhandlerOrgnr,
     } = useBehandling();
 
     const registeropplysningerHentetTidpsunkt =
@@ -159,7 +161,14 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>
                 )}
             </>
-            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+            {samhandlerOrgnr ? (
+                <VilkårsvurderingSkjemaInstitusjon
+                    visFeilmeldinger={visFeilmeldinger}
+                    orgNummer={samhandlerOrgnr}
+                />
+            ) : (
+                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+            )}
             {uregistrerteBarn.length > 0 && (
                 <Alert variant="info">
                     <BodyShort>

@@ -58,7 +58,6 @@ export const validerVilkår = (
                 vilkårType: nyttVilkårResultat.verdi.vilkårType,
                 resultat: nyttVilkårResultat.verdi.resultat.verdi,
                 vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
-                brukEøs: avhengigheter?.brukEøs,
             }
         );
 

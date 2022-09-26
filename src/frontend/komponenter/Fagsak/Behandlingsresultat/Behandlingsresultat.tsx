@@ -12,7 +12,6 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
 import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/KompetanseSkjemaContext';
@@ -27,7 +26,6 @@ import type {
     IRestUtenlandskPeriodeBeløp,
     IRestValutakurs,
 } from '../../../typer/eøsPerioder';
-import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatter';
@@ -69,7 +67,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { toggles } = useApp();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -164,11 +161,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     };
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const harKompetanser = toggles[ToggleNavn.brukEøs] && åpenBehandling.kompetanser?.length > 0;
-    const harUtenlandskeBeløper =
-        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
-    const harValutakurser =
-        toggles[ToggleNavn.brukEøs] && åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harKompetanser = åpenBehandling.kompetanser?.length > 0;
+    const harUtenlandskeBeløper = åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harValutakurser = åpenBehandling.utenlandskePeriodebeløp?.length > 0;
 
     const harEøs = harKompetanser || harUtenlandskeBeløper || harValutakurser;
 
@@ -258,7 +253,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     åpenBehandling={åpenBehandling}
                 />
             )}
-            {visFeilmeldinger && toggles[ToggleNavn.brukEøs] && !erEøsInformasjonGyldig() && (
+            {visFeilmeldinger && !erEøsInformasjonGyldig() && (
                 <StyledFeiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
                     feil={[

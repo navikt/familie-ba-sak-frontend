@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import classNames from 'classnames';
+import styled from 'styled-components';
 
-import { BodyShort, Checkbox, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, Switch } from '@navikt/ds-react';
 
 import type { BehandlingResultat } from '../../../typer/behandling';
 import { erBehandlingHenlagt } from '../../../typer/behandling';
@@ -13,6 +14,20 @@ import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
 import { BehandlingEllerTilbakekreving } from './BehandlingEllerTilbakekreving';
 import type { VisningBehandling } from './visningBehandling';
+
+const SwitchHøyre = styled(Switch)`
+    margin-top: 1rem;
+    margin-right: 0.275rem;
+    float: right;
+`;
+
+const StyledOpprettetKolonne = styled.th`
+    width: 10%;
+`;
+
+const StyledResultatKolonne = styled.th`
+    width: 22%;
+`;
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
@@ -54,27 +69,18 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
         ),
     ];
 
+    const finnesRadSomKanFiltreresBort = behandlinger.some(
+        (behandling: BehandlingTabellobjekt) => !visRad(behandling, false)
+    );
+
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
             <Heading
-                size={'medium'}
-                children={
-                    <>
-                        Behandlinger
-                        <Checkbox
-                            id={'vis-henlagte-behandlinger'}
-                            value={'Vis henlagte behandlinger'}
-                            checked={visHenlagteBehandlinger}
-                            onChange={() => {
-                                setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                            }}
-                        >
-                            {'Vis henlagte behandlinger'}
-                        </Checkbox>
-                    </>
-                }
+                level="2"
+                size={'small'}
+                children={'Behandlinger'}
             />
             {behandlinger.length > 0 ? (
                 <table
@@ -82,13 +88,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 >
                     <thead>
                         <tr>
-                            <th children={'Opprettet'} />
+                            <StyledOpprettetKolonne children={'Opprettet'} />
                             <th children={'Årsak'} />
                             <th children={'Type'} />
                             <th children={'Behandlingstema'} />
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
-                            <th children={'Resultat'} />
+                            <StyledResultatKolonne children={'Resultat'} />
                         </tr>
                     </thead>
                     <tbody>
@@ -111,6 +117,19 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 </table>
             ) : (
                 <BodyShort children={'Ingen tidligere behandlinger'} />
+            )}
+            {finnesRadSomKanFiltreresBort && (
+                <SwitchHøyre
+                    size="small"
+                    position="left"
+                    id={'vis-henlagte-behandlinger'}
+                    checked={visHenlagteBehandlinger}
+                    onChange={() => {
+                        setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
+                    }}
+                >
+                    Vis henlagte behandlinger
+                </SwitchHøyre>
             )}
         </div>
     );

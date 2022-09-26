@@ -11,7 +11,6 @@ import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
-import { ToggleNavn } from '../../typer/toggles';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import { AlertType, ToastTyper } from '../Felleskomponenter/Toast/typer';
 
@@ -22,7 +21,7 @@ interface IOppgaveDirektelenke {
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
-    const { sjekkTilgang, toggles } = useApp();
+    const { sjekkTilgang } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
     const navigate = useNavigate();
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
@@ -83,7 +82,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     />
                 );
             case OppgavetypeFilter.BEH_SED:
-                if (oppgavetype === OppgavetypeFilter.BEH_SED && toggles[ToggleNavn.brukEøs]) {
+                if (oppgavetype === OppgavetypeFilter.BEH_SED) {
                     return (
                         <Button
                             variant="tertiary"

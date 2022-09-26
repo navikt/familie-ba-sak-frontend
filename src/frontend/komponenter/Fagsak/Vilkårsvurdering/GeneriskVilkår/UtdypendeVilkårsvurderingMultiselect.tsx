@@ -5,9 +5,7 @@ import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { useApp } from '../../../../context/AppContext';
 import type { PersonType } from '../../../../typer/person';
-import { ToggleNavn } from '../../../../typer/toggles';
 import {
     UtdypendeVilkårsvurderingDeltBosted,
     UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
@@ -102,14 +100,11 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     personType,
     feilhåndtering,
 }) => {
-    const { toggles } = useApp();
-
     const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,
         resultat: redigerbartVilkår.verdi.resultat.verdi,
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
-        brukEøs: toggles[ToggleNavn.brukEøs],
     };
 
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
