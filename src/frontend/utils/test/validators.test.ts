@@ -378,7 +378,6 @@ describe('utils/validators', () => {
             vilkårType: VilkårType.BOSATT_I_RIKET,
             resultat: Resultat.OPPFYLT,
             vurderesEtter: null,
-            brukEøs: true,
         };
         const valideringForMangeValgteAlternativer = erUtdypendeVilkårsvurderingerGyldig(
             nyFeltState(utdypendeVilkårsvurderinger),

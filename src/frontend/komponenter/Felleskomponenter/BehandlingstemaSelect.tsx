@@ -4,10 +4,8 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { useApp } from '../../context/AppContext';
 import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
-import { BehandlingKategori, behandlingstemaer } from '../../typer/behandlingstema';
-import { ToggleNavn } from '../../typer/toggles';
+import { behandlingstemaer } from '../../typer/behandlingstema';
 
 interface EgneProps {
     behandlingstema: Felt<IBehandlingstema | undefined>;
@@ -23,7 +21,6 @@ export const BehandlingstemaSelect = ({
     erLesevisning = false,
     ...familieSelectProps
 }: Props) => {
-    const { toggles } = useApp();
     const { verdi } = behandlingstema;
     return (
         <FamilieSelect
@@ -54,9 +51,6 @@ export const BehandlingstemaSelect = ({
                         key={tema.id}
                         aria-selected={verdi !== undefined && verdi.id === tema.id}
                         value={tema.id}
-                        disabled={
-                            tema.kategori === BehandlingKategori.EØS && !toggles[ToggleNavn.brukEøs]
-                        }
                     >
                         {tema.navn}
                     </option>

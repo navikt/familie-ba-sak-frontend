@@ -17,7 +17,6 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     vilkårType: VilkårType.BOSATT_I_RIKET,
     resultat: Resultat.OPPFYLT,
     vurderesEtter: null,
-    brukEøs: true,
 };
 
 describe('Utdypende Vilkårsvurderinger', () => {
