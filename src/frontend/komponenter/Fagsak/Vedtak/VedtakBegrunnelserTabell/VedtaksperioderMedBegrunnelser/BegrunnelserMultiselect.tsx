@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import type { GroupBase } from 'react-select';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
@@ -7,7 +8,6 @@ import type {
     ActionMeta,
     FormatOptionLabelMeta,
     ISelectOption,
-    GroupType,
 } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -130,7 +130,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     return <BodyShort>{option.label}</BodyShort>;
                 }
             }}
-            formatGroupLabel={(group: GroupType<ISelectOption>) => {
+            formatGroupLabel={(group: GroupBase<ISelectOption>) => {
                 return (
                     <GroupLabel>
                         <Label>{group.label}</Label>

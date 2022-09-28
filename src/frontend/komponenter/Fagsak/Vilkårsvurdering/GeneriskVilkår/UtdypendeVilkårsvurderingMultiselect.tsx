@@ -170,7 +170,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
             propSelectStyles={{
                 menu: provided => ({
                     ...provided,
-                    zIndex: '3',
+                    ZIndex: '3',
                 }),
             }}
             creatable={false}
