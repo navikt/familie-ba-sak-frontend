@@ -23,7 +23,7 @@ import { useFagsakRessurser } from './FagsakContext';
 export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
     FØDSEL_MINDREÅRIG = 'FØDSEL_MINDREÅRIG',
-    FØDSEL_UMYNDIG = 'FØDSEL_UMYNDIG',
+    FØDSEL_VERGEMÅL = 'FØDSEL_VERGEMÅL',
     FØDSEL_GENERELL = 'FØDSEL_GENERELL',
     KAN_SØKE = 'KAN_SØKE',
     KAN_SØKE_EØS = 'KAN_SØKE_EØS',
@@ -32,7 +32,7 @@ export enum DokumentÅrsak {
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     DELT_BOSTED: 'Delt bosted',
     FØDSEL_MINDREÅRIG: 'Fødsel mindreårig',
-    FØDSEL_UMYNDIG: 'Fødsel umyndig',
+    FØDSEL_VERGEMÅL: 'Fødsel vergemål',
     FØDSEL_GENERELL: 'Fødsel generell',
     KAN_SØKE: 'Kan søke',
     KAN_SØKE_EØS: 'Kan søke EØS',
@@ -203,11 +203,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
                         });
-                    case DokumentÅrsak.FØDSEL_UMYNDIG:
+                    case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_UMYNDIG,
+                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({
