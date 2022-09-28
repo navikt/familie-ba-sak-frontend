@@ -77,11 +77,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Heading
-                level="2"
-                size={'small'}
-                children={'Behandlinger'}
-            />
+            <Heading level="2" size={'small'} children={'Behandlinger'} />
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}

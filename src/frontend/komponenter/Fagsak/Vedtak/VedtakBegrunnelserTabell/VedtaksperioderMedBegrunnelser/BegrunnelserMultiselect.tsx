@@ -6,9 +6,8 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import type {
     ActionMeta,
     FormatOptionLabelMeta,
-    GroupType,
     ISelectOption,
-    MultiValueProps,
+    GroupType,
 } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -73,11 +72,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided, props: MultiValueProps<ISelectOption>) => {
+                multiValue: (provided, props) => {
+                    const currentOption = props.data as ISelectOption;
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined =
                         finnVedtakBegrunnelseType(
                             vedtaksbegrunnelseTekster,
-                            props.data.value as VedtakBegrunnelse
+                            currentOption.value as VedtakBegrunnelse
                         );
 
                     return {
@@ -111,7 +111,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             }}
             formatOptionLabel={(
                 option: ISelectOption,
-                formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
+                formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
                     vedtaksbegrunnelseTekster,

@@ -263,7 +263,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     isMulti={true}
                     formatOptionLabel={(
                         option: ISelectOption,
-                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
+                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
                     ) => {
                         if (formatOptionLabelMeta.context === 'menu') {
                             return (
