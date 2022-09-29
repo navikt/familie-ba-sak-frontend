@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Office1Filled } from '@navikt/ds-icons';
 import { Button, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieCheckbox, FamilieInput } from '@navikt/familie-form-elements';
+import { FamilieInput } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -22,10 +22,7 @@ import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
 const FlexDiv = styled.div`
     display: flex;
-`;
-
-const StyledCheckBoxWrapper = styled.div`
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 `;
 
 const StyledButton = styled(Button)`
@@ -73,6 +70,16 @@ export const BrukerPanel: React.FC = () => {
 
     const erBrukerPåInstitusjon = !!skjema.felter.erPåInstitusjon.verdi;
 
+    const velgFagsaktype = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const erEnsligMindreårig = event.target.value === 'enslig-mindreårig';
+        const erInstitusjon = event.target.value === 'institusjon';
+        skjema.felter.erPåInstitusjon.validerOgSettFelt(erInstitusjon);
+        skjema.felter.erEnsligMindreårig.validerOgSettFelt(erEnsligMindreårig);
+        if (skjema.felter.bruker.verdi) {
+            endreBruker(skjema.felter.bruker.verdi?.personIdent, erEnsligMindreårig, erInstitusjon);
+        }
+    };
+
     return (
         <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
@@ -114,6 +121,7 @@ export const BrukerPanel: React.FC = () => {
                             error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
                             label={'Endre bruker'}
                             description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
+                            size="small"
                         />
                         <StyledButton
                             onClick={() => {
@@ -136,12 +144,12 @@ export const BrukerPanel: React.FC = () => {
                             variant="secondary"
                         />
                     </FlexDiv>
-                    {toggles[ToggleNavn.støtterInstitusjon] && skjema.felter.erPåInstitusjon.verdi && (
+                    {toggles[ToggleNavn.støtterInstitusjon] && (
                         <ReadMore
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
                         >
-                            <Select label="Fagsaktype" size="small">
+                            <Select label="Fagsaktype" size="small" onChange={velgFagsaktype}>
                                 <option value="">Velg</option>
                                 <option value="institusjon">Institusjon</option>
                                 <option value="enslig-mindreårig">Enslig mindreårig</option>
@@ -151,50 +159,6 @@ export const BrukerPanel: React.FC = () => {
                 </>
             )}
 
-            {toggles[ToggleNavn.støtterInstitusjon] && (
-                <div>
-                    <StyledCheckBoxWrapper>
-                        <FamilieCheckbox
-                            id={'enslig-mindreårig'}
-                            erLesevisning={false}
-                            label={'Bruker er enslig mindreårig'}
-                            checked={skjema.felter.erEnsligMindreårig.verdi}
-                            disabled={skjema.felter.erPåInstitusjon.verdi}
-                            onChange={() => {
-                                const oppdatertVerdi = !skjema.felter.erEnsligMindreårig.verdi;
-                                skjema.felter.erEnsligMindreårig.validerOgSettFelt(oppdatertVerdi);
-                                if (skjema.felter.bruker.verdi) {
-                                    endreBruker(
-                                        skjema.felter.bruker.verdi?.personIdent,
-                                        oppdatertVerdi,
-                                        skjema.felter.erPåInstitusjon.verdi
-                                    );
-                                }
-                            }}
-                        />
-                    </StyledCheckBoxWrapper>
-                    <StyledCheckBoxWrapper>
-                        <FamilieCheckbox
-                            id={'på-institusjon'}
-                            erLesevisning={false}
-                            label={'Bruker er på institusjon'}
-                            checked={skjema.felter.erPåInstitusjon.verdi}
-                            disabled={skjema.felter.erEnsligMindreårig.verdi}
-                            onChange={() => {
-                                const oppdatertVerdi = !skjema.felter.erPåInstitusjon.verdi;
-                                skjema.felter.erPåInstitusjon.validerOgSettFelt(oppdatertVerdi);
-                                if (skjema.felter.bruker.verdi) {
-                                    endreBruker(
-                                        skjema.felter.bruker.verdi?.personIdent,
-                                        skjema.felter.erEnsligMindreårig.verdi,
-                                        oppdatertVerdi
-                                    );
-                                }
-                            }}
-                        />
-                    </StyledCheckBoxWrapper>
-                </div>
-            )}
             {skjema.felter.erPåInstitusjon.verdi && (
                 <FlexDiv>
                     <FamilieInput
