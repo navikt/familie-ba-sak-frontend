@@ -70,9 +70,9 @@ export const BrukerPanel: React.FC = () => {
 
     const erBrukerPåInstitusjon = !!skjema.felter.erPåInstitusjon.verdi;
 
-    const velgFagsaktype = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const erEnsligMindreårig = event.target.value === 'enslig-mindreårig';
-        const erInstitusjon = event.target.value === 'institusjon';
+    const velgFagsaktype = (verdi?: string) => {
+        const erEnsligMindreårig = verdi === 'enslig-mindreårig';
+        const erInstitusjon = verdi === 'institusjon';
         skjema.felter.erPåInstitusjon.validerOgSettFelt(erInstitusjon);
         skjema.felter.erEnsligMindreårig.validerOgSettFelt(erEnsligMindreårig);
         if (skjema.felter.bruker.verdi) {
@@ -149,7 +149,11 @@ export const BrukerPanel: React.FC = () => {
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
                         >
-                            <Select label="Fagsaktype" size="small" onChange={velgFagsaktype}>
+                            <Select
+                                label="Fagsaktype"
+                                size="small"
+                                onChange={event => velgFagsaktype(event.target.value)}
+                            >
                                 <option value="">Velg</option>
                                 <option value="institusjon">Institusjon</option>
                                 <option value="enslig-mindreårig">Enslig mindreårig</option>
