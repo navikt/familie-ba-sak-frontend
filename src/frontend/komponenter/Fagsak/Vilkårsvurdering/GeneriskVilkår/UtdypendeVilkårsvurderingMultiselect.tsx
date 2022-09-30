@@ -122,7 +122,6 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     const håndterEndring = (action: ActionMeta<ISelectOption>) => {
         switch (action.action) {
             case 'select-option':
-            case 'set-value':
                 validerOgSettRedigerbartVilkår({
                     ...redigerbartVilkår,
                     verdi: mapOgLeggTilUtdypendeVilkårsvurdering(action, redigerbartVilkår.verdi),
