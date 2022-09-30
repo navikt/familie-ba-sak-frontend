@@ -3033,11 +3033,6 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/1.3.4/a0d9ef50ffde4a9844b0f33bc58f190354fe103f#a0d9ef50ffde4a9844b0f33bc58f190354fe103f"
   integrity sha512-IY6lDLr8T7NQXrgCodQ5O+9GE31NmLgOaxx7rVw0GFMxakjjxxRobqnbtchSF+J+4svPESiJL59Tpmsj+JHh7g==
 
-"@navikt/ds-tokens@^0.9.x":
-  version "0.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/0.9.8/2f3226abe39844915337395390159235bb9fd1cc#2f3226abe39844915337395390159235bb9fd1cc"
-  integrity sha512-44I4NS19RU9xQMgIBNZu2kLerhRN4BtnxOP40haqgo7n83XYVaJExSmwtspbnkzB9NUvvECjKkAsFNfZLjRqNQ==
-
 "@navikt/familie-backend@^7.0.4":
   version "7.0.4"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/7.0.4/e90fbdf6e9d46822eb3a3dc732acbcabe9ec9703c76dcbb283682be4240c2248#5663b88300cbb453feb4705536d92d3afd19959f"
@@ -3105,14 +3100,14 @@
     react-modal "^3.15.1"
     react-transition-group "^4.4.2"
 
-"@navikt/familie-form-elements@6.0.1":
-  version "6.0.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/6.0.1/96024096f1d1112c27aa5dfffb7f1c86362d69a8#96024096f1d1112c27aa5dfffb7f1c86362d69a8"
-  integrity sha512-ZvzFxOAXHBH+oZ+Jdk+Rw4zGkjuKUcxS1nzwj/Lobs8vQlyOPG8X1S7RpVNAJIVNgiRog/nx7+iVRpEKHogunA==
+"@navikt/familie-form-elements@6.2.x":
+  version "6.2.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/6.2.1/65d45846cf650029b6d45c89d3ea62e7c57da9ae#65d45846cf650029b6d45c89d3ea62e7c57da9ae"
+  integrity sha512-Z5ttbW1vDJnasZBPMhfzitqIxHwepBmPE3GbSqsZV3eZRAB5AW89MUiWpsHUoYU9yGOwhgw8bk00iiEepmDvpw==
   dependencies:
-    "@navikt/ds-css" "^0.18.x"
-    "@navikt/ds-react" "^0.19.x"
-    "@navikt/ds-tokens" "^0.9.x"
+    "@navikt/ds-css" "1.3.x"
+    "@navikt/ds-react" "1.3.x"
+    "@navikt/ds-tokens" "1.3.x"
     "@types/classnames" "^2.3.1"
     "@types/react-select" "^5.0.1"
     classnames "^2.3.1"
