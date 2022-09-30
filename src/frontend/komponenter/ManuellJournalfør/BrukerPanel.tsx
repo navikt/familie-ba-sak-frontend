@@ -153,6 +153,7 @@ export const BrukerPanel: React.FC = () => {
                                 onChange={event =>
                                     oppdaterFagsaktype(event.target.value as FagsakType)
                                 }
+                                value={skjema.felter.fagsakType.verdi}
                             >
                                 <option value={FagsakType.NORMAL}>Velg</option>
                                 <option value={FagsakType.INSTITUSJON}>Institusjon</option>
