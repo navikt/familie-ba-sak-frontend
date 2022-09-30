@@ -12,6 +12,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { FagsakType } from '../../typer/fagsak';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
@@ -68,15 +69,12 @@ export const BrukerPanel: React.FC = () => {
         }
     }, [samhandlerSkjema.submitRessurs.status]);
 
-    const erBrukerPåInstitusjon = !!skjema.felter.erPåInstitusjon.verdi;
+    const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
 
-    const velgFagsaktype = (verdi?: string) => {
-        const erEnsligMindreårig = verdi === 'enslig-mindreårig';
-        const erInstitusjon = verdi === 'institusjon';
-        skjema.felter.erPåInstitusjon.validerOgSettFelt(erInstitusjon);
-        skjema.felter.erEnsligMindreårig.validerOgSettFelt(erEnsligMindreårig);
+    const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
+        skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
         if (skjema.felter.bruker.verdi) {
-            endreBruker(skjema.felter.bruker.verdi?.personIdent, erEnsligMindreårig, erInstitusjon);
+            endreBruker(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
         }
     };
 
@@ -152,11 +150,15 @@ export const BrukerPanel: React.FC = () => {
                             <Select
                                 label="Fagsaktype"
                                 size="small"
-                                onChange={event => velgFagsaktype(event.target.value)}
+                                onChange={event =>
+                                    oppdaterFagsaktype(event.target.value as FagsakType)
+                                }
                             >
-                                <option value="">Velg</option>
-                                <option value="institusjon">Institusjon</option>
-                                <option value="enslig-mindreårig">Enslig mindreårig</option>
+                                <option value={FagsakType.NORMAL}>Velg</option>
+                                <option value={FagsakType.INSTITUSJON}>Institusjon</option>
+                                <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
+                                    Enslig mindreårig
+                                </option>
                             </Select>
                         </ReadMore>
                     )}
