@@ -152,18 +152,18 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                             !personErEkspandert[personResultat.personIdent],
                                     })
                                 }
+                                icon={
+                                    personErEkspandert[personResultat.personIdent] ? (
+                                        <CollapseFilled aria-hidden />
+                                    ) : (
+                                        <ExpandFilled aria-hidden />
+                                    )
+                                }
+                                iconPosition="right"
                             >
-                                {personErEkspandert[personResultat.personIdent] ? (
-                                    <>
-                                        Skjul vilkårsvurdering
-                                        <CollapseFilled />
-                                    </>
-                                ) : (
-                                    <>
-                                        Vis vilkårsvurdering
-                                        <ExpandFilled />
-                                    </>
-                                )}
+                                {personErEkspandert[personResultat.personIdent]
+                                    ? 'Skjul vilkårsvurdering'
+                                    : 'Vis vilkårsvurdering'}
                             </Button>
                         </PersonLinje>
 
