@@ -324,7 +324,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         }
                         label={'Fødselsnummer / D-nummer'}
                         placeholder={'11 siffer'}
-                        inputRef={fnrInputRef}
+                        ref={fnrInputRef}
                     />
                     <DrekLenkeContainer>
                         <Lenke
