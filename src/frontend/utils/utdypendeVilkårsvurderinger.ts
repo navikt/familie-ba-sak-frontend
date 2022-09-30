@@ -19,7 +19,6 @@ export interface UtdypendeVilkårsvurderingAvhengigheter {
     vilkårType: VilkårType;
     resultat: Resultat;
     vurderesEtter: Regelverk | null;
-    brukEøs: boolean;
 }
 
 export const bestemMuligeUtdypendeVilkårsvurderinger = (

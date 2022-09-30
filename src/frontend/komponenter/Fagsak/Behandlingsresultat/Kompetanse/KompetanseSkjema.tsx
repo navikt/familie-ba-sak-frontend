@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Alert, Heading, Table } from '@navikt/ds-react';
 
 import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import KompetanseTabellRad from './KompetanseTabellRad';
@@ -52,11 +53,20 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
             <Heading spacing size="medium" level="3">
                 Kompetanse
             </Heading>
-            {harUfullstendigeKompetanser && (
+            {harUfullstendigeKompetanser && åpenBehandling.årsak !== BehandlingÅrsak.MIGRERING && (
                 <Alert
                     variant={'warning'}
                     fullWidth
                     children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
+                />
+            )}
+            {harUfullstendigeKompetanser && åpenBehandling.årsak === BehandlingÅrsak.MIGRERING && (
+                <Alert
+                    variant={'info'}
+                    fullWidth
+                    children={
+                        'Saken er migrert og kompetansen er hentet fra Infotrygd. Kompetanseskjemaet er derfor ikke fullstendig utfylt.'
+                    }
                 />
             )}
             <StyledTable>
