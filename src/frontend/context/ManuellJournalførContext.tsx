@@ -399,8 +399,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 : nyBehandlingsårsak,
 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
-                        erEnsligMindreårig: skjema.felter.erEnsligMindreårig.verdi,
-                        erPåInstitusjon: skjema.felter.erPåInstitusjon.verdi,
                         fagsakType: skjema.felter.fagsakType.verdi,
                         institusjon:
                             skjema.felter.samhandler && skjema.felter.samhandler.verdi?.orgNummer
