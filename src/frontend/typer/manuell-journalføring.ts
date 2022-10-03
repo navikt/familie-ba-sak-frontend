@@ -79,8 +79,6 @@ export interface IRestJournalføring {
     navIdent: string;
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
-    erEnsligMindreårig: boolean;
-    erPåInstitusjon: boolean;
     fagsakType: FagsakType;
 }
 
