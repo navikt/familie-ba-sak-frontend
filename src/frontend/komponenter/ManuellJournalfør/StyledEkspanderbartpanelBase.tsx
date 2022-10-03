@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
-export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)<{
+export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase).withConfig({
+    shouldForwardProp: prop => !['visFeilmeldinger', 'valgt'].includes(prop),
+})<{
     visFeilmeldinger: boolean;
     valgt?: boolean;
 }>`
