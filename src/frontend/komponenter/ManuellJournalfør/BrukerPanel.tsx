@@ -161,6 +161,13 @@ export const BrukerPanel: React.FC = () => {
                                     Enslig mindreårig
                                 </option>
                             </Select>
+                            {erBrukerPåInstitusjon && (
+                                <Select label="Institusjon" size="small">
+                                    <option value="">Velg</option>
+                                    {/*TODO: Hente institusjons-fagsaker og lagre ned staten på selecten riktig*/}
+                                    <option value="ny-institusjon">Ny institusjon</option>
+                                </Select>
+                            )}
                         </ReadMore>
                     )}
                 </>
