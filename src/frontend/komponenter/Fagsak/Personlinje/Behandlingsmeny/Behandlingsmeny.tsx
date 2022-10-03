@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import '@navikt/ds-css-internal';
 import { Button } from '@navikt/ds-react';
@@ -27,6 +28,10 @@ interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
 
+const PosisjonertMenyknapp = styled(Button)`
+    margin-left: 3rem;
+`;
+
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
     const navigate = useNavigate();
@@ -34,9 +39,9 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
 
     return (
         <Dropdown>
-            <Button as={Dropdown.Toggle} id={'behandlingsmeny-arialabel-knapp'}>
+            <PosisjonertMenyknapp variant="secondary" size="small" forwardedAs={Dropdown.Toggle}>
                 Meny
-            </Button>
+            </PosisjonertMenyknapp>
             <Dropdown.Menu>
                 <Dropdown.Menu.List>
                     {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
