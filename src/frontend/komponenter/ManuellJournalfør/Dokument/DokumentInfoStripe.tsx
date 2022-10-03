@@ -20,7 +20,7 @@ const DokumentInfoStripeContainer = styled.div`
 
 const DokumentTittelContainer = styled.div`
     display: flex;
-    justfify-content: left;
+    justify-content: left;
     flex-direction: column;
 `;
 
