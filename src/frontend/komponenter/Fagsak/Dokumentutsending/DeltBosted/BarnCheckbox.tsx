@@ -119,8 +119,8 @@ const BarnCheckbox: React.FC<IProps> = ({
                                 ),
                             ]);
                         }}
+                        icon={<Slett />}
                     >
-                        <Slett />
                         {'Fjern barn'}
                     </FjernBarnKnapp>
                 )}

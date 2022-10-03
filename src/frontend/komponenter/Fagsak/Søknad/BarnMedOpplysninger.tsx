@@ -121,8 +121,9 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                                 ),
                             ]);
                         }}
+                        icon={<Slett />}
                     >
-                        <Slett /> {'Fjern barn'}
+                        {'Fjern barn'}
                     </FjernBarnKnapp>
                 ) : null)}
             <UIModalWrapper

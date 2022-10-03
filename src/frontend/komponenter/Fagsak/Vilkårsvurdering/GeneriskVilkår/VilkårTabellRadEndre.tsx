@@ -435,8 +435,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             loading={vilkårSubmit === VilkårSubmit.DELETE}
                             disabled={vilkårSubmit === VilkårSubmit.DELETE}
                             size={'small'}
+                            icon={<Delete />}
                         >
-                            <Delete />
                             {'Fjern'}
                         </Button>
                     ) : null}

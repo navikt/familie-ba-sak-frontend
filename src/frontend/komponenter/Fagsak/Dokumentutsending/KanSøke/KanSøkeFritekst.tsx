@@ -114,8 +114,10 @@ const KanSøkeFritekst = ({
                                     id={`fjern_fritekst-${fritekstId}`}
                                     size={'small'}
                                     aria-label={'Fjern fritekst'}
+                                    icon={<Slett />}
+                                    iconPosition={'right'}
                                 >
-                                    {'Fjern'} <Slett />
+                                    {'Fjern'}
                                 </SletteKnapp>
                             </StyledFamilieFritekstFelt>
                         );
@@ -128,8 +130,8 @@ const KanSøkeFritekst = ({
                         onClick={leggTilFritekst}
                         id={`legg-til-fritekst`}
                         size={'small'}
+                        icon={<Pluss />}
                     >
-                        <Pluss />
                         {'Legg til fritekst'}
                     </Button>
                 )}

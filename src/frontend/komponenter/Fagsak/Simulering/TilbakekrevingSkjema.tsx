@@ -338,8 +338,8 @@ const TilbakekrevingSkjema: React.FC<{
                                             }
                                             loading={hentetDokument.status === RessursStatus.HENTER}
                                             size={'small'}
+                                            icon={<DokumentIkon />}
                                         >
-                                            <DokumentIkon />
                                             {'Forhåndsvis varsel'}
                                         </Button>
                                     </ForhåndsvisVarselKnappContainer>

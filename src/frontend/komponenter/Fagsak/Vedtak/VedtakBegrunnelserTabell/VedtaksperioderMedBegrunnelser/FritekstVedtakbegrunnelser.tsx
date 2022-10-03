@@ -197,8 +197,10 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             id={`fjern_fritekst-${fritekstId}`}
                                             size={'small'}
                                             aria-label={'Fjern fritekst'}
+                                            icon={<Slett />}
+                                            iconPosition={'right'}
                                         >
-                                            {'Fjern'} <Slett />
+                                            {'Fjern'}
                                         </SletteKnapp>
                                     </StyledFamilieFritekstFelt>
                                 );
@@ -213,8 +215,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                 onClick={leggTilFritekst}
                                 id={`legg-til-fritekst`}
                                 size={'small'}
+                                icon={<Pluss />}
                             >
-                                <Pluss />
                                 {'Legg til fritekst'}
                             </Button>
                         ) : null)}
@@ -251,8 +253,9 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             onClick={leggTilFritekst}
             id={`legg-til-fritekst`}
             size={'small'}
+            icon={<Pluss />}
         >
-            <Pluss /> {'Legg til fritekst'}
+            {'Legg til fritekst'}
         </Button>
     ) : null;
 };

@@ -103,13 +103,18 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                             onClick={() => toggleForm(true)}
                             id={annenVurderingFeilmeldingId(annenVurdering.verdi)}
                             size={'small'}
+                            icon={
+                                <FamilieChevron
+                                    retning={ekspandertAnnenVurdering ? 'opp' : 'ned'}
+                                />
+                            }
+                            iconPosition={'right'}
                         >
                             {!ekspandertAnnenVurdering
                                 ? annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
                                     ? 'Vurder'
                                     : 'Endre'
                                 : 'Lukk'}
-                            <FamilieChevron retning={ekspandertAnnenVurdering ? 'opp' : 'ned'} />
                         </Button>
                     ) : null}
                 </td>

@@ -238,8 +238,8 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 onClick={() => {
                     settVisModal(true);
                 }}
+                icon={<Pluss />}
             >
-                <Pluss />
                 {'Legg til barn'}
             </LeggTilBarnKnapp>
 

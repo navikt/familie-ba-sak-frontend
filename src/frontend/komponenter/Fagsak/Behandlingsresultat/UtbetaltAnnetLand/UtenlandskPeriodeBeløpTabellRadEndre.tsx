@@ -261,8 +261,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             size={'small'}
+                            icon={<Delete />}
                         >
-                            <Delete />
                             {'Fjern'}
                         </Button>
                     ) : null}

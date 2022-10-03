@@ -433,8 +433,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
                                 size={'small'}
                                 onClick={slettEndretUtbetaling}
+                                icon={<Delete />}
                             >
-                                <Delete />
                                 {'Fjern Periode'}
                             </Button>
                         ) : null}

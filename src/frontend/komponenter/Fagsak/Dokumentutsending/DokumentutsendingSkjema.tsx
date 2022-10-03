@@ -122,8 +122,8 @@ const DokumentutsendingSkjema: React.FC = () => {
                     loading={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
+                    icon={<DokumentIkon />}
                 >
-                    <DokumentIkon />
                     {'Forhåndsvis'}
                 </Button>
 

@@ -134,8 +134,10 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                                     leggTilVilkårUtvidet(personResultat.personIdent)
                                                 }
                                                 size={'small'}
+                                                icon={
+                                                    <AddCircle title="Legg til vilkår utvidet barnetrygd" />
+                                                }
                                             >
-                                                <AddCircle title="Legg til vilkår utvidet barnetrygd" />{' '}
                                                 {`Legg til vilkår utvidet barnetrygd`}
                                             </Button>
                                         ) : null}

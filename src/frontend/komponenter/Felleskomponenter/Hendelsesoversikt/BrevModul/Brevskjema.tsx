@@ -311,9 +311,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                             id={`fjern_fritekst-${fritekstId}`}
                                                             size={'small'}
                                                             aria-label={'Fjern fritekst'}
+                                                            icon={<Slett />}
+                                                            iconPosition={'right'}
                                                         >
                                                             {'Fjern'}
-                                                            <Slett />
                                                         </SletteKnapp>
                                                     )}
                                                 </StyledFamilieFritekstFelt>
@@ -329,8 +330,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                             onClick={() => leggTilFritekst()}
                                             id={`legg-til-fritekst`}
                                             size={'small'}
+                                            icon={<Pluss />}
                                         >
-                                            <Pluss />
                                             {'Legg til kulepunkt'}
                                         </Button>
                                     ) : null)}
@@ -405,8 +406,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 });
                             }
                         }}
+                        icon={<DokumentIkon />}
                     >
-                        <DokumentIkon />
                         {'Forhåndsvis'}
                     </Button>
                 ) : null}

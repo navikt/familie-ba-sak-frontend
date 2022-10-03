@@ -143,8 +143,8 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                             ),
                                         });
                                     }}
+                                    icon={<Slett />}
                                 >
-                                    <Slett />
                                     {'Fjern'}
                                 </FjernAvtaleKnapp>
                             )}
@@ -166,8 +166,9 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }
+                    icon={<Pluss />}
                 >
-                    <Pluss /> {'Legg til dato for avtale'}
+                    {'Legg til dato for avtale'}
                 </LeggTilAvtaleKnapp>
             )}
         </Container>

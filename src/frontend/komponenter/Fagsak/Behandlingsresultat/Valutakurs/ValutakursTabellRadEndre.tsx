@@ -257,8 +257,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 loading={sletterValutakurs}
                                 disabled={sletterValutakurs}
                                 size={'small'}
+                                icon={<Delete />}
                             >
-                                <Delete />
                                 {'Fjern'}
                             </Button>
                         ) : null)}
