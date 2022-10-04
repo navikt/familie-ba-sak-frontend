@@ -10,6 +10,7 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
+import { useFagsakContext } from '../../../context/FagsakContext';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
@@ -63,6 +64,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+    const { fagsakerPåBruker } = useFagsakContext();
 
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
@@ -192,7 +194,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 >
                     <StyledUndertittel tag={'h3'}>
                         {`Personen har ${
-                            (personInfo?.fagsakIder?.size || 0) > 0 ? 'en eksisterende' : 'ingen'
+                            (fagsakerPåBruker?.length || 0) > 0 ? 'en eksisterende' : 'ingen'
                         } tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                             personen?`}
                     </StyledUndertittel>

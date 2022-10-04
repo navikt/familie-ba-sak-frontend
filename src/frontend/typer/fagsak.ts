@@ -40,6 +40,19 @@ export interface IMinimalFagsak extends IBaseFagsak {
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
+export const mapMinimalFagsakTilBaseFagsak = (it: IMinimalFagsak): IBaseFagsak => ({
+    id: it.id,
+    opprettetTidspunkt: it.opprettetTidspunkt,
+    saksnummer: it.saksnummer,
+    status: it.status,
+    søkerFødselsnummer: it.søkerFødselsnummer,
+    underBehandling: it.underBehandling,
+    løpendeKategori: it.løpendeKategori,
+    løpendeUnderkategori: it.løpendeUnderkategori,
+    fagsakType: it.fagsakType,
+    institusjon: it.institusjon,
+});
+
 export const fagsakStatus: INøkkelPar = {
     OPPRETTET: {
         id: 'OPPRETTET',
