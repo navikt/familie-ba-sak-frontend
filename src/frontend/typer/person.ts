@@ -63,7 +63,7 @@ export interface IPersonInfo {
     personIdent: string;
     type: PersonType;
     dødsfallDato?: string;
-    fagsakId?: Map<FagsakType, number>;
+    fagsakIder?: Map<number, FagsakType>;
     bostedsadresse?: IBostedsadresse;
 }
 

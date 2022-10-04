@@ -96,11 +96,11 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 settBruker(sjekkTilgangTilPerson(hentetPerson));
             } else if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
                 const brukerMedFagsakId = brukerEtterTilgangssjekk.data;
-                brukerMedFagsakId.fagsakId = new Map<FagsakType, number>();
+                brukerMedFagsakId.fagsakIder = new Map<number, FagsakType>();
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
                     if (fagsaker.status === RessursStatus.SUKSESS) {
-                        fagsaker.data.map(it =>
-                            brukerMedFagsakId.fagsakId?.set(it.fagsakType, it.id)
+                        fagsaker.data.forEach(it =>
+                            brukerMedFagsakId.fagsakIder?.set(it.id, it.fagsakType)
                         );
                     }
                     settBruker(sjekkTilgangTilPerson(byggDataRessurs(brukerMedFagsakId)));
