@@ -105,8 +105,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
-            erEnsligMindreårig: boolean;
-            erPåInstitusjon: boolean;
             fagsakType: FagsakType;
             samhandler: ISamhandlerInfo | null;
         },
@@ -160,12 +158,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingsårsak,
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
-            }),
-            erEnsligMindreårig: useFelt<boolean>({
-                verdi: false,
-            }),
-            erPåInstitusjon: useFelt<boolean>({
-                verdi: false,
             }),
             fagsakType: useFelt<FagsakType>({
                 verdi: FagsakType.NORMAL,

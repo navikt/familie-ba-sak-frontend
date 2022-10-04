@@ -27,7 +27,7 @@ const FlexDiv = styled.div`
 
 const StyledButton = styled(Button)`
     margin-left: 1rem;
-    margin-top: auto; // todo trengs denne?
+    margin-top: auto;
 `;
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
