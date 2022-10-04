@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Office1Filled } from '@navikt/ds-icons';
 import { Button, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieInput } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -49,7 +48,8 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+    const { samhandlerSkjema } = useSamhandlerSkjema();
+
     useEffect(() => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
@@ -164,38 +164,12 @@ export const BrukerPanel: React.FC = () => {
                             {erBrukerPåInstitusjon && (
                                 <Select label="Institusjon" size="small">
                                     <option value="">Velg</option>
-                                    {/*TODO: Hente institusjons-fagsaker og lagre ned staten på selecten riktig*/}
                                     <option value="ny-institusjon">Ny institusjon</option>
                                 </Select>
                             )}
                         </ReadMore>
                     )}
                 </>
-            )}
-
-            {skjema.felter.erPåInstitusjon.verdi && (
-                <FlexDiv>
-                    <FamilieInput
-                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                            samhandlerSkjema.visFeilmeldinger
-                        )}
-                        erLesevisning={erLesevisning()}
-                        id={'hent-samhandler'}
-                        label={'Institusjonens organisasjonsnummer'}
-                        bredde={'XL'}
-                        placeholder={'organisasjonsnummer'}
-                    />
-                    <StyledButton
-                        onClick={() => {
-                            settSpinner(true);
-                            onSubmitWrapper();
-                            settSpinner(false);
-                        }}
-                        children={'Hent institusjon'}
-                        loading={spinner}
-                        size="small"
-                    />
-                </FlexDiv>
             )}
 
             {skjema.felter.samhandler.verdi !== null && (
