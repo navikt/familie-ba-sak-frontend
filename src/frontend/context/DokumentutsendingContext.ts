@@ -18,7 +18,7 @@ import { Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
-import { useFagsakRessurser } from './FagsakContext';
+import { useFagsakContext } from './FagsakContext';
 
 export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
@@ -40,7 +40,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
     ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker } = useFagsakRessurser();
+        const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetDokument } = useDokument();
 

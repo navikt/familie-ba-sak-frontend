@@ -6,7 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -16,7 +16,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
-    const { minimalFagsak } = useFagsakRessurser();
+    const { minimalFagsak } = useFagsakContext();
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {

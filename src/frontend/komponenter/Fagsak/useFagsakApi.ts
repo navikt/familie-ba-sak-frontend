@@ -5,7 +5,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IOpprettEllerHentFagsakData } from '../../api/fagsak';
-import { useFagsakRessurser } from '../../context/FagsakContext';
+import { useFagsakContext } from '../../context/FagsakContext';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import type { VisningBehandling } from './Saksoversikt/visningBehandling';
@@ -14,7 +14,7 @@ const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
     settFeilmelding: (feilmelding: string) => void
 ) => {
-    const { settMinimalFagsak } = useFagsakRessurser();
+    const { settMinimalFagsak } = useFagsakContext();
     const { request } = useHttp();
 
     const navigate = useNavigate();

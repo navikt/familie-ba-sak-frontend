@@ -3,7 +3,7 @@ import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../context/FagsakContext';
+import { useFagsakContext } from '../context/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
-    const { bruker: brukerRessurs } = useFagsakRessurser();
+    const { bruker: brukerRessurs } = useFagsakContext();
 
     const barnMedDeltBosted = useFelt<IBarnMedOpplysninger[]>({
         verdi: [],

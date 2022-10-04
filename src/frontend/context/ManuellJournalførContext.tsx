@@ -36,11 +36,11 @@ import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbeh
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
-import { useFagsakRessurser } from './FagsakContext';
+import { useFagsakContext } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
-    const { hentFagsakForPerson } = useFagsakRessurser();
+    const { hentFagsakForPerson } = useFagsakContext();
     const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();

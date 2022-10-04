@@ -15,7 +15,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
@@ -31,7 +31,7 @@ const useOpprettBehandling = (
 ) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { settÅpenBehandling } = useBehandling();
-    const { bruker: brukerRessurs } = useFagsakRessurser();
+    const { bruker: brukerRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
 

@@ -20,7 +20,7 @@ import { FagsakType } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
-const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
+const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [minimalFagsak, settMinimalFagsak] = React.useState<Ressurs<IMinimalFagsak>>(
         byggTomRessurs()
     );
@@ -160,4 +160,4 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 });
 
-export { FagsakProvider, useFagsakRessurser };
+export { FagsakProvider, useFagsakContext };
