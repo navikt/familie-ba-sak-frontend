@@ -49,7 +49,7 @@ const FjernBarnKnapp = styled(IkonKnapp)`
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, gjelderInstitusjon } = useBehandling();
     const [visHarLøpendeModal, settVisHarLøpendeModal] = useState(false);
 
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
@@ -75,7 +75,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     return (
         <CheckboxOgSlettknapp>
             <StyledFamilieCheckbox
-                erLesevisning={erLesevisning()}
+                erLesevisning={erLesevisning() || gjelderInstitusjon}
                 label={
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>

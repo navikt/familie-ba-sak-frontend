@@ -47,7 +47,7 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
-        const { erLesevisning, settÅpenBehandling } = useBehandling();
+        const { erLesevisning, settÅpenBehandling, gjelderInstitusjon } = useBehandling();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { bruker, minimalFagsak } = useFagsakContext();
@@ -101,23 +101,37 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const tilbakestillSøknad = () => {
             if (bruker.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
-                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                    bruker.data.forelderBarnRelasjon
-                        .filter(
-                            (relasjon: IForelderBarnRelasjon) =>
-                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        )
-                        .map(
-                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
-                                ident: relasjon.personIdent,
-                                navn: relasjon.navn,
-                                fødselsdato: relasjon.fødselsdato,
-                                manueltRegistrert: false,
-                                erFolkeregistrert: true,
-                            })
-                        ) ?? []
-                );
+                let barnaMedOpplysninger: IBarnMedOpplysninger[];
+                if (gjelderInstitusjon) {
+                    barnaMedOpplysninger = [
+                        {
+                            merket: true,
+                            ident: bruker.data.personIdent,
+                            navn: bruker.data.navn,
+                            fødselsdato: bruker.data.fødselsdato,
+                            manueltRegistrert: false,
+                            erFolkeregistrert: true,
+                        },
+                    ];
+                } else {
+                    barnaMedOpplysninger =
+                        bruker.data.forelderBarnRelasjon
+                            .filter(
+                                (relasjon: IForelderBarnRelasjon) =>
+                                    relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                            )
+                            .map(
+                                (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                                    merket: false,
+                                    ident: relasjon.personIdent,
+                                    navn: relasjon.navn,
+                                    fødselsdato: relasjon.fødselsdato,
+                                    manueltRegistrert: false,
+                                    erFolkeregistrert: true,
+                                })
+                            ) ?? [];
+                }
+                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
             }
             settSøknadErLastetFraBackend(false);
         };
