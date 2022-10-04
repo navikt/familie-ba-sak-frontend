@@ -12,8 +12,6 @@ import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../../typer/sam
 import { orgnummerValidator } from '../../../utils/validators';
 
 export const useSamhandlerSkjema = () => {
-    const [orgnr, settOrgnr] = useState('');
-
     const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
         ISamhandlerInfoRequest,
         ISamhandlerInfo
@@ -31,14 +29,12 @@ export const useSamhandlerSkjema = () => {
         onSubmit(
             hentSamhandlerdataForOrgnrConfig(skjema.felter.orgnr.verdi),
             (ressurs: Ressurs<ISamhandlerInfo>) => {
-                settOrgnr(skjema.felter.orgnr.verdi);
                 settSubmitRessurs(ressurs);
             }
         );
     };
 
     return {
-        orgnr,
         onSubmitWrapper,
         samhandlerSkjema: skjema,
     };

@@ -1,6 +1,5 @@
 import type { kjønnType } from '@navikt/familie-typer';
 
-import type { FagsakType } from './fagsak';
 import type { Målform } from './søknad';
 
 // Enum
@@ -63,7 +62,6 @@ export interface IPersonInfo {
     personIdent: string;
     type: PersonType;
     dødsfallDato?: string;
-    fagsakId?: Map<FagsakType, number>;
     bostedsadresse?: IBostedsadresse;
 }
 

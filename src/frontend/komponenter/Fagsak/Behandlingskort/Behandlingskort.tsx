@@ -7,7 +7,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useFagsakContext } from '../../../context/FagsakContext';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlingResultat,
@@ -87,7 +87,7 @@ const StyledHr = styled.hr`
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
-    const minimalFagsak = hentDataFraRessurs(useFagsakRessurser().minimalFagsak);
+    const minimalFagsak = hentDataFraRessurs(useFagsakContext().minimalFagsak);
     const behandlinger = minimalFagsak?.behandlinger ?? [];
 
     const antallBehandlinger = behandlinger.length;

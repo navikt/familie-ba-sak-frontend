@@ -23,7 +23,7 @@ import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from './FagsakContext';
+import { useFagsakContext } from './FagsakContext';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>
@@ -106,7 +106,7 @@ export const mottakersMålformImplementering = (
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
-    const { minimalFagsak } = useFagsakRessurser();
+    const { minimalFagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;

@@ -10,7 +10,7 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
-import { FagsakType } from '../../../typer/fagsak';
+import { FagsakType, type IBaseFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
@@ -24,6 +24,7 @@ export interface IOpprettFagsakModal {
     lukkModal: () => void;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
+    fagsakerPåBruker?: IBaseFagsak[];
 }
 
 const StyledDiv = styled.div`
@@ -55,6 +56,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
     personInfo,
+    fagsakerPåBruker,
 }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang, toggles } = useApp();
@@ -192,7 +194,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 >
                     <StyledUndertittel tag={'h3'}>
                         {`Personen har ${
-                            (personInfo?.fagsakId?.size || 0) > 0 ? 'en eksisternede' : 'ingen'
+                            (fagsakerPåBruker?.length || 0) > 0 ? 'en eksisterende' : 'ingen'
                         } tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                             personen?`}
                     </StyledUndertittel>
