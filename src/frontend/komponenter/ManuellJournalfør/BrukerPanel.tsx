@@ -109,9 +109,7 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
-            {erLesevisning() ? (
-                <>Lesevisning</>
-            ) : (
+            {!erLesevisning() && (
                 <>
                     <FlexDiv>
                         <TextField
