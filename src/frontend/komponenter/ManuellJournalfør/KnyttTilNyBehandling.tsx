@@ -25,7 +25,9 @@ export const KnyttTilNyBehandling: React.FC = () => {
         skjema.felter;
     return (
         <SkjemaGruppe>
-            <Heading size={'small'}>Knytt til ny behandling</Heading>
+            <Heading size={'small'} level={'2'}>
+                Knytt til ny behandling
+            </Heading>
             <br />
             <StyledCheckboxDiv>
                 {!kanKnytteJournalpostTilBehandling() ? (

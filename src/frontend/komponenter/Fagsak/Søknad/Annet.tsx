@@ -19,7 +19,7 @@ const Annet: React.FunctionComponent = () => {
 
     return (
         <AnnetWrapper>
-            <Heading size={'medium'} children={'Annet'} />
+            <Heading size={'medium'} level={'2'} children={'Annet'} />
             <br />
             <FamilieTextarea
                 {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(

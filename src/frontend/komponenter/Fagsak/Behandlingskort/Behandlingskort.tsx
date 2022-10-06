@@ -102,7 +102,9 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
 
     return (
         <Container behandlingResultat={åpenBehandling.resultat}>
-            <StyledHeading size={'small'}>{tittel}</StyledHeading>
+            <StyledHeading size={'small'} level={'2'}>
+                {tittel}
+            </StyledHeading>
             <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
             <StyledHr />
             <Informasjonsbolk

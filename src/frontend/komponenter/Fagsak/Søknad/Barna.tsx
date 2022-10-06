@@ -75,7 +75,7 @@ const Barna: React.FunctionComponent = () => {
 
     return (
         <BarnaWrapper className={'søknad__barna'}>
-            <Heading size={'medium'} children={'Opplysninger om barn'} />
+            <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
             {maskerteRelasjoner.map(
                 (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                     return (

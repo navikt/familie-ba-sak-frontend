@@ -54,7 +54,9 @@ const Vinduvelger: React.FunctionComponent = () => {
                         valgt={aktivtTidslinjeVindu.vindu.id === vindu.id}
                         onClick={() => endreTidslinjeVindu(vindu)}
                     >
-                        <Heading size={'small'}>{vindu.label}</Heading>
+                        <Heading size={'xsmall'} level={'2'}>
+                            {vindu.label}
+                        </Heading>
                     </VinduVelgerKnapp>
                 );
             })}

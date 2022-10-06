@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 
-import { BodyShort, Button, Heading, Label } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -71,7 +71,9 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     egetVedtak ? (
                         <SendtTilBeslutterContainer>
                             <div>
-                                <Heading size={'medium'}>Totrinnskontroll</Heading>
+                                <Heading size={'medium'} level={'2'}>
+                                    Totrinnskontroll
+                                </Heading>
                                 <br />
                                 <BodyShort>
                                     {formaterIsoDato(
@@ -82,7 +84,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                                 </BodyShort>
                                 <BodyShort>{saksbehandler}</BodyShort>
                                 <br />
-                                <Heading size={'small'}>Vedtaket er sendt til godkjenning</Heading>
+                                <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
                             </div>
                         </SendtTilBeslutterContainer>
                     ) : (

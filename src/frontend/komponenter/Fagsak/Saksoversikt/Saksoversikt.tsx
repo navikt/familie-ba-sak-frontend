@@ -187,7 +187,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Heading size={'large'} children={'Saksoversikt'} />
+            <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
             <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
                 onChange={(_, tabnr) => {
@@ -204,7 +204,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
                         <>
-                            <Heading size={'medium'}>Løpende månedlig utbetaling</Heading>
+                            <Heading size={'small'} level={'2'}>
+                                Løpende månedlig utbetaling
+                            </Heading>
                             {løpendeMånedligUtbetaling()}
                         </>
                     )}

@@ -8,7 +8,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
     return (
         <div className={'oppgave-header'}>
             <div>
-                <Heading size={'medium'} className={'oppgave-header__tittel'}>
+                <Heading size={'medium'} level={'2'} className={'oppgave-header__tittel'}>
                     Oppgavebenken
                 </Heading>
 

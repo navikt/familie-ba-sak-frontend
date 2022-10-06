@@ -59,7 +59,9 @@ const OppgaveList: React.FunctionComponent = () => {
     return (
         <div className={'oppgavelist'}>
             <div className={'oppgavelist__header'}>
-                <Heading size={'medium'}>Oppgaveliste</Heading>
+                <Heading size={'medium'} level={'2'}>
+                    Oppgaveliste
+                </Heading>
                 <OppgavelisteNavigator />
             </div>
             <div>

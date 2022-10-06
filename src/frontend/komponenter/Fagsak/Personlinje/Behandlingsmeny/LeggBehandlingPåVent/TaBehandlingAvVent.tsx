@@ -67,7 +67,11 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
 
             <UIModalWrapper
                 modal={{
-                    tittel: <Heading size={'small'}>Fortsett behandling</Heading>,
+                    tittel: (
+                        <Heading size={'small'} level={'2'}>
+                            Fortsett behandling
+                        </Heading>
+                    ),
                     visModal: visModal,
                     lukkKnapp: true,
                     onClose: lukkModal,

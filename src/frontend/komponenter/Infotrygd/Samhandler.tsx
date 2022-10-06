@@ -46,7 +46,9 @@ export const Samhandler: React.FC = () => {
 
     return (
         <SamhandlerContainer>
-            <Heading size={'large'}>Søk samhandler</Heading>
+            <Heading size={'large'} level={'1'}>
+                Søk samhandler
+            </Heading>
             <HentSakerFlex>
                 <SkjemaGruppe feil={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}>
                     <Input

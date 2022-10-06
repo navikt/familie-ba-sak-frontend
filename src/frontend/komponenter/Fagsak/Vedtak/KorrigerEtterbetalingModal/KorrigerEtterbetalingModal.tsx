@@ -106,7 +106,9 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
     return (
         <Modal open={visModal} onClose={lukkModal}>
             <StyledModalContent>
-                <StyledModalHeader size="medium">Korriger etterbetaling</StyledModalHeader>
+                <StyledModalHeader size="medium" level={'2'}>
+                    Korriger etterbetaling
+                </StyledModalHeader>
                 <StyledSkjema feil={false}>
                     <div>
                         <StyledFamilieSelect

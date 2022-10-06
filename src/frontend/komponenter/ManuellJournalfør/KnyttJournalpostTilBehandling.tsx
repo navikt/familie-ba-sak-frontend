@@ -56,7 +56,9 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         <KnyttDiv>
             {!!minimalFagsak?.behandlinger.length && (
                 <>
-                    <Heading size={'small'}>Knytt til tidligere behandling(er)</Heading>
+                    <Heading size={'small'} level={'2'}>
+                        Knytt til tidligere behandling(er)
+                    </Heading>
                     <table className="tabell">
                         <thead className="tabell__head">
                             <tr className="tabell__head__tr">

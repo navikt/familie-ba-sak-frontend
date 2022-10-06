@@ -219,8 +219,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             loading={hentetDokument.status === RessursStatus.HENTER}
+                            icon={<FileContent aria-hidden />}
                         >
-                            <FileContent aria-hidden /> Vis vedtaksbrev
+                            Vis vedtaksbrev
                         </Button>
                         <Button
                             id={'korriger-etterbetaling'}
@@ -228,15 +229,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'small'}
                             style={{ float: 'right' }}
                             onClick={() => setVisKorrigerEtterbetalingModal(true)}
+                            icon={<Edit aria-hidden />}
                         >
                             {åpenBehandling.korrigertEtterbetaling ? (
                                 <>
                                     <InformationColored aria-hidden /> Vis korrigert etterbetaling
                                 </>
                             ) : (
-                                <>
-                                    <Edit aria-hidden /> Korriger etterbetaling
-                                </>
+                                <>Korriger etterbetaling</>
                             )}
                         </Button>
                     </Container>

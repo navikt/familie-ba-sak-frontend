@@ -69,7 +69,9 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
     return (
         <>
             <TidslinjeHeader>
-                <Heading size={'small'}>{genererFormatertÅrstall()}</Heading>
+                <Heading size={'small'} level={'2'}>
+                    {genererFormatertÅrstall()}
+                </Heading>
                 <TidslinjeControls>
                     <Vinduvelger />
                     <TidslinjeNavigering naviger={naviger} />

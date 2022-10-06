@@ -68,11 +68,11 @@ export const JournalpostSkjema: React.FC = () => {
             )}
             <Journalpost />
             <StyledSectionDiv>
-                <Heading size={'small'} children={'Dokumenter'} />
+                <Heading size={'small'} level={'2'} children={'Dokumenter'} />
                 <Dokumenter />
             </StyledSectionDiv>
             <StyledSectionDiv>
-                <Heading size={'small'} children={'Bruker og avsender'} />
+                <Heading size={'small'} level={'2'} children={'Bruker og avsender'} />
                 <BrukerPanel />
                 <br />
                 <AvsenderPanel />

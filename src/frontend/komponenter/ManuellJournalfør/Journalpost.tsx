@@ -67,7 +67,7 @@ const Journalpost: React.FC = () => {
         <Ekspanderbartpanel
             id={skjema.felter.journalpostTittel.id}
             tittel={
-                <Heading size={'small'}>
+                <Heading size={'small'} level={'2'}>
                     {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
                 </Heading>
             }

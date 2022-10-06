@@ -132,9 +132,13 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                     )}`}
                 />
             )}
-            <SakerTekst size={'small'}>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
+            <SakerTekst size={'small'} level={'2'}>
+                {ident ? `Saker for ${ident}` : 'Saker'}
+            </SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
-            <VedtakTekst size={'small'}>Vedtak</VedtakTekst>
+            <VedtakTekst size={'small'} level={'2'}>
+                Vedtak
+            </VedtakTekst>
             <Vedtakstabell saker={saker} />
         </>
     );

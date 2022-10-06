@@ -225,11 +225,13 @@ const TidslinjeVisualisering: React.FC = () => {
 
             return (
                 <Container>
-                    <Heading size="xlarge">Tidslinjer</Heading>
+                    <Heading size="xlarge" level={'1'}>
+                        Tidslinjer
+                    </Heading>
                     {barna.map((barn, index) => (
                         <div key={`barn_${index}`}>
                             <TidslinjeHeader>
-                                <Heading size={'small'}>{`${formaterIdent(
+                                <Heading size={'small'} level={'2'}>{`${formaterIdent(
                                     barn
                                 )}: ${genererFormatertÅrstall()}`}</Heading>
                                 <TidslinjeControls>

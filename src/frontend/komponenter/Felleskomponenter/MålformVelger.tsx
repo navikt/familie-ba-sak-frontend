@@ -27,7 +27,7 @@ const MålformVelger: React.FC<IProps> = ({
     målformFelt,
     visFeilmeldinger,
     erLesevisning,
-    Legend = <Heading size={'medium'} children={'Målform'} />,
+    Legend = <Heading size={'medium'} level={'2'} children={'Målform'} />,
 }) => {
     const radioOnChange = (målform: Målform) => {
         målformFelt.validerOgSettFelt(målform);

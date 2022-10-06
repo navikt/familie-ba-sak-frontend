@@ -86,7 +86,9 @@ export const Infotrygd: React.FC = () => {
 
     return (
         <InfotrygdContainer>
-            <Heading size={'large'}>Visningsside for Infotrygd</Heading>
+            <Heading size={'large'} level={'1'}>
+                Visningsside for Infotrygd
+            </Heading>
             <HentSakerFlex>
                 <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
                     <Input

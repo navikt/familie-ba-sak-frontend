@@ -209,8 +209,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                         variant="tertiary"
                         size="small"
                         onClick={() => opprettEndretUtbetaling()}
+                        icon={<StyledEditIkon />}
                     >
-                        <StyledEditIkon />
                         <Label>Endre utbetalingsperiode</Label>
                     </Button>
                     {visFeilmeldinger && opprettelseFeilmelding !== '' && (

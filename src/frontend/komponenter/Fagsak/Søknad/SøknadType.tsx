@@ -31,7 +31,7 @@ const SøknadType: React.FunctionComponent = () => {
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             erLesevisning={lesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
-            legend={<Heading size={'medium'} children={'Hva har bruker søkt om?'} />}
+            legend={<Heading size={'medium'} level={'2'} children={'Hva har bruker søkt om?'} />}
         >
             <StyledRadio
                 value={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR]}

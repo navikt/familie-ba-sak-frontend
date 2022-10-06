@@ -61,7 +61,7 @@ const DokumentutsendingSkjema: React.FC = () => {
 
     return (
         <Container>
-            <Heading size={'large'} children={'Send informasjonsbrev'} />
+            <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
 
             <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
                 <FamilieSelect

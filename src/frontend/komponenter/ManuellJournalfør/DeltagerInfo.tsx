@@ -27,7 +27,9 @@ export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel,
             <HSplit>
                 <MarginedDiv>{ikon}</MarginedDiv>
                 <div>
-                    <Heading size={'small'}>{ident ? `${navn} | ${ident}` : navn}</Heading>
+                    <Heading size={'small'} level={'2'}>
+                        {ident ? `${navn} | ${ident}` : navn}
+                    </Heading>
                     <BodyShort>{undertittel}</BodyShort>
                 </div>
             </HSplit>

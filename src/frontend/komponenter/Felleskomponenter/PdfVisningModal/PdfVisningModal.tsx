@@ -62,7 +62,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
         case RessursStatus.HENTER:
             return (
                 <div className={'pdfvisning-modal__spinner'}>
-                    <Heading size={'small'} children={'Innhenter dokument'} />
+                    <Heading size={'small'} level={'2'} children={'Innhenter dokument'} />
                     <NavFrontendSpinner className={'pdfvisning-modal__spinner--item'} />
                 </div>
             );

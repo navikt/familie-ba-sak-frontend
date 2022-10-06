@@ -6,7 +6,7 @@ import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
 
-import { BodyShort, Heading, Label } from '@navikt/ds-react';
+import { BodyShort, Detail, Label } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
@@ -188,9 +188,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                             aktueltÅr - 1
                                         }`}
                                     >
-                                        <Heading size={'small'}>
+                                        <Detail size={'small'}>
                                             {årISimuleringen[indexFramvistÅr]}
-                                        </Heading>
+                                        </Detail>
                                     </TidslinjeNavigering>
                                 </Årsvelger>
                             )}
