@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
-
+import { BodyShort, Button } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -63,16 +61,16 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     onClose: () => lukkModal(),
     innhold: () => {
         return (
-            <Normaltekst>
+            <BodyShort>
                 <IkkeTilgang height={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
                 {`Bruker har diskresjonskode ${
                     adressebeskyttelsestyper[data.adressebeskyttelsegradering]
                 }`}
-            </Normaltekst>
+            </BodyShort>
         );
     },
     actions: [
-        <Knapp key={'lukk'} type={'hoved'} mini={true} onClick={lukkModal} children={'Lukk'} />,
+        <Button key="lukk" variant="primary" size="small" onClick={lukkModal} children="Lukk" />,
     ],
 });
 
@@ -115,10 +113,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                             return (
                                 <div className={'utdatert-losning'}>
                                     <InformasjonSirkel />
-                                    <Normaltekst>
+                                    <BodyShort>
                                         Det finnes en oppdatert versjon av løsningen. Det anbefales
                                         at du oppdaterer med en gang.
-                                    </Normaltekst>
+                                    </BodyShort>
                                 </div>
                             );
                         },
@@ -126,16 +124,17 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         visModal: true,
                         onClose: () => lukkModal(),
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'avbryt'}
-                                mini={true}
+                                variant="tertiary"
+                                size="small"
                                 onClick={() => lukkModal()}
                                 children={'Avbryt'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'oppdater'}
-                                type={'hoved'}
-                                mini={true}
+                                variant="primary"
+                                size="small"
                                 onClick={() => {
                                     window.location.reload();
                                 }}

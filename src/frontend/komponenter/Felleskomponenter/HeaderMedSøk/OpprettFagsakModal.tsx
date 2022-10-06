@@ -303,7 +303,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         <StyledReadMore
                             header={'Søker er en institusjon eller enslig mindreårig'}
                             defaultOpen={false}
-                            onClick={() => settFagsakType(FagsakType.NORMAL)} // resetter fagsaktype når komponenten lukkes.
+                            onClick={() => settFagsakType(FagsakType.NORMAL)}
                         >
                             {valgAvFagsakType()}
                         </StyledReadMore>
