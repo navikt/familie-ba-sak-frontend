@@ -5,13 +5,8 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { ReadMore } from '@navikt/ds-react';
-import {
-    FamilieInput,
-    FamilieKnapp,
-    FamilieReactSelect,
-    type OptionType,
-} from '@navikt/familie-form-elements';
+import { BodyShort, ReadMore } from '@navikt/ds-react';
+import { FamilieInput, FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -20,7 +15,7 @@ import { FagsakType, type IBaseFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
-import { formaterIdent } from '../../../utils/formatter';
+import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import UIModalWrapper from '../Modal/UIModalWrapper';
@@ -50,27 +45,35 @@ const StyledUndertittel = styled(Undertittel)`
 `;
 
 const StyledKnappContainer = styled.div`
-    margin-top: 1.2rem;
+    margin-top: 2rem;
     margin-bottom: 0.5rem;
 `;
 
-const StyledFagsaktypeWrapper = styled.div`
-    margin-top: 1.2rem;
-    margin-bottom: 1rem;
+const StyledFagsakOptionsDiv = styled.div`
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: fit-content;
+    min-width: 20rem;
 `;
 
 const StyledReadMore = styled(ReadMore)`
-    margin-top: 1.5rem;
+    margin-top: 2rem;
 `;
 
-const fagsakTypeOptions = Object.values(FagsakType)
-    .filter(type => type !== FagsakType.NORMAL)
-    .map<OptionType>(fagsakType => {
-        return {
-            value: fagsakType,
-            label: fagsakType === FagsakType.INSTITUSJON ? 'Institusjon' : 'Enslig mindreårig',
-        };
-    });
+const StyledBodyShort = styled(BodyShort)`
+    margin-bottom: 2rem;
+`;
+
+const fagsakTypeOptions = [
+    {
+        value: FagsakType.INSTITUSJON,
+        label: 'Institusjon',
+    },
+    {
+        value: FagsakType.BARN_ENSLIG_MINDREÅRIG,
+        label: 'Enslig mindreårig',
+    },
+];
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
@@ -78,8 +81,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     personInfo,
     fagsakerPåBruker,
 }) => {
+    const [bruker, settBruker] = useState(personInfo);
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
-    const { sjekkTilgang, toggles } = useApp();
+    const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
@@ -100,81 +104,68 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     };
 
     useEffect(() => {
+        if (bruker === undefined && søkeresultat) {
+            hentPerson(søkeresultat.ident).then(personRessurs => {
+                if (personRessurs.status === RessursStatus.SUKSESS) {
+                    settBruker(personRessurs.data);
+                }
+            });
+        }
+    }, []);
+
+    useEffect(() => {
         if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
             settValgtSamhandler(samhandlerSkjema.submitRessurs.data);
             settVisFeilmelding(false);
         }
     }, [samhandlerSkjema.submitRessurs.status]);
 
-    const fagsaktypeVelger = () => (
-        <StyledFagsaktypeWrapper>
-            <FamilieReactSelect
-                label={'Fagsaktype'}
-                onChange={(fagsaktype): void => {
-                    switch (fagsaktype && 'value' in fagsaktype && fagsaktype.value) {
-                        case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-                            settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRIG);
-                            console.log(fagsaktype);
-                            break;
-                        case FagsakType.INSTITUSJON:
-                            settFagsakType(FagsakType.INSTITUSJON);
-                            console.log(fagsaktype);
-                            break;
-                        default:
-                            settFagsakType(FagsakType.NORMAL);
-                            console.log(fagsaktype);
-                            break;
-                    }
-                }}
-                options={fagsakTypeOptions}
-                value={fagsakTypeOptions.find(option => option.value === fagsakType)}
-                isClearable={false}
-            >
-                <option aria-selected={fagsakType === FagsakType.NORMAL} value={''}>
-                    Velg
-                </option>
-                <option
-                    aria-selected={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
-                    value={FagsakType.BARN_ENSLIG_MINDREÅRIG}
-                >
-                    Enslig mindreårig
-                </option>
-                <option
-                    aria-selected={fagsakType === FagsakType.INSTITUSJON}
-                    value={FagsakType.INSTITUSJON}
-                >
-                    Institusjon
-                </option>
-            </FamilieReactSelect>
-            {fagsakType === FagsakType.INSTITUSJON && (
-                <StyledDiv>
-                    <FamilieInput
-                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                            samhandlerSkjema.visFeilmeldinger
-                        )}
-                        erLesevisning={false}
-                        id={'hent-samhandler'}
-                        label={'Organisasjonsnummer'}
-                        bredde={'XL'}
-                        mini={true}
-                    />
+    const valgAvFagsakType = () => (
+        <>
+            <StyledFagsakOptionsDiv>
+                <FamilieReactSelect
+                    label={'Fagsaktype'}
+                    options={fagsakTypeOptions}
+                    onChange={(valgtType): void => {
+                        if (valgtType && 'value' in valgtType) {
+                            settFagsakType(
+                                Object.values(FagsakType).find(type => type === valgtType.value) ||
+                                    FagsakType.NORMAL
+                            );
+                        }
+                    }}
+                    value={fagsakTypeOptions.find(option => option.value === fagsakType)}
+                    isClearable={false}
+                />
+                {fagsakType === FagsakType.INSTITUSJON && (
+                    <StyledDiv>
+                        <FamilieInput
+                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                samhandlerSkjema.visFeilmeldinger
+                            )}
+                            erLesevisning={false}
+                            id={'hent-samhandler'}
+                            label={'Organisasjonsnummer'}
+                            bredde={'XL'}
+                            mini={true}
+                        />
 
-                    <StyledKnapp
-                        onClick={() => {
-                            onSubmitWrapper();
-                        }}
-                        children={'Hent institusjon'}
-                        erLesevisning={false}
-                        mini={true}
-                        kompakt={true}
-                    />
-                </StyledDiv>
-            )}
-            <br />
+                        <StyledKnapp
+                            onClick={() => {
+                                onSubmitWrapper();
+                            }}
+                            children={'Hent institusjon'}
+                            erLesevisning={false}
+                            mini={true}
+                            kompakt={true}
+                        />
+                    </StyledDiv>
+                )}
+            </StyledFagsakOptionsDiv>
             {fagsakType === FagsakType.INSTITUSJON && valgtSamhandler !== undefined && (
                 <SamhandlerTabell samhandler={valgtSamhandler} />
             )}
-        </StyledFagsaktypeWrapper>
+        </>
     );
     return (
         <>
@@ -290,29 +281,31 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         className: 'uimodal-wider',
                     }}
                 >
-                    <StyledUndertittel tag={'h3'}>
+                    <StyledBodyShort>
                         {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
-                    </StyledUndertittel>
-                    {søkeresultat && (
-                        <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
-                            søkeresultat.ident
-                        )})`}</Normaltekst>
+                    </StyledBodyShort>
+                    {bruker && (
+                        <BodyShort>
+                            &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
+                        </BodyShort>
                     )}
-                    {!søkeresultat && personInfo && (
-                        <Normaltekst>{`${personInfo.navn} (${formaterIdent(
-                            personInfo.personIdent
-                        )})`}</Normaltekst>
+                    {!bruker && (
+                        <BodyShort>
+                            &ensp;&bull;&ensp;
+                            {`${søkeresultat?.navn || ''} (${formaterIdent(
+                                søkeresultat?.ident || ''
+                            )})`}
+                        </BodyShort>
                     )}
-
-                    {harNormalFagsak && fagsaktypeVelger()}
+                    {harNormalFagsak && valgAvFagsakType()}
                     {!harNormalFagsak && (
                         <StyledReadMore
                             header={'Søker er en institusjon eller enslig mindreårig'}
                             defaultOpen={false}
-                            onClick={() => settFagsakType(FagsakType.NORMAL)}
+                            onClick={() => settFagsakType(FagsakType.NORMAL)} // resetter fagsaktype når komponenten lukkes.
                         >
-                            {fagsaktypeVelger()}
+                            {valgAvFagsakType()}
                         </StyledReadMore>
                     )}
 

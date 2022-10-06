@@ -64,13 +64,6 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     style={{ minWidth: 190 }}
                     aria-labelledby={'behandlingsmeny-arialabel-knapp'}
                 >
-                    {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <li>
-                            <EndreBehandlendeEnhet
-                                onListElementClick={() => settAnker(undefined)}
-                            />
-                        </li>
-                    )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
                             <li>
@@ -93,12 +86,30 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             />
                         </li>
                     )}
+                    <li>
+                        <KnappBase
+                            mini={true}
+                            onClick={() => {
+                                navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
+                                settAnker(undefined);
+                            }}
+                        >
+                            Send informasjonsbrev
+                        </KnappBase>
+                    </li>
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
                         <li>
                             <HenleggBehandling
                                 onListElementClick={() => settAnker(undefined)}
                                 fagsakId={minimalFagsak.id}
                                 behandling={åpenBehandling.data}
+                            />
+                        </li>
+                    )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS && (
+                        <li>
+                            <EndreBehandlendeEnhet
+                                onListElementClick={() => settAnker(undefined)}
                             />
                         </li>
                     )}
@@ -134,18 +145,6 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             />
                         </li>
                     )}
-
-                    <li>
-                        <KnappBase
-                            mini={true}
-                            onClick={() => {
-                                navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
-                                settAnker(undefined);
-                            }}
-                        >
-                            Send informasjonsbrev
-                        </KnappBase>
-                    </li>
                 </ul>
             </Popover>
         </>
