@@ -26,6 +26,12 @@ const DatoVelgerContainer = styled.div`
     max-width: 12.5rem;
 `;
 
+const StyledFamilieDatovelger = styled(FamilieDatovelger)`
+    .nav-datovelger {
+        padding-top: 0.5rem;
+    }
+`;
+
 // Denne stylingen skal fjernes på sikt (minus marginer)
 const StyledButton = styled(Button)`
     margin-top: 0.5rem;
@@ -60,7 +66,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                             case 'dato':
                                 return (
                                     <DatoVelgerContainer key={oppgaveFelt.nøkkel}>
-                                        <FamilieDatovelger
+                                        <StyledFamilieDatovelger
                                             id={oppgaveFelt.nøkkel}
                                             label={oppgaveFelt.label}
                                             onChange={(dato?: ISODateString) => {

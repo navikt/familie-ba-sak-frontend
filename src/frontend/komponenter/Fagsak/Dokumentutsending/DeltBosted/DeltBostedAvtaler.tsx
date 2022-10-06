@@ -26,6 +26,9 @@ const Container = styled.div`
 `;
 
 export const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil: boolean }>`
+    .nav-datovelger {
+        margin-top: 0.5rem;
+    }
     .nav-datovelger__input {
         border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
