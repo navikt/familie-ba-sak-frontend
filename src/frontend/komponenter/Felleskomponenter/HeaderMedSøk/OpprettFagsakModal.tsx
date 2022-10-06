@@ -5,13 +5,14 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { BodyShort, ReadMore } from '@navikt/ds-react';
-import { FamilieInput, FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { BodyShort, ReadMore, Select } from '@navikt/ds-react';
+import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
-import { FagsakType, type IBaseFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
+import type { IBaseFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
@@ -65,6 +66,10 @@ const StyledBodyShort = styled(BodyShort)`
 `;
 
 const fagsakTypeOptions = [
+    {
+        value: FagsakType.NORMAL,
+        label: 'Velg',
+    },
     {
         value: FagsakType.INSTITUSJON,
         label: 'Institusjon',
@@ -123,19 +128,23 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const valgAvFagsakType = () => (
         <>
             <StyledFagsakOptionsDiv>
-                <FamilieReactSelect
+                <Select
                     label={'Fagsaktype'}
-                    options={fagsakTypeOptions}
-                    onChange={(valgtType): void => {
-                        if (valgtType && 'value' in valgtType) {
-                            settFagsakType(
-                                Object.values(FagsakType).find(type => type === valgtType.value) ||
-                                    FagsakType.NORMAL
-                            );
-                        }
+                    onChange={(event): void => {
+                        settFagsakType(
+                            Object.values(FagsakType).find(type => type === event.target.value) ||
+                                FagsakType.NORMAL
+                        );
                     }}
-                    value={fagsakTypeOptions.find(option => option.value === fagsakType)}
-                    isClearable={false}
+                    children={fagsakTypeOptions
+                        .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
+                        .map(option => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    value={fagsakTypeOptions.find(option => option.value === fagsakType)?.value}
+                    size={'small'}
                 />
                 {fagsakType === FagsakType.INSTITUSJON && (
                     <StyledDiv>
@@ -303,7 +312,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         <StyledReadMore
                             header={'Søker er en institusjon eller enslig mindreårig'}
                             defaultOpen={false}
-                            onClick={() => settFagsakType(FagsakType.NORMAL)}
+                            onClick={() => {
+                                if (fagsakType !== FagsakType.NORMAL) {
+                                    settFagsakType(FagsakType.NORMAL);
+                                }
+                            }}
                         >
                             {valgAvFagsakType()}
                         </StyledReadMore>
