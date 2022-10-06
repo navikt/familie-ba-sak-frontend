@@ -111,7 +111,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 }
             });
         }
-    }, []);
+    }, [søkeresultat]);
 
     useEffect(() => {
         if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
@@ -285,12 +285,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
                     </StyledBodyShort>
-                    {bruker && (
+                    {bruker ? (
                         <BodyShort>
                             &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
                         </BodyShort>
-                    )}
-                    {!bruker && (
+                    ) : (
                         <BodyShort>
                             &ensp;&bull;&ensp;
                             {`${søkeresultat?.navn || ''} (${formaterIdent(
@@ -298,8 +297,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             )})`}
                         </BodyShort>
                     )}
-                    {harNormalFagsak && valgAvFagsakType()}
-                    {!harNormalFagsak && (
+                    {harNormalFagsak ? (
+                        valgAvFagsakType()
+                    ) : (
                         <StyledReadMore
                             header={'Søker er en institusjon eller enslig mindreårig'}
                             defaultOpen={false}
