@@ -30,7 +30,7 @@ export interface IOpprettFagsakModal {
 }
 
 const StyledDiv = styled.div`
-    padding-top: 1rem;
+    margin-top: 2rem;
     display: flex;
 `;
 
