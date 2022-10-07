@@ -4,19 +4,16 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
-
-import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
+import { BodyShort, Button } from '@navikt/ds-react';
+import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
+import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { ISaksbehandler } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
-import type { IRestTilgang } from '../typer/person';
+import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
 import type { IToggles } from '../typer/toggles';
 import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
@@ -57,6 +54,26 @@ interface AuthProviderExports {
     innloggetSaksbehandler: ISaksbehandler | undefined;
 }
 
+const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
+    tittel: 'Diskresjonskode',
+    lukkKnapp: true,
+    visModal: !data.saksbehandlerHarTilgang,
+    onClose: () => lukkModal(),
+    innhold: () => {
+        return (
+            <BodyShort>
+                <IkkeTilgang height={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
+                {`Bruker har diskresjonskode ${
+                    adressebeskyttelsestyper[data.adressebeskyttelsegradering]
+                }`}
+            </BodyShort>
+        );
+    },
+    actions: [
+        <Button key="lukk" variant="primary" size="small" onClick={lukkModal} children="Lukk" />,
+    ],
+});
+
 const [AuthProvider, useAuth] = createUseContext(
     ({ autentisertSaksbehandler }: IProps): AuthProviderExports => {
         const [autentisert, settAutentisert] = React.useState(true);
@@ -96,10 +113,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                             return (
                                 <div className={'utdatert-losning'}>
                                     <InformasjonSirkel />
-                                    <Normaltekst>
+                                    <BodyShort>
                                         Det finnes en oppdatert versjon av løsningen. Det anbefales
                                         at du oppdaterer med en gang.
-                                    </Normaltekst>
+                                    </BodyShort>
                                 </div>
                             );
                         },
@@ -107,16 +124,17 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         visModal: true,
                         onClose: () => lukkModal(),
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'avbryt'}
-                                mini={true}
+                                variant="tertiary"
+                                size="small"
                                 onClick={() => lukkModal()}
                                 children={'Avbryt'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'oppdater'}
-                                type={'hoved'}
-                                mini={true}
+                                variant="primary"
+                                size="small"
                                 onClick={() => {
                                     window.location.reload();
                                 }}
@@ -162,6 +180,29 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         settModal(initalState);
     };
 
+    const hentPerson = async (brukerIdent: string): Promise<Ressurs<IPersonInfo>> => {
+        return request<{ brukerIdent: string }, IPersonInfo>({
+            method: 'GET',
+            url: '/familie-ba-sak/api/person/enkel',
+            headers: {
+                personIdent: brukerIdent,
+            },
+        }).then((ressurs: Ressurs<IPersonInfo>) => {
+            if ('data' in ressurs && ressurs.data.harTilgang === false) {
+                settModal(
+                    tilgangModal(
+                        {
+                            saksbehandlerHarTilgang: false,
+                            adressebeskyttelsegradering: ressurs.data.adressebeskyttelseGradering,
+                        },
+                        lukkModal
+                    )
+                );
+            }
+            return ressurs;
+        });
+    };
+
     const sjekkTilgang = async (
         brukerIdent: string,
         visSystemetLaster = true
@@ -173,37 +214,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             påvirkerSystemLaster: visSystemetLaster,
         }).then((ressurs: Ressurs<IRestTilgang>) => {
             if (ressurs.status === RessursStatus.SUKSESS) {
-                settModal({
-                    tittel: 'Diskresjonskode',
-                    lukkKnapp: true,
-                    visModal: !ressurs.data.saksbehandlerHarTilgang,
-                    onClose: () => lukkModal(),
-                    innhold: () => {
-                        return (
-                            <Normaltekst>
-                                <IkkeTilgang
-                                    height={20}
-                                    className={'tilgangmodal-ikke-oppfylt-ikon'}
-                                    width={20}
-                                />
-                                {`Bruker har diskresjonskode ${
-                                    adressebeskyttelsestyper[
-                                        ressurs.data.adressebeskyttelsegradering
-                                    ]
-                                }`}
-                            </Normaltekst>
-                        );
-                    },
-                    actions: [
-                        <Knapp
-                            key={'lukk'}
-                            type={'hoved'}
-                            mini={true}
-                            onClick={lukkModal}
-                            children={'Lukk'}
-                        />,
-                    ],
-                });
+                settModal(tilgangModal(ressurs.data, lukkModal));
                 return ressurs.data.saksbehandlerHarTilgang;
             } else {
                 return false;
@@ -256,6 +267,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         toasts,
         toggles,
         åpneModal,
+        hentPerson,
     };
 });
 
