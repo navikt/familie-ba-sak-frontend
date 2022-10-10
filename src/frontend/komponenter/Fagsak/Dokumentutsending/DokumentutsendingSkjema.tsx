@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { FileContent } from '@navikt/ds-icons';
 import { Alert, Button, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -13,7 +14,6 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
@@ -122,7 +122,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     loading={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
-                    icon={<DokumentIkon />}
+                    icon={<FileContent />}
                 >
                     {'Forhåndsvis'}
                 </Button>
