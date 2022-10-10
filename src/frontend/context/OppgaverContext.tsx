@@ -21,12 +21,11 @@ import {
 } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
 import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
-import type { IMinimalFagsak } from '../typer/fagsak';
+import { FagsakStatus, type IMinimalFagsak } from '../typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
 import {
     BehandlingstypeFilter,
@@ -38,6 +37,7 @@ import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
+import { useFagsakContext } from './FagsakContext';
 import type { IOppgaveRad } from './OppgaverContextUtils';
 import { kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 
@@ -198,14 +198,38 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
     };
 
-    const { opprettEllerHentFagsak } = useFagsakApi(
-        _ => {
-            'Feilmelding';
-        },
-        _ => {
-            'Feilmelding';
+    const { hentFagsakerForPerson } = useFagsakContext();
+
+    const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
+        const fagsaker = await hentFagsakerForPerson(personident);
+        if (fagsaker.status === RessursStatus.SUKSESS && fagsaker.data.length > 0) {
+            if (fagsaker.data.length === 1) {
+                navigate(`/fagsak/${fagsaker.data[0].id}/saksoversikt`);
+            } else {
+                const løpendeFagsaker = fagsaker.data.filter(
+                    fagsak => fagsak.status === FagsakStatus.LØPENDE
+                );
+                if (løpendeFagsaker.length > 1) {
+                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                        alertType: AlertType.WARNING,
+                        tekst: 'Fant flere enn 1 løpende fagsak på bruker',
+                    });
+                } else if (løpendeFagsaker.length === 1) {
+                    navigate(`/fagsak/${løpendeFagsaker[0].id}/saksoversikt`);
+                } else {
+                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                        alertType: AlertType.WARNING,
+                        tekst: 'Fant ikke fagsak',
+                    });
+                }
+            }
+        } else {
+            settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                alertType: AlertType.WARNING,
+                tekst: 'Fant ikke fagsak',
+            });
         }
-    );
+    };
 
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string) => {
         request<void, string>({
@@ -227,10 +251,15 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                             // tilbakekreving
                             gåTilTilbakekreving(oppgave);
                         } else if (oppgave.aktoerId) {
-                            opprettEllerHentFagsak({
-                                personIdent: null,
-                                aktørId: oppgave.aktoerId,
-                            });
+                            const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+                            if (brukerident) {
+                                gåTilFagsakEllerVisFeilmelding(brukerident);
+                            } else {
+                                settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                                    alertType: AlertType.WARNING,
+                                    tekst: 'Fant ikke fagsak',
+                                });
+                            }
                         }
                     }
                 } else {
@@ -424,6 +453,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         tilbakestillOppgaveFelter,
         validerSkjema,
         tableInstance,
+        gåTilFagsakEllerVisFeilmelding,
     };
 });
 const Oppgaver: React.FC = () => {
