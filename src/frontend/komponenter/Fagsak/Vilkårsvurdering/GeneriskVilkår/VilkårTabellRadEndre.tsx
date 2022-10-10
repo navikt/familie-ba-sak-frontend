@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button, Radio } from '@navikt/ds-react';
+import { Button, Radio, Label } from '@navikt/ds-react';
 import {
     NavdsSemanticColorBorderMuted,
     NavdsSemanticColorFeedbackWarningBorder,
@@ -86,6 +86,15 @@ const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
+`;
+
+const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+    && {
+        margin: 1rem 0;
+        legend {
+            margin-bottom: 0rem;
+        }
+    }
 `;
 
 const VilkårTabellRadEndre: React.FC<IProps> = ({
@@ -282,7 +291,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         )}
                     </FamilieSelect>
                 )}
-                <FamilieRadioGruppe
+                <StyledFamilieRadioGruppe
                     erLesevisning={lesevisning}
                     value={
                         redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
@@ -292,9 +301,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             : resultater[redigerbartVilkår.verdi.resultat.verdi]
                     }
                     legend={
-                        vilkårFraConfig.spørsmål
-                            ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                            : ''
+                        <Label>
+                            {vilkårFraConfig.spørsmål
+                                ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                : ''}
+                        </Label>
                     }
                     error={
                         redigerbartVilkår.verdi.resultat.valideringsstatus ===
@@ -340,7 +351,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     >
                         {'Nei'}
                     </Radio>
-                </FamilieRadioGruppe>
+                </StyledFamilieRadioGruppe>
                 {!gjelderInstitusjon && (
                     <UtdypendeVilkårsvurderingMultiselect
                         redigerbartVilkår={redigerbartVilkår}
