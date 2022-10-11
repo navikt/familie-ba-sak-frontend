@@ -426,8 +426,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 Avbryt
                             </Button>
                         </KnapperekkeVenstre>
-
-                        {!erLesevisning ? (
+                        {!erLesevisning() ? (
                             <Button
                                 variant={'tertiary'}
                                 id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
@@ -435,7 +434,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 onClick={slettEndretUtbetaling}
                                 icon={<Delete />}
                             >
-                                {'Fjern Periode'}
+                                {'Fjern periode'}
                             </Button>
                         ) : null}
                     </Knapperekke>

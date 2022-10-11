@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { ExternalLink } from '@navikt/ds-icons';
+import { AddCircle, ExternalLink } from '@navikt/ds-icons';
 import { BodyLong, Heading, Button } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -16,7 +16,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
-import Pluss from '../../ikoner/Pluss';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
 import type { IBarnMedOpplysninger } from '../../typer/søknad';
@@ -25,10 +24,6 @@ import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 import HelpText from './HelpText';
 import UIModalWrapper from './Modal/UIModalWrapper';
-
-const LeggTilBarnKnapp = styled(Button)`
-    margin-left: 1rem;
-`;
 
 const StyledUIModalWrapper = styled(UIModalWrapper)`
     min-height: 20rem !important;
@@ -231,17 +226,17 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
 
     return (
         <>
-            <LeggTilBarnKnapp
+            <Button
                 variant={'tertiary'}
                 id={'legg-til-barn'}
-                size={'small'}
+                size={'medium'}
                 onClick={() => {
                     settVisModal(true);
                 }}
-                icon={<Pluss />}
+                icon={<AddCircle />}
             >
                 {'Legg til barn'}
-            </LeggTilBarnKnapp>
+            </Button>
 
             <StyledUIModalWrapper
                 modal={{

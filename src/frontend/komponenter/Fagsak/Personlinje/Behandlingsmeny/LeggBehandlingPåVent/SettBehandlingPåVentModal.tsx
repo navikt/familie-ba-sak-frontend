@@ -58,14 +58,14 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                     <Button
                         variant={'tertiary'}
                         key={'Avbryt'}
-                        size="small"
+                        size="medium"
                         onClick={onAvbryt}
                         children={'Avbryt'}
                     />,
                     <Button
                         variant={'primary'}
                         key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                        size={'small'}
+                        size={'medium'}
                         onClick={settBehandlingPåVent}
                         children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                         loading={skjema.submitRessurs.status === RessursStatus.HENTER}

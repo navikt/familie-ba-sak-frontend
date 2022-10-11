@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 
+import styled from 'styled-components';
+
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -56,6 +58,10 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND]:
         'Barn bor alene i annet EØS-land',
 };
+
+const StyledFamilieReactSelect = styled(FamilieReactSelect)`
+    margin-top: 0.75rem;
+`;
 
 const mapUtdypendeVilkårsvurderingTilOption = (
     utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering
@@ -160,7 +166,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     }
 
     return (
-        <FamilieReactSelect
+        <StyledFamilieReactSelect
             id="UtdypendeVilkarsvurderingMultiselect"
             label="Utdypende vilkårsvurdering"
             value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(

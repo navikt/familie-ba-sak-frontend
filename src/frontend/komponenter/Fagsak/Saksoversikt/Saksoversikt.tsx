@@ -54,6 +54,15 @@ const FlexSpaceBetween = styled.div`
     justify-content: space-between;
 `;
 
+const SaksoversiktWrapper = styled.div`
+    max-width: 70rem;
+    margin: 4rem;
+`;
+
+const StyledHeading = styled(Heading)`
+    margin-top: 3.75rem;
+`;
+
 const StyledTabs = styled(Tabs)`
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -186,7 +195,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     };
 
     return (
-        <div className={'saksoversikt'}>
+        <SaksoversiktWrapper>
             <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
             <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
@@ -204,9 +213,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
                         <>
-                            <Heading size={'small'} level={'2'}>
+                            <StyledHeading size={'medium'} level={'2'} spacing>
                                 Løpende månedlig utbetaling
-                            </Heading>
+                            </StyledHeading>
                             {løpendeMånedligUtbetaling()}
                         </>
                     )}
@@ -215,7 +224,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             ) : (
                 visTabell()
             )}
-        </div>
+        </SaksoversiktWrapper>
     );
 };
 

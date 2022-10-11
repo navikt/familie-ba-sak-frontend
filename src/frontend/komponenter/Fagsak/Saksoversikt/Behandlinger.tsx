@@ -21,6 +21,10 @@ const SwitchHøyre = styled(Switch)`
     float: right;
 `;
 
+const StyledHeading = styled(Heading)`
+    margin-top: 3.75rem;
+`;
+
 const StyledOpprettetKolonne = styled.th`
     width: 10%;
 `;
@@ -77,7 +81,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Heading level="2" size={'small'} children={'Behandlinger'} />
+            <StyledHeading level="2" size={'medium'} children={'Behandlinger'} spacing />
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}

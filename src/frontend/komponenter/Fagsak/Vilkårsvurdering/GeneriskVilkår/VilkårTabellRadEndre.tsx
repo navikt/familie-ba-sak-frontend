@@ -414,7 +414,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={lesevisning}
                             onClick={onClickVilkårFerdig}
-                            size="small"
+                            size="medium"
                             variant="secondary"
                             loading={vilkårSubmit === VilkårSubmit.PUT}
                             disabled={vilkårSubmit === VilkårSubmit.PUT}
@@ -425,7 +425,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={lesevisning}
                             onClick={() => toggleForm(false)}
-                            size="small"
+                            size="medium"
                             variant="tertiary"
                         >
                             Avbryt
@@ -445,7 +445,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                             loading={vilkårSubmit === VilkårSubmit.DELETE}
                             disabled={vilkårSubmit === VilkårSubmit.DELETE}
-                            size={'small'}
+                            size={'medium'}
                             icon={<Delete />}
                         >
                             {'Fjern'}

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
-import { Heading } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
@@ -54,9 +54,7 @@ const Vinduvelger: React.FunctionComponent = () => {
                         valgt={aktivtTidslinjeVindu.vindu.id === vindu.id}
                         onClick={() => endreTidslinjeVindu(vindu)}
                     >
-                        <Heading size={'xsmall'} level={'2'}>
-                            {vindu.label}
-                        </Heading>
+                        <BodyShort size={'small'}>{vindu.label}</BodyShort>
                     </VinduVelgerKnapp>
                 );
             })}

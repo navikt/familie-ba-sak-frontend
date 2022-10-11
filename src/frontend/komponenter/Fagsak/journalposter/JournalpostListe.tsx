@@ -177,7 +177,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         );
         return (
             <Container>
-                <Heading level="2" size="xlarge" spacing>
+                <Heading level="2" size="large" spacing>
                     Dokumentoversikt
                 </Heading>
 
