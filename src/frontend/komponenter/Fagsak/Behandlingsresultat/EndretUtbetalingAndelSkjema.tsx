@@ -179,7 +179,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <StyledPersonvelger
                         {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={<Label>Velg hvem det gjelder</Label>}
-                        value={skjema.felter.person.verdi}
+                        value={skjema.felter.person.verdi ?? ''}
                         placeholder={'Velg person'}
                         onChange={(event): void => {
                             skjema.felter.person.validerOgSettFelt(event.target.value);
@@ -243,7 +243,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 <Feltmargin>
                     <FamilieSelect
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        value={skjema.felter.årsak.verdi}
+                        value={skjema.felter.årsak.verdi ?? ''}
                         label={<Label>Årsak</Label>}
                         placeholder={'Velg årsak'}
                         onChange={(event): void => {
