@@ -216,7 +216,6 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     label={'Begrunnelse (valgfri)'}
                     className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på annen vurdering'}
-                    value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     error={
                         redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()

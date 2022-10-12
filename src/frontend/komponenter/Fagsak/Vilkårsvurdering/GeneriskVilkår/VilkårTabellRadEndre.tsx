@@ -389,7 +389,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
                     className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
-                    value={redigerbartVilkår.verdi.begrunnelse.verdi}
                     error={
                         redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
