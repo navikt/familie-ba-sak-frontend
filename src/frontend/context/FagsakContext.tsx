@@ -152,6 +152,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         minimalFagsak,
         settMinimalFagsak,
         hentBruker,
+        hentFagsakerForPerson,
     };
 });
 

@@ -10,6 +10,7 @@ const Container = styled.div`
     right: 2rem;
     float: right;
     bottom: 0;
+    z-index: 9999;
 `;
 
 const Toasts: React.FC = () => {
