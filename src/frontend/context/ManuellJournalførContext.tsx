@@ -477,7 +477,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const tilordnetInnloggetSaksbehandler = () =>
+    const erTilordnetInnloggetSaksbehandler = () =>
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
         innloggetSaksbehandler !== undefined &&
         dataForManuellJournalføring.data.oppgave.tilordnetRessurs ===
@@ -487,7 +487,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             (dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT ||
-                !tilordnetInnloggetSaksbehandler())
+                !erTilordnetInnloggetSaksbehandler())
         );
     };
 
@@ -495,7 +495,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return dataForManuellJournalføring.status !== RessursStatus.SUKSESS
             ? false
             : dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.BEH_SED &&
-              tilordnetInnloggetSaksbehandler()
+              erTilordnetInnloggetSaksbehandler()
             ? true
             : !erLesevisning();
     };
