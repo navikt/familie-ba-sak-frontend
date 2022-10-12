@@ -48,11 +48,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
-    const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
+    const [dataForManuellJournalføring, settDataForManuellJournalføring] = useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
             nullstillDokument();
@@ -203,6 +203,15 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
+    const settFagsakForPerson = async (personIdent: string, fagsakType: FagsakType) => {
+        const restFagsak = await hentFagsakForPerson(personIdent, fagsakType);
+        if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
+            settMinimalFagsak(restFagsak.data);
+        } else {
+            settMinimalFagsak(undefined);
+        }
+    };
+
     const endreBruker = async (personId: string, fagsakType: FagsakType = FagsakType.NORMAL) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
@@ -232,14 +241,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent, fagsakType);
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
-        if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
-            settMinimalFagsak(restFagsak.data);
-        } else {
-            settMinimalFagsak(undefined);
-        }
-        return '';
+        return settFagsakForPerson(hentetPerson.data.personIdent, fagsakType);
     };
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {

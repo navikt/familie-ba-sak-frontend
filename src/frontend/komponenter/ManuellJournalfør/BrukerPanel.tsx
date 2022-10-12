@@ -123,15 +123,11 @@ export const BrukerPanel: React.FC = () => {
                             onClick={() => {
                                 if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                     settSpinner(true);
-                                    endreBruker(nyIdent.verdi)
-                                        .then((feilmelding: string) => {
-                                            settFeilMelding(feilmelding);
-                                        })
-                                        .finally(() => {
-                                            settSpinner(false);
-                                        });
+                                    endreBruker(nyIdent.verdi).finally(() => {
+                                        settSpinner(false);
+                                    });
                                 } else {
-                                    settFeilMelding('Person ident er ugyldig');
+                                    settFeilMelding('Personident er ugyldig');
                                 }
                             }}
                             children={'Endre bruker'}
