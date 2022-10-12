@@ -11,7 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { FagsakType } from '../../typer/fagsak';
+import { FagsakType, fagsakStatus } from '../../typer/fagsak';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
@@ -39,7 +39,8 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { skjema, endreBruker, erLesevisning } = useManuellJournalfør();
+    const { skjema, endreBruker, erLesevisning, institusjonsfagsaker, settFagsakForPerson } =
+        useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
@@ -74,7 +75,7 @@ export const BrukerPanel: React.FC = () => {
     const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
         if (skjema.felter.bruker.verdi) {
-            endreBruker(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
+            settFagsakForPerson(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
         }
     };
 
@@ -158,6 +159,17 @@ export const BrukerPanel: React.FC = () => {
                             {erBrukerPåInstitusjon && (
                                 <Select label="Institusjon" size="small">
                                     <option value="">Velg</option>
+                                    {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
+                                        institusjonsfagsaker.data.map(({ institusjon, status }) => {
+                                            return (
+                                                institusjon && (
+                                                    <option value={institusjon.orgNummer}>
+                                                        {institusjon.orgNummer} |{' '}
+                                                        {fagsakStatus[status].navn}
+                                                    </option>
+                                                )
+                                            );
+                                        })}
                                     <option value="ny-institusjon">Ny institusjon</option>
                                 </Select>
                             )}
