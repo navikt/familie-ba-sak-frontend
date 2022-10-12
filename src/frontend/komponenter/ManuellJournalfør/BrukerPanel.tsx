@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Office1Filled } from '@navikt/ds-icons';
-import { Button, ReadMore, Select, TextField } from '@navikt/ds-react';
+import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -50,6 +50,7 @@ export const BrukerPanel: React.FC = () => {
         valideringsfunksjon: identValidator,
     });
     const { samhandlerSkjema } = useSamhandlerSkjema();
+    const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
 
     useEffect(() => {
         settFeilMelding('');
@@ -157,13 +158,20 @@ export const BrukerPanel: React.FC = () => {
                                 </option>
                             </Select>
                             {erBrukerPåInstitusjon && (
-                                <Select label="Institusjon" size="small">
+                                <Select
+                                    label="Institusjon"
+                                    size="small"
+                                    onChange={event => settValgtInstitusjon(event.target.value)}
+                                >
                                     <option value="">Velg</option>
                                     {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
                                         institusjonsfagsaker.data.map(({ institusjon, status }) => {
                                             return (
                                                 institusjon && (
-                                                    <option value={institusjon.orgNummer}>
+                                                    <option
+                                                        value={institusjon.orgNummer}
+                                                        key={institusjon.orgNummer}
+                                                    >
                                                         {institusjon.orgNummer} |{' '}
                                                         {fagsakStatus[status].navn}
                                                     </option>
@@ -174,6 +182,16 @@ export const BrukerPanel: React.FC = () => {
                                 </Select>
                             )}
                         </ReadMore>
+                    )}
+                    {valgtInstitusjon === 'ny-institusjon' && (
+                        <Alert variant="warning" inline>
+                            <Heading size="xsmall" level="3">
+                                Institusjonssak på bruker må opprettes
+                            </Heading>
+                            For å journalføre dokumentet, må ny fagsak av typen institusjon
+                            opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
+                            godkjent institusjon, kan dokumentet journalføres.
+                        </Alert>
                     )}
                 </>
             )}
