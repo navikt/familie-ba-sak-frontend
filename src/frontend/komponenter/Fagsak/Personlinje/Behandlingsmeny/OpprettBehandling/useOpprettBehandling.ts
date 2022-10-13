@@ -207,6 +207,7 @@ const useOpprettBehandling = (
                                 ? skjema.felter.valgteBarn.verdi.map(option => option.value)
                                 : undefined,
                             fagsakType: fagsakType,
+                            fagsakId: fagsakId,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',
