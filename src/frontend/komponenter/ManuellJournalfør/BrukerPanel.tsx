@@ -210,7 +210,7 @@ export const BrukerPanel: React.FC = () => {
                 </>
             )}
 
-            {skjema.felter.samhandler.verdi !== null && (
+            {skjema.felter.samhandler.verdi !== undefined && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
         </StyledEkspanderbartpanelBaseMedMargin>

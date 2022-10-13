@@ -109,7 +109,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
             fagsakType: FagsakType;
-            samhandler: ISamhandlerInfo | null;
+            samhandler: ISamhandlerInfo | undefined;
         },
         string
     >({
@@ -165,8 +165,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             fagsakType: useFelt<FagsakType>({
                 verdi: FagsakType.NORMAL,
             }),
-            samhandler: useFelt<ISamhandlerInfo | null>({
-                verdi: null,
+            samhandler: useFelt<ISamhandlerInfo | undefined>({
+                verdi: undefined,
             }),
         },
         skjemanavn: 'Journalfør dokument',
