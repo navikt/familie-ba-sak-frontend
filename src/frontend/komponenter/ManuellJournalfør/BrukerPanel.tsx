@@ -6,17 +6,18 @@ import { Office1Filled } from '@navikt/ds-icons';
 import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { FagsakType, fagsakStatus } from '../../typer/fagsak';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
-import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
+import { useSamhandlerRequest } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
@@ -49,7 +50,7 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { samhandlerSkjema } = useSamhandlerSkjema();
+    const { hentSamhandler } = useSamhandlerRequest();
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
 
     useEffect(() => {
@@ -66,10 +67,19 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     useEffect(() => {
-        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            skjema.felter.samhandler.validerOgSettFelt(samhandlerSkjema.submitRessurs.data);
+        if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
+            hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+                if (ressurs.status === RessursStatus.SUKSESS) {
+                    skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
+                } else {
+                    console.log(ressurs.status);
+                    /* Feilhåndtering - vise feilmelding */
+                }
+            });
+        } else {
+            skjema.felter.samhandler.nullstill();
         }
-    }, [samhandlerSkjema.submitRessurs.status]);
+    }, [valgtInstitusjon]);
 
     const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
 
@@ -77,6 +87,10 @@ export const BrukerPanel: React.FC = () => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
         if (skjema.felter.bruker.verdi) {
             settFagsakForPerson(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
+        }
+        if (nyFagsakType !== FagsakType.INSTITUSJON) {
+            skjema.felter.samhandler.nullstill();
+            settValgtInstitusjon('');
         }
     };
 
