@@ -52,6 +52,7 @@ export const BrukerPanel: React.FC = () => {
     });
     const { hentSamhandler } = useSamhandlerRequest();
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
+    const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
 
     useEffect(() => {
         settFeilMelding('');
@@ -67,13 +68,14 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     useEffect(() => {
+        settSamhandlerFeilmelding('');
         if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
             hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
                 } else {
-                    console.log(ressurs.status);
-                    /* Feilhåndtering - vise feilmelding */
+                    skjema.felter.samhandler.nullstill();
+                    settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
                 }
             });
         } else {
@@ -209,7 +211,7 @@ export const BrukerPanel: React.FC = () => {
                     )}
                 </>
             )}
-
+            {samhandlerFeilmelding && <Alert variant="warning">{samhandlerFeilmelding}</Alert>}
             {skjema.felter.samhandler.verdi !== undefined && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
