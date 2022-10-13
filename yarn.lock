@@ -11934,10 +11934,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snyk@^1.473.0, snyk@^1.985.0:
-  version "1.985.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.985.0.tgz#14025f4687316af7d7826b0f91f5c503ff452182"
-  integrity sha512-znT9qMRf5VuZeRb4y4OoMjBeUkgeXyIkvb8KC2i6JPckKCiKgqInzB/uXRVieYlWQjUlMGlktfMizN3lJ/9vuQ==
+snyk@^1.1029.0, snyk@^1.473.0:
+  version "1.1029.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.1029.0.tgz#2347ca85fe566f4f44cf3e8d27bf3b1503499c8a"
+  integrity sha512-qhF7pzZRQ70vytJXywH5uUI8SEWsdSbbWYIf+xrgYr35XARmHqeJvQxaZrdMjHY8CmEsXVblAYjUpy2SVm5hAA==
 
 source-list-map@^2.0.0:
   version "2.0.1"
