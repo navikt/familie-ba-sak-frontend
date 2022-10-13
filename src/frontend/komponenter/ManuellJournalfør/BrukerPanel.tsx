@@ -73,6 +73,13 @@ export const BrukerPanel: React.FC = () => {
             hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
+
+                    if (skjema.felter.bruker.verdi) {
+                        settFagsakForPerson(
+                            skjema.felter.bruker.verdi?.personIdent,
+                            skjema.felter.fagsakType.verdi
+                        );
+                    }
                 } else {
                     skjema.felter.samhandler.nullstill();
                     settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
@@ -87,9 +94,6 @@ export const BrukerPanel: React.FC = () => {
 
     const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
-        if (skjema.felter.bruker.verdi) {
-            settFagsakForPerson(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
-        }
         if (nyFagsakType !== FagsakType.INSTITUSJON) {
             skjema.felter.samhandler.nullstill();
             settValgtInstitusjon('');
