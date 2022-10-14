@@ -366,6 +366,11 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 datoAvtale: skjema.felter.datoAvtale.verdi,
                 behandlingKategori,
                 antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
+                mottakerMålform: institusjon ? personer.at(0)?.målform : mottakersMålform(),
+                mottakerNavn:
+                    mottakerIdent.verdi === institusjon?.orgNummer
+                        ? institusjon.navn
+                        : personer.find(person => person.personIdent === mottakerIdent.verdi)?.navn,
             };
         }
     };
