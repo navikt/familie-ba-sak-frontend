@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Office1Filled } from '@navikt/ds-icons';
+import { Cancel, Office1Filled } from '@navikt/ds-icons';
 import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
@@ -59,6 +59,7 @@ export const BrukerPanel: React.FC = () => {
     const { hentSamhandler } = useSamhandlerRequest();
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
     const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
+    const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
 
     useEffect(() => {
         settFeilMelding('');
@@ -131,6 +132,7 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
+            {/* Lesevisning */}
             {!erLesevisning() && (
                 <>
                     <FlexDiv>
@@ -162,6 +164,8 @@ export const BrukerPanel: React.FC = () => {
                         <ReadMore
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
+                            open={erFagsaktypePanelÅpnet}
+                            onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                         >
                             <Select
                                 label="Fagsaktype"
@@ -200,6 +204,19 @@ export const BrukerPanel: React.FC = () => {
                                         })}
                                     <option value="ny-institusjon">Ny institusjon</option>
                                 </Select>
+                            )}
+                            {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
+                                <Button
+                                    variant="tertiary"
+                                    size="xsmall"
+                                    onClick={() => {
+                                        oppdaterFagsaktype(FagsakType.NORMAL);
+                                        settErFagsaktypePanelÅpnet(false);
+                                    }}
+                                >
+                                    <Cancel />
+                                    Tilbakestill
+                                </Button>
                             )}
                         </ReadMore>
                     )}
