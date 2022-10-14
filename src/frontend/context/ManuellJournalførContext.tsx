@@ -225,16 +225,20 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         } else settMinimalFagsak(undefined);
     };
 
-    const settFagsakForPerson = async (personIdent: string, fagsakType: FagsakType) => {
-        const restFagsak = await hentFagsakForPerson(personIdent, fagsakType);
-        if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
-            settMinimalFagsak(restFagsak.data);
-        } else {
+    const settMinimalFagsakTilNormalFagsakForPerson = async (personIdent?: string) => {
+        if (personIdent === undefined) {
             settMinimalFagsak(undefined);
+        } else {
+            const restFagsak = await hentFagsakForPerson(personIdent);
+            if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
+                settMinimalFagsak(restFagsak.data);
+            } else {
+                settMinimalFagsak(undefined);
+            }
         }
     };
 
-    const endreBruker = async (personId: string, fagsakType: FagsakType = FagsakType.NORMAL) => {
+    const endreBruker = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -264,7 +268,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
 
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
-        return settFagsakForPerson(hentetPerson.data.personIdent, fagsakType);
+        return settMinimalFagsakTilNormalFagsakForPerson(hentetPerson.data.personIdent);
     };
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {
@@ -582,7 +586,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         lukkOppgaveOgKnyttJournalpostTilBehandling,
         kanKnytteJournalpostTilBehandling,
         institusjonsfagsaker,
-        settFagsakForPerson,
+        settMinimalFagsakTilNormalFagsakForPerson,
         settMinimalFagsakTilInstitusjonsfagsak,
     };
 });

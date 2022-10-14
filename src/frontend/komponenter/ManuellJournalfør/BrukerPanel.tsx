@@ -46,6 +46,7 @@ export const BrukerPanel: React.FC = () => {
         erLesevisning,
         institusjonsfagsaker,
         settMinimalFagsakTilInstitusjonsfagsak,
+        settMinimalFagsakTilNormalFagsakForPerson,
     } = useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
@@ -75,17 +76,17 @@ export const BrukerPanel: React.FC = () => {
     useEffect(() => {
         settSamhandlerFeilmelding('');
         if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
+            settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
             hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
-
-                    settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
                 } else {
                     skjema.felter.samhandler.nullstill();
                     settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
                 }
             });
         } else {
+            settMinimalFagsakTilNormalFagsakForPerson(skjema.felter.bruker.verdi?.personIdent);
             skjema.felter.samhandler.nullstill();
         }
     }, [valgtInstitusjon]);
@@ -95,7 +96,6 @@ export const BrukerPanel: React.FC = () => {
     const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
         if (nyFagsakType !== FagsakType.INSTITUSJON) {
-            skjema.felter.samhandler.nullstill();
             settValgtInstitusjon('');
         }
     };
