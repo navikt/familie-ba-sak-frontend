@@ -26,7 +26,7 @@ const ToKolonnerDiv = styled.div(
 );
 
 const ManuellJournalførContent: React.FC = () => {
-    const { dataForManuellJournalføring, minimalFagsak } = useManuellJournalfør();
+    const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalfør();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -36,7 +36,7 @@ const ManuellJournalførContent: React.FC = () => {
             return (
                 <>
                     <Personlinje
-                        bruker={dataForManuellJournalføring.data.person}
+                        bruker={skjema.felter.bruker.verdi}
                         minimalFagsak={minimalFagsak}
                     />
 
