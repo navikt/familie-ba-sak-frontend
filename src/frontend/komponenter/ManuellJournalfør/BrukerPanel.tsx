@@ -40,8 +40,13 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { skjema, endreBruker, erLesevisning, institusjonsfagsaker, settFagsakForPerson } =
-        useManuellJournalfør();
+    const {
+        skjema,
+        endreBruker,
+        erLesevisning,
+        institusjonsfagsaker,
+        settMinimalFagsakTilInstitusjonsfagsak,
+    } = useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
@@ -74,12 +79,7 @@ export const BrukerPanel: React.FC = () => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
 
-                    if (skjema.felter.bruker.verdi) {
-                        settFagsakForPerson(
-                            skjema.felter.bruker.verdi?.personIdent,
-                            skjema.felter.fagsakType.verdi
-                        );
-                    }
+                    settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
                 } else {
                     skjema.felter.samhandler.nullstill();
                     settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');

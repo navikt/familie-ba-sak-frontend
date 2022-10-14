@@ -216,6 +216,15 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
+    const settMinimalFagsakTilInstitusjonsfagsak = (orgNummer: string) => {
+        if (institusjonsfagsaker.status === RessursStatus.SUKSESS) {
+            const institusjonsfagsak = institusjonsfagsaker.data.find(
+                fagsak => fagsak.institusjon?.orgNummer === orgNummer
+            );
+            settMinimalFagsak(institusjonsfagsak);
+        } else settMinimalFagsak(undefined);
+    };
+
     const settFagsakForPerson = async (personIdent: string, fagsakType: FagsakType) => {
         const restFagsak = await hentFagsakForPerson(personIdent, fagsakType);
         if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
@@ -574,6 +583,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         kanKnytteJournalpostTilBehandling,
         institusjonsfagsaker,
         settFagsakForPerson,
+        settMinimalFagsakTilInstitusjonsfagsak,
     };
 });
 
