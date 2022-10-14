@@ -215,7 +215,11 @@ export const BrukerPanel: React.FC = () => {
                     )}
                 </>
             )}
-            {samhandlerFeilmelding && <Alert variant="warning">{samhandlerFeilmelding}</Alert>}
+            {samhandlerFeilmelding && (
+                <Alert variant="warning" inline>
+                    {samhandlerFeilmelding}
+                </Alert>
+            )}
             {skjema.felter.samhandler.verdi !== undefined && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
