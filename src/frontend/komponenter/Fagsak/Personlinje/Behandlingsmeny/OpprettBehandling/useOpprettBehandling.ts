@@ -16,7 +16,6 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/FagsakContext';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
@@ -26,10 +25,10 @@ import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
+    fagsakId: number,
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { fagsakId } = useSakOgBehandlingParams();
     const { settÅpenBehandling } = useBehandling();
     const { bruker: brukerRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();

@@ -31,7 +31,7 @@ export interface IRestNyBehandling {
     navIdent?: string;
     barnasIdenter?: string[];
     nyMigreringsdato?: string;
-    fagsakId?: string;
+    fagsakId: number;
 }
 
 export enum HenleggÅrsak {
