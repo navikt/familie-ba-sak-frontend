@@ -132,7 +132,6 @@ export const BrukerPanel: React.FC = () => {
                 />
             }
         >
-            {/* Lesevisning */}
             {!erLesevisning() && (
                 <>
                     <FlexDiv>
