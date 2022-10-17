@@ -170,7 +170,7 @@ const useOpprettBehandling = (
                 skjema.felter.behandlingstype.verdi ===
                 Tilbakekrevingsbehandlingstype.TILBAKEKREVING
             ) {
-                onSubmit(
+                onSubmit<void>(
                     {
                         method: 'GET',
                         url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,

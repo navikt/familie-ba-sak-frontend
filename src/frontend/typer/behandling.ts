@@ -30,6 +30,8 @@ export interface IRestNyBehandling {
     skalBehandlesAutomatisk?: boolean;
     navIdent?: string;
     barnasIdenter?: string[];
+    nyMigreringsdato?: string;
+    fagsakId?: string;
 }
 
 export enum HenleggÅrsak {
