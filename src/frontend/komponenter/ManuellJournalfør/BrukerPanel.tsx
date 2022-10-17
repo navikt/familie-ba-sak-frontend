@@ -147,6 +147,8 @@ export const BrukerPanel: React.FC = () => {
                             onClick={() => {
                                 if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                     settSpinner(true);
+                                    oppdaterFagsaktype(FagsakType.NORMAL);
+                                    settErFagsaktypePanelÅpnet(false);
                                     endreBruker(nyIdent.verdi).finally(() => {
                                         settSpinner(false);
                                     });
