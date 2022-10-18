@@ -28,11 +28,12 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { målform } from '../../../../typer/søknad';
-import { lagPersonLabel } from '../../../../utils/formatter';
+import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
@@ -93,6 +94,7 @@ const StyledFamilieInput = styled(FamilieInput)`
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     const {
         skjema,
@@ -108,6 +110,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         leggTilFritekst,
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekst,
+        institusjon,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -135,6 +138,17 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const behandlingSteg =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.steg : undefined;
+
+    if (institusjon) {
+        skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
+        if (!institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+            hentOgSettSamhandler(institusjon.orgNummer);
+        }
+        institusjon.navn =
+            samhandlerRessurs.status === RessursStatus.SUKSESS
+                ? samhandlerRessurs.data.navn
+                : institusjon.navn;
+    }
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -191,6 +205,19 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 </option>
                             );
                         })}
+                    {institusjon && (
+                        <option
+                            aria-selected={
+                                institusjon.orgNummer === skjema.felter.mottakerIdent.verdi
+                            }
+                            key={`institusjon_${institusjon.orgNummer}`}
+                            value={institusjon.orgNummer}
+                        >
+                            {`Institusjon | ${institusjon.navn?.concat(' |') || ''} ${formaterIdent(
+                                institusjon.orgNummer
+                            )}`}
+                        </option>
+                    )}
                 </FamilieSelect>
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}

@@ -2,34 +2,33 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Checkbox } from '@navikt/ds-react';
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { Cancel, Office1Filled } from '@navikt/ds-icons';
+import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
+import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { FagsakType, fagsakStatus } from '../../typer/fagsak';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
-import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
+import { useSamhandlerRequest } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
-const StyledDiv = styled.div`
+const FlexDiv = styled.div`
     display: flex;
+    margin-bottom: 1.5rem;
 `;
 
-const StyledCheckBoxWrapper = styled.div`
-    margin-bottom: 1rem;
-`;
-
-const StyledKnapp = styled(FamilieKnapp)`
+const StyledButton = styled(Button)`
     margin-left: 1rem;
     margin-top: auto;
-    height: 1rem;
 `;
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
@@ -41,7 +40,15 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { skjema, endreBruker, erLesevisning } = useManuellJournalfør();
+    const {
+        skjema,
+        endreBrukerOgSettNormalFagsak,
+        erLesevisning,
+        institusjonsfagsaker,
+        settMinimalFagsakTilInstitusjonsfagsak,
+        settMinimalFagsakTilNormalFagsakForPerson,
+        kanKnyttesTilInstitusjonsfagsak,
+    } = useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
@@ -50,7 +57,11 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+    const { hentSamhandler } = useSamhandlerRequest();
+    const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
+    const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
+    const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
+
     useEffect(() => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
@@ -65,10 +76,36 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     useEffect(() => {
-        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            skjema.felter.samhandler.validerOgSettFelt(samhandlerSkjema.submitRessurs.data);
+        settSamhandlerFeilmelding('');
+        if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
+            settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
+            hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+                if (ressurs.status === RessursStatus.SUKSESS) {
+                    skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
+                } else {
+                    skjema.felter.samhandler.nullstill();
+                    settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
+                }
+            });
+        } else {
+            settMinimalFagsakTilNormalFagsakForPerson(skjema.felter.bruker.verdi?.personIdent);
+            skjema.felter.samhandler.nullstill();
         }
-    }, [samhandlerSkjema.submitRessurs.status]);
+    }, [valgtInstitusjon]);
+
+    const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
+
+    const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
+        skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
+        if (nyFagsakType !== FagsakType.INSTITUSJON) {
+            settValgtInstitusjon('');
+        }
+    };
+
+    const nullstillFagsaktype = () => {
+        oppdaterFagsaktype(FagsakType.NORMAL);
+        settErFagsaktypePanelÅpnet(false);
+    };
 
     return (
         <StyledEkspanderbartpanelBaseMedMargin
@@ -82,132 +119,130 @@ export const BrukerPanel: React.FC = () => {
             }}
             tittel={
                 <DeltagerInfo
-                    ikon={<KontoSirkel filled={åpen} width={48} height={48} />}
+                    ikon={
+                        erBrukerPåInstitusjon ? (
+                            <Office1Filled
+                                color={NavdsSemanticColorInteractionPrimary}
+                                width={48}
+                                height={48}
+                            />
+                        ) : (
+                            <KontoSirkel filled={åpen} width={48} height={48} />
+                        )
+                    }
                     navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
-                    undertittel={'Søker/Bruker'}
+                    undertittel={
+                        erBrukerPåInstitusjon ? 'Søker/Bruker er på institusjon' : 'Søker/Bruker'
+                    }
                     ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                 />
             }
         >
-            {toggles[ToggleNavn.støtterInstitusjon] && (
-                <div>
-                    <StyledCheckBoxWrapper>
-                        <Checkbox
-                            id={'enslig-mindreårig'}
-                            value={'Bruker er enslig mindreårig'}
-                            checked={skjema.felter.erEnsligMindreårig.verdi}
-                            disabled={skjema.felter.erPåInstitusjon.verdi}
-                            onChange={() => {
-                                if (erLesevisning()) {
-                                    return;
-                                }
-                                const oppdatertVerdi = !skjema.felter.erEnsligMindreårig.verdi;
-                                skjema.felter.erEnsligMindreårig.validerOgSettFelt(oppdatertVerdi);
-                                if (skjema.felter.bruker.verdi) {
-                                    endreBruker(
-                                        skjema.felter.bruker.verdi?.personIdent,
-                                        oppdatertVerdi,
-                                        skjema.felter.erPåInstitusjon.verdi
-                                    );
-                                }
-                            }}
-                        >
-                            {'Bruker er enslig mindreårig'}
-                        </Checkbox>
-                    </StyledCheckBoxWrapper>
-                    <StyledCheckBoxWrapper>
-                        <Checkbox
-                            id={'på-institusjon'}
-                            value={'Bruker er på institusjon'}
-                            checked={skjema.felter.erPåInstitusjon.verdi}
-                            disabled={skjema.felter.erEnsligMindreårig.verdi}
-                            onChange={() => {
-                                if (erLesevisning()) {
-                                    return;
-                                }
-                                const oppdatertVerdi = !skjema.felter.erPåInstitusjon.verdi;
-                                skjema.felter.erPåInstitusjon.validerOgSettFelt(oppdatertVerdi);
-                                if (skjema.felter.bruker.verdi) {
-                                    endreBruker(
-                                        skjema.felter.bruker.verdi?.personIdent,
-                                        skjema.felter.erEnsligMindreårig.verdi,
-                                        oppdatertVerdi
-                                    );
-                                }
-                            }}
-                        >
-                            {'Bruker er på institusjon'}
-                        </Checkbox>
-                    </StyledCheckBoxWrapper>
-                </div>
-            )}
-            {skjema.felter.erPåInstitusjon.verdi && (
-                <StyledDiv>
-                    {!erLesevisning() && (
-                        <FamilieInput
-                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                                samhandlerSkjema.visFeilmeldinger
-                            )}
-                            erLesevisning={erLesevisning()}
-                            id={'hent-samhandler'}
-                            label={'Institusjonens organisasjonsnummer'}
-                            size={'medium'}
-                            placeholder={'organisasjonsnummer'}
+            {!erLesevisning() && (
+                <>
+                    <FlexDiv>
+                        <TextField
+                            {...nyIdent.hentNavInputProps(!!feilMelding)}
+                            error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                            label={'Endre bruker'}
+                            description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
+                            size="small"
                         />
+                        <StyledButton
+                            onClick={() => {
+                                if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
+                                    settSpinner(true);
+                                    nullstillFagsaktype();
+                                    endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
+                                        settSpinner(false);
+                                    });
+                                } else {
+                                    settFeilMelding('Personident er ugyldig');
+                                }
+                            }}
+                            children={'Endre bruker'}
+                            loading={spinner}
+                            size="small"
+                            variant="secondary"
+                        />
+                    </FlexDiv>
+                    {toggles[ToggleNavn.støtterInstitusjon] && kanKnyttesTilInstitusjonsfagsak() && (
+                        <ReadMore
+                            size="medium"
+                            header="Søker er en institusjon eller enslig mindreårig"
+                            open={erFagsaktypePanelÅpnet}
+                            onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
+                        >
+                            <Select
+                                label="Fagsaktype"
+                                size="small"
+                                onChange={event =>
+                                    oppdaterFagsaktype(event.target.value as FagsakType)
+                                }
+                                value={skjema.felter.fagsakType.verdi}
+                            >
+                                <option value={FagsakType.NORMAL}>Velg</option>
+                                <option value={FagsakType.INSTITUSJON}>Institusjon</option>
+                                <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
+                                    Enslig mindreårig
+                                </option>
+                            </Select>
+                            {erBrukerPåInstitusjon && (
+                                <Select
+                                    label="Institusjon"
+                                    size="small"
+                                    onChange={event => settValgtInstitusjon(event.target.value)}
+                                >
+                                    <option value="">Velg</option>
+                                    {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
+                                        institusjonsfagsaker.data.map(({ institusjon, status }) => {
+                                            return (
+                                                institusjon && (
+                                                    <option
+                                                        value={institusjon.orgNummer}
+                                                        key={institusjon.orgNummer}
+                                                    >
+                                                        {institusjon.orgNummer} |{' '}
+                                                        {fagsakStatus[status].navn}
+                                                    </option>
+                                                )
+                                            );
+                                        })}
+                                    <option value="ny-institusjon">Ny institusjon</option>
+                                </Select>
+                            )}
+                            {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
+                                <Button
+                                    variant="tertiary"
+                                    size="xsmall"
+                                    onClick={nullstillFagsaktype}
+                                >
+                                    <Cancel />
+                                    Tilbakestill
+                                </Button>
+                            )}
+                        </ReadMore>
                     )}
-                    <StyledKnapp
-                        variant={'secondary'}
-                        onClick={() => {
-                            settSpinner(true);
-                            onSubmitWrapper();
-                            settSpinner(false);
-                        }}
-                        children={'Hent institusjon'}
-                        loading={spinner}
-                        size="small"
-                        erLesevisning={erLesevisning()}
-                    />
-                </StyledDiv>
+                    {valgtInstitusjon === 'ny-institusjon' && (
+                        <Alert variant="warning" inline>
+                            <Heading size="xsmall" level="3">
+                                Institusjonssak på bruker må opprettes
+                            </Heading>
+                            For å journalføre dokumentet, må ny fagsak av typen institusjon
+                            opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
+                            godkjent institusjon, kan dokumentet journalføres.
+                        </Alert>
+                    )}
+                </>
             )}
-
-            {skjema.felter.samhandler.verdi !== null && (
+            {samhandlerFeilmelding && (
+                <Alert variant="warning" inline>
+                    {samhandlerFeilmelding}
+                </Alert>
+            )}
+            {skjema.felter.samhandler.verdi !== undefined && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
-            <br />
-            <StyledDiv>
-                {!erLesevisning() && (
-                    <FamilieInput
-                        {...nyIdent.hentNavInputProps(!!feilMelding)}
-                        error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                        erLesevisning={erLesevisning()}
-                        id={'hent-person'}
-                        label={'Skriv inn fødselsnummer/D-nummer'}
-                        size={'medium'}
-                        placeholder={'fnr/dnr'}
-                    />
-                )}
-                <StyledKnapp
-                    variant={'secondary'}
-                    onClick={() => {
-                        if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                            settSpinner(true);
-                            endreBruker(nyIdent.verdi)
-                                .then((feilmelding: string) => {
-                                    settFeilMelding(feilmelding);
-                                })
-                                .finally(() => {
-                                    settSpinner(false);
-                                });
-                        } else {
-                            settFeilMelding('Person ident er ugyldig');
-                        }
-                    }}
-                    children={'Endre bruker'}
-                    loading={spinner}
-                    size="small"
-                    erLesevisning={erLesevisning()}
-                />
-            </StyledDiv>
         </StyledEkspanderbartpanelBaseMedMargin>
     );
 };

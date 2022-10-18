@@ -6,7 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
-import { useFagsakRessurser } from '../../context/FagsakContext';
+import { useFagsakContext } from '../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
@@ -30,7 +30,7 @@ const FagsakContainer: React.FunctionComponent = () => {
 
     const skalHaHøyremeny = !erPåSaksoversikt && !erPåDokumentutsending;
 
-    const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakRessurser();
+    const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 
     useEffect(() => {
         if (fagsakId !== undefined) {

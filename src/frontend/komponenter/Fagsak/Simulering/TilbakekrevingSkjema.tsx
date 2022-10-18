@@ -13,7 +13,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useFagsakContext } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
@@ -91,7 +91,7 @@ const TilbakekrevingSkjema: React.FC<{
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
-    const { bruker: brukerRessurs } = useFagsakRessurser();
+    const { bruker: brukerRessurs } = useFagsakContext();
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {

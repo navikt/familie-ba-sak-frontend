@@ -15,8 +15,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
@@ -26,12 +25,12 @@ import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
+    fagsakId: number,
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { fagsakId } = useSakOgBehandlingParams();
     const { settÅpenBehandling } = useBehandling();
-    const { bruker: brukerRessurs } = useFagsakRessurser();
+    const { bruker: brukerRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
 
@@ -170,7 +169,7 @@ const useOpprettBehandling = (
                 skjema.felter.behandlingstype.verdi ===
                 Tilbakekrevingsbehandlingstype.TILBAKEKREVING
             ) {
-                onSubmit(
+                onSubmit<void>(
                     {
                         method: 'GET',
                         url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,
@@ -207,6 +206,7 @@ const useOpprettBehandling = (
                                 ? skjema.felter.valgteBarn.verdi.map(option => option.value)
                                 : undefined,
                             fagsakType: fagsakType,
+                            fagsakId: fagsakId,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',

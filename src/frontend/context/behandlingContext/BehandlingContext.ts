@@ -30,14 +30,14 @@ import { Målform } from '../../typer/søknad';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
-import { useFagsakRessurser } from '../FagsakContext';
+import { useFagsakContext } from '../FagsakContext';
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './util';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentMinimalFagsak, minimalFagsak } = useFagsakRessurser();
+    const { hentMinimalFagsak, minimalFagsak } = useFagsakContext();
     const [åpenBehandling, privatSettÅpenBehandling] = useState<Ressurs<IBehandling>>(
         byggTomRessurs()
     );

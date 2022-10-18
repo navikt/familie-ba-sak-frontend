@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, Checkbox, ErrorMessage, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorMessage, Heading, ReadMore, Select } from '@navikt/ds-react';
 import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { FagsakType } from '../../../typer/fagsak';
+import type { IBaseFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
-import { formaterIdent } from '../../../utils/formatter';
+import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import UIModalWrapper from '../Modal/UIModalWrapper';
@@ -22,9 +23,11 @@ export interface IOpprettFagsakModal {
     lukkModal: () => void;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
+    fagsakerPåBruker?: IBaseFagsak[];
 }
 
 const StyledDiv = styled.div`
+    margin-top: 2rem;
     display: flex;
 `;
 
@@ -40,24 +43,57 @@ const StyledHeading = styled(Heading)`
 `;
 
 const StyledKnappContainer = styled.div`
-    margin-top: 1.2rem;
+    margin-top: 2rem;
     margin-bottom: 0.5rem;
 `;
 
-const StyledCheckBoxWrapper = styled.div`
-    margin-top: 1.2rem;
-    margin-bottom: 1rem;
+const StyledFagsakOptionsDiv = styled.div`
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: fit-content;
+    min-width: 20rem;
 `;
+
+const StyledReadMore = styled(ReadMore)`
+    margin-top: 2rem;
+`;
+
+const StyledBodyShort = styled(BodyShort)`
+    margin-bottom: 2rem;
+`;
+
+const fagsakTypeOptions = [
+    {
+        value: FagsakType.NORMAL,
+        label: 'Velg',
+    },
+    {
+        value: FagsakType.INSTITUSJON,
+        label: 'Institusjon',
+    },
+    {
+        value: FagsakType.BARN_ENSLIG_MINDREÅRIG,
+        label: 'Enslig mindreårig',
+    },
+];
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
     personInfo,
+    fagsakerPåBruker,
 }) => {
+    const [bruker, settBruker] = useState(personInfo);
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
-    const { sjekkTilgang, toggles } = useApp();
+    const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
-    const [fagsakType, settFagsakType] = useState<FagsakType>(FagsakType.NORMAL);
+    const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
+    const harNormalFagsak = fagsakerPåBruker?.some(
+        fagsak => fagsak.fagsakType === FagsakType.NORMAL
+    );
+    const [fagsakType, settFagsakType] = useState<FagsakType>(
+        harNormalFagsak ? FagsakType.INSTITUSJON : FagsakType.NORMAL
+    );
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
@@ -70,12 +106,71 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     };
 
     useEffect(() => {
+        if (bruker === undefined && søkeresultat) {
+            hentPerson(søkeresultat.ident).then(personRessurs => {
+                if (personRessurs.status === RessursStatus.SUKSESS) {
+                    settBruker(personRessurs.data);
+                }
+            });
+        }
+    }, [søkeresultat]);
+
+    useEffect(() => {
         if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
             settValgtSamhandler(samhandlerSkjema.submitRessurs.data);
             settVisFeilmelding(false);
         }
     }, [samhandlerSkjema.submitRessurs.status]);
 
+    const valgAvFagsakType = () => (
+        <>
+            <StyledFagsakOptionsDiv>
+                <Select
+                    label={'Fagsaktype'}
+                    onChange={(event): void => {
+                        settFagsakType(
+                            Object.values(FagsakType).find(type => type === event.target.value) ||
+                                FagsakType.NORMAL
+                        );
+                    }}
+                    children={fagsakTypeOptions
+                        .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
+                        .map(option => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    value={fagsakTypeOptions.find(option => option.value === fagsakType)?.value}
+                    size={'small'}
+                />
+                {fagsakType === FagsakType.INSTITUSJON && (
+                    <StyledDiv>
+                        <FamilieInput
+                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                                samhandlerSkjema.visFeilmeldinger
+                            )}
+                            erLesevisning={false}
+                            id={'hent-samhandler'}
+                            label={'Organisasjonsnummer'}
+                            size={'small'}
+                        />
+
+                        <StyledKnapp
+                            onClick={() => {
+                                onSubmitWrapper();
+                            }}
+                            children={'Hent institusjon'}
+                            erLesevisning={false}
+                            size={'small'}
+                        />
+                    </StyledDiv>
+                )}
+            </StyledFagsakOptionsDiv>
+            {fagsakType === FagsakType.INSTITUSJON && valgtSamhandler !== undefined && (
+                <SamhandlerTabell samhandler={valgtSamhandler} />
+            )}
+        </>
+    );
     return (
         <>
             {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
@@ -182,90 +277,45 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         ],
                         onClose: onClose,
                         lukkKnapp: true,
-                        tittel: 'Opprett fagsak',
+                        tittel: harNormalFagsak
+                            ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+                            : 'Opprett fagsak',
                         visModal: visModal,
                         className: 'uimodal-wider',
                     }}
                 >
-                    <StyledHeading level={'3'}>
-                        {`Personen har ${
-                            (personInfo?.fagsakId?.size || 0) > 0 ? 'en eksisternede' : 'ingen'
-                        } tilknyttet fagsak. Ønsker du å opprette fagsak for denne
-                            personen?`}
-                    </StyledHeading>
-                    {søkeresultat && (
-                        <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
-                            søkeresultat.ident
-                        )})`}</BodyShort>
+                    <StyledBodyShort>
+                        {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
+                        Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
+                    </StyledBodyShort>
+                    {bruker ? (
+                        <BodyShort>
+                            &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
+                        </BodyShort>
+                    ) : (
+                        <BodyShort>
+                            &ensp;&bull;&ensp;
+                            {`${søkeresultat?.navn || ''} (${formaterIdent(
+                                søkeresultat?.ident || ''
+                            )})`}
+                        </BodyShort>
                     )}
-                    {!søkeresultat && personInfo && (
-                        <BodyShort>{`${personInfo.navn} (${formaterIdent(
-                            personInfo.personIdent
-                        )})`}</BodyShort>
-                    )}
-                    <StyledCheckBoxWrapper>
-                        <Checkbox
-                            id={'gjelder-enslig-mindreårig'}
-                            value={'Gjelder enslig mindreårig'}
-                            checked={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
-                            disabled={fagsakType === FagsakType.INSTITUSJON}
-                            onChange={() => {
-                                if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
+                    {harNormalFagsak ? (
+                        valgAvFagsakType()
+                    ) : (
+                        <StyledReadMore
+                            header={'Søker er en institusjon eller enslig mindreårig'}
+                            defaultOpen={false}
+                            onClick={() => {
+                                if (fagsakType !== FagsakType.NORMAL) {
                                     settFagsakType(FagsakType.NORMAL);
-                                } else {
-                                    settFagsakType(FagsakType.BARN_ENSLIG_MINDREÅRIG);
                                 }
-                                settVisFeilmelding(false);
                             }}
                         >
-                            {'Gjelder enslig mindreårig'}
-                        </Checkbox>
-                        <br />
-                        <Checkbox
-                            id={'gjelder-institusjon'}
-                            value={'Gjelder institusjon'}
-                            checked={fagsakType === FagsakType.INSTITUSJON}
-                            disabled={fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG}
-                            onChange={() => {
-                                if (fagsakType === FagsakType.INSTITUSJON) {
-                                    settFagsakType(FagsakType.NORMAL);
-                                } else {
-                                    settFagsakType(FagsakType.INSTITUSJON);
-                                }
-                                settVisFeilmelding(false);
-                            }}
-                        >
-                            {'Gjelder institusjon'}
-                        </Checkbox>
-                        <br />
-                        {fagsakType === FagsakType.INSTITUSJON && (
-                            <StyledDiv>
-                                <FamilieInput
-                                    {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                                        samhandlerSkjema.visFeilmeldinger
-                                    )}
-                                    erLesevisning={false}
-                                    id={'hent-samhandler'}
-                                    label={'Institusjonens organisasjonsnummer'}
-                                    size={'medium'}
-                                    placeholder={'organisasjonsnummer'}
-                                />
+                            {valgAvFagsakType()}
+                        </StyledReadMore>
+                    )}
 
-                                <StyledKnapp
-                                    onClick={() => {
-                                        onSubmitWrapper();
-                                    }}
-                                    children={'Hent institusjon'}
-                                    erLesevisning={false}
-                                />
-                            </StyledDiv>
-                        )}
-                        <br />
-
-                        {fagsakType === FagsakType.INSTITUSJON && valgtSamhandler !== undefined && (
-                            <SamhandlerTabell samhandler={valgtSamhandler}></SamhandlerTabell>
-                        )}
-                    </StyledCheckBoxWrapper>
                     {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
                 </UIModalWrapper>
             )}

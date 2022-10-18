@@ -18,12 +18,12 @@ import { Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
-import { useFagsakRessurser } from './FagsakContext';
+import { useFagsakContext } from './FagsakContext';
 
 export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
     FØDSEL_MINDREÅRIG = 'FØDSEL_MINDREÅRIG',
-    FØDSEL_UMYNDIG = 'FØDSEL_UMYNDIG',
+    FØDSEL_VERGEMÅL = 'FØDSEL_VERGEMÅL',
     FØDSEL_GENERELL = 'FØDSEL_GENERELL',
     KAN_SØKE = 'KAN_SØKE',
     KAN_SØKE_EØS = 'KAN_SØKE_EØS',
@@ -32,7 +32,7 @@ export enum DokumentÅrsak {
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     DELT_BOSTED: 'Delt bosted',
     FØDSEL_MINDREÅRIG: 'Fødsel mindreårig',
-    FØDSEL_UMYNDIG: 'Fødsel umyndig',
+    FØDSEL_VERGEMÅL: 'Fødsel vergemål',
     FØDSEL_GENERELL: 'Fødsel generell',
     KAN_SØKE: 'Kan søke',
     KAN_SØKE_EØS: 'Kan søke EØS',
@@ -40,7 +40,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
     ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker } = useFagsakRessurser();
+        const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetDokument } = useDokument();
 
@@ -203,11 +203,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
                         });
-                    case DokumentÅrsak.FØDSEL_UMYNDIG:
+                    case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_UMYNDIG,
+                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({

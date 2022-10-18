@@ -3,6 +3,7 @@ import type { IJournalpost } from '@navikt/familie-typer';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { IMinimalFagsak } from './fagsak';
+import type { FagsakType } from './fagsak';
 import type { IOppgave } from './oppgave';
 import type { IPersonInfo } from './person';
 
@@ -78,8 +79,7 @@ export interface IRestJournalføring {
     navIdent: string;
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
-    erEnsligMindreårig: boolean;
-    erPåInstitusjon: boolean;
+    fagsakType: FagsakType;
 }
 
 export interface ILogiskVedlegg {

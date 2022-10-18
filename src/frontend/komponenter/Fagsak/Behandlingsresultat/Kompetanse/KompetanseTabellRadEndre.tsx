@@ -16,7 +16,6 @@ import { type ISkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
@@ -29,7 +28,6 @@ import {
     SøkersAktivitet,
     søkersAktiviteter,
 } from '../../../../typer/eøsPerioder';
-import { ToggleNavn } from '../../../../typer/toggles';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -63,7 +61,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning(true);
-    const { toggles } = useApp();
 
     const visSubmitFeilmelding = () => {
         if (
@@ -247,22 +244,18 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     >
                         {kompetanseResultater[KompetanseResultat.NORGE_ER_PRIMÆRLAND]}
                     </option>
-                    {toggles[ToggleNavn.kanBehandleEøsSekunderland] && (
-                        <option
-                            key={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
-                            value={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
-                        >
-                            {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
-                        </option>
-                    )}
-                    {toggles[ToggleNavn.kanBehandleEøsToPrimerland] && (
-                        <option
-                            key={KompetanseResultat.TO_PRIMÆRLAND}
-                            value={KompetanseResultat.TO_PRIMÆRLAND}
-                        >
-                            {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
-                        </option>
-                    )}
+                    <option
+                        key={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
+                        value={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
+                    >
+                        {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
+                    </option>
+                    <option
+                        key={KompetanseResultat.TO_PRIMÆRLAND}
+                        value={KompetanseResultat.TO_PRIMÆRLAND}
+                    >
+                        {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
+                    </option>
                 </FamilieSelect>
                 {toPrimærland && (
                     <Alert

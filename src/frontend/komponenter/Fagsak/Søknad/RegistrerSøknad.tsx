@@ -27,7 +27,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 `;
 
 const RegistrerSøknad: React.FC = () => {
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, gjelderInstitusjon } = useBehandling();
 
     const {
         hentFeilTilOppsummering,
@@ -62,7 +62,7 @@ const RegistrerSøknad: React.FC = () => {
                 </>
             )}
 
-            <SøknadType />
+            {!gjelderInstitusjon && <SøknadType />}
 
             <Barna />
 

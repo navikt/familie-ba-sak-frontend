@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Heading, BodyShort, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../context/FagsakContext';
+import { useFagsakContext } from '../context/FagsakContext';
 import { behandlingÅrsak } from '../typer/behandling';
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 
 const Internstatistikk: React.FC = () => {
-    const { internstatistikk, hentInternstatistikk } = useFagsakRessurser();
+    const { internstatistikk, hentInternstatistikk } = useFagsakContext();
     if (internstatistikk.status === RessursStatus.IKKE_HENTET) {
         hentInternstatistikk();
     }

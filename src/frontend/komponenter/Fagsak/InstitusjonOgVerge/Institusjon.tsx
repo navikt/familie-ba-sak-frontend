@@ -15,10 +15,10 @@ const StyledDiv = styled.div`
 
 const Institusjon: React.FunctionComponent = () => {
     const { skjema } = useInstitusjonOgVerge();
-    const { hentSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     if (skjema.felter.institusjon.verdi && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentSamhandler(skjema.felter.institusjon.verdi.orgNummer);
+        hentOgSettSamhandler(skjema.felter.institusjon.verdi.orgNummer);
     }
 
     const visInstitusjon = () => {

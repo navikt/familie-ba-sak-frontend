@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import '@navikt/ds-css-internal';
+import { NedChevron } from 'nav-frontend-chevron';
+
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -39,7 +41,13 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
 
     return (
         <Dropdown>
-            <PosisjonertMenyknapp variant="secondary" size="small" forwardedAs={Dropdown.Toggle}>
+            <PosisjonertMenyknapp
+                variant="secondary"
+                size="small"
+                icon={<NedChevron />}
+                iconPosition={'right'}
+                forwardedAs={Dropdown.Toggle}
+            >
                 Meny
             </PosisjonertMenyknapp>
             <Dropdown.Menu>

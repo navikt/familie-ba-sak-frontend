@@ -88,12 +88,20 @@ export const formaterIdent = (personIdent: string, ukjentTekst = 'Ukjent id') =>
         : ukjentTekst;
 };
 
+export const formaterNavnAlderOgIdent = (person: {
+    personIdent: string;
+    navn: string;
+    fødselsdato: string;
+}): string => {
+    return `${person.navn} (${hentAlder(person.fødselsdato)} år) ${formaterIdent(
+        person.personIdent
+    )}`;
+};
+
 export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): string => {
     const person = personer.find(person => person.personIdent === ident);
     if (person) {
-        return `${person.navn} (${hentAlder(person.fødselsdato)} år) ${formaterIdent(
-            person.personIdent
-        )}`;
+        return formaterNavnAlderOgIdent({ ...person });
     } else {
         return ident;
     }

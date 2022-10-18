@@ -6,7 +6,6 @@ import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
 import {
-    byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
@@ -15,17 +14,18 @@ import {
 } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
-import { FagsakType } from '../typer/fagsak';
+import type { IMinimalFagsak, IInternstatistikk, IBaseFagsak } from '../typer/fagsak';
+import { mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
-const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
+const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [minimalFagsak, settMinimalFagsak] = React.useState<Ressurs<IMinimalFagsak>>(
         byggTomRessurs()
     );
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
+    const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
         byggTomRessurs()
     );
@@ -92,18 +92,12 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
             const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
-            if (brukerEtterTilgangssjekk.status === RessursStatus.FEILET) {
-                settBruker(sjekkTilgangTilPerson(hentetPerson));
-            } else if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
-                const brukerMedFagsakId = brukerEtterTilgangssjekk.data;
-                brukerMedFagsakId.fagsakId = new Map<FagsakType, number>();
+            settBruker(brukerEtterTilgangssjekk);
+            if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
                     if (fagsaker.status === RessursStatus.SUKSESS) {
-                        fagsaker.data.map(it =>
-                            brukerMedFagsakId.fagsakId?.set(it.fagsakType, it.id)
-                        );
+                        settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
                     }
-                    settBruker(sjekkTilgangTilPerson(byggDataRessurs(brukerMedFagsakId)));
                 });
             }
         });
@@ -123,19 +117,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const hentFagsakForPerson = async (personId: string, fagsakType = FagsakType.NORMAL) => {
-        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-                fagsakType: fagsakType,
-            },
-        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const hentFagsakerForPerson = async (personId: string) => {
         return request<{ personIdent: string }, IMinimalFagsak[]>({
             method: 'POST',
@@ -150,14 +131,15 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     return {
         bruker,
-        hentFagsakForPerson,
+        fagsakerPåBruker,
         hentInternstatistikk,
         hentMinimalFagsak,
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
         hentBruker,
+        hentFagsakerForPerson,
     };
 });
 
-export { FagsakProvider, useFagsakRessurser };
+export { FagsakProvider, useFagsakContext };

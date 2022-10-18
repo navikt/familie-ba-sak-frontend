@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Dropdown } from '@navikt/ds-react-internal';
 
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import type { IPersonInfo } from '../../../../../typer/person';
 import OpprettFagsakModal from '../../../../Felleskomponenter/HeaderMedSøk/OpprettFagsakModal';
 
@@ -11,6 +12,7 @@ interface IProps {
 
 const OpprettFagsak: React.FC<IProps> = ({ personInfo }) => {
     const [visModal, settVisModal] = React.useState(false);
+    const { fagsakerPåBruker } = useFagsakContext();
 
     return (
         <>
@@ -20,6 +22,7 @@ const OpprettFagsak: React.FC<IProps> = ({ personInfo }) => {
             {visModal && (
                 <OpprettFagsakModal
                     personInfo={personInfo}
+                    fagsakerPåBruker={fagsakerPåBruker}
                     lukkModal={() => {
                         settVisModal(false);
                     }}

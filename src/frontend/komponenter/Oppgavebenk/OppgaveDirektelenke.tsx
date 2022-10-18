@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
 import { Button } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
-import { useFagsakRessurser } from '../../context/FagsakContext';
+import { useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
@@ -20,7 +19,7 @@ interface IOppgaveDirektelenke {
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useApp();
-    const { hentFagsakForPerson } = useFagsakRessurser();
+    const { gåTilFagsakEllerVisFeilmelding } = useOppgaver();
     const { sjekkTilgang } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -46,15 +45,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
         if (brukerident) {
             if (await sjekkTilgang(brukerident, false)) {
-                const fagsak = await hentFagsakForPerson(brukerident);
-                if (fagsak.status === RessursStatus.SUKSESS && fagsak.data?.id) {
-                    navigate(`/fagsak/${fagsak.data.id}/saksoversikt`);
-                } else {
-                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                        alertType: AlertType.WARNING,
-                        tekst: 'Fant ikke fagsak',
-                    });
-                }
+                await gåTilFagsakEllerVisFeilmelding(brukerident);
             }
         } else {
             settToast(ToastTyper.MANGLER_TILGANG, {

@@ -23,6 +23,7 @@ import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useFagsakContext } from './FagsakContext';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>
@@ -105,6 +106,7 @@ export const mottakersMålformImplementering = (
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
+    const { minimalFagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
@@ -295,6 +297,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             skjema.felter.mottakerIdent.verdi
         );
 
+    const institusjon =
+        minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data.institusjon : undefined;
+
     const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
     const leggTilFritekst = (valideringsmelding?: string) => {
@@ -393,6 +398,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         maksAntallKulepunkter,
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekst,
+        institusjon,
     };
 });
 

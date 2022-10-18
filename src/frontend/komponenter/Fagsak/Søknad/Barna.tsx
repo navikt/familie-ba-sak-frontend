@@ -8,7 +8,7 @@ import { Alert, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useFagsakContext } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
@@ -41,9 +41,9 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 `;
 
 const Barna: React.FunctionComponent = () => {
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, gjelderInstitusjon } = useBehandling();
     const lesevisning = erLesevisning();
-    const { bruker } = useFagsakRessurser();
+    const { bruker } = useFagsakContext();
     const { skjema } = useSøknad();
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
@@ -99,7 +99,7 @@ const Barna: React.FunctionComponent = () => {
                     skjema.visFeilmeldinger
                 )}
                 legend={
-                    !lesevisning ? (
+                    !lesevisning && !gjelderInstitusjon ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>
@@ -121,7 +121,7 @@ const Barna: React.FunctionComponent = () => {
                     />
                 )}
 
-                {!lesevisning && (
+                {!lesevisning && !gjelderInstitusjon && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
             </StyledCheckboxGruppe>

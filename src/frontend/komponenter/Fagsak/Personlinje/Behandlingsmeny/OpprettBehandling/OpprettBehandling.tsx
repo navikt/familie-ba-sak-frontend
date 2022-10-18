@@ -27,6 +27,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker } =
         useOpprettBehandling(
+            minimalFagsak.id,
             () => settVisModal(false),
             () => {
                 settVisModal(false);
