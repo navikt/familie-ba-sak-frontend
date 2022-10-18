@@ -45,6 +45,14 @@ const StyledSelect = styled(Select)`
     margin: 0.75rem 0 1.25rem;
 `;
 
+const StyledDiv = styled.div`
+    margin-top: 2rem;
+`;
+
+const StyledAlert = styled(Alert)`
+    margin-top: 2rem;
+`;
+
 export const BrukerPanel: React.FC = () => {
     const {
         skjema,
@@ -230,24 +238,28 @@ export const BrukerPanel: React.FC = () => {
                         </ReadMore>
                     )}
                     {valgtInstitusjon === 'ny-institusjon' && (
-                        <Alert variant="warning" inline>
+                        <StyledAlert variant="warning" inline>
                             <Heading size="xsmall" level="3">
                                 Institusjonssak på bruker må opprettes
                             </Heading>
                             For å journalføre dokumentet, må ny fagsak av typen institusjon
                             opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
                             godkjent institusjon, kan dokumentet journalføres.
-                        </Alert>
+                        </StyledAlert>
                     )}
                 </>
             )}
             {samhandlerFeilmelding && (
-                <Alert variant="warning" inline>
+                <StyledAlert variant="warning" inline>
                     {samhandlerFeilmelding}
-                </Alert>
+                </StyledAlert>
             )}
             {skjema.felter.samhandler.verdi !== undefined && (
-                <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
+                <StyledDiv>
+                    <SamhandlerTabell
+                        samhandler={skjema.felter.samhandler.verdi}
+                    ></SamhandlerTabell>
+                </StyledDiv>
             )}
         </StyledEkspanderbartpanelBaseMedMargin>
     );
