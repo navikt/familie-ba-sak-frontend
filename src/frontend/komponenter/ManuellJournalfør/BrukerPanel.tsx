@@ -47,6 +47,7 @@ export const BrukerPanel: React.FC = () => {
         institusjonsfagsaker,
         settMinimalFagsakTilInstitusjonsfagsak,
         settMinimalFagsakTilNormalFagsakForPerson,
+        kanKnyttesTilInstitusjonsfagsak,
     } = useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
@@ -165,7 +166,7 @@ export const BrukerPanel: React.FC = () => {
                             variant="secondary"
                         />
                     </FlexDiv>
-                    {toggles[ToggleNavn.støtterInstitusjon] && (
+                    {toggles[ToggleNavn.støtterInstitusjon] && kanKnyttesTilInstitusjonsfagsak() && (
                         <ReadMore
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
