@@ -227,7 +227,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         if (personIdent === undefined) {
             settMinimalFagsak(undefined);
         } else {
-            const restFagsak = await hentFagsakForPerson(personIdent);
+            const restFagsak = await hentNormalFagsakForPerson(personIdent);
             if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
                 settMinimalFagsak(restFagsak.data);
             } else {
@@ -563,7 +563,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         });
     };
 
-    const hentFagsakForPerson = async (personId: string) => {
+    const hentNormalFagsakForPerson = async (personId: string) => {
         return request<{ personIdent: string }, IMinimalFagsak | undefined>({
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
