@@ -29,10 +29,13 @@ const FlexDiv = styled.div`
 const StyledButton = styled(Button)`
     margin-left: 1rem;
     margin-top: auto;
+    width: 9rem;
 `;
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
     & .ekspanderbartPanel__innhold {
+        margin-left: 4rem;
+        margin-right: 4rem;
         margin-bottom: 1rem;
         margin-top: 1rem;
     }
