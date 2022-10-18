@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 
 import { Back } from '@navikt/ds-icons';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -141,7 +141,7 @@ export const JournalpostSkjema: React.FC = () => {
                     Ferdigstill oppgave
                 </FamilieKnapp>
             </Knapperekke>
-            {valideringsfeilmelding && <Feilmelding>{valideringsfeilmelding}</Feilmelding>}
+            {valideringsfeilmelding && <ErrorMessage>{valideringsfeilmelding}</ErrorMessage>}
         </Container>
     );
 };
