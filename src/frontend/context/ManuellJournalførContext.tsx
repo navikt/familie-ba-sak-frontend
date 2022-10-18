@@ -36,11 +36,9 @@ import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbeh
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
-import { useFagsakContext } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
-    const { hentFagsakForPerson } = useFagsakContext();
     const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -109,7 +107,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
             fagsakType: FagsakType;
-            samhandler: ISamhandlerInfo | null;
+            samhandler: ISamhandlerInfo | undefined;
         },
         string
     >({
@@ -165,8 +163,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             fagsakType: useFelt<FagsakType>({
                 verdi: FagsakType.NORMAL,
             }),
-            samhandler: useFelt<ISamhandlerInfo | null>({
-                verdi: null,
+            samhandler: useFelt<ISamhandlerInfo | undefined>({
+                verdi: undefined,
             }),
         },
         skjemanavn: 'Journalfør dokument',
@@ -216,16 +214,29 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const settFagsakForPerson = async (personIdent: string, fagsakType: FagsakType) => {
-        const restFagsak = await hentFagsakForPerson(personIdent, fagsakType);
-        if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
-            settMinimalFagsak(restFagsak.data);
-        } else {
+    const settMinimalFagsakTilInstitusjonsfagsak = (orgNummer: string) => {
+        if (institusjonsfagsaker.status === RessursStatus.SUKSESS) {
+            const institusjonsfagsak = institusjonsfagsaker.data.find(
+                fagsak => fagsak.institusjon?.orgNummer === orgNummer
+            );
+            settMinimalFagsak(institusjonsfagsak);
+        } else settMinimalFagsak(undefined);
+    };
+
+    const settMinimalFagsakTilNormalFagsakForPerson = async (personIdent?: string) => {
+        if (personIdent === undefined) {
             settMinimalFagsak(undefined);
+        } else {
+            const restFagsak = await hentNormalFagsakForPerson(personIdent);
+            if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
+                settMinimalFagsak(restFagsak.data);
+            } else {
+                settMinimalFagsak(undefined);
+            }
         }
     };
 
-    const endreBruker = async (personId: string, fagsakType: FagsakType = FagsakType.NORMAL) => {
+    const endreBrukerOgSettNormalFagsak = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -255,7 +266,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
 
         skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
-        return settFagsakForPerson(hentetPerson.data.personIdent, fagsakType);
+        return settMinimalFagsakTilNormalFagsakForPerson(hentetPerson.data.personIdent);
     };
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {
@@ -552,10 +563,22 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         });
     };
 
+    const hentNormalFagsakForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
+            return fagsak;
+        });
+    };
+
     return {
         dataForManuellJournalføring,
         hentetDokument,
-        endreBruker,
+        endreBrukerOgSettNormalFagsak,
         erLesevisning,
         minimalFagsak,
         hentAktivBehandlingForJournalføring,
@@ -573,7 +596,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         lukkOppgaveOgKnyttJournalpostTilBehandling,
         kanKnytteJournalpostTilBehandling,
         institusjonsfagsaker,
-        settFagsakForPerson,
+        settMinimalFagsakTilNormalFagsakForPerson,
+        settMinimalFagsakTilInstitusjonsfagsak,
     };
 });
 
