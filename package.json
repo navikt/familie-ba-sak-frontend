@@ -16,6 +16,7 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
+    "prettier:fix": "prettier --write",
     "prepare": "husky install",
     "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=production node --loader ts-node/esm --es-module-specifier-resolution=node node_dist/backend/cypress-server.js",
     "run:cypress": "cypress run",
@@ -23,8 +24,8 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
-      "prettier --write",
-      "eslint --fix src/ --max-warnings=0"
+      "prettier --check",
+      "eslint --max-warnings=0"
     ]
   },
   "dependencies": {
