@@ -23,8 +23,12 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     : feil(felt, 'Du må velge en årsak'),
         });
 
-        const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean>({
-            verdi: endretUtbetalingAndel.prosent !== undefined && endretUtbetalingAndel.prosent > 0,
+        const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean | undefined>({
+            verdi:
+                endretUtbetalingAndel.prosent === undefined ||
+                endretUtbetalingAndel.prosent === null
+                    ? undefined
+                    : endretUtbetalingAndel.prosent > 0,
         });
 
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
@@ -32,7 +36,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 person: string | undefined;
                 fom: FamilieIsoDate | undefined;
                 tom: FamilieIsoDate | undefined;
-                periodeSkalUtbetalesTilSøker: boolean;
+                periodeSkalUtbetalesTilSøker: boolean | undefined;
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
                 søknadstidspunkt: FamilieIsoDate | undefined;
                 avtaletidspunktDeltBosted: FamilieIsoDate | undefined;
@@ -90,7 +94,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     },
                     skalFeltetVises: (avhengigheter: Avhengigheter) =>
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
-                        periodeSkalUtbetalesTilSøkerFelt.verdi,
+                        periodeSkalUtbetalesTilSøkerFelt.verdi === true,
                     valideringsfunksjon: (felt, avhengigheter) => {
                         const feilmelding = 'Du må velge om brukeren skal ha full sats eller ikke.';
                         if (avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED)
