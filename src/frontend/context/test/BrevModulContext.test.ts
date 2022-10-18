@@ -66,10 +66,26 @@ describe('BrevmodulContext', () => {
                     );
             }
         );
+        const hentTilpassetInstitusjon = true;
+        test('Skal returnere liste med brev tilpasset institusjon', () => {
+            expect(
+                hentMuligeBrevmalerImplementering(
+                    lagBehandlignRessursSuksess(behandlingSøknad),
+                    hentTilpassetInstitusjon
+                ).sort()
+            ).toEqual(
+                [
+                    Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                    // Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON, TODO
+                    // Brevmal.SVARTIDSBREV_INSTITUSJON,
+                ].sort()
+            );
+        });
     });
 
     describe('mottakersMålformImplementering', () => {
         const personIdent = '12345678930';
+        const orgNummer = '123456789';
         const personerNB = [mockBarn, mockSøker({ målform: Målform.NB, personIdent })];
         const personerNN = [mockBarn, mockSøker({ målform: Målform.NN, personIdent })];
         test('Skal returnere NB når søkers målform er NB', () => {
@@ -82,6 +98,11 @@ describe('BrevmodulContext', () => {
             expect(
                 mottakersMålformImplementering(personerNN, Valideringsstatus.OK, personIdent)
             ).toEqual(Målform.NN);
+        });
+        test('Skal returnere målformen registrert på barnet når mottakeren er en institusjon', () => {
+            expect(
+                mottakersMålformImplementering([mockBarn], Valideringsstatus.OK, orgNummer)
+            ).toEqual(mockBarn.målform);
         });
     });
 });

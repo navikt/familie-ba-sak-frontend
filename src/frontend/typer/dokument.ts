@@ -14,6 +14,8 @@ export interface IManueltBrevRequestPåBehandling {
     barnasFødselsdager?: string[];
     behandlingKategori?: BehandlingKategori | undefined;
     antallUkerSvarfrist?: number;
+    mottakerMålform?: Målform;
+    mottakerNavn?: string;
 }
 
 export interface IManueltBrevRequestPåFagsak {
