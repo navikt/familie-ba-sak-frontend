@@ -103,7 +103,7 @@ const brevmalKanVelgesForInstitusjon = (brevmal: Brevmal): boolean => {
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
             return true;
-        default:
+        default: // TODO: FORLENGET_SVARTIDSBREV_INSTITUSJON og SVARTIDSBREV_INSTITUSJON
             return false;
     }
 };
