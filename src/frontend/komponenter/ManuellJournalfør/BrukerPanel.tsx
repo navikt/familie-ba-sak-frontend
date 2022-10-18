@@ -206,6 +206,7 @@ export const BrukerPanel: React.FC = () => {
                                     label="Institusjon"
                                     size="small"
                                     onChange={event => settValgtInstitusjon(event.target.value)}
+                                    value={valgtInstitusjon}
                                 >
                                     <option value="">Velg</option>
                                     {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
