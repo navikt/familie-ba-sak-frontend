@@ -41,6 +41,10 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
     }
 `;
 
+const StyledSelect = styled(Select)`
+    margin: 0.75rem 0 1.25rem;
+`;
+
 export const BrukerPanel: React.FC = () => {
     const {
         skjema,
@@ -175,7 +179,7 @@ export const BrukerPanel: React.FC = () => {
                             open={erFagsaktypePanelÅpnet}
                             onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                         >
-                            <Select
+                            <StyledSelect
                                 label="Fagsaktype"
                                 size="small"
                                 onChange={event =>
@@ -188,9 +192,9 @@ export const BrukerPanel: React.FC = () => {
                                 <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
                                     Enslig mindreårig
                                 </option>
-                            </Select>
+                            </StyledSelect>
                             {erBrukerPåInstitusjon && (
-                                <Select
+                                <StyledSelect
                                     label="Institusjon"
                                     size="small"
                                     onChange={event => settValgtInstitusjon(event.target.value)}
@@ -211,7 +215,7 @@ export const BrukerPanel: React.FC = () => {
                                             );
                                         })}
                                     <option value="ny-institusjon">Ny institusjon</option>
-                                </Select>
+                                </StyledSelect>
                             )}
                             {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
                                 <Button
