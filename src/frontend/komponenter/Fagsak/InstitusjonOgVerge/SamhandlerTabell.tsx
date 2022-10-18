@@ -3,6 +3,7 @@ import React from 'react';
 import { Table } from '@navikt/ds-react';
 
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
+import { formaterIdent } from '../../../utils/formatter';
 
 export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ samhandler }) => {
     return (
@@ -19,7 +20,7 @@ export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ sa
                 </Table.Row>
                 <Table.Row>
                     <Table.DataCell>Organisasjonsnummer</Table.DataCell>
-                    <Table.DataCell>{samhandler.orgNummer}</Table.DataCell>
+                    <Table.DataCell>{formaterIdent(samhandler.orgNummer)}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                     <Table.DataCell>TSS-ident</Table.DataCell>

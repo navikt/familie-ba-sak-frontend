@@ -217,7 +217,7 @@ export const BrukerPanel: React.FC = () => {
                                                         value={institusjon.orgNummer}
                                                         key={institusjon.orgNummer}
                                                     >
-                                                        {institusjon.orgNummer} |{' '}
+                                                        {formaterIdent(institusjon.orgNummer)} |{' '}
                                                         {fagsakStatus[status].navn}
                                                     </option>
                                                 )
