@@ -101,6 +101,11 @@ export const BrukerPanel: React.FC = () => {
         }
     };
 
+    const nullstillFagsaktype = () => {
+        oppdaterFagsaktype(FagsakType.NORMAL);
+        settErFagsaktypePanelÅpnet(false);
+    };
+
     return (
         <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
@@ -146,8 +151,7 @@ export const BrukerPanel: React.FC = () => {
                             onClick={() => {
                                 if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                     settSpinner(true);
-                                    oppdaterFagsaktype(FagsakType.NORMAL);
-                                    settErFagsaktypePanelÅpnet(false);
+                                    nullstillFagsaktype();
                                     endreBruker(nyIdent.verdi).finally(() => {
                                         settSpinner(false);
                                     });
@@ -210,10 +214,7 @@ export const BrukerPanel: React.FC = () => {
                                 <Button
                                     variant="tertiary"
                                     size="xsmall"
-                                    onClick={() => {
-                                        oppdaterFagsaktype(FagsakType.NORMAL);
-                                        settErFagsaktypePanelÅpnet(false);
-                                    }}
+                                    onClick={nullstillFagsaktype}
                                 >
                                     <Cancel />
                                     Tilbakestill
