@@ -527,6 +527,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             : !erLesevisning();
     };
 
+    const kanKnyttesTilInstitusjonsfagsak = () => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            return dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.JFR;
+        }
+        return false;
+    };
+
     const settAvsenderLikBruker = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
             skjema.felter.avsenderNavn.validerOgSettFelt(
@@ -595,6 +602,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         tilbakestillAvsender,
         lukkOppgaveOgKnyttJournalpostTilBehandling,
         kanKnytteJournalpostTilBehandling,
+        kanKnyttesTilInstitusjonsfagsak,
         institusjonsfagsaker,
         settMinimalFagsakTilNormalFagsakForPerson,
         settMinimalFagsakTilInstitusjonsfagsak,
