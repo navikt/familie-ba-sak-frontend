@@ -42,7 +42,7 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 export const BrukerPanel: React.FC = () => {
     const {
         skjema,
-        endreBruker,
+        endreBrukerOgSettNormalFagsak,
         erLesevisning,
         institusjonsfagsaker,
         settMinimalFagsakTilInstitusjonsfagsak,
@@ -152,7 +152,7 @@ export const BrukerPanel: React.FC = () => {
                                 if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                     settSpinner(true);
                                     nullstillFagsaktype();
-                                    endreBruker(nyIdent.verdi).finally(() => {
+                                    endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
                                         settSpinner(false);
                                     });
                                 } else {

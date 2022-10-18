@@ -238,7 +238,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const endreBruker = async (personId: string) => {
+    const endreBrukerOgSettNormalFagsak = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -568,7 +568,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     return {
         dataForManuellJournalføring,
         hentetDokument,
-        endreBruker,
+        endreBrukerOgSettNormalFagsak,
         erLesevisning,
         minimalFagsak,
         hentAktivBehandlingForJournalføring,
