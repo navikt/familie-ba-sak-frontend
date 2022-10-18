@@ -117,18 +117,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             });
     };
 
-    const hentFagsakForPerson = async (personId: string) => {
-        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const hentFagsakerForPerson = async (personId: string) => {
         return request<{ personIdent: string }, IMinimalFagsak[]>({
             method: 'POST',
@@ -144,7 +132,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     return {
         bruker,
         fagsakerPåBruker,
-        hentFagsakForPerson,
         hentInternstatistikk,
         hentMinimalFagsak,
         internstatistikk,

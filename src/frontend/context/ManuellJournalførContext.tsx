@@ -36,11 +36,9 @@ import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbeh
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
-import { useFagsakContext } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
-    const { hentFagsakForPerson } = useFagsakContext();
     const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -562,6 +560,18 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             },
         }).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
             return fagsaker;
+        });
+    };
+
+    const hentFagsakForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
+            return fagsak;
         });
     };
 
