@@ -28,18 +28,16 @@ import { useFagsakContext } from './FagsakContext';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>,
-    hentTilpassetInstitusjon = false
+    tilpassetInstitusjon = false
 ): Brevmal[] => {
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return [];
     }
 
-    const brevmaler: Brevmal[] = Object.keys(Brevmal) as Brevmal[];
-    return brevmaler.filter(
-        brevmal =>
-            brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data) &&
-            hentTilpassetInstitusjon === brevmalKanVelgesForInstitusjon(brevmal)
+    const brevmaler: Brevmal[] = (Object.keys(Brevmal) as Brevmal[]).filter(
+        brevmal => tilpassetInstitusjon === brevmal.endsWith('INSTITUSJON')
     );
+    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
 };
 
 const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
@@ -96,15 +94,6 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             );
         case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
-    }
-};
-
-const brevmalKanVelgesForInstitusjon = (brevmal: Brevmal): boolean => {
-    switch (brevmal) {
-        case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
-            return true;
-        default: // TODO: FORLENGET_SVARTIDSBREV_INSTITUSJON og SVARTIDSBREV_INSTITUSJON
-            return false;
     }
 };
 
