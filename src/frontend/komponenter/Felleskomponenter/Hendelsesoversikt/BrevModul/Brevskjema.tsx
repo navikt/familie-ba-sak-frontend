@@ -43,7 +43,13 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
-import { Brevmal, brevmaler, leggTilValuePåOption, opplysningsdokumenter } from './typer';
+import {
+    Brevmal,
+    brevmaler,
+    leggTilValuePåOption,
+    opplysningsdokumenter,
+    opplysningsdokumenterTilInstitusjon,
+} from './typer';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -268,7 +274,11 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     : (valgteOptions as ISelectOptionMedBrevtekst[])
                             );
                         }}
-                        options={opplysningsdokumenter.map(leggTilValuePåOption)}
+                        options={
+                            institusjon
+                                ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
+                                : opplysningsdokumenter.map(leggTilValuePåOption)
+                        }
                     />
                 )}
                 {skjema.felter.fritekster.erSynlig && (

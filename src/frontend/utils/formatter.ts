@@ -71,7 +71,7 @@ const erPersonId = (personIdent: string) => {
     return /^[+-]?\d+(\.\d+)?$/.test(id) && id.length === 11;
 };
 
-const erOrgNr = (orgNr: string) => {
+export const erOrgNr = (orgNr: string) => {
     // Sjekker kun etter ni siffer, validerer ikke kontrollsifferet (det 9. sifferet)
     return kunSiffer(orgNr) && orgNr.length === 9;
 };

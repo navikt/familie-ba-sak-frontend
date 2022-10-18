@@ -19,6 +19,7 @@ import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
+import { erOrgNr } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
@@ -26,14 +27,19 @@ import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakContext } from './FagsakContext';
 
 export const hentMuligeBrevmalerImplementering = (
-    åpenBehandling: Ressurs<IBehandling>
+    åpenBehandling: Ressurs<IBehandling>,
+    hentTilpassetInstitusjon = false
 ): Brevmal[] => {
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return [];
     }
 
     const brevmaler: Brevmal[] = Object.keys(Brevmal) as Brevmal[];
-    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
+    return brevmaler.filter(
+        brevmal =>
+            brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data) &&
+            hentTilpassetInstitusjon === brevmalKanVelgesForInstitusjon(brevmal)
+    );
 };
 
 const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {
@@ -88,6 +94,17 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
                     åpenBehandling.type
                 )
             );
+        case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
+            return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+    }
+};
+
+const brevmalKanVelgesForInstitusjon = (brevmal: Brevmal): boolean => {
+    switch (brevmal) {
+        case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
+            return true;
+        default:
+            return false;
     }
 };
 
@@ -96,13 +113,15 @@ export const mottakersMålformImplementering = (
     skjemaValideringsStatus: Valideringsstatus,
     mottakerIdent: string | readonly string[] | number
 ) =>
-    personer.find((person: IGrunnlagPerson) => {
-        if (skjemaValideringsStatus === Valideringsstatus.OK) {
-            return person.personIdent === mottakerIdent;
-        } else {
-            return person.type === PersonType.SØKER;
-        }
-    })?.målform ?? Målform.NB;
+    (erOrgNr(mottakerIdent.toString())
+        ? personer.at(0)?.målform
+        : personer.find((person: IGrunnlagPerson) => {
+              if (skjemaValideringsStatus === Valideringsstatus.OK) {
+                  return person.personIdent === mottakerIdent;
+              } else {
+                  return person.type === PersonType.SØKER;
+              }
+          })?.målform) ?? Målform.NB;
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
@@ -209,6 +228,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                    Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
@@ -300,7 +320,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const institusjon =
         minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data.institusjon : undefined;
 
-    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
+    const hentMuligeBrevMaler = (): Brevmal[] =>
+        hentMuligeBrevmalerImplementering(åpenBehandling, !!institusjon);
 
     const leggTilFritekst = (valideringsmelding?: string) => {
         skjema.felter.fritekster.validerOgSettFelt([
@@ -366,7 +387,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 datoAvtale: skjema.felter.datoAvtale.verdi,
                 behandlingKategori,
                 antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
-                mottakerMålform: institusjon ? personer.at(0)?.målform : mottakersMålform(),
+                mottakerMålform: mottakersMålform(),
                 mottakerNavn:
                     mottakerIdent.verdi === institusjon?.orgNummer
                         ? institusjon.navn
