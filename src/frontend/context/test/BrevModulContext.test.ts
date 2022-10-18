@@ -99,7 +99,6 @@ describe('BrevmodulContext', () => {
                 mottakersMålformImplementering(personerNN, Valideringsstatus.OK, personIdent)
             ).toEqual(Målform.NN);
         });
-
         test('Skal returnere målformen registrert på barnet når mottakeren er en institusjon', () => {
             expect(
                 mottakersMålformImplementering([mockBarn], Valideringsstatus.OK, orgNummer)

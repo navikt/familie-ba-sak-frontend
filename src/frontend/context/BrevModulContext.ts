@@ -114,7 +114,7 @@ export const mottakersMålformImplementering = (
     mottakerIdent: string | readonly string[] | number
 ) =>
     (erOrgNr(mottakerIdent.toString())
-        ? personer.at(0)?.målform
+        ? personer[0]?.målform
         : personer.find((person: IGrunnlagPerson) => {
               if (skjemaValideringsStatus === Valideringsstatus.OK) {
                   return person.personIdent === mottakerIdent;
