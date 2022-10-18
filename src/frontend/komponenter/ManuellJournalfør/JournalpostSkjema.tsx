@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,11 +7,12 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { Back } from '@navikt/ds-icons';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { FagsakType } from '../../typer/fagsak';
 import type { OppgavetypeFilter } from '../../typer/oppgave';
 import { oppgaveTypeFilter } from '../../typer/oppgave';
 import Knapperekke from '../Felleskomponenter/Knapperekke';
@@ -54,6 +55,20 @@ export const JournalpostSkjema: React.FC = () => {
     } = useManuellJournalfør();
 
     const navigate = useNavigate();
+    const [valideringsfeilmelding, settValideringsfeilmelding] = useState<string>('');
+
+    const validerOgJournalfør = (): void => {
+        if (
+            skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON &&
+            skjema.felter.samhandler.verdi === undefined
+        ) {
+            settValideringsfeilmelding(
+                'Det er registrert at søker er institusjon. For å journalføre, må fagsak av typen institusjon først opprettes i saksbehandlingsløsningen. Deretter kan fagsaken velges i nedtrekkslisten i bruker/søker-panelet over.'
+            );
+        } else {
+            journalfør();
+        }
+    };
 
     return (
         <Container>
@@ -108,7 +123,7 @@ export const JournalpostSkjema: React.FC = () => {
                     mini={true}
                     type={'hoved'}
                     erLesevisning={erLesevisning()}
-                    onClick={journalfør}
+                    onClick={validerOgJournalfør}
                     spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
@@ -126,6 +141,7 @@ export const JournalpostSkjema: React.FC = () => {
                     Ferdigstill oppgave
                 </FamilieKnapp>
             </Knapperekke>
+            {valideringsfeilmelding && <ErrorMessage>{valideringsfeilmelding}</ErrorMessage>}
         </Container>
     );
 };

@@ -15,7 +15,7 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak, IInternstatistikk, IBaseFagsak } from '../typer/fagsak';
-import { FagsakType, mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
+import { mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
 import type { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
@@ -117,19 +117,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             });
     };
 
-    const hentFagsakForPerson = async (personId: string, fagsakType = FagsakType.NORMAL) => {
-        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-                fagsakType: fagsakType,
-            },
-        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const hentFagsakerForPerson = async (personId: string) => {
         return request<{ personIdent: string }, IMinimalFagsak[]>({
             method: 'POST',
@@ -145,7 +132,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     return {
         bruker,
         fagsakerPåBruker,
-        hentFagsakForPerson,
         hentInternstatistikk,
         hentMinimalFagsak,
         internstatistikk,

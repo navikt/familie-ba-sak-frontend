@@ -97,7 +97,7 @@ const FritekstWrapper = styled.div`
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
-    const { hentSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     const {
         skjema,
@@ -145,7 +145,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     if (institusjon) {
         skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
         if (!institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-            hentSamhandler(institusjon.orgNummer);
+            hentOgSettSamhandler(institusjon.orgNummer);
         }
         institusjon.navn =
             samhandlerRessurs.status === RessursStatus.SUKSESS

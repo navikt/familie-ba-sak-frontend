@@ -46,21 +46,31 @@ export const useSamhandlerRequest = () => {
         byggTomRessurs()
     );
 
-    const hentSamhandler = (orgnr: string) => {
+    const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
-        request<ISamhandlerInfoRequest, ISamhandlerInfo>(hentSamhandlerdataForOrgnrConfig(orgnr))
+        hentSamhandler(orgnr).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+            settSamhandlerRessurs(ressurs);
+        });
+    };
+
+    const hentSamhandler = async (orgnr: string): Promise<Ressurs<ISamhandlerInfo>> => {
+        return request<ISamhandlerInfoRequest, ISamhandlerInfo>(
+            hentSamhandlerdataForOrgnrConfig(orgnr)
+        )
             .then((ressurs: Ressurs<ISamhandlerInfo>) => {
-                settSamhandlerRessurs(ressurs);
+                return ressurs;
             })
             .catch((_error: AxiosError) => {
-                settSamhandlerRessurs(
-                    byggFeiletRessurs('Ukjent feil ved innhenting av samhandlerinfo')
+                const ressurs: Ressurs<ISamhandlerInfo> = byggFeiletRessurs(
+                    'Ukjent feil ved innhenting av samhandlerinfo'
                 );
+                return ressurs;
             });
     };
 
     return {
         hentSamhandler,
+        hentOgSettSamhandler,
         samhandlerRessurs,
     };
 };

@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Office1Filled } from '@navikt/ds-icons';
-import { Button, ReadMore, Select, TextField } from '@navikt/ds-react';
+import { Cancel, Office1Filled } from '@navikt/ds-icons';
+import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { FagsakType, fagsakStatus } from '../../typer/fagsak';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
-import { useSamhandlerSkjema } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
+import { useSamhandlerRequest } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
@@ -39,8 +40,15 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { skjema, endreBruker, erLesevisning, institusjonsfagsaker, settFagsakForPerson } =
-        useManuellJournalfør();
+    const {
+        skjema,
+        endreBrukerOgSettNormalFagsak,
+        erLesevisning,
+        institusjonsfagsaker,
+        settMinimalFagsakTilInstitusjonsfagsak,
+        settMinimalFagsakTilNormalFagsakForPerson,
+        kanKnyttesTilInstitusjonsfagsak,
+    } = useManuellJournalfør();
     const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
@@ -49,7 +57,10 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { samhandlerSkjema } = useSamhandlerSkjema();
+    const { hentSamhandler } = useSamhandlerRequest();
+    const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
+    const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
+    const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
 
     useEffect(() => {
         settFeilMelding('');
@@ -65,18 +76,35 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     useEffect(() => {
-        if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            skjema.felter.samhandler.validerOgSettFelt(samhandlerSkjema.submitRessurs.data);
+        settSamhandlerFeilmelding('');
+        if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
+            settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
+            hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+                if (ressurs.status === RessursStatus.SUKSESS) {
+                    skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
+                } else {
+                    skjema.felter.samhandler.nullstill();
+                    settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
+                }
+            });
+        } else {
+            settMinimalFagsakTilNormalFagsakForPerson(skjema.felter.bruker.verdi?.personIdent);
+            skjema.felter.samhandler.nullstill();
         }
-    }, [samhandlerSkjema.submitRessurs.status]);
+    }, [valgtInstitusjon]);
 
     const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
 
     const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
-        if (skjema.felter.bruker.verdi) {
-            settFagsakForPerson(skjema.felter.bruker.verdi?.personIdent, nyFagsakType);
+        if (nyFagsakType !== FagsakType.INSTITUSJON) {
+            settValgtInstitusjon('');
         }
+    };
+
+    const nullstillFagsaktype = () => {
+        oppdaterFagsaktype(FagsakType.NORMAL);
+        settErFagsaktypePanelÅpnet(false);
     };
 
     return (
@@ -124,7 +152,8 @@ export const BrukerPanel: React.FC = () => {
                             onClick={() => {
                                 if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                     settSpinner(true);
-                                    endreBruker(nyIdent.verdi).finally(() => {
+                                    nullstillFagsaktype();
+                                    endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
                                         settSpinner(false);
                                     });
                                 } else {
@@ -137,10 +166,12 @@ export const BrukerPanel: React.FC = () => {
                             variant="secondary"
                         />
                     </FlexDiv>
-                    {toggles[ToggleNavn.støtterInstitusjon] && (
+                    {toggles[ToggleNavn.støtterInstitusjon] && kanKnyttesTilInstitusjonsfagsak() && (
                         <ReadMore
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
+                            open={erFagsaktypePanelÅpnet}
+                            onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                         >
                             <Select
                                 label="Fagsaktype"
@@ -157,13 +188,20 @@ export const BrukerPanel: React.FC = () => {
                                 </option>
                             </Select>
                             {erBrukerPåInstitusjon && (
-                                <Select label="Institusjon" size="small">
+                                <Select
+                                    label="Institusjon"
+                                    size="small"
+                                    onChange={event => settValgtInstitusjon(event.target.value)}
+                                >
                                     <option value="">Velg</option>
                                     {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
                                         institusjonsfagsaker.data.map(({ institusjon, status }) => {
                                             return (
                                                 institusjon && (
-                                                    <option value={institusjon.orgNummer}>
+                                                    <option
+                                                        value={institusjon.orgNummer}
+                                                        key={institusjon.orgNummer}
+                                                    >
                                                         {institusjon.orgNummer} |{' '}
                                                         {fagsakStatus[status].navn}
                                                     </option>
@@ -173,12 +211,36 @@ export const BrukerPanel: React.FC = () => {
                                     <option value="ny-institusjon">Ny institusjon</option>
                                 </Select>
                             )}
+                            {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
+                                <Button
+                                    variant="tertiary"
+                                    size="xsmall"
+                                    onClick={nullstillFagsaktype}
+                                >
+                                    <Cancel />
+                                    Tilbakestill
+                                </Button>
+                            )}
                         </ReadMore>
+                    )}
+                    {valgtInstitusjon === 'ny-institusjon' && (
+                        <Alert variant="warning" inline>
+                            <Heading size="xsmall" level="3">
+                                Institusjonssak på bruker må opprettes
+                            </Heading>
+                            For å journalføre dokumentet, må ny fagsak av typen institusjon
+                            opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
+                            godkjent institusjon, kan dokumentet journalføres.
+                        </Alert>
                     )}
                 </>
             )}
-
-            {skjema.felter.samhandler.verdi !== null && (
+            {samhandlerFeilmelding && (
+                <Alert variant="warning" inline>
+                    {samhandlerFeilmelding}
+                </Alert>
+            )}
+            {skjema.felter.samhandler.verdi !== undefined && (
                 <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
             )}
         </StyledEkspanderbartpanelBaseMedMargin>
