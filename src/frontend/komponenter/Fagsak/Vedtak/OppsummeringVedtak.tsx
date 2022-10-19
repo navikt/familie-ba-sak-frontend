@@ -229,12 +229,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'small'}
                             style={{ float: 'right' }}
                             onClick={() => setVisKorrigerEtterbetalingModal(true)}
-                            icon={<Edit aria-hidden />}
+                            icon={
+                                åpenBehandling.korrigertEtterbetaling ? (
+                                    <InformationColored aria-hidden />
+                                ) : (
+                                    <Edit aria-hidden />
+                                )
+                            }
                         >
                             {åpenBehandling.korrigertEtterbetaling ? (
-                                <>
-                                    <InformationColored aria-hidden /> Vis korrigert etterbetaling
-                                </>
+                                <>Vis korrigert etterbetaling</>
                             ) : (
                                 <>Korriger etterbetaling</>
                             )}
