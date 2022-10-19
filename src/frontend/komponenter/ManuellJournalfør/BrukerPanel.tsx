@@ -29,14 +29,25 @@ const FlexDiv = styled.div`
 const StyledButton = styled(Button)`
     margin-left: 1rem;
     margin-top: auto;
+    width: 9rem;
 `;
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
     & .ekspanderbartPanel__innhold {
-        margin-left: 4rem;
-        margin-bottom: 1rem;
-        margin-top: 1rem;
+        margin: 1rem 4rem;
     }
+`;
+
+const StyledSelect = styled(Select)`
+    margin: 0.75rem 0 1.25rem;
+`;
+
+const ToppMargin = styled.div`
+    margin-top: 2rem;
+`;
+
+const StyledAlert = styled(Alert)`
+    margin-top: 2rem;
 `;
 
 export const BrukerPanel: React.FC = () => {
@@ -173,7 +184,7 @@ export const BrukerPanel: React.FC = () => {
                             open={erFagsaktypePanelÅpnet}
                             onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                         >
-                            <Select
+                            <StyledSelect
                                 label="Fagsaktype"
                                 size="small"
                                 onChange={event =>
@@ -186,12 +197,13 @@ export const BrukerPanel: React.FC = () => {
                                 <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
                                     Enslig mindreårig
                                 </option>
-                            </Select>
+                            </StyledSelect>
                             {erBrukerPåInstitusjon && (
-                                <Select
+                                <StyledSelect
                                     label="Institusjon"
                                     size="small"
                                     onChange={event => settValgtInstitusjon(event.target.value)}
+                                    value={valgtInstitusjon}
                                 >
                                     <option value="">Velg</option>
                                     {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
@@ -202,14 +214,14 @@ export const BrukerPanel: React.FC = () => {
                                                         value={institusjon.orgNummer}
                                                         key={institusjon.orgNummer}
                                                     >
-                                                        {institusjon.orgNummer} |{' '}
+                                                        {formaterIdent(institusjon.orgNummer)} |{' '}
                                                         {fagsakStatus[status].navn}
                                                     </option>
                                                 )
                                             );
                                         })}
                                     <option value="ny-institusjon">Ny institusjon</option>
-                                </Select>
+                                </StyledSelect>
                             )}
                             {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
                                 <Button
@@ -224,24 +236,26 @@ export const BrukerPanel: React.FC = () => {
                         </ReadMore>
                     )}
                     {valgtInstitusjon === 'ny-institusjon' && (
-                        <Alert variant="warning" inline>
+                        <StyledAlert variant="warning" inline>
                             <Heading size="xsmall" level="3">
                                 Institusjonssak på bruker må opprettes
                             </Heading>
                             For å journalføre dokumentet, må ny fagsak av typen institusjon
                             opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
                             godkjent institusjon, kan dokumentet journalføres.
-                        </Alert>
+                        </StyledAlert>
                     )}
                 </>
             )}
             {samhandlerFeilmelding && (
-                <Alert variant="warning" inline>
+                <StyledAlert variant="warning" inline>
                     {samhandlerFeilmelding}
-                </Alert>
+                </StyledAlert>
             )}
             {skjema.felter.samhandler.verdi !== undefined && (
-                <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi}></SamhandlerTabell>
+                <ToppMargin>
+                    <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi} />
+                </ToppMargin>
             )}
         </StyledEkspanderbartpanelBaseMedMargin>
     );

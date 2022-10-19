@@ -7,6 +7,7 @@ export interface BrevtypeSelect extends HTMLSelectElement {
 export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED = 'INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED',
+    INNHENTE_OPPLYSNINGER_INSTITUSJON = 'INNHENTE_OPPLYSNINGER_INSTITUSJON',
     VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED = 'VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
     VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 = 'VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14',
@@ -29,6 +30,7 @@ export enum Informasjonsbrev {
 export const brevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Innhent opplysninger',
     INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED: 'Innhente opplysninger etter søknad i SED',
+    INNHENTE_OPPLYSNINGER_INSTITUSJON: 'Innhente opplysninger institusjon',
     VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED: 'Varsel om vedtak etter søknad i SED',
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
     HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
@@ -56,6 +58,30 @@ export interface ISelectOptionMedBrevtekst extends OptionType {
     label: string;
     brevtekst?: Record<Målform, string>;
 }
+
+export const opplysningsdokumenterTilInstitusjon: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
+    {
+        label: 'Bekreftelse fra barnevernet',
+        brevtekst: {
+            NB: 'Dokumentasjon fra barneverntjenesten som viser at barnet bor fast i institusjonen, og fra hvilken dato det gjelder.',
+            NN: 'Dokumentasjon frå barneverntenesta som viser at barnet bur fast i institusjonen, og frå kva dato det gjeld.',
+        },
+    },
+    {
+        label: 'Oppholdstillatelse',
+        brevtekst: {
+            NB: 'Dokumentasjon som viser at barnet har lovlig opphold i Norge.',
+            NN: 'Dokumentasjon som viser at barnet har lovleg opphald i Noreg.',
+        },
+    },
+    {
+        label: 'Opplysninger om kontonummer',
+        brevtekst: {
+            NB: 'Opplysninger om hvilket kontonummer barnetrygden skal utbetales til.',
+            NN: 'Opplysningar om kva kontonummer barnetrygda skal utbetalast til.',
+        },
+    },
+];
 
 export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
     {
