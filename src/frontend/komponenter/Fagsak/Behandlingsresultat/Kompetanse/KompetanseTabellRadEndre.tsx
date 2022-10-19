@@ -50,6 +50,14 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
+const StyledFamilieLandvelger = styled(FamilieLandvelger)`
+    margin-top: 1.5rem;
+`;
+
+const StyledFamilieSelect = styled(FamilieSelect)`
+    margin-top: 1.5rem;
+`;
+
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
@@ -114,6 +122,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             event.target.value as SøkersAktivitet
                         )
                     }
+                    size={'small'}
                 >
                     <option value={''}>Velg</option>
                     {Object.values(SøkersAktivitet).map(aktivitet => {
@@ -124,7 +133,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </FamilieSelect>
-                <FamilieSelect
+                <StyledFamilieSelect
                     className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
                         skjema.visFeilmeldinger
@@ -142,6 +151,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             event.target.value as AnnenForelderAktivitet
                         );
                     }}
+                    size={'small'}
                 >
                     <option value={''}>Velg</option>
                     {Object.values(AnnenForelderAktivitet).map(aktivitet => {
@@ -151,14 +161,14 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             </option>
                         );
                     })}
-                </FamilieSelect>
+                </StyledFamilieSelect>
                 {skjema.felter.annenForeldersAktivitet.verdi ===
                     AnnenForelderAktivitet.IKKE_AKTUELT && (
                     <StyledAlert variant="info" size="small" inline>
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
                     </StyledAlert>
                 )}
-                <FamilieLandvelger
+                <StyledFamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'søkersAktivitetsland'}
                     label={'Søkers aktivitetsland'}
