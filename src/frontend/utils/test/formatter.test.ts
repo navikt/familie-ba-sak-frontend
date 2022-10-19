@@ -5,6 +5,7 @@ import {
     datoformat,
     formaterIdent,
     formaterIsoDato,
+    formaterTekstStorForbokstav,
     hentAlder,
     kunSiffer,
     sorterUtbetaling,
@@ -120,5 +121,23 @@ describe('utils/formatter', () => {
             expect(sorterteUtbetalingsperiodedetaljer[1]).toEqual(utbetalingSmåbarnstillegg);
             expect(sorterteUtbetalingsperiodedetaljer[2]).toEqual(utbetalingBarn);
         });
+    });
+
+    test('formaterTekstStorForbokstav', () => {
+        //Skal gjøre om tekst til små bokstaver og store forbokstaver
+        expect(formaterTekstStorForbokstav('HEI')).toBe('Hei');
+        expect(formaterTekstStorForbokstav('hei PÅ deg')).toBe('Hei På Deg');
+        expect(formaterTekstStorForbokstav('HEI, Hallo og hei Tilbake.')).toBe(
+            'Hei, Hallo Og Hei Tilbake.'
+        );
+        expect(formaterTekstStorForbokstav('HALLOGATEN 22A')).toBe('Hallogaten 22A');
+        expect(formaterTekstStorForbokstav('1234 helsfyr')).toBe('1234 Helsfyr');
+        expect(formaterTekstStorForbokstav('hallOGATen, postboks 1234')).toBe(
+            'Hallogaten, Postboks 1234'
+        );
+        expect(formaterTekstStorForbokstav('postboks 1234 sentrum')).toBe('Postboks 1234 Sentrum');
+        expect(formaterTekstStorForbokstav('HALLOgaten 22A, 1234 helsfyr')).toBe(
+            'Hallogaten 22A, 1234 Helsfyr'
+        );
     });
 });

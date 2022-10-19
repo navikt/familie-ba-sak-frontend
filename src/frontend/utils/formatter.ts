@@ -143,3 +143,10 @@ export const sorterUtbetaling = (
 export const slåSammenListeTilStreng = (liste: string[]) => {
     return liste.join(', ').replace(new RegExp('(.*),'), '$1 og');
 };
+
+export const formaterTekstStorForbokstav = (tekst: string) => {
+    return tekst
+        .split(' ')
+        .map(it => it.toLowerCase().replace(/[a-zæøå]/, match => match.toUpperCase()))
+        .join(' ');
+};
