@@ -3,7 +3,7 @@ import React from 'react';
 import { Table } from '@navikt/ds-react';
 
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
-import { formaterIdent } from '../../../utils/formatter';
+import { formaterIdent, formaterTekstStorForbokstav } from '../../../utils/formatter';
 
 export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ samhandler }) => {
     return (
@@ -26,20 +26,16 @@ export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ sa
                     <Table.DataCell>TSS-ident</Table.DataCell>
                     <Table.DataCell>{samhandler.tssEksternId}</Table.DataCell>
                 </Table.Row>
-                <Table.Row>
-                    <Table.DataCell>Adresse</Table.DataCell>
-                    <Table.DataCell>
-                        <div>
-                            {samhandler.adresser.map((adresse, index) => (
-                                <div key={index}>
-                                    {adresse.adresseType}: <br />
-                                    {adresse.adresselinjer} {adresse.postNr} {adresse.postSted}{' '}
-                                    <br />
-                                </div>
-                            ))}
-                        </div>
-                    </Table.DataCell>
-                </Table.Row>
+                {samhandler.adresser.map((adresse, index) => (
+                    <Table.Row key={index}>
+                        <Table.DataCell>{adresse.adresseType}</Table.DataCell>
+                        <Table.DataCell>
+                            {formaterTekstStorForbokstav(
+                                `${adresse.adresselinjer}, ${adresse.postNr} ${adresse.postSted}`
+                            )}
+                        </Table.DataCell>
+                    </Table.Row>
+                ))}
             </Table.Body>
         </Table>
     );
