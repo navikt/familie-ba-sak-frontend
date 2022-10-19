@@ -81,6 +81,7 @@ const StyledTag = styled(Tag)`
 const LabelOgEtikett = styled.div`
     display: flex;
     justify-content: space-between;
+    margin-top: 1rem;
 `;
 
 const FritekstWrapper = styled.div`
