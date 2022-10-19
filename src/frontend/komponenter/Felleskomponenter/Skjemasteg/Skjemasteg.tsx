@@ -120,7 +120,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             )}
 
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
-                <Heading size={'large'} level={'1'} children={tittel} />
+                <Heading size={'large'} level={'1'} children={tittel} spacing />
 
                 {children}
 
