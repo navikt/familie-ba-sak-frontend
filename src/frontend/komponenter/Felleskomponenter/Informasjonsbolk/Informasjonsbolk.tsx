@@ -24,7 +24,7 @@ const Informasjonsbolk: React.FC<IProps> = ({ informasjon, infoTeksFarve }) => {
             {informasjon.map((info: IInformasjon) => {
                 return (
                     <Label
-                        style={{ color: infoTeksFarve ?? navFarger.navMorkGra }}
+                        style={{ color: infoTeksFarve ?? navFarger.navMorkGra, display: 'block' }}
                         title={info.tekstTitle}
                         key={info.tekst + info.label}
                         children={info.tekst}
