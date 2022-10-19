@@ -71,7 +71,7 @@ const erPersonId = (personIdent: string) => {
     return /^[+-]?\d+(\.\d+)?$/.test(id) && id.length === 11;
 };
 
-const erOrgNr = (orgNr: string) => {
+export const erOrgNr = (orgNr: string) => {
     // Sjekker kun etter ni siffer, validerer ikke kontrollsifferet (det 9. sifferet)
     return kunSiffer(orgNr) && orgNr.length === 9;
 };
@@ -142,4 +142,11 @@ export const sorterUtbetaling = (
 
 export const slåSammenListeTilStreng = (liste: string[]) => {
     return liste.join(', ').replace(new RegExp('(.*),'), '$1 og');
+};
+
+export const formaterTekstStorForbokstav = (tekst: string) => {
+    return tekst
+        .split(' ')
+        .map(it => it.toLowerCase().replace(/[a-zæøå]/, match => match.toUpperCase()))
+        .join(' ');
 };
