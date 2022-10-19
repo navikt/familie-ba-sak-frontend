@@ -10,7 +10,7 @@ export const mockBarn: IGrunnlagPerson = {
     type: PersonType.BARN,
     kjønn: 'KVINNE' as kjønnType,
     navn: 'Mock Barn',
-    målform: Målform.NB,
+    målform: Målform.NN,
 };
 
 interface IMockSøker {
