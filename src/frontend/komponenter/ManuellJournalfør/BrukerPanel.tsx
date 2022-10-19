@@ -34,10 +34,7 @@ const StyledButton = styled(Button)`
 
 const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
     & .ekspanderbartPanel__innhold {
-        margin-left: 4rem;
-        margin-right: 4rem;
-        margin-bottom: 1rem;
-        margin-top: 1rem;
+        margin: 1rem 4rem;
     }
 `;
 
