@@ -28,7 +28,6 @@ export const KnyttTilNyBehandling: React.FC = () => {
             <Heading size={'small'} level={'2'}>
                 Knytt til ny behandling
             </Heading>
-            <br />
             <StyledCheckboxDiv>
                 {!kanKnytteJournalpostTilBehandling() ? (
                     knyttTilNyBehandling.verdi ? (
