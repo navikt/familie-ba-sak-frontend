@@ -42,7 +42,7 @@ const StyledSelect = styled(Select)`
     margin: 0.75rem 0 1.25rem;
 `;
 
-const StyledDiv = styled.div`
+const ToppMargin = styled.div`
     margin-top: 2rem;
 `;
 
@@ -253,11 +253,9 @@ export const BrukerPanel: React.FC = () => {
                 </StyledAlert>
             )}
             {skjema.felter.samhandler.verdi !== undefined && (
-                <StyledDiv>
-                    <SamhandlerTabell
-                        samhandler={skjema.felter.samhandler.verdi}
-                    ></SamhandlerTabell>
-                </StyledDiv>
+                <ToppMargin>
+                    <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi} />
+                </ToppMargin>
             )}
         </StyledEkspanderbartpanelBaseMedMargin>
     );
