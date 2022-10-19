@@ -414,15 +414,19 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
                     />
                 )}
-                {skjema.felter.brevmal.verdi === Brevmal.FORLENGET_SVARTIDSBREV && (
-                    <FamilieInput
-                        {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(
-                            skjema.visFeilmeldinger
-                        )}
-                        label={'Antall uker svarfrist'}
-                        bredde={'S'}
-                    />
-                )}
+                {skjema.felter.brevmal.verdi &&
+                    [
+                        Brevmal.FORLENGET_SVARTIDSBREV,
+                        Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
+                    ].includes(skjema.felter.brevmal.verdi) && (
+                        <FamilieInput
+                            {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(
+                                skjema.visFeilmeldinger
+                            )}
+                            label={'Antall uker svarfrist'}
+                            bredde={'S'}
+                        />
+                    )}
             </SkjemaGruppe>
             <Knapperekke>
                 <IkonKnapp

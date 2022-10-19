@@ -61,8 +61,10 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
         case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
             return åpenBehandling.type === Behandlingstype.REVURDERING;
         case Brevmal.SVARTIDSBREV:
+        case Brevmal.SVARTIDSBREV_INSTITUSJON:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.FORLENGET_SVARTIDSBREV:
+        case Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON:
             return [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
                 åpenBehandling.type
             );
@@ -178,7 +180,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [Brevmal.FORLENGET_SVARTIDSBREV].includes(avhengigheter.brevmal.verdi)
+                [
+                    Brevmal.FORLENGET_SVARTIDSBREV,
+                    Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
+                ].includes(avhengigheter.brevmal.verdi)
             );
         },
         avhengigheter: { brevmal },
@@ -329,6 +334,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
             Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
             Brevmal.FORLENGET_SVARTIDSBREV,
+            Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
         ].includes(brevmal);
 
     /**
