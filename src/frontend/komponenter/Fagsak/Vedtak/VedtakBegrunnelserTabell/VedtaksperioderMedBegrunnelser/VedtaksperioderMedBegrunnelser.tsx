@@ -16,6 +16,7 @@ import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserP
 
 const StyledHeading = styled(Heading)`
     display: flex;
+    margin-top: 1rem;
 `;
 
 const StyledHelpText = styled(HelpText)`

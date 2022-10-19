@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Edit } from '@navikt/ds-icons';
+import { Calender } from '@navikt/ds-icons';
 import { Button, Label } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -15,9 +15,6 @@ import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspun
 const EndringstidspunktDiv = styled.div`
     display: flex;
     justify-content: flex-end;
-`;
-const StyledEditIkon = styled(Edit)`
-    margin-right: 0.5rem;
 `;
 
 const EndreEndringstidspunkt: React.FC<{
@@ -59,7 +56,7 @@ const EndreEndringstidspunkt: React.FC<{
                     settVisModal(true);
                 }}
             >
-                <StyledEditIkon />
+                <Calender />
                 <Label>Oppdater endringstidspunkt</Label>
             </Button>
             <OppdaterEndringstidspunktModal

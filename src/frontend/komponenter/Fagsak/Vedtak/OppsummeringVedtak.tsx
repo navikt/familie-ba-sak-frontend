@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
+import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -233,7 +233,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 åpenBehandling.korrigertEtterbetaling ? (
                                     <InformationColored aria-hidden />
                                 ) : (
-                                    <Edit aria-hidden />
+                                    <Notes aria-hidden />
                                 )
                             }
                         >

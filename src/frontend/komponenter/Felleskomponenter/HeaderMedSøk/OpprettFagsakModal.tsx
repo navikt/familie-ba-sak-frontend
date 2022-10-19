@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Button, ErrorMessage, Heading, ReadMore, Select } from '@navikt/ds-react';
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -31,10 +31,9 @@ const StyledDiv = styled.div`
     display: flex;
 `;
 
-const StyledKnapp = styled(FamilieKnapp)`
+const StyledButton = styled(Button)`
+    align-self: end;
     margin-left: 1rem;
-    margin-top: auto;
-    height: 1rem;
 `;
 
 const StyledHeading = styled(Heading)`
@@ -155,12 +154,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             size={'small'}
                         />
 
-                        <StyledKnapp
+                        <StyledButton
                             onClick={() => {
                                 onSubmitWrapper();
                             }}
                             children={'Hent institusjon'}
-                            erLesevisning={false}
                             size={'small'}
                         />
                     </StyledDiv>
