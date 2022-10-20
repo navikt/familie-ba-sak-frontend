@@ -30,7 +30,7 @@ jobs:
       - name: Yarn test
         run: yarn test
       - name: Yarn test
-        run: yarn test cypress
+        run: yarn run cypress
       - name: Yarn build backend
         run: yarn build:backend
       - name: Build and publish Docker image
