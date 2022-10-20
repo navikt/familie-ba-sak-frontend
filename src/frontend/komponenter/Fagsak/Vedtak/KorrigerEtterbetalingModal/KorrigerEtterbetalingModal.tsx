@@ -46,7 +46,9 @@ const StyledFamilieSelect = styled(FamilieSelect)`
 
 const StyledFamilieInput = styled(FamilieInput)`
     ${baseSkjemaelementStyle};
-    width: 25%;
+    :not(&.lesevisning) {
+        width: 7.5rem;
+    }
 `;
 
 const StyledFamilieTextarea = styled(FamilieTextarea)`
@@ -103,6 +105,9 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
         onClose();
     };
 
+    const hentLabelForÅrsak = (årsakValue: string) =>
+        årsaker.find(årsak => årsak.value === årsakValue)?.label;
+
     return (
         <Modal open={visModal} onClose={lukkModal}>
             <StyledModalContent>
@@ -118,7 +123,7 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                             lesevisningVerdi={
                                 skjema.felter.årsak.verdi === ''
                                     ? 'Ingen årsak valgt.'
-                                    : skjema.felter.årsak.verdi
+                                    : hentLabelForÅrsak(skjema.felter.årsak.verdi)
                             }
                             onChange={option =>
                                 skjema.felter.årsak.validerOgSettFelt(option.target.value)
@@ -152,6 +157,7 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                                     : ''
                             }
                             erLesevisning={erLesevisning}
+                            className={erLesevisning ? 'lesevisning' : ''}
                         />
                         <StyledFamilieTextarea
                             label={'Begrunnelse (valgfri)'}
