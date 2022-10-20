@@ -3106,10 +3106,10 @@
     react-modal "^3.15.1"
     react-transition-group "^4.4.2"
 
-"@navikt/familie-form-elements@6.3.x":
-  version "6.3.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/6.3.0/6da30ea1de0c74bc47310d4c965a8133b8327037#6da30ea1de0c74bc47310d4c965a8133b8327037"
-  integrity sha512-DdLWlq090fdKORafpHKdMlz51P/yBAZ4ibC/93EMFFggxu9W3zS/UBzfQucvnYeGVEOYcLP+my/BnC1+a3ycuA==
+"@navikt/familie-form-elements@6.3.3":
+  version "6.3.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/6.3.3/fc03c393a1c9419f3faa29b37eabf8067e5019cf#fc03c393a1c9419f3faa29b37eabf8067e5019cf"
+  integrity sha512-N5SXb3GdWzCqR9ZpDnSRcmPgkyEGcNtf3Dm6kAXhxhM/Q5Fj6x9gSK5cCQluMfLmengVEedMiJwL+2AEFqioyQ==
   dependencies:
     "@navikt/ds-css" "1.3.x"
     "@navikt/ds-react" "1.3.x"
@@ -3178,10 +3178,10 @@
   dependencies:
     winston "^3.8.1"
 
-"@navikt/familie-skjema@4.0.6":
-  version "4.0.6"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/4.0.6/b395a238144dac1394d9ed1e7e7a1f3657049562#b395a238144dac1394d9ed1e7e7a1f3657049562"
-  integrity sha512-9vbJ7h46lzMKigYZVveWQX5mZJZHzFlG/81kHRt4FLXlKvP/FEFMiWsv12jodBzKGut+KNXjL8TIyxt/LChwHQ==
+"@navikt/familie-skjema@4.0.9":
+  version "4.0.9"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/4.0.9/acab5d2ebca15050c91b2ac9b771d6cd6f7d81a9#acab5d2ebca15050c91b2ac9b771d6cd6f7d81a9"
+  integrity sha512-8O6HGZaM3R25dVZM4Nf7SnWPuLwsLZUocbR6BtJVw5FyA6rSF+P09Xinne1vb0xSd8X0DosUVJWC4gWjUFp7Wg==
   dependencies:
     "@navikt/familie-http" "^3.0.1"
     "@navikt/familie-typer" "^5.0.0"
