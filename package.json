@@ -7,7 +7,7 @@
   "author": "Henning Håkonsen",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=production node --loader ts-node/esm --es-module-specifier-resolution=node backend_production/backend/server.js",
+    "start": "NODE_ENV=production node --es-module-specifier-resolution=node backend_production/backend/server.js",
     "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node --loader ts-node/esm --es-module-specifier-resolution=node node_dist/backend/server-dev.js",
     "build": "yarn build:prod",
     "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",

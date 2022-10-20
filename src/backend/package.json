@@ -6,6 +6,6 @@
   "author": "Henning Håkonsen",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=production node --loader ts-node/esm --es-module-specifier-resolution=node backend_production/backend/server.js"
+    "start": "NODE_ENV=production node --es-module-specifier-resolution=node backend_production/backend/server.js"
   }
 }
