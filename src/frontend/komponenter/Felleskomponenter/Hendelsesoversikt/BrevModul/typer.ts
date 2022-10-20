@@ -15,7 +15,9 @@ export enum Brevmal {
     VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS = 'VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS',
     HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
     SVARTIDSBREV = 'SVARTIDSBREV',
+    SVARTIDSBREV_INSTITUSJON = 'SVARTIDSBREV_INSTITUSJON',
     FORLENGET_SVARTIDSBREV = 'FORLENGET_SVARTIDSBREV',
+    FORLENGET_SVARTIDSBREV_INSTITUSJON = 'FORLENGET_SVARTIDSBREV_INSTITUSJON',
 }
 
 export enum Informasjonsbrev {
@@ -39,6 +41,8 @@ export const brevmaler: Record<Brevmal, string> = {
     VARSEL_OM_REVURDERING_SAMBOER: 'Varsel om revurdering samboer',
     VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS: 'Varsel om revurdering fra nasjonal til EØS',
     FORLENGET_SVARTIDSBREV: 'Forlenget svartidsbrev',
+    SVARTIDSBREV_INSTITUSJON: 'Svartidsbrev institusjon',
+    FORLENGET_SVARTIDSBREV_INSTITUSJON: 'Forlenget svartidsbrev institusjon',
 };
 
 export const leggTilValuePåOption = (

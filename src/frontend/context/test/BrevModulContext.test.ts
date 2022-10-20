@@ -76,8 +76,8 @@ describe('BrevmodulContext', () => {
             ).toEqual(
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
-                    // Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON, TODO
-                    // Brevmal.SVARTIDSBREV_INSTITUSJON,
+                    Brevmal.SVARTIDSBREV_INSTITUSJON,
+                    Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
                 ].sort()
             );
         });
