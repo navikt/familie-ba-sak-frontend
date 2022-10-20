@@ -3106,7 +3106,7 @@
     react-modal "^3.15.1"
     react-transition-group "^4.4.2"
 
-"@navikt/familie-form-elements@6.3.3":
+"@navikt/familie-form-elements@6.3.x":
   version "6.3.3"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/6.3.3/fc03c393a1c9419f3faa29b37eabf8067e5019cf#fc03c393a1c9419f3faa29b37eabf8067e5019cf"
   integrity sha512-N5SXb3GdWzCqR9ZpDnSRcmPgkyEGcNtf3Dm6kAXhxhM/Q5Fj6x9gSK5cCQluMfLmengVEedMiJwL+2AEFqioyQ==
