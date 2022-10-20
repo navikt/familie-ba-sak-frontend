@@ -209,7 +209,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                     </SkjemaGruppe>
 
                     {!erMaksAntallKulepunkter &&
-                        (!erLesevisning ? (
+                        (!erLesevisning() ? (
                             <Button
                                 variant={'tertiary'}
                                 onClick={leggTilFritekst}
@@ -247,7 +247,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : !erLesevisning ? (
+    ) : !erLesevisning() ? (
         <Button
             variant={'tertiary'}
             onClick={leggTilFritekst}
