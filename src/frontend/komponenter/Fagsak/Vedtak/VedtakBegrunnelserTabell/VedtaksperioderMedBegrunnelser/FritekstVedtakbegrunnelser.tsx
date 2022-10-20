@@ -247,19 +247,17 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : (
-        !erLesevisning() && (
-            <Button
-                variant={'tertiary'}
-                onClick={leggTilFritekst}
-                id={`legg-til-fritekst`}
-                size={'small'}
-                icon={<Pluss />}
-            >
-                {'Legg til fritekst'}
-            </Button>
-        )
-    );
+    ) : !erLesevisning() ? (
+        <Button
+            variant={'tertiary'}
+            onClick={leggTilFritekst}
+            id={`legg-til-fritekst`}
+            size={'small'}
+            icon={<Pluss />}
+        >
+            {'Legg til fritekst'}
+        </Button>
+    ) : null;
 };
 
 export default FritekstVedtakbegrunnelser;
