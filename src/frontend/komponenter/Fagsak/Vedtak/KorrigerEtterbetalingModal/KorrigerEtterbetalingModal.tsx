@@ -115,6 +115,11 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                             label={'Årsak'}
                             id={'korrigering-aarsak'}
                             value={skjema.felter.årsak.verdi}
+                            lesevisningVerdi={
+                                skjema.felter.årsak.verdi === ''
+                                    ? 'Ingen årsak valgt.'
+                                    : skjema.felter.årsak.verdi
+                            }
                             onChange={option =>
                                 skjema.felter.årsak.validerOgSettFelt(option.target.value)
                             }
