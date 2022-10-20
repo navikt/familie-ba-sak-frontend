@@ -61,6 +61,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
             <Button
                 title={'Naviger til høyre'}
                 variant="tertiary"
+                size="small"
                 disabled={!kanNavigereTilHøyre}
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
             >
