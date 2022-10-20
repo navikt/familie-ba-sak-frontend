@@ -19,11 +19,6 @@ const config = {
     },
     module: {
         rules: [
-            /*{
-                test: /\.(ts|js)?$/,
-                exclude: /node_modules/,
-                loader: 'ts-loader',
-            },*/
             {
                 test: /\.(ts|js)?$/,
                 exclude: /node_modules/,
