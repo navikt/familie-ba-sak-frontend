@@ -209,18 +209,17 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         )}
                     </SkjemaGruppe>
 
-                    {!erMaksAntallKulepunkter &&
-                        (!erLesevisning() ? (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={leggTilFritekst}
-                                id={`legg-til-fritekst`}
-                                size={'small'}
-                                icon={<Pluss />}
-                            >
-                                {'Legg til fritekst'}
-                            </Button>
-                        ) : null)}
+                    {!erMaksAntallKulepunkter && !erLesevisning() && (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={leggTilFritekst}
+                            id={`legg-til-fritekst`}
+                            size={'small'}
+                            icon={<Pluss />}
+                        >
+                            {'Legg til fritekst'}
+                        </Button>
+                    )}
                     <Knapperekke>
                         <FamilieKnapp
                             erLesevisning={erLesevisning()}
@@ -248,17 +247,19 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : !erLesevisning() ? (
-        <Button
-            variant={'tertiary'}
-            onClick={leggTilFritekst}
-            id={`legg-til-fritekst`}
-            size={'small'}
-            icon={<Pluss />}
-        >
-            {'Legg til fritekst'}
-        </Button>
-    ) : null;
+    ) : (
+        !erLesevisning() && (
+            <Button
+                variant={'tertiary'}
+                onClick={leggTilFritekst}
+                id={`legg-til-fritekst`}
+                size={'small'}
+                icon={<Pluss />}
+            >
+                {'Legg til fritekst'}
+            </Button>
+        )
+    );
 };
 
 export default FritekstVedtakbegrunnelser;
