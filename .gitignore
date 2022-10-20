@@ -1,4 +1,5 @@
 node_modules
+backend_production
 frontend_production
 frontend_development
 node_dist

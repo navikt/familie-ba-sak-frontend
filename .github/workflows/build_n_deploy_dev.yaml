@@ -29,7 +29,7 @@ jobs:
         run: yarn build
       - name: Yarn test
         run: yarn test
-      - name: Yarn test
+      - name: Yarn test cypress
         run: yarn run cypress
       - name: Yarn build backend
         run: yarn build:backend
