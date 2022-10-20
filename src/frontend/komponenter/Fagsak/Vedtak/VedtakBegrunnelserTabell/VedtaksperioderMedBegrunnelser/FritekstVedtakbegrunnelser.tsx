@@ -176,6 +176,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             className={'fritekst-textarea'}
                                             label={`Kulepunkt ${fritekstId}`}
                                             hideLabel
+                                            resize
                                             value={fritekst.verdi.tekst}
                                             maxLength={makslengdeFritekst}
                                             onChange={event => onChangeFritekst(event, fritekstId)}
