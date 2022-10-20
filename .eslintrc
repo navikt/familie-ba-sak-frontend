@@ -98,5 +98,13 @@
         "react": {
             "version": "detect"
         }
-    }
+    },
+    "overrides": [
+        {
+            "files": ["src/backend/package.json"],
+            "rules": {
+                "no-unused-expressions": "off"
+            }
+        }
+    ]
 }

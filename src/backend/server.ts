@@ -1,45 +1,19 @@
 import './konfigurerApp.js';
 
-import path from 'path';
-
 import bodyParser from 'body-parser';
 import type { NextFunction, Request, Response } from 'express';
-import expressStaticGzip from 'express-static-gzip';
 import { v4 as uuidv4 } from 'uuid';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import type { IApp } from '@navikt/familie-backend';
-import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
+import { ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
-import webpackDevConfig from '../webpack/webpack.dev';
-import { sessionConfig } from './config';
-import { prometheusTellere } from './metrikker';
 import { attachToken, doEndringslogProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 
 const port = 8000;
 
-backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
-    let middleware;
-
-    if (process.env.NODE_ENV === 'development') {
-        const compiler = webpack(webpackDevConfig);
-        middleware = webpackDevMiddleware(compiler, {
-            // eslint-disable-next-line
-            // @ts-ignore
-            publicPath: webpackDevConfig.output.publicPath,
-            writeToDisk: true,
-        });
-
-        app.use(middleware);
-        app.use(webpackHotMiddleware(compiler));
-    } else {
-        app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
-    }
-
+export const setupServer = ({ app, azureAuthClient, router }: IApp): void => {
     app.use((req: Request, _res: Response, next: NextFunction) => {
         req.headers['nav-call-id'] = uuidv4();
         req.headers['nav-consumer-id'] = 'familie-ba-sak-front';
@@ -70,4 +44,4 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     app.listen(port, '0.0.0.0', () => {
         logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
     });
-});
+};

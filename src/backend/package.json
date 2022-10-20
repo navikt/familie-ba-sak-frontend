@@ -1,0 +1,11 @@
+{
+  "name": "familie-ba-sak-frontend",
+  "type": "commonjs",
+  "version": "0.0.1",
+  "repository": "https://github.com/navikt/familie-ba-sak-frontend.git",
+  "author": "Henning Håkonsen",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=production node --loader ts-node/esm --es-module-specifier-resolution=node node_dist/backend/server.js"
+  }
+}

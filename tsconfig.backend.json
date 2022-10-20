@@ -4,6 +4,7 @@
         "allowJs": true,
         "skipLibCheck": true,
         "outDir": "node_dist",
+        "baseUrl": "./src",
         "rootDir": "./src",
         "resolveJsonModule": true,
         "types": ["express-session"],

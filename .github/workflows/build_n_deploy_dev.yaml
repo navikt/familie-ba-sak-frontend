@@ -12,26 +12,31 @@ jobs:
     name: Build and push Docker container
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
-          cache: npm
           registry-url: "https://npm.pkg.github.com"
       - uses: ./.github/yarn-cache
       - name: Yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
+      - name: Yarn build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: yarn build
+      - name: Yarn test
+        run: yarn test
+      - name: Yarn test
+        run: yarn test cypress
+      - name: Yarn build backend
+        run: yarn build:backend
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
         run: |
-          yarn build
-          yarn test
-          yarn run cypress
           docker build . -t ${IMAGE}
           echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE}
