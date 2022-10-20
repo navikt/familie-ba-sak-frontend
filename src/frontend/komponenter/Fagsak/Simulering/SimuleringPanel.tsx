@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import Panel from 'nav-frontend-paneler';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { BodyShort, Label } from '@navikt/ds-react';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
@@ -34,7 +35,7 @@ const StyledTd = styled.th(
     `
 );
 
-const ElementMedFarge = styled(Element)`
+const LabelMedFarge = styled(Label)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
 
@@ -91,30 +92,30 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>
-                            <Element>{panelTittel()}</Element>
+                            <Label>{panelTittel()}</Label>
                         </StyledTh>
                     </tr>
                     <tr>
                         <StyledTd>
-                            <Normaltekst>Feilutbetaling</Normaltekst>
+                            <BodyShort>Feilutbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge
+                            <LabelMedFarge
                                 farge={feilutbetaling > 0 ? navFarger.navRod : navFarger.navMorkGra}
                             >
                                 {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
-                            </ElementMedFarge>
+                            </LabelMedFarge>
                         </StyledTd>
                     </tr>
 
                     <tr>
                         <StyledTd>
-                            <Normaltekst>Etterbetaling</Normaltekst>
+                            <BodyShort>Etterbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge>
+                            <LabelMedFarge>
                                 {formaterBeløpEllerDashOmUndefined(etterbetaling)}
-                            </ElementMedFarge>
+                            </LabelMedFarge>
                         </StyledTd>
                     </tr>
                 </tbody>
@@ -126,29 +127,29 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>
-                            <Element>Neste utbetaling</Element>
+                            <Label>Neste utbetaling</Label>
                         </StyledTh>
                         {!nestePeriode && (
                             <StyledTh erHøyrestilt={true}>
-                                <Element>-</Element>
+                                <Label>-</Label>
                             </StyledTh>
                         )}
                     </tr>
                     {nestePeriode && (
                         <tr>
                             <StyledTd>
-                                <Normaltekst>
+                                <BodyShort>
                                     {kapitaliserTekst(
                                         formaterIsoDato(
                                             fomDatoNestePeriode,
                                             datoformat.MÅNED_ÅR_NAVN
                                         )
                                     )}
-                                </Normaltekst>
+                                </BodyShort>
                             </StyledTd>
 
                             <StyledTd erHøyrestilt={true}>
-                                <ElementMedFarge
+                                <LabelMedFarge
                                     farge={
                                         nestePeriode?.resultat && nestePeriode.resultat > 0
                                             ? navFarger.navGronnDarken40
@@ -156,7 +157,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                                     }
                                 >
                                     {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                                </ElementMedFarge>
+                                </LabelMedFarge>
                             </StyledTd>
                         </tr>
                     )}

@@ -3,12 +3,11 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { ExternalLink } from '@navikt/ds-icons';
-import { HelpText, BodyLong, Heading } from '@navikt/ds-react';
+import { AddCircle, ExternalLink } from '@navikt/ds-icons';
+import { BodyLong, Heading, Button } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -17,19 +16,14 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
-import Pluss from '../../ikoner/Pluss';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
 import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-import IkonKnapp, { IkonPosisjon } from './IkonKnapp/IkonKnapp';
+import HelpText from './HelpText';
 import UIModalWrapper from './Modal/UIModalWrapper';
-
-const LeggTilBarnKnapp = styled(IkonKnapp)`
-    margin-left: 1rem;
-`;
 
 const StyledUIModalWrapper = styled(UIModalWrapper)`
     min-height: 20rem !important;
@@ -232,17 +226,17 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
 
     return (
         <>
-            <LeggTilBarnKnapp
+            <Button
+                variant={'tertiary'}
                 id={'legg-til-barn'}
-                mini
-                erLesevisning={false}
+                size={'medium'}
                 onClick={() => {
                     settVisModal(true);
                 }}
-                ikon={<Pluss />}
-                label={'Legg til barn'}
-                ikonPosisjon={IkonPosisjon.VENSTRE}
-            />
+                icon={<AddCircle />}
+            >
+                {'Legg til barn'}
+            </Button>
 
             <StyledUIModalWrapper
                 modal={{
@@ -277,14 +271,20 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                     lukkKnapp: true,
                     onClose: onAvbryt,
                     actions: [
-                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
-                        <Knapp
-                            type={'hoved'}
+                        <Button
+                            variant={'tertiary'}
+                            key={'Avbryt'}
+                            size={'small'}
+                            onClick={onAvbryt}
+                            children={'Avbryt'}
+                        />,
+                        <Button
+                            variant={'primary'}
                             key={'Legg til'}
-                            mini={true}
+                            size={'small'}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
-                            spinner={
+                            loading={
                                 registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
                             }
                             disabled={
@@ -319,7 +319,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         }
                         label={'Fødselsnummer / D-nummer'}
                         placeholder={'11 siffer'}
-                        inputRef={fnrInputRef}
+                        ref={fnrInputRef}
                     />
                     <DrekLenkeContainer>
                         <Lenke

@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -67,16 +67,18 @@ const Journalpost: React.FC = () => {
         <Ekspanderbartpanel
             id={skjema.felter.journalpostTittel.id}
             tittel={
-                <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
+                <Heading size={'small'} level={'2'}>
+                    {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
+                </Heading>
             }
         >
             <JournalpostMetadataDiv>
-                <Normaltekst>
+                <BodyShort>
                     Mottatt:{' '}
                     {datoMottatt
                         ? formaterIsoDato(datoMottatt, datoformat.DATO)
                         : 'Ingen mottatt dato'}
-                </Normaltekst>
+                </BodyShort>
             </JournalpostMetadataDiv>
             <EndreJournalpost />
         </Ekspanderbartpanel>

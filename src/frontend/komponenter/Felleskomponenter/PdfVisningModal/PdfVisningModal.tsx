@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import Modal from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Undertittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -53,7 +52,7 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
 };
 
 const IframePdfVisning = styled.iframe`
-    maring: 0 auto;
+    margin: 0 auto;
     height: 100%;
     width: 100%;
 `;
@@ -63,7 +62,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
         case RessursStatus.HENTER:
             return (
                 <div className={'pdfvisning-modal__spinner'}>
-                    <Undertittel children={'Innhenter dokument'} />
+                    <Heading size={'small'} level={'2'} children={'Innhenter dokument'} />
                     <NavFrontendSpinner className={'pdfvisning-modal__spinner--item'} />
                 </div>
             );

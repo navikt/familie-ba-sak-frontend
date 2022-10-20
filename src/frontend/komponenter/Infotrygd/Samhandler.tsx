@@ -3,10 +3,9 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel } from 'nav-frontend-typografi';
 
+import { Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -24,7 +23,7 @@ const HentSakerFlex = styled.div`
     display: flex;
 `;
 
-const HentSakerKnapp = styled(Knapp)`
+const HentSakerButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 1.9rem;
     margin-bottom: auto;
@@ -47,7 +46,9 @@ export const Samhandler: React.FC = () => {
 
     return (
         <SamhandlerContainer>
-            <Innholdstittel>Søk samhandler</Innholdstittel>
+            <Heading size={'large'} level={'1'}>
+                Søk samhandler
+            </Heading>
             <HentSakerFlex>
                 <SkjemaGruppe feil={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}>
                     <Input
@@ -60,22 +61,22 @@ export const Samhandler: React.FC = () => {
                         placeholder={'orgnr'}
                     />
                 </SkjemaGruppe>
-                <HentSakerKnapp
-                    mini
-                    spinner={skjemaErLåst}
+                <HentSakerButton
+                    variant={'secondary'}
+                    loading={skjemaErLåst}
                     disabled={skjemaErLåst}
                     onClick={onSubmitWrapper}
                 >
                     Hent samhandler
-                </HentSakerKnapp>
+                </HentSakerButton>
             </HentSakerFlex>
             {samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS ? (
-                <Innholdstittel>
+                <Heading size={'large'}>
                     {samhandlerSkjema.submitRessurs.data.tssEksternId}{' '}
                     {samhandlerSkjema.submitRessurs.data.navn} <br />
                     {samhandlerSkjema.submitRessurs.data.adresser[0].adresseType}{' '}
                     {samhandlerSkjema.submitRessurs.data.adresser[0].postSted}
-                </Innholdstittel>
+                </Heading>
             ) : undefined}
         </SamhandlerContainer>
     );

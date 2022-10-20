@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
+import { Button, Radio, Label } from '@navikt/ds-react';
 import {
     NavdsSemanticColorBorderMuted,
     NavdsSemanticColorFeedbackWarningBorder,
@@ -15,7 +16,7 @@ import {
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieSelect,
-    FamilieTextareaControlled,
+    FamilieTextarea,
 } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -36,7 +37,6 @@ import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../..
 import { Regelverk } from '../../../../typer/vilkår';
 import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
@@ -86,6 +86,15 @@ const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
+`;
+
+const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+    && {
+        margin: 1rem 0;
+        legend {
+            margin-bottom: 0rem;
+        }
+    }
 `;
 
 const VilkårTabellRadEndre: React.FC<IProps> = ({
@@ -282,9 +291,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         )}
                     </FamilieSelect>
                 )}
-                <FamilieRadioGruppe
+                <StyledFamilieRadioGruppe
                     erLesevisning={lesevisning}
-                    verdi={
+                    value={
                         redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
                             ? vilkårResultatForEkteskapVisning(
                                   redigerbartVilkår.verdi.resultat.verdi
@@ -292,20 +301,22 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             : resultater[redigerbartVilkår.verdi.resultat.verdi]
                     }
                     legend={
-                        vilkårFraConfig.spørsmål
-                            ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                            : ''
+                        <Label>
+                            {vilkårFraConfig.spørsmål
+                                ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                : ''}
+                        </Label>
                     }
-                    feil={
+                    error={
                         redigerbartVilkår.verdi.resultat.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.resultat.feilmelding
                             : ''
                     }
-                    feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                    errorId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
                 >
                     <Radio
-                        label={'Ja'}
+                        value={'Ja'}
                         name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                         checked={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
@@ -319,9 +330,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                     : Resultat.OPPFYLT
                             )
                         }
-                    />
+                    >
+                        {'Ja'}
+                    </Radio>
                     <Radio
-                        label={'Nei'}
+                        value={'Nei'}
                         name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                         checked={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
@@ -335,8 +348,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                     : Resultat.IKKE_OPPFYLT
                             )
                         }
-                    />
-                </FamilieRadioGruppe>
+                    >
+                        {'Nei'}
+                    </Radio>
+                </StyledFamilieRadioGruppe>
                 {!gjelderInstitusjon && (
                     <UtdypendeVilkårsvurderingMultiselect
                         redigerbartVilkår={redigerbartVilkår}
@@ -366,16 +381,15 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-                <FamilieTextareaControlled
+                <FamilieTextarea
                     tekstLesevisning={''}
                     erLesevisning={lesevisning}
                     defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
-                    textareaClass={'begrunnelse-textarea'}
+                    className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
-                    value={redigerbartVilkår.verdi.begrunnelse.verdi}
-                    feil={
+                    error={
                         redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.begrunnelse.feilmelding
@@ -399,9 +413,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={lesevisning}
                             onClick={onClickVilkårFerdig}
-                            mini={true}
-                            type={'standard'}
-                            spinner={vilkårSubmit === VilkårSubmit.PUT}
+                            size="medium"
+                            variant="secondary"
+                            loading={vilkårSubmit === VilkårSubmit.PUT}
                             disabled={vilkårSubmit === VilkårSubmit.PUT}
                         >
                             Ferdig
@@ -410,30 +424,32 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={lesevisning}
                             onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
+                            size="medium"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>
                     </div>
 
-                    <IkonKnapp
-                        erLesevisning={lesevisning}
-                        onClick={() => {
-                            const promise = deleteVilkår(
-                                person.personIdent,
-                                redigerbartVilkår.verdi.id
-                            );
-                            håndterEndringPåVilkårsvurdering(promise);
-                        }}
-                        id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        spinner={vilkårSubmit === VilkårSubmit.DELETE}
-                        disabled={vilkårSubmit === VilkårSubmit.DELETE}
-                        mini={true}
-                        label={'Fjern'}
-                        ikonPosisjon={IkonPosisjon.VENSTRE}
-                        ikon={<Delete />}
-                    />
+                    {!lesevisning ? (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={() => {
+                                const promise = deleteVilkår(
+                                    person.personIdent,
+                                    redigerbartVilkår.verdi.id
+                                );
+                                håndterEndringPåVilkårsvurdering(promise);
+                            }}
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            loading={vilkårSubmit === VilkårSubmit.DELETE}
+                            disabled={vilkårSubmit === VilkårSubmit.DELETE}
+                            size={'medium'}
+                            icon={<Delete />}
+                        >
+                            {'Fjern'}
+                        </Button>
+                    ) : null}
                 </Knapperad>
             </Container>
         </SkjemaGruppe>

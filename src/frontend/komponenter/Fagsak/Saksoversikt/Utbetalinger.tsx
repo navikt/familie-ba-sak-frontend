@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
@@ -47,10 +47,10 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
                     }
                 )}
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
-                    <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
-                    <Normaltekst>
+                    <BodyShort>Totalt utbetalt/mnd</BodyShort>
+                    <BodyShort>
                         {vedtaksperiode ? formaterBeløp(vedtaksperiode.utbetaltPerMnd) : '-'}
-                    </Normaltekst>
+                    </BodyShort>
                 </li>
                 <hr />
             </ul>

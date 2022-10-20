@@ -3,9 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { CheckboxGruppe } from 'nav-frontend-skjema';
-import { Element, Systemtittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -76,7 +75,7 @@ const Barna: React.FunctionComponent = () => {
 
     return (
         <BarnaWrapper className={'søknad__barna'}>
-            <Systemtittel children={'Opplysninger om barn'} />
+            <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
             {maskerteRelasjoner.map(
                 (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                     return (
@@ -101,9 +100,9 @@ const Barna: React.FunctionComponent = () => {
                 )}
                 legend={
                     !lesevisning && !gjelderInstitusjon ? (
-                        <Element>Velg hvilke barn det er søkt om</Element>
+                        <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
-                        <Element>Barn det er søkt om</Element>
+                        <Label>Barn det er søkt om</Label>
                     )
                 }
                 utenFeilPropagering={true}

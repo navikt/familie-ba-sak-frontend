@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Feilmelding } from 'nav-frontend-typografi';
-
-import { Alert } from '@navikt/ds-react';
+import { Alert, ErrorMessage } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
@@ -30,7 +28,7 @@ export const Dokumenter: React.FC = () => {
                 skjema.felter.dokumenter.valideringsstatus === Valideringsstatus.FEIL && (
                     <>
                         <br />
-                        <Feilmelding>{skjema.felter.dokumenter.feilmelding}</Feilmelding>
+                        <ErrorMessage>{skjema.felter.dokumenter.feilmelding}</ErrorMessage>
                     </>
                 )}
         </div>

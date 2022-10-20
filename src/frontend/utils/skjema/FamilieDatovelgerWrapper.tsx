@@ -8,7 +8,7 @@ import navFarger from 'nav-frontend-core';
 
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 
-import { StyledFeilmelding } from '../../komponenter/Fagsak/Dokumentutsending/DeltBosted/DeltBostedAvtaler';
+import { StyledErrorMessage } from '../../komponenter/Fagsak/Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const StyledFamilieDatovelgerForSkjema = styled(FamilieDatovelger)<{
     feil: ReactNode | undefined;
@@ -63,7 +63,7 @@ export const FamilieDatovelgerWrapper: React.FC<IProps> = (props: IProps) => {
     return (
         <>
             <StyledFamilieDatovelgerForSkjema {...props} />
-            {!!props.feil && <StyledFeilmelding>{props.feil}</StyledFeilmelding>}
+            {!!props.feil && <StyledErrorMessage>{props.feil}</StyledErrorMessage>}
         </>
     );
 };

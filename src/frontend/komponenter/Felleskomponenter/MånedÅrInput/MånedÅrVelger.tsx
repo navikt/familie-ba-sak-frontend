@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Feilmelding } from 'nav-frontend-typografi';
+import { ErrorMessage } from '@navikt/ds-react';
 
 import MånedVelger from './MånedVelger';
 import Årvelger from './ÅrVelger';
@@ -34,7 +34,7 @@ const StyledMånedVelger = styled(MånedVelger)`
     padding-right: 1em;
 `;
 
-const StyledFeilmelding = styled(Feilmelding)`
+const StyledErrorMessage = styled(ErrorMessage)`
     margin-top: 0rem;
     margin-bottom: 0.5rem;
 `;
@@ -91,7 +91,7 @@ const MånedÅrVelger: React.FC<Props> = ({
                     feil={!!feil && !år}
                 />
             </Knapperad>
-            {feil && <StyledFeilmelding>{feil}</StyledFeilmelding>}
+            {feil && <StyledErrorMessage>{feil}</StyledErrorMessage>}
         </div>
     );
 };

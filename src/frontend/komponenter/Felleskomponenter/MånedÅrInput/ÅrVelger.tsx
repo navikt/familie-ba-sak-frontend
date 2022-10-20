@@ -42,14 +42,15 @@ const Årvelger: React.FC<ÅrProps> = ({
         <FamilieSelect
             lesevisningVerdi={år ? år.toString() : ''}
             value={år ?? ''}
-            bredde={'xs'}
+            size={'medium'}
             onChange={event => {
                 event.persist();
                 settÅr(event.target.value !== '' ? parseInt(event.target.value) : undefined);
             }}
             erLesevisning={lesevisning}
             disabled={disabled}
-            feil={feil}
+            error={feil}
+            label={'År'}
         >
             <option value="">År</option>
             {årOptions}

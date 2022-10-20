@@ -41,6 +41,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
             ) : (
                 <Container>
                     <HentetLabel
+                        size={'small'}
                         style={{ marginBottom: NavdsSpacing4 }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +

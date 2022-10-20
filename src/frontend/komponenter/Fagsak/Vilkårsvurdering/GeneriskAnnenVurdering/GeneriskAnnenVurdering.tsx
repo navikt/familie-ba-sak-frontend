@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertittel } from 'nav-frontend-typografi';
 
+import { Heading, Label } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IGrunnlagPerson } from '../../../../typer/person';
@@ -25,7 +25,7 @@ const Container = styled.div`
     }
 `;
 
-const VilkårTittel = styled(Undertittel)`
+const VilkårTittel = styled(Heading)`
     display: flex;
     align-items: center;
 
@@ -46,8 +46,8 @@ const GeneriskAnnenVurdering: React.FC<IProps> = ({
     return (
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForAnnenVurdering ? feilmelding : undefined}>
-                <VilkårTittel tag={'h4'}>
-                    <Element children={annenVurderingConfig.tittel} />
+                <VilkårTittel size={'small'} level={'4'}>
+                    <Label children={annenVurderingConfig.tittel} />
                 </VilkårTittel>
                 <AnnenVurderingTabell
                     person={person}

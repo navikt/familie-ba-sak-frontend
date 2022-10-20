@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { BodyShort, Heading } from '@navikt/ds-react';
 
 interface DeltagerProps {
     ikon: React.ReactNode;
@@ -27,8 +27,10 @@ export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel,
             <HSplit>
                 <MarginedDiv>{ikon}</MarginedDiv>
                 <div>
-                    <Undertittel>{ident ? `${navn} | ${ident}` : navn}</Undertittel>
-                    <Normaltekst>{undertittel}</Normaltekst>
+                    <Heading size={'small'} level={'2'}>
+                        {ident ? `${navn} | ${ident}` : navn}
+                    </Heading>
+                    <BodyShort>{undertittel}</BodyShort>
                 </div>
             </HSplit>
         </div>

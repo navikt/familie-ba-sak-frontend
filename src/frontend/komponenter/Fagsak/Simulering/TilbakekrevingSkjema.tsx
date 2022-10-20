@@ -4,11 +4,10 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import Lenke from 'nav-frontend-lenker';
-import { Feiloppsummering, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
+import { Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Alert, BodyLong, Heading, HelpText, Tag } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, Label, Radio, Tag } from '@navikt/ds-react';
 import { FamilieRadioGruppe, FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -21,7 +20,7 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import HelpText from '../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
@@ -75,7 +74,7 @@ const StyledAlert = styled(Alert)`
     margin-top: 1.5rem;
 `;
 
-const StyledElement = styled(Element)`
+const StyledLabel = styled(Label)`
     margin-top: 4rem;
 `;
 
@@ -121,7 +120,7 @@ const TilbakekrevingSkjema: React.FC<{
     ) {
         return (
             <>
-                <StyledElement>Tilbakekrevingsvalg</StyledElement>
+                <StyledLabel>Tilbakekrevingsvalg</StyledLabel>
                 <StyledAlert variant="warning">
                     Det foreligger en åpen tilbakekrevingsbehandling. Endringer i vedtaket vil
                     automatisk oppdatere eksisterende feilutbetalte perioder og beløp.
@@ -133,7 +132,7 @@ const TilbakekrevingSkjema: React.FC<{
     if (erLesevisning() && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
         return (
             <>
-                <StyledElement>Tilbakekrevingsvalg</StyledElement>
+                <StyledLabel>Tilbakekrevingsvalg</StyledLabel>
                 <StyledAlert variant="warning">
                     Tilbakekreving uten varsel er valgt automatisk, da feilutbetailngen ble avdekket
                     etter at saken ble sendt til beslutter.
@@ -210,7 +209,7 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger
                     )}
                     erLesevisning={erLesevisning()}
-                    verdi={
+                    value={
                         tilbakekrevingsvalg.verdi
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
@@ -251,7 +250,7 @@ const TilbakekrevingSkjema: React.FC<{
                     {bruker && !bruker.dødsfallDato && (
                         <>
                             <Radio
-                                label={'Opprett tilbakekreving, send varsel'}
+                                value={'Opprett tilbakekreving, send varsel'}
                                 name={'tilbakekreving'}
                                 checked={
                                     tilbakekrevingsvalg.verdi ===
@@ -263,14 +262,16 @@ const TilbakekrevingSkjema: React.FC<{
                                     )
                                 }
                                 id={'Opprett-tilbakekreving-send-varsel'}
-                            />
+                            >
+                                {'Opprett tilbakekreving, send varsel'}
+                            </Radio>
                             {fritekstVarsel.erSynlig && (
                                 <FritekstVarsel>
                                     <FamilieTextarea
                                         label={
                                             <FritektsVarselLabel>
                                                 <FlexRad>
-                                                    <Element>Fritekst i varselet</Element>
+                                                    <Label>Fritekst i varselet</Label>
                                                     <StyledHelpText placement="right">
                                                         <StyledHelpTextContainer>
                                                             <BodyLong size="small" spacing={true}>
@@ -320,11 +321,9 @@ const TilbakekrevingSkjema: React.FC<{
                                     />
 
                                     <ForhåndsvisVarselKnappContainer>
-                                        <IkonKnapp
+                                        <Button
+                                            variant={'tertiary'}
                                             id={'forhandsvis-varsel'}
-                                            erLesevisning={false}
-                                            label={'Forhåndsvis varsel'}
-                                            ikon={<DokumentIkon />}
                                             onClick={() =>
                                                 åpenBehandling.status === RessursStatus.SUKSESS &&
                                                 hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
@@ -337,17 +336,19 @@ const TilbakekrevingSkjema: React.FC<{
                                                     }
                                                 )
                                             }
-                                            spinner={hentetDokument.status === RessursStatus.HENTER}
-                                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                                            mini={true}
-                                        />
+                                            loading={hentetDokument.status === RessursStatus.HENTER}
+                                            size={'small'}
+                                            icon={<DokumentIkon />}
+                                        >
+                                            {'Forhåndsvis varsel'}
+                                        </Button>
                                     </ForhåndsvisVarselKnappContainer>
                                 </FritekstVarsel>
                             )}
                         </>
                     )}
                     <Radio
-                        label={'Opprett tilbakekreving, ikke send varsel'}
+                        value={'Opprett tilbakekreving, ikke send varsel'}
                         name={'tilbakekreving'}
                         checked={
                             tilbakekrevingsvalg.verdi ===
@@ -357,16 +358,20 @@ const TilbakekrevingSkjema: React.FC<{
                             radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
                         }
                         id={'Opprett-tilbakekreving-ikke-send-varsel'}
-                    />
+                    >
+                        {'Opprett tilbakekreving, ikke send varsel'}
+                    </Radio>
                     <Radio
-                        label={'Avvent tilbakekreving'}
+                        value={'Avvent tilbakekreving'}
                         name={'tilbakekreving'}
                         checked={
                             tilbakekrevingsvalg.verdi === Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
                         }
                         onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
                         id={'avvent-tilbakekreving'}
-                    />
+                    >
+                        {'Avvent tilbakekreving'}
+                    </Radio>
                 </FamilieRadioGruppe>
                 {erLesevisning() && fritekstVarsel.erSynlig && (
                     <FamilieTextarea

@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst, Element } from 'nav-frontend-typografi';
+import { BodyShort, Label } from '@navikt/ds-react';
 
 import type { IUtbetalingsperiodeDetalj } from '../../../../../typer/vedtaksperiode';
 import { formaterIdent, formaterBeløp, sorterUtbetaling } from '../../../../../utils/formatter';
@@ -25,17 +25,17 @@ const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) =
 
     return (
         <div style={{ marginBottom: '1rem' }}>
-            <Element>Resultat</Element>
+            <Label>Resultat</Label>
 
             {utbetalingsperiodeDetaljer
                 .sort(sorterUtbetaling)
                 .map((detalj: IUtbetalingsperiodeDetalj, index: number) => (
                     <UtbetalingsperiodeDetalj key={`${index}_${detalj.person.fødselsdato}`}>
-                        <Normaltekst title={detalj.person.navn}>
+                        <BodyShort title={detalj.person.navn}>
                             {formaterIdent(detalj.person.personIdent)}
-                        </Normaltekst>
+                        </BodyShort>
 
-                        <Normaltekst>{formaterBeløp(detalj.utbetaltPerMnd)}</Normaltekst>
+                        <BodyShort>{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
                     </UtbetalingsperiodeDetalj>
                 ))}
         </div>

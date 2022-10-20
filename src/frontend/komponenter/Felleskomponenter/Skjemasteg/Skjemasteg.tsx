@@ -4,9 +4,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Innholdstittel } from 'nav-frontend-typografi';
-
-import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import {
     NavdsSpacing4,
     NavdsSpacing6,
@@ -122,7 +120,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             )}
 
             <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
-                <Innholdstittel children={tittel} />
+                <Heading size={'large'} level={'1'} children={tittel} spacing />
 
                 {children}
 

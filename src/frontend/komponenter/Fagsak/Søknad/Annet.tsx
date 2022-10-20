@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Systemtittel } from 'nav-frontend-typografi';
-
+import { Heading } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -20,7 +19,7 @@ const Annet: React.FunctionComponent = () => {
 
     return (
         <AnnetWrapper>
-            <Systemtittel children={'Annet'} />
+            <Heading size={'medium'} level={'2'} children={'Annet'} />
             <br />
             <FamilieTextarea
                 {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(

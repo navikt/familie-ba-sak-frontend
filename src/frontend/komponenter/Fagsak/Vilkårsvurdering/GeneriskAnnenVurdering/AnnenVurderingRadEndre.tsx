@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import {
-    FamilieKnapp,
-    FamilieRadioGruppe,
-    FamilieTextareaControlled,
-} from '@navikt/familie-form-elements';
+import { Radio } from '@navikt/ds-react';
+import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -175,50 +172,51 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             <Container>
                 <FamilieRadioGruppe
                     erLesevisning={leseVisning}
-                    verdi={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
+                    value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
                         annenVurderingConfig.spørsmål
                             ? annenVurderingConfig.spørsmål(person.type.toLowerCase())
                             : annenVurderingConfig.beskrivelse
                     }
-                    feil={
+                    error={
                         redigerbartAnnenVurdering.verdi.resultat.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.resultat.feilmelding
                             : ''
                     }
-                    feilmeldingId={annenVurderingResultatFeilmeldingId(
-                        redigerbartAnnenVurdering.verdi
-                    )}
+                    errorId={annenVurderingResultatFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                 >
                     <Radio
-                        label={'Ja'}
+                        value={'Ja'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
                         checked={
                             redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.OPPFYLT
                         }
                         onChange={() => radioOnChange(Resultat.OPPFYLT)}
-                    />
+                    >
+                        {'Ja'}
+                    </Radio>
                     <Radio
-                        label={'Nei'}
+                        value={'Nei'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
                         checked={
                             redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
                         }
                         onChange={() => radioOnChange(Resultat.IKKE_OPPFYLT)}
-                    />
+                    >
+                        {'Nei'}
+                    </Radio>
                 </FamilieRadioGruppe>
 
-                <FamilieTextareaControlled
+                <FamilieTextarea
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
                     defaultValue={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}
-                    textareaClass={'begrunnelse-textarea'}
+                    className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på annen vurdering'}
-                    value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
-                    feil={
+                    error={
                         redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus ===
                             Valideringsstatus.FEIL && skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.begrunnelse.feilmelding
@@ -243,9 +241,9 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={leseVisning}
                             onClick={onClickFerdig}
-                            mini={true}
-                            type={'standard'}
-                            spinner={vilkårSubmit === VilkårSubmit.PUT}
+                            size="small"
+                            variant="secondary"
+                            loading={vilkårSubmit === VilkårSubmit.PUT}
                             disabled={vilkårSubmit === VilkårSubmit.PUT}
                         >
                             Ferdig
@@ -254,8 +252,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={leseVisning}
                             onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
+                            size="small"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>

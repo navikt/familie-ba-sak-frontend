@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typografi';
 
+import { BodyShort, Button, Detail, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -30,7 +29,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const KontrollerteTrinnOverskrift = styled(Element)`
+const KontrollerteTrinnOverskrift = styled(Label)`
     margin-bottom: 1rem;
 `;
 
@@ -72,25 +71,27 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     egetVedtak ? (
                         <SendtTilBeslutterContainer>
                             <div>
-                                <Systemtittel>Totrinnskontroll</Systemtittel>
+                                <Heading size={'medium'} level={'2'}>
+                                    Totrinnskontroll
+                                </Heading>
                                 <br />
-                                <Normaltekst>
+                                <BodyShort>
                                     {formaterIsoDato(
                                         opprettetTidspunkt,
                                         datoformat.DATO_FORLENGET_MED_TID,
                                         'UKJENT OPPRETTELSESTIDSPUNKT'
                                     )}
-                                </Normaltekst>
-                                <Normaltekst>{saksbehandler}</Normaltekst>
+                                </BodyShort>
+                                <BodyShort>{saksbehandler}</BodyShort>
                                 <br />
-                                <UndertekstBold>Vedtaket er sendt til godkjenning</UndertekstBold>
+                                <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
                             </div>
                         </SendtTilBeslutterContainer>
                     ) : (
                         <>
-                            <Normaltekst>
+                            <BodyShort>
                                 Kontrollér opplysninger og faglige vurderinger som er gjort
-                            </Normaltekst>
+                            </BodyShort>
 
                             <br />
                             <KontrollerteTrinnOverskrift>
@@ -145,11 +146,11 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 </div>
             )}
 
-            <Knapp
-                type={'hoved'}
-                spinner={senderInn}
+            <Button
+                variant={'primary'}
+                loading={senderInn}
                 disabled={senderInn}
-                mini={true}
+                size={'small'}
                 onClick={() => {
                     if (!senderInn) {
                         sendInnVedtak(

@@ -140,9 +140,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         loading={vilkårSubmit === VilkårSubmit.POST}
                         disabled={vilkårSubmit === VilkårSubmit.POST}
                         variant="tertiary"
-                        size="small"
+                        size="medium"
+                        icon={<AddCircle />}
                     >
-                        <AddCircle />
                         Legg til periode
                     </UtførKnapp>
                 )}

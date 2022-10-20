@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { FamilieInput, FamilieCheckbox } from '@navikt/familie-form-elements';
+import { BodyShort, Checkbox } from '@navikt/ds-react';
+import { FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -59,21 +61,32 @@ export const AvsenderPanel: React.FC = () => {
                 settÅpen(!åpen);
             }}
         >
-            <FamilieCheckbox
-                erLesevisning={erLesevisning()}
-                label={'Avsender er bruker'}
-                checked={brukerErAvsender}
-                onChange={() => {
-                    brukerErAvsender ? tilbakestillAvsender() : settAvsenderLikBruker();
-                    settBrukerErAvsender(!brukerErAvsender);
-                }}
-            />
+            {erLesevisning() ? (
+                brukerErAvsender ? (
+                    <BodyShort
+                        className={classNames('skjemaelement', 'lese-felt')}
+                        children={'Avsender er bruker'}
+                    />
+                ) : null
+            ) : (
+                <Checkbox
+                    value={'Avsender er bruker'}
+                    checked={brukerErAvsender}
+                    onChange={() => {
+                        brukerErAvsender ? tilbakestillAvsender() : settAvsenderLikBruker();
+                        settBrukerErAvsender(!brukerErAvsender);
+                    }}
+                >
+                    {' '}
+                    {'Avsender er bruker'}
+                </Checkbox>
+            )}
             <br />
             <FamilieInput
                 {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 label={'Navn'}
-                bredde={'XL'}
+                size={'medium'}
                 placeholder={'navn'}
                 disabled={brukerErAvsender}
             />
@@ -83,7 +96,7 @@ export const AvsenderPanel: React.FC = () => {
                 {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning()}
                 label={'Ident'}
-                bredde={'XL'}
+                size={'medium'}
                 placeholder={'Fnr/dnr/orgnr'}
                 disabled={brukerErAvsender}
             />

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import classNames from 'classnames';
+import styled from 'styled-components';
 
 import Modal from 'nav-frontend-modal';
 
@@ -12,6 +13,12 @@ import { useApp } from '../../../context/AppContext';
 interface IProps {
     modal?: IModal;
 }
+
+export const StyledButtons = styled.div`
+    Button:first-of-type {
+        margin-right: 1rem;
+    }
+`;
 
 const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
@@ -36,7 +43,9 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
                 <div className="uimodal__content--inner-content">
                     {innhold ? innhold() : children}
                 </div>
-                {actions && <div className="uimodal__content--actions"> {actions} </div>}
+                {actions && (
+                    <StyledButtons className="uimodal__content--actions">{actions}</StyledButtons>
+                )}
             </div>
         </Modal>
     );

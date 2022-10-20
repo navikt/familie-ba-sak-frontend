@@ -6,7 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Heading, HelpText, Link, Tag } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, Link, Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,7 +17,7 @@ import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import HelpText from '../../../../Felleskomponenter/HelpText';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
@@ -64,7 +64,7 @@ const StyledTag = styled(Tag)`
     border-color: ${navFarger.navGra60};
 `;
 
-const SletteKnapp = styled(IkonKnapp)`
+const SletteKnapp = styled(Button)`
     margin-left: 0.5rem;
     height: 2.75rem;
 `;
@@ -169,21 +169,22 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
 
                                 return (
                                     <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                                        <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                         <FamilieTextareaBegrunnelseFritekst
                                             erLesevisning={false}
                                             key={`fritekst-${fritekstId}`}
                                             id={`${fritekstId}`}
-                                            textareaClass={'fritekst-textarea'}
+                                            className={'fritekst-textarea'}
+                                            label={`Kulepunkt ${fritekstId}`}
+                                            hideLabel
                                             value={fritekst.verdi.tekst}
                                             maxLength={makslengdeFritekst}
                                             onChange={event => onChangeFritekst(event, fritekstId)}
-                                            feil={skjema.visFeilmeldinger && fritekst.feilmelding}
+                                            error={skjema.visFeilmeldinger && fritekst.feilmelding}
                                             /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                             autoFocus
                                         />
                                         <SletteKnapp
-                                            erLesevisning={false}
+                                            variant={'tertiary'}
                                             onClick={() => {
                                                 skjema.felter.fritekster.validerOgSettFelt([
                                                     ...skjema.felter.fritekster.verdi.filter(
@@ -194,37 +195,40 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                                 ]);
                                             }}
                                             id={`fjern_fritekst-${fritekstId}`}
-                                            mini={true}
-                                            label={'Fjern'}
+                                            size={'small'}
                                             aria-label={'Fjern fritekst'}
-                                            ikon={<Slett />}
-                                        />
+                                            icon={<Slett />}
+                                            iconPosition={'right'}
+                                        >
+                                            {'Fjern'}
+                                        </SletteKnapp>
                                     </StyledFamilieFritekstFelt>
                                 );
                             }
                         )}
                     </SkjemaGruppe>
 
-                    {!erMaksAntallKulepunkter && (
-                        <IkonKnapp
-                            erLesevisning={erLesevisning()}
-                            onClick={leggTilFritekst}
-                            id={`legg-til-fritekst`}
-                            ikon={<Pluss />}
-                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                            label={'Legg til fritekst'}
-                            mini={true}
-                        />
-                    )}
+                    {!erMaksAntallKulepunkter &&
+                        (!erLesevisning ? (
+                            <Button
+                                variant={'tertiary'}
+                                onClick={leggTilFritekst}
+                                id={`legg-til-fritekst`}
+                                size={'small'}
+                                icon={<Pluss />}
+                            >
+                                {'Legg til fritekst'}
+                            </Button>
+                        ) : null)}
                     <Knapperekke>
                         <FamilieKnapp
                             erLesevisning={erLesevisning()}
                             onClick={() => {
                                 putVedtaksperiodeMedFritekster();
                             }}
-                            mini={true}
-                            type={'standard'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            size="small"
+                            variant="secondary"
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >
                             Lagre
@@ -234,8 +238,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             onClick={() => {
                                 onPanelClose(false);
                             }}
-                            mini={true}
-                            type={'flat'}
+                            size="small"
+                            variant="tertiary"
                         >
                             Avbryt
                         </FamilieKnapp>
@@ -243,17 +247,17 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : (
-        <IkonKnapp
-            erLesevisning={erLesevisning()}
+    ) : !erLesevisning ? (
+        <Button
+            variant={'tertiary'}
             onClick={leggTilFritekst}
             id={`legg-til-fritekst`}
-            ikon={<Pluss />}
-            ikonPosisjon={IkonPosisjon.VENSTRE}
-            label={'Legg til fritekst'}
-            mini={true}
-        />
-    );
+            size={'small'}
+            icon={<Pluss />}
+        >
+            {'Legg til fritekst'}
+        </Button>
+    ) : null;
 };
 
 export default FritekstVedtakbegrunnelser;

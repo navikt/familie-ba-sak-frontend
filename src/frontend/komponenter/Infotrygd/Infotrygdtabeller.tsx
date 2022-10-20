@@ -2,10 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erBehandlingHenlagt } from '../../typer/behandling';
@@ -23,17 +20,17 @@ interface InfotrygdtabellerProps {
     minimalFagsak?: IMinimalFagsak;
 }
 
-const SakerTekst = styled(Undertittel)`
+const SakerTekst = styled(Heading)`
     margin-top: 4rem;
     margin-bottom: 1rem;
 `;
 
-const VedtakTekst = styled(Undertittel)`
+const VedtakTekst = styled(Heading)`
     margin-top: 4rem;
     margin-bottom: 1rem;
 `;
 
-const FlyttSakKnapp = styled(Knapp)`
+const FlyttSakButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 30px;
     margint-bottom: auto;
@@ -90,15 +87,16 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                 minimalFagsak?.behandlinger.filter(
                     behandling => !erBehandlingHenlagt(behandling.resultat)
                 ).length === 0 && (
-                    <FlyttSakKnapp
-                        mini
+                    <FlyttSakButton
+                        variant={'secondary'}
+                        size={'small'}
                         disabled={disableMigrerKnapp}
                         onClick={() => {
                             ident && flyttBrukerTilBaSak(ident);
                         }}
                     >
                         Flytt til BA-sak
-                    </FlyttSakKnapp>
+                    </FlyttSakButton>
                 )}
             {visFlyttSakAlert()}
             {visMigrertModal && (
@@ -108,20 +106,20 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                         lukkKnapp: false,
                         visModal: visMigrertModal,
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'bekreft'}
-                                type={'hoved'}
-                                mini={true}
+                                variant={'secondary'}
+                                size={'small'}
                                 onClick={() => gåTilSaksoversiktVedSuksess(minimalFagsak?.id)}
                                 children={'Gå til saksoversikt'}
                             />,
                         ],
                     }}
                 >
-                    <Normaltekst>
+                    <BodyShort>
                         Migrering tar 1-2 minutter. Du vil se behandlingen i saksoversikten så fort
                         migreringen er ferdig.
-                    </Normaltekst>
+                    </BodyShort>
                 </UIModalWrapper>
             )}
 
@@ -134,9 +132,13 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
                     )}`}
                 />
             )}
-            <SakerTekst>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
+            <SakerTekst size={'small'} level={'2'}>
+                {ident ? `Saker for ${ident}` : 'Saker'}
+            </SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
-            <VedtakTekst>Vedtak</VedtakTekst>
+            <VedtakTekst size={'small'} level={'2'}>
+                Vedtak
+            </VedtakTekst>
             <Vedtakstabell saker={saker} />
         </>
     );

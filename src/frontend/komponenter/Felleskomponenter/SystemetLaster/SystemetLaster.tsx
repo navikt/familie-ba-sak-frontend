@@ -1,13 +1,15 @@
 import * as React from 'react';
 
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Systemtittel } from 'nav-frontend-typografi';
+
+import { Heading } from '@navikt/ds-react';
 
 const SystemetLaster = () => {
     return (
         <div className={'systemet-laster'}>
             <div className={'systemet-laster__content'}>
-                <Systemtittel
+                <Heading
+                    size={'medium'}
                     className={'systemet-laster__content--tekst'}
                     children={'Systemet laster'}
                 />

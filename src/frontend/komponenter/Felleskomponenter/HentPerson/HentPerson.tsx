@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 
-import { Knapp } from 'nav-frontend-knapper';
 import PanelBase from 'nav-frontend-paneler';
-import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 
+import { Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
@@ -49,11 +48,12 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                     erLesevisning={erLesevisning}
                     id={'hent-person'}
                     label={'Ident'}
-                    bredde={'XL'}
+                    size={'medium'}
                     placeholder={'fnr/dnr'}
                 />
                 {!erLesevisning && (
-                    <Knapp
+                    <Button
+                        variant={'secondary'}
                         onClick={() => {
                             if (
                                 ident.valideringsstatus === Valideringsstatus.OK ||
@@ -82,14 +82,14 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                             }
                         }}
                         children={'Hent'}
-                        spinner={person.status === RessursStatus.HENTER}
+                        loading={person.status === RessursStatus.HENTER}
                     />
                 )}
             </div>
 
             {person.status === RessursStatus.SUKSESS && (
                 <PanelBase className={classNames('hentperson__panel', 'panel--gra')}>
-                    <Undertittel children={'Fant person'} />
+                    <Heading size={'small'} children={'Fant person'} />
                     <Informasjonsbolk
                         informasjon={[
                             {
@@ -113,7 +113,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                 person.status === RessursStatus.IKKE_TILGANG) && (
                 <>
                     <br />
-                    <Feilmelding children={person.frontendFeilmelding} />
+                    <ErrorMessage children={person.frontendFeilmelding} />
                 </>
             )}
         </div>

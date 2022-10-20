@@ -3,11 +3,8 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
-
-import { Edit, FileContent, InformationColored } from '@navikt/ds-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -222,8 +219,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             loading={hentetDokument.status === RessursStatus.HENTER}
+                            icon={<FileContent aria-hidden />}
                         >
-                            <FileContent aria-hidden /> Vis vedtaksbrev
+                            Vis vedtaksbrev
                         </Button>
                         <Button
                             id={'korriger-etterbetaling'}
@@ -231,15 +229,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'small'}
                             style={{ float: 'right' }}
                             onClick={() => setVisKorrigerEtterbetalingModal(true)}
+                            icon={
+                                åpenBehandling.korrigertEtterbetaling ? (
+                                    <InformationColored aria-hidden />
+                                ) : (
+                                    <Notes aria-hidden />
+                                )
+                            }
                         >
                             {åpenBehandling.korrigertEtterbetaling ? (
-                                <>
-                                    <InformationColored aria-hidden /> Vis korrigert etterbetaling
-                                </>
+                                <>Vis korrigert etterbetaling</>
                             ) : (
-                                <>
-                                    <Edit aria-hidden /> Korriger etterbetaling
-                                </>
+                                <>Korriger etterbetaling</>
                             )}
                         </Button>
                     </Container>
@@ -250,9 +251,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 lukkKnapp: false,
                                 visModal: visModal,
                                 actions: [
-                                    <Knapp
+                                    <Button
                                         key={'saksoversikt'}
-                                        mini={true}
+                                        variant={'secondary'}
+                                        size={'small'}
                                         onClick={() => {
                                             settVisModal(false);
                                             navigate(`/fagsak/${fagsakId}/saksoversikt`);
@@ -260,10 +262,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         }}
                                         children={'Gå til saksoversikten'}
                                     />,
-                                    <Knapp
+                                    <Button
                                         key={'oppgavebenk'}
-                                        type={'hoved'}
-                                        mini={true}
+                                        variant={'primary'}
+                                        size={'small'}
                                         onClick={() => {
                                             settVisModal(false);
                                             navigate('/oppgaver');
@@ -273,7 +275,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 ],
                             }}
                         >
-                            <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
+                            <BodyShort>Behandlingen er nå sendt til totrinnskontroll</BodyShort>
                         </UIModalWrapper>
                     )}
                 </>

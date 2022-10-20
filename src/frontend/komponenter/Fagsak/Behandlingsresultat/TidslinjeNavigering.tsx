@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
@@ -43,10 +43,10 @@ const TidslinjeNavigering: React.FC<IProps> = ({
 }) => {
     return (
         <StyledTidslinjenavigering className={'tidslinje-header__navigering'}>
-            <Flatknapp
+            <Button
                 title={'Naviger til venstre'}
-                mini
-                kompakt
+                variant="tertiary"
+                size="small"
                 disabled={!kanNavigereTilVenstre}
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
             >
@@ -56,12 +56,12 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                         ? navigerTilVenstreTittel
                         : 'Naviger til venstre i tidslinjen'}
                 </span>
-            </Flatknapp>
+            </Button>
             {children && <DivMedHøyremargin>{children}</DivMedHøyremargin>}
-            <Flatknapp
+            <Button
                 title={'Naviger til høyre'}
-                mini
-                kompakt
+                variant="tertiary"
+                size="small"
                 disabled={!kanNavigereTilHøyre}
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
             >
@@ -71,7 +71,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                         ? navigerTilHyøyreTittel
                         : 'Naviger til høyre i tidslinjen'}
                 </span>
-            </Flatknapp>
+            </Button>
         </StyledTidslinjenavigering>
     );
 };

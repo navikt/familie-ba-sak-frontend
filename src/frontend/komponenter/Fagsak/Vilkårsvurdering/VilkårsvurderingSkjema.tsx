@@ -20,7 +20,6 @@ import { BehandlingÅrsak } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../typer/vilkår';
 import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../typer/vilkår';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
@@ -127,19 +126,21 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 !harUtvidet &&
                                 kanLeggeTilUtvidetVilkår && (
                                     <VilkårDiv>
-                                        <IkonKnapp
-                                            erLesevisning={erLesevisning()}
-                                            id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
-                                            onClick={() =>
-                                                leggTilVilkårUtvidet(personResultat.personIdent)
-                                            }
-                                            label={`Legg til vilkår utvidet barnetrygd`}
-                                            mini={true}
-                                            ikonPosisjon={IkonPosisjon.VENSTRE}
-                                            ikon={
-                                                <AddCircle title="Legg til vilkår utvidet barnetrygd" />
-                                            }
-                                        />
+                                        {!erLesevisning ? (
+                                            <Button
+                                                variant={'tertiary'}
+                                                id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
+                                                onClick={() =>
+                                                    leggTilVilkårUtvidet(personResultat.personIdent)
+                                                }
+                                                size={'small'}
+                                                icon={
+                                                    <AddCircle title="Legg til vilkår utvidet barnetrygd" />
+                                                }
+                                            >
+                                                {`Legg til vilkår utvidet barnetrygd`}
+                                            </Button>
+                                        ) : null}
                                     </VilkårDiv>
                                 )}
 
@@ -153,18 +154,18 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                             !personErEkspandert[personResultat.personIdent],
                                     })
                                 }
+                                icon={
+                                    personErEkspandert[personResultat.personIdent] ? (
+                                        <CollapseFilled aria-hidden />
+                                    ) : (
+                                        <ExpandFilled aria-hidden />
+                                    )
+                                }
+                                iconPosition="right"
                             >
-                                {personErEkspandert[personResultat.personIdent] ? (
-                                    <>
-                                        Skjul vilkårsvurdering
-                                        <CollapseFilled />
-                                    </>
-                                ) : (
-                                    <>
-                                        Vis vilkårsvurdering
-                                        <ExpandFilled />
-                                    </>
-                                )}
+                                {personErEkspandert[personResultat.personIdent]
+                                    ? 'Skjul vilkårsvurdering'
+                                    : 'Vis vilkårsvurdering'}
                             </Button>
                         </PersonLinje>
 

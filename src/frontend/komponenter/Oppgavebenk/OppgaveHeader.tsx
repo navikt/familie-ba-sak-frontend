@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Heading } from '@navikt/ds-react';
 
 import FilterSkjema from './FilterSkjema';
 
@@ -8,7 +8,9 @@ const OppgaveHeader: React.FunctionComponent = () => {
     return (
         <div className={'oppgave-header'}>
             <div>
-                <Systemtittel className={'oppgave-header__tittel'}>Oppgavebenken</Systemtittel>
+                <Heading size={'medium'} level={'2'} className={'oppgave-header__tittel'}>
+                    Oppgavebenken
+                </Heading>
 
                 <FilterSkjema />
             </div>

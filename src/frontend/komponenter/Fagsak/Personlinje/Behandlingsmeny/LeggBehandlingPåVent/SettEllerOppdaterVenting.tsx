@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import KnappBase from 'nav-frontend-knapper';
-
+import { Dropdown } from '@navikt/ds-react-internal';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -11,11 +10,10 @@ import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 
 interface IProps {
-    onListElementClick: () => void;
     behandling: IBehandling;
 }
 
-const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behandling }) => {
+const SettEllerOppdaterVenting: React.FC<IProps> = ({ behandling }) => {
     const { settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(
@@ -43,18 +41,14 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    settVisModal(true);
-                    onListElementClick();
-                }}
+            <Dropdown.Menu.List.Item
+                onClick={() => settVisModal(true)}
                 disabled={behandling.status !== BehandlingStatus.UTREDES}
             >
                 {erBehandlingAlleredePåVent
                     ? 'Endre ventende behandling'
                     : 'Sett behandling på vent'}
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
 
             <SettBehandlingPåVentModal
                 visModal={visModal}

@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
 import {
     FamilieDatovelger,
@@ -41,12 +41,31 @@ const FixedDatoVelger = styled(FamilieDatovelger)`
     .nav-datovelger__kalenderknapp {
         z-index: 0;
     }
+    margin-top: 2rem;
 `;
 
-const FeltFeilmelding = styled(Normaltekst)`
+const FeltFeilmelding = styled(BodyShort)`
     margin-top: 0.5rem;
     font-weight: 600;
     color: ${navFarger.redError};
+`;
+
+const StyledFamilieSelect = styled(FamilieSelect)`
+    label {
+        margin-top: 2rem;
+    }
+`;
+
+const StyledBehandlingstemaSelect = styled(BehandlingstemaSelect)`
+    label {
+        margin-top: 2rem;
+    }
+`;
+
+const StyledFamilieReactSelect = styled(FamilieReactSelect)`
+    label {
+        margin-top: 2rem;
+    }
 `;
 
 interface IProps {
@@ -181,7 +200,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             </FamilieSelect>
 
             {behandlingsårsak.erSynlig && (
-                <FamilieSelect
+                <StyledFamilieSelect
                     {...behandlingsårsak.hentNavBaseSkjemaProps(visFeilmeldinger)}
                     erLesevisning={erLesevisning}
                     name={'Behandlingsårsak'}
@@ -240,11 +259,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                                       </option>
                                   );
                               })}
-                </FamilieSelect>
+                </StyledFamilieSelect>
             )}
 
             {behandlingstema.erSynlig && (
-                <BehandlingstemaSelect
+                <StyledBehandlingstemaSelect
                     behandlingstema={behandlingstema}
                     erLesevisning={erLesevisning}
                     visFeilmeldinger={visFeilmeldinger}
@@ -254,7 +273,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             )}
 
             {erHelmanuellMigrering && valgteBarn?.erSynlig && (
-                <FamilieReactSelect
+                <StyledFamilieReactSelect
                     {...valgteBarn.hentNavInputProps(visFeilmeldinger)}
                     label={'Legg til juridiske barn for migrering'}
                     placeholder={'Velg barn'}
@@ -263,16 +282,16 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     isMulti={true}
                     formatOptionLabel={(
                         option: ISelectOption,
-                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
+                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
                     ) => {
                         if (formatOptionLabelMeta.context === 'menu') {
                             return (
-                                <Normaltekst>
+                                <BodyShort>
                                     <b>{option.label}</b> | {option.value}
-                                </Normaltekst>
+                                </BodyShort>
                             );
                         } else {
-                            return <Normaltekst>{option.value}</Normaltekst>;
+                            return <BodyShort>{option.value}</BodyShort>;
                         }
                     }}
                     onChange={valgteOptions => {

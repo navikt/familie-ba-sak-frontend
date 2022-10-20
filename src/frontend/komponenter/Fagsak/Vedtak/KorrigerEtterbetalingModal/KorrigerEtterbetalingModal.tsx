@@ -6,14 +6,12 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Cancel } from '@navikt/ds-icons';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerEtterbetalingSkjemaContext } from '../../../../context/KorrigertEtterbetaling/KorrigerEtterbetalingModalSkjemaContext';
 import type { IRestKorrigertEtterbetaling } from '../../../../typer/vedtak';
-import { SelectMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/SelectMedLesevisning';
-import { TextAreaMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextAreaMedLesevisning';
-import { TextFieldMedLesevisning } from '../../../Felleskomponenter/SkjemafelterMedLesevisning/TextFieldMedLesevisning';
 
 interface IKorrigerEtterbetalingModal {
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
@@ -42,20 +40,18 @@ const baseSkjemaelementStyle = css`
     margin-bottom: 1.5rem;
 `;
 
-//TODO: Bytt ut med Select fra familie-felles-frontend etter oppgradering.
-//TODO: Må sikkert slenge inn custom styling for å få riktige margins osv i lesevisning.
-const StyledSelect = styled(SelectMedLesevisning)`
+const StyledFamilieSelect = styled(FamilieSelect)`
     ${baseSkjemaelementStyle}
 `;
 
-//TODO: Bytt ut med TextField fra familie-felles-frontend etter oppgradering.
-const StyledTextField = styled(TextFieldMedLesevisning)`
-    ${baseSkjemaelementStyle}
-    width: 25%;
+const StyledFamilieInput = styled(FamilieInput)`
+    ${baseSkjemaelementStyle};
+    :not(&.lesevisning) {
+        width: 7.5rem;
+    }
 `;
 
-//TODO: Bytt ut med TextArea fra familie-felles-frontend etter oppgradering.
-const StyledTextarea = styled(TextAreaMedLesevisning)`
+const StyledFamilieTextarea = styled(FamilieTextarea)`
     ${baseSkjemaelementStyle}
 `;
 
@@ -109,16 +105,26 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
         onClose();
     };
 
+    const hentLabelForÅrsak = (årsakValue: string) =>
+        årsaker.find(årsak => årsak.value === årsakValue)?.label;
+
     return (
         <Modal open={visModal} onClose={lukkModal}>
             <StyledModalContent>
-                <StyledModalHeader size="medium">Korriger etterbetaling</StyledModalHeader>
+                <StyledModalHeader size="medium" level={'2'}>
+                    Korriger etterbetaling
+                </StyledModalHeader>
                 <StyledSkjema feil={false}>
                     <div>
-                        <StyledSelect
+                        <StyledFamilieSelect
                             label={'Årsak'}
                             id={'korrigering-aarsak'}
                             value={skjema.felter.årsak.verdi}
+                            lesevisningVerdi={
+                                skjema.felter.årsak.verdi === ''
+                                    ? 'Ingen årsak valgt.'
+                                    : hentLabelForÅrsak(skjema.felter.årsak.verdi)
+                            }
                             onChange={option =>
                                 skjema.felter.årsak.validerOgSettFelt(option.target.value)
                             }
@@ -128,10 +134,15 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                                     ? skjema.felter.årsak.feilmelding?.toString()
                                     : ''
                             }
-                            lesevisning={erLesevisning}
-                            options={årsaker}
-                        />
-                        <StyledTextField
+                            erLesevisning={erLesevisning}
+                        >
+                            {årsaker.map(årsak => (
+                                <option value={årsak.value} key={årsak.value}>
+                                    {årsak.label}
+                                </option>
+                            ))}
+                        </StyledFamilieSelect>
+                        <StyledFamilieInput
                             label={'Nytt beløp'}
                             id={'korrigering-belop'}
                             type={'number'}
@@ -145,9 +156,10 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                                     ? skjema.felter.beløp.feilmelding?.toString()
                                     : ''
                             }
-                            lesevisning={erLesevisning}
+                            erLesevisning={erLesevisning}
+                            className={erLesevisning ? 'lesevisning' : ''}
                         />
-                        <StyledTextarea
+                        <StyledFamilieTextarea
                             label={'Begrunnelse (valgfri)'}
                             id={'korrigering-begrunnelse'}
                             value={skjema.felter.begrunnelse.verdi}
@@ -157,7 +169,7 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                                 )
                             }
                             maxLength={erLesevisning ? 0 : 1000}
-                            lesevisning={erLesevisning}
+                            erLesevisning={erLesevisning}
                         />
                     </div>
                     {!erLesevisning && (

@@ -1,4 +1,6 @@
-import type { GroupType, ISelectOption } from '@navikt/familie-form-elements';
+import type { GroupBase } from 'react-select';
+
+import type { ISelectOption } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -71,7 +73,7 @@ export const useVilkårBegrunnelser = ({
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       )
                   )
-                  .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
+                  .reduce((acc: GroupBase<ISelectOption>[], vedtakBegrunnelseType: string) => {
                       return [
                           ...acc,
                           {

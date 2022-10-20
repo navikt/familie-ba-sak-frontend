@@ -3,7 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { BodyShort, Label } from '@navikt/ds-react';
 
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
@@ -65,21 +66,21 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
             tittel={
                 <PanelTittel>
                     {periode.fom && (
-                        <Element>
+                        <Label>
                             {periodeToString({
                                 fom: periode.fom,
                                 tom: slutterSenereEnnInneværendeMåned(periode.tom)
                                     ? ''
                                     : periode.tom,
                             })}
-                        </Element>
+                        </Label>
                     )}
-                    <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
+                    <BodyShort>{vedtaksperiodeTittel}</BodyShort>
                     {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
                         vedtaksperiodeMedBegrunnelser.type ===
                             Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING) &&
                         vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
-                            <Normaltekst>
+                            <BodyShort>
                                 {formaterBeløp(
                                     summer(
                                         vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.map(
@@ -88,7 +89,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                                         )
                                     )
                                 )}
-                            </Normaltekst>
+                            </BodyShort>
                         )}
                 </PanelTittel>
             }

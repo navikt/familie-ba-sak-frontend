@@ -1,10 +1,11 @@
 import React from 'react';
 
+import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { BodyShort, Checkbox } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -53,26 +54,37 @@ const AvslagSkjema: React.FC<IProps> = ({
                     : ''
             }
         >
-            <FamilieCheckbox
-                erLesevisning={lesevisning}
-                label={'Vurderingen er et avslag'}
-                checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
-                onChange={() => {
-                    settRedigerbartVilkår({
-                        ...redigerbartVilkår,
-                        verdi: {
-                            ...redigerbartVilkår.verdi,
-                            erEksplisittAvslagPåSøknad:
-                                !redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
-                            avslagBegrunnelser: {
-                                ...redigerbartVilkår.verdi.avslagBegrunnelser,
-                                verdi: [],
+            {lesevisning ? (
+                redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad ? (
+                    <BodyShort
+                        className={classNames('skjemaelement', 'lese-felt')}
+                        children={'Vurderingen er et avslag'}
+                    />
+                ) : null
+            ) : (
+                <Checkbox
+                    value={'Vurderingen er et avslag'}
+                    checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
+                    onChange={() => {
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                erEksplisittAvslagPåSøknad:
+                                    !redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
+                                avslagBegrunnelser: {
+                                    ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                                    verdi: [],
+                                },
                             },
-                        },
-                    });
-                    settVisFeilmeldingerForEttVilkår(false);
-                }}
-            />
+                        });
+                        settVisFeilmeldingerForEttVilkår(false);
+                    }}
+                >
+                    {'Vurderingen er et avslag'}
+                </Checkbox>
+            )}
+
             {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
                 <VedtaksbegrunnelseTeksterProvider>
                     <AvslagBegrunnelseMultiselect

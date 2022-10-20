@@ -4,10 +4,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Xknapp } from 'nav-frontend-ikonknapper';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -64,14 +63,14 @@ const UtbetalingsbeløpTable = styled.table`
     padding-bottom: 1rem;
 `;
 
-const VenstreTekst = styled(Normaltekst)`
+const VenstreTekst = styled(BodyShort)`
     text-align: left;
     font-weight: bold;
     width: 50%;
     margin: 1.25rem 0rem;
 `;
 
-const HøyreTekst = styled(Normaltekst)`
+const HøyreTekst = styled(BodyShort)`
     text-align: right;
     font-weight: bold;
     width: 50%;
@@ -258,11 +257,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         </AlertWithBottomMargin>
                     )}
 
-                    <Element>{månedNavnOgÅr()}</Element>
+                    <Label>{månedNavnOgÅr()}</Label>
 
-                    {utbetalingsperiode === undefined && (
-                        <Normaltekst>Ingen utbetalinger</Normaltekst>
-                    )}
+                    {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
                 </div>
                 <Xknapp
                     onClick={() => {
@@ -276,13 +273,13 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         <thead>
                             <tr>
                                 <th>
-                                    <Normaltekst>Person</Normaltekst>
+                                    <BodyShort>Person</BodyShort>
                                 </th>
                                 <th>
-                                    <Normaltekst>Sats</Normaltekst>
+                                    <BodyShort>Sats</BodyShort>
                                 </th>
                                 <TableHeaderAlignedRight>
-                                    <Normaltekst>Beløp</Normaltekst>
+                                    <BodyShort>Beløp</BodyShort>
                                 </TableHeaderAlignedRight>
                             </tr>
                         </thead>
@@ -293,26 +290,26 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                     return (
                                         <tr key={index}>
                                             <td>
-                                                <Normaltekst>{`${
+                                                <BodyShort>{`${
                                                     detalj.person.navn
                                                 } (${hentAlderSomString(
                                                     detalj.person.fødselsdato
                                                 )}) | ${formaterIdent(
                                                     detalj.person.personIdent
-                                                )}`}</Normaltekst>
+                                                )}`}</BodyShort>
                                             </td>
                                             <td>
-                                                <Normaltekst>
+                                                <BodyShort>
                                                     {ytelsetype[detalj.ytelseType].navn}
-                                                </Normaltekst>
+                                                </BodyShort>
                                             </td>
                                             <TableDataAlignedRight>
                                                 {utbetalingsBeløpStatusMap.get(
                                                     detalj.person.personIdent
                                                 ) ? (
-                                                    <Normaltekst>
+                                                    <BodyShort>
                                                         {formaterBeløp(detalj.utbetaltPerMnd)}
-                                                    </Normaltekst>
+                                                    </BodyShort>
                                                 ) : (
                                                     <AlertAlignedRight
                                                         variant="warning"

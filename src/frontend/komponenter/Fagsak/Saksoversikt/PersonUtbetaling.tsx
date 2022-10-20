@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
 import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
@@ -23,17 +23,17 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                 {utbetalingsperiodeDetaljer.map((utbetalingsperiodeDetalj, index) => {
                     return (
                         <div key={index} className={'saksoversikt__utbetalinger__ytelselinje'}>
-                            <Normaltekst>
+                            <BodyShort>
                                 {utbetalingsperiodeDetalj.ytelseType ===
                                 YtelseType.ORDINÆR_BARNETRYGD
                                     ? genererTekstForOrdinær(
                                           utbetalingsperiodeDetalj.person.fødselsdato
                                       )
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
-                            </Normaltekst>
-                            <Normaltekst>
+                            </BodyShort>
+                            <BodyShort>
                                 {formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}
-                            </Normaltekst>
+                            </BodyShort>
                         </div>
                     );
                 })}

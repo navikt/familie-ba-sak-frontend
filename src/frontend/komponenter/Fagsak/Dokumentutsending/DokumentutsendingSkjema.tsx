@@ -2,11 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { FileContent } from '@navikt/ds-icons';
+import { Alert, Button, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -15,8 +14,6 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
@@ -44,7 +41,7 @@ const Handlinger = styled.div`
     justify-content: space-between;
 `;
 
-const SendBrevKnapp = styled(Knapp)`
+const SendBrevKnapp = styled(Button)`
     margin-right: 2rem;
 `;
 
@@ -64,7 +61,7 @@ const DokumentutsendingSkjema: React.FC = () => {
 
     return (
         <Container>
-            <Innholdstittel children={'Send informasjonsbrev'} />
+            <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
 
             <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
                 <FamilieSelect
@@ -74,7 +71,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         skjema.felter.årsak.onChange(event.target.value as DokumentÅrsak);
                     }}
-                    bredde={'m'}
+                    size={'medium'}
                 >
                     {Object.values(DokumentÅrsak).map(årsak => {
                         return (
@@ -93,7 +90,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     målformFelt={skjema.felter.målform}
                     visFeilmeldinger={false}
                     erLesevisning={false}
-                    Legend={<Element children={'Målform'} />}
+                    Legend={<Label children={'Målform'} />}
                 />
 
                 <ÅrsakSkjema>
@@ -118,32 +115,32 @@ const DokumentutsendingSkjema: React.FC = () => {
             </StyledSkjemaGruppe>
 
             <Handlinger>
-                <IkonKnapp
+                <Button
+                    variant={'tertiary'}
                     id={'forhandsvis-vedtaksbrev'}
-                    erLesevisning={false}
-                    label={'Forhåndsvis'}
-                    ikonPosisjon={IkonPosisjon.VENSTRE}
-                    ikon={<DokumentIkon />}
-                    mini={true}
-                    spinner={hentetDokument.status === RessursStatus.HENTER}
+                    size={'small'}
+                    loading={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
-                />
+                    icon={<FileContent />}
+                >
+                    {'Forhåndsvis'}
+                </Button>
 
                 <div>
                     <SendBrevKnapp
-                        mini
-                        spinner={senderBrev()}
+                        size="small"
+                        variant="primary"
+                        loading={senderBrev()}
                         disabled={skjemaErLåst()}
                         onClick={sendBrevPåFagsak}
-                        type={'hoved'}
                     >
                         Send brev
                     </SendBrevKnapp>
 
-                    <Knapp mini onClick={nullstillSkjema} type={'flat'}>
+                    <Button size="small" variant="tertiary" onClick={nullstillSkjema}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </div>
             </Handlinger>
         </Container>

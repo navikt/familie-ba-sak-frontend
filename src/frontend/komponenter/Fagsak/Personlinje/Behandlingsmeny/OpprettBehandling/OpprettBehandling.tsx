@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Button } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
@@ -15,11 +16,10 @@ import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 
 interface IProps {
-    onListElementClick: () => void;
     minimalFagsak: IMinimalFagsak;
 }
 
-const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) => {
+const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visModal, settVisModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
@@ -50,29 +50,23 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
 
     return (
         <>
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    onListElementClick();
-                    settVisModal(true);
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Opprett behandling
-            </KnappBase>
-
+            </Dropdown.Menu.List.Item>
             <UIModalWrapper
                 modal={{
                     actions: [
-                        <Flatknapp
+                        <Button
                             key={'avbryt'}
-                            mini={true}
+                            variant="tertiary"
+                            size="small"
                             onClick={lukkOpprettBehandlingModal}
                             children={'Avbryt'}
                         />,
-                        <Knapp
+                        <Button
                             key={'bekreft'}
-                            type={'hoved'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             onClick={() =>
                                 onBekreft(
                                     minimalFagsak.søkerFødselsnummer,
@@ -80,7 +74,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                                 )
                             }
                             children={'Bekreft'}
-                            spinner={
+                            loading={
                                 opprettBehandlingSkjema.submitRessurs.status ===
                                 RessursStatus.HENTER
                             }
@@ -119,19 +113,20 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                         lukkKnapp: false,
                         visModal: visBekreftelseTilbakekrevingModal,
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'saksoversikt'}
-                                mini={true}
+                                variant="secondary"
+                                size="small"
                                 onClick={() => {
                                     settVisBekreftelseTilbakekrevingModal(false);
                                     navigate(`/fagsak/${minimalFagsak.id}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'oppgavebenk'}
-                                type={'hoved'}
-                                mini={true}
+                                variant="primary"
+                                size="small"
                                 onClick={() => {
                                     settVisBekreftelseTilbakekrevingModal(false);
                                     navigate('/oppgaver');

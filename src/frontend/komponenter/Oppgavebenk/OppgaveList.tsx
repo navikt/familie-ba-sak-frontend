@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import type { Cell, ColumnInstance } from 'react-table';
 import styled from 'styled-components';
 
-import { Systemtittel } from 'nav-frontend-typografi';
-
-import { Alert } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -61,7 +59,9 @@ const OppgaveList: React.FunctionComponent = () => {
     return (
         <div className={'oppgavelist'}>
             <div className={'oppgavelist__header'}>
-                <Systemtittel>Oppgaveliste</Systemtittel>
+                <Heading size={'medium'} level={'2'}>
+                    Oppgaveliste
+                </Heading>
                 <OppgavelisteNavigator />
             </div>
             <div>

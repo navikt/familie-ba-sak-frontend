@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { BodyShort } from '@navikt/ds-react';
 
 import IkonTotrinnskontroll from '../ikoner/IkonTotrinnskontroll';
 import Filterknapp from '../komponenter/Filterknapp';
@@ -13,7 +13,7 @@ interface ITotrinnskontrollKnappProps {
 const TotrinnskontrollKnapp = ({ aktiv, onClick }: ITotrinnskontrollKnappProps) => (
     <Filterknapp disabled={false} onClick={onClick} aktiv={aktiv}>
         <IkonTotrinnskontroll />
-        <Normaltekst>Totrinnskontroll</Normaltekst>
+        <BodyShort>Totrinnskontroll</BodyShort>
     </Filterknapp>
 );
 

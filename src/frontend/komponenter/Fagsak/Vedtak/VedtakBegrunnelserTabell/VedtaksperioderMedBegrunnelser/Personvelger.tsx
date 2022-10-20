@@ -1,9 +1,8 @@
-import type { CSSProperties } from 'react';
 import React from 'react';
 
 import navFarger from 'nav-frontend-core';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort } from '@navikt/ds-react';
 import type { ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { useFelt } from '@navikt/familie-skjema';
@@ -24,21 +23,21 @@ const Personvelger: React.FC = () => {
     return (
         <FamilieReactSelect
             propSelectStyles={{
-                container: (provided: CSSProperties) => ({
+                container: provided => ({
                     ...provided,
                     maxWidth: '50rem',
                 }),
-                groupHeading: (provided: CSSProperties) => ({
+                groupHeading: provided => ({
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided: CSSProperties) => {
+                multiValue: provided => {
                     return {
                         ...provided,
                         borderRadius: '0.5rem',
                     };
                 },
-                multiValueRemove: (provided: CSSProperties) => ({
+                multiValueRemove: provided => ({
                     ...provided,
                     ':hover': {
                         backgroundColor: navFarger.navBla,
@@ -58,9 +57,9 @@ const Personvelger: React.FC = () => {
             isMulti={true}
             formatOptionLabel={(option: ISelectOption) => {
                 return (
-                    <Normaltekst>
+                    <BodyShort>
                         <b>{option.label}</b>: {option.value}
-                    </Normaltekst>
+                    </BodyShort>
                 );
             }}
             options={åpenBehandling.personer.map(person => ({

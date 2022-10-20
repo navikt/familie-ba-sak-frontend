@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, ErrorMessage } from '@navikt/ds-react';
 import { NavdsSpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -116,6 +115,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             <>
                 {åpenBehandling?.migreringsdato !== null && (
                     <HentetLabel
+                        size={'small'}
                         children={`Saken ble migrert fra Infotrygd: ${formaterIsoDato(
                             åpenBehandling?.migreringsdato,
                             datoformat.DATO
@@ -124,6 +124,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
                 <HentetLabelOgKnappDiv>
                     <HentetLabel
+                        size={'small'}
                         children={
                             registeropplysningerHentetTidpsunkt
                                 ? `Registeropplysninger hentet ${formaterIsoDato(
@@ -146,10 +147,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                                 }
                             );
                         }}
-                        spinner={hentOpplysningerRessurs.status === RessursStatus.HENTER}
-                        type={'flat'}
-                        mini={true}
-                        kompakt={true}
+                        loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
+                        variant="tertiary"
+                        size="small"
                         erLesevisning={erLesevisning()}
                     >
                         {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (
@@ -158,7 +158,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     </FamilieKnapp>
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
-                    <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
+                    <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>
                 )}
             </>
             {samhandlerOrgnr ? (
@@ -171,23 +171,23 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             )}
             {uregistrerteBarn.length > 0 && (
                 <Alert variant="info">
-                    <Normaltekst>
+                    <BodyShort>
                         Du har registrert følgende barn som ikke er registrert i Folkeregisteret:
-                    </Normaltekst>
+                    </BodyShort>
                     <UregistrerteBarnListe>
                         {uregistrerteBarn.map(uregistrertBarn => (
                             <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
-                                <Normaltekst>
+                                <BodyShort>
                                     {`${uregistrertBarn.navn} - ${formaterIsoDato(
                                         uregistrertBarn.fødselsdato,
                                         datoformat.DATO
                                     )}`}
-                                </Normaltekst>
+                                </BodyShort>
                             </li>
                         ))}
                     </UregistrerteBarnListe>
 
-                    <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
+                    <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
                 </Alert>
             )}
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
@@ -213,7 +213,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     />
                 )}
             {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
-                <Feilmelding>{skjemaFeilmelding}</Feilmelding>
+                <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
             )}
         </Skjemasteg>
     );

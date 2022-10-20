@@ -3,8 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
-
+import { Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
@@ -34,17 +33,19 @@ const Dokumentutsending: React.FC = () => {
                         lukkKnapp: true,
                         visModal: visInnsendtBrevModal,
                         actions: [
-                            <Knapp
+                            <Button
                                 key={'til oppgavebenken'}
-                                mini={true}
+                                size="small"
+                                variant="secondary"
                                 onClick={() => {
                                     navigate('/oppgaver');
                                 }}
                                 children={'Gå til oppgavebenken'}
                             />,
-                            <Knapp
+                            <Button
                                 key={'til dokumentoversikt'}
-                                mini={true}
+                                size="small"
+                                variant="secondary"
                                 onClick={() => {
                                     navigate(`/fagsak/${fagsakId}/dokumenter`);
                                 }}

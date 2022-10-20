@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
 
+import { BodyShort, Button } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -25,7 +25,6 @@ import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useHenleggBehandling from './useHenleggBehandling';
 
 interface IProps {
-    onListElementClick: () => void;
     fagsakId: number;
     behandling: IBehandling;
 }
@@ -34,7 +33,7 @@ interface HenleggÅrsakSelect extends HTMLSelectElement {
     value: HenleggÅrsak | '';
 }
 
-const StyledVeivalgTekst = styled(Normaltekst)`
+const StyledVeivalgTekst = styled(BodyShort)`
     position: relative;
     top: -32px;
     svg {
@@ -50,7 +49,7 @@ const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
     align-items: center;
 `;
 
-const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, behandling }) => {
+const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
     const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
     const {
@@ -92,10 +91,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
 
     return (
         <>
-            <KnappBase
-                mini={true}
+            <Dropdown.Menu.List.Item
                 onClick={() => {
-                    onListElementClick();
                     settVisModal(true);
                 }}
                 disabled={
@@ -104,7 +101,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                 }
             >
                 Henlegg behandling
-            </KnappBase>
+            </Dropdown.Menu.List.Item>
 
             <UIModalWrapper
                 modal={{
@@ -123,21 +120,22 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                         >
                             Forhåndsvis
                         </StyledLenke>,
-                        <Flatknapp
+                        <Button
                             key={'avbryt'}
-                            mini={true}
+                            variant="tertiary"
+                            size="small"
                             onClick={() => {
                                 nullstillSkjema();
                                 settVisModal(false);
                             }}
                             children={'Avbryt'}
                         />,
-                        <Knapp
+                        <Button
                             key={'bekreft'}
-                            type={'hoved'}
-                            mini={true}
+                            variant="primary"
+                            size="small"
                             onClick={() => onBekreft(behandling.behandlingId)}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             children={
                                 skjema.felter.årsak.verdi === HenleggÅrsak.SØKNAD_TRUKKET
@@ -208,17 +206,19 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
             <UIModalWrapper
                 modal={{
                     actions: [
-                        <Knapp
+                        <Button
                             key={'Gå til saksoversikten'}
-                            mini={true}
+                            variant="secondary"
+                            size="small"
                             onClick={() => {
                                 navigate(`/fagsak/${fagsakId}/saksoversikt`);
                             }}
                             children={'Gå til saksoversikten'}
                         />,
-                        <Knapp
+                        <Button
                             key={'Gå til oppgavebenken'}
-                            mini={true}
+                            variant="secondary"
+                            size="small"
                             onClick={() => {
                                 navigate('/oppgaver');
                             }}

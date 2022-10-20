@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { Menyknapp } from 'nav-frontend-ikonknapper';
-import KnappBase from 'nav-frontend-knapper';
-import Popover, { PopoverOrientering } from 'nav-frontend-popover';
+import '@navikt/ds-css-internal';
+import { NedChevron } from 'nav-frontend-chevron';
 
+import { Button } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
@@ -28,90 +30,42 @@ interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
 
+const PosisjonertMenyknapp = styled(Button)`
+    margin-left: 3rem;
+`;
+
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
     const navigate = useNavigate();
-    const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
     const { toggles } = useApp();
 
     return (
-        <>
-            <div style={{ marginLeft: '3rem' }} />
-            <Menyknapp
-                id={'behandlingsmeny-arialabel-knapp'}
-                mini={true}
-                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                    settAnker(anker === undefined ? event.currentTarget : undefined)
-                }
+        <Dropdown>
+            <PosisjonertMenyknapp
+                variant="secondary"
+                size="small"
+                icon={<NedChevron />}
+                iconPosition={'right'}
+                forwardedAs={Dropdown.Toggle}
             >
                 Meny
-            </Menyknapp>
-
-            <Popover
-                id={'behandlingsmeny-arialabel-popover'}
-                ankerEl={anker}
-                orientering={PopoverOrientering.Under}
-                autoFokus={false}
-                onRequestClose={() => {
-                    settAnker(undefined);
-                }}
-                tabIndex={-1}
-                utenPil
-            >
-                <ul
-                    className="behandlingsmeny__list"
-                    role="menu"
-                    style={{ minWidth: 190 }}
-                    aria-labelledby={'behandlingsmeny-arialabel-knapp'}
-                >
+            </PosisjonertMenyknapp>
+            <Dropdown.Menu>
+                <Dropdown.Menu.List>
+                    {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
-                            <li>
-                                <EndreBehandlingstema
-                                    onListElementClick={() => settAnker(undefined)}
-                                />
-                            </li>
+                            <EndreBehandlingstema />
                         )}
-                    <li>
-                        <OpprettBehandling
-                            onListElementClick={() => settAnker(undefined)}
-                            minimalFagsak={minimalFagsak}
-                        />
-                    </li>
+                    <OpprettBehandling minimalFagsak={minimalFagsak} />
                     {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
-                        <li>
-                            <OpprettFagsak
-                                onListElementClick={() => settAnker(undefined)}
-                                personInfo={bruker}
-                            />
-                        </li>
-                    )}
-                    <li>
-                        <KnappBase
-                            mini={true}
-                            onClick={() => {
-                                navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
-                                settAnker(undefined);
-                            }}
-                        >
-                            Send informasjonsbrev
-                        </KnappBase>
-                    </li>
-                    {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <li>
-                            <HenleggBehandling
-                                onListElementClick={() => settAnker(undefined)}
-                                fagsakId={minimalFagsak.id}
-                                behandling={åpenBehandling.data}
-                            />
-                        </li>
+                        <OpprettFagsak personInfo={bruker} />
                     )}
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <li>
-                            <EndreBehandlendeEnhet
-                                onListElementClick={() => settAnker(undefined)}
-                            />
-                        </li>
+                        <HenleggBehandling
+                            fagsakId={minimalFagsak.id}
+                            behandling={åpenBehandling.data}
+                        />
                     )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         !erLesevisning() &&
@@ -121,33 +75,23 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             åpenBehandling.data.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
                             åpenBehandling.data.type ===
                                 Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
-                            <li>
-                                <LeggTilBarnPBehandling
-                                    onListElementClick={() => settAnker(undefined)}
-                                    behandling={åpenBehandling.data}
-                                />
-                            </li>
+                            <LeggTilBarnPBehandling behandling={åpenBehandling.data} />
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.aktivSettPåVent && (
-                            <li>
-                                <TaBehandlingAvVent
-                                    onListElementClick={() => settAnker(undefined)}
-                                    behandling={åpenBehandling.data}
-                                />
-                            </li>
+                            <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <li>
-                            <SettEllerOppdaterVenting
-                                onListElementClick={() => settAnker(undefined)}
-                                behandling={åpenBehandling.data}
-                            />
-                        </li>
+                        <SettEllerOppdaterVenting behandling={åpenBehandling.data} />
                     )}
-                </ul>
-            </Popover>
-        </>
+                    <Dropdown.Menu.List.Item
+                        onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
+                    >
+                        Send informasjonsbrev
+                    </Dropdown.Menu.List.Item>
+                </Dropdown.Menu.List>
+            </Dropdown.Menu>
+        </Dropdown>
     );
 };
 

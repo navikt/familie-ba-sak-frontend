@@ -3,11 +3,9 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -26,14 +24,14 @@ const HentSakerFlex = styled.div`
     display: flex;
 `;
 
-const HentSakerKnapp = styled(Knapp)`
+const HentSakerButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 30px;
     margin-bottom: auto;
     height: 40px;
 `;
 
-const FlyttSakKnapp = styled(Knapp)`
+const FlyttSakButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 30px;
     margint-bottom: auto;
@@ -58,15 +56,16 @@ export const Infotrygd: React.FC = () => {
     const visFlyttSakKnapp = () => {
         if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
             return (
-                <FlyttSakKnapp
-                    mini
+                <FlyttSakButton
+                    variant={'secondary'}
+                    size={'small'}
                     disabled={migrerInfotrygdSakRessurs.status === RessursStatus.HENTER}
                     onClick={() => {
                         flyttBrukerTilBaSak(ident);
                     }}
                 >
                     Flytt til BA-sak
-                </FlyttSakKnapp>
+                </FlyttSakButton>
             );
         }
     };
@@ -87,7 +86,9 @@ export const Infotrygd: React.FC = () => {
 
     return (
         <InfotrygdContainer>
-            <Innholdstittel>Visningsside for Infotrygd</Innholdstittel>
+            <Heading size={'large'} level={'1'}>
+                Visningsside for Infotrygd
+            </Heading>
             <HentSakerFlex>
                 <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
                     <Input
@@ -98,14 +99,15 @@ export const Infotrygd: React.FC = () => {
                         placeholder={'fnr/dnr'}
                     />
                 </SkjemaGruppe>
-                <HentSakerKnapp
-                    mini
+                <HentSakerButton
+                    variant={'secondary'}
+                    size={'small'}
                     spinner={skjemaErLåst}
                     disabled={skjemaErLåst}
                     onClick={onSubmitWrapper}
                 >
                     Hent saker
-                </HentSakerKnapp>
+                </HentSakerButton>
                 {visFlyttSakKnapp()}
             </HentSakerFlex>
             {visFlyttSakAlert()}
