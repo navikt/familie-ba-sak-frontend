@@ -153,6 +153,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.SVARTIDSBREV,
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
+                    Brevmal.SVARTIDSBREV_INSTITUSJON,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
