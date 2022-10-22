@@ -58,10 +58,10 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     annenVurdering,
 }) => {
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning, åpenBehandling } = useBehandling();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
-        erLesevisning() || false || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
+        vurderErLesevisning() || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
     );
     const [redigerbartAnnenVurdering, settRedigerbartAnnenVurdering] =
         useState<FeltState<IAnnenVurdering>>(annenVurdering);
@@ -97,7 +97,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                     <BeskrivelseCelle children={annenVurdering.verdi.begrunnelse.verdi} />
                 </td>
                 <td>
-                    {!erLesevisning ? (
+                    {!vurderErLesevisning() && (
                         <Button
                             variant={'tertiary'}
                             onClick={() => toggleForm(true)}
@@ -116,7 +116,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                                     : 'Endre'
                                 : 'Lukk'}
                         </Button>
-                    ) : null}
+                    )}
                 </td>
                 <td>
                     <ManuellVurdering />

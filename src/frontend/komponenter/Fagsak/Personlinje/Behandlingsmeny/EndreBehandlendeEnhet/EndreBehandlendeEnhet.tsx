@@ -18,8 +18,12 @@ import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
 const EndreBehandlendeEnhet: React.FC = () => {
-    const { åpenBehandling, erLesevisning, erBehandleneEnhetMidlertidig, erBehandlingAvsluttet } =
-        useBehandling();
+    const {
+        åpenBehandling,
+        vurderErLesevisning,
+        erBehandleneEnhetMidlertidig,
+        erBehandlingAvsluttet,
+    } = useBehandling();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
     const { innloggetSaksbehandler } = useApp();
 
@@ -54,7 +58,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
         ) {
             return false;
         } else {
-            return erLesevisning(false, true);
+            return vurderErLesevisning(false, true);
         }
     };
 

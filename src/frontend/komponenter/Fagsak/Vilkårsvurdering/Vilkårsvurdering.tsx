@@ -57,7 +57,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         vilkårsvurdering,
     } = useVilkårsvurdering();
     const {
-        erLesevisning,
+        vurderErLesevisning,
         oppdaterRegisteropplysninger,
         vilkårsvurderingNesteOnClick,
         behandlingsstegSubmitressurs,
@@ -100,7 +100,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 }
             }}
             nesteOnClick={() => {
-                if (erLesevisning()) {
+                if (vurderErLesevisning()) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/tilkjent-ytelse`);
                 } else if (erVilkårsvurderingenGyldig()) {
                     vilkårsvurderingNesteOnClick();
@@ -150,7 +150,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
                         variant="tertiary"
                         size="small"
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={vurderErLesevisning()}
                     >
                         {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (
                             <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />

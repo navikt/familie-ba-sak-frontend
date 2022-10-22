@@ -36,7 +36,7 @@ interface IOptionType {
 }
 
 const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange }) => {
-    const { erLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
@@ -99,8 +99,8 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={erLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
-            erLesevisning={erLesevisning()}
+            isDisabled={vurderErLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
+            erLesevisning={vurderErLesevisning()}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);

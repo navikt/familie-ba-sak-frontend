@@ -19,7 +19,7 @@ const EndreBehandlingstema: React.FC = () => {
         settVisModal(false)
     );
 
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning, åpenBehandling } = useBehandling();
 
     const lukkEndreBehandlingModal = () => {
         nullstillSkjema();
@@ -68,7 +68,7 @@ const EndreBehandlingstema: React.FC = () => {
                     <SkjultLegend>Endre behandligstema</SkjultLegend>
                     <BehandlingstemaSelect
                         behandlingstema={skjema.felter.behandlingstema}
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={vurderErLesevisning()}
                         label="Behandlingstema"
                     />
                 </SkjemaGruppe>

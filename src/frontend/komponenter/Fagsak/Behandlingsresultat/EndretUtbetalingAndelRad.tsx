@@ -41,7 +41,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { erLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
 
     const { hentSkjemaData } = useEndretUtbetalingAndel();
 
@@ -141,7 +141,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         ) : (
                             <>
-                                <BodyShort>{erLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
+                                <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
                                 <Expand width="22" height="22" />
                             </>
                         )}

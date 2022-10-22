@@ -141,7 +141,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         return hentDataFraRessurs(åpenBehandling)?.steg;
     };
 
-    const erLesevisning = (
+    const vurderErLesevisning = (
         sjekkTilgangTilEnhet = true,
         skalIgnorereOmEnhetErMidlertidig = false
     ): boolean => {
@@ -225,7 +225,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         : undefined;
 
     return {
-        erLesevisning,
+        vurderErLesevisning,
         forrigeÅpneSide,
         hentStegPåÅpenBehandling,
         leggTilBesøktSide,

@@ -46,7 +46,7 @@ const FjernBarnKnapp = styled(Button)`
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
-    const { erLesevisning, gjelderInstitusjon } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
     const [visHarLøpendeModal, settVisHarLøpendeModal] = useState(false);
 
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
@@ -71,7 +71,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
 
     return (
         <CheckboxOgSlettknapp>
-            {erLesevisning() || gjelderInstitusjon ? (
+            {vurderErLesevisning() || gjelderInstitusjon ? (
                 barn.merket ? (
                     <BodyShort
                         className={classNames('skjemaelement', 'lese-felt')}
@@ -105,27 +105,26 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     </LabelContent>
                 </StyledCheckbox>
             )}
-            {barn.manueltRegistrert &&
-                (!erLesevisning ? (
-                    <FjernBarnKnapp
-                        variant={'tertiary'}
-                        id={`fjern__${barn.ident}`}
-                        size={'small'}
-                        onClick={() => {
-                            skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                                ...skjema.felter.barnaMedOpplysninger.verdi.filter(
-                                    barnMedOpplysninger =>
-                                        barnMedOpplysninger.ident !== barn.ident ||
-                                        barnMedOpplysninger.navn !== barn.navn ||
-                                        barnMedOpplysninger.fødselsdato !== barn.fødselsdato
-                                ),
-                            ]);
-                        }}
-                        icon={<Slett />}
-                    >
-                        {'Fjern barn'}
-                    </FjernBarnKnapp>
-                ) : null)}
+            {barn.manueltRegistrert && !vurderErLesevisning() && (
+                <FjernBarnKnapp
+                    variant={'tertiary'}
+                    id={`fjern__${barn.ident}`}
+                    size={'small'}
+                    onClick={() => {
+                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                            ...skjema.felter.barnaMedOpplysninger.verdi.filter(
+                                barnMedOpplysninger =>
+                                    barnMedOpplysninger.ident !== barn.ident ||
+                                    barnMedOpplysninger.navn !== barn.navn ||
+                                    barnMedOpplysninger.fødselsdato !== barn.fødselsdato
+                            ),
+                        ]);
+                    }}
+                    icon={<Slett />}
+                >
+                    {'Fjern barn'}
+                </FjernBarnKnapp>
+            )}
             <UIModalWrapper
                 modal={{
                     tittel: 'Søker mottar allerede barnetrygd for dette barnet',

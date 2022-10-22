@@ -25,7 +25,7 @@ const StyledHeader = styled.header`
 `;
 
 const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) => {
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning, åpenBehandling } = useBehandling();
 
     const erMigreringFraInfotrygd =
         åpenBehandling.status === RessursStatus.SUKSESS &&
@@ -49,7 +49,7 @@ const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) =>
             />
             <Meldingerknapp
                 aktiv={aktivTab === Tabs.Meldinger}
-                disabled={erLesevisning() || erMigreringFraInfotrygd}
+                disabled={vurderErLesevisning() || erMigreringFraInfotrygd}
                 onClick={() => settAktivTab(Tabs.Meldinger)}
             />
         </StyledHeader>
