@@ -246,7 +246,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : !erLesevisning() ? (
+    ) : !vurderErLesevisning() ? (
         <Button
             variant={'tertiary'}
             onClick={leggTilFritekst}
