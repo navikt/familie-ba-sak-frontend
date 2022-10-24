@@ -176,6 +176,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             className={'fritekst-textarea'}
                                             label={`Kulepunkt ${fritekstId}`}
                                             hideLabel
+                                            resize
                                             value={fritekst.verdi.tekst}
                                             maxLength={makslengdeFritekst}
                                             onChange={event => onChangeFritekst(event, fritekstId)}
@@ -207,19 +208,17 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             }
                         )}
                     </SkjemaGruppe>
-
-                    {!erMaksAntallKulepunkter &&
-                        (!vurderErLesevisning() ? (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={leggTilFritekst}
-                                id={`legg-til-fritekst`}
-                                size={'small'}
-                                icon={<Pluss />}
-                            >
-                                {'Legg til fritekst'}
-                            </Button>
-                        ) : null)}
+                    {!erMaksAntallKulepunkter && !vurderErLesevisning() && (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={leggTilFritekst}
+                            id={`legg-til-fritekst`}
+                            size={'small'}
+                            icon={<Pluss />}
+                        >
+                            {'Legg til fritekst'}
+                        </Button>
+                    )}
                     <Knapperekke>
                         <FamilieKnapp
                             erLesevisning={vurderErLesevisning()}
@@ -247,7 +246,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : !erLesevisning ? (
+    ) : !erLesevisning() ? (
         <Button
             variant={'tertiary'}
             onClick={leggTilFritekst}

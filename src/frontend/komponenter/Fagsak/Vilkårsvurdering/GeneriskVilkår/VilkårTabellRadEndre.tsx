@@ -382,9 +382,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
                 <FamilieTextarea
-                    tekstLesevisning={''}
                     erLesevisning={lesevisning}
-                    defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                    value={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
                     className={'begrunnelse-textarea'}
@@ -395,7 +394,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             ? redigerbartVilkår.verdi.begrunnelse.feilmelding
                             : ''
                     }
-                    onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {

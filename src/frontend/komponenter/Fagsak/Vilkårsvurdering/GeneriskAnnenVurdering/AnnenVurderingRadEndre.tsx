@@ -209,9 +209,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                 </FamilieRadioGruppe>
 
                 <FamilieTextarea
-                    tekstLesevisning={''}
                     erLesevisning={erLesevisning}
-                    defaultValue={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
+                    value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}
                     className={'begrunnelse-textarea'}
@@ -222,7 +221,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             ? redigerbartAnnenVurdering.verdi.begrunnelse.feilmelding
                             : ''
                     }
-                    onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                         validerOgSettRedigerbartAnnenVurdering({
                             ...redigerbartAnnenVurdering,
                             verdi: {
