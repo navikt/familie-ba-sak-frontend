@@ -22,7 +22,7 @@ import { useFagsakContext } from './FagsakContext';
 
 const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
-        const { erLesevisning, settÅpenBehandling } = useBehandling();
+        const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
         const { minimalFagsak } = useFagsakContext();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
@@ -138,7 +138,7 @@ const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
 
         const onSubmitMottaker = () => {
             if (
-                erLesevisning() ||
+                vurderErLesevisning() ||
                 (erSkjemaUendret() &&
                     åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE)
             ) {

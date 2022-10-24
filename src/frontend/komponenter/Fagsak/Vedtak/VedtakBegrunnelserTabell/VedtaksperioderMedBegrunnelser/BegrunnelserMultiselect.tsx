@@ -34,8 +34,9 @@ const GroupLabel = styled.div`
 `;
 
 const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
-    const { erLesevisning } = useBehandling();
-    const skalIkkeEditeres = erLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
+    const { vurderErLesevisning } = useBehandling();
+    const skalIkkeEditeres =
+        vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
     const {
         id,

@@ -78,7 +78,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     const {
         forrigeÅpneSide,
         åpenBehandling,
-        erLesevisning,
+        vurderErLesevisning,
         erBehandleneEnhetMidlertidig,
         erBehandlingAvsluttet,
     } = useBehandling();
@@ -129,7 +129,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 <Navigering>
                     {nesteOnClick &&
                         skalViseNesteKnapp &&
-                        (!erLesevisning() || kanGåVidereILesevisning) && (
+                        (!vurderErLesevisning() || kanGåVidereILesevisning) && (
                             <Button
                                 loading={senderInn}
                                 disabled={senderInn}

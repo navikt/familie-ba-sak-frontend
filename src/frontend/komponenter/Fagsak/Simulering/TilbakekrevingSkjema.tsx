@@ -86,7 +86,7 @@ const TilbakekrevingSkjema: React.FC<{
     søkerMålform: Målform;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
 }> = ({ søkerMålform, harÅpenTilbakekrevingRessurs }) => {
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning, åpenBehandling } = useBehandling();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
@@ -116,7 +116,7 @@ const TilbakekrevingSkjema: React.FC<{
     if (
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
         harÅpenTilbakekrevingRessurs.data &&
-        !erLesevisning()
+        !vurderErLesevisning()
     ) {
         return (
             <>
@@ -129,7 +129,7 @@ const TilbakekrevingSkjema: React.FC<{
         );
     }
 
-    if (erLesevisning() && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
+    if (vurderErLesevisning() && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
         return (
             <>
                 <StyledLabel>Tilbakekrevingsvalg</StyledLabel>
@@ -199,7 +199,7 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger ||
                             begrunnelse.verdi.length > maksLengdeTekst
                     )}
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={vurderErLesevisning()}
                     maxLength={maksLengdeTekst}
                     description="Hva er årsaken til feilutbetaling? Hvordan og når ble feilutbetalingen oppdaget? Begrunn hvordan feilutbetalingen skal behandles videre."
                 />
@@ -208,7 +208,7 @@ const TilbakekrevingSkjema: React.FC<{
                     {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(
                         tilbakekrevingSkjema.visFeilmeldinger
                     )}
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={vurderErLesevisning()}
                     value={
                         tilbakekrevingsvalg.verdi
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
@@ -316,7 +316,7 @@ const TilbakekrevingSkjema: React.FC<{
                                             tilbakekrevingSkjema.visFeilmeldinger ||
                                                 fritekstVarsel.verdi.length > maksLengdeTekst
                                         )}
-                                        erLesevisning={erLesevisning()}
+                                        erLesevisning={vurderErLesevisning()}
                                         maxLength={maksLengdeTekst}
                                     />
 
@@ -373,11 +373,11 @@ const TilbakekrevingSkjema: React.FC<{
                         {'Avvent tilbakekreving'}
                     </Radio>
                 </FamilieRadioGruppe>
-                {erLesevisning() && fritekstVarsel.erSynlig && (
+                {vurderErLesevisning() && fritekstVarsel.erSynlig && (
                     <FamilieTextarea
                         label="Fritekst i varselet"
                         {...fritekstVarsel.hentNavInputProps(tilbakekrevingSkjema.visFeilmeldinger)}
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={vurderErLesevisning()}
                     />
                 )}
 

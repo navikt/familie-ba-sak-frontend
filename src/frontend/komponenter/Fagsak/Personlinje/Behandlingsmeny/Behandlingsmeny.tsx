@@ -35,7 +35,7 @@ const PosisjonertMenyknapp = styled(Button)`
 `;
 
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
-    const { åpenBehandling, erLesevisning } = useBehandling();
+    const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
     const { toggles } = useApp();
 
@@ -68,7 +68,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         />
                     )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        !erLesevisning() &&
+                        !vurderErLesevisning() &&
                         (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
                             åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE ||
                             åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||

@@ -66,7 +66,7 @@ interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+    const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
     const { overstyrFortsattInnvilgetVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
@@ -86,7 +86,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
         React.useState<boolean>(false);
 
-    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
+    const visSubmitKnapp =
+        !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
@@ -169,7 +170,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         pdfdata={hentetDokument}
                     />
                     <KorrigerEtterbetalingModal
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={vurderErLesevisning()}
                         korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                         behandlingId={åpenBehandling.behandlingId}
                         visModal={visKorrigerEtterbetalingModal}
@@ -186,7 +187,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect
                                 label="Velg brev med eller uten perioder"
-                                erLesevisning={erLesevisning()}
+                                erLesevisning={vurderErLesevisning()}
                                 onChange={(
                                     event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
                                 ): void => {

@@ -13,9 +13,9 @@ const AnnetWrapper = styled.div`
 `;
 
 const Annet: React.FunctionComponent = () => {
-    const { erLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const { skjema } = useSøknad();
-    const lesevisning = erLesevisning();
+    const lesevisning = vurderErLesevisning();
 
     return (
         <AnnetWrapper>

@@ -106,8 +106,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     toggleForm,
     slettUtenlandskPeriodeBeløp,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning(true);
+    const { vurderErLesevisning } = useBehandling();
+    const lesevisning = vurderErLesevisning(true);
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -250,8 +250,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                    !erLesevisning ? (
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !lesevisning && (
                         <Button
                             variant={'tertiary'}
                             onClick={() => slettUtenlandskPeriodeBeløp()}
@@ -265,7 +264,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         >
                             {'Fjern'}
                         </Button>
-                    ) : null}
+                    )}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
         </SkjemaGruppe>

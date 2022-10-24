@@ -13,7 +13,7 @@ import { personTypeMap } from '../../../../../typer/person';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const Personvelger: React.FC = () => {
-    const { erLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const { skjema, åpenBehandling, id } = useVedtaksperiodeMedBegrunnelser();
 
     const personIdenter = useFelt({
@@ -49,11 +49,13 @@ const Personvelger: React.FC = () => {
             id={`personvelger-${id}`}
             value={personIdenter.verdi}
             placeholder={`Velg`}
-            isDisabled={erLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER}
+            isDisabled={
+                vurderErLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER
+            }
             feil={skjema.visFeilmeldinger ? personIdenter.feilmelding : undefined}
             label={`Velg de begrunnelsene gjelder for`}
             creatable={false}
-            erLesevisning={erLesevisning()}
+            erLesevisning={vurderErLesevisning()}
             isMulti={true}
             formatOptionLabel={(option: ISelectOption) => {
                 return (

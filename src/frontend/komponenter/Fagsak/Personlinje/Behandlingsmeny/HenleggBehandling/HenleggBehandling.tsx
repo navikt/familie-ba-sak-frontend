@@ -59,7 +59,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
         hentetDokument,
         settVisDokumentModal,
     } = useDokument();
-    const { åpenBehandling, erLesevisning } = useBehandling();
+    const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
 
     const behandlingId =
@@ -96,7 +96,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                     settVisModal(true);
                 }}
                 disabled={
-                    (erLesevisning() || !erPåHenleggbartSteg) &&
+                    (vurderErLesevisning() || !erPåHenleggbartSteg) &&
                     !harTilgangTilTekniskVedlikeholdHenleggelse
                 }
             >

@@ -60,8 +60,8 @@ const VelgPeriode: React.FC<IProps> = ({
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning();
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     return (
         <MarginSkjemaGruppe
@@ -73,7 +73,7 @@ const VelgPeriode: React.FC<IProps> = ({
                     : ''
             }
         >
-            {!lesevisning && (
+            {!erLesevisning && (
                 <StyledLegend>
                     <StyledLabel>Velg periode</StyledLabel>
                     <HelpText title="Hvordan fastsette periode">
@@ -85,14 +85,14 @@ const VelgPeriode: React.FC<IProps> = ({
             )}
 
             <FlexDiv>
-                {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
+                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
                     <div>
                         <FamilieDatovelger
                             allowInvalidDateSelection={false}
                             limitations={{
                                 maxDate: new Date().toISOString(),
                             }}
-                            erLesesvisning={lesevisning}
+                            erLesesvisning={erLesevisning}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-fom`}
@@ -122,10 +122,10 @@ const VelgPeriode: React.FC<IProps> = ({
                         />
                     </div>
                 )}
-                {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
+                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
-                            erLesesvisning={lesevisning}
+                            erLesesvisning={erLesevisning}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-tom`}

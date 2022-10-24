@@ -99,8 +99,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     sletterValutakurs,
     erManuellInputAvKurs,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning(true);
+    const { vurderErLesevisning } = useBehandling();
+    const lesevisning = vurderErLesevisning(true);
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {

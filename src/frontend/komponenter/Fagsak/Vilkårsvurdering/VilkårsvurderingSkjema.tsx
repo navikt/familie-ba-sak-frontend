@@ -58,7 +58,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
     const {
-        erLesevisning,
+        vurderErLesevisning,
         erMigreringsbehandling,
         settÅpenBehandling,
         aktivSettPåVent,
@@ -81,7 +81,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
             (personMapEkspandert, personResultat) => ({
                 ...personMapEkspandert,
                 [personResultat.personIdent]:
-                    erLesevisning() || personHarIkkevurdertVilkår(personResultat),
+                    vurderErLesevisning() || personHarIkkevurdertVilkår(personResultat),
             }),
             {}
         );
@@ -120,13 +120,13 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         <PersonLinje>
                             <PersonInformasjon person={personResultat.person} somOverskrift />
 
-                            {!erLesevisning() &&
+                            {!vurderErLesevisning() &&
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
                                 kanLeggeTilUtvidetVilkår && (
                                     <VilkårDiv>
-                                        {!erLesevisning ? (
+                                        {!vurderErLesevisning() ? (
                                             <Button
                                                 variant={'tertiary'}
                                                 id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}

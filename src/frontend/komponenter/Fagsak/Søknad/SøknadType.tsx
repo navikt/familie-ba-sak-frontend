@@ -18,8 +18,8 @@ const StyledRadio = styled(Radio)`
 `;
 
 const SøknadType: React.FunctionComponent = () => {
-    const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning();
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { skjema } = useSøknad();
 
     const radioOnChange = (underKategori: BehandlingUnderkategori) => {
@@ -29,7 +29,7 @@ const SøknadType: React.FunctionComponent = () => {
     return (
         <StyledFamilieRadioGruppe
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-            erLesevisning={lesevisning}
+            erLesevisning={erLesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
             legend={<Heading size={'medium'} level={'2'} children={'Hva har bruker søkt om?'} />}
         >

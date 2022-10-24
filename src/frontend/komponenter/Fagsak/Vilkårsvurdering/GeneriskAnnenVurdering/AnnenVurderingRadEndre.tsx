@@ -72,8 +72,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { erLesevisning, settÅpenBehandling } = useBehandling();
-    const leseVisning = erLesevisning();
+    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -171,7 +171,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
         >
             <Container>
                 <FamilieRadioGruppe
-                    erLesevisning={leseVisning}
+                    erLesevisning={erLesevisning}
                     value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
                         annenVurderingConfig.spørsmål
@@ -209,7 +209,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                 </FamilieRadioGruppe>
 
                 <FamilieTextarea
-                    erLesevisning={leseVisning}
+                    erLesevisning={erLesevisning}
                     value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}
@@ -238,7 +238,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                 <Knapperad>
                     <div>
                         <FamilieKnapp
-                            erLesevisning={leseVisning}
+                            erLesevisning={erLesevisning}
                             onClick={onClickFerdig}
                             size="small"
                             variant="secondary"
@@ -249,7 +249,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                         <FamilieKnapp
                             style={{ marginLeft: '1rem' }}
-                            erLesevisning={leseVisning}
+                            erLesevisning={erLesevisning}
                             onClick={() => toggleForm(false)}
                             size="small"
                             variant="tertiary"

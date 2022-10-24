@@ -58,10 +58,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     settFokusPåKnapp,
 }) => {
-    const { erLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
+    const { vurderErLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
 
     const hentInitiellEkspandering = () =>
-        erLesevisning() || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+        vurderErLesevisning() || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] =
@@ -100,7 +100,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     settRedigerbartVilkår={settRedigerbartVilkår}
                     settEkspandertVilkår={settEkspandertVilkår}
                     settFokusPåKnapp={settFokusPåKnapp}
-                    lesevisning={erLesevisning()}
+                    lesevisning={vurderErLesevisning()}
                 />
             }
         >

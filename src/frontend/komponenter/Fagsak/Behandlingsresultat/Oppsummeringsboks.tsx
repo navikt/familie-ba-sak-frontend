@@ -157,7 +157,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     valutakurser,
 }) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, åpenBehandling, erLesevisning } = useBehandling();
+    const { settÅpenBehandling, åpenBehandling, vurderErLesevisning } = useBehandling();
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();
 
@@ -340,7 +340,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || erLesevisning()}
+                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
                                 onClick={() =>
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
@@ -355,7 +355,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || erLesevisning()}
+                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
                                 onClick={() =>
                                     leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }

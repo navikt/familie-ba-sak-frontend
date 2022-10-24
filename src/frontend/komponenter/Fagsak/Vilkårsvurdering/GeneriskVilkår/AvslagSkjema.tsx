@@ -42,8 +42,8 @@ const AvslagSkjema: React.FC<IProps> = ({
     visFeilmeldinger,
     settVisFeilmeldingerForEttVilkår,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning();
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     return (
         <MarginSkjemaGruppe
@@ -54,13 +54,13 @@ const AvslagSkjema: React.FC<IProps> = ({
                     : ''
             }
         >
-            {lesevisning ? (
-                redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad ? (
+            {erLesevisning ? (
+                redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
                     <BodyShort
                         className={classNames('skjemaelement', 'lese-felt')}
                         children={'Vurderingen er et avslag'}
                     />
-                ) : null
+                )
             ) : (
                 <Checkbox
                     value={'Vurderingen er et avslag'}
