@@ -53,7 +53,7 @@ const Hendelsesoversikt = ({ hendelser, className, åpenBehandling }: IHendelses
                     </div>
                 )}
                 {aktivTab === Tabs.Meldinger && (
-                    <Brev onOkIModalClick={() => settAktivTab(Tabs.Historikk)} />
+                    <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} />
                 )}
             </BrevModulProvider>
         </div>
