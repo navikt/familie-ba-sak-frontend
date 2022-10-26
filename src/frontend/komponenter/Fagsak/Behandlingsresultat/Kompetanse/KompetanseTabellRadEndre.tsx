@@ -111,7 +111,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
                     label={'Søkers aktivitet'}
-                    value={skjema.felter.søkersAktivitet.verdi || undefined}
+                    value={skjema.felter.søkersAktivitet.verdi || ''}
                     lesevisningVerdi={
                         skjema.felter.søkersAktivitet.verdi
                             ? søkersAktiviteter[skjema.felter.søkersAktivitet.verdi]
@@ -122,7 +122,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             event.target.value as SøkersAktivitet
                         )
                     }
-                    size={'small'}
                 >
                     <option value={''}>Velg</option>
                     {Object.values(SøkersAktivitet).map(aktivitet => {
@@ -140,7 +139,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     )}
                     erLesevisning={lesevisning}
                     label={'Annen forelders aktivitet'}
-                    value={skjema.felter.annenForeldersAktivitet.verdi || undefined}
+                    value={skjema.felter.annenForeldersAktivitet.verdi || ''}
                     lesevisningVerdi={
                         skjema.felter.annenForeldersAktivitet?.verdi
                             ? annenForelderAktiviteter[skjema.felter.annenForeldersAktivitet?.verdi]
@@ -151,7 +150,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             event.target.value as AnnenForelderAktivitet
                         );
                     }}
-                    size={'small'}
                 >
                     <option value={''}>Velg</option>
                     {Object.values(AnnenForelderAktivitet).map(aktivitet => {
@@ -235,7 +233,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
                     label={'Kompetanse'}
-                    value={skjema.felter.resultat.verdi || undefined}
+                    value={skjema.felter.resultat.verdi || ''}
                     lesevisningVerdi={
                         skjema.felter.resultat.verdi
                             ? kompetanseResultater[skjema.felter.resultat.verdi]
