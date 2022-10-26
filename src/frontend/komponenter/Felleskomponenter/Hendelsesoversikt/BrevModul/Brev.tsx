@@ -12,7 +12,7 @@ interface IProps {
     onIModalClick: () => void;
 }
 
-const StyledModalContent = styled(Modal)`
+const StyledModal = styled(Modal)`
     padding: 2.5rem;
     width: 35rem;
 `;
@@ -43,7 +43,7 @@ const Brev = ({ onIModalClick }: IProps) => {
                     settVisInnsendtBrevModal(true);
                 }}
             />
-            <StyledModalContent
+            <StyledModal
                 open={visInnsendtBrevModal}
                 onClose={() => {
                     settVisInnsendtBrevModal(false);
@@ -76,7 +76,7 @@ const Brev = ({ onIModalClick }: IProps) => {
                         children={'Gå til saksoversikt'}
                     />
                 </Knapperad>
-            </StyledModalContent>
+            </StyledModal>
         </div>
     );
 };
