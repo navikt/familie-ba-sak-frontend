@@ -95,6 +95,7 @@ interface IBaseLandvelgerProps {
     utenMargin: boolean;
     kanNullstilles: boolean;
     feil?: string;
+    size?: 'small' | 'medium';
 }
 
 const BaseFamilieLandvelger: React.FC<IBaseLandvelgerProps> = ({
@@ -104,6 +105,7 @@ const BaseFamilieLandvelger: React.FC<IBaseLandvelgerProps> = ({
     utenMargin,
     kanNullstilles,
     feil,
+    size,
 }) => {
     return (
         <div className={classNames('skjemaelement', className)}>
@@ -113,7 +115,7 @@ const BaseFamilieLandvelger: React.FC<IBaseLandvelgerProps> = ({
                 feil={feil}
                 {...countrySelectProps}
                 place
-                label={<Label size="small">{label}</Label>}
+                label={<Label size={size}>{label}</Label>}
             />
         </div>
     );
@@ -245,7 +247,7 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
                 feil={feil}
                 {...landvelgerProps}
                 place
-                label={<Label size="small">{label}</Label>}
+                label={<Label size={size}>{label}</Label>}
             />
         </div>
     );
