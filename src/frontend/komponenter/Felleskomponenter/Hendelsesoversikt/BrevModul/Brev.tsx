@@ -12,20 +12,12 @@ interface IProps {
     onIModalClick: () => void;
 }
 
-const StyledModal = styled(Modal)`
-    padding: 2.5rem;
-    width: 35rem;
-`;
-
-const StyledModalHeader = styled(Heading)`
-    margin-bottom: 2rem;
-`;
-
 const KnappHøyre = styled(Button)`
     margin-left: 1rem;
 `;
 
 const Knapperad = styled.div`
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
 `;
@@ -43,40 +35,42 @@ const Brev = ({ onIModalClick }: IProps) => {
                     settVisInnsendtBrevModal(true);
                 }}
             />
-            <StyledModal
+            <Modal
                 open={visInnsendtBrevModal}
                 onClose={() => {
                     settVisInnsendtBrevModal(false);
                     onIModalClick();
                 }}
             >
-                <StyledModalHeader size="medium" level={'2'}>
-                    Brevet er sendt
-                </StyledModalHeader>
-                <Knapperad>
-                    <Button
-                        variant={'secondary'}
-                        key={'til oppgavebenken'}
-                        size={'medium'}
-                        onClick={() => {
-                            onIModalClick();
-                            navigate('/oppgaver');
-                        }}
-                        children={'Gå til oppgavebenken'}
-                    />
-                    <KnappHøyre
-                        variant={'secondary'}
-                        key={'til saksoversikt'}
-                        size={'medium'}
-                        onClick={() => {
-                            onIModalClick();
-                            navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                            settVisInnsendtBrevModal(false);
-                        }}
-                        children={'Gå til saksoversikt'}
-                    />
-                </Knapperad>
-            </StyledModal>
+                <Modal.Content>
+                    <Heading size="medium" level={'2'}>
+                        Brevet er sendt
+                    </Heading>
+                    <Knapperad>
+                        <Button
+                            variant={'secondary'}
+                            key={'til oppgavebenken'}
+                            size={'medium'}
+                            onClick={() => {
+                                onIModalClick();
+                                navigate('/oppgaver');
+                            }}
+                            children={'Se oppgavebenk'}
+                        />
+                        <KnappHøyre
+                            variant={'secondary'}
+                            key={'til saksoversikt'}
+                            size={'medium'}
+                            onClick={() => {
+                                onIModalClick();
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                settVisInnsendtBrevModal(false);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </Modal>
         </div>
     );
 };

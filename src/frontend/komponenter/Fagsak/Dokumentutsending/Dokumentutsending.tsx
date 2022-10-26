@@ -17,20 +17,12 @@ const Container = styled.div`
     height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
 `;
 
-const StyledModal = styled(Modal)`
-    padding: 2.5rem;
-    width: 35rem;
-`;
-
-const StyledModalHeader = styled(Heading)`
-    margin-bottom: 2rem;
-`;
-
 const KnappHøyre = styled(Button)`
     margin-left: 1rem;
 `;
 
 const Knapperad = styled.div`
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
 `;
@@ -43,35 +35,34 @@ const Dokumentutsending: React.FC = () => {
 
     return (
         <Container>
-            <StyledModal
-                open={visInnsendtBrevModal}
-                onClose={() => settVisInnsendtBrevModal(false)}
-            >
-                <StyledModalHeader size="medium" level={'2'}>
-                    Brevet er sendt
-                </StyledModalHeader>
-                <Knapperad>
-                    <Button
-                        variant={'secondary'}
-                        key={'til oppgavebenken'}
-                        size={'medium'}
-                        onClick={() => {
-                            navigate('/oppgaver');
-                        }}
-                        children={'Gå til oppgavebenken'}
-                    />
-                    <KnappHøyre
-                        variant={'secondary'}
-                        key={'til saksoversikt'}
-                        size={'medium'}
-                        onClick={() => {
-                            navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                            settVisInnsendtBrevModal(false);
-                        }}
-                        children={'Gå til saksoversikt'}
-                    />
-                </Knapperad>
-            </StyledModal>
+            <Modal open={visInnsendtBrevModal} onClose={() => settVisInnsendtBrevModal(false)}>
+                <Modal.Content>
+                    <Heading size="medium" level={'2'}>
+                        Brevet er sendt
+                    </Heading>
+                    <Knapperad>
+                        <Button
+                            variant={'secondary'}
+                            key={'til oppgavebenken'}
+                            size={'medium'}
+                            onClick={() => {
+                                navigate('/oppgaver');
+                            }}
+                            children={'Se oppgavebenk'}
+                        />
+                        <KnappHøyre
+                            variant={'secondary'}
+                            key={'til saksoversikt'}
+                            size={'medium'}
+                            onClick={() => {
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                settVisInnsendtBrevModal(false);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </Modal>
             <DokumentutsendingSkjema />
 
             <iframe
