@@ -21,7 +21,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
             årsak: HenleggÅrsak | '';
-            begrunnelse: '';
+            begrunnelse: string;
         },
         IBehandling
     >({
@@ -33,6 +33,13 @@ const useHenleggBehandling = (lukkModal: () => void) => {
             }),
             begrunnelse: useFelt({
                 verdi: '',
+                valideringsfunksjon: (felt: FeltState<string>) =>
+                    felt.verdi.length > 5
+                        ? ok(felt)
+                        : feil(
+                              felt,
+                              'Du må skrive en begrunnelse som forklarer hvorfor behandlingen henlegges'
+                          ),
             }),
         },
         skjemanavn: 'henleggbehandling',
