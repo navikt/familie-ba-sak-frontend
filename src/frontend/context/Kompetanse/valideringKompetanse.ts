@@ -1,11 +1,5 @@
 import type { Felt } from '@navikt/familie-skjema';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import { type Avhengigheter, feil, type FeltState, ok } from '@navikt/familie-skjema';
 
 import {
     AnnenForelderAktivitet,
@@ -31,7 +25,6 @@ const erAnnenForeldersAktivitetslandGyldig = (
     const annenForeldersAktivitet =
         avhengigheter?.annenForeldersAktivitet as Felt<AnnenForelderAktivitet>;
     if (
-        annenForeldersAktivitet?.valideringsstatus === Valideringsstatus.IKKE_VALIDERT ||
         annenForeldersAktivitet?.verdi === AnnenForelderAktivitet.IKKE_AKTUELT ||
         annenForeldersAktivitet?.verdi === AnnenForelderAktivitet.INAKTIV
     ) {
@@ -44,10 +37,7 @@ const erSøkersAktivitetslandGyldig = (
     avhengigheter?: Avhengigheter
 ): FeltState<string | undefined> => {
     const søkersAktivitet = avhengigheter?.annenForeldersAktivitet as Felt<SøkersAktivitet>;
-    if (
-        søkersAktivitet?.valideringsstatus === Valideringsstatus.IKKE_VALIDERT ||
-        søkersAktivitet?.verdi === SøkersAktivitet.INAKTIV
-    ) {
+    if (søkersAktivitet?.verdi === SøkersAktivitet.INAKTIV) {
         return ok(felt);
     }
     return !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
