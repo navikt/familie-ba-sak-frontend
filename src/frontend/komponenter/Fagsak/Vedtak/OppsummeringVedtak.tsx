@@ -59,7 +59,7 @@ const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
 `;
 
 const Modaltekst = styled(BodyShort)`
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 `;
 
 const KnappHøyre = styled(Button)`
@@ -260,7 +260,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
                     <Modal open={visModal} onClose={() => settVisModal(false)} closeButton={true}>
                         <Modal.Content>
-                            <Heading size={'medium'} level={'2'} spacing>
+                            <Heading size={'medium'} level={'2'}>
                                 Totrinnskontroll
                             </Heading>
                             <Modaltekst>Behandlingen er nå sendt til totrinnskontroll</Modaltekst>

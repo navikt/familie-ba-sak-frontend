@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -14,7 +14,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
-import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -33,14 +32,17 @@ interface HenleggÅrsakSelect extends HTMLSelectElement {
     value: HenleggÅrsak | '';
 }
 
-const StyledVeivalgTekst = styled(BodyShort)`
-    position: relative;
-    top: -32px;
-    svg {
-        position: relative;
-        top: 6px;
-        margin-right: 10px;
-    }
+const StyledBodyShort = styled(BodyShort)`
+    margin: 2rem 2rem 2rem 0;
+`;
+
+const KnappHøyre = styled(Button)`
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    display: flex;
+    justify-content: end;
 `;
 
 const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
@@ -203,43 +205,43 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                 </SkjemaGruppe>
             </UIModalWrapper>
 
-            <UIModalWrapper
-                modal={{
-                    actions: [
-                        <Button
-                            key={'Gå til saksoversikten'}
-                            variant="secondary"
-                            size="small"
-                            onClick={() => {
-                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                            }}
-                            children={'Gå til saksoversikten'}
-                        />,
+            <Modal
+                open={visVeivalgModal}
+                onClose={() => {
+                    settVisVeivalgModal(false);
+                }}
+            >
+                <Modal.Content>
+                    <Heading size={'medium'} level={'2'}>
+                        Behandling henlagt
+                    </Heading>
+                    <StyledBodyShort>
+                        {årsak === HenleggÅrsak.SØKNAD_TRUKKET
+                            ? 'Behandlingen er henlagt og brev til bruker er sendt'
+                            : 'Behandlingen er henlagt'}
+                    </StyledBodyShort>
+                    <Knapperad>
                         <Button
                             key={'Gå til oppgavebenken'}
                             variant="secondary"
-                            size="small"
+                            size="medium"
                             onClick={() => {
                                 navigate('/oppgaver');
                             }}
-                            children={'Gå til oppgavebenken'}
-                        />,
-                    ],
-                    onClose: () => {
-                        settVisVeivalgModal(false);
-                    },
-                    lukkKnapp: true,
-                    tittel: '',
-                    visModal: visVeivalgModal,
-                }}
-            >
-                <StyledVeivalgTekst>
-                    <StatusIkon status={Status.OK} />
-                    {årsak === HenleggÅrsak.SØKNAD_TRUKKET
-                        ? 'Behandlingen er henlagt og brev til bruker er sendt'
-                        : 'Behandlingen er henlagt'}
-                </StyledVeivalgTekst>
-            </UIModalWrapper>
+                            children={'Se oppgavebenk'}
+                        />
+                        <KnappHøyre
+                            key={'Gå til saksoversikten'}
+                            variant="secondary"
+                            size="medium"
+                            onClick={() => {
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </Modal>
             <PdfVisningModal
                 åpen={visDokumentModal}
                 onRequestClose={() => settVisDokumentModal(false)}
