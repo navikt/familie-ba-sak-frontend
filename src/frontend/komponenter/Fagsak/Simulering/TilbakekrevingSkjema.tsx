@@ -17,7 +17,7 @@ import { useFagsakContext } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
+import { Tilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
 import HelpText from '../../Felleskomponenter/HelpText';
@@ -209,11 +209,8 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger
                     )}
                     erLesevisning={vurderErLesevisning()}
-                    value={
-                        tilbakekrevingsvalg.verdi
-                            ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
-                            : undefined
-                    }
+                    value={tilbakekrevingsvalg.verdi}
+                    onChange={(val: Tilbakekrevingsvalg) => radioOnChange(val)}
                     legend={
                         <FlexDiv>
                             Fastsett videre behandling
@@ -250,17 +247,8 @@ const TilbakekrevingSkjema: React.FC<{
                     {bruker && !bruker.dødsfallDato && (
                         <>
                             <Radio
-                                value={'Opprett tilbakekreving, send varsel'}
+                                value={Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL}
                                 name={'tilbakekreving'}
-                                checked={
-                                    tilbakekrevingsvalg.verdi ===
-                                    Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
-                                }
-                                onChange={() =>
-                                    radioOnChange(
-                                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
-                                    )
-                                }
                                 id={'Opprett-tilbakekreving-send-varsel'}
                             >
                                 {'Opprett tilbakekreving, send varsel'}
@@ -348,26 +336,15 @@ const TilbakekrevingSkjema: React.FC<{
                         </>
                     )}
                     <Radio
-                        value={'Opprett tilbakekreving, ikke send varsel'}
+                        value={Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL}
                         name={'tilbakekreving'}
-                        checked={
-                            tilbakekrevingsvalg.verdi ===
-                            Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL
-                        }
-                        onChange={() =>
-                            radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
-                        }
                         id={'Opprett-tilbakekreving-ikke-send-varsel'}
                     >
                         {'Opprett tilbakekreving, ikke send varsel'}
                     </Radio>
                     <Radio
-                        value={'Avvent tilbakekreving'}
+                        value={Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING}
                         name={'tilbakekreving'}
-                        checked={
-                            tilbakekrevingsvalg.verdi === Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
-                        }
-                        onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
                         id={'avvent-tilbakekreving'}
                     >
                         {'Avvent tilbakekreving'}
