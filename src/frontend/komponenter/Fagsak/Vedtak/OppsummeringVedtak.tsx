@@ -258,7 +258,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         </Button>
                     </Container>
 
-                    <Modal open={visModal} onClose={() => settVisModal(false)} closeButton={true}>
+                    <Modal
+                        open={visModal}
+                        onClose={() => settVisModal(false)}
+                        closeButton={true}
+                        shouldCloseOnOverlayClick={false}
+                    >
                         <Modal.Content>
                             <Heading size={'medium'} level={'2'}>
                                 Totrinnskontroll
