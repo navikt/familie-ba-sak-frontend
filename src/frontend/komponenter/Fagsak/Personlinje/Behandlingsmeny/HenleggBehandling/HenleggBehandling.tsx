@@ -210,6 +210,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                 onClose={() => {
                     settVisVeivalgModal(false);
                 }}
+                shouldCloseOnOverlayClick={false}
             >
                 <Modal.Content>
                     <Heading size={'medium'} level={'2'}>
