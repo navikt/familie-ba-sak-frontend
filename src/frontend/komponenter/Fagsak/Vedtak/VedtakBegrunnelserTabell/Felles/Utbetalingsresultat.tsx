@@ -15,8 +15,8 @@ const UtbetalingsperiodeDetalj = styled.div`
     display: flex;
     flex-direction: row;
 
-    .typo-normal {
-        margin-right: 1.5rem;
+    p + p {
+        margin-left: 1.5rem;
     }
 `;
 
