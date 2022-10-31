@@ -1,30 +1,32 @@
 import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { Button } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Button, Heading, Modal } from '@navikt/ds-react';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useBrevModul } from '../../../../context/BrevModulContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from './Brevskjema';
 
 interface IProps {
-    onOkIModalClick: () => void;
+    onIModalClick: () => void;
 }
 
-const Brev = ({ onOkIModalClick }: IProps) => {
+const KnappHøyre = styled(Button)`
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+`;
+
+const Brev = ({ onIModalClick }: IProps) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { åpenBehandling } = useBehandling();
-    const { navigerTilOpplysningsplikt } = useBrevModul();
+    const navigate = useNavigate();
 
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
-
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const navigate = useNavigate();
 
     return (
         <div className={'brev'}>
@@ -33,31 +35,42 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                     settVisInnsendtBrevModal(true);
                 }}
             />
-            {visInnsendtBrevModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Brevet er sendt',
-                        lukkKnapp: false,
-                        visModal: visInnsendtBrevModal,
-                        actions: [
-                            <Button
-                                variant={'secondary'}
-                                key={'ok'}
-                                size={'small'}
-                                onClick={() => {
-                                    onOkIModalClick();
-                                    navigerTilOpplysningsplikt &&
-                                        navigate(
-                                            `/fagsak/${fagsakId}/${behandlingId}/vilkaarsvurdering`
-                                        );
-                                    settVisInnsendtBrevModal(false);
-                                }}
-                                children={'Ok'}
-                            />,
-                        ],
-                    }}
-                />
-            )}
+            <Modal
+                open={visInnsendtBrevModal}
+                onClose={() => {
+                    settVisInnsendtBrevModal(false);
+                    onIModalClick();
+                }}
+            >
+                <Modal.Content>
+                    <Heading size="medium" level={'2'}>
+                        Brevet er sendt
+                    </Heading>
+                    <Knapperad>
+                        <Button
+                            variant={'secondary'}
+                            key={'til oppgavebenken'}
+                            size={'medium'}
+                            onClick={() => {
+                                onIModalClick();
+                                navigate('/oppgaver');
+                            }}
+                            children={'Se oppgavebenk'}
+                        />
+                        <KnappHøyre
+                            variant={'secondary'}
+                            key={'til saksoversikt'}
+                            size={'medium'}
+                            onClick={() => {
+                                onIModalClick();
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                settVisInnsendtBrevModal(false);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </Modal>
         </div>
     );
 };
