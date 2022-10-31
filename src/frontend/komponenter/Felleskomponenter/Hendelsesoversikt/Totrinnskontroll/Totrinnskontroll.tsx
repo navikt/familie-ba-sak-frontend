@@ -4,7 +4,7 @@ import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Heading, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -21,7 +21,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus } from '../../../../typer/behandling';
 import type { ITotrinnskontrollData } from '../../../../typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
-import UIModalWrapper from '../../Modal/UIModalWrapper';
 import type { ITrinn } from '../../Venstremeny/sider';
 import { KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
@@ -34,6 +33,15 @@ interface IProps {
 const Container = styled.div`
     padding: 0.5rem 1.5rem;
     display: flex;
+`;
+
+const KnappHøyre = styled(Button)`
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    display: flex;
+    justify-content: end;
 `;
 
 interface IModalVerdier {
@@ -148,39 +156,40 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 </Container>
             )}
 
-            {modalVerdi && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Totrinnskontroll',
-                        lukkKnapp: false,
-                        visModal: modalVerdi.skalVises,
-                        actions: [
-                            <Button
-                                variant={'secondary'}
-                                key={'saksoversikt'}
-                                size={'small'}
-                                onClick={() => {
-                                    settModalVerdi(initiellModalVerdi);
-                                    navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                                }}
-                                children={'Gå til saksoversikten'}
-                            />,
-                            <Button
-                                key={'oppgavebenk'}
-                                variant={'primary'}
-                                size={'small'}
-                                onClick={() => {
-                                    settModalVerdi(initiellModalVerdi);
-                                    navigate('/oppgaver');
-                                }}
-                                children={'Gå til oppgavebenken'}
-                            />,
-                        ],
-                    }}
-                >
+            <Modal
+                open={modalVerdi.skalVises}
+                onClose={() => settModalVerdi(initiellModalVerdi)}
+                shouldCloseOnOverlayClick={false}
+            >
+                <Modal.Content>
+                    <Heading size={'medium'} level={'2'}>
+                        Totrinnskontroll
+                    </Heading>
                     <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
-                </UIModalWrapper>
-            )}
+                    <Knapperad>
+                        <Button
+                            key={'oppgavebenk'}
+                            variant={'secondary'}
+                            size={'medium'}
+                            onClick={() => {
+                                settModalVerdi(initiellModalVerdi);
+                                navigate('/oppgaver');
+                            }}
+                            children={'Se oppgavebenk'}
+                        />
+                        <KnappHøyre
+                            key={'saksoversikt'}
+                            variant={'secondary'}
+                            size={'medium'}
+                            onClick={() => {
+                                settModalVerdi(initiellModalVerdi);
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </Modal>
         </>
     );
 };
