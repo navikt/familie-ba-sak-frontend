@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import { BodyShort, Button, ErrorMessage, Heading, ReadMore, Select } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
-import { FagsakType } from '../../../typer/fagsak';
 import type { IBaseFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
@@ -95,7 +96,15 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     );
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
-    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+    const [spinner, settSpinner] = useState(false);
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema(
+        _r => {
+            settSpinner(false);
+        },
+        _r => {
+            settSpinner(false);
+        }
+    );
 
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
@@ -167,10 +176,17 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
 
                         <StyledButton
                             onClick={() => {
+                                if (
+                                    samhandlerSkjema.felter.orgnr.valideringsstatus !==
+                                    Valideringsstatus.FEIL
+                                ) {
+                                    settSpinner(true);
+                                }
                                 onSubmitWrapper();
                             }}
                             children={'Hent institusjon'}
                             size={'small'}
+                            loading={spinner}
                         />
                     </StyledDiv>
                 )}
