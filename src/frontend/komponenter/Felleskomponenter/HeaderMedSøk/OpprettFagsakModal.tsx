@@ -151,6 +151,11 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             erLesevisning={false}
                             id={'hent-samhandler'}
                             label={'Organisasjonsnummer'}
+                            onChange={event =>
+                                samhandlerSkjema.felter.orgnr.validerOgSettFelt(
+                                    event.target.value.replaceAll(' ', '')
+                                )
+                            }
                             size={'small'}
                         />
 
