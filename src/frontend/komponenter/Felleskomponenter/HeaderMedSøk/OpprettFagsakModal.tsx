@@ -156,6 +156,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                     event.target.value.replaceAll(' ', '')
                                 )
                             }
+                            onKeyDown={event => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    onSubmitWrapper();
+                                }
+                            }}
                             size={'small'}
                         />
 
