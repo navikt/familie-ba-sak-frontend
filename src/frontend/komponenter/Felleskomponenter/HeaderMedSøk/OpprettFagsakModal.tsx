@@ -216,6 +216,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         lukkKnapp: true,
                         tittel: 'Opprett fagsak',
                         visModal: visModal,
+                        shouldCloseOnOverlayClick: false,
                     }}
                 >
                     <StyledHeading size={'small'} level={'3'}>
@@ -285,6 +286,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             : 'Opprett fagsak',
                         visModal: visModal,
                         className: 'uimodal-wider',
+                        shouldCloseOnOverlayClick: false,
                     }}
                 >
                     <StyledBodyShort>

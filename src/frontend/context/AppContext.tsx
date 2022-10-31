@@ -36,6 +36,7 @@ export interface IModal {
     style?: CSSProperties;
     tittel: ReactNode;
     visModal: boolean;
+    shouldCloseOnOverlayClick?: boolean;
 }
 
 const initalState: IModal = {
