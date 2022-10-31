@@ -84,7 +84,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     fagsakerPåBruker,
 }) => {
     const [bruker, settBruker] = useState(personInfo);
-    const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
+    const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
+        useOpprettFagsak();
     const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
@@ -100,8 +101,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema(
         _r => {
             settSpinner(false);
+            settFeilmelding('');
+            settVisFeilmelding(false);
         },
         _r => {
+            settFeilmelding('Finner ikke institusjon. Kontakt NØS for å opprette TSS-ident.');
+            settVisFeilmelding(true);
             settSpinner(false);
         }
     );
