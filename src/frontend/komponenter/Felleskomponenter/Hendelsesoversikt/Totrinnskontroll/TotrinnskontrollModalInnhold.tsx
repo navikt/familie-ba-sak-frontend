@@ -1,32 +1,37 @@
 import * as React from 'react';
 
-import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
+import styled from 'styled-components';
+
+import { BodyShort } from '@navikt/ds-react';
+
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 
 interface IProps {
     beslutning: TotrinnskontrollBeslutning;
 }
 
+const ModalInnholdContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 2rem 2rem 2rem 0;
+`;
+
 const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutning }) => {
     if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
         return (
-            <div className={'totrinnsvurdering-modal-innhold'}>
-                <StatusIkon status={Status.FEIL} />
-                <div className={'totrinnsvurdering-modal-tekst'}>
-                    Beslutning er IKKE_VURDERT. Ta kontakt med barnetrygdteamet.
-                </div>
-            </div>
+            <ModalInnholdContainer>
+                <BodyShort>Beslutning er IKKE_VURDERT. Ta kontakt med barnetrygdteamet.</BodyShort>
+            </ModalInnholdContainer>
         );
     } else {
         return (
-            <div className={'totrinnsvurdering-modal-innhold'}>
-                <StatusIkon status={Status.OK} />
-                <div className={'totrinnsvurdering-modal-tekst'}>
+            <ModalInnholdContainer>
+                <BodyShort>
                     {beslutning === TotrinnskontrollBeslutning.GODKJENT
                         ? 'Behandlingen er godkjent, og vedtaket er iverksatt'
                         : 'Behandlingen er ikke godkjent og er sendt tilbake til saksbehandler'}
-                </div>
-            </div>
+                </BodyShort>
+            </ModalInnholdContainer>
         );
     }
 };
