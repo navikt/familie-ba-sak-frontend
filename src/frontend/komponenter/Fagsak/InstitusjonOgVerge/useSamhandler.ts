@@ -7,11 +7,12 @@ import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../../typer/samhandler';
 import { orgnummerValidator } from '../../../utils/validators';
 
-export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: () => void) => {
+export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: string) => void) => {
     const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
         ISamhandlerInfoRequest,
         ISamhandlerInfo
@@ -34,9 +35,9 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: () => void
                     onSuccess();
                 }
             },
-            (_: Ressurs<ISamhandlerInfo>) => {
-                if (onError) {
-                    onError();
+            (error: Ressurs<ISamhandlerInfo>) => {
+                if (onError && error.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    onError(error.frontendFeilmelding);
                 }
             }
         );

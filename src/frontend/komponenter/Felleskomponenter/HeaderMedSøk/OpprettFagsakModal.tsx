@@ -104,8 +104,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
             settFeilmelding('');
             settVisFeilmelding(false);
         },
-        () => {
-            settFeilmelding('Finner ikke institusjon. Kontakt NØS for å opprette TSS-ident.');
+        error => {
+            settFeilmelding(error);
             settVisFeilmelding(true);
             settSpinner(false);
         }
