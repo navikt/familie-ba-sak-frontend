@@ -118,7 +118,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                 <Button
                     variant={'tertiary'}
                     id={'forhandsvis-vedtaksbrev'}
-                    size={'small'}
+                    size={'medium'}
                     loading={hentetDokument.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
@@ -129,7 +129,7 @@ const DokumentutsendingSkjema: React.FC = () => {
 
                 <div>
                     <SendBrevKnapp
-                        size="small"
+                        size="medium"
                         variant="primary"
                         loading={senderBrev()}
                         disabled={skjemaErLåst()}
@@ -138,7 +138,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                         Send brev
                     </SendBrevKnapp>
 
-                    <Button size="small" variant="tertiary" onClick={nullstillSkjema}>
+                    <Button size="medium" variant="tertiary" onClick={nullstillSkjema}>
                         Avbryt
                     </Button>
                 </div>
