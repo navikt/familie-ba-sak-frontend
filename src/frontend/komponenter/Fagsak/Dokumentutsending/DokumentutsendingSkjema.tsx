@@ -39,10 +39,11 @@ const StyledAlert = styled(Alert)`
 const Handlinger = styled.div`
     display: flex;
     justify-content: space-between;
+    margin-top: 1.5rem;
 `;
 
 const SendBrevKnapp = styled(Button)`
-    margin-right: 2rem;
+    margin-right: 1rem;
 `;
 
 const DokumentutsendingSkjema: React.FC = () => {
@@ -115,21 +116,9 @@ const DokumentutsendingSkjema: React.FC = () => {
             </StyledSkjemaGruppe>
 
             <Handlinger>
-                <Button
-                    variant={'tertiary'}
-                    id={'forhandsvis-vedtaksbrev'}
-                    size={'small'}
-                    loading={hentetDokument.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst()}
-                    onClick={hentForhåndsvisningPåFagsak}
-                    icon={<FileContent />}
-                >
-                    {'Forhåndsvis'}
-                </Button>
-
                 <div>
                     <SendBrevKnapp
-                        size="small"
+                        size="medium"
                         variant="primary"
                         loading={senderBrev()}
                         disabled={skjemaErLåst()}
@@ -138,10 +127,21 @@ const DokumentutsendingSkjema: React.FC = () => {
                         Send brev
                     </SendBrevKnapp>
 
-                    <Button size="small" variant="tertiary" onClick={nullstillSkjema}>
+                    <Button size="medium" variant="tertiary" onClick={nullstillSkjema}>
                         Avbryt
                     </Button>
                 </div>
+                <Button
+                    variant={'tertiary'}
+                    id={'forhandsvis-vedtaksbrev'}
+                    size={'medium'}
+                    loading={hentetDokument.status === RessursStatus.HENTER}
+                    disabled={skjemaErLåst()}
+                    onClick={hentForhåndsvisningPåFagsak}
+                    icon={<FileContent />}
+                >
+                    {'Forhåndsvis'}
+                </Button>
             </Handlinger>
         </Container>
     );
