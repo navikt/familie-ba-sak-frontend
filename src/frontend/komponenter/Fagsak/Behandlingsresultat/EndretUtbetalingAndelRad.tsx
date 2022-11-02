@@ -133,17 +133,23 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <Button variant="tertiary" size="xsmall" onClick={() => toggleForm()}>
-                        {åpenUtbetalingsAndel ? (
-                            <>
-                                <BodyShort>Lukk</BodyShort>
+                    <Button
+                        variant="tertiary"
+                        size="xsmall"
+                        onClick={() => toggleForm()}
+                        icon={
+                            åpenUtbetalingsAndel ? (
                                 <Collapse width="22" height="22" />
-                            </>
-                        ) : (
-                            <>
-                                <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
+                            ) : (
                                 <Expand width="22" height="22" />
-                            </>
+                            )
+                        }
+                        iconPosition="right"
+                    >
+                        {åpenUtbetalingsAndel ? (
+                            <BodyShort>Lukk</BodyShort>
+                        ) : (
+                            <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
                         )}
                     </Button>
                 </TdUtenUnderstrek>
