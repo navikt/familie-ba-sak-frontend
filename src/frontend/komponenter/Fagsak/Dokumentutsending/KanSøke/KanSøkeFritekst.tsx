@@ -4,13 +4,12 @@ import styled from 'styled-components';
 
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
-import Pluss from '../../../../ikoner/Pluss';
-import Slett from '../../../../ikoner/Slett';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekster,
@@ -20,17 +19,13 @@ import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;
-
-    .textarea__container {
-        width: 100% !important;
-    }
+    align-items: center;
 `;
 
 const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
-    .skjemaelement {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
+    display: flex;
+    margin-bottom: 0.5rem;
+    flex: auto;
 `;
 
 const SletteKnapp = styled(Button)`
@@ -114,8 +109,7 @@ const KanSøkeFritekst = ({
                                     id={`fjern_fritekst-${fritekstId}`}
                                     size={'small'}
                                     aria-label={'Fjern fritekst'}
-                                    icon={<Slett />}
-                                    iconPosition={'right'}
+                                    icon={<Delete />}
                                 >
                                     {'Fjern'}
                                 </SletteKnapp>
@@ -130,7 +124,7 @@ const KanSøkeFritekst = ({
                         onClick={leggTilFritekst}
                         id={`legg-til-fritekst`}
                         size={'small'}
-                        icon={<Pluss />}
+                        icon={<AddCircle />}
                     >
                         {'Legg til fritekst'}
                     </Button>
