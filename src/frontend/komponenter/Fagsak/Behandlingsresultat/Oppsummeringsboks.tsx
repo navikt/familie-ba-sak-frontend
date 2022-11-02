@@ -344,8 +344,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 onClick={() =>
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
+                                icon={<Delete aria-hidden />}
                             >
-                                <Delete aria-hidden /> Fjern småbarnstillegg
+                                Fjern småbarnstillegg
                             </Button>
                         )}
                     {kanLeggeSmåbarnstilleggTilPeriode(utbetalingsperiode, aktivEtikett.date) &&
@@ -359,8 +360,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 onClick={() =>
                                     leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }
+                                icon={<AddCircle aria-hidden />}
                             >
-                                <AddCircle aria-hidden /> Legg til småbarnstillegg
+                                Legg til småbarnstillegg
                             </Button>
                         )}
                 </>
