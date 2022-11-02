@@ -4,13 +4,12 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 
+import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { Felt } from '@navikt/familie-skjema';
 
-import Pluss from '../../../../ikoner/Pluss';
-import Slett from '../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
@@ -146,7 +145,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                             ),
                                         });
                                     }}
-                                    icon={<Slett />}
+                                    icon={<Delete />}
                                 >
                                     {'Fjern'}
                                 </FjernAvtaleKnapp>
@@ -169,7 +168,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }
-                    icon={<Pluss />}
+                    icon={<AddCircle />}
                 >
                     {'Legg til dato for avtale'}
                 </LeggTilAvtaleKnapp>
