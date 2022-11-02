@@ -13,7 +13,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../typer/fagsak';
+import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
@@ -54,7 +54,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                 <Dropdown.Menu.List>
                     {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
+                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
+                        minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && (
                             <EndreBehandlingstema />
                         )}
                     <OpprettBehandling minimalFagsak={minimalFagsak} />

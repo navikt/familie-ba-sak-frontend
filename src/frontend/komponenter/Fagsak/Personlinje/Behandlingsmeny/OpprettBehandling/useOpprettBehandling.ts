@@ -18,8 +18,8 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
-import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
-import type { FagsakType } from '../../../../../typer/fagsak';
+import { behandlingstemaer, type IBehandlingstema } from '../../../../../typer/behandlingstema';
+import { FagsakType } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
@@ -30,11 +30,15 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { settÅpenBehandling } = useBehandling();
-    const { bruker: brukerRessurs } = useFagsakContext();
+    const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
+    const minimalFagsak =
+        minimalFagsakRessurs.status === RessursStatus.SUKSESS
+            ? minimalFagsakRessurs.data
+            : undefined;
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
@@ -63,11 +67,16 @@ const useOpprettBehandling = (
     });
 
     const behandlingstema = useFelt<IBehandlingstema | undefined>({
-        verdi: undefined,
+        verdi:
+            minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+                ? behandlingstemaer.NASJONAL_INSTITUSJON
+                : undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
+            if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) return false;
+
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
             return (

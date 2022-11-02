@@ -4,7 +4,11 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
 import type { Felt } from '@navikt/familie-skjema';
 
-import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
+import {
+    BehandlingUnderkategori,
+    type Behandlingstema,
+    type IBehandlingstema,
+} from '../../typer/behandlingstema';
 import { behandlingstemaer } from '../../typer/behandlingstema';
 
 interface EgneProps {
@@ -45,17 +49,19 @@ export const BehandlingstemaSelect = ({
                     Velg behandlingstema
                 </option>
             )}
-            {Object.values(behandlingstemaer).map(tema => {
-                return (
-                    <option
-                        key={tema.id}
-                        aria-selected={verdi !== undefined && verdi.id === tema.id}
-                        value={tema.id}
-                    >
-                        {tema.navn}
-                    </option>
-                );
-            })}
+            {Object.values(behandlingstemaer)
+                .filter(it => it.underkategori !== BehandlingUnderkategori.INSTITUSJON)
+                .map(tema => {
+                    return (
+                        <option
+                            key={tema.id}
+                            aria-selected={verdi !== undefined && verdi.id === tema.id}
+                            value={tema.id}
+                        >
+                            {tema.navn}
+                        </option>
+                    );
+                })}
         </FamilieSelect>
     );
 };
