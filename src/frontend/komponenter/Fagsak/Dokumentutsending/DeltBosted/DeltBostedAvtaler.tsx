@@ -60,7 +60,7 @@ const FjernAvtaleKnapp = styled(Button)`
 `;
 
 const LeggTilAvtaleKnapp = styled(Button)`
-    margin: 1rem 0;
+    margin-bottom: 1rem;
 `;
 
 const DeltBostedAvtaler: React.FC<IProps> = ({
