@@ -135,13 +135,14 @@ const Venstremeny: React.FunctionComponent = () => {
                     aria-label="Skjul venstremeny"
                     åpenvenstremeny={åpenVenstremeny ? 1 : 0}
                     title={åpenVenstremeny ? 'Skjul venstremeny' : 'Vis venstremeny'}
-                >
-                    {åpenVenstremeny ? (
-                        <BackFilled aria-label="Vis venstremeny" />
-                    ) : (
-                        <NextFilled aria-label="Skjul venstremeny" />
-                    )}
-                </ToggleVisningVenstremeny>
+                    icon={
+                        åpenVenstremeny ? (
+                            <BackFilled aria-label="Vis venstremeny" />
+                        ) : (
+                            <NextFilled aria-label="Skjul venstremeny" />
+                        )
+                    }
+                />
             </MenyItem>
         </ÅpenMenyContainer>
     );
