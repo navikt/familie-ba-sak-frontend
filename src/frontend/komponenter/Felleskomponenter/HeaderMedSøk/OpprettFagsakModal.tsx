@@ -99,12 +99,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
     const [spinner, settSpinner] = useState(false);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema(
-        _r => {
+        () => {
             settSpinner(false);
             settFeilmelding('');
             settVisFeilmelding(false);
         },
-        _r => {
+        () => {
             settFeilmelding('Finner ikke institusjon. Kontakt NØS for å opprette TSS-ident.');
             settVisFeilmelding(true);
             settSpinner(false);

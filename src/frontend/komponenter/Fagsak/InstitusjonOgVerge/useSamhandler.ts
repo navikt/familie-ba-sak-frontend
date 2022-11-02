@@ -11,10 +11,7 @@ import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/fa
 import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../../typer/samhandler';
 import { orgnummerValidator } from '../../../utils/validators';
 
-export const useSamhandlerSkjema = (
-    onSuccess?: (r?: Ressurs<ISamhandlerInfo>) => void,
-    onError?: (r?: Ressurs<ISamhandlerInfo>) => void
-) => {
+export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: () => void) => {
     const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
         ISamhandlerInfoRequest,
         ISamhandlerInfo
@@ -34,12 +31,12 @@ export const useSamhandlerSkjema = (
             (ressurs: Ressurs<ISamhandlerInfo>) => {
                 settSubmitRessurs(ressurs);
                 if (onSuccess) {
-                    onSuccess(ressurs);
+                    onSuccess();
                 }
             },
-            (ressurs: Ressurs<ISamhandlerInfo>) => {
+            (_: Ressurs<ISamhandlerInfo>) => {
                 if (onError) {
-                    onError(ressurs);
+                    onError();
                 }
             }
         );
