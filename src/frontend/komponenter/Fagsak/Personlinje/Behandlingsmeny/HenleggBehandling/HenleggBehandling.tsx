@@ -91,16 +91,20 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
     const harTilgangTilTekniskVedlikeholdHenleggelse =
         toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
 
+    const kanHenlegge =
+        harTilgangTilTekniskVedlikeholdHenleggelse ||
+        (!vurderErLesevisning() && erPåHenleggbartSteg);
+
+    if (!kanHenlegge) {
+        return null;
+    }
+
     return (
         <>
             <Dropdown.Menu.List.Item
                 onClick={() => {
                     settVisModal(true);
                 }}
-                disabled={
-                    (vurderErLesevisning() || !erPåHenleggbartSteg) &&
-                    !harTilgangTilTekniskVedlikeholdHenleggelse
-                }
             >
                 Henlegg behandling
             </Dropdown.Menu.List.Item>
