@@ -59,7 +59,7 @@ const StyledList = styled.ul`
 `;
 
 const StyledFamilieSelect = styled(FamilieSelect)`
-    margin-top: 1rem;
+    margin-bottom: 1rem;
 
     .navds-label {
         width: 100%;
@@ -93,7 +93,6 @@ const StyledTag = styled(Tag)`
 const LabelOgEtikett = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
 `;
 
 const FritekstWrapper = styled.div`
@@ -198,7 +197,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 }
             >
                 <SkjultLegend>Send brev</SkjultLegend>
-                <FamilieSelect
+                <StyledFamilieSelect
                     {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={'Velg mottaker'}
                     placeholder={'Velg mottaker'}
@@ -235,10 +234,24 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             )}`}
                         </option>
                     )}
-                </FamilieSelect>
+                </StyledFamilieSelect>
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
-                    label={'Velg brevmal'}
+                    label={
+                        <LabelOgEtikett>
+                            <Label
+                                htmlFor={
+                                    skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)
+                                        .id
+                                }
+                            >
+                                Velg brevmal
+                            </Label>
+                            <StyledTag variant="info" size="small">
+                                {målform[mottakersMålform()]}
+                            </StyledTag>
+                        </LabelOgEtikett>
+                    }
                     placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
@@ -262,22 +275,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 {skjema.felter.dokumenter.erSynlig && (
                     <FamilieReactSelect
                         {...skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                        label={
-                            <LabelOgEtikett>
-                                <Label
-                                    htmlFor={
-                                        skjema.felter.dokumenter.hentNavInputProps(
-                                            skjema.visFeilmeldinger
-                                        ).id
-                                    }
-                                >
-                                    Velg dokumenter
-                                </Label>
-                                <StyledTag variant="info" size="small">
-                                    Skriv {målform[mottakersMålform()].toLowerCase()}
-                                </StyledTag>
-                            </LabelOgEtikett>
-                        }
+                        label={<Label>Velg dokumenter</Label>}
                         creatable={false}
                         erLesevisning={vurderErLesevisning()}
                         isMulti={true}
