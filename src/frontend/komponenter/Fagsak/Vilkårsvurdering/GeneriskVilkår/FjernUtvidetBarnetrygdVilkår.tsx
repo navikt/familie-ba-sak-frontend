@@ -62,8 +62,13 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
 
     return (
         <>
-            <UtførKnapp id={slettVilkårId} onClick={() => settVisModal(true)} size="small">
-                <Delete title="Fjern vilkår" /> Fjern vilkår
+            <UtførKnapp
+                id={slettVilkårId}
+                onClick={() => settVisModal(true)}
+                size="small"
+                icon={<Delete title="Fjern vilkår" />}
+            >
+                Fjern vilkår
             </UtførKnapp>
 
             {visModal && (

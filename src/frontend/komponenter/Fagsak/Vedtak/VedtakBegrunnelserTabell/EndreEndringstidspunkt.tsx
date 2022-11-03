@@ -55,8 +55,8 @@ const EndreEndringstidspunkt: React.FC<{
                 onClick={() => {
                     settVisModal(true);
                 }}
+                icon={<Calender />}
             >
-                <Calender />
                 <Label>Oppdater endringstidspunkt</Label>
             </Button>
             <OppdaterEndringstidspunktModal

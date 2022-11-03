@@ -30,18 +30,6 @@ const StyledSectionDiv = styled.div`
     margin-top: 2.5rem;
 `;
 
-const StyledIkonKnappDiv = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const tilbakeKnappInnhold = (
-    <StyledIkonKnappDiv>
-        <Back />
-        Tilbake
-    </StyledIkonKnappDiv>
-);
-
 export const JournalpostSkjema: React.FC = () => {
     const {
         dataForManuellJournalføring,
@@ -116,8 +104,9 @@ export const JournalpostSkjema: React.FC = () => {
                     erLesevisning={false}
                     onClick={() => navigate(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    icon={erLesevisning() && <Back />}
                 >
-                    {erLesevisning() ? tilbakeKnappInnhold : 'Avbryt'}
+                    {erLesevisning() ? 'Tilbake' : 'Avbryt'}
                 </FamilieKnapp>
                 <FamilieKnapp
                     size="small"
