@@ -52,22 +52,28 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             </PosisjonertMenyknapp>
             <Dropdown.Menu>
                 <Dropdown.Menu.List>
-                    {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
-                        minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && (
-                            <EndreBehandlingstema />
-                        )}
                     <OpprettBehandling minimalFagsak={minimalFagsak} />
                     {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
                         <OpprettFagsak personInfo={bruker} />
                     )}
+                    <Dropdown.Menu.List.Item
+                        onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
+                    >
+                        Send informasjonsbrev
+                    </Dropdown.Menu.List.Item>
+                    {åpenBehandling.status === RessursStatus.SUKSESS && <Dropdown.Menu.Divider />}
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
                         <HenleggBehandling
                             fagsakId={minimalFagsak.id}
                             behandling={åpenBehandling.data}
                         />
                     )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
+                        minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && (
+                            <EndreBehandlingstema />
+                        )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         !vurderErLesevisning() &&
                         (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
@@ -79,18 +85,13 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             <LeggTilBarnPBehandling behandling={åpenBehandling.data} />
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.aktivSettPåVent && (
-                            <TaBehandlingAvVent behandling={åpenBehandling.data} />
-                        )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.status === BehandlingStatus.UTREDES && (
                             <SettEllerOppdaterVenting behandling={åpenBehandling.data} />
                         )}
-                    <Dropdown.Menu.List.Item
-                        onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
-                    >
-                        Send informasjonsbrev
-                    </Dropdown.Menu.List.Item>
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        åpenBehandling.data.aktivSettPåVent && (
+                            <TaBehandlingAvVent behandling={åpenBehandling.data} />
+                        )}
                 </Dropdown.Menu.List>
             </Dropdown.Menu>
         </Dropdown>
