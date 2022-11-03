@@ -12,7 +12,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
@@ -82,9 +82,10 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         åpenBehandling.data.aktivSettPåVent && (
                             <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <SettEllerOppdaterVenting behandling={åpenBehandling.data} />
-                    )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        åpenBehandling.data.status === BehandlingStatus.UTREDES && (
+                            <SettEllerOppdaterVenting behandling={åpenBehandling.data} />
+                        )}
                     <Dropdown.Menu.List.Item
                         onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
                     >
