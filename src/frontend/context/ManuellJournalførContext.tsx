@@ -19,7 +19,7 @@ import {
 import useDokument from '../hooks/useDokument';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import type { IBehandlingstema } from '../typer/behandlingstema';
+import { behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
 import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
@@ -121,10 +121,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 },
             }),
             behandlingstema: useFelt<IBehandlingstema | undefined>({
-                verdi: undefined,
+                verdi:
+                    minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+                        ? behandlingstemaer.NASJONAL_INSTITUSJON
+                        : undefined,
                 avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
                 skalFeltetVises: (avhengigheter: Avhengigheter) =>
-                    avhengigheter.knyttTilNyBehandling,
+                    avhengigheter.knyttTilNyBehandling &&
+                    minimalFagsak?.fagsakType !== FagsakType.INSTITUSJON,
                 valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
                     felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
@@ -161,7 +165,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 verdi: [],
             }),
             fagsakType: useFelt<FagsakType>({
-                verdi: FagsakType.NORMAL,
+                verdi: minimalFagsak?.fagsakType || FagsakType.NORMAL,
             }),
             samhandler: useFelt<ISamhandlerInfo | undefined>({
                 verdi: undefined,
