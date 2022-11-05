@@ -22,17 +22,9 @@ export const StyledButtons = styled.div`
 
 const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
-    const {
-        tittel,
-        visModal,
-        onClose,
-        lukkKnapp,
-        actions,
-        className,
-        innhold,
-        style,
-        shouldCloseOnOverlayClick,
-    } = modal ? modal : useAppModal;
+    const { tittel, visModal, onClose, lukkKnapp, actions, className, innhold, style } = modal
+        ? modal
+        : useAppModal;
 
     return (
         <Modal
@@ -40,9 +32,6 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
             className={classNames(className, 'uimodal')}
             isOpen={visModal}
             onRequestClose={(): void => onClose && onClose()}
-            shouldCloseOnOverlayClick={
-                shouldCloseOnOverlayClick !== undefined ? shouldCloseOnOverlayClick : true
-            }
             contentLabel="ui-modal"
             closeButton={lukkKnapp}
             {...style}
