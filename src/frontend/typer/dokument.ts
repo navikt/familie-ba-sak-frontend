@@ -16,6 +16,7 @@ export interface IManueltBrevRequestPåBehandling {
     antallUkerSvarfrist?: number;
     mottakerMålform?: Målform;
     mottakerNavn?: string;
+    mottakerlandSed?: string;
 }
 
 export interface IManueltBrevRequestPåFagsak {

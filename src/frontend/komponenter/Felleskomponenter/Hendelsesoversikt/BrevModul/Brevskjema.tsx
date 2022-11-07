@@ -3,20 +3,21 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { AddCircle, Delete, FileContent } from '@navikt/ds-icons';
 import { Button, Label, Tag } from '@navikt/ds-react';
+import { NavdsGlobalColorGray100, NavdsGlobalColorGray600 } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieInput,
     FamilieReactSelect,
     FamilieSelect,
     FamilieTextarea,
 } from '@navikt/familie-form-elements';
-import type { FeltState } from '@navikt/familie-skjema';
+import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
@@ -32,6 +33,7 @@ import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
+import { FamilieLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import Knapperekke from '../../Knapperekke';
@@ -57,7 +59,11 @@ const StyledList = styled.ul`
 `;
 
 const StyledFamilieSelect = styled(FamilieSelect)`
-    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .navds-label {
+        width: 100%;
+    }
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
@@ -80,14 +86,13 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledTag = styled(Tag)`
-    background-color: ${navFarger.navLysGra};
-    border-color: ${navFarger.navGra60};
+    background-color: ${NavdsGlobalColorGray100};
+    border-color: ${NavdsGlobalColorGray600};
 `;
 
 const LabelOgEtikett = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
 `;
 
 const FritekstWrapper = styled.div`
@@ -96,6 +101,10 @@ const FritekstWrapper = styled.div`
 
 const StyledFamilieInput = styled(FamilieInput)`
     width: fit-content;
+`;
+
+const StyledFamilieLandvelger = styled(FamilieLandvelger)`
+    margin-top: 1.5rem;
 `;
 
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
@@ -188,7 +197,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 }
             >
                 <SkjultLegend>Send brev</SkjultLegend>
-                <FamilieSelect
+                <StyledFamilieSelect
                     {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={'Velg mottaker'}
                     placeholder={'Velg mottaker'}
@@ -225,10 +234,24 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             )}`}
                         </option>
                     )}
-                </FamilieSelect>
+                </StyledFamilieSelect>
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
-                    label={'Velg brevmal'}
+                    label={
+                        <LabelOgEtikett>
+                            <Label
+                                htmlFor={
+                                    skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)
+                                        .id
+                                }
+                            >
+                                Velg brevmal
+                            </Label>
+                            <StyledTag variant="info" size="small">
+                                {målform[mottakersMålform()]}
+                            </StyledTag>
+                        </LabelOgEtikett>
+                    }
                     placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
@@ -252,22 +275,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 {skjema.felter.dokumenter.erSynlig && (
                     <FamilieReactSelect
                         {...skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                        label={
-                            <LabelOgEtikett>
-                                <Label
-                                    htmlFor={
-                                        skjema.felter.dokumenter.hentNavInputProps(
-                                            skjema.visFeilmeldinger
-                                        ).id
-                                    }
-                                >
-                                    Velg dokumenter
-                                </Label>
-                                <StyledTag variant="info" size="small">
-                                    Skriv {målform[mottakersMålform()].toLowerCase()}
-                                </StyledTag>
-                            </LabelOgEtikett>
-                        }
+                        label={<Label>Velg dokumenter</Label>}
                         creatable={false}
                         erLesevisning={vurderErLesevisning()}
                         isMulti={true}
@@ -433,6 +441,34 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             )}
                             label={'Antall uker svarfrist'}
                             size={'small'}
+                        />
+                    )}
+                {skjema.felter.brevmal.verdi &&
+                    [
+                        Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
+                        Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
+                    ].includes(skjema.felter.brevmal.verdi) && (
+                        <StyledFamilieLandvelger
+                            erLesevisning={false}
+                            id={'mottakerlandSED'}
+                            label={'SED er sendt til'}
+                            kunEøs
+                            eksluderLand={['NO']}
+                            medFlag
+                            size="medium"
+                            kanNullstilles
+                            value={skjema.felter.mottakerlandSed?.verdi}
+                            onChange={(value: Country) => {
+                                const nyVerdi = value ? value.value : '';
+                                skjema.felter.mottakerlandSed.validerOgSettFelt(nyVerdi);
+                            }}
+                            feil={
+                                skjema.visFeilmeldinger &&
+                                skjema.felter.mottakerlandSed.valideringsstatus ===
+                                    Valideringsstatus.FEIL
+                                    ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
+                                    : ''
+                            }
                         />
                     )}
             </SkjemaGruppe>

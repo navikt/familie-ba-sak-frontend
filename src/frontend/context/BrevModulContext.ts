@@ -19,6 +19,7 @@ import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
+import { isEmpty } from '../utils/eøsValidators';
 import { erOrgNr } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
@@ -96,6 +97,9 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             );
         case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        case Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS:
+        case Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER:
+            return åpenBehandling.årsak === BehandlingÅrsak.ÅRLIG_KONTROLL;
     }
 };
 
@@ -154,6 +158,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                     Brevmal.SVARTIDSBREV_INSTITUSJON,
+                    Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
@@ -212,7 +217,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             avhengigheter?: Avhengigheter
         ) => {
             if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
-                return feil(felt, `Du må velge minst ett dokument`);
+                return feil(
+                    felt,
+                    'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt med fritekst'
+                );
             }
 
             return ok(felt);
@@ -224,6 +232,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                    Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
@@ -242,6 +251,24 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             return [
                 Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                 Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
+            ].includes(avhengigheter?.brevmal.verdi);
+        },
+        avhengigheter: { brevmal },
+    });
+
+    const mottakerlandSed = useFelt<string>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<string>) => {
+            return felt.verdi === 'NO'
+                ? feil(felt, 'Norge kan ikke velges som mottakerland')
+                : !isEmpty(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Velg land SED er sendt/skal sendes til');
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return [
+                Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
+                Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
             ].includes(avhengigheter?.brevmal.verdi);
         },
         avhengigheter: { brevmal },
@@ -269,6 +296,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
             antallUkerSvarfrist: number;
+            mottakerlandSed: string;
         },
         IBehandling
     >({
@@ -282,6 +310,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             avtalerOmDeltBostedPerBarn,
             datoAvtale,
             antallUkerSvarfrist,
+            mottakerlandSed,
         },
         skjemanavn: 'brevmodul',
     });
@@ -300,6 +329,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     useEffect(() => {
         nullstillDeltBosted();
+        skjema.felter.mottakerlandSed.nullstill();
     }, [skjema.felter.brevmal.verdi]);
 
     const personer =
@@ -388,6 +418,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     mottakerIdent.verdi === institusjon?.orgNummer
                         ? institusjon.navn
                         : personer.find(person => person.personIdent === mottakerIdent.verdi)?.navn,
+                mottakerlandSed: mottakerlandSed.verdi,
             };
         }
     };
