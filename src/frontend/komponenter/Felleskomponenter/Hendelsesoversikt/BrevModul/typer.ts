@@ -45,9 +45,9 @@ export const brevmaler: Record<Brevmal, string> = {
     FORLENGET_SVARTIDSBREV: 'Forlenget svartidsbrev',
     SVARTIDSBREV_INSTITUSJON: 'Svartidsbrev institusjon',
     FORLENGET_SVARTIDSBREV_INSTITUSJON: 'Forlenget svartidsbrev institusjon',
-    VARSEL_OM_ÅRLIG_REVURDERING_EØS: 'Varsel årlig kontroll EØS (uten innhenting)',
+    VARSEL_OM_ÅRLIG_REVURDERING_EØS: 'Varsel årlig revurdering EØS',
     VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER:
-        'Varsel årlig kontroll EØS (med innhenting)',
+        'Varsel årlig revurdering EØS med innhenting',
 };
 
 export const leggTilValuePåOption = (
