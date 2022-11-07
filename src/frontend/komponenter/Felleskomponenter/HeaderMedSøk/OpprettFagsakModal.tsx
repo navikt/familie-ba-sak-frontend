@@ -23,7 +23,6 @@ import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
-import { Knapperad } from '../../Fagsak/Behandlingsresultat/EøsPeriode/fellesKomponenter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import useOpprettFagsak from './useOpprettFagsak';
@@ -46,7 +45,6 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledHeading = styled(Heading)`
-    font-size: 1rem;
     margin-bottom: 1.5rem;
 `;
 
@@ -55,6 +53,11 @@ const StyledFagsakOptionsDiv = styled.div`
     margin-bottom: 2rem;
     width: fit-content;
     min-width: 20rem;
+`;
+
+const StyledModalContent = styled(Modal.Content)`
+    padding: 2.5rem;
+    width: 40rem;
 `;
 
 const StyledReadMore = styled(ReadMore)`
@@ -80,6 +83,18 @@ const fagsakTypeOptions = [
     },
 ];
 
+const KnappHøyre = styled(Button)`
+    float: right;
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    margin-top: 2.5rem;
+`;
+
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
@@ -92,9 +107,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
-    const harNormalFagsak = fagsakerPåBruker?.some(
-        fagsak => fagsak.fagsakType === FagsakType.NORMAL
-    );
+    const harNormalFagsak =
+        false && fagsakerPåBruker?.some(fagsak => fagsak.fagsakType === FagsakType.NORMAL);
     const [fagsakType, settFagsakType] = useState<FagsakType>(
         harNormalFagsak ? FagsakType.INSTITUSJON : FagsakType.NORMAL
     );
@@ -194,6 +208,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             }}
                             children={'Hent institusjon'}
                             size={'small'}
+                            variant={'secondary'}
                             loading={spinner}
                         />
                     </StyledDiv>
@@ -208,7 +223,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
         <>
             {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
                 <Modal open={visModal} onClose={lukkModal} shouldCloseOnOverlayClick={false}>
-                    <Modal.Content>
+                    <StyledModalContent>
                         <StyledHeading size={'small'} level={'3'}>
                             Opprett fagsak
                         </StyledHeading>
@@ -223,18 +238,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             {!!feilmelding && <ErrorMessage children={feilmelding} />}
                         </StyledBodyShort>
                         <Knapperad>
-                            <Button
-                                variant={'secondary'}
-                                key={'avbryt'}
-                                size={'small'}
-                                onClick={lukkModal}
-                                children={'Avbryt'}
-                            />
-                            ,
-                            <Button
+                            <KnappHøyre
                                 key={'bekreft'}
                                 variant={'primary'}
-                                size={'small'}
                                 onClick={async () => {
                                     settSenderInn(true);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
@@ -251,24 +257,23 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                         settSenderInn(false);
                                     }
                                 }}
-                                children={'Ja, opprett fagsak'}
                                 disabled={senderInn}
                                 loading={senderInn}
-                            />
+                            >
+                                Ja, opprett fagsak
+                            </KnappHøyre>
                             ,
+                            <KnappHøyre variant={'secondary'} key={'avbryt'} onClick={lukkModal}>
+                                Avbryt
+                            </KnappHøyre>
                         </Knapperad>
-                    </Modal.Content>
+                    </StyledModalContent>
                 </Modal>
             )}
             {toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
-                <Modal
-                    open={visModal}
-                    onClose={onClose}
-                    shouldCloseOnOverlayClick={false}
-                    className={'uimodal-wider'}
-                >
-                    <Modal.Content>
-                        <StyledHeading>
+                <Modal open={visModal} onClose={onClose} shouldCloseOnOverlayClick={false}>
+                    <StyledModalContent>
+                        <StyledHeading size={'medium'} level={'2'}>
                             {harNormalFagsak
                                 ? 'Opprett fagsak for institusjon eller enslig mindreårig'
                                 : 'Opprett fagsak'}
@@ -307,17 +312,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
 
                         {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
                         <Knapperad>
-                            <Button
-                                key={'avbryt'}
-                                variant={'tertiary'}
-                                size={'small'}
-                                onClick={onClose}
-                                children={'Avbryt'}
-                            />
-                            <Button
+                            <KnappHøyre
                                 key={'Bekreft'}
                                 variant={'primary'}
-                                size={'small'}
                                 onClick={async () => {
                                     settSenderInn(true);
                                     const personIdent =
@@ -344,12 +341,16 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                     }
                                     settVisFeilmelding(true);
                                 }}
-                                children={'Opprett fagsak'}
                                 disabled={senderInn}
                                 loading={senderInn}
-                            />
+                            >
+                                Opprett fagsak
+                            </KnappHøyre>
+                            <KnappHøyre key={'avbryt'} variant={'tertiary'} onClick={onClose}>
+                                Avbryt
+                            </KnappHøyre>
                         </Knapperad>
-                    </Modal.Content>
+                    </StyledModalContent>
                 </Modal>
             )}
         </>
