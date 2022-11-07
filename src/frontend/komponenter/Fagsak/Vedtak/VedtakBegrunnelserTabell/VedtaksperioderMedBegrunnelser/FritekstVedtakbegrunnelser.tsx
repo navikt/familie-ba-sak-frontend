@@ -5,15 +5,13 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { ExternalLink } from '@navikt/ds-icons';
+import { AddCircle, Delete, ExternalLink } from '@navikt/ds-icons';
 import { BodyLong, Button, Heading, Link, Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import Pluss from '../../../../../ikoner/Pluss';
-import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
@@ -28,10 +26,9 @@ const FritekstContainer = styled.div`
 `;
 
 const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
-    .skjemaelement {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex: auto;
 `;
 
 const StyledList = styled.ul`
@@ -41,10 +38,7 @@ const StyledList = styled.ul`
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;
-
-    .textarea__container {
-        width: 100% !important;
-    }
+    align-items: center;
 `;
 
 const StyledLabel = styled(Label)`
@@ -198,8 +192,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             id={`fjern_fritekst-${fritekstId}`}
                                             size={'small'}
                                             aria-label={'Fjern fritekst'}
-                                            icon={<Slett />}
-                                            iconPosition={'right'}
+                                            icon={<Delete />}
                                         >
                                             {'Fjern'}
                                         </SletteKnapp>
@@ -214,7 +207,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             onClick={leggTilFritekst}
                             id={`legg-til-fritekst`}
                             size={'small'}
-                            icon={<Pluss />}
+                            icon={<AddCircle />}
                         >
                             {'Legg til fritekst'}
                         </Button>
@@ -252,7 +245,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             onClick={leggTilFritekst}
             id={`legg-til-fritekst`}
             size={'small'}
-            icon={<Pluss />}
+            icon={<AddCircle />}
         >
             {'Legg til fritekst'}
         </Button>

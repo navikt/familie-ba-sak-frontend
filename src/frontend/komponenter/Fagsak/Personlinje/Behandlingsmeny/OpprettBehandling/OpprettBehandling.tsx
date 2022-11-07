@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
@@ -19,11 +18,24 @@ interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
 
+const Knapperad = styled.div`
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+`;
+
+const StyledModal = styled(Modal)`
+    width: 35rem;
+`;
+
+const KnappHøyre = styled(Button)`
+    margin-left: 1rem;
+`;
+
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visModal, settVisModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
-    const navigate = useNavigate();
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker } =
         useOpprettBehandling(
@@ -53,20 +65,41 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Opprett behandling
             </Dropdown.Menu.List.Item>
-            <UIModalWrapper
-                modal={{
-                    actions: [
+            <StyledModal
+                open={visModal}
+                onClose={lukkOpprettBehandlingModal}
+                aria-label="Opprett ny behandling"
+            >
+                <Modal.Content>
+                    <Heading size="medium" level="2" spacing>
+                        Opprett ny behandling
+                    </Heading>
+                    <SkjemaGruppe
+                        feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                    >
+                        <SkjultLegend>Opprett ny behandling</SkjultLegend>
+                        <OpprettBehandlingValg
+                            behandlingstype={behandlingstype}
+                            behandlingsårsak={behandlingsårsak}
+                            behandlingstema={behandlingstema}
+                            migreringsdato={migreringsdato}
+                            søknadMottattDato={søknadMottattDato}
+                            minimalFagsak={minimalFagsak}
+                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                            bruker={bruker}
+                            valgteBarn={valgteBarn}
+                        />
+                    </SkjemaGruppe>
+                    <Knapperad>
                         <Button
                             key={'avbryt'}
                             variant="tertiary"
-                            size="small"
                             onClick={lukkOpprettBehandlingModal}
                             children={'Avbryt'}
-                        />,
-                        <Button
+                        />
+                        <KnappHøyre
                             key={'bekreft'}
                             variant="primary"
-                            size="small"
                             onClick={() =>
                                 onBekreft(
                                     minimalFagsak.søkerFødselsnummer,
@@ -82,64 +115,34 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 opprettBehandlingSkjema.submitRessurs.status ===
                                 RessursStatus.HENTER
                             }
-                        />,
-                    ],
-                    onClose: lukkOpprettBehandlingModal,
-                    lukkKnapp: true,
-                    tittel: 'Opprett ny behandling',
-                    visModal,
-                }}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </StyledModal>
+            <StyledModal
+                open={visBekreftelseTilbakekrevingModal}
+                onClose={() => settVisBekreftelseTilbakekrevingModal(false)}
+                aria-label="Tilbakekrevingsbehandling opprettes"
             >
-                <SkjemaGruppe feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}>
-                    <SkjultLegend>Opprett ny behandling</SkjultLegend>
-                    <OpprettBehandlingValg
-                        behandlingstype={behandlingstype}
-                        behandlingsårsak={behandlingsårsak}
-                        behandlingstema={behandlingstema}
-                        migreringsdato={migreringsdato}
-                        søknadMottattDato={søknadMottattDato}
-                        minimalFagsak={minimalFagsak}
-                        visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                        bruker={bruker}
-                        valgteBarn={valgteBarn}
-                    />
-                </SkjemaGruppe>
-            </UIModalWrapper>
-
-            {visBekreftelseTilbakekrevingModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Tilbakekreving opprettes...',
-                        lukkKnapp: false,
-                        visModal: visBekreftelseTilbakekrevingModal,
-                        actions: [
-                            <Button
-                                key={'saksoversikt'}
-                                variant="secondary"
-                                size="small"
-                                onClick={() => {
-                                    settVisBekreftelseTilbakekrevingModal(false);
-                                    navigate(`/fagsak/${minimalFagsak.id}/saksoversikt`);
-                                }}
-                                children={'Gå til saksoversikten'}
-                            />,
-                            <Button
-                                key={'oppgavebenk'}
-                                variant="primary"
-                                size="small"
-                                onClick={() => {
-                                    settVisBekreftelseTilbakekrevingModal(false);
-                                    navigate('/oppgaver');
-                                }}
-                                children={'Gå til oppgavebenken'}
-                            />,
-                        ],
-                    }}
-                >
+                <Modal.Content>
+                    <Heading size="medium" level="2" spacing>
+                        Tilbakekrevingsbehandling opprettes
+                    </Heading>
                     Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30 sekunder)
                     før den blir tilgjengelig i saksoversikten og oppgavebenken.
-                </UIModalWrapper>
-            )}
+                    <Knapperad>
+                        <Button
+                            key={'oppgavebenk'}
+                            variant="primary"
+                            size="medium"
+                            onClick={() => {
+                                settVisBekreftelseTilbakekrevingModal(false);
+                            }}
+                            children={'Lukk'}
+                        />
+                    </Knapperad>
+                </Modal.Content>
+            </StyledModal>
         </>
     );
 };

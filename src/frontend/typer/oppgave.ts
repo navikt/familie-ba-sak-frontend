@@ -100,6 +100,7 @@ export enum GjelderFilter {
     ab0180 = 'ab0180',
     ab0096 = 'ab0096',
     ab0058 = 'ab0058',
+    ab0437 = 'ab0437',
 }
 
 export const gjelderFilter: Record<GjelderFilter, IPar> = {
@@ -108,6 +109,7 @@ export const gjelderFilter: Record<GjelderFilter, IPar> = {
     ab0180: { id: 'ab0180', navn: 'Ordinær' },
     ab0096: { id: 'ab0096', navn: 'Utvidet' },
     ab0058: { id: 'ab0058', navn: 'EØS' },
+    ab0437: { id: 'ab0437', navn: 'Institusjon' },
 };
 
 export enum BehandlingstypeFilter {

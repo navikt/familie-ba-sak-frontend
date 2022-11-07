@@ -149,13 +149,12 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         }}
                         loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
                         variant="tertiary"
-                        size="small"
+                        size="xsmall"
                         erLesevisning={vurderErLesevisning()}
-                    >
-                        {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (
+                        icon={
                             <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />
-                        )}
-                    </FamilieKnapp>
+                        }
+                    />
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
                     <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>

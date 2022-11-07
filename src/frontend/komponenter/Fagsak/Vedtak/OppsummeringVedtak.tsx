@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
-import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -23,7 +23,6 @@ import {
     hentStegNummer,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
@@ -57,6 +56,19 @@ const StyleHeading = styled(Heading)`
 
 const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
     margin-bottom: 1.5rem;
+`;
+
+const Modaltekst = styled(BodyShort)`
+    margin: 2rem 0;
+`;
+
+const KnappHøyre = styled(Button)`
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    display: flex;
+    justify-content: center;
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -245,40 +257,43 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             )}
                         </Button>
                     </Container>
-                    {visModal && (
-                        <UIModalWrapper
-                            modal={{
-                                tittel: 'Totrinnskontroll',
-                                lukkKnapp: false,
-                                visModal: visModal,
-                                actions: [
-                                    <Button
-                                        key={'saksoversikt'}
-                                        variant={'secondary'}
-                                        size={'small'}
-                                        onClick={() => {
-                                            settVisModal(false);
-                                            navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                                            window.location.reload();
-                                        }}
-                                        children={'Gå til saksoversikten'}
-                                    />,
-                                    <Button
-                                        key={'oppgavebenk'}
-                                        variant={'primary'}
-                                        size={'small'}
-                                        onClick={() => {
-                                            settVisModal(false);
-                                            navigate('/oppgaver');
-                                        }}
-                                        children={'Gå til oppgavebenken'}
-                                    />,
-                                ],
-                            }}
-                        >
-                            <BodyShort>Behandlingen er nå sendt til totrinnskontroll</BodyShort>
-                        </UIModalWrapper>
-                    )}
+
+                    <Modal
+                        open={visModal}
+                        onClose={() => settVisModal(false)}
+                        closeButton={true}
+                        shouldCloseOnOverlayClick={false}
+                    >
+                        <Modal.Content>
+                            <Heading size={'medium'} level={'2'}>
+                                Totrinnskontroll
+                            </Heading>
+                            <Modaltekst>Behandlingen er nå sendt til totrinnskontroll</Modaltekst>
+                            <Knapperad>
+                                <Button
+                                    key={'oppgavebenk'}
+                                    variant={'secondary'}
+                                    size={'medium'}
+                                    onClick={() => {
+                                        settVisModal(false);
+                                        navigate('/oppgaver');
+                                    }}
+                                    children={'Gå til oppgavebenken'}
+                                />
+                                <KnappHøyre
+                                    key={'saksoversikt'}
+                                    variant={'secondary'}
+                                    size={'medium'}
+                                    onClick={() => {
+                                        settVisModal(false);
+                                        navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                        window.location.reload();
+                                    }}
+                                    children={'Gå til saksoversikten'}
+                                />
+                            </Knapperad>
+                        </Modal.Content>
+                    </Modal>
                 </>
             ) : erMigreringFraInfotrygd ? (
                 <Alert variant="info">
