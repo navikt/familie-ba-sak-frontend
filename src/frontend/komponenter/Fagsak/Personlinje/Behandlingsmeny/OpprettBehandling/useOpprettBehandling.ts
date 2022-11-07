@@ -89,7 +89,7 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi)
+            felt.verdi && erIsoStringGyldig(felt.verdi) && !erDatoFremITid(felt.verdi)
                 ? ok(felt)
                 : feil(felt, 'Du må velge en ny migreringsdato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
@@ -105,13 +105,24 @@ const useOpprettBehandling = (
 
     const søknadMottattDato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi)
-                ? ok(felt)
-                : feil(
-                      felt,
-                      'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
-                  ),
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) => {
+            const erGyldigIsoString = felt.verdi && erIsoStringGyldig(felt.verdi);
+            const erIFremtiden = felt.verdi && erDatoFremITid(felt.verdi);
+
+            if (!erGyldigIsoString) {
+                return feil(
+                    felt,
+                    'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
+                );
+            }
+
+            if (erIFremtiden) {
+                return feil(felt, 'Du kan ikke sette en mottatt dato som er frem i tid.');
+            }
+
+            return ok(felt);
+        },
+
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -123,6 +134,10 @@ const useOpprettBehandling = (
             );
         },
     });
+
+    const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
+        return Date.parse(dato.toString()) > new Date().getTime();
+    };
 
     const valgteBarn = useFelt({
         verdi: [],
