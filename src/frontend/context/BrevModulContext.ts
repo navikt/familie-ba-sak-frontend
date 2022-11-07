@@ -103,12 +103,6 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
     }
 };
 
-const utledFeilmeldingDokumenter = (brevmal: Brevmal) => {
-    return brevmal === Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER
-        ? 'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt med fritekst'
-        : `Du må velge minst ett dokument`;
-};
-
 export const mottakersMålformImplementering = (
     personer: IGrunnlagPerson[],
     skjemaValideringsStatus: Valideringsstatus,
@@ -223,7 +217,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             avhengigheter?: Avhengigheter
         ) => {
             if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
-                return feil(felt, utledFeilmeldingDokumenter(avhengigheter.brevmal.verdi));
+                return feil(
+                    felt,
+                    'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt med fritekst'
+                );
             }
 
             return ok(felt);
