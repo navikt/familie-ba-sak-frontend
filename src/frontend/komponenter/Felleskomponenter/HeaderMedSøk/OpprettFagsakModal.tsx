@@ -107,8 +107,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
-    const harNormalFagsak =
-        false && fagsakerPåBruker?.some(fagsak => fagsak.fagsakType === FagsakType.NORMAL);
+    const harNormalFagsak = fagsakerPåBruker?.some(
+        fagsak => fagsak.fagsakType === FagsakType.NORMAL
+    );
     const [fagsakType, settFagsakType] = useState<FagsakType>(
         harNormalFagsak ? FagsakType.INSTITUSJON : FagsakType.NORMAL
     );
