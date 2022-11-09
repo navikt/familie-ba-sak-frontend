@@ -141,6 +141,7 @@ interface IBaseFamilieLandvelgerProps {
 
 interface IFamilieLandvelgerProps extends IBaseFamilieLandvelgerProps {
     onChange: (value: Country) => void;
+    eksluderLand?: string[];
 }
 
 const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
@@ -159,6 +160,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
     onChange,
     utenMargin = false,
     kanNullstilles = false,
+    eksluderLand = null,
 }) => {
     const id = `country-select-${label}`;
 
@@ -180,6 +182,9 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
     };
     if (kunEøs) {
         landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
+    }
+    if (eksluderLand && eksluderLand.length > 0) {
+        landvelgerProps = { ...landvelgerProps, excludeList: eksluderLand };
     }
     return (
         <BaseFamilieLandvelger
