@@ -59,6 +59,7 @@ const useOpprettFagsak = () => {
     return {
         opprettFagsak,
         feilmelding,
+        settFeilmelding,
         senderInn,
         settSenderInn,
     };

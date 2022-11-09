@@ -2,21 +2,29 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, ErrorMessage, Heading, ReadMore, Select } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    ErrorMessage,
+    Heading,
+    Modal,
+    ReadMore,
+    Select,
+} from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
-import { FagsakType } from '../../../typer/fagsak';
 import type { IBaseFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
-import UIModalWrapper from '../Modal/UIModalWrapper';
 import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
@@ -37,13 +45,7 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledHeading = styled(Heading)`
-    font-size: 1rem;
     margin-bottom: 1.5rem;
-`;
-
-const StyledKnappContainer = styled.div`
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
 `;
 
 const StyledFagsakOptionsDiv = styled.div`
@@ -51,6 +53,11 @@ const StyledFagsakOptionsDiv = styled.div`
     margin-bottom: 2rem;
     width: fit-content;
     min-width: 20rem;
+`;
+
+const StyledModalContent = styled(Modal.Content)`
+    padding: 2.5rem;
+    width: 40rem;
 `;
 
 const StyledReadMore = styled(ReadMore)`
@@ -76,6 +83,18 @@ const fagsakTypeOptions = [
     },
 ];
 
+const KnappHøyre = styled(Button)`
+    float: right;
+    margin-left: 1rem;
+`;
+
+const Knapperad = styled.div`
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    margin-top: 2.5rem;
+`;
+
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
@@ -83,7 +102,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     fagsakerPåBruker,
 }) => {
     const [bruker, settBruker] = useState(personInfo);
-    const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
+    const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
+        useOpprettFagsak();
     const { hentPerson, sjekkTilgang, toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
@@ -95,7 +115,19 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     );
     const [visFeilmelding, settVisFeilmelding] = useState(false);
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
-    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
+    const [spinner, settSpinner] = useState(false);
+    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema(
+        () => {
+            settSpinner(false);
+            settFeilmelding('');
+            settVisFeilmelding(false);
+        },
+        error => {
+            settFeilmelding(error);
+            settVisFeilmelding(true);
+            settSpinner(false);
+        }
+    );
 
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
@@ -151,15 +183,34 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             erLesevisning={false}
                             id={'hent-samhandler'}
                             label={'Organisasjonsnummer'}
+                            onChange={event =>
+                                samhandlerSkjema.felter.orgnr.validerOgSettFelt(
+                                    event.target.value.replaceAll(' ', '')
+                                )
+                            }
+                            onKeyDown={event => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    onSubmitWrapper();
+                                }
+                            }}
                             size={'small'}
                         />
 
                         <StyledButton
                             onClick={() => {
+                                if (
+                                    samhandlerSkjema.felter.orgnr.valideringsstatus !==
+                                    Valideringsstatus.FEIL
+                                ) {
+                                    settSpinner(true);
+                                }
                                 onSubmitWrapper();
                             }}
                             children={'Hent institusjon'}
                             size={'small'}
+                            variant={'secondary'}
+                            loading={spinner}
                         />
                     </StyledDiv>
                 )}
@@ -172,20 +223,25 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     return (
         <>
             {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
-                <UIModalWrapper
-                    modal={{
-                        actions: [
-                            <Button
-                                variant={'secondary'}
-                                key={'avbryt'}
-                                size={'small'}
-                                onClick={lukkModal}
-                                children={'Avbryt'}
-                            />,
-                            <Button
+                <Modal open={visModal} onClose={lukkModal} shouldCloseOnOverlayClick={false}>
+                    <StyledModalContent>
+                        <StyledHeading size={'small'} level={'3'}>
+                            Opprett fagsak
+                        </StyledHeading>
+                        <StyledBodyShort>
+                            Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for
+                            denne personen?
+                            {søkeresultat && (
+                                <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
+                                    søkeresultat.ident
+                                )})`}</BodyShort>
+                            )}
+                            {!!feilmelding && <ErrorMessage children={feilmelding} />}
+                        </StyledBodyShort>
+                        <Knapperad>
+                            <KnappHøyre
                                 key={'bekreft'}
                                 variant={'primary'}
-                                size={'small'}
                                 onClick={async () => {
                                     settSenderInn(true);
                                     if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
@@ -202,120 +258,101 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                         settSenderInn(false);
                                     }
                                 }}
-                                children={'Ja, opprett fagsak'}
                                 disabled={senderInn}
                                 loading={senderInn}
-                            />,
-                        ],
-                        onClose: lukkModal,
-                        lukkKnapp: true,
-                        tittel: 'Opprett fagsak',
-                        visModal: visModal,
-                    }}
-                >
-                    <StyledHeading size={'small'} level={'3'}>
-                        Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
-                        personen?
-                    </StyledHeading>
-                    {søkeresultat && (
-                        <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
-                            søkeresultat.ident
-                        )})`}</BodyShort>
-                    )}
-                    {!!feilmelding && <ErrorMessage children={feilmelding} />}
-                </UIModalWrapper>
+                            >
+                                Ja, opprett fagsak
+                            </KnappHøyre>
+                            ,
+                            <KnappHøyre variant={'secondary'} key={'avbryt'} onClick={lukkModal}>
+                                Avbryt
+                            </KnappHøyre>
+                        </Knapperad>
+                    </StyledModalContent>
+                </Modal>
             )}
             {toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
-                <UIModalWrapper
-                    modal={{
-                        actions: [
-                            <StyledKnappContainer key={'OpprettFagsakModal knapper'}>
-                                <Button
-                                    key={'avbryt'}
-                                    variant={'tertiary'}
-                                    size={'small'}
-                                    onClick={onClose}
-                                    children={'Avbryt'}
-                                />
-                                <Button
-                                    key={'Bekreft'}
-                                    variant={'primary'}
-                                    size={'small'}
-                                    onClick={async () => {
-                                        settSenderInn(true);
-                                        const personIdent =
-                                            søkeresultat?.ident || personInfo?.personIdent;
-
-                                        if (personIdent && (await sjekkTilgang(personIdent))) {
-                                            opprettFagsak(
-                                                {
-                                                    personIdent: personIdent,
-                                                    aktørId: null,
-                                                    fagsakType: fagsakType,
-                                                    institusjon: valgtSamhandler
-                                                        ? {
-                                                              orgNummer: valgtSamhandler.orgNummer,
-                                                              tssEksternId:
-                                                                  valgtSamhandler.tssEksternId,
-                                                          }
-                                                        : null,
-                                                },
-                                                onClose
-                                            );
-                                        } else {
-                                            settSenderInn(false);
-                                        }
-                                        settVisFeilmelding(true);
-                                    }}
-                                    children={'Opprett fagsak'}
-                                    disabled={senderInn}
-                                    loading={senderInn}
-                                />
-                            </StyledKnappContainer>,
-                        ],
-                        onClose: onClose,
-                        lukkKnapp: true,
-                        tittel: harNormalFagsak
-                            ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-                            : 'Opprett fagsak',
-                        visModal: visModal,
-                        className: 'uimodal-wider',
-                    }}
-                >
-                    <StyledBodyShort>
-                        {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
+                <Modal open={visModal} onClose={onClose} shouldCloseOnOverlayClick={false}>
+                    <StyledModalContent>
+                        <StyledHeading size={'medium'} level={'2'}>
+                            {harNormalFagsak
+                                ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+                                : 'Opprett fagsak'}
+                        </StyledHeading>
+                        <StyledBodyShort>
+                            {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
-                    </StyledBodyShort>
-                    {bruker ? (
-                        <BodyShort>
-                            &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
-                        </BodyShort>
-                    ) : (
-                        <BodyShort>
-                            &ensp;&bull;&ensp;
-                            {`${søkeresultat?.navn || ''} (${formaterIdent(
-                                søkeresultat?.ident || ''
-                            )})`}
-                        </BodyShort>
-                    )}
-                    {harNormalFagsak ? (
-                        valgAvFagsakType()
-                    ) : (
-                        <StyledReadMore
-                            header={'Søker er en institusjon eller enslig mindreårig'}
-                            defaultOpen={false}
-                            onClick={() => {
-                                if (fagsakType !== FagsakType.NORMAL) {
-                                    settFagsakType(FagsakType.NORMAL);
-                                }
-                            }}
-                        >
-                            {valgAvFagsakType()}
-                        </StyledReadMore>
-                    )}
+                        </StyledBodyShort>
+                        {bruker ? (
+                            <BodyShort>
+                                &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
+                            </BodyShort>
+                        ) : (
+                            <BodyShort>
+                                &ensp;&bull;&ensp;
+                                {`${søkeresultat?.navn || ''} (${formaterIdent(
+                                    søkeresultat?.ident || ''
+                                )})`}
+                            </BodyShort>
+                        )}
+                        {harNormalFagsak ? (
+                            valgAvFagsakType()
+                        ) : (
+                            <StyledReadMore
+                                header={'Søker er en institusjon eller enslig mindreårig'}
+                                defaultOpen={false}
+                                onClick={() => {
+                                    if (fagsakType !== FagsakType.NORMAL) {
+                                        settFagsakType(FagsakType.NORMAL);
+                                    }
+                                }}
+                            >
+                                {valgAvFagsakType()}
+                            </StyledReadMore>
+                        )}
 
-                    {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
-                </UIModalWrapper>
+                        {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
+                        <Knapperad>
+                            <KnappHøyre
+                                key={'Bekreft'}
+                                variant={'primary'}
+                                onClick={async () => {
+                                    settSenderInn(true);
+                                    const personIdent =
+                                        søkeresultat?.ident || personInfo?.personIdent;
+
+                                    if (personIdent && (await sjekkTilgang(personIdent))) {
+                                        opprettFagsak(
+                                            {
+                                                personIdent: personIdent,
+                                                aktørId: null,
+                                                fagsakType: fagsakType,
+                                                institusjon: valgtSamhandler
+                                                    ? {
+                                                          orgNummer: valgtSamhandler.orgNummer,
+                                                          tssEksternId:
+                                                              valgtSamhandler.tssEksternId,
+                                                      }
+                                                    : null,
+                                            },
+                                            onClose
+                                        );
+                                    } else {
+                                        settSenderInn(false);
+                                    }
+                                    settVisFeilmelding(true);
+                                }}
+                                disabled={senderInn}
+                                loading={senderInn}
+                            >
+                                Opprett fagsak
+                            </KnappHøyre>
+                            <KnappHøyre key={'avbryt'} variant={'tertiary'} onClick={onClose}>
+                                Avbryt
+                            </KnappHøyre>
+                        </Knapperad>
+                    </StyledModalContent>
+                </Modal>
             )}
         </>
     );
