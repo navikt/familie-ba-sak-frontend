@@ -18,8 +18,8 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
-import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
-import type { FagsakType } from '../../../../../typer/fagsak';
+import { behandlingstemaer, type IBehandlingstema } from '../../../../../typer/behandlingstema';
+import { FagsakType } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
@@ -30,11 +30,15 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { settÅpenBehandling } = useBehandling();
-    const { bruker: brukerRessurs } = useFagsakContext();
+    const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
+    const minimalFagsak =
+        minimalFagsakRessurs.status === RessursStatus.SUKSESS
+            ? minimalFagsakRessurs.data
+            : undefined;
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
@@ -63,11 +67,16 @@ const useOpprettBehandling = (
     });
 
     const behandlingstema = useFelt<IBehandlingstema | undefined>({
-        verdi: undefined,
+        verdi:
+            minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+                ? behandlingstemaer.NASJONAL_INSTITUSJON
+                : undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
+            if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) return false;
+
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
             return (
@@ -80,7 +89,7 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi)
+            felt.verdi && erIsoStringGyldig(felt.verdi) && !erDatoFremITid(felt.verdi)
                 ? ok(felt)
                 : feil(felt, 'Du må velge en ny migreringsdato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
@@ -96,13 +105,24 @@ const useOpprettBehandling = (
 
     const søknadMottattDato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi)
-                ? ok(felt)
-                : feil(
-                      felt,
-                      'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
-                  ),
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) => {
+            const erGyldigIsoString = felt.verdi && erIsoStringGyldig(felt.verdi);
+            const erIFremtiden = felt.verdi && erDatoFremITid(felt.verdi);
+
+            if (!erGyldigIsoString) {
+                return feil(
+                    felt,
+                    'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
+                );
+            }
+
+            if (erIFremtiden) {
+                return feil(felt, 'Du kan ikke sette en mottatt dato som er frem i tid.');
+            }
+
+            return ok(felt);
+        },
+
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -114,6 +134,10 @@ const useOpprettBehandling = (
             );
         },
     });
+
+    const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
+        return Date.parse(dato.toString()) > new Date().getTime();
+    };
 
     const valgteBarn = useFelt({
         verdi: [],

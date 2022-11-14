@@ -246,22 +246,21 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                     </div>
 
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        (!lesevisning ? (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={() => slettValutakurs()}
-                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                    barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
-                                loading={sletterValutakurs}
-                                disabled={sletterValutakurs}
-                                size={'small'}
-                                icon={<Delete />}
-                            >
-                                {'Fjern'}
-                            </Button>
-                        ) : null)}
+                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !lesevisning && (
+                        <Button
+                            variant={'tertiary'}
+                            onClick={() => slettValutakurs()}
+                            id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                barn => `${barn}-`
+                            )}_${skjema.felter.initielFom.verdi}`}
+                            loading={sletterValutakurs}
+                            disabled={sletterValutakurs}
+                            size={'small'}
+                            icon={<Delete />}
+                        >
+                            Fjern
+                        </Button>
+                    )}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
         </SkjemaGruppe>

@@ -10,11 +10,13 @@ export enum BehandlingKategori {
 export enum BehandlingUnderkategori {
     ORDINÆR = 'ORDINÆR',
     UTVIDET = 'UTVIDET',
+    INSTITUSJON = 'INSTITUSJON',
 }
 
 export enum Behandlingstema {
     NASJONAL_ORDINÆR = 'NASJONAL_ORDINÆR',
     NASJONAL_UTVIDET = 'NASJONAL_UTVIDET',
+    NASJONAL_INSTITUSJON = 'NASJONAL_INSTITUSJON',
     EØS_ORDINÆR = 'EØS_ORDINÆR',
     EØS_UTVIDET = 'EØS_UTVIDET',
 }
@@ -30,6 +32,7 @@ export const behandlingKategori: Record<BehandlingKategori, string> = {
 export const behandlingUnderkategori: Record<BehandlingUnderkategori, string> = {
     ORDINÆR: 'Ordinær',
     UTVIDET: 'Utvidet',
+    INSTITUSJON: 'Institusjon',
 };
 
 export interface IBehandlingstema {
@@ -51,6 +54,12 @@ export const behandlingstemaer: Record<Behandlingstema, IBehandlingstema> = {
         underkategori: BehandlingUnderkategori.UTVIDET,
         navn: 'Nasjonal utvidet',
         id: 'NASJONAL_UTVIDET',
+    },
+    NASJONAL_INSTITUSJON: {
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.INSTITUSJON,
+        navn: 'Nasjonal institusjon',
+        id: 'NASJONAL_INSTITUSJON',
     },
     EØS_ORDINÆR: {
         kategori: BehandlingKategori.EØS,

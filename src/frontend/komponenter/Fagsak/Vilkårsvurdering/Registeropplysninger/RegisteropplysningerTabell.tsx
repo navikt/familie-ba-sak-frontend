@@ -139,18 +139,12 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         variant="tertiary"
                         size="small"
                         onClick={() => settEkspandert(nåverdi => !nåverdi)}
+                        icon={erEkspandert ? <Collapse /> : <Expand />}
+                        iconPosition="right"
                     >
-                        {erEkspandert ? (
-                            <>
-                                Skjul
-                                <Collapse />
-                            </>
-                        ) : (
-                            <>
-                                Vis {historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere
-                                <Expand />
-                            </>
-                        )}
+                        {erEkspandert
+                            ? 'Skjul'
+                            : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
                     </Button>
                 </HøyrejustertKnapperad>
             )}

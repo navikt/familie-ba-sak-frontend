@@ -48,13 +48,14 @@ const Høyremeny: React.FunctionComponent = () => {
                     aria-label="Skjul høyremeny"
                     åpenhøyremeny={åpenHøyremeny ? 1 : 0}
                     title={åpenHøyremeny ? 'Skjul høyremeny' : 'Vis høyremeny'}
-                >
-                    {åpenHøyremeny ? (
-                        <NextFilled aria-label="Skjul høyremeny" />
-                    ) : (
-                        <BackFilled aria-label="Vis høyremeny" />
-                    )}
-                </ToggleVisningHøyremeny>
+                    icon={
+                        åpenHøyremeny ? (
+                            <NextFilled aria-label="Skjul høyremeny" />
+                        ) : (
+                            <BackFilled aria-label="Vis høyremeny" />
+                        )
+                    }
+                />
                 {åpenHøyremeny && (
                     <>
                         <Behandlingskort åpenBehandling={åpenBehandling.data} />

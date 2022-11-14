@@ -228,8 +228,8 @@ export const BrukerPanel: React.FC = () => {
                                     variant="tertiary"
                                     size="xsmall"
                                     onClick={nullstillFagsaktype}
+                                    icon={<Cancel />}
                                 >
-                                    <Cancel />
                                     Tilbakestill
                                 </Button>
                             )}

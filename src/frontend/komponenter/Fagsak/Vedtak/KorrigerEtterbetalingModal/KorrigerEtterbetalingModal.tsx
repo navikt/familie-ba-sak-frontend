@@ -199,8 +199,9 @@ const KorrigerEtterbetalingModal: React.FC<IKorrigerEtterbetalingModal> = ({
                                 variant={'tertiary'}
                                 loading={angrerKorrigering}
                                 disabled={angrerKorrigering}
+                                icon={<Cancel />}
                             >
-                                <Cancel /> Angre korrigering
+                                Angre korrigering
                             </AngreKnapp>
                         )}
                         <KnappHøyre

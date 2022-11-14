@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
-import { BodyShort, Button, Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import {
     NavdsSemanticColorBorderMuted,
     NavdsSemanticColorFeedbackDangerBorder,
@@ -17,30 +16,6 @@ import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
-
-interface IEkspanderbarTrProps {
-    ekspandert?: boolean;
-}
-
-export const EkspanderbarTr = styled(Table.Row)`
-    td {
-        border-bottom: ${(props: IEkspanderbarTrProps) =>
-            props.ekspandert
-                ? 'none'
-                : '1px solid rgba(0, 0, 0, 0.15)'} !important; // Denne !important er nødvendig
-        vertical-align: top;
-    }
-
-    & td:last-child {
-        text-align: right;
-        padding-right: 0;
-        padding-left: 0;
-    }
-`;
-
-export const EkspandertTd = styled(Table.DataCell)`
-    padding: 0 1rem 1rem 1.6rem;
-`;
 
 interface IEøsPeriodeSkjemaContainerProps {
     maxWidth?: number;
@@ -128,37 +103,5 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                 <BodyShort size="small">{formatterPeriode(props.periode)}</BodyShort>
             </Table.DataCell>
         </>
-    );
-};
-
-interface IEøsPeriodeEkspanderKnappProps {
-    feilmeldingId: string;
-    toggleForm: (visAlert: boolean) => void;
-    erEkspandert: boolean;
-    periodeStatus: EøsPeriodeStatus;
-    ikkeUtfyltLabel: string;
-}
-
-export const EøsPeriodeEkspanderKnapp = (props: IEøsPeriodeEkspanderKnappProps) => {
-    return (
-        <Button
-            id={props.feilmeldingId}
-            variant="tertiary"
-            onClick={() => props.toggleForm(true)}
-            size="xsmall"
-        >
-            <BodyShort>
-                {!props.erEkspandert
-                    ? props.periodeStatus === EøsPeriodeStatus.OK
-                        ? 'Endre'
-                        : props.ikkeUtfyltLabel
-                    : `Lukk`}
-            </BodyShort>
-            {props.erEkspandert ? (
-                <Collapse width="22" height="22" />
-            ) : (
-                <Expand width="22" height="22" />
-            )}
-        </Button>
     );
 };
