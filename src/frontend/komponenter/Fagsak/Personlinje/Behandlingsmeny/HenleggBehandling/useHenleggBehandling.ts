@@ -38,7 +38,9 @@ const useHenleggBehandling = (lukkModal: () => void) => {
                         ? ok(felt)
                         : feil(
                               felt,
-                              'Du må skrive en begrunnelse som forklarer hvorfor behandlingen henlegges'
+                              'Skriv en begrunnelse som forklarer hvorfor behandlingen henlegges. ' +
+                                  'Dette kan gi andre saksbehandlere bedre grunnlag hvis de gjenopptar saken, og kan gjøre det lettere for teamet å feilsøke. ' +
+                                  'Var det en teknisk feil? Fikk du feilmelding?'
                           ),
             }),
         },
