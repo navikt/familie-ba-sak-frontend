@@ -87,7 +87,7 @@ const VedtaksperiodeListe: React.FC<{
     åpenBehandling: IBehandling;
 }> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
-        return null;
+        return <></>;
     }
 
     return (
