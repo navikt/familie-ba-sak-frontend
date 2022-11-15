@@ -46,6 +46,7 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
         case Brevmal.INNHENTE_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.VARSEL_OM_REVURDERING:
+        case Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
                 åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
@@ -362,6 +363,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const erBrevmalMedObligatoriskFritekst = (brevmal: Brevmal) =>
         [
             Brevmal.VARSEL_OM_REVURDERING,
+            Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON,
             Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
             Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
             Brevmal.FORLENGET_SVARTIDSBREV,
