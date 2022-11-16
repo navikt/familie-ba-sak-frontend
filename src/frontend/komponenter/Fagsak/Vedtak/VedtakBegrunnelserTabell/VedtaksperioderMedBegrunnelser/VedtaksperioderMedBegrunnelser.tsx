@@ -12,6 +12,7 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import ForMyeUtbetaltPanel from './ForMyeUtbetalt/ForMyeUtbetaltPanel';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 const StyledHeading = styled(Heading)`
@@ -74,6 +75,13 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 }
                 åpenBehandling={åpenBehandling}
             />
+
+            <ForMyeUtbetaltListe
+                vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
+                overskrift={'For mye utbetalt barnetrygd'}
+                hjelpetekst={''}
+                åpenBehandling={åpenBehandling}
+            />
         </>
     ) : (
         <Fragment />
@@ -104,6 +112,39 @@ const VedtaksperiodeListe: React.FC<{
                         vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                     >
                         <VedtaksperiodeMedBegrunnelserPanel
+                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                        />
+                    </VedtaksperiodeMedBegrunnelserProvider>
+                )
+            )}
+        </>
+    );
+};
+
+const ForMyeUtbetaltListe: React.FC<{
+    vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
+    overskrift: string;
+    hjelpetekst: string;
+    åpenBehandling: IBehandling;
+}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
+    if (vedtaksperioderMedBegrunnelser.length === 0) {
+        return <></>;
+    }
+
+    return (
+        <>
+            <StyledHeading level="2" size="small" spacing>
+                {overskrift}
+                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
+            </StyledHeading>
+            {vedtaksperioderMedBegrunnelser.map(
+                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
+                    <VedtaksperiodeMedBegrunnelserProvider
+                        key={vedtaksperiodeMedBegrunnelser.id}
+                        åpenBehandling={åpenBehandling}
+                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                    >
+                        <ForMyeUtbetaltPanel
                             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                         />
                     </VedtaksperiodeMedBegrunnelserProvider>
