@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { GroupBase } from 'react-select';
 import styled from 'styled-components';
@@ -14,7 +14,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
-import { vedtakBegrunnelseTyper } from '../../../../../typer/vedtak';
+import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     finnVedtakBegrunnelseType,
@@ -44,10 +44,19 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         grupperteBegrunnelser,
         standardBegrunnelserPut,
         vedtaksperiodeMedBegrunnelser,
+        genererteBrevbegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<ISelectOption[]>([]);
+
+    const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
+    const enkeltverdierSomKanSettesAutomatisk = [
+        'INNVILGET_SATSENDRING',
+        Standardbegrunnelse.REDUKSJON_SATSENDRING,
+        Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
+        Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
+    ];
 
     useEffect(() => {
         if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
@@ -59,6 +68,31 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             );
         }
     }, [vedtaksperiodeMedBegrunnelser, vedtaksbegrunnelseTekster]);
+
+    useEffect(() => {
+        if (!skalAutomatiskUtfylle.current) {
+            return;
+        }
+        if (
+            vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS &&
+            genererteBrevbegrunnelser.status === RessursStatus.SUKSESS
+        ) {
+            const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
+            if (
+                genererteBrevbegrunnelser.data.length === 0 &&
+                valgmuligheter.length === 1 &&
+                enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
+            ) {
+                onChangeBegrunnelse({
+                    action: 'select-option',
+                    option: valgmuligheter[0],
+                });
+            }
+        } else {
+            return;
+        }
+        skalAutomatiskUtfylle.current = false;
+    }, [genererteBrevbegrunnelser, grupperteBegrunnelser, vedtaksbegrunnelseTekster]);
 
     return (
         <FamilieReactSelect
