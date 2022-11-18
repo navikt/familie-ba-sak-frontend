@@ -3,8 +3,11 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { NedChevron } from 'nav-frontend-chevron';
+
+import { Calculator, FileContent, InformationColored, Notes } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -52,6 +55,19 @@ const StyledFlexiDiv = styled(FlexDiv)`
 
 const StyleHeading = styled(Heading)`
     display: flex;
+`;
+
+const StyledDropdownMeny = styled(Dropdown.Menu)`
+    padding: 0;
+    width: 19rem;
+`;
+
+const StyledDropdownMenyItem = styled(Dropdown.Menu.List.Item)`
+    font-size: 1rem;
+`;
+
+const PosisjonertMenyknapp = styled(Button)`
+    margin-left: 3rem;
 `;
 
 const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
@@ -153,6 +169,25 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
+                    <Dropdown>
+                        <PosisjonertMenyknapp
+                            variant="secondary"
+                            size="small"
+                            icon={<NedChevron />}
+                            iconPosition={'right'}
+                            forwardedAs={Dropdown.Toggle}
+                        >
+                            Vedtaksmeny
+                        </PosisjonertMenyknapp>
+                        <StyledDropdownMeny>
+                            <Dropdown.Menu.List>
+                                <StyledDropdownMenyItem onClick={() => navigate(`/`)}>
+                                    <Calculator />
+                                    Legg til trekk i løpende utbetaling
+                                </StyledDropdownMenyItem>
+                            </Dropdown.Menu.List>
+                        </StyledDropdownMeny>
+                    </Dropdown>
                 </StyledFlexiDiv>
             }
             forrigeOnClick={() =>
