@@ -48,6 +48,11 @@ export enum VedtakBegrunnelseType {
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
     ENDRET_UTBETALING = 'ENDRET_UTBETALING',
     ETTER_ENDRET_UTBETALING = 'ETTER_ENDRET_UTBETALING',
+    INSTITUSJON_INNVILGET = 'INSTITUSJON_INNVILGET',
+    INSTITUSJON_REDUKSJON = 'INSTITUSJON_REDUKSJON',
+    INSTITUSJON_AVSLAG = 'INSTITUSJON_AVSLAG',
+    INSTITUSJON_OPPHØR = 'INSTITUSJON_OPPHØR',
+    INSTITUSJON_FORTSATT_INNVILGET = 'INSTITUSJON_FORTSATT_INNVILGET',
 }
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
@@ -60,6 +65,11 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
     ENDRET_UTBETALING: 'Endret utbetaling',
     ETTER_ENDRET_UTBETALING: 'Etter endret utbetaling',
+    INSTITUSJON_INNVILGET: 'Institusjon - innvilgelse',
+    INSTITUSJON_REDUKSJON: 'Institusjon - reduksjon',
+    INSTITUSJON_AVSLAG: 'Institusjon - avslag',
+    INSTITUSJON_OPPHØR: 'Institusjon - opphør',
+    INSTITUSJON_FORTSATT_INNVILGET: 'Institusjon - fortsatt innvilget',
 };
 
 export enum Standardbegrunnelse {

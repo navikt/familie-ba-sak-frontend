@@ -110,12 +110,17 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGET:
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
+        case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
+        case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
+        case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
             return navFarger.redErrorLighten80;
         case VedtakBegrunnelseType.REDUKSJON:
+        case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
             return navFarger.navOransjeLighten80;
         case VedtakBegrunnelseType.OPPHØR:
+        case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
             return navFarger.navLysGra;
         default:
             return navFarger.navBlaLighten80;
@@ -126,12 +131,17 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGET:
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
+        case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
+        case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
+        case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
             return navFarger.redErrorDarken20;
         case VedtakBegrunnelseType.REDUKSJON:
+        case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
             return navFarger.navOransjeDarken20;
         case VedtakBegrunnelseType.OPPHØR:
+        case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
             return navFarger.navGra60;
         default:
             return navFarger.navBlaLighten80;
