@@ -78,7 +78,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
             <ForMyeUtbetaltListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
-                overskrift={'For mye utbetalt barnetrygd'}
+                overskrift={'Trekk i løpende utbetaling'}
                 hjelpetekst={''}
                 åpenBehandling={åpenBehandling}
             />

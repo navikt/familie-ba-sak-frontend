@@ -25,6 +25,7 @@ import {
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
+import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -117,6 +118,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
+    const skalViseMeny =
+        åpenBehandling.type === Behandlingstype.REVURDERING &&
+        åpenBehandling.kategori === BehandlingKategori.EØS;
+
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
         const rolle = hentSaksbehandlerRolle();
@@ -169,25 +174,27 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
-                    <Dropdown>
-                        <PosisjonertMenyknapp
-                            variant="secondary"
-                            size="small"
-                            icon={<NedChevron />}
-                            iconPosition={'right'}
-                            forwardedAs={Dropdown.Toggle}
-                        >
-                            Vedtaksmeny
-                        </PosisjonertMenyknapp>
-                        <StyledDropdownMeny>
-                            <Dropdown.Menu.List>
-                                <StyledDropdownMenyItem onClick={() => navigate(`/`)}>
-                                    <Calculator />
-                                    Legg til trekk i løpende utbetaling
-                                </StyledDropdownMenyItem>
-                            </Dropdown.Menu.List>
-                        </StyledDropdownMeny>
-                    </Dropdown>
+                    {skalViseMeny && (
+                        <Dropdown>
+                            <PosisjonertMenyknapp
+                                variant="secondary"
+                                size="small"
+                                icon={<NedChevron />}
+                                iconPosition={'right'}
+                                forwardedAs={Dropdown.Toggle}
+                            >
+                                Vedtaksmeny
+                            </PosisjonertMenyknapp>
+                            <StyledDropdownMeny>
+                                <Dropdown.Menu.List>
+                                    <StyledDropdownMenyItem onClick={() => navigate(`/`)}>
+                                        <Calculator />
+                                        Legg til trekk i løpende utbetaling
+                                    </StyledDropdownMenyItem>
+                                </Dropdown.Menu.List>
+                            </StyledDropdownMeny>
+                        </Dropdown>
+                    )}
                 </StyledFlexiDiv>
             }
             forrigeOnClick={() =>
