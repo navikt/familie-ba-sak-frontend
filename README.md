@@ -76,3 +76,4 @@ Fra og med Windows 10 følge det med eget Subsystem for Linux i Windows.
 * Legg til .env fila (se beskrivelsen over)
 
 Anbefaler også å laste ned Visual Studio Code fra Microsoft store for å kunne åpne og redigere filene i Linux uten å gå via terminalen. Det gjør det også betydelig lettere å legge til .env fila.
+
