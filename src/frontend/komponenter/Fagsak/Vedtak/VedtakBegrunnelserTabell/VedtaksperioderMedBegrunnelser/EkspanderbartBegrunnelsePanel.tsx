@@ -6,9 +6,10 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 
+import type { Periode } from '../../../../../typer/periode';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import { formaterBeløp, summer } from '../../../../../utils/formatter';
+import { hentVedtaksperiodeTittel } from '../../../../../typer/vedtaksperiode';
+import { formaterBeløp } from '../../../../../utils/formatter';
 import {
     erEtter,
     kalenderDatoMedFallback,
@@ -40,6 +41,9 @@ interface IEkspanderbartBegrunnelsePanelProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    periode: Periode;
+    skalViseSum: boolean;
+    summer: () => number;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
@@ -50,12 +54,10 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     åpen,
     onClick,
     children,
+    periode,
+    skalViseSum,
+    summer,
 }) => {
-    const periode = {
-        fom: vedtaksperiodeMedBegrunnelser.fom,
-        tom: vedtaksperiodeMedBegrunnelser.tom,
-    };
-
     const vedtaksperiodeTittel = hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser);
 
     return (
@@ -76,21 +78,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                         </Label>
                     )}
                     <BodyShort>{vedtaksperiodeTittel}</BodyShort>
-                    {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
-                        vedtaksperiodeMedBegrunnelser.type ===
-                            Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING) &&
-                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
-                            <BodyShort>
-                                {formaterBeløp(
-                                    summer(
-                                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.map(
-                                            utbetalingsperiodeDetalj =>
-                                                utbetalingsperiodeDetalj.utbetaltPerMnd
-                                        )
-                                    )
-                                )}
-                            </BodyShort>
-                        )}
+                    {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
                 </PanelTittel>
             }
         >
