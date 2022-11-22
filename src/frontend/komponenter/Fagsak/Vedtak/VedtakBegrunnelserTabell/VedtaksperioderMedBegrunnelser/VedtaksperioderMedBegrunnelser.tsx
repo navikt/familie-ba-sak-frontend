@@ -12,7 +12,7 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import ForMyeUtbetaltPanel from './ForMyeUtbetalt/ForMyeUtbetaltPanel';
+import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingPanel';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 const StyledHeading = styled(Heading)`
@@ -76,7 +76,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 åpenBehandling={åpenBehandling}
             />
 
-            <ForMyeUtbetaltListe
+            <TrekkILøpendeUtbetalingListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Trekk i løpende utbetaling'}
                 hjelpetekst={''}
@@ -121,7 +121,7 @@ const VedtaksperiodeListe: React.FC<{
     );
 };
 
-const ForMyeUtbetaltListe: React.FC<{
+const TrekkILøpendeUtbetalingListe: React.FC<{
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     hjelpetekst: string;
@@ -144,7 +144,7 @@ const ForMyeUtbetaltListe: React.FC<{
                         åpenBehandling={åpenBehandling}
                         vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                     >
-                        <ForMyeUtbetaltPanel
+                        <TrekkILøpendeUtbetalingPanel
                             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                         />
                     </VedtaksperiodeMedBegrunnelserProvider>

@@ -55,7 +55,7 @@ const KnappHøyre = styled(Button)`
     margin: 0.5rem 1rem 0.5rem 1rem;
 `;
 
-const ForMyeUtbetaltPanel: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
+const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
     const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeMedBegrunnelser();
     const [fomDato, settFomDato] = useState<ISODateString | undefined>();
     const [tomDato, settTomDato] = useState<ISODateString | undefined>();
@@ -179,4 +179,4 @@ const ForMyeUtbetaltPanel: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }
         </EkspanderbartBegrunnelsePanel>
     );
 };
-export default ForMyeUtbetaltPanel;
+export default TrekkILøpendeUtbetalingPanel;
