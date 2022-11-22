@@ -3,8 +3,10 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { ExpandFilled, FileContent, InformationColored, Notes } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
+import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -28,7 +30,6 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
@@ -50,10 +51,6 @@ const StyledFlexiDiv = styled(FlexDiv)`
     max-width: 49rem;
 `;
 
-const StyleHeading = styled(Heading)`
-    display: flex;
-`;
-
 const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
@@ -69,6 +66,13 @@ const KnappHøyre = styled(Button)`
 const Knapperad = styled.div`
     display: flex;
     justify-content: center;
+`;
+
+const KnappHøyreHjørne = styled(Button)`
+    position: absolute;
+    top: ${NavdsSpacing10};
+    right: ${NavdsSpacing10};
+}
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -147,12 +151,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         <StyledSkjemaSteg
             tittel={
                 <StyledFlexiDiv>
-                    <StyleHeading size="large" level="1">
-                        Vedtak
-                    </StyleHeading>
-                    {åpenBehandling.endringstidspunkt && (
-                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
-                    )}
+                    <span>Vedtak</span>
                 </StyledFlexiDiv>
             }
             forrigeOnClick={() =>
@@ -166,6 +165,23 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
+            <Dropdown>
+                <KnappHøyreHjørne
+                    forwardedAs={Dropdown.Toggle}
+                    size="small"
+                    variant="secondary"
+                    icon={<ExpandFilled />}
+                    iconPosition="right"
+                >
+                    Vedtak
+                </KnappHøyreHjørne>
+                <Dropdown.Menu>
+                    <Dropdown.Menu.List>
+                        <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
+                        <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
+                    </Dropdown.Menu.List>
+                </Dropdown.Menu>
+            </Dropdown>
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal
