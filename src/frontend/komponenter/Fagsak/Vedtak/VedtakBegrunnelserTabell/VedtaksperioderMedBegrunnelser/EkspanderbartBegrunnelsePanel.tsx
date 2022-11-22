@@ -7,8 +7,6 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { BodyShort, Label } from '@navikt/ds-react';
 
 import type { Periode } from '../../../../../typer/periode';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import { hentVedtaksperiodeTittel } from '../../../../../typer/vedtaksperiode';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import {
     erEtter,
@@ -38,28 +36,26 @@ const PanelTittel = styled.div`
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
     periode: Periode;
     skalViseSum: boolean;
     summer: () => number;
+    tittel: string | undefined;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
-    vedtaksperiodeMedBegrunnelser,
     åpen,
     onClick,
     children,
     periode,
     skalViseSum,
     summer,
+    tittel,
 }) => {
-    const vedtaksperiodeTittel = hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser);
-
     return (
         <StyledEkspanderbartpanelBase
             key={`${periode.fom}_${periode.tom}`}
@@ -77,7 +73,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                             })}
                         </Label>
                     )}
-                    <BodyShort>{vedtaksperiodeTittel}</BodyShort>
+                    {tittel && <BodyShort>{tittel}</BodyShort>}
                     {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
                 </PanelTittel>
             }
