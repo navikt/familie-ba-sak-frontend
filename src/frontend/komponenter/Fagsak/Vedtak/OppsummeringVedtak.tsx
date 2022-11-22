@@ -3,10 +3,8 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ExpandFilled, FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
-import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -31,6 +29,7 @@ import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtt
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksmeny from './Vedtaksmeny';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -62,13 +61,6 @@ const KnappHøyre = styled(Button)`
 const Knapperad = styled.div`
     display: flex;
     justify-content: center;
-`;
-
-const KnappHøyreHjørne = styled(Button)`
-    position: absolute;
-    top: ${NavdsSpacing10};
-    right: ${NavdsSpacing10};
-}
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -161,23 +153,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
-            <Dropdown>
-                <KnappHøyreHjørne
-                    forwardedAs={Dropdown.Toggle}
-                    size="small"
-                    variant="secondary"
-                    icon={<ExpandFilled />}
-                    iconPosition="right"
-                >
-                    Vedtak
-                </KnappHøyreHjørne>
-                <Dropdown.Menu>
-                    <Dropdown.Menu.List>
-                        <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
-                        <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
-                    </Dropdown.Menu.List>
-                </Dropdown.Menu>
-            </Dropdown>
+            <Vedtaksmeny />
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal
