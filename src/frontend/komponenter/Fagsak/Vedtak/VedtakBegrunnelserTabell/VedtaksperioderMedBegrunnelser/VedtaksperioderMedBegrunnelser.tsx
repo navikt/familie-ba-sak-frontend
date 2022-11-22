@@ -75,7 +75,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 åpenBehandling={åpenBehandling}
             />
             <TrekkILøpendeUtbetalingListe
-                vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
+                trekkILøpendeUtbetalinger={avslagOgResterende[0]}
                 overskrift={'Trekk i løpende utbetaling'}
                 hjelpetekst={''}
                 åpenBehandling={åpenBehandling}

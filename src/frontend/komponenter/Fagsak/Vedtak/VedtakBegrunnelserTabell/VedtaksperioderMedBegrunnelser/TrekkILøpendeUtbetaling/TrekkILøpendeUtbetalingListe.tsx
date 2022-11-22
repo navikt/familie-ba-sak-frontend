@@ -24,12 +24,12 @@ const StyledHelpText = styled(HelpText)`
 `;
 
 export const TrekkILøpendeUtbetalingListe: React.FC<{
-    vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
+    trekkILøpendeUtbetalinger: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     hjelpetekst: string;
     åpenBehandling: IBehandling;
-}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
-    if (vedtaksperioderMedBegrunnelser.length === 0) {
+}> = ({ trekkILøpendeUtbetalinger, overskrift, hjelpetekst, åpenBehandling }) => {
+    if (trekkILøpendeUtbetalinger.length === 0) {
         return <></>;
     }
 
@@ -39,15 +39,15 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                 {overskrift}
                 <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
             </StyledHeading>
-            {vedtaksperioderMedBegrunnelser.map(
-                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
+            {trekkILøpendeUtbetalinger.map(
+                (trekkILøpendeUtbetaling: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
-                        key={vedtaksperiodeMedBegrunnelser.id}
+                        key={trekkILøpendeUtbetaling.id}
                         åpenBehandling={åpenBehandling}
-                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                        vedtaksperiodeMedBegrunnelser={trekkILøpendeUtbetaling}
                     >
                         <TrekkILøpendeUtbetalingPanel
-                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                            vedtaksperiodeMedBegrunnelser={trekkILøpendeUtbetaling}
                         />
                     </VedtaksperiodeMedBegrunnelserProvider>
                 )
