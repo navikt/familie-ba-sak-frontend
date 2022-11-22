@@ -12,7 +12,7 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingPanel';
+import { TrekkILøpendeUtbetalingListe } from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 const StyledHeading = styled(Heading)`
@@ -66,7 +66,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 }
                 åpenBehandling={åpenBehandling}
             />
-
             <VedtaksperiodeListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Begrunnelser for avslag i vedtaksbrev'}
@@ -75,7 +74,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 }
                 åpenBehandling={åpenBehandling}
             />
-
             <TrekkILøpendeUtbetalingListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Trekk i løpende utbetaling'}
@@ -112,39 +110,6 @@ const VedtaksperiodeListe: React.FC<{
                         vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                     >
                         <VedtaksperiodeMedBegrunnelserPanel
-                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                        />
-                    </VedtaksperiodeMedBegrunnelserProvider>
-                )
-            )}
-        </>
-    );
-};
-
-const TrekkILøpendeUtbetalingListe: React.FC<{
-    vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
-    overskrift: string;
-    hjelpetekst: string;
-    åpenBehandling: IBehandling;
-}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
-    if (vedtaksperioderMedBegrunnelser.length === 0) {
-        return <></>;
-    }
-
-    return (
-        <>
-            <StyledHeading level="2" size="small" spacing>
-                {overskrift}
-                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
-            </StyledHeading>
-            {vedtaksperioderMedBegrunnelser.map(
-                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                    <VedtaksperiodeMedBegrunnelserProvider
-                        key={vedtaksperiodeMedBegrunnelser.id}
-                        åpenBehandling={åpenBehandling}
-                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                    >
-                        <TrekkILøpendeUtbetalingPanel
                             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                         />
                     </VedtaksperiodeMedBegrunnelserProvider>
