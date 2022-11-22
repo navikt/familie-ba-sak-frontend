@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
-import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -39,11 +39,6 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     .typo-innholdstittel {
         margin-bottom: 1.4rem;
     }
-`;
-
-const StyledFlexiDiv = styled(FlexDiv)`
-    justify-content: space-between;
-    max-width: 49rem;
 `;
 
 const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
@@ -137,11 +132,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     return (
         <StyledSkjemaSteg
-            tittel={
-                <StyledFlexiDiv>
-                    <span>Vedtak</span>
-                </StyledFlexiDiv>
-            }
+            tittel="Vedtak"
             forrigeOnClick={() =>
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
