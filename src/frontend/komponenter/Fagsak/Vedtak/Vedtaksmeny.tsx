@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { ExpandFilled } from '@navikt/ds-icons';
+import { Calender, ExpandFilled, Notes } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
@@ -11,6 +11,10 @@ const KnappHøyreHjørne = styled(Button)`
     position: absolute;
     top: ${NavdsSpacing10};
     right: ${NavdsSpacing10};
+`;
+
+const StyledDropdownMeny = styled(Dropdown.Menu)`
+    width: 36ch;
 `;
 
 const Vedtaksmeny: React.FunctionComponent = () => {
@@ -25,12 +29,18 @@ const Vedtaksmeny: React.FunctionComponent = () => {
             >
                 Vedtak
             </KnappHøyreHjørne>
-            <Dropdown.Menu>
+            <StyledDropdownMeny>
                 <Dropdown.Menu.List>
-                    <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
-                    <Dropdown.Menu.List.Item>Test</Dropdown.Menu.List.Item>
+                    <Dropdown.Menu.List.Item>
+                        <Notes />
+                        Korriger etterbetaling i vedtak
+                    </Dropdown.Menu.List.Item>
+                    <Dropdown.Menu.List.Item>
+                        <Calender />
+                        Oppdater endringstidspunkt
+                    </Dropdown.Menu.List.Item>
                 </Dropdown.Menu.List>
-            </Dropdown.Menu>
+            </StyledDropdownMeny>
         </Dropdown>
     );
 };
