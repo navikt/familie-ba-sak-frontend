@@ -160,7 +160,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={erMigreringFraInfotrygd ? 'Bekreft migrering' : 'Til godkjenning'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-            maxWidthStyle="100%"
+            maxWidthStyle="54rem"
             className={'vedtak'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
