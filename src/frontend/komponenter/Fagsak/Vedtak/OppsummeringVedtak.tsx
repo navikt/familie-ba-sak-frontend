@@ -36,10 +36,6 @@ interface IVedtakProps {
     åpenBehandling: IBehandling;
 }
 
-const Container = styled.div`
-    max-width: 49rem;
-`;
-
 const StyledSkjemaSteg = styled(Skjemasteg)`
     .typo-innholdstittel {
         margin-bottom: 1.4rem;
@@ -206,7 +202,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
                         }
                     />
-                    <Container>
+                    <div>
                         {åpenBehandling.korrigertEtterbetaling && (
                             <KorrigertEtterbetalingsbeløpAlert variant="info">
                                 Etterbetalingsbeløp i brevet er manuelt korrigert
@@ -272,7 +268,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <>Korriger etterbetaling</>
                             )}
                         </Button>
-                    </Container>
+                    </div>
 
                     <Modal
                         open={visModal}
