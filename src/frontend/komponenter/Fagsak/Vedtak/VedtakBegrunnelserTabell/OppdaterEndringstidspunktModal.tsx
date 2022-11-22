@@ -8,6 +8,7 @@ import { Button } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
@@ -31,6 +32,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
     oppdaterEndringstidspunkt,
     skjema,
 }) => {
+    const { vurderErLesevisning } = useBehandling();
     return (
         <UIModalWrapper
             modal={{
@@ -70,6 +72,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                         valgtDato={skjema.felter.endringstidspunkt.verdi}
                         label={'Endringstidspunkt'}
                         placeholder={'DD.MM.ÅÅÅÅ'}
+                        erLesesvisning={vurderErLesevisning()}
                     />
                 </Feltmargin>
             </SkjemaGruppe>
