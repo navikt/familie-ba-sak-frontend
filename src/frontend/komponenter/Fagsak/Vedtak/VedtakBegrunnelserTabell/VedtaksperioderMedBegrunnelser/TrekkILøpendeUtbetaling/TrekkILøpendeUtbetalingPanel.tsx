@@ -122,10 +122,6 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                 error={''}
                 erLesevisning={false}
             />
-            <Alert variant="info" style={{ marginBottom: '1.5rem' }} inline>
-                Husk å sende melding til NØS
-            </Alert>
-
             <Knapperad>
                 <Button
                     onClick={leggTilPeriode}
