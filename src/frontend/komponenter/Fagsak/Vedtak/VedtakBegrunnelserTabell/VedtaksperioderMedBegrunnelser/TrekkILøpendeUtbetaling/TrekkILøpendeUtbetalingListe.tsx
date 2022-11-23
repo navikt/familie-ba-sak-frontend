@@ -27,10 +27,8 @@ const StyledHelpText = styled(HelpText)`
 `;
 
 export const TrekkILøpendeUtbetalingListe: React.FC<{
-    overskrift: string;
-    hjelpetekst: string;
     åpenBehandling: IBehandling;
-}> = ({ overskrift, hjelpetekst, åpenBehandling }) => {
+}> = ({ åpenBehandling }) => {
     const { request } = useHttp();
     const [trekkILøpendeUtbetalinger, settTrekkILøpendeUtbetalinger] = useState<
         ITrekkILøpendeUtbetaling[]
@@ -72,8 +70,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     return (
         <>
             <StyledHeading level="2" size="small" spacing>
-                {overskrift}
-                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
+                Trekk i løpende utbetaling
             </StyledHeading>
             {trekkILøpendeUtbetalinger.map((trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => (
                 <TrekkILøpendeUtbetalingProvider
