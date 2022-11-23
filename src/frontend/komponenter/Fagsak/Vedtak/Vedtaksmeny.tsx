@@ -47,13 +47,11 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
             <StyledDropdownMeny>
                 <Dropdown.Menu.List>
                     {erBehandlingMedVedtaksbrevutsending && (
-                        <>
-                            <KorrigerEtterbetaling
-                                erLesevisning={vurderErLesevisning()}
-                                korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
-                                behandlingId={åpenBehandling.behandlingId}
-                            />
-                        </>
+                        <KorrigerEtterbetaling
+                            erLesevisning={vurderErLesevisning()}
+                            korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
+                            behandlingId={åpenBehandling.behandlingId}
+                        />
                     )}
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
