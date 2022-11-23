@@ -15,7 +15,7 @@ import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 
 const Feltmargin = styled.div`
-    margin: 2rem 0;
+    margin: 1.5rem 0 2rem;
 `;
 
 const StyledModal = styled(Modal)`
@@ -28,7 +28,7 @@ const KnappHøyre = styled(Button)`
 
 const Knapperad = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 `;
 
 interface IProps {
@@ -49,7 +49,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
     return (
         <StyledModal open={visModal} onClose={onAvbryt}>
             <Modal.Content>
-                <Heading size="medium" level="2" spacing>
+                <Heading size="medium" level="2">
                     Oppdater endringstidspunkt
                 </Heading>
                 <SkjemaGruppe
@@ -70,26 +70,24 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                 </SkjemaGruppe>
                 <Knapperad>
                     {erLesevisning ? (
-                        <Button variant="primary" key="Lukk" size="small">
+                        <Button variant="primary" key="Lukk">
                             Lukk
                         </Button>
                     ) : (
                         <>
                             <Button
-                                variant={'tertiary'}
-                                key={'Avbryt'}
-                                size={'small'}
-                                onClick={onAvbryt}
-                                children={'Avbryt'}
-                            />
-                            <KnappHøyre
                                 variant={'primary'}
                                 key={'Oppdater'}
-                                size={'small'}
                                 onClick={oppdaterEndringstidspunkt}
                                 children={'Oppdater'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            />
+                            <KnappHøyre
+                                variant={'tertiary'}
+                                key={'Avbryt'}
+                                onClick={onAvbryt}
+                                children={'Avbryt'}
                             />
                         </>
                     )}
