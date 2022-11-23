@@ -7,14 +7,13 @@ import { Alert, Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import { datoformatNorsk } from '../../../../../../utils/formatter';
 import { useVedtaksperiodeMedBegrunnelser } from '../../Context/VedtaksperiodeMedBegrunnelserContext';
-import Utbetalingsresultat from '../../Felles/Utbetalingsresultat';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
+import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 
 interface IProps {
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
+    trekkILøpendeUtbetalinger: ITrekkILøpendeUtbetaling;
 }
 
 const baseSkjemaelementStyle = css`
@@ -55,7 +54,7 @@ const KnappHøyre = styled(Button)`
     margin: 0.5rem 1rem 0.5rem 1rem;
 `;
 
-const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
+const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetalinger }) => {
     const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeMedBegrunnelser();
     const [fomDato, settFomDato] = useState<ISODateString | undefined>();
     const [tomDato, settTomDato] = useState<ISODateString | undefined>();
@@ -68,17 +67,20 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ vedtaksperiodeMedBegr
         console.log('');
     };
 
+    const periode = {
+        fom: '',
+        tom: '', //TODO
+    };
+
     return (
         <EkspanderbartBegrunnelsePanel
-            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(true)}
+            periode={periode}
+            skalViseSum={false}
+            summer={() => 0} // TODO
+            tittel={undefined}
         >
-            <Utbetalingsresultat
-                utbetalingsperiodeDetaljer={
-                    vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer
-                }
-            />
             <Label>Angi periode med feilutbetalt beløp</Label>
 
             <FlexDiv>
