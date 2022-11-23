@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { FileContent } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -25,7 +25,6 @@ import {
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
@@ -82,8 +81,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisDokumentModal,
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
-        React.useState<boolean>(false);
 
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
@@ -144,7 +141,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
-            <Vedtaksmeny åpenBehandling={åpenBehandling} />
+            <Vedtaksmeny
+                åpenBehandling={åpenBehandling}
+                erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
+            />
+
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal
@@ -159,15 +160,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             nullstillDokument();
                         }}
                         pdfdata={hentetDokument}
-                    />
-                    <KorrigerEtterbetalingModal
-                        erLesevisning={vurderErLesevisning()}
-                        korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
-                        behandlingId={åpenBehandling.behandlingId}
-                        visModal={visKorrigerEtterbetalingModal}
-                        onClose={() =>
-                            setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
-                        }
                     />
                     <div>
                         {åpenBehandling.korrigertEtterbetaling && (
@@ -214,26 +206,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             icon={<FileContent aria-hidden />}
                         >
                             Vis vedtaksbrev
-                        </Button>
-                        <Button
-                            id={'korriger-etterbetaling'}
-                            variant={'tertiary'}
-                            size={'small'}
-                            style={{ float: 'right' }}
-                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
-                            icon={
-                                åpenBehandling.korrigertEtterbetaling ? (
-                                    <InformationColored aria-hidden />
-                                ) : (
-                                    <Notes aria-hidden />
-                                )
-                            }
-                        >
-                            {åpenBehandling.korrigertEtterbetaling ? (
-                                <>Vis korrigert etterbetaling</>
-                            ) : (
-                                <>Korriger etterbetaling</>
-                            )}
                         </Button>
                     </div>
 
