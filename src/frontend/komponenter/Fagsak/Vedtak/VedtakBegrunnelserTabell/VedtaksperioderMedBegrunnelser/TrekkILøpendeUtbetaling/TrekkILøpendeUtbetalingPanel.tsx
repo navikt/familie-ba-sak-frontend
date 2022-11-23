@@ -6,8 +6,10 @@ import { Delete } from '@navikt/ds-icons';
 import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 
 import { datoformatNorsk } from '../../../../../../utils/formatter';
+import type { YearMonth } from '../../../../../../utils/kalender';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
@@ -57,12 +59,22 @@ const KnappHøyre = styled(Button)`
 
 const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetaling, fjern }) => {
     const { erPanelEkspandert, onPanelClose } = useTrekkILøpendeUtbetalingProvider();
-    const [fomDato, settFomDato] = useState<ISODateString | undefined>();
-    const [tomDato, settTomDato] = useState<ISODateString | undefined>();
+    const [fomDato, settFomDato] = useState<YearMonth | undefined>();
+    const [tomDato, settTomDato] = useState<YearMonth | undefined>();
     const [beløp, settBeløp] = useState<string | undefined>();
+    const { request } = useHttp();
 
-    const leggTilPeriode = () => {
-        console.log('');
+    const leggTilPeriode = async () => {
+        await request<ITrekkILøpendeUtbetaling, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+            data: {
+                ...trekkILøpendeUtbetaling,
+                fom: fomDato,
+                tom: tomDato,
+                feilutbetaltBeløp: Number(beløp || 0),
+            },
+        });
     };
     const avbryt = () => {
         console.log('');
