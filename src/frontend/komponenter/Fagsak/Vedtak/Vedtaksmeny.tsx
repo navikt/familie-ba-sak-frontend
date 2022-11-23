@@ -8,6 +8,7 @@ import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IBehandling } from '../../../typer/behandling';
+import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
@@ -47,10 +48,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({ åpenBehandlin
                         Korriger etterbetaling i vedtak
                     </Dropdown.Menu.List.Item>
                     {åpenBehandling.endringstidspunkt && (
-                        <Dropdown.Menu.List.Item>
-                            <Calender />
-                            Oppdater endringstidspunkt
-                        </Dropdown.Menu.List.Item>
+                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
