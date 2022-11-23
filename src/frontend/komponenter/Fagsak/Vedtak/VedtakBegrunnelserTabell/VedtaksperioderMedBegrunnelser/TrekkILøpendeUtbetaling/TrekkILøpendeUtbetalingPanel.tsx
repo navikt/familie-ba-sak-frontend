@@ -68,8 +68,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
     };
 
     const periode = {
-        fom: '',
-        tom: '', //TODO
+        fom: fomDato,
+        tom: tomDato,
     };
 
     return (
@@ -77,8 +77,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(true)}
             periode={periode}
-            skalViseSum={false}
-            summer={() => 0} // TODO
+            skalViseSum={true}
+            summer={() => Number(beløp || 0)}
             tittel={undefined}
         >
             <Label>Angi periode med feilutbetalt beløp</Label>
