@@ -8,12 +8,12 @@ import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
 import { datoformatNorsk } from '../../../../../../utils/formatter';
-import { useVedtaksperiodeMedBegrunnelser } from '../../Context/VedtaksperiodeMedBegrunnelserContext';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
+import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
 interface IProps {
-    trekkILøpendeUtbetalinger: ITrekkILøpendeUtbetaling;
+    trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
 }
 
 const baseSkjemaelementStyle = css`
@@ -54,8 +54,8 @@ const KnappHøyre = styled(Button)`
     margin: 0.5rem 1rem 0.5rem 1rem;
 `;
 
-const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetalinger }) => {
-    const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeMedBegrunnelser();
+const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetaling }) => {
+    const { erPanelEkspandert, onPanelClose } = useTrekkILøpendeUtbetalingProvider();
     const [fomDato, settFomDato] = useState<ISODateString | undefined>();
     const [tomDato, settTomDato] = useState<ISODateString | undefined>();
     const [beløp, settBeløp] = useState<string | undefined>();
@@ -75,7 +75,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
     return (
         <EkspanderbartBegrunnelsePanel
             åpen={erPanelEkspandert}
-            onClick={() => onPanelClose(true)}
+            onClick={() => erPanelEkspandert} // TODO
             periode={periode}
             skalViseSum={true}
             summer={() => Number(beløp || 0)}

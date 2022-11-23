@@ -43,11 +43,14 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
 
     const leggTilNyPeriode = () => {
         const ider = trekkILøpendeUtbetalinger.map(trekk => trekk.id);
-        trekkILøpendeUtbetalinger.push({
-            id: Math.max(0, Math.max(...ider) + 1),
-            behandlingId: åpenBehandling.behandlingId,
-            feilutbetaltBeløp: 0,
-        });
+        settTrekkILøpendeUtbetalinger([
+            ...trekkILøpendeUtbetalinger,
+            {
+                id: Math.max(0, Math.max(...ider) + 1),
+                behandlingId: åpenBehandling.behandlingId,
+                feilutbetaltBeløp: 0,
+            },
+        ]);
     };
 
     useEffect(() => {
@@ -70,7 +73,8 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                 >
                     <TrekkILøpendeUtbetalingPanel
-                        trekkILøpendeUtbetalinger={trekkILøpendeUtbetaling}
+                        key={trekkILøpendeUtbetaling.id}
+                        trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                     />
                 </TrekkILøpendeUtbetalingProvider>
             ))}
