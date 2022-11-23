@@ -6,8 +6,8 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 
-import type { Periode } from '../../../../../typer/periode';
 import { formaterBeløp } from '../../../../../utils/formatter';
+import type { IYearMonthPeriode } from '../../../../../utils/kalender';
 import {
     erEtter,
     kalenderDatoMedFallback,
@@ -38,7 +38,7 @@ const PanelTittel = styled.div`
 interface IEkspanderbartBegrunnelsePanelProps {
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
-    periode: Periode;
+    periode: IYearMonthPeriode;
     skalViseSum: boolean;
     summer: () => number;
     tittel: string | undefined;
