@@ -57,7 +57,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         trekkILøpendeUtbetalinger.push({
             id: Math.max(...ider) + 1,
             behandlingId: åpenBehandling.behandlingId,
-            sum: 0,
+            feilutbetaltBeløp: 0,
         });
     };
 

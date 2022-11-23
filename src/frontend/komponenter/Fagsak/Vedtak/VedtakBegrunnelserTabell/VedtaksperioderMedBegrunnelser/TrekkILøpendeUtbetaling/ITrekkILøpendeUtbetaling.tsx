@@ -5,5 +5,5 @@ export interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
     fom?: YearMonth;
     tom?: YearMonth;
-    sum: number;
+    feilutbetaltBeløp: number;
 }
