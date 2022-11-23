@@ -53,6 +53,12 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         ]);
     };
 
+    const fjern = (trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => {
+        settTrekkILøpendeUtbetalinger(
+            trekkILøpendeUtbetalinger.filter(t => t.id !== trekkILøpendeUtbetaling.id)
+        );
+    };
+
     useEffect(() => {
         hentTrekkILøpendeUtbetalinger();
     }, [åpenBehandling]);
@@ -75,6 +81,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     <TrekkILøpendeUtbetalingPanel
                         key={trekkILøpendeUtbetaling.id}
                         trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
+                        fjern={() => fjern(trekkILøpendeUtbetaling)}
                     />
                 </TrekkILøpendeUtbetalingProvider>
             ))}

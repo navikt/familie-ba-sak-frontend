@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Delete } from '@navikt/ds-icons';
-import { Alert, Button, Label } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
@@ -14,6 +14,7 @@ import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingP
 
 interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
+    fjern: () => void;
 }
 
 const baseSkjemaelementStyle = css`
@@ -54,7 +55,7 @@ const KnappHøyre = styled(Button)`
     margin: 0.5rem 1rem 0.5rem 1rem;
 `;
 
-const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetaling }) => {
+const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetaling, fjern }) => {
     const { erPanelEkspandert, onPanelClose } = useTrekkILøpendeUtbetalingProvider();
     const [fomDato, settFomDato] = useState<ISODateString | undefined>();
     const [tomDato, settTomDato] = useState<ISODateString | undefined>();
@@ -75,7 +76,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
     return (
         <EkspanderbartBegrunnelsePanel
             åpen={erPanelEkspandert}
-            onClick={() => erPanelEkspandert} // TODO
+            onClick={() => onPanelClose(false)} // TODO
             periode={periode}
             skalViseSum={true}
             summer={() => Number(beløp || 0)}
@@ -144,7 +145,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                 <KnappHøyre
                     id={'fjern-for-mye-utbetalt-periode'}
                     size={'small'}
-                    onClick={avbryt}
+                    onClick={fjern}
                     variant={'tertiary'}
                     loading={false}
                     disabled={false}
