@@ -53,10 +53,15 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         ]);
     };
 
-    const fjern = (trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => {
+    const fjern = async (trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => {
         settTrekkILøpendeUtbetalinger(
             trekkILøpendeUtbetalinger.filter(t => t.id !== trekkILøpendeUtbetaling.id)
         );
+        await request<ITrekkILøpendeUtbetaling, void>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+            data: trekkILøpendeUtbetaling,
+        });
     };
 
     useEffect(() => {
