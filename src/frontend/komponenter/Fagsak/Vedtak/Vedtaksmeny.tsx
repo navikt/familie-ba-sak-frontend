@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Calender, ExpandFilled, Notes } from '@navikt/ds-icons';
+import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
-import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
+import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 
 interface IVedtakmenyProps {
@@ -33,9 +33,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 }) => {
     const { vurderErLesevisning } = useBehandling();
 
-    const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
-        React.useState<boolean>(false);
-
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -51,26 +48,10 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                 <Dropdown.Menu.List>
                     {erBehandlingMedVedtaksbrevutsending && (
                         <>
-                            <Dropdown.Menu.List.Item
-                                onClick={() => {
-                                    setVisKorrigerEtterbetalingModal(true);
-                                }}
-                            >
-                                <Notes />
-                                {åpenBehandling.korrigertEtterbetaling ? (
-                                    <>Vis korrigert etterbetaling</>
-                                ) : (
-                                    <>Korriger etterbetaling</>
-                                )}
-                            </Dropdown.Menu.List.Item>
-                            <KorrigerEtterbetalingModal
+                            <KorrigerEtterbetaling
                                 erLesevisning={vurderErLesevisning()}
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
-                                visModal={visKorrigerEtterbetalingModal}
-                                onClose={() =>
-                                    setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
-                                }
                             />
                         </>
                     )}
