@@ -70,8 +70,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
             data: {
                 ...trekkILøpendeUtbetaling,
-                fom: fomDato,
-                tom: tomDato,
+                fom: fomDato?.substring(0, 7),
+                tom: tomDato?.substring(0, 7),
                 feilutbetaltBeløp: Number(beløp || 0),
             },
         });
