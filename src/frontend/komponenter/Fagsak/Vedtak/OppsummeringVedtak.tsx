@@ -144,7 +144,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
-            <Vedtaksmeny />
+            <Vedtaksmeny åpenBehandling={åpenBehandling} />
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal

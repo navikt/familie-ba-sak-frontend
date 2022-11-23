@@ -7,6 +7,12 @@ import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
+import type { IBehandling } from '../../../typer/behandling';
+
+interface IVedtakmenyProps {
+    åpenBehandling: IBehandling;
+}
+
 const KnappHøyreHjørne = styled(Button)`
     position: absolute;
     top: ${NavdsSpacing10};
@@ -17,7 +23,8 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
     width: 36ch;
 `;
 
-const Vedtaksmeny: React.FunctionComponent = () => {
+const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({ åpenBehandling }) => {
+    console.log(åpenBehandling);
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -32,13 +39,19 @@ const Vedtaksmeny: React.FunctionComponent = () => {
             <StyledDropdownMeny>
                 <Dropdown.Menu.List>
                     <Dropdown.Menu.List.Item>
+                        <Calender />
+                        Legg til trekk i løpende utbetaling
+                    </Dropdown.Menu.List.Item>
+                    <Dropdown.Menu.List.Item>
                         <Notes />
                         Korriger etterbetaling i vedtak
                     </Dropdown.Menu.List.Item>
-                    <Dropdown.Menu.List.Item>
-                        <Calender />
-                        Oppdater endringstidspunkt
-                    </Dropdown.Menu.List.Item>
+                    {åpenBehandling.endringstidspunkt && (
+                        <Dropdown.Menu.List.Item>
+                            <Calender />
+                            Oppdater endringstidspunkt
+                        </Dropdown.Menu.List.Item>
+                    )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>
