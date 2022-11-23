@@ -14,25 +14,25 @@ import {
     genererIdBasertPåAndreFritekster,
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
-import type { IPeriode } from '../../../../../../utils/kalender';
+import type { IPeriode, IYearMonthPeriode } from '../../../../../../utils/kalender';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 
 interface IProps {
-    trekkILøpendeUtbetalinger: ITrekkILøpendeUtbetaling;
+    trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
     åpenBehandling: IBehandling;
 }
 
 const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = constate(
-    ({ åpenBehandling, trekkILøpendeUtbetalinger }: IProps) => {
+    ({ åpenBehandling, trekkILøpendeUtbetaling }: IProps) => {
         // const { request } = useHttp();
         const { settÅpenBehandling } = useBehandling();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(true);
         const makslengdeFritekst = 220;
 
-        const periode = useFelt<IPeriode>({
+        const periode = useFelt<IYearMonthPeriode>({
             verdi: {
-                fom: trekkILøpendeUtbetalinger.fom,
-                tom: trekkILøpendeUtbetalinger.tom,
+                fom: trekkILøpendeUtbetaling.fom,
+                tom: trekkILøpendeUtbetaling.tom,
             },
         });
 
@@ -67,14 +67,14 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         const populerSkjemaFraBackend = () => {
             settVisfeilmeldinger(false);
             skjema.felter.periode.validerOgSettFelt({
-                fom: trekkILøpendeUtbetalinger.fom,
-                tom: trekkILøpendeUtbetalinger.tom,
+                fom: trekkILøpendeUtbetaling.fom,
+                tom: trekkILøpendeUtbetaling.tom,
             });
         };
 
         useEffect(() => {
             populerSkjemaFraBackend();
-        }, [trekkILøpendeUtbetalinger]);
+        }, [trekkILøpendeUtbetaling]);
         const leggTilFritekst = () => {
             skjema.felter.fritekster.validerOgSettFelt([
                 ...skjema.felter.fritekster.verdi,
@@ -99,7 +99,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
                 onSubmit<IRestPutVedtaksperiodeMedFritekster>(
                     {
                         method: 'PUT',
-                        url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${trekkILøpendeUtbetalinger.id}`,
+                        url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${trekkILøpendeUtbetaling.id}`,
                         data: {
                             fritekster: skjema.felter.fritekster.verdi.map(
                                 fritekst => fritekst.verdi.tekst
@@ -117,8 +117,8 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         return {
             erPanelEkspandert,
             hentFeilTilOppsummering,
-            id: trekkILøpendeUtbetalinger.id,
-            trekkILøpendeUtbetalinger,
+            id: trekkILøpendeUtbetaling.id,
+            trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
             leggTilFritekst,
             makslengdeFritekst,
             onPanelClose,
