@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Heading, HelpText } from '@navikt/ds-react';
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading, HelpText } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -29,7 +30,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     overskrift: string;
     hjelpetekst: string;
     åpenBehandling: IBehandling;
-}> = ({ overskrift, hjelpetekst, åpenBehandling}) => {
+}> = ({ overskrift, hjelpetekst, åpenBehandling }) => {
     const { request } = useHttp();
     const [trekkILøpendeUtbetalinger, settTrekkILøpendeUtbetalinger] = useState<
         ITrekkILøpendeUtbetaling[]
@@ -51,6 +52,15 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         }
     };
 
+    const leggTilNyPeriode = () => {
+        const ider = trekkILøpendeUtbetalinger.map(trekk => trekk.id);
+        trekkILøpendeUtbetalinger.push({
+            id: Math.max(...ider) + 1,
+            behandlingId: åpenBehandling.behandlingId,
+            sum: 0,
+        });
+    };
+
     useEffect(() => {
         hentTrekkILøpendeUtbetalinger();
     }, [åpenBehandling]);
@@ -67,15 +77,24 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             </StyledHeading>
             {trekkILøpendeUtbetalinger.map((trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => (
                 <TrekkILøpendeUtbetalingProvider
-                    key={trekkILøpendeUtbetaling.id}
                     åpenBehandling={åpenBehandling}
-                    trekkILøpendeUtbetalinger={trekkILøpendeUtbetaling}
+                    trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                 >
                     <TrekkILøpendeUtbetalingPanel
                         trekkILøpendeUtbetalinger={trekkILøpendeUtbetaling}
                     />
                 </TrekkILøpendeUtbetalingProvider>
             ))}
+            <Button
+                id={'legg-til-ny-trekk-i-loepende-utbetaling-periode'}
+                variant={'tertiary'}
+                size={'small'}
+                style={{ float: 'right' }}
+                onClick={leggTilNyPeriode}
+                icon={<AddCircle aria-hidden />}
+            >
+                Legg til ny periode
+            </Button>
         </>
     );
 };
