@@ -55,7 +55,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     const leggTilNyPeriode = () => {
         const ider = trekkILøpendeUtbetalinger.map(trekk => trekk.id);
         trekkILøpendeUtbetalinger.push({
-            id: Math.max(...ider) + 1,
+            id: Math.max(0, Math.max(...ider) + 1),
             behandlingId: åpenBehandling.behandlingId,
             feilutbetaltBeløp: 0,
         });
@@ -77,6 +77,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             </StyledHeading>
             {trekkILøpendeUtbetalinger.map((trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => (
                 <TrekkILøpendeUtbetalingProvider
+                    key={trekkILøpendeUtbetaling.id}
                     åpenBehandling={åpenBehandling}
                     trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                 >
