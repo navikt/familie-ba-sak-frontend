@@ -45,14 +45,10 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                 icon={<ExpandFilled />}
                 iconPosition="right"
             >
-                Vedtak
+                Vedtaksmeny
             </KnappHøyreHjørne>
             <StyledDropdownMeny>
                 <Dropdown.Menu.List>
-                    <Dropdown.Menu.List.Item>
-                        <Calender />
-                        Legg til trekk i løpende utbetaling
-                    </Dropdown.Menu.List.Item>
                     {erBehandlingMedVedtaksbrevutsending && (
                         <>
                             <Dropdown.Menu.List.Item
