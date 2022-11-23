@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, HelpText } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -15,15 +15,6 @@ import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProv
 const StyledHeading = styled(Heading)`
     display: flex;
     margin-top: 1rem;
-`;
-
-const StyledHelpText = styled(HelpText)`
-    margin-top: 0.1rem;
-    margin-left: 0.6rem;
-
-    & + .navds-popover {
-        max-width: 20rem;
-    }
 `;
 
 export const TrekkILøpendeUtbetalingListe: React.FC<{
