@@ -146,7 +146,7 @@ const TilbakekrevingSkjema: React.FC<{
             <>
                 <StyledLabel>Tilbakekrevingsvalg</StyledLabel>
                 <StyledAlert variant="warning">
-                    Tilbakekreving uten varsel er valgt automatisk, da feilutbetailngen ble avdekket
+                    Tilbakekreving uten varsel er valgt automatisk, da feilutbetalingen ble avdekket
                     etter at saken ble sendt til beslutter.
                 </StyledAlert>
             </>

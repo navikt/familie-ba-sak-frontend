@@ -37,6 +37,7 @@ interface IProps {
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
+    position: relative;
     padding: ${NavdsSpacing10};
     max-width: ${({ maxWidthStyle }) => maxWidthStyle};
 `;

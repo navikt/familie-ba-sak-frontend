@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
-
 import { Calender } from '@navikt/ds-icons';
-import { Button, Label } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react-internal';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -11,11 +9,6 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
-
-const EndringstidspunktDiv = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`;
 
 const EndreEndringstidspunkt: React.FC<{
     åpenBehandling: IBehandling;
@@ -48,24 +41,23 @@ const EndreEndringstidspunkt: React.FC<{
     };
 
     return (
-        <EndringstidspunktDiv>
-            <Button
-                variant="tertiary"
-                size="small"
+        <>
+            <Dropdown.Menu.List.Item
                 onClick={() => {
                     settVisModal(true);
                 }}
-                icon={<Calender />}
             >
-                <Label>Oppdater endringstidspunkt</Label>
-            </Button>
+                <Calender />
+                Oppdater endringstidspunkt
+            </Dropdown.Menu.List.Item>
+
             <OppdaterEndringstidspunktModal
                 visModal={visModal}
                 onAvbryt={() => settVisModal(false)}
                 oppdaterEndringstidspunkt={oppdaterEndringstidspunkt}
                 skjema={skjema}
             />
-        </EndringstidspunktDiv>
+        </>
     );
 };
 

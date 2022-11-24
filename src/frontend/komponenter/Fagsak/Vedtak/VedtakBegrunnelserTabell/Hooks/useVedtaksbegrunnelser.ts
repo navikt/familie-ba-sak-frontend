@@ -37,16 +37,24 @@ export const useVilkårBegrunnelser = ({
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
+                    VedtakBegrunnelseType.INSTITUSJON_INNVILGET,
+                    VedtakBegrunnelseType.INSTITUSJON_REDUKSJON,
+                    VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET,
                     Vedtaksperiodetype.ENDRET_UTBETALING,
                 ];
             case Vedtaksperiodetype.FORTSATT_INNVILGET:
-                return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
+                return [
+                    VedtakBegrunnelseType.FORTSATT_INNVILGET,
+                    VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET,
+                ];
             case Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING:
                 return [
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.INNVILGET,
                     VedtakBegrunnelseType.EØS_INNVILGET,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
+                    VedtakBegrunnelseType.INSTITUSJON_INNVILGET,
+                    VedtakBegrunnelseType.INSTITUSJON_REDUKSJON,
                     Vedtaksperiodetype.ENDRET_UTBETALING,
                 ];
             case Vedtaksperiodetype.OPPHØR:
@@ -54,6 +62,7 @@ export const useVilkårBegrunnelser = ({
                     VedtakBegrunnelseType.OPPHØR,
                     VedtakBegrunnelseType.EØS_OPPHØR,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
+                    VedtakBegrunnelseType.INSTITUSJON_OPPHØR,
                 ];
             case Vedtaksperiodetype.ENDRET_UTBETALING:
                 return [VedtakBegrunnelseType.ENDRET_UTBETALING];
