@@ -91,3 +91,8 @@ export enum KorrigertEtterbetalingÅrsak {
     REFUSJON_FRA_ANDRE_MYNDIGHETER = 'REFUSJON_FRA_ANDRE_MYNDIGHETER',
     MOTREGNING = 'MOTREGNING',
 }
+
+export interface IRestKorrigertVedtak {
+    vedtaksdato: string;
+    begrunnelse: string | undefined;
+}
