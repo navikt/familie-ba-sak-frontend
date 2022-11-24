@@ -15,6 +15,7 @@ export enum Filtreringsregel {
     MOR_ER_OVER_18_ÅR = 'MOR_ER_OVER_18_ÅR',
     MOR_HAR_IKKE_VERGE = 'MOR_HAR_IKKE_VERGE',
     MOR_MOTTAR_IKKE_LØPENDE_UTVIDET = 'MOR_MOTTAR_IKKE_LØPENDE_UTVIDET',
+    MOR_HAR_IKKE_LØPENDE_EØS_BARNETRYGD = 'MOR_HAR_IKKE_LØPENDE_EØS_BARNETRYGD',
     LØPER_IKKE_BARNETRYGD_FOR_BARNET = 'LØPER_IKKE_BARNETRYGD_FOR_BARNET',
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT = 'FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT',
 }
@@ -28,6 +29,7 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     MOR_ER_OVER_18_ÅR: 'Mor er over 18 år',
     MOR_HAR_IKKE_VERGE: 'Mor har ikke verge',
     MOR_MOTTAR_IKKE_LØPENDE_UTVIDET: 'Mor mottar ikke utvidet barnetrygd',
+    MOR_HAR_IKKE_LØPENDE_EØS_BARNETRYGD: 'Mor har ikke løpende EØS-barnetrygd',
     LØPER_IKKE_BARNETRYGD_FOR_BARNET:
         'Det er ikke utbetalt barnetrygd for barnet til annen mottaker',
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT:
