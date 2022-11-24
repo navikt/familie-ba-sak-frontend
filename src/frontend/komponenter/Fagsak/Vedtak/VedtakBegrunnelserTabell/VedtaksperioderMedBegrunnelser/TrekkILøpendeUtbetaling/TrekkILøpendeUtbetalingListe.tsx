@@ -18,8 +18,9 @@ const StyledHeading = styled(Heading)`
 `;
 
 export const TrekkILøpendeUtbetalingListe: React.FC<{
+    visTrekkILøpendeUtbetalinger: boolean;
     åpenBehandling: IBehandling;
-}> = ({ åpenBehandling }) => {
+}> = ({ visTrekkILøpendeUtbetalinger, åpenBehandling }) => {
     const { request } = useHttp();
     const [trekkILøpendeUtbetalinger, settTrekkILøpendeUtbetalinger] = useState<
         ITrekkILøpendeUtbetaling[]
@@ -73,7 +74,9 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         return <></>;
     }
 
-    return (
+    return !visTrekkILøpendeUtbetalinger && trekkILøpendeUtbetalinger.length === 0 ? (
+        <></>
+    ) : (
         <>
             <StyledHeading level="2" size="small" spacing>
                 Trekk i løpende utbetaling

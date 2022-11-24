@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { ExpandFilled } from '@navikt/ds-icons';
+import { Calculator, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
@@ -56,6 +56,10 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
+                    <Dropdown.Menu.List.Item>
+                        <Calculator />
+                        Legg til trekk i løpende utbetaling
+                    </Dropdown.Menu.List.Item>
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>
