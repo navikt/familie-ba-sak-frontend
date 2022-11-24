@@ -18,26 +18,19 @@ import { datoformatNorsk } from '../../../../utils/formatter';
 
 const Knapperad = styled.div`
     width: 100%;
-    display: inline-block;
+    display: flex;
+    justify-content: space-between;
 `;
 
 const KnappVenstre = styled(Button)`
-    float: left;
     margin-right: 1rem;
 `;
 
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0rem;
-    float: right;
-`;
-
-const LukkKnapp = styled(Button)`
-    margin: 0 auto;
-    display: block;
 `;
 
 const StyledModalContent = styled(Modal.Content)`
-    padding: 2.5rem;
     width: 40rem;
 `;
 
@@ -155,34 +148,48 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                             </Alert>
                         )}
                     </div>
-                    {!erLesevisning && (
-                        <Knapperad>
-                            <KnappVenstre
-                                onClick={lagreKorrigertVedtak}
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
-                                {korrigertVedtak ? 'Oppdater' : 'Legg til'}
-                            </KnappVenstre>
-                            <KnappVenstre onClick={lukkModal} variant={'tertiary'}>
-                                Avbryt
-                            </KnappVenstre>
-                            {visAngreKnapp && (
-                                <AngreKnapp
-                                    size={'small'}
-                                    onClick={angreKorrigering}
-                                    variant={'tertiary'}
-                                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                    icon={<Cancel />}
-                                >
-                                    Fjern korrigering
-                                </AngreKnapp>
-                            )}
-                        </Knapperad>
-                    )}
-                    {erLesevisning && <LukkKnapp onClick={lukkModal}>Lukk</LukkKnapp>}
+                    <Knapperad>
+                        {!erLesevisning && (
+                            <>
+                                <div>
+                                    <KnappVenstre
+                                        onClick={lagreKorrigertVedtak}
+                                        variant={valideringErOk() ? 'primary' : 'secondary'}
+                                        loading={
+                                            skjema.submitRessurs.status === RessursStatus.HENTER
+                                        }
+                                        disabled={
+                                            skjema.submitRessurs.status === RessursStatus.HENTER
+                                        }
+                                    >
+                                        {korrigertVedtak ? 'Oppdater' : 'Legg til'}
+                                    </KnappVenstre>
+                                    <Button onClick={lukkModal} variant={'tertiary'}>
+                                        Avbryt
+                                    </Button>
+                                </div>
+                                <div>
+                                    {visAngreKnapp && (
+                                        <AngreKnapp
+                                            size={'small'}
+                                            onClick={angreKorrigering}
+                                            variant={'tertiary'}
+                                            loading={
+                                                skjema.submitRessurs.status === RessursStatus.HENTER
+                                            }
+                                            disabled={
+                                                skjema.submitRessurs.status === RessursStatus.HENTER
+                                            }
+                                            icon={<Cancel />}
+                                        >
+                                            Fjern korrigering
+                                        </AngreKnapp>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                        {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
+                    </Knapperad>
                 </StyledModalContent>
             </Modal>
         </>

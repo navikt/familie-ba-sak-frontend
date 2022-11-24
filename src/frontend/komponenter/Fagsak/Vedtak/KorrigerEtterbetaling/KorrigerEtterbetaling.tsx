@@ -22,17 +22,16 @@ interface IKorrigerEtterbetaling {
 
 const Knapperad = styled.div`
     width: 100%;
-    position: relative;
-    display: inline-block;
+    display: flex;
+    justify-content: space-between;
 `;
 
 const AngreKnapp = styled(Button)`
-    margin: 0.5rem 1rem 0.5rem 0rem;
+    margin: 0.5rem 0rem;
 `;
 
-const KnappHøyre = styled(Button)`
-    float: right;
-    margin-left: 1rem;
+const KnappVenstre = styled(Button)`
+    margin-right: 1rem;
 `;
 
 const baseSkjemaelementStyle = css`
@@ -59,17 +58,11 @@ const StyledSkjema = styled(SkjemaGruppe)`
 `;
 
 const StyledModalContent = styled(Modal.Content)`
-    padding: 2.5rem;
     width: 35rem;
 `;
 
 const StyledModalHeader = styled(Heading)`
     margin-bottom: 2rem;
-`;
-
-const LukkKnapp = styled(Button)`
-    margin: 0 auto;
-    display: block;
 `;
 
 const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
@@ -205,35 +198,45 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                             </>
                         )}
                     </StyledSkjema>
-                    {!erLesevisning && (
-                        <Knapperad>
-                            {visAngreKorrigering && (
-                                <AngreKnapp
-                                    id={'angre-korrigering'}
-                                    size={'small'}
-                                    onClick={angreKorrigering}
-                                    variant={'tertiary'}
-                                    loading={angrerKorrigering}
-                                    disabled={angrerKorrigering}
-                                    icon={<Cancel />}
-                                >
-                                    Angre korrigering
-                                </AngreKnapp>
-                            )}
-                            <KnappHøyre
-                                onClick={lagreKorrigering}
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
-                                {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
-                            </KnappHøyre>
-                            <KnappHøyre onClick={lukkModal} variant={'tertiary'}>
-                                Avbryt
-                            </KnappHøyre>
-                        </Knapperad>
-                    )}
-                    {erLesevisning && <LukkKnapp onClick={lukkModal}>Lukk</LukkKnapp>}
+                    <Knapperad>
+                        {!erLesevisning && (
+                            <>
+                                <div>
+                                    <KnappVenstre
+                                        onClick={lagreKorrigering}
+                                        variant={valideringErOk() ? 'primary' : 'secondary'}
+                                        loading={
+                                            skjema.submitRessurs.status === RessursStatus.HENTER
+                                        }
+                                        disabled={
+                                            skjema.submitRessurs.status === RessursStatus.HENTER
+                                        }
+                                    >
+                                        {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
+                                    </KnappVenstre>
+                                    <Button onClick={lukkModal} variant={'tertiary'}>
+                                        Avbryt
+                                    </Button>
+                                </div>
+                                <div>
+                                    {visAngreKorrigering && (
+                                        <AngreKnapp
+                                            id={'angre-korrigering'}
+                                            size={'small'}
+                                            onClick={angreKorrigering}
+                                            variant={'tertiary'}
+                                            loading={angrerKorrigering}
+                                            disabled={angrerKorrigering}
+                                            icon={<Cancel />}
+                                        >
+                                            Angre korrigering
+                                        </AngreKnapp>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                        {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
+                    </Knapperad>
                 </StyledModalContent>
             </Modal>
         </>
