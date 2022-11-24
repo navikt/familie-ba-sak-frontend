@@ -1,8 +1,8 @@
-import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
+import type { IPeriode } from '../../../../../../utils/kalender';
 
 export interface ITrekkILøpendeUtbetaling {
     id: number;
     behandlingId: number;
-    periode: IYearMonthPeriode;
+    periode: IPeriode;
     feilutbetaltBeløp: number;
 }

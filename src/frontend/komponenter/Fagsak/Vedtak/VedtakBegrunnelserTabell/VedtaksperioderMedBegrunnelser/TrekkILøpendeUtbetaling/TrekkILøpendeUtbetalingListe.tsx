@@ -8,6 +8,7 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IRestTrekkILøpendeUtbetaling } from './IRestTrekkILøpendeUtbetaling';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
@@ -27,7 +28,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     >([]);
 
     const hentTrekkILøpendeUtbetalinger = async () => {
-        const trekk = await request<void, ITrekkILøpendeUtbetaling[]>({
+        const trekk = await request<void, IRestTrekkILøpendeUtbetaling[]>({
             method: 'GET',
             url: '/familie-ba-sak/api/trekk-i-loepende-utbetaling',
             headers: {},
@@ -37,7 +38,8 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         }
         if (trekk.status === RessursStatus.SUKSESS) {
             const data = trekk.data;
-            settTrekkILøpendeUtbetalinger(data);
+            const transformert = data.map(d => fraRest(d));
+            settTrekkILøpendeUtbetalinger(transformert);
             return trekk;
         }
     };
@@ -55,6 +57,30 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         ]);
     };
 
+    function fraRest(
+        trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling
+    ): ITrekkILøpendeUtbetaling {
+        return {
+            ...trekkILøpendeUtbetaling,
+            periode: {
+                fom: trekkILøpendeUtbetaling.periode.fom + '-01',
+                tom: trekkILøpendeUtbetaling.periode.tom + '-01',
+            },
+        };
+    }
+
+    function tilRest(
+        trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling
+    ): IRestTrekkILøpendeUtbetaling {
+        return {
+            ...trekkILøpendeUtbetaling,
+            periode: {
+                fom: trekkILøpendeUtbetaling.periode.fom?.substring(0, 7),
+                tom: trekkILøpendeUtbetaling.periode.tom?.substring(0, 7),
+            },
+        };
+    }
+
     const fjern = async (trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => {
         settTrekkILøpendeUtbetalinger(
             trekkILøpendeUtbetalinger.filter(t => t.id !== trekkILøpendeUtbetaling.id)
@@ -62,7 +88,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         await request<ITrekkILøpendeUtbetaling, void>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-            data: trekkILøpendeUtbetaling,
+            data: tilRest(trekkILøpendeUtbetaling),
         });
     };
 
