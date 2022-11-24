@@ -70,10 +70,6 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         hentTrekkILøpendeUtbetalinger();
     }, [åpenBehandling]);
 
-    if (trekkILøpendeUtbetalinger.length === 0) {
-        return <></>;
-    }
-
     return !visTrekkILøpendeUtbetalinger && trekkILøpendeUtbetalinger.length === 0 ? (
         <></>
     ) : (
