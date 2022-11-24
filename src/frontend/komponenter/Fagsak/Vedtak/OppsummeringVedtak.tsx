@@ -40,7 +40,7 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     }
 `;
 
-const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
+const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
@@ -163,9 +163,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     />
                     <div>
                         {åpenBehandling.korrigertEtterbetaling && (
-                            <KorrigertEtterbetalingsbeløpAlert variant="info">
+                            <BehandlingKorrigertAlert variant="info">
                                 Etterbetalingsbeløp i brevet er manuelt korrigert
-                            </KorrigertEtterbetalingsbeløpAlert>
+                            </BehandlingKorrigertAlert>
+                        )}
+                        {åpenBehandling.korrigertVedtak && (
+                            <BehandlingKorrigertAlert variant="info">
+                                Vedtaket er korrigert etter § 35
+                            </BehandlingKorrigertAlert>
                         )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
                             <FamilieSelect

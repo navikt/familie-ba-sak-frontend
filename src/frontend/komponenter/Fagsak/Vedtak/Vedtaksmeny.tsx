@@ -7,9 +7,12 @@ import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
+import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 
 interface IVedtakmenyProps {
@@ -32,6 +35,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     erBehandlingMedVedtaksbrevutsending,
 }) => {
     const { vurderErLesevisning } = useBehandling();
+    const { toggles } = useApp();
 
     return (
         <Dropdown>
@@ -47,11 +51,21 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
             <StyledDropdownMeny>
                 <Dropdown.Menu.List>
                     {erBehandlingMedVedtaksbrevutsending && (
-                        <KorrigerEtterbetaling
-                            erLesevisning={vurderErLesevisning()}
-                            korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
-                            behandlingId={åpenBehandling.behandlingId}
-                        />
+                        <>
+                            <KorrigerEtterbetaling
+                                erLesevisning={vurderErLesevisning()}
+                                korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
+                                behandlingId={åpenBehandling.behandlingId}
+                            />
+                            {(toggles[ToggleNavn.kunneKorrigereVedtak] ||
+                                åpenBehandling.korrigertVedtak) && (
+                                <KorrigerVedtak
+                                    erLesevisning={vurderErLesevisning()}
+                                    korrigertVedtak={åpenBehandling.korrigertVedtak}
+                                    behandlingId={åpenBehandling.behandlingId}
+                                />
+                            )}
+                        </>
                     )}
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
