@@ -3,9 +3,9 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent, InformationColored, Notes } from '@navikt/ds-icons';
+import { FileContent } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
-import { FamilieSelect, FlexDiv } from '@navikt/familie-form-elements';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -25,33 +25,19 @@ import {
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import KorrigerEtterbetalingModal from './KorrigerEtterbetalingModal/KorrigerEtterbetalingModal';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksmeny from './Vedtaksmeny';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
 }
 
-const Container = styled.div`
-    max-width: 49rem;
-`;
-
 const StyledSkjemaSteg = styled(Skjemasteg)`
     .typo-innholdstittel {
         margin-bottom: 1.4rem;
     }
-`;
-
-const StyledFlexiDiv = styled(FlexDiv)`
-    justify-content: space-between;
-    max-width: 49rem;
-`;
-
-const StyleHeading = styled(Heading)`
-    display: flex;
 `;
 
 const KorrigertEtterbetalingsbeløpAlert = styled(Alert)`
@@ -95,8 +81,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisDokumentModal,
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [visKorrigerEtterbetalingModal, setVisKorrigerEtterbetalingModal] =
-        React.useState<boolean>(false);
 
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
@@ -145,27 +129,23 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     return (
         <StyledSkjemaSteg
-            tittel={
-                <StyledFlexiDiv>
-                    <StyleHeading size="large" level="1">
-                        Vedtak
-                    </StyleHeading>
-                    {åpenBehandling.endringstidspunkt && (
-                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
-                    )}
-                </StyledFlexiDiv>
-            }
+            tittel="Vedtak"
             forrigeOnClick={() =>
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={erMigreringFraInfotrygd ? 'Bekreft migrering' : 'Til godkjenning'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-            maxWidthStyle="100%"
+            maxWidthStyle="54rem"
             className={'vedtak'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
+            <Vedtaksmeny
+                åpenBehandling={åpenBehandling}
+                erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
+            />
+
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal
@@ -181,16 +161,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         }}
                         pdfdata={hentetDokument}
                     />
-                    <KorrigerEtterbetalingModal
-                        erLesevisning={vurderErLesevisning()}
-                        korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
-                        behandlingId={åpenBehandling.behandlingId}
-                        visModal={visKorrigerEtterbetalingModal}
-                        onClose={() =>
-                            setVisKorrigerEtterbetalingModal(!visKorrigerEtterbetalingModal)
-                        }
-                    />
-                    <Container>
+                    <div>
                         {åpenBehandling.korrigertEtterbetaling && (
                             <KorrigertEtterbetalingsbeløpAlert variant="info">
                                 Etterbetalingsbeløp i brevet er manuelt korrigert
@@ -236,27 +207,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         >
                             Vis vedtaksbrev
                         </Button>
-                        <Button
-                            id={'korriger-etterbetaling'}
-                            variant={'tertiary'}
-                            size={'small'}
-                            style={{ float: 'right' }}
-                            onClick={() => setVisKorrigerEtterbetalingModal(true)}
-                            icon={
-                                åpenBehandling.korrigertEtterbetaling ? (
-                                    <InformationColored aria-hidden />
-                                ) : (
-                                    <Notes aria-hidden />
-                                )
-                            }
-                        >
-                            {åpenBehandling.korrigertEtterbetaling ? (
-                                <>Vis korrigert etterbetaling</>
-                            ) : (
-                                <>Korriger etterbetaling</>
-                            )}
-                        </Button>
-                    </Container>
+                    </div>
 
                     <Modal
                         open={visModal}
