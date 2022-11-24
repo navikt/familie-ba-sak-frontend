@@ -75,7 +75,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
         });
     };
     const avbryt = () => {
-        console.log('');
+        onPanelClose(false);
     };
 
     return (
