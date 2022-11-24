@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled, { css } from 'styled-components';
 
@@ -9,7 +9,6 @@ import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 
 import { datoformatNorsk } from '../../../../../../utils/formatter';
-import type { YearMonth } from '../../../../../../utils/kalender';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
@@ -58,10 +57,7 @@ const KnappHøyre = styled(Button)`
 `;
 
 const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetaling, fjern }) => {
-    const { erPanelEkspandert, onPanelClose } = useTrekkILøpendeUtbetalingProvider();
-    const [fomDato, settFomDato] = useState<YearMonth | undefined>();
-    const [tomDato, settTomDato] = useState<YearMonth | undefined>();
-    const [beløp, settBeløp] = useState<string | undefined>();
+    const { skjema, erPanelEkspandert, onPanelClose } = useTrekkILøpendeUtbetalingProvider();
     const { request } = useHttp();
 
     const leggTilPeriode = async () => {
@@ -70,9 +66,11 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
             data: {
                 ...trekkILøpendeUtbetaling,
-                fom: fomDato?.substring(0, 7),
-                tom: tomDato?.substring(0, 7),
-                feilutbetaltBeløp: Number(beløp || 0),
+                periode: {
+                    fom: skjema.felter.periode.verdi.fom?.substring(0, 7),
+                    tom: skjema.felter.periode.verdi.tom?.substring(0, 7),
+                },
+                feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
             },
         });
     };
@@ -80,18 +78,13 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
         console.log('');
     };
 
-    const periode = {
-        fom: fomDato,
-        tom: tomDato,
-    };
-
     return (
         <EkspanderbartBegrunnelsePanel
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(false)} // TODO
-            periode={periode}
+            periode={skjema.felter.periode.verdi}
             skalViseSum={true}
-            summer={() => Number(beløp || 0)}
+            summer={() => skjema.felter.feilutbetaltBeløp.verdi}
             tittel={undefined}
         >
             <Label>Angi periode med feilutbetalt beløp</Label>
@@ -107,9 +100,12 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                     label={'F.o.m'}
                     placeholder={datoformatNorsk.DATO}
                     onChange={(dato?: ISODateString) => {
-                        settFomDato(dato);
+                        skjema.felter.periode.validerOgSettFelt({
+                            fom: dato,
+                            tom: skjema.felter.periode.verdi.tom,
+                        });
                     }}
-                    valgtDato={fomDato}
+                    valgtDato={skjema.felter.periode.verdi.fom}
                 />
                 <FamilieDatovelger
                     allowInvalidDateSelection={false}
@@ -121,17 +117,24 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                     label={'T.o.m'}
                     placeholder={datoformatNorsk.DATO}
                     onChange={(dato?: ISODateString) => {
-                        settTomDato(dato);
+                        skjema.felter.periode.validerOgSettFelt({
+                            fom: skjema.felter.periode.verdi.fom,
+                            tom: dato,
+                        });
                     }}
-                    valgtDato={tomDato}
+                    valgtDato={skjema.felter.periode.verdi.tom}
                 />
             </FlexDiv>
             <StyledFamilieInput
                 label={'Hvor mye er utbetalt feil i perioden?'}
                 id={'korrigering-belop'}
                 type={'number'}
-                value={beløp}
-                onChange={changeEvent => settBeløp(changeEvent.target.value)}
+                value={skjema.felter.feilutbetaltBeløp.verdi}
+                onChange={changeEvent =>
+                    skjema.felter.feilutbetaltBeløp.validerOgSettFelt(
+                        Number(changeEvent.target.value)
+                    )
+                }
                 error={''}
                 erLesevisning={false}
             />

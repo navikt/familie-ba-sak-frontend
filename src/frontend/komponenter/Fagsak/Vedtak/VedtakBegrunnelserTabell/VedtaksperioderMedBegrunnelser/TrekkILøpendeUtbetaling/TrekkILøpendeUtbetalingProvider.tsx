@@ -2,19 +2,14 @@ import { useEffect, useState } from 'react';
 
 import constate from 'constate';
 
-import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestPutVedtaksperiodeMedFritekster } from '../../../../../../typer/vedtaksperiode';
-import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import {
-    genererIdBasertPåAndreFritekster,
-    lagInitiellFritekst,
-} from '../../../../../../utils/fritekstfelter';
-import type { IPeriode, IYearMonthPeriode } from '../../../../../../utils/kalender';
+import { erEøsPeriodeGyldig } from '../../../../../../utils/eøsValidators';
+import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
+import { nyYearMonthPeriode } from '../../../../../../utils/kalender';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 
 interface IProps {
@@ -29,37 +24,23 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         const [erPanelEkspandert, settErPanelEkspandert] = useState(true);
         const makslengdeFritekst = 220;
 
-        const periode = useFelt<IYearMonthPeriode>({
-            verdi: {
-                fom: trekkILøpendeUtbetaling.fom,
-                tom: trekkILøpendeUtbetaling.tom,
-            },
-        });
-
-        const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
-                return felt.verdi.some(
-                    fritekst =>
-                        fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                        fritekst.verdi.tekst.length === 0
-                )
-                    ? feil(felt, '')
-                    : ok(felt);
-            },
-        });
-
         const { hentFeilTilOppsummering, kanSendeSkjema, onSubmit, settVisfeilmeldinger, skjema } =
-            useSkjema<
-                {
-                    periode: IPeriode;
-                    fritekster: FeltState<IFritekstFelt>[];
-                },
-                IBehandling
-            >({
+            useSkjema<ITrekkILøpendeUtbetaling, IBehandling>({
                 felter: {
-                    periode,
-                    fritekster,
+                    id: useFelt<number>({ verdi: trekkILøpendeUtbetaling.id }),
+                    periode: useFelt<IYearMonthPeriode>({
+                        verdi: nyYearMonthPeriode(
+                            trekkILøpendeUtbetaling.periode.fom,
+                            trekkILøpendeUtbetaling.periode.tom
+                        ),
+                        valideringsfunksjon: erEøsPeriodeGyldig,
+                    }),
+                    feilutbetaltBeløp: useFelt<number>({
+                        verdi: trekkILøpendeUtbetaling.feilutbetaltBeløp,
+                    }),
+                    behandlingId: useFelt<number>({
+                        verdi: trekkILøpendeUtbetaling.behandlingId,
+                    }),
                 },
                 skjemanavn: 'Begrunnelser for vedtaksperiode',
             });
@@ -67,27 +48,21 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         const populerSkjemaFraBackend = () => {
             settVisfeilmeldinger(false);
             skjema.felter.periode.validerOgSettFelt({
-                fom: trekkILøpendeUtbetaling.fom,
-                tom: trekkILøpendeUtbetaling.tom,
+                fom: trekkILøpendeUtbetaling.periode.fom,
+                tom: trekkILøpendeUtbetaling.periode.tom,
             });
         };
 
         useEffect(() => {
             populerSkjemaFraBackend();
         }, [trekkILøpendeUtbetaling]);
-        const leggTilFritekst = () => {
-            skjema.felter.fritekster.validerOgSettFelt([
-                ...skjema.felter.fritekster.verdi,
-                lagInitiellFritekst('', genererIdBasertPåAndreFritekster(skjema.felter.fritekster)),
-            ]);
-        };
 
         const onPanelClose = (visAlert: boolean) => {
             if (
                 erPanelEkspandert &&
                 visAlert // TODO HER
             ) {
-                alert('Periode har endringer som ikke er lagret!');
+                // alert('Periode har endringer som ikke er lagret!');
             } else {
                 settErPanelEkspandert(!erPanelEkspandert);
                 populerSkjemaFraBackend();
@@ -96,15 +71,11 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
 
         const putVedtaksperiodeMedFritekster = () => {
             if (kanSendeSkjema()) {
-                onSubmit<IRestPutVedtaksperiodeMedFritekster>(
+                onSubmit<ITrekkILøpendeUtbetaling>(
                     {
                         method: 'PUT',
-                        url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${trekkILøpendeUtbetaling.id}`,
-                        data: {
-                            fritekster: skjema.felter.fritekster.verdi.map(
-                                fritekst => fritekst.verdi.tekst
-                            ),
-                        },
+                        url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/${trekkILøpendeUtbetaling.id}`,
+                        data: trekkILøpendeUtbetaling,
                     },
                     (behandling: Ressurs<IBehandling>) => {
                         settÅpenBehandling(behandling);
@@ -119,7 +90,6 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             hentFeilTilOppsummering,
             id: trekkILøpendeUtbetaling.id,
             trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
-            leggTilFritekst,
             makslengdeFritekst,
             onPanelClose,
             putVedtaksperiodeMedFritekster,

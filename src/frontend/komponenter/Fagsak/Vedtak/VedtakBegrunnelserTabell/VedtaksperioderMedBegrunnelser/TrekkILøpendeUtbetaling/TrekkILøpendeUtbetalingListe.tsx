@@ -49,6 +49,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                 id: Math.max(0, Math.max(...ider) + 1),
                 behandlingId: åpenBehandling.behandlingId,
                 feilutbetaltBeløp: 0,
+                periode: {},
             },
         ]);
     };
