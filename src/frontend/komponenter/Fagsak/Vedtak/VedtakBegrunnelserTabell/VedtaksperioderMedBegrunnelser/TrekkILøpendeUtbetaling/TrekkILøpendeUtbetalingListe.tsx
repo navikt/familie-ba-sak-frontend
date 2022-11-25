@@ -83,6 +83,9 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
 
     const fjern = async (id: number) => {
         settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id));
+        if (id === 0) {
+            return;
+        }
         await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
