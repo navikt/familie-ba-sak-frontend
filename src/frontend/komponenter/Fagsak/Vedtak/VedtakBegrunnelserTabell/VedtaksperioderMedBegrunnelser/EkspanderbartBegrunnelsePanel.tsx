@@ -41,7 +41,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
     periode: IYearMonthPeriode;
     skalViseSum: boolean;
     summer: () => number;
-    tittel: string | undefined;
+    tittel: string;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
@@ -73,7 +73,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                             })}
                         </Label>
                     )}
-                    {tittel && <BodyShort>{tittel}</BodyShort>}
+                    <BodyShort>{tittel}</BodyShort>
                     {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
                 </PanelTittel>
             }

@@ -66,7 +66,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
             periode={skjema.felter.periode.verdi}
             skalViseSum={true}
             summer={() => skjema.felter.feilutbetaltBeløp.verdi}
-            tittel={undefined}
+            tittel={''}
         >
             <Label>Angi periode med feilutbetalt beløp</Label>
 
