@@ -66,7 +66,9 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             behandlingId: trekkILøpendeUtbetaling.identifikator.behandlingId,
             periode: {
                 fom: trekkILøpendeUtbetaling.periode.fom + '-01',
-                tom: trekkILøpendeUtbetaling.periode.tom + '-01',
+                tom: trekkILøpendeUtbetaling.periode.tom
+                    ? trekkILøpendeUtbetaling.periode.tom + '-01'
+                    : undefined,
             },
         };
     }
