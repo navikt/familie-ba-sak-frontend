@@ -8,7 +8,10 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestTrekkILøpendeUtbetaling } from './IRestTrekkILøpendeUtbetaling';
+import type {
+    IRestTrekkILøpendeUtbetaling,
+    IRestTrekkILøpendeUtbetalingIdentifikator,
+} from './IRestTrekkILøpendeUtbetaling';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
@@ -62,6 +65,8 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     ): ITrekkILøpendeUtbetaling {
         return {
             ...trekkILøpendeUtbetaling,
+            id: trekkILøpendeUtbetaling.identifikator.id,
+            behandlingId: trekkILøpendeUtbetaling.identifikator.behandlingId,
             periode: {
                 fom: trekkILøpendeUtbetaling.periode.fom + '-01',
                 tom: trekkILøpendeUtbetaling.periode.tom + '-01',
@@ -69,15 +74,12 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         };
     }
 
-    function tilRest(
+    function tilRestIdentifikator(
         trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling
-    ): IRestTrekkILøpendeUtbetaling {
+    ): IRestTrekkILøpendeUtbetalingIdentifikator {
         return {
-            ...trekkILøpendeUtbetaling,
-            periode: {
-                fom: trekkILøpendeUtbetaling.periode.fom?.substring(0, 7),
-                tom: trekkILøpendeUtbetaling.periode.tom?.substring(0, 7),
-            },
+            id: trekkILøpendeUtbetaling.id,
+            behandlingId: trekkILøpendeUtbetaling.behandlingId,
         };
     }
 
@@ -85,10 +87,10 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         settTrekkILøpendeUtbetalinger(
             trekkILøpendeUtbetalinger.filter(t => t.id !== trekkILøpendeUtbetaling.id)
         );
-        await request<ITrekkILøpendeUtbetaling, void>({
+        await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-            data: tilRest(trekkILøpendeUtbetaling),
+            data: tilRestIdentifikator(trekkILøpendeUtbetaling),
         });
     };
 
