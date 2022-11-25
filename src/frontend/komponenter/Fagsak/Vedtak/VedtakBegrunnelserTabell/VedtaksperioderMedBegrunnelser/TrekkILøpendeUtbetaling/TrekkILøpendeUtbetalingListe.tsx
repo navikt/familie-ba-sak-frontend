@@ -74,23 +74,19 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         };
     }
 
-    function tilRestIdentifikator(
-        trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling
-    ): IRestTrekkILøpendeUtbetalingIdentifikator {
+    function tilRestIdentifikator(id: number): IRestTrekkILøpendeUtbetalingIdentifikator {
         return {
-            id: trekkILøpendeUtbetaling.id,
-            behandlingId: trekkILøpendeUtbetaling.behandlingId,
+            id: id,
+            behandlingId: åpenBehandling.behandlingId,
         };
     }
 
-    const fjern = async (trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling) => {
-        settTrekkILøpendeUtbetalinger(
-            trekkILøpendeUtbetalinger.filter(t => t.id !== trekkILøpendeUtbetaling.id)
-        );
+    const fjern = async (id: number) => {
+        settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id));
         await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-            data: tilRestIdentifikator(trekkILøpendeUtbetaling),
+            data: tilRestIdentifikator(id),
         });
     };
 
@@ -114,7 +110,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     <TrekkILøpendeUtbetalingPanel
                         key={trekkILøpendeUtbetaling.id}
                         trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                        fjern={() => fjern(trekkILøpendeUtbetaling)}
+                        fjern={() => fjern(trekkILøpendeUtbetaling.id)}
                     />
                 </TrekkILøpendeUtbetalingProvider>
             ))}

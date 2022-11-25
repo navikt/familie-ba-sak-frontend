@@ -7,6 +7,7 @@ import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { datoformatNorsk } from '../../../../../../utils/formatter';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
@@ -15,7 +16,7 @@ import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingP
 
 interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
-    fjern: () => void;
+    fjern: (id: number) => void;
 }
 
 const baseSkjemaelementStyle = css`
@@ -61,11 +62,15 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
     const { request } = useHttp();
 
     const leggTilPeriode = async () => {
-        await request<ITrekkILøpendeUtbetaling, void>({
+        const respons = await request<ITrekkILøpendeUtbetaling, number>({
             method: 'POST',
             url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
             data: {
                 ...trekkILøpendeUtbetaling,
+                identifikator: {
+                    id: trekkILøpendeUtbetaling.id,
+                    behandlingId: trekkILøpendeUtbetaling.behandlingId,
+                },
                 periode: {
                     fom: skjema.felter.periode.verdi.fom?.substring(0, 7),
                     tom: skjema.felter.periode.verdi.tom?.substring(0, 7),
@@ -73,6 +78,9 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                 feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
             },
         });
+        if (respons.status === RessursStatus.SUKSESS) {
+            skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
+        }
     };
     const avbryt = () => {
         onPanelClose(false);
@@ -160,7 +168,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                 <KnappHøyre
                     id={'fjern-for-mye-utbetalt-periode'}
                     size={'small'}
-                    onClick={fjern}
+                    onClick={() => fjern(skjema.felter.id.verdi)}
                     variant={'tertiary'}
                     loading={false}
                     disabled={false}
