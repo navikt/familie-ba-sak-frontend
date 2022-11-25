@@ -9,6 +9,7 @@ export enum ToggleNavn {
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
     støtterInstitusjon = 'familie-ba-sak.stotter-institusjon',
+    trekkILøpendeUtbetaling = 'familie-ba-sak.trekk-i-loepende-utbetaling',
 }
 
 export const alleTogglerAv = (): IToggles => {

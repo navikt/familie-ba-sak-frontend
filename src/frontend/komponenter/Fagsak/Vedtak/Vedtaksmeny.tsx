@@ -7,8 +7,10 @@ import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
 
@@ -32,7 +34,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     erBehandlingMedVedtaksbrevutsending,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-
+    const { toggles } = useApp();
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -56,10 +58,12 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
-                    <Dropdown.Menu.List.Item>
-                        <Calculator />
-                        Legg til trekk i løpende utbetaling
-                    </Dropdown.Menu.List.Item>
+                    {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
+                        <Dropdown.Menu.List.Item>
+                            <Calculator />
+                            Legg til trekk i løpende utbetaling
+                        </Dropdown.Menu.List.Item>
+                    )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>
