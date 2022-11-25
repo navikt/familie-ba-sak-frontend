@@ -177,27 +177,6 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({ trekkILøpendeUtbetal
                     Fjern
                 </KnappHøyre>
             </Knapperad>
-
-            {/*{genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&*/}
-            {/*    genererteBrevbegrunnelser.data.length > 0 && (*/}
-            {/*        <>*/}
-            {/*            <Label>Begrunnelse(r)</Label>*/}
-            {/*            <ul>*/}
-            {/*                {genererteBrevbegrunnelser.data.map(*/}
-            {/*                    (begrunnelse: string, index: number) => (*/}
-            {/*                        <li key={`begrunnelse-${index}`}>*/}
-            {/*                            <BodyShort children={begrunnelse}/>*/}
-            {/*                        </li>*/}
-            {/*                    )*/}
-            {/*                )}*/}
-            {/*            </ul>*/}
-            {/*        </>*/}
-            {/*    )}*/}
-            {/*{genererteBrevbegrunnelser.status === RessursStatus.FEILET && (*/}
-            {/*    <>*/}
-            {/*        <ErrorMessage>{genererteBrevbegrunnelser.frontendFeilmelding}</ErrorMessage>*/}
-            {/*    </>*/}
-            {/*)}*/}
         </EkspanderbartBegrunnelsePanel>
     );
 };
