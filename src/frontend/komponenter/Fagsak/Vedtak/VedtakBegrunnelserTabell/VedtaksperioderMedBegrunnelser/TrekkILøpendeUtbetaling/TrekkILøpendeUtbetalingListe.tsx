@@ -8,10 +8,7 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type {
-    IRestTrekkILøpendeUtbetaling,
-    IRestTrekkILøpendeUtbetalingIdentifikator,
-} from './IRestTrekkILøpendeUtbetaling';
+import type { IRestTrekkILøpendeUtbetaling } from './IRestTrekkILøpendeUtbetaling';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
@@ -74,23 +71,8 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         };
     }
 
-    function tilRestIdentifikator(id: number): IRestTrekkILøpendeUtbetalingIdentifikator {
-        return {
-            id: id,
-            behandlingId: åpenBehandling.behandlingId,
-        };
-    }
-
-    const fjern = async (id: number) => {
+    const fjernFraLista = async (id: number) => {
         settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id));
-        if (id === 0) {
-            return;
-        }
-        await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-            data: tilRestIdentifikator(id),
-        });
     };
 
     useEffect(() => {
@@ -113,7 +95,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     <TrekkILøpendeUtbetalingPanel
                         key={trekkILøpendeUtbetaling.id}
                         trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                        fjern={() => fjern(trekkILøpendeUtbetaling.id)}
+                        fjernFraLista={() => fjernFraLista(trekkILøpendeUtbetaling.id)}
                     />
                 </TrekkILøpendeUtbetalingProvider>
             ))}
