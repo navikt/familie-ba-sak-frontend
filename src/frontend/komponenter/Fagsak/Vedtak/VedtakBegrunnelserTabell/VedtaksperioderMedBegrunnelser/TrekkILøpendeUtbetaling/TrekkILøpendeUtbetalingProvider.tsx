@@ -130,6 +130,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
                 });
                 if (respons.status === RessursStatus.SUKSESS) {
                     skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
+                    onPanelClose(false);
                 }
             }
         };

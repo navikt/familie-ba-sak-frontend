@@ -52,7 +52,7 @@ const KnappHøyre = styled(Button)`
 `;
 
 const TrekkILøpendeUtbetalingPanel: React.FC = () => {
-    const { skjema, erPanelEkspandert, onPanelClose, leggTilPeriode, fjern } =
+    const { skjema, erPanelEkspandert, onPanelClose, valideringErOk, leggTilPeriode, fjern } =
         useTrekkILøpendeUtbetalingProvider();
 
     const avbryt = () => {
@@ -133,7 +133,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
             <Knapperad>
                 <Button
                     onClick={leggTilPeriode}
-                    variant={'primary'}
+                    variant={valideringErOk() ? 'primary' : 'secondary'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
