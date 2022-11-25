@@ -31,7 +31,6 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         const trekk = await request<void, IRestTrekkILøpendeUtbetaling[]>({
             method: 'GET',
             url: '/familie-ba-sak/api/trekk-i-loepende-utbetaling',
-            headers: {},
         });
         if (trekk.status !== RessursStatus.SUKSESS) {
             settTrekkILøpendeUtbetalinger([]);
@@ -65,7 +64,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             id: trekkILøpendeUtbetaling.identifikator.id,
             behandlingId: trekkILøpendeUtbetaling.identifikator.behandlingId,
             periode: {
-                fom: trekkILøpendeUtbetaling.periode.fom + '-01',
+                fom: trekkILøpendeUtbetaling.periode.fom + '-01', // TODO: 01 her er ein workaround i påvente av månadsveljar, vi bryr oss jo eigentleg ikkje om datoen her
                 tom: trekkILøpendeUtbetaling.periode.tom
                     ? trekkILøpendeUtbetaling.periode.tom + '-01'
                     : undefined,
