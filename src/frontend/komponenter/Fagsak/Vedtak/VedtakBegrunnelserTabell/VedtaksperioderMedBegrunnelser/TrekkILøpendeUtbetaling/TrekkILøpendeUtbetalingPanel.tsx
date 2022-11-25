@@ -6,20 +6,12 @@ import { Delete } from '@navikt/ds-icons';
 import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { datoformatNorsk } from '../../../../../../utils/formatter';
 import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
-import type { IRestTrekkILøpendeUtbetalingIdentifikator } from './IRestTrekkILøpendeUtbetaling';
-import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
-
-interface IProps {
-    trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
-    fjernFraLista: (id: number) => void;
-}
 
 const baseSkjemaelementStyle = css`
     margin-bottom: 1.5rem;
@@ -59,55 +51,10 @@ const KnappHøyre = styled(Button)`
     margin: 0.5rem 1rem 0.5rem 1rem;
 `;
 
-const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({
-    trekkILøpendeUtbetaling,
-    fjernFraLista,
-}) => {
-    const { skjema, erPanelEkspandert, kanSendeSkjema, onPanelClose } =
+const TrekkILøpendeUtbetalingPanel: React.FC = () => {
+    const { skjema, erPanelEkspandert, onPanelClose, leggTilPeriode, fjern } =
         useTrekkILøpendeUtbetalingProvider();
-    const { request } = useHttp();
 
-    const fjern = async (id: number) => {
-        if (id !== 0) {
-            await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-                data: tilRestIdentifikator(id),
-            });
-        }
-        fjernFraLista(id);
-    };
-
-    function tilRestIdentifikator(id: number): IRestTrekkILøpendeUtbetalingIdentifikator {
-        return {
-            id: id,
-            behandlingId: trekkILøpendeUtbetaling.behandlingId,
-        };
-    }
-
-    const leggTilPeriode = async () => {
-        if (kanSendeSkjema()) {
-            const respons = await request<ITrekkILøpendeUtbetaling, number>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-                data: {
-                    ...trekkILøpendeUtbetaling,
-                    identifikator: {
-                        id: trekkILøpendeUtbetaling.id,
-                        behandlingId: trekkILøpendeUtbetaling.behandlingId,
-                    },
-                    periode: {
-                        fom: skjema.felter.periode.verdi.fom?.substring(0, 7),
-                        tom: skjema.felter.periode.verdi.tom?.substring(0, 7),
-                    },
-                    feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
-                },
-            });
-            if (respons.status === RessursStatus.SUKSESS) {
-                skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
-            }
-        }
-    };
     const avbryt = () => {
         onPanelClose(false);
     };
@@ -187,8 +134,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC<IProps> = ({
                 <Button
                     onClick={leggTilPeriode}
                     variant={'primary'}
-                    // loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    // disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
                     {'Legg til periode'}
                 </Button>

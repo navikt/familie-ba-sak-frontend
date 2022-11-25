@@ -2,19 +2,23 @@ import { useEffect, useState } from 'react';
 
 import constate from 'constate';
 
+import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
 import { nyYearMonthPeriode } from '../../../../../../utils/kalender';
+import type { IRestTrekkILøpendeUtbetalingIdentifikator } from './IRestTrekkILøpendeUtbetaling';
 import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 
 interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
     åpenBehandling: IBehandling;
+    fjernFraLista: (id: number) => void;
 }
 
 const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
@@ -32,10 +36,11 @@ const validerFeilutbetaltBeløp = (felt: FeltState<number>) => {
 };
 
 const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = constate(
-    ({ åpenBehandling, trekkILøpendeUtbetaling }: IProps) => {
+    ({ åpenBehandling, trekkILøpendeUtbetaling, fjernFraLista }: IProps) => {
         const { settÅpenBehandling } = useBehandling();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(true);
         const makslengdeFritekst = 220;
+        const { request } = useHttp();
 
         const {
             hentFeilTilOppsummering,
@@ -105,6 +110,48 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             }
         };
 
+        const leggTilPeriode = async () => {
+            if (kanSendeSkjema()) {
+                const respons = await request<ITrekkILøpendeUtbetaling, number>({
+                    method: 'POST',
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+                    data: {
+                        ...trekkILøpendeUtbetaling,
+                        identifikator: {
+                            id: trekkILøpendeUtbetaling.id,
+                            behandlingId: trekkILøpendeUtbetaling.behandlingId,
+                        },
+                        periode: {
+                            fom: skjema.felter.periode.verdi.fom?.substring(0, 7),
+                            tom: skjema.felter.periode.verdi.tom?.substring(0, 7),
+                        },
+                        feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
+                    },
+                });
+                if (respons.status === RessursStatus.SUKSESS) {
+                    skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
+                }
+            }
+        };
+
+        const fjern = async (id: number) => {
+            if (id !== 0) {
+                await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+                    data: tilRestIdentifikator(id),
+                });
+            }
+            fjernFraLista(id);
+        };
+
+        function tilRestIdentifikator(id: number): IRestTrekkILøpendeUtbetalingIdentifikator {
+            return {
+                id: id,
+                behandlingId: trekkILøpendeUtbetaling.behandlingId,
+            };
+        }
+
         return {
             erPanelEkspandert,
             hentFeilTilOppsummering,
@@ -117,6 +164,8 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             åpenBehandling,
             valideringErOk,
             kanSendeSkjema,
+            leggTilPeriode,
+            fjern,
         };
     }
 );
