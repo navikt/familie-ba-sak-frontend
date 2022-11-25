@@ -93,6 +93,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     åpenBehandling={åpenBehandling}
                     trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                     fjernFraLista={() => fjernFraLista(trekkILøpendeUtbetaling.id)}
+                    hentTrekkILøpendeUtbetalinger={hentTrekkILøpendeUtbetalinger}
                 >
                     <TrekkILøpendeUtbetalingPanel key={trekkILøpendeUtbetaling.id} />
                 </TrekkILøpendeUtbetalingProvider>

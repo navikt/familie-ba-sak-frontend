@@ -5,10 +5,8 @@ import constate from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
 import { nyYearMonthPeriode } from '../../../../../../utils/kalender';
@@ -19,6 +17,7 @@ interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;
     åpenBehandling: IBehandling;
     fjernFraLista: (id: number) => void;
+    hentTrekkILøpendeUtbetalinger: () => void;
 }
 
 const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
@@ -36,8 +35,12 @@ const validerFeilutbetaltBeløp = (felt: FeltState<number>) => {
 };
 
 const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = constate(
-    ({ åpenBehandling, trekkILøpendeUtbetaling, fjernFraLista }: IProps) => {
-        const { settÅpenBehandling } = useBehandling();
+    ({
+        åpenBehandling,
+        trekkILøpendeUtbetaling,
+        fjernFraLista,
+        hentTrekkILøpendeUtbetalinger,
+    }: IProps) => {
         const [erPanelEkspandert, settErPanelEkspandert] = useState(true);
         const makslengdeFritekst = 220;
         const { request } = useHttp();
@@ -45,7 +48,6 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         const {
             hentFeilTilOppsummering,
             kanSendeSkjema,
-            onSubmit,
             settVisfeilmeldinger,
             valideringErOk,
             skjema,
@@ -67,7 +69,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
                     verdi: trekkILøpendeUtbetaling.behandlingId,
                 }),
             },
-            skjemanavn: 'Begrunnelser for vedtaksperiode',
+            skjemanavn: 'Trekk i løpende utbetaling',
         });
 
         const populerSkjemaFraBackend = () => {
@@ -94,22 +96,6 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             }
         };
 
-        const putVedtaksperiodeMedFritekster = () => {
-            if (kanSendeSkjema()) {
-                onSubmit<ITrekkILøpendeUtbetaling>(
-                    {
-                        method: 'PUT',
-                        url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/${trekkILøpendeUtbetaling.id}`,
-                        data: trekkILøpendeUtbetaling,
-                    },
-                    (behandling: Ressurs<IBehandling>) => {
-                        settÅpenBehandling(behandling);
-                        onPanelClose(false);
-                    }
-                );
-            }
-        };
-
         const leggTilPeriode = async () => {
             if (kanSendeSkjema()) {
                 const respons = await request<ITrekkILøpendeUtbetaling, number>({
@@ -131,6 +117,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
                 if (respons.status === RessursStatus.SUKSESS) {
                     skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
                     onPanelClose(false);
+                    hentTrekkILøpendeUtbetalinger();
                 }
             }
         };
@@ -160,7 +147,6 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
             makslengdeFritekst,
             onPanelClose,
-            putVedtaksperiodeMedFritekster,
             skjema,
             åpenBehandling,
             valideringErOk,
