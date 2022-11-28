@@ -44,11 +44,10 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     };
 
     const leggTilNyPeriode = () => {
-        const ider = trekkILøpendeUtbetalinger.map(trekk => trekk.id);
         settTrekkILøpendeUtbetalinger([
             ...trekkILøpendeUtbetalinger,
             {
-                id: Math.max(0, Math.max(...ider) + 1),
+                id: 0,
                 behandlingId: åpenBehandling.behandlingId,
                 feilutbetaltBeløp: 0,
                 periode: {},

@@ -41,8 +41,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
         fjernFraLista,
         hentTrekkILøpendeUtbetalinger,
     }: IProps) => {
-        const [erPanelEkspandert, settErPanelEkspandert] = useState(true);
-        const makslengdeFritekst = 220;
+        const [erPanelEkspandert, settErPanelEkspandert] = useState(false);
         const { request } = useHttp();
 
         const {
@@ -145,7 +144,6 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             hentFeilTilOppsummering,
             id: trekkILøpendeUtbetaling.id,
             trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
-            makslengdeFritekst,
             onPanelClose,
             skjema,
             åpenBehandling,
