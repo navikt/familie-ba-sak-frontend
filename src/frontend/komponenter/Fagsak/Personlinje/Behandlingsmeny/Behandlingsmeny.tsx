@@ -21,6 +21,7 @@ import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
+import LeggTilEllerFjernBrevmottakere from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 
@@ -97,9 +98,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.status === BehandlingStatus.UTREDES && (
-                            <Dropdown.Menu.List.Item>
-                                Legg til / fjern brevmottakere
-                            </Dropdown.Menu.List.Item>
+                            <LeggTilEllerFjernBrevmottakere />
                         )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>
