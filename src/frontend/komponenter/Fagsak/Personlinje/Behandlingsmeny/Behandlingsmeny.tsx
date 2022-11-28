@@ -33,6 +33,10 @@ const PosisjonertMenyknapp = styled(Button)`
     margin-left: 3rem;
 `;
 
+const StyletDropdownMenu = styled(Dropdown.Menu)`
+    width: 30ch;
+`;
+
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
@@ -49,7 +53,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             >
                 Meny
             </PosisjonertMenyknapp>
-            <Dropdown.Menu>
+            <StyletDropdownMenu>
                 <Dropdown.Menu.List>
                     <OpprettBehandling minimalFagsak={minimalFagsak} />
                     {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
@@ -98,7 +102,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             </Dropdown.Menu.List.Item>
                         )}
                 </Dropdown.Menu.List>
-            </Dropdown.Menu>
+            </StyletDropdownMenu>
         </Dropdown>
     );
 };
