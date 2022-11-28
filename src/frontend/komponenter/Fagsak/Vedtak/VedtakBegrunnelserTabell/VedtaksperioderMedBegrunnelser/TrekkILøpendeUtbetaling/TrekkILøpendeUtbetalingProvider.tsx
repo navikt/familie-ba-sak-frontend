@@ -121,6 +121,32 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             }
         };
 
+        const oppdaterPeriode = async () => {
+            if (kanSendeSkjema()) {
+                const respons = await request<ITrekkILøpendeUtbetaling, number>({
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+                    data: {
+                        ...trekkILøpendeUtbetaling,
+                        identifikator: {
+                            id: trekkILøpendeUtbetaling.id,
+                            behandlingId: trekkILøpendeUtbetaling.behandlingId,
+                        },
+                        periode: {
+                            fom: skjema.felter.periode.verdi.fom?.substring(0, 7),
+                            tom: skjema.felter.periode.verdi.tom?.substring(0, 7),
+                        },
+                        feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
+                    },
+                });
+                if (respons.status === RessursStatus.SUKSESS) {
+                    skjema.felter.id.validerOgSettFelt(respons.data.valueOf());
+                    onPanelClose(false);
+                    hentTrekkILøpendeUtbetalinger();
+                }
+            }
+        };
+
         const fjern = async (id: number) => {
             if (id !== 0) {
                 await request<IRestTrekkILøpendeUtbetalingIdentifikator, void>({
@@ -150,6 +176,7 @@ const [TrekkILøpendeUtbetalingProvider, useTrekkILøpendeUtbetalingProvider] = 
             valideringErOk,
             kanSendeSkjema,
             leggTilPeriode,
+            oppdaterPeriode,
             fjern,
         };
     }

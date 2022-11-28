@@ -52,12 +52,21 @@ const KnappHøyre = styled(Button)`
 `;
 
 const TrekkILøpendeUtbetalingPanel: React.FC = () => {
-    const { skjema, erPanelEkspandert, onPanelClose, valideringErOk, leggTilPeriode, fjern } =
-        useTrekkILøpendeUtbetalingProvider();
+    const {
+        skjema,
+        erPanelEkspandert,
+        onPanelClose,
+        valideringErOk,
+        leggTilPeriode,
+        oppdaterPeriode,
+        fjern,
+    } = useTrekkILøpendeUtbetalingProvider();
 
     const avbryt = () => {
         onPanelClose(false);
     };
+
+    const erNyPeriode = skjema.felter.id.verdi === 0;
 
     return (
         <EkspanderbartBegrunnelsePanel
@@ -132,12 +141,12 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
             />
             <Knapperad>
                 <Button
-                    onClick={leggTilPeriode}
+                    onClick={erNyPeriode ? leggTilPeriode : oppdaterPeriode}
                     variant={valideringErOk() ? 'primary' : 'secondary'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    {'Legg til periode'}
+                    {erNyPeriode ? 'Legg til periode' : 'Lagre endringer'}
                 </Button>
                 <AvbrytKnapp
                     id={'avbryt'}
