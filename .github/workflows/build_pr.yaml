@@ -33,5 +33,3 @@ jobs:
           yarn build
           yarn test
           yarn run cypress
-          docker build . -t ${IMAGE}
-      # docker-bygget her er temp for å få testa dockerignore og sånt
