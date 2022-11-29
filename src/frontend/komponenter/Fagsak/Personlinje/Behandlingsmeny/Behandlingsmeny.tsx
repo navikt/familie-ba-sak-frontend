@@ -97,7 +97,9 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.status === BehandlingStatus.UTREDES && (
+                        åpenBehandling.data.status === BehandlingStatus.UTREDES &&
+                        (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                            åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
                             <LeggTilEllerFjernBrevmottakere />
                         )}
                 </Dropdown.Menu.List>
