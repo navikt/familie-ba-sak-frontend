@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 import { Button, Select, TextField } from '@navikt/ds-react';
 
+interface IProps {
+    lukkModal: () => void;
+}
+
 const StyledInputKontainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -14,9 +18,10 @@ const Knapperad = styled.div`
     margin-top: 2.5rem;
     display: flex;
     justify-content: flex-start;
+    gap: 1rem;
 `;
 
-const NyBrevmottakerRedigerbarVisning: React.FC = () => {
+const NyBrevmottakerRedigerbarVisning: React.FC<IProps> = ({ lukkModal }) => {
     return (
         <>
             <StyledInputKontainer>
@@ -31,7 +36,7 @@ const NyBrevmottakerRedigerbarVisning: React.FC = () => {
                 <Button variant="secondary" size="medium">
                     Legg til mottaker
                 </Button>
-                <Button variant="tertiary" size="medium">
+                <Button variant="tertiary" size="medium" onClick={lukkModal}>
                     Avbryt
                 </Button>
             </Knapperad>

@@ -17,6 +17,10 @@ const StyledAlert = styled(Alert)`
 
 const LeggTilEllerFjernBrevmottakere: React.FC = () => {
     const [visModal, settVisModal] = useState(false);
+
+    const lukkModal = () => {
+        settVisModal(false);
+    };
     return (
         <>
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
@@ -25,7 +29,8 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
             <StyledModal
                 open={visModal}
                 aria-label="Legg til eller fjern brevmottakere"
-                onClose={() => settVisModal(false)}
+                onClose={lukkModal}
+                shouldCloseOnOverlayClick={false}
             >
                 <Modal.Content>
                     <Heading spacing level="2" size="medium" id="modal-heading">
@@ -37,7 +42,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                         fullmektig, verge eller dødsbo.
                     </StyledAlert>
                     {/* TODO: Lag ny komponent for leservisning og legg inn sjekk for hvilken som skal vises */}
-                    <NyBrevmottakerRedigerbarVisning />
+                    <NyBrevmottakerRedigerbarVisning lukkModal={lukkModal} />
                 </Modal.Content>
             </StyledModal>
         </>
