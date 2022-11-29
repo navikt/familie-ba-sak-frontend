@@ -45,8 +45,9 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
 
     const brukerHarStrengtFortroligAdresse =
         bruker &&
-        bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.STRENGT_FORTROLIG &&
-        bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
+        (bruker.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+            bruker.adressebeskyttelseGradering ===
+                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND);
 
     return (
         <Dropdown>
