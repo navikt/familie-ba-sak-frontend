@@ -102,11 +102,14 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         åpenBehandling.data.aktivSettPåVent && (
                             <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                    {toggles[ToggleNavn.leggTilMottaker] &&
+                        !brukerHarStrengtFortroligAdresse &&
+                        åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.status === BehandlingStatus.UTREDES &&
                         (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
-                            åpenBehandling.data.type === Behandlingstype.REVURDERING) &&
-                        !brukerHarStrengtFortroligAdresse && <LeggTilEllerFjernBrevmottakere />}
+                            åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
+                            <LeggTilEllerFjernBrevmottakere />
+                        )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>
         </Dropdown>
