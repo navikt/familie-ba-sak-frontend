@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 
-import { Alert, Heading, Modal } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
+
+const Knapperad = styled.div`
+    display: flex;
+    justify-content: flex-start;
+`;
 
 const LeggTilEllerFjernBrevmottakere: React.FC = () => {
     const [visModal, settVisModal] = useState(false);
@@ -24,6 +31,14 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                         kanal. Legg til mottaker dersom brev skal sendes til utenlandsk adresse,
                         fullmektig, verge eller dødsbo.
                     </Alert>
+                    <Knapperad>
+                        <Button variant="secondary" size="medium">
+                            Legg til mottaker
+                        </Button>
+                        <Button variant="tertiary" size="medium">
+                            Avbryt
+                        </Button>
+                    </Knapperad>
                 </Modal.Content>
             </Modal>
         </>
