@@ -16,7 +16,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                 onClose={() => settVisModal(false)}
             >
                 <Modal.Content>
-                    <Heading spacing level="1" size="medium" id="modal-heading">
+                    <Heading spacing level="2" size="medium" id="modal-heading">
                         Legg til eller fjern brevmottakere
                     </Heading>
                 </Modal.Content>
