@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 
 env:
+  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
