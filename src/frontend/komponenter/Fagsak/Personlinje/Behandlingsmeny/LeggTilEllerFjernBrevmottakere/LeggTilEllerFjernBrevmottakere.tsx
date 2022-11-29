@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: flex-start;
+import NyBrevmottakerSkjema from './NyBrevmottakerSkjema';
+
+const StyledModal = styled(Modal)`
+    width: 35rem;
 `;
 
 const LeggTilEllerFjernBrevmottakere: React.FC = () => {
@@ -17,7 +18,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Legg til / fjern brevmottakere
             </Dropdown.Menu.List.Item>
-            <Modal
+            <StyledModal
                 open={visModal}
                 aria-label="Legg til eller fjern brevmottakere"
                 onClose={() => settVisModal(false)}
@@ -31,16 +32,10 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                         kanal. Legg til mottaker dersom brev skal sendes til utenlandsk adresse,
                         fullmektig, verge eller dødsbo.
                     </Alert>
-                    <Knapperad>
-                        <Button variant="secondary" size="medium">
-                            Legg til mottaker
-                        </Button>
-                        <Button variant="tertiary" size="medium">
-                            Avbryt
-                        </Button>
-                    </Knapperad>
+                    {/* TODO: Lag ny komponent for leservisning og legg inn sjekk for hvilken som skal vises */}
+                    <NyBrevmottakerSkjema />
                 </Modal.Content>
-            </Modal>
+            </StyledModal>
         </>
     );
 };
