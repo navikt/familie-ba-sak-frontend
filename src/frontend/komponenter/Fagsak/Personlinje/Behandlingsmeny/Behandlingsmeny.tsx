@@ -7,7 +7,7 @@ import '@navikt/ds-css-internal';
 import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Adressebeskyttelsegradering, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -42,6 +42,11 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
     const { toggles } = useApp();
+
+    const brukerHarStrengtFortroligAdresse =
+        bruker &&
+        bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.STRENGT_FORTROLIG &&
+        bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
 
     return (
         <Dropdown>
@@ -99,9 +104,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         åpenBehandling.data.status === BehandlingStatus.UTREDES &&
                         (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
-                            åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
-                            <LeggTilEllerFjernBrevmottakere />
-                        )}
+                            åpenBehandling.data.type === Behandlingstype.REVURDERING) &&
+                        !brukerHarStrengtFortroligAdresse && <LeggTilEllerFjernBrevmottakere />}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>
         </Dropdown>
