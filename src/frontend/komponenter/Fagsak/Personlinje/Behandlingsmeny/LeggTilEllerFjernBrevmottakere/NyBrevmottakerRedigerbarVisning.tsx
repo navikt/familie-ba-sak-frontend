@@ -23,7 +23,7 @@ const Knapperad = styled.div`
     justify-content: flex-start;
 `;
 
-const NyBrevmottakerSkjema: React.FC = () => {
+const NyBrevmottakerRedigerbarVisning: React.FC = () => {
     return (
         <StyledSkjema>
             <Select label="Mottaker">
@@ -47,4 +47,4 @@ const NyBrevmottakerSkjema: React.FC = () => {
     );
 };
 
-export default NyBrevmottakerSkjema;
+export default NyBrevmottakerRedigerbarVisning;

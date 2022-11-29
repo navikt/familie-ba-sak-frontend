@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 
-import NyBrevmottakerSkjema from './NyBrevmottakerSkjema';
+import NyBrevmottakerRedigerbarVisning from './NyBrevmottakerRedigerbarVisning';
 
 const StyledModal = styled(Modal)`
     width: 35rem;
@@ -33,7 +33,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                         fullmektig, verge eller dødsbo.
                     </Alert>
                     {/* TODO: Lag ny komponent for leservisning og legg inn sjekk for hvilken som skal vises */}
-                    <NyBrevmottakerSkjema />
+                    <NyBrevmottakerRedigerbarVisning />
                 </Modal.Content>
             </StyledModal>
         </>
