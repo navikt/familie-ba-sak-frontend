@@ -36,9 +36,9 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             settTrekkILøpendeUtbetalinger([]);
         }
         if (trekk.status === RessursStatus.SUKSESS) {
-            const data = trekk.data;
-            const transformert = data.map(d => fraRest(d));
-            settTrekkILøpendeUtbetalinger(transformert);
+            settTrekkILøpendeUtbetalinger(
+                trekk.data.map(d => konverterFraRestobjektTilDomeneobjekt(d))
+            );
             return trekk;
         }
     };
@@ -55,7 +55,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         ]);
     };
 
-    function fraRest(
+    function konverterFraRestobjektTilDomeneobjekt(
         trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling
     ): ITrekkILøpendeUtbetaling {
         return {
@@ -71,7 +71,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         };
     }
 
-    const fjernFraLista = async (id: number) => {
+    const fjernPeriode = async (id: number) => {
         settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id));
     };
 
@@ -91,7 +91,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     key={trekkILøpendeUtbetaling.id}
                     åpenBehandling={åpenBehandling}
                     trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                    fjernFraLista={() => fjernFraLista(trekkILøpendeUtbetaling.id)}
+                    fjernFraLista={() => fjernPeriode(trekkILøpendeUtbetaling.id)}
                     hentTrekkILøpendeUtbetalinger={hentTrekkILøpendeUtbetalinger}
                 >
                     <TrekkILøpendeUtbetalingPanel key={trekkILøpendeUtbetaling.id} />
