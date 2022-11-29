@@ -11,6 +11,10 @@ const StyledModal = styled(Modal)`
     width: 35rem;
 `;
 
+const StyledAlert = styled(Alert)`
+    margin: 2rem 0;
+`;
+
 const LeggTilEllerFjernBrevmottakere: React.FC = () => {
     const [visModal, settVisModal] = useState(false);
     return (
@@ -27,11 +31,11 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                     <Heading spacing level="2" size="medium" id="modal-heading">
                         Legg til eller fjern brevmottakere
                     </Heading>
-                    <Alert variant="info">
+                    <StyledAlert variant="info">
                         Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken
                         kanal. Legg til mottaker dersom brev skal sendes til utenlandsk adresse,
                         fullmektig, verge eller dødsbo.
-                    </Alert>
+                    </StyledAlert>
                     {/* TODO: Lag ny komponent for leservisning og legg inn sjekk for hvilken som skal vises */}
                     <NyBrevmottakerRedigerbarVisning />
                 </Modal.Content>
