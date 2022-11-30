@@ -7,13 +7,13 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IBehandling } from '../../../../typer/behandling';
 import type {
     IRestTrekkILøpendeUtbetalingIdentifikator,
     ITrekkILøpendeUtbetaling,
-} from '../../../../../../typer/eøs-trekk-i-løpende-ytelse';
-import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
-import { nyYearMonthPeriode } from '../../../../../../utils/kalender';
+} from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import type { IYearMonthPeriode } from '../../../../utils/kalender';
+import { nyYearMonthPeriode } from '../../../../utils/kalender';
 
 interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;

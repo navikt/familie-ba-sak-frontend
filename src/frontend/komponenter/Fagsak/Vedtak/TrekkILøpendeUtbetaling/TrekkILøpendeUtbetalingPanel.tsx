@@ -9,8 +9,8 @@ import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { datoformatNorsk } from '../../../../../../utils/formatter';
-import EkspanderbartBegrunnelsePanel from '../EkspanderbartBegrunnelsePanel';
+import { datoformatNorsk } from '../../../../utils/formatter';
+import EkspanderbartBegrunnelsePanel from '../VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/EkspanderbartBegrunnelsePanel';
 import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
 const baseSkjemaelementStyle = css`

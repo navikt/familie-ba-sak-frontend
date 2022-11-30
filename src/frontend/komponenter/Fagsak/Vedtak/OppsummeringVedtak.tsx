@@ -26,9 +26,9 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { TrekkILøpendeUtbetalingListe } from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import { TrekkILøpendeUtbetalingListe } from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import Vedtaksmeny from './Vedtaksmeny';
 

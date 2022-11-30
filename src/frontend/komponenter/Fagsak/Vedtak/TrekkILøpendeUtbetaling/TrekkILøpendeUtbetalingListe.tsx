@@ -7,11 +7,11 @@ import { Button, Heading } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IBehandling } from '../../../../typer/behandling';
 import type {
     IRestTrekkILøpendeUtbetaling,
     ITrekkILøpendeUtbetaling,
-} from '../../../../../../typer/eøs-trekk-i-løpende-ytelse';
+} from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
