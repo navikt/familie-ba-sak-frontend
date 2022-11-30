@@ -22,11 +22,13 @@ import {
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import { TrekkILøpendeUtbetalingListe } from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import Vedtaksmeny from './Vedtaksmeny';
 
@@ -62,7 +64,7 @@ interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
-    const { hentSaksbehandlerRolle } = useApp();
+    const { hentSaksbehandlerRolle, toggles } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
@@ -198,9 +200,19 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 {hentInfostripeTekst(åpenBehandling.årsak, åpenBehandling.status)}
                             </Alert>
                         ) : (
-                            <VedtaksbegrunnelseTeksterProvider>
-                                <VedtaksperioderMedBegrunnelser åpenBehandling={åpenBehandling} />
-                            </VedtaksbegrunnelseTeksterProvider>
+                            <>
+                                <VedtaksbegrunnelseTeksterProvider>
+                                    <VedtaksperioderMedBegrunnelser
+                                        åpenBehandling={åpenBehandling}
+                                    />
+                                </VedtaksbegrunnelseTeksterProvider>
+                                {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
+                                    <TrekkILøpendeUtbetalingListe
+                                        visTrekkILøpendeUtbetalinger={true}
+                                        åpenBehandling={åpenBehandling}
+                                    />
+                                )}
+                            </>
                         )}
                         <Button
                             id={'forhandsvis-vedtaksbrev'}

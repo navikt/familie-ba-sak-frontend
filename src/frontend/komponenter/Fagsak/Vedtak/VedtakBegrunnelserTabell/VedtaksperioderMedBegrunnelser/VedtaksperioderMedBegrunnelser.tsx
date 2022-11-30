@@ -12,7 +12,6 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import { TrekkILøpendeUtbetalingListe } from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 const StyledHeading = styled(Heading)`
@@ -72,10 +71,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 hjelpetekst={
                     'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
                 }
-                åpenBehandling={åpenBehandling}
-            />
-            <TrekkILøpendeUtbetalingListe
-                visTrekkILøpendeUtbetalinger={true}
                 åpenBehandling={åpenBehandling}
             />
         </>
