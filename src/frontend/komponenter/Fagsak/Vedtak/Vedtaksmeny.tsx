@@ -9,7 +9,7 @@ import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
@@ -37,6 +37,10 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
 
+    const kanIkkeKorrigereVedtak =
+        åpenBehandling.type === Behandlingstype.REVURDERING &&
+        [BehandlingÅrsak.KLAGE, BehandlingÅrsak.DØDSFALL_BRUKER].includes(åpenBehandling.årsak);
+
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -57,7 +61,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
                             />
-                            {(toggles[ToggleNavn.kunneKorrigereVedtak] ||
+                            {((toggles[ToggleNavn.kunneKorrigereVedtak] &&
+                                !kanIkkeKorrigereVedtak) ||
                                 åpenBehandling.korrigertVedtak) && (
                                 <KorrigerVedtak
                                     erLesevisning={vurderErLesevisning()}
