@@ -206,7 +206,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
+                                {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                                     <TrekkILøpendeUtbetalingListe
                                         visTrekkILøpendeUtbetalinger={true}
                                         åpenBehandling={åpenBehandling}

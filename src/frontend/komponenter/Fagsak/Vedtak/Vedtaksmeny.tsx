@@ -75,7 +75,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
-                    {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
+                    {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                         <Dropdown.Menu.List.Item>
                             <Calculator />
                             Legg til trekk i løpende utbetaling
