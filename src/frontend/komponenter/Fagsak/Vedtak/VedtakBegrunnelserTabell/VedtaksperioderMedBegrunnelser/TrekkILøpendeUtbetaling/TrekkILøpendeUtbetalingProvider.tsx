@@ -8,10 +8,12 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
+import type {
+    IRestTrekkILøpendeUtbetalingIdentifikator,
+    ITrekkILøpendeUtbetaling,
+} from '../../../../../../typer/eøs-trekk-i-løpende-ytelse';
 import type { IYearMonthPeriode } from '../../../../../../utils/kalender';
 import { nyYearMonthPeriode } from '../../../../../../utils/kalender';
-import type { IRestTrekkILøpendeUtbetalingIdentifikator } from './IRestTrekkILøpendeUtbetaling';
-import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
 
 interface IProps {
     trekkILøpendeUtbetaling: ITrekkILøpendeUtbetaling;

@@ -8,8 +8,10 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestTrekkILøpendeUtbetaling } from './IRestTrekkILøpendeUtbetaling';
-import type { ITrekkILøpendeUtbetaling } from './ITrekkILøpendeUtbetaling';
+import type {
+    IRestTrekkILøpendeUtbetaling,
+    ITrekkILøpendeUtbetaling,
+} from '../../../../../../typer/eøs-trekk-i-løpende-ytelse';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
