@@ -11,6 +11,7 @@ export enum ToggleNavn {
     støtterInstitusjon = 'familie-ba-sak.stotter-institusjon',
     kunneKorrigereVedtak = 'familie-ba-sak.kunne-korrigere-vedtak',
     leggTilMottaker = 'familie-ba-sak.behandling.legg-til-mottaker',
+    trekkILøpendeUtbetaling = 'familie-ba-sak.trekk-i-loepende-utbetaling',
 }
 
 export const alleTogglerAv = (): IToggles => {
