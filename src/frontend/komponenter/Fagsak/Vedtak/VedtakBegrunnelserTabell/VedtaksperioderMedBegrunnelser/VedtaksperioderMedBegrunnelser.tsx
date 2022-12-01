@@ -65,7 +65,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 }
                 åpenBehandling={åpenBehandling}
             />
-
             <VedtaksperiodeListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Begrunnelser for avslag i vedtaksbrev'}
@@ -87,7 +86,7 @@ const VedtaksperiodeListe: React.FC<{
     åpenBehandling: IBehandling;
 }> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
-        return null;
+        return <></>;
     }
 
     return (

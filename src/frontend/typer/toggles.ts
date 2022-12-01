@@ -10,6 +10,7 @@ export enum ToggleNavn {
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
     støtterInstitusjon = 'familie-ba-sak.stotter-institusjon',
     kunneKorrigereVedtak = 'familie-ba-sak.kunne-korrigere-vedtak',
+    trekkILøpendeUtbetaling = 'familie-ba-sak.trekk-i-loepende-utbetaling',
 }
 
 export const alleTogglerAv = (): IToggles => {

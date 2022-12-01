@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { ExpandFilled } from '@navikt/ds-icons';
+import { Calculator, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
@@ -37,6 +37,10 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
 
+    const kanIkkeKorrigereVedtak =
+        åpenBehandling.type === Behandlingstype.REVURDERING &&
+        [BehandlingÅrsak.KLAGE, BehandlingÅrsak.DØDSFALL_BRUKER].includes(åpenBehandling.årsak);
+
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -57,7 +61,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
                             />
-                            {(toggles[ToggleNavn.kunneKorrigereVedtak] ||
+                            {((toggles[ToggleNavn.kunneKorrigereVedtak] &&
+                                !kanIkkeKorrigereVedtak) ||
                                 åpenBehandling.korrigertVedtak) && (
                                 <KorrigerVedtak
                                     erLesevisning={vurderErLesevisning()}
@@ -69,6 +74,12 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     )}
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
+                    )}
+                    {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
+                        <Dropdown.Menu.List.Item>
+                            <Calculator />
+                            Legg til trekk i løpende utbetaling
+                        </Dropdown.Menu.List.Item>
                     )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
