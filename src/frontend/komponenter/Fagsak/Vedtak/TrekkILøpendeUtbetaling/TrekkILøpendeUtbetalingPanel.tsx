@@ -19,10 +19,9 @@ const baseSkjemaelementStyle = css`
 
 const FlexDiv = styled.div`
     ${baseSkjemaelementStyle}
-    margin-top: 0.5rem;
-    width: 23rem;
+    margin-top: 0.625rem;
     display: flex;
-    justify-content: space-between;
+    gap: 1rem;
 `;
 
 const StyledFamilieInput = styled(FamilieInput)`
