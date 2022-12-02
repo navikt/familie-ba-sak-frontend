@@ -6,9 +6,8 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import { formaterBeløp, summer } from '../../../../../utils/formatter';
+import { formaterBeløp } from '../../../../../utils/formatter';
+import type { IYearMonthPeriode } from '../../../../../utils/kalender';
 import {
     erEtter,
     kalenderDatoMedFallback,
@@ -37,27 +36,26 @@ const PanelTittel = styled.div`
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    periode: IYearMonthPeriode;
+    skalViseSum: boolean;
+    summer: () => number;
+    tittel: string;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
-    vedtaksperiodeMedBegrunnelser,
     åpen,
     onClick,
     children,
+    periode,
+    skalViseSum,
+    summer,
+    tittel,
 }) => {
-    const periode = {
-        fom: vedtaksperiodeMedBegrunnelser.fom,
-        tom: vedtaksperiodeMedBegrunnelser.tom,
-    };
-
-    const vedtaksperiodeTittel = hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser);
-
     return (
         <StyledEkspanderbartpanelBase
             key={`${periode.fom}_${periode.tom}`}
@@ -75,22 +73,8 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                             })}
                         </Label>
                     )}
-                    <BodyShort>{vedtaksperiodeTittel}</BodyShort>
-                    {(vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
-                        vedtaksperiodeMedBegrunnelser.type ===
-                            Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING) &&
-                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
-                            <BodyShort>
-                                {formaterBeløp(
-                                    summer(
-                                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.map(
-                                            utbetalingsperiodeDetalj =>
-                                                utbetalingsperiodeDetalj.utbetaltPerMnd
-                                        )
-                                    )
-                                )}
-                            </BodyShort>
-                        )}
+                    <BodyShort>{tittel}</BodyShort>
+                    {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
                 </PanelTittel>
             }
         >

@@ -9,7 +9,7 @@ import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
-import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
+import EkspanderbartVedtaksbegrunnelsePanel from './EkspanderbartVedtaksbegrunnelsePanel';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 
 interface IProps {
@@ -47,7 +47,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         ).length > 0;
 
     return (
-        <EkspanderbartBegrunnelsePanel
+        <EkspanderbartVedtaksbegrunnelsePanel
             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(true)}
@@ -81,7 +81,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                 </>
             )}
             {visFritekster() && <FritekstVedtakbegrunnelser />}
-        </EkspanderbartBegrunnelsePanel>
+        </EkspanderbartVedtaksbegrunnelsePanel>
     );
 };
 export default VedtaksperiodeMedBegrunnelserPanel;
