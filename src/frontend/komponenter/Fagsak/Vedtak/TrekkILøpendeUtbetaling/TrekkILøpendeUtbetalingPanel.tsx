@@ -99,7 +99,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                                 iDag.getMonth() + 1
                             ).toISOString(),
                         }}
-                        erLesesvisning={false}
+                        erLesesvisning={erLeserVisning}
                         id={`for-mye-utbetalt-fom`}
                         label={'F.o.m'}
                         placeholder={datoformatNorsk.DATO}
@@ -120,7 +120,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                                 iDag.getMonth() + 1
                             ).toISOString(),
                         }}
-                        erLesesvisning={false}
+                        erLesesvisning={erLeserVisning}
                         id={`for-mye-utbetalt-tom`}
                         label={'T.o.m'}
                         placeholder={datoformatNorsk.DATO}
