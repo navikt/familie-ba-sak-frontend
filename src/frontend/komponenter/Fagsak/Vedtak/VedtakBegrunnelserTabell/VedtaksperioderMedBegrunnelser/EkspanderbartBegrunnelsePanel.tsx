@@ -22,19 +22,28 @@ const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     .ekspanderbartPanel__hode {
         padding: 0 1rem 0 1.6rem;
     }
+    .ekspanderbartPanel__tittel {
+        width: 100%;
+    }
     .ekspanderbartPanel__innhold {
         padding: 0.5rem 2.75rem 1.5rem 1.6rem;
     }
 `;
 
-const PanelTittel = styled.div`
-    display: grid;
-    grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
-    grid-gap: 0.5rem;
-    margin: 1rem;
-    margin-left: 0;
-`;
+// const PanelTittel = styled.div`
+//     display: grid;
+//     grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
+//     grid-gap: 0.5rem;
+//     margin: 1rem;
+//     margin-left: 0;
+// `;
 
+const PanelTittel = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1rem 1rem 1rem 0rem;
+`;
 interface IEkspanderbartBegrunnelsePanelProps {
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
