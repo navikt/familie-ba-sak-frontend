@@ -82,6 +82,12 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
         hentTrekkILøpendeUtbetalinger();
     }, [åpenBehandling]);
 
+    useEffect(() => {
+        if (visTrekkILøpendeUtbetalinger && trekkILøpendeUtbetalinger.length === 0) {
+            leggTilNyPeriode();
+        }
+    }, [visTrekkILøpendeUtbetalinger]);
+
     return !visTrekkILøpendeUtbetalinger && trekkILøpendeUtbetalinger.length === 0 ? (
         <></>
     ) : (
