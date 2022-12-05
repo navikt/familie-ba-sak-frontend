@@ -1,11 +1,11 @@
 import React from 'react';
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button, Label, TextField } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
