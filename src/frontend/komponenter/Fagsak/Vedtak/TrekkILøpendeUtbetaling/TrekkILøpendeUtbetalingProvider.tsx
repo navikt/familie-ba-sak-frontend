@@ -13,6 +13,7 @@ import type {
     ITrekkILøpendeUtbetaling,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
+import { erSamme } from '../../../../utils/kalender';
 import {
     erFør,
     kalenderDatoMedFallback,
@@ -39,8 +40,10 @@ const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
     const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
     const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
+    const fomDatoErLikTomDato = erSamme(fomKalenderDato, tomKalenderDato);
 
-    if (!fomDatoErFørTomDato) {
+    // Dato kan være lik fordi vi bryr oss kun om måneden, ikke spesifikk dato
+    if (!fomDatoErFørTomDato && !fomDatoErLikTomDato) {
         return feil(felt, 'F.o.m. må være tidligere enn t.o.m');
     }
 
