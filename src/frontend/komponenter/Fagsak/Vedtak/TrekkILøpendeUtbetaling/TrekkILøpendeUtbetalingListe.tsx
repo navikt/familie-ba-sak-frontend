@@ -12,6 +12,7 @@ import type {
     IRestTrekkILøpendeUtbetaling,
     ITrekkILøpendeUtbetaling,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import { Knapperad } from '../../Behandlingsresultat/EøsPeriode/fellesKomponenter';
 import TrekkILøpendeUtbetalingPanel from './TrekkILøpendeUtbetalingPanel';
 import { TrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
@@ -99,16 +100,18 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                     <TrekkILøpendeUtbetalingPanel key={trekkILøpendeUtbetaling.id} />
                 </TrekkILøpendeUtbetalingProvider>
             ))}
-            <Button
-                id={'legg-til-ny-trekk-i-loepende-utbetaling-periode'}
-                variant={'tertiary'}
-                size={'small'}
-                style={{ float: 'right' }}
-                onClick={leggTilNyPeriode}
-                icon={<AddCircle aria-hidden />}
-            >
-                Legg til ny periode
-            </Button>
+            <Knapperad>
+                <Button
+                    id={'legg-til-ny-trekk-i-loepende-utbetaling-periode'}
+                    variant={'tertiary'}
+                    size={'small'}
+                    style={{ paddingLeft: '0' }}
+                    onClick={leggTilNyPeriode}
+                    icon={<AddCircle aria-hidden />}
+                >
+                    Legg til ny periode
+                </Button>
+            </Knapperad>
         </>
     );
 };
