@@ -74,10 +74,10 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
 
     return (
         <EkspanderbartBegrunnelsePanel
-            åpen={erPanelEkspandert || skjema.felter.feilutbetaltBeløp.verdi === 0}
+            åpen={erPanelEkspandert || erNyPeriode}
             onClick={() => onPanelClose(false)}
             periode={skjema.felter.periode.verdi}
-            skalViseSum={true}
+            skalViseSum={skjema.felter.feilutbetaltBeløp.verdi !== 0}
             summer={() => skjema.felter.feilutbetaltBeløp.verdi}
             tittel={''}
         >

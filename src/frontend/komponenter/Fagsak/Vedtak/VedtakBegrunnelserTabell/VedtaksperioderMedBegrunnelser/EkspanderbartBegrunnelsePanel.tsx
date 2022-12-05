@@ -63,7 +63,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
             onClick={onClick}
             tittel={
                 <PanelTittel>
-                    {periode.fom && (
+                    {periode.fom ? (
                         <Label>
                             {periodeToString({
                                 fom: periode.fom,
@@ -72,6 +72,8 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                                     : periode.tom,
                             })}
                         </Label>
+                    ) : (
+                        <Label>mm.åååå</Label>
                     )}
                     <BodyShort>{tittel}</BodyShort>
                     {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
