@@ -29,7 +29,6 @@ interface IProps {
 }
 
 const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
-    console.log('validerer periode');
     const fom = felt.verdi.fom;
 
     if (!fom) {
@@ -39,14 +38,7 @@ const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
     const tom = felt.verdi.tom;
     const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
     const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
-
-    console.log('Datoer: ', fomKalenderDato, tomKalenderDato);
-
     const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
-
-    if (fomDatoErFørTomDato) {
-        return feil(felt, 'skjønner ikke');
-    }
 
     if (!fomDatoErFørTomDato) {
         return feil(felt, 'F.o.m. må være tidligere enn t.o.m');
