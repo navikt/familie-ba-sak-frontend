@@ -138,7 +138,11 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                 label={'Feilutbetalt beløp'}
                 id={'korrigering-belop'}
                 type={'number'}
-                value={skjema.felter.feilutbetaltBeløp.verdi}
+                value={
+                    skjema.felter.feilutbetaltBeløp.verdi !== 0
+                        ? skjema.felter.feilutbetaltBeløp.verdi
+                        : undefined
+                }
                 size="small"
                 onChange={changeEvent =>
                     skjema.felter.feilutbetaltBeløp.validerOgSettFelt(
