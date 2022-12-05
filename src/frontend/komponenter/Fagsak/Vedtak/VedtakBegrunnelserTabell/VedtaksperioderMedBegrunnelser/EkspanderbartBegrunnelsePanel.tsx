@@ -30,14 +30,6 @@ const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     }
 `;
 
-// const PanelTittel = styled.div`
-//     display: grid;
-//     grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
-//     grid-gap: 0.5rem;
-//     margin: 1rem;
-//     margin-left: 0;
-// `;
-
 const PanelTittel = styled.div`
     display: flex;
     width: 100%;
