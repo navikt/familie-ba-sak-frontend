@@ -13,6 +13,12 @@ import type {
     ITrekkILøpendeUtbetaling,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
+import {
+    erFør,
+    kalenderDatoMedFallback,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+} from '../../../../utils/kalender';
 import { nyYearMonthPeriode } from '../../../../utils/kalender';
 
 interface IProps {
@@ -23,9 +29,29 @@ interface IProps {
 }
 
 const validerPeriode = (felt: FeltState<IYearMonthPeriode>) => {
-    if (!felt.verdi || !felt.verdi?.fom) {
+    console.log('validerer periode');
+    const fom = felt.verdi.fom;
+
+    if (!fom) {
         return feil(felt, 'F.o.m. er påkrevd');
     }
+
+    const tom = felt.verdi.tom;
+    const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
+    const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
+
+    console.log('Datoer: ', fomKalenderDato, tomKalenderDato);
+
+    const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
+
+    if (fomDatoErFørTomDato) {
+        return feil(felt, 'skjønner ikke');
+    }
+
+    if (!fomDatoErFørTomDato) {
+        return feil(felt, 'F.o.m. må være tidligere enn t.o.m');
+    }
+
     return ok(felt);
 };
 

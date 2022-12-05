@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled, { css } from 'styled-components';
 
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+
 import { Delete } from '@navikt/ds-icons';
 import { Button, Label } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
@@ -67,6 +69,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
 
     const erNyPeriode = skjema.felter.id.verdi === 0;
 
+    const iDag = new Date();
+
     return (
         <EkspanderbartBegrunnelsePanel
             åpen={erPanelEkspandert}
@@ -76,50 +80,59 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
             summer={() => skjema.felter.feilutbetaltBeløp.verdi}
             tittel={''}
         >
-            <Label>Angi periode med feilutbetalt beløp</Label>
-
-            <FlexDiv>
-                <FamilieDatovelger
-                    allowInvalidDateSelection={false}
-                    limitations={{
-                        maxDate: new Date().toISOString(),
-                    }}
-                    erLesesvisning={false}
-                    id={`for-mye-utbetalt-fom`}
-                    label={'F.o.m'}
-                    placeholder={datoformatNorsk.DATO}
-                    onChange={(dato?: ISODateString) => {
-                        skjema.felter.periode.validerOgSettFelt({
-                            fom: dato,
-                            tom: skjema.felter.periode.verdi.tom,
-                        });
-                    }}
-                    valgtDato={skjema.felter.periode.verdi.fom}
-                    feil={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.periode.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.periode.feilmelding?.toString()
-                            : ''
-                    }
-                />
-                <FamilieDatovelger
-                    allowInvalidDateSelection={false}
-                    limitations={{
-                        maxDate: new Date().toISOString(),
-                    }}
-                    erLesesvisning={false}
-                    id={`for-mye-utbetalt-tom`}
-                    label={'T.o.m'}
-                    placeholder={datoformatNorsk.DATO}
-                    onChange={(dato?: ISODateString) => {
-                        skjema.felter.periode.validerOgSettFelt({
-                            fom: skjema.felter.periode.verdi.fom,
-                            tom: dato,
-                        });
-                    }}
-                    valgtDato={skjema.felter.periode.verdi.tom}
-                />
-            </FlexDiv>
+            <SkjemaGruppe
+                feil={
+                    skjema.visFeilmeldinger &&
+                    skjema.felter.periode.valideringsstatus === Valideringsstatus.FEIL
+                        ? skjema.felter.periode.feilmelding?.toString()
+                        : ''
+                }
+            >
+                <Label>Angi periode med feilutbetalt beløp</Label>
+                <FlexDiv>
+                    <FamilieDatovelger
+                        allowInvalidDateSelection={false}
+                        limitations={{
+                            maxDate: new Date(
+                                iDag.getFullYear(),
+                                iDag.getMonth() + 1
+                            ).toISOString(),
+                        }}
+                        erLesesvisning={false}
+                        id={`for-mye-utbetalt-fom`}
+                        label={'F.o.m'}
+                        placeholder={datoformatNorsk.DATO}
+                        onChange={(dato?: ISODateString) => {
+                            skjema.felter.periode.validerOgSettFelt({
+                                fom: dato,
+                                tom: skjema.felter.periode.verdi.tom,
+                            });
+                        }}
+                        valgtDato={skjema.felter.periode.verdi.fom}
+                    />
+                    <FamilieDatovelger
+                        allowInvalidDateSelection={false}
+                        limitations={{
+                            minDate: skjema.felter.periode.verdi.fom,
+                            maxDate: new Date(
+                                iDag.getFullYear(),
+                                iDag.getMonth() + 1
+                            ).toISOString(),
+                        }}
+                        erLesesvisning={false}
+                        id={`for-mye-utbetalt-tom`}
+                        label={'T.o.m'}
+                        placeholder={datoformatNorsk.DATO}
+                        onChange={(dato?: ISODateString) => {
+                            skjema.felter.periode.validerOgSettFelt({
+                                fom: skjema.felter.periode.verdi.fom,
+                                tom: dato,
+                            });
+                        }}
+                        valgtDato={skjema.felter.periode.verdi.tom}
+                    />
+                </FlexDiv>
+            </SkjemaGruppe>
             <StyledFamilieInput
                 label={'Hvor mye er utbetalt feil i perioden?'}
                 id={'korrigering-belop'}
