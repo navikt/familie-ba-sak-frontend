@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button, Label } from '@navikt/ds-react';
+import { Button, Label, TextField } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -15,19 +15,17 @@ import { datoformatNorsk } from '../../../../utils/formatter';
 import EkspanderbartBegrunnelsePanel from '../VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/EkspanderbartBegrunnelsePanel';
 import { useTrekkILøpendeUtbetalingProvider } from './TrekkILøpendeUtbetalingProvider';
 
-const baseSkjemaelementStyle = css`
-    margin-bottom: 1.5rem;
+const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 `;
 
 const FlexDiv = styled.div`
-    ${baseSkjemaelementStyle}
-    margin-top: 0.625rem;
     display: flex;
     gap: 1rem;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
-    ${baseSkjemaelementStyle};
+const StyletTextField = styled(FamilieInput)`
     width: 7.5rem;
     .navds-label {
         width: 18rem;
@@ -42,6 +40,7 @@ const AvbrytKnapp = styled(Button)`
 `;
 
 const Knapperad = styled.div`
+    margin-top: 2.5rem;
     width: 100%;
     position: relative;
     display: inline-block;
@@ -71,6 +70,8 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
 
     const iDag = new Date();
 
+    const erLeserVisning = false;
+
     return (
         <EkspanderbartBegrunnelsePanel
             åpen={erPanelEkspandert}
@@ -80,7 +81,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
             summer={() => skjema.felter.feilutbetaltBeløp.verdi}
             tittel={''}
         >
-            <SkjemaGruppe
+            <StyledSkjemaGruppe
                 feil={
                     skjema.visFeilmeldinger &&
                     skjema.felter.periode.valideringsstatus === Valideringsstatus.FEIL
@@ -132,12 +133,13 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                         valgtDato={skjema.felter.periode.verdi.tom}
                     />
                 </FlexDiv>
-            </SkjemaGruppe>
-            <StyledFamilieInput
-                label={'Hvor mye er utbetalt feil i perioden?'}
+            </StyledSkjemaGruppe>
+            <StyletTextField
+                label={'Feilutbetalt beløp'}
                 id={'korrigering-belop'}
                 type={'number'}
                 value={skjema.felter.feilutbetaltBeløp.verdi}
+                size="small"
                 onChange={changeEvent =>
                     skjema.felter.feilutbetaltBeløp.validerOgSettFelt(
                         Number(changeEvent.target.value)
@@ -149,10 +151,11 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                         ? skjema.felter.feilutbetaltBeløp.feilmelding?.toString()
                         : ''
                 }
-                erLesevisning={false}
+                disabled={erLeserVisning}
             />
             <Knapperad>
                 <Button
+                    size="small"
                     onClick={erNyPeriode ? leggTilPeriode : oppdaterPeriode}
                     variant={valideringErOk() ? 'primary' : 'secondary'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
