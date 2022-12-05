@@ -18,6 +18,7 @@ import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstids
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     erBehandlingMedVedtaksbrevutsending: boolean;
+    settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -33,6 +34,7 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
 const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     erBehandlingMedVedtaksbrevutsending,
+    settVisTrekkILøpendeUtbetaling,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
@@ -76,7 +78,9 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
                     {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
-                        <Dropdown.Menu.List.Item>
+                        <Dropdown.Menu.List.Item
+                            onClick={() => settVisTrekkILøpendeUtbetaling(true)}
+                        >
                             <Calculator />
                             Legg til trekk i løpende utbetaling
                         </Dropdown.Menu.List.Item>

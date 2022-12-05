@@ -87,6 +87,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
+    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
+
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
         const rolle = hentSaksbehandlerRolle();
@@ -146,6 +148,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             <Vedtaksmeny
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
+                settVisTrekkILøpendeUtbetaling={settVisTrekkILøpendeUtbetaling}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -208,7 +211,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                                     <TrekkILøpendeUtbetalingListe
-                                        visTrekkILøpendeUtbetalinger={true}
+                                        visTrekkILøpendeUtbetalinger={visTrekkILøpendeUtbetaling}
                                         åpenBehandling={åpenBehandling}
                                     />
                                 )}
