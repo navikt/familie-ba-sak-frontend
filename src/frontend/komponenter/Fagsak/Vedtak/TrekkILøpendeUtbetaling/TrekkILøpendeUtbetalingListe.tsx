@@ -75,7 +75,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
     }
 
     const fjernPeriode = async (id: number) => {
-        settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id));
+        settTrekkILøpendeUtbetalinger(trekkILøpendeUtbetalinger.filter(t => t.id !== id)); //Denne funker ikke om id er 0 for nye
     };
 
     useEffect(() => {
@@ -87,6 +87,30 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
             leggTilNyPeriode();
         }
     }, [visTrekkILøpendeUtbetalinger]);
+
+    const leggTilPerioderINØSTekst = () =>
+        trekkILøpendeUtbetalinger
+            .map(
+                trekkILøpendeUtbetaling =>
+                    `${trekkILøpendeUtbetaling.feilutbetaltBeløp} kr per mnd fra ${trekkILøpendeUtbetaling.periode.fom} til ${trekkILøpendeUtbetaling.periode.tom}`
+            )
+            .join('\n');
+
+    const summerPerioder = trekkILøpendeUtbetalinger.reduce(
+        (sum, trekkILøpendeUtbetaling) => sum + trekkILøpendeUtbetaling.feilutbetaltBeløp,
+        0
+    );
+
+    const kopierTekstTilNøs = () => {
+        const tekstTilNØS =
+            'Viser til Saksblokk A03 3030 \n\nBer om at feilutbetaling med\n' +
+            leggTilPerioderINØSTekst() +
+            'totalt ' +
+            summerPerioder +
+            ' kr \ntrekkes i løpende utbetaling';
+
+        navigator.clipboard.writeText(tekstTilNØS);
+    };
 
     return !visTrekkILøpendeUtbetalinger && trekkILøpendeUtbetalinger.length === 0 ? (
         <></>
@@ -117,6 +141,7 @@ export const TrekkILøpendeUtbetalingListe: React.FC<{
                 >
                     Legg til ny periode
                 </Button>
+                <Button onClick={kopierTekstTilNøs}>Kopier tekst til NØS</Button>
             </Knapperad>
         </>
     );
