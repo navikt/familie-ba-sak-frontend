@@ -165,7 +165,7 @@ const TrekkILøpendeUtbetalingPanel: React.FC = () => {
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    {erNyPeriode ? 'Legg til periode' : 'Lagre endringer'}
+                    {erNyPeriode ? 'Lagre periode' : 'Lagre endringer'}
                 </Button>
                 <AvbrytKnapp
                     id={'avbryt'}
