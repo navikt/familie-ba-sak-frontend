@@ -37,15 +37,20 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
 
-    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker } =
-        useOpprettBehandling(
-            minimalFagsak.id,
-            () => settVisModal(false),
-            () => {
-                settVisModal(false);
-                settVisBekreftelseTilbakekrevingModal(true);
-            }
-        );
+    const {
+        onBekreft,
+        opprettBehandlingSkjema,
+        nullstillSkjemaStatus,
+        bruker,
+        maksdatoForMigrering,
+    } = useOpprettBehandling(
+        minimalFagsak.id,
+        () => settVisModal(false),
+        () => {
+            settVisModal(false);
+            settVisBekreftelseTilbakekrevingModal(true);
+        }
+    );
     const {
         behandlingsårsak,
         behandlingstype,
@@ -83,6 +88,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                             behandlingsårsak={behandlingsårsak}
                             behandlingstema={behandlingstema}
                             migreringsdato={migreringsdato}
+                            maksdatoForMigrering={maksdatoForMigrering().toISOString()}
                             søknadMottattDato={søknadMottattDato}
                             minimalFagsak={minimalFagsak}
                             visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}

@@ -79,9 +79,14 @@ const useOpprettBehandling = (
 
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            const behandlingsårsakerFeltetSkalVisesFor = [
+                BehandlingÅrsak.SØKNAD,
+                BehandlingÅrsak.ENDRE_MIGRERINGSDATO,
+                BehandlingÅrsak.HELMANUELL_MIGRERING,
+            ];
             return (
                 behandlingstypeVerdi in Behandlingstype &&
-                behandlingsårsakVerdi === BehandlingÅrsak.SØKNAD
+                behandlingsårsakerFeltetSkalVisesFor.includes(behandlingsårsakVerdi)
             );
         },
     });
@@ -89,9 +94,9 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi) && !erDatoFremITid(felt.verdi)
+            felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoFørForrigeMåned(felt.verdi)
                 ? ok(felt)
-                : feil(felt, 'Du må velge en ny migreringsdato'),
+                : feil(felt, 'Du må velge en ny migreringsdato.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -137,6 +142,10 @@ const useOpprettBehandling = (
 
     const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
         return Date.parse(dato.toString()) > new Date().getTime();
+    };
+
+    const erDatoFørForrigeMåned = (dato: FamilieIsoDate): boolean => {
+        return Date.parse(dato.toString()) <= dagenførForrigeMånedStartet().getTime();
     };
 
     const valgteBarn = useFelt({
@@ -268,11 +277,19 @@ const useOpprettBehandling = (
         nullstillSkjema();
     };
 
+    const dagenførForrigeMånedStartet = () => {
+        const dato = new Date();
+        dato.setMonth(dato.getMonth() - 1);
+        dato.setDate(0);
+        return dato;
+    };
+
     return {
         onBekreft,
         opprettBehandlingSkjema: skjema,
         nullstillSkjemaStatus,
         bruker,
+        maksdatoForMigrering: dagenførForrigeMånedStartet,
     };
 };
 

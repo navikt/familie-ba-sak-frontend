@@ -2,8 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
 import { BodyShort } from '@navikt/ds-react';
 import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
 import {
@@ -44,12 +42,6 @@ const FixedDatoVelger = styled(FamilieDatovelger)`
     margin-top: 2rem;
 `;
 
-const FeltFeilmelding = styled(BodyShort)`
-    margin-top: 0.5rem;
-    font-weight: 600;
-    color: ${navFarger.redError};
-`;
-
 const StyledFamilieSelect = styled(FamilieSelect)`
     label {
         margin-top: 2rem;
@@ -66,6 +58,7 @@ const StyledFamilieReactSelect = styled(FamilieReactSelect)`
     label {
         margin-top: 2rem;
     }
+    margin-bottom: -1rem;
 `;
 
 interface IProps {
@@ -80,6 +73,7 @@ interface IProps {
     manuellJournalfør?: boolean;
     bruker?: IPersonInfo | undefined;
     valgteBarn?: Felt<ISelectOption[]> | undefined;
+    maksdatoForMigrering?: FamilieIsoDate | undefined;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -102,6 +96,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
     valgteBarn = undefined,
+    maksdatoForMigrering = undefined,
 }) => {
     const { toggles } = useApp();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
@@ -262,16 +257,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </StyledFamilieSelect>
             )}
 
-            {behandlingstema.erSynlig && (
-                <StyledBehandlingstemaSelect
-                    behandlingstema={behandlingstema}
-                    erLesevisning={erLesevisning}
-                    visFeilmeldinger={visFeilmeldinger}
-                    name="Behandlingstema"
-                    label="Velg behandlingstema"
-                />
-            )}
-
             {erHelmanuellMigrering && valgteBarn?.erSynlig && (
                 <StyledFamilieReactSelect
                     {...valgteBarn.hentNavInputProps(visFeilmeldinger)}
@@ -302,37 +287,39 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 />
             )}
 
+            {behandlingstema.erSynlig && (
+                <StyledBehandlingstemaSelect
+                    behandlingstema={behandlingstema}
+                    erLesevisning={erLesevisning}
+                    visFeilmeldinger={visFeilmeldinger}
+                    name="Behandlingstema"
+                    label="Velg behandlingstema"
+                />
+            )}
+
             {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
-                <>
-                    <FixedDatoVelger
-                        {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
-                        valgtDato={migreringsdato.verdi}
-                        label={'Ny migreringsdato'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
-                    />
-                    {migreringsdato.feilmelding && visFeilmeldinger && (
-                        <FeltFeilmelding>{migreringsdato.feilmelding}</FeltFeilmelding>
-                    )}
-                </>
+                <FixedDatoVelger
+                    {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
+                    valgtDato={migreringsdato.verdi}
+                    label={'Ny migreringsdato'}
+                    placeholder={'DD.MM.ÅÅÅÅ'}
+                    limitations={{
+                        maxDate: maksdatoForMigrering,
+                    }}
+                    feil={migreringsdato.feilmelding}
+                />
             )}
             {søknadMottattDato?.erSynlig && (
-                <>
-                    <FixedDatoVelger
-                        {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
-                        valgtDato={søknadMottattDato.verdi}
-                        label={'Mottatt dato'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
-                    />
-                    {søknadMottattDato.feilmelding && visFeilmeldinger && (
-                        <FeltFeilmelding>{søknadMottattDato.feilmelding}</FeltFeilmelding>
-                    )}
-                </>
+                <FixedDatoVelger
+                    {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
+                    valgtDato={søknadMottattDato.verdi}
+                    label={'Mottatt dato'}
+                    placeholder={'DD.MM.ÅÅÅÅ'}
+                    limitations={{
+                        maxDate: new Date().toISOString(),
+                    }}
+                    feil={søknadMottattDato.feilmelding}
+                />
             )}
         </>
     );
