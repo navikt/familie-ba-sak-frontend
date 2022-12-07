@@ -162,27 +162,28 @@ const useOpprettBehandling = (
         },
     });
 
-    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs } = useSkjema<
-        {
-            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
-            behandlingsårsak: BehandlingÅrsak | '';
-            behandlingstema: IBehandlingstema | undefined;
-            migreringsdato: FamilieIsoDate | undefined;
-            søknadMottattDato: FamilieIsoDate | undefined;
-            valgteBarn: ISelectOption[];
-        },
-        IBehandling
-    >({
-        felter: {
-            behandlingstype,
-            behandlingsårsak,
-            behandlingstema,
-            migreringsdato,
-            søknadMottattDato,
-            valgteBarn,
-        },
-        skjemanavn: 'Opprett behandling modal',
-    });
+    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs, valideringErOk } =
+        useSkjema<
+            {
+                behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
+                behandlingsårsak: BehandlingÅrsak | '';
+                behandlingstema: IBehandlingstema | undefined;
+                migreringsdato: FamilieIsoDate | undefined;
+                søknadMottattDato: FamilieIsoDate | undefined;
+                valgteBarn: ISelectOption[];
+            },
+            IBehandling
+        >({
+            felter: {
+                behandlingstype,
+                behandlingsårsak,
+                behandlingstema,
+                migreringsdato,
+                søknadMottattDato,
+                valgteBarn,
+            },
+            skjemanavn: 'Opprett behandling modal',
+        });
 
     useEffect(() => {
         switch (skjema.felter.behandlingstype.verdi) {
@@ -290,6 +291,7 @@ const useOpprettBehandling = (
         nullstillSkjemaStatus,
         bruker,
         maksdatoForMigrering: dagenførForrigeMånedStartet,
+        valideringErOk,
     };
 };
 

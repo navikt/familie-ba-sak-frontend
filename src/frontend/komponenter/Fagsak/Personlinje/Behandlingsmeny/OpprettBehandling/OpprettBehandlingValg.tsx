@@ -46,6 +46,7 @@ const StyledFamilieSelect = styled(FamilieSelect)`
     label {
         margin-top: 2rem;
     }
+    margin-bottom: 1rem;
 `;
 
 const StyledBehandlingstemaSelect = styled(BehandlingstemaSelect)`
@@ -287,16 +288,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 />
             )}
 
-            {behandlingstema.erSynlig && (
-                <StyledBehandlingstemaSelect
-                    behandlingstema={behandlingstema}
-                    erLesevisning={erLesevisning}
-                    visFeilmeldinger={visFeilmeldinger}
-                    name="Behandlingstema"
-                    label="Velg behandlingstema"
-                />
-            )}
-
             {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
                 <FixedDatoVelger
                     {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
@@ -309,6 +300,17 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     feil={migreringsdato.feilmelding}
                 />
             )}
+
+            {behandlingstema.erSynlig && (
+                <StyledBehandlingstemaSelect
+                    behandlingstema={behandlingstema}
+                    erLesevisning={erLesevisning}
+                    visFeilmeldinger={visFeilmeldinger}
+                    name="Behandlingstema"
+                    label="Velg behandlingstema"
+                />
+            )}
+
             {søknadMottattDato?.erSynlig && (
                 <FixedDatoVelger
                     {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}

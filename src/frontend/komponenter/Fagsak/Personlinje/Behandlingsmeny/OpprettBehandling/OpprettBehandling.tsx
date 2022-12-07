@@ -19,17 +19,18 @@ interface IProps {
 }
 
 const Knapperad = styled.div`
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 `;
 
 const StyledModal = styled(Modal)`
     width: 35rem;
 `;
 
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
+const KnappVenstre = styled(Button)`
+    margin-right: 1rem;
 `;
 
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
@@ -43,6 +44,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
         nullstillSkjemaStatus,
         bruker,
         maksdatoForMigrering,
+        valideringErOk,
     } = useOpprettBehandling(
         minimalFagsak.id,
         () => settVisModal(false),
@@ -97,31 +99,33 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                         />
                     </SkjemaGruppe>
                     <Knapperad>
-                        <Button
-                            key={'avbryt'}
-                            variant="tertiary"
-                            onClick={lukkOpprettBehandlingModal}
-                            children={'Avbryt'}
-                        />
-                        <KnappHøyre
-                            key={'bekreft'}
-                            variant="primary"
-                            onClick={() =>
-                                onBekreft(
-                                    minimalFagsak.søkerFødselsnummer,
-                                    minimalFagsak.fagsakType
-                                )
-                            }
-                            children={'Bekreft'}
-                            loading={
-                                opprettBehandlingSkjema.submitRessurs.status ===
-                                RessursStatus.HENTER
-                            }
-                            disabled={
-                                opprettBehandlingSkjema.submitRessurs.status ===
-                                RessursStatus.HENTER
-                            }
-                        />
+                        <div>
+                            <KnappVenstre
+                                key={'bekreft'}
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                onClick={() =>
+                                    onBekreft(
+                                        minimalFagsak.søkerFødselsnummer,
+                                        minimalFagsak.fagsakType
+                                    )
+                                }
+                                children={'Bekreft'}
+                                loading={
+                                    opprettBehandlingSkjema.submitRessurs.status ===
+                                    RessursStatus.HENTER
+                                }
+                                disabled={
+                                    opprettBehandlingSkjema.submitRessurs.status ===
+                                    RessursStatus.HENTER
+                                }
+                            />
+                            <Button
+                                key={'avbryt'}
+                                variant="tertiary"
+                                onClick={lukkOpprettBehandlingModal}
+                                children={'Avbryt'}
+                            />
+                        </div>
                     </Knapperad>
                 </Modal.Content>
             </StyledModal>
