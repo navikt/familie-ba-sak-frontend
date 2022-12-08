@@ -96,7 +96,7 @@ const useOpprettBehandling = (
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
             felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoFørForrigeMåned(felt.verdi)
                 ? ok(felt)
-                : feil(felt, 'Du må velge en ny migreringsdato'),
+                : feil(felt, 'Du må velge en migreringsdato som er før inneværende eller forrige måned'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
