@@ -43,7 +43,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } =
         useAvslagBegrunnelseMultiselect(vilkårType);
 
-    const valgteBegrunnlser = begrunnelser
+    const valgteBegrunnelser = begrunnelser
         ? begrunnelser.map((valgtBegrunnelse: VedtakBegrunnelse) => ({
               value: valgtBegrunnelse?.toString() ?? '',
               label:
@@ -59,8 +59,8 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
         switch (action.action) {
             case 'select-option':
                 if (action.option) {
-                    valgteBegrunnlser.push(action.option);
-                    onChange(valgteBegrunnlser.map(option => option.value as VedtakBegrunnelse));
+                    valgteBegrunnelser.push(action.option);
+                    onChange(valgteBegrunnelser.map(option => option.value as VedtakBegrunnelse));
                 } else {
                     throw new Error('Klarer ikke legge til begrunnelse');
                 }
@@ -68,7 +68,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
             case 'pop-value':
             case 'remove-value':
                 onChange(
-                    valgteBegrunnlser
+                    valgteBegrunnelser
                         .filter(option => option.value !== action.removedValue?.value)
                         .map(option => option.value as VedtakBegrunnelse)
                 );
@@ -94,7 +94,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
 
     return (
         <FamilieReactSelect
-            value={valgteBegrunnlser}
+            value={valgteBegrunnelser}
             label={'Velg standardtekst i brev'}
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
