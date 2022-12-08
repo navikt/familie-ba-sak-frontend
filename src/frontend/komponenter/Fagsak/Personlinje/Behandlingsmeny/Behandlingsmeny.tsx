@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import '@navikt/ds-css-internal';
-import { NedChevron } from 'nav-frontend-chevron';
-
+import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Adressebeskyttelsegradering, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -22,6 +21,7 @@ import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
+import LeggTilEllerFjernBrevmottakere from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 
@@ -34,23 +34,33 @@ const PosisjonertMenyknapp = styled(Button)`
     margin-left: 3rem;
 `;
 
+const StyletDropdownMenu = styled(Dropdown.Menu)`
+    width: 30ch;
+`;
+
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
     const { toggles } = useApp();
+
+    const brukerHarStrengtFortroligAdresse =
+        bruker &&
+        (bruker.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+            bruker.adressebeskyttelseGradering ===
+                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND);
 
     return (
         <Dropdown>
             <PosisjonertMenyknapp
                 variant="secondary"
                 size="small"
-                icon={<NedChevron />}
+                icon={<ExpandFilled />}
                 iconPosition={'right'}
                 forwardedAs={Dropdown.Toggle}
             >
                 Meny
             </PosisjonertMenyknapp>
-            <Dropdown.Menu>
+            <StyletDropdownMenu>
                 <Dropdown.Menu.List>
                     <OpprettBehandling minimalFagsak={minimalFagsak} />
                     {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
@@ -92,8 +102,16 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         åpenBehandling.data.aktivSettPåVent && (
                             <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
+                    {toggles[ToggleNavn.leggTilMottaker] &&
+                        !brukerHarStrengtFortroligAdresse &&
+                        åpenBehandling.status === RessursStatus.SUKSESS &&
+                        åpenBehandling.data.status === BehandlingStatus.UTREDES &&
+                        (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                            åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
+                            <LeggTilEllerFjernBrevmottakere />
+                        )}
                 </Dropdown.Menu.List>
-            </Dropdown.Menu>
+            </StyletDropdownMenu>
         </Dropdown>
     );
 };

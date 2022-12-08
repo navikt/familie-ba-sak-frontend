@@ -14,15 +14,16 @@ const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, regelverk: Re
         return { avslagBegrunnelseTeksterForGjeldendeVilkår: [] };
     }
 
-    const vedtakBegrunnelseType =
+    const begrunnelsestyperForRegelverk: VedtakBegrunnelseType[] =
         regelverk === Regelverk.EØS_FORORDNINGEN
-            ? VedtakBegrunnelseType.EØS_AVSLAG
-            : VedtakBegrunnelseType.AVSLAG;
+            ? [VedtakBegrunnelseType.EØS_AVSLAG]
+            : [VedtakBegrunnelseType.AVSLAG, VedtakBegrunnelseType.INSTITUSJON_AVSLAG];
 
-    const teksterForGjeldendeRegelverk = vedtaksbegrunnelseTekster.data[vedtakBegrunnelseType];
-
-    const avslagBegrunnelseTeksterForGjeldendeVilkår = teksterForGjeldendeRegelverk.filter(
-        (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType
+    const avslagBegrunnelseTeksterForGjeldendeVilkår = begrunnelsestyperForRegelverk.flatMap(type =>
+        vedtaksbegrunnelseTekster.data[type].filter(
+            (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                begrunnelse.vilkår === vilkårType
+        )
     );
 
     return {
