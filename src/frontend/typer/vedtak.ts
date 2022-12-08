@@ -8,15 +8,6 @@ export interface IVedtakForBehandling {
     id: number;
 }
 
-export interface IRestVedtakBegrunnelse {
-    begrunnelse?: VedtakBegrunnelse;
-    begrunnelseType?: VedtakBegrunnelseType;
-    brevBegrunnelse?: string;
-    fom: string;
-    id?: number;
-    tom?: string;
-}
-
 export interface IRestPostFritekstVedtakBegrunnelser {
     fom?: string;
     tom?: string;
@@ -42,6 +33,7 @@ export enum VedtakBegrunnelseType {
     INNVILGET = 'INNVILGET',
     EØS_INNVILGET = 'EØS_INNVILGET',
     AVSLAG = 'AVSLAG',
+    EØS_AVSLAG = 'EØS_AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
     EØS_OPPHØR = 'EØS_OPPHØR',
@@ -54,6 +46,7 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     INNVILGET: 'Innvilgelse',
     EØS_INNVILGET: 'EØS - Innvilgelse',
     AVSLAG: 'Avslag',
+    EØS_AVSLAG: 'EØS - Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
     EØS_OPPHØR: 'EØS - Opphør',

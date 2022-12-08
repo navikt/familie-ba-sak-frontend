@@ -1,19 +1,29 @@
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../typer/vedtak';
-import type { VilkårType } from '../../../../typer/vilkår';
+import {
+    type IRestVedtakBegrunnelseTilknyttetVilkår,
+    VedtakBegrunnelseType,
+} from '../../../../typer/vedtak';
+import { Regelverk, type VilkårType } from '../../../../typer/vilkår';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
-const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType) => {
+const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, regelverk: Regelverk | null) => {
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    const avslagBegrunnelseTeksterForGjeldendeVilkår =
-        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
-            ? vedtaksbegrunnelseTekster.data.AVSLAG.filter(
-                  (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                      begrunnelse.vilkår === vilkårType
-              )
-            : [];
+    if (vedtaksbegrunnelseTekster.status !== RessursStatus.SUKSESS) {
+        return { avslagBegrunnelseTeksterForGjeldendeVilkår: [] };
+    }
+
+    const vedtakBegrunnelseType =
+        regelverk === Regelverk.EØS_FORORDNINGEN
+            ? VedtakBegrunnelseType.EØS_AVSLAG
+            : VedtakBegrunnelseType.AVSLAG;
+
+    const teksterForGjeldendeRegelverk = vedtaksbegrunnelseTekster.data[vedtakBegrunnelseType];
+
+    const avslagBegrunnelseTeksterForGjeldendeVilkår = teksterForGjeldendeRegelverk.filter(
+        (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType
+    );
 
     return {
         avslagBegrunnelseTeksterForGjeldendeVilkår,

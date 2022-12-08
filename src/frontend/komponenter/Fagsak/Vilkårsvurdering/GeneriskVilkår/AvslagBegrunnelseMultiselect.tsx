@@ -17,7 +17,7 @@ import type {
     VedtakBegrunnelse,
 } from '../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../typer/vedtak';
-import type { VilkårType } from '../../../../typer/vilkår';
+import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
@@ -25,6 +25,7 @@ import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;
+    regelverk: Regelverk | null;
     periode: IPeriode;
     begrunnelser: VedtakBegrunnelse[];
     onChange: (oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => void;
@@ -35,13 +36,20 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange }) => {
+const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
+    vilkårType,
+    begrunnelser,
+    onChange,
+    regelverk,
+}) => {
     const { vurderErLesevisning } = useBehandling();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
-    const { avslagBegrunnelseTeksterForGjeldendeVilkår } =
-        useAvslagBegrunnelseMultiselect(vilkårType);
+    const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
+        vilkårType,
+        regelverk
+    );
 
     const valgteBegrunnelser = begrunnelser
         ? begrunnelser.map((valgtBegrunnelse: VedtakBegrunnelse) => ({
