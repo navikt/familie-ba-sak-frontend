@@ -97,8 +97,8 @@ const useOpprettBehandling = (
             felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoFørForrigeMåned(felt.verdi)
                 ? ok(felt)
                 : feil(
-                    felt,
-                    'Du må velge en migreringsdato som er før inneværende eller forrige måned'
+                      felt,
+                      'Du må velge en migreringsdato som er før inneværende eller forrige måned'
                   ),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
