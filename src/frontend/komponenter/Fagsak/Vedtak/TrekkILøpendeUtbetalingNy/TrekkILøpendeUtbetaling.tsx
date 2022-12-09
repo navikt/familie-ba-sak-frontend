@@ -10,7 +10,7 @@ import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingList
 
 interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
-    trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
+    trekkILøpendeUtbetalingListe?: IRestTrekkILøpendeUtbetaling[];
 }
 
 const FlexColumnDiv = styled.div`
@@ -31,7 +31,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        trekkILøpendeUtbetalingListe.length === 0
+        !trekkILøpendeUtbetalingListe
     );
 
     return (
@@ -51,14 +51,15 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
-                        <TrekkILøpendeUtbetalingListeElement
-                            key={indeks}
-                            trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                            settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
-                            erNyPeriode={false}
-                        />
-                    ))}
+                    {trekkILøpendeUtbetalingListe &&
+                        trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
+                            <TrekkILøpendeUtbetalingListeElement
+                                key={indeks}
+                                trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
+                                settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                                erNyPeriode={false}
+                            />
+                        ))}
                     {ønskerÅLeggeTilNyPeriode && (
                         <TrekkILøpendeUtbetalingListeElement
                             trekkILøpendeUtbetaling={{

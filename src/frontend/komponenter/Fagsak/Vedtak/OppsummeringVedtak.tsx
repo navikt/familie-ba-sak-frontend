@@ -89,18 +89,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(
         åpenBehandling.trekkILøpendeUtbetaling &&
-            åpenBehandling.trekkILøpendeUtbetaling.length > 0 &&
             (toggles[ToggleNavn.trekkILøpendeUtbetaling] || true)
             ? true
             : false
     );
-
-    // const settVisTrekkILøpendeUtbetalingFraVedtaksmeny = () => {
-    //     if(åpenBehandling.trekkILøpendeUtbetaling?.length === 0){
-    //         sett
-    //     }
-    //     settVisTrekkILøpendeUtbetaling(true);
-    // };
 
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
@@ -222,15 +214,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {visTrekkILøpendeUtbetaling &&
-                                    åpenBehandling.trekkILøpendeUtbetaling && (
-                                        <TrekkILøpendeUtbetaling
-                                            trekkILøpendeUtbetalingListe={
-                                                åpenBehandling.trekkILøpendeUtbetaling
-                                            }
-                                            behandlingId={åpenBehandling.behandlingId}
-                                        />
-                                    )}
+                                {visTrekkILøpendeUtbetaling && (
+                                    <TrekkILøpendeUtbetaling
+                                        trekkILøpendeUtbetalingListe={
+                                            åpenBehandling.trekkILøpendeUtbetaling
+                                        }
+                                        behandlingId={åpenBehandling.behandlingId}
+                                    />
+                                )}
                             </>
                         )}
                         <Button
