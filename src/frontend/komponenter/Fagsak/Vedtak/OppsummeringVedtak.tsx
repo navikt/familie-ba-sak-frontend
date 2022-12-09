@@ -88,10 +88,19 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(
-        åpenBehandling.trekkILøpendeUtbetaling && åpenBehandling.trekkILøpendeUtbetaling.length > 0
+        åpenBehandling.trekkILøpendeUtbetaling &&
+            åpenBehandling.trekkILøpendeUtbetaling.length > 0 &&
+            (toggles[ToggleNavn.trekkILøpendeUtbetaling] || true)
             ? true
             : false
     );
+
+    // const settVisTrekkILøpendeUtbetalingFraVedtaksmeny = () => {
+    //     if(åpenBehandling.trekkILøpendeUtbetaling?.length === 0){
+    //         sett
+    //     }
+    //     settVisTrekkILøpendeUtbetaling(true);
+    // };
 
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
@@ -213,12 +222,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
-                                    <TrekkILøpendeUtbetaling
-                                        skalViseTrekkILøpendeUtbetaling={visTrekkILøpendeUtbetaling}
-                                        åpenBehandling={åpenBehandling}
-                                    />
-                                )}
+                                {visTrekkILøpendeUtbetaling &&
+                                    åpenBehandling.trekkILøpendeUtbetaling && (
+                                        <TrekkILøpendeUtbetaling
+                                            trekkILøpendeUtbetalingListe={
+                                                åpenBehandling.trekkILøpendeUtbetaling
+                                            }
+                                            behandlingId={åpenBehandling.behandlingId}
+                                        />
+                                    )}
                             </>
                         )}
                         <Button

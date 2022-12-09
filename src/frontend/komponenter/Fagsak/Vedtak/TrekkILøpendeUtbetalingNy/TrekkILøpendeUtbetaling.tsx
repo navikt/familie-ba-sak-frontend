@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { AddCircle, Copy } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
-import type { IBehandling } from '../../../../typer/behandling';
+import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
 
 interface ITrekkILøpendeUtbetaling {
-    skalViseTrekkILøpendeUtbetaling: boolean;
-    åpenBehandling: IBehandling;
+    behandlingId: number;
+    trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
 }
 
 const FlexColumnDiv = styled.div`
@@ -27,75 +27,69 @@ const FlexRowDiv = styled.div`
 `;
 
 const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
-    skalViseTrekkILøpendeUtbetaling,
-    åpenBehandling,
+    trekkILøpendeUtbetalingListe,
+    behandlingId,
 }) => {
-    const trekkILøpendeUtbetalingListe = åpenBehandling.trekkILøpendeUtbetaling;
+    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
+        trekkILøpendeUtbetalingListe.length === 0
+    );
 
-    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(false);
-
-    if (skalViseTrekkILøpendeUtbetaling) {
-        return (
-            <FlexColumnDiv>
-                <Heading level="2" size="small" spacing>
-                    Trekk i løpende utbetaling
-                </Heading>
-                {trekkILøpendeUtbetalingListe && (
-                    <Table size="small">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell />
-                                <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
-                                <Table.HeaderCell align="right" scope="col">
-                                    Refusjonsbeløp
-                                </Table.HeaderCell>
-                                <Table.HeaderCell scope="col" />
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
-                                <TrekkILøpendeUtbetalingListeElement
-                                    key={indeks}
-                                    trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                                    settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
-                                    erNyPeriode={false}
-                                />
-                            ))}
-                            {ønskerÅLeggeTilNyPeriode && (
-                                <TrekkILøpendeUtbetalingListeElement
-                                    trekkILøpendeUtbetaling={{
-                                        identifikator: {
-                                            id: 0,
-                                            behandlingId: åpenBehandling.behandlingId,
-                                        },
-                                        periode: {},
-                                        feilutbetaltBeløp: 0,
-                                    }}
-                                    erNyPeriode={true}
-                                    settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
-                                />
-                            )}
-                        </Table.Body>
-                    </Table>
-                )}
-                <FlexRowDiv>
-                    <Button
-                        variant="tertiary"
-                        size="small"
-                        icon={<AddCircle />}
-                        onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
-                    >
-                        Legg til ny periode
-                    </Button>
-                    <Button variant="tertiary" size="small" icon={<Copy />}>
-                        Kopier tekst til NØS
-                    </Button>
-                </FlexRowDiv>
-            </FlexColumnDiv>
-        );
-    }
-
-    return <></>;
+    return (
+        <FlexColumnDiv>
+            <Heading level="2" size="small" spacing>
+                Trekk i løpende utbetaling
+            </Heading>
+            <Table size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell />
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                        <Table.HeaderCell align="right" scope="col">
+                            Refusjonsbeløp
+                        </Table.HeaderCell>
+                        <Table.HeaderCell scope="col" />
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
+                        <TrekkILøpendeUtbetalingListeElement
+                            key={indeks}
+                            trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
+                            settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                            erNyPeriode={false}
+                        />
+                    ))}
+                    {ønskerÅLeggeTilNyPeriode && (
+                        <TrekkILøpendeUtbetalingListeElement
+                            trekkILøpendeUtbetaling={{
+                                identifikator: {
+                                    id: 0,
+                                    behandlingId: behandlingId,
+                                },
+                                periode: {},
+                                feilutbetaltBeløp: 0,
+                            }}
+                            erNyPeriode={true}
+                            settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                        />
+                    )}
+                </Table.Body>
+            </Table>
+            <FlexRowDiv>
+                <Button
+                    variant="tertiary"
+                    size="small"
+                    icon={<AddCircle />}
+                    onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
+                >
+                    Legg til ny periode
+                </Button>
+                <Button variant="tertiary" size="small" icon={<Copy />}>
+                    Kopier tekst til NØS
+                </Button>
+            </FlexRowDiv>
+        </FlexColumnDiv>
+    );
 };
 
 export default TrekkILøpendeUtbetaling;
