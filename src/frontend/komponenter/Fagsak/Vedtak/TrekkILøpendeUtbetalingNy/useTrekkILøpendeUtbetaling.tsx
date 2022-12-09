@@ -32,6 +32,9 @@ const validerTom = (
     fom: FamilieIsoDate | undefined
 ) => {
     const tom = felt.verdi;
+    if (!erIsoStringGyldig(tom)) {
+        return feil(felt, 'Du må velge t.o.m-dato');
+    }
     const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
     const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
@@ -39,14 +42,14 @@ const validerTom = (
 
     // Dato kan være lik fordi vi bryr oss kun om måneden, ikke spesifikk dato
     if (!fomDatoErFørTomDato && !fomDatoErLikTomDato) {
-        return feil(felt, 'F.o.m. må være tidligere enn t.o.m');
+        return feil(felt, 'T.o.m. må være senere enn f.o.m');
     }
 
     return ok(felt);
 };
 
-const validerFeilutbetaltBeløp = (felt: FeltState<number>) => {
-    if (!felt.verdi || felt.verdi === 0) {
+const validerFeilutbetaltBeløp = (felt: FeltState<number | undefined>) => {
+    if (!felt.verdi) {
         return feil(felt, 'Beløp er påkrevd');
     }
     return ok(felt);
@@ -67,7 +70,7 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
         {
             fom: FamilieIsoDate | undefined;
             tom: FamilieIsoDate | undefined;
-            feilutbetaltBeløp: number;
+            feilutbetaltBeløp: number | undefined;
         },
         IBehandling
     >({
@@ -83,7 +86,7 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
                 valideringsfunksjon: (felt, avhengigheter) =>
                     validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate | undefined),
             }),
-            feilutbetaltBeløp: useFelt<number>({
+            feilutbetaltBeløp: useFelt<number | undefined>({
                 verdi: trekkILøpendeUtbetaling.feilutbetaltBeløp,
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),

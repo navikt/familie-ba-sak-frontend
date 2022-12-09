@@ -68,7 +68,6 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                                     behandlingId: behandlingId,
                                 },
                                 periode: {},
-                                feilutbetaltBeløp: 0,
                             }}
                             erNyPeriode={true}
                             settErNyPeriode={settØnskerÅLeggeTilNyPeriode}

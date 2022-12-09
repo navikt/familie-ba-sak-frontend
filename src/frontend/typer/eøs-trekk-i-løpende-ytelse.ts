@@ -15,5 +15,5 @@ export interface IRestTrekkILøpendeUtbetalingIdentifikator {
 export interface IRestTrekkILøpendeUtbetaling {
     identifikator: IRestTrekkILøpendeUtbetalingIdentifikator;
     periode: IYearMonthPeriode;
-    feilutbetaltBeløp: number;
+    feilutbetaltBeløp?: number;
 }
