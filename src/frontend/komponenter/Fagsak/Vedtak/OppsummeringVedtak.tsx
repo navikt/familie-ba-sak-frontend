@@ -26,7 +26,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { TrekkILøpendeUtbetalingListe } from './TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
+import TrekkILøpendeUtbetaling from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
@@ -87,7 +87,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
-    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
+    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(
+        åpenBehandling.trekkILøpendeUtbetaling && åpenBehandling.trekkILøpendeUtbetaling.length > 0
+            ? true
+            : false
+    );
 
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
@@ -210,8 +214,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
-                                    <TrekkILøpendeUtbetalingListe
-                                        visTrekkILøpendeUtbetalinger={visTrekkILøpendeUtbetaling}
+                                    <TrekkILøpendeUtbetaling
+                                        skalViseTrekkILøpendeUtbetaling={visTrekkILøpendeUtbetaling}
                                         åpenBehandling={åpenBehandling}
                                     />
                                 )}

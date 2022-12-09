@@ -1,9 +1,10 @@
-import type { IPeriode, IYearMonthPeriode } from '../utils/kalender';
+import type { FamilieIsoDate, IYearMonthPeriode } from '../utils/kalender';
 
 export interface ITrekkILøpendeUtbetaling {
     id: number;
     behandlingId: number;
-    periode: IPeriode;
+    fom?: FamilieIsoDate;
+    tom?: FamilieIsoDate;
     feilutbetaltBeløp: number;
 }
 export interface IRestTrekkILøpendeUtbetalingIdentifikator {
