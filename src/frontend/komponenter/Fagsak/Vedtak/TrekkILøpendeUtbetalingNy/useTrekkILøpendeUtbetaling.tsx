@@ -38,10 +38,8 @@ const validerTom = (
     const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
     const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
-    const fomDatoErLikTomDato = erSamme(fomKalenderDato, tomKalenderDato);
 
-    // Dato kan være lik fordi vi bryr oss kun om måneden, ikke spesifikk dato
-    if (!fomDatoErFørTomDato && !fomDatoErLikTomDato) {
+    if (!fomDatoErFørTomDato) {
         return feil(felt, 'T.o.m. må være senere enn f.o.m');
     }
 
