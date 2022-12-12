@@ -93,8 +93,23 @@ const useBehandlingssteg = (
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
         behandling?.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const sendTilBeslutterNesteOnClick = (settVisModal: (visModal: boolean) => void) => {
-        if (kanSendeinnVedtak()) {
+    const sendTilBeslutterNesteOnClick = (
+        settVisModal: (visModal: boolean) => void,
+        erUlagretNyTrekkILøpendeUtbetaling: boolean
+    ) => {
+        if (erUlagretNyTrekkILøpendeUtbetaling) {
+            settSubmitRessurs(
+                byggFeiletRessurs(
+                    'Det er lagt til panel for trekk i løpende utbetaling. Fyll ut periode og beløp, eller fjern panelet.'
+                )
+            );
+        } else if (!kanSendeinnVedtak) {
+            settSubmitRessurs(
+                byggFeiletRessurs(
+                    'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
+                )
+            );
+        } else {
             settSubmitRessurs(byggHenterRessurs());
             request<void, IBehandling>({
                 method: 'POST',
@@ -113,12 +128,6 @@ const useBehandlingssteg = (
                     settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
                 }
             });
-        } else {
-            settSubmitRessurs(
-                byggFeiletRessurs(
-                    'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
-                )
-            );
         }
     };
 

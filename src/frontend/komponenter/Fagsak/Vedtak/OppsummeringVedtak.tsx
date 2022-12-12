@@ -88,6 +88,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
+    const [erUlagretNyTrekkILøpendeUtbetaling, settErUlagretNyTrekkILøpendeUtbetaling] =
+        React.useState(false);
 
     React.useEffect(() => {
         settVisTrekkILøpendeUtbetaling(
@@ -121,7 +123,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     };
 
     const sendTilBeslutter = () => {
-        sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
+        sendTilBeslutterNesteOnClick(
+            (visModal: boolean) => settVisModal(visModal),
+            erUlagretNyTrekkILøpendeUtbetaling
+        );
     };
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
@@ -224,6 +229,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                             åpenBehandling.trekkILøpendeUtbetaling
                                         }
                                         behandlingId={åpenBehandling.behandlingId}
+                                        settErUlagretNyTrekkILøpendeUtbetaling={
+                                            settErUlagretNyTrekkILøpendeUtbetaling
+                                        }
                                     />
                                 )}
                             </>

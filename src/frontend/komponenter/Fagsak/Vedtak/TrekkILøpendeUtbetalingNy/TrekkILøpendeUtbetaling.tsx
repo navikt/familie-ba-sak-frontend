@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -11,6 +11,7 @@ import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingList
 interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
     trekkILøpendeUtbetalingListe?: IRestTrekkILøpendeUtbetaling[];
+    settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -29,10 +30,15 @@ const FlexRowDiv = styled.div`
 const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetalingListe,
     behandlingId,
+    settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         !trekkILøpendeUtbetalingListe
     );
+
+    useEffect(() => {
+        settErUlagretEndringTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
+    }, [ønskerÅLeggeTilNyPeriode]);
 
     return (
         <FlexColumnDiv>
