@@ -14,7 +14,6 @@ import type {
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import { tilFørsteDagIMåneden, tilSisteDagIMåneden } from '../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
-import { erSamme } from '../../../../utils/kalender';
 import {
     erFør,
     kalenderDatoMedFallback,
@@ -25,6 +24,7 @@ import {
 interface IProps {
     trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
     settErNyPeriode: (erNyPeriode: boolean) => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const validerTom = (
@@ -53,7 +53,11 @@ const validerFeilutbetaltBeløp = (felt: FeltState<number | undefined>) => {
     return ok(felt);
 };
 
-const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling }: IProps) => {
+const useTrekkILøpendeUtbetaling = ({
+    settErNyPeriode,
+    trekkILøpendeUtbetaling,
+    settFeilmelding,
+}: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate | undefined>({
@@ -103,6 +107,7 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
 
     const lagreNyPeriode = () => {
         if (kanSendeSkjema()) {
+            settFeilmelding('Klarte ikke å lagre ny periode');
             onSubmit<IRestTrekkILøpendeUtbetaling>(
                 {
                     method: 'POST',
@@ -125,7 +130,7 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
                         settÅpenBehandling(behandling);
                         settErNyPeriode(false);
                     } else {
-                        console.log('Noe feilet');
+                        settFeilmelding('Klarte ikke å lagre ny periode');
                     }
                 }
             );
@@ -156,7 +161,7 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
                         settÅpenBehandling(behandling);
                         settErNyPeriode(false);
                     } else {
-                        console.log('Noe feilet');
+                        settFeilmelding('Klarte ikke å lagre endringer');
                     }
                 }
             );
@@ -175,18 +180,11 @@ const useTrekkILøpendeUtbetaling = ({ settErNyPeriode, trekkILøpendeUtbetaling
                     settÅpenBehandling(behandling);
                     settErNyPeriode(false);
                 } else {
-                    console.log('Noe feilet');
+                    settFeilmelding('Klarte ikke å slette periode');
                 }
             }
         );
     };
-
-    // const erSkjemaForandret = () =>
-    //     !deepEqual(hentSkjemaData(), {
-    //         fom: trekkILøpendeUtbetaling.periode.fom,
-    //         tom: trekkILøpendeUtbetaling.periode.tom,
-    //         feilutbetaltBeløp: trekkILøpendeUtbetaling.feilutbetaltBeløp,
-    //     });
 
     return {
         skjema,

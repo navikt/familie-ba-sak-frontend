@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Delete } from '@navikt/ds-icons';
-import { Table, Label, Button, Tooltip } from '@navikt/ds-react';
+import { Table, Label, Button, Tooltip, Alert } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
@@ -54,6 +54,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     settErNyPeriode,
 }) => {
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(erNyPeriode ? true : false);
+    const [feilmelding, settFeilmelding] = useState<string>();
 
     const {
         skjema,
@@ -64,7 +65,8 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         valideringErOk,
     } = useTrekkILøpendeUtbetaling({
         trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
-        settErNyPeriode,
+        settErNyPeriode: settErNyPeriode,
+        settFeilmelding: settFeilmelding,
     });
 
     useEffect(() => {
@@ -151,6 +153,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                             Avbryt
                         </Button>
                     </FlexRowDiv>
+                    {feilmelding && <Alert variant="error">{feilmelding}</Alert>}
                 </FlexColumnDiv>
             }
         >
