@@ -8,7 +8,11 @@ import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
-import { yearMonthPeriodeToString } from '../../../../utils/kalender';
+import {
+    serializeIso8601String,
+    sisteDagIInneværendeMåned,
+    yearMonthPeriodeToString,
+} from '../../../../utils/kalender';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
@@ -97,6 +101,9 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                 onChange={(dato?: ISODateString) =>
                                     skjema.felter.fom?.validerOgSettFelt(dato)
                                 }
+                                limitations={{
+                                    maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                                }}
                             />
                             <FamilieDatovelger
                                 {...skjema.felter.tom?.hentNavBaseSkjemaProps(
@@ -108,6 +115,9 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                 onChange={(dato?: ISODateString) =>
                                     skjema.felter.tom?.validerOgSettFelt(dato)
                                 }
+                                limitations={{
+                                    maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                                }}
                             />
                         </FlexRowDiv>
                     </FlexDatoInputWrapper>
