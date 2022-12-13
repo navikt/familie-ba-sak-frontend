@@ -87,7 +87,13 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     return (
         <Table.ExpandableRow
             open={erNyPeriode ? erNyPeriode : erRadEkspandert}
-            onOpenChange={settErRadEkspandert}
+            onOpenChange={
+                erRadEkspandert
+                    ? erNyPeriode
+                        ? avbrytLeggTilNy
+                        : avbrytOppdaterEksisterende
+                    : () => settErRadEkspandert(true)
+            }
             content={
                 <FlexColumnDiv>
                     <FlexDatoInputWrapper>
