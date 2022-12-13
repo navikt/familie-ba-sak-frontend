@@ -83,7 +83,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 onClick={() => settVisTrekkILøpendeUtbetaling(true)}
                             >
                                 <Calculator />
-                                Legg til trekk i løpende utbetaling
+                                Legg til feilutbetalt valuta
                             </Dropdown.Menu.List.Item>
                         ))}
                 </Dropdown.Menu.List>

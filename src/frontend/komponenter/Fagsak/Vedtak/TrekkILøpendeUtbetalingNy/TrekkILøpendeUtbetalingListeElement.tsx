@@ -9,9 +9,9 @@ import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import {
+    periodeToString,
     serializeIso8601String,
     sisteDagIInneværendeMåned,
-    yearMonthPeriodeToString,
 } from '../../../../utils/kalender';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
@@ -91,7 +91,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
             content={
                 <FlexColumnDiv>
                     <FlexDatoInputWrapper>
-                        <Label size="small">Angi periode som skal refunderes til UDI</Label>
+                        <Label size="small">Angi periode med feilutbetalt valuta</Label>
                         <FlexRowDiv style={{ gap: '2rem' }}>
                             <FamilieDatovelger
                                 {...skjema.felter.fom?.hentNavBaseSkjemaProps(
@@ -112,7 +112,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                     skjema.visFeilmeldinger
                                 )}
                                 id="id1"
-                                label="T.o.m (valgfri)"
+                                label="T.o.m"
                                 valgtDato={skjema.felter.tom?.verdi}
                                 onChange={(dato?: ISODateString) =>
                                     skjema.felter.tom?.validerOgSettFelt(dato)
@@ -128,7 +128,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                             skjema.visFeilmeldinger
                         )}
                         size="small"
-                        label="Refusjonsbeløp"
+                        label="Feilutbetalt beløp"
                         value={skjema.felter.feilutbetaltBeløp.verdi}
                         type="number"
                         onChange={changeEvent =>
@@ -160,7 +160,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
             {!erNyPeriode && (
                 <>
                     <Table.DataCell scope="row">
-                        {!erNyPeriode && yearMonthPeriodeToString(trekkILøpendeUtbetaling.periode)}
+                        {!erNyPeriode && periodeToString(trekkILøpendeUtbetaling.periode)}
                     </Table.DataCell>
                     <Table.DataCell align="right">
                         {!erNyPeriode && trekkILøpendeUtbetaling.feilutbetaltBeløp + ' kr'}

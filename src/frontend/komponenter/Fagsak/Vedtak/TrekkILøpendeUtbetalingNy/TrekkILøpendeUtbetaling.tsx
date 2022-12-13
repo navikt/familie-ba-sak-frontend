@@ -47,7 +47,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     return (
         <FlexColumnDiv>
             <Heading level="2" size="small" spacing>
-                Trekk i løpende utbetaling
+                Feilutbetalt valuta
             </Heading>
             <Table size="small">
                 <Table.Header>
@@ -55,7 +55,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                         <Table.HeaderCell />
                         <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell align="right" scope="col">
-                            Refusjonsbeløp
+                            Feilutbetalt beløp
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col" />
                     </Table.Row>
@@ -86,17 +86,17 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                 </Table.Body>
             </Table>
             <FlexRowDiv>
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    icon={<AddCircle />}
-                    onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
-                >
-                    Legg til ny periode
-                </Button>
-                <Button variant="tertiary" size="small" icon={<Copy />}>
-                    Kopier tekst til NØS
-                </Button>
+                {!ønskerÅLeggeTilNyPeriode && (
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        icon={<AddCircle />}
+                        onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
+                    >
+                        Legg til ny periode
+                    </Button>
+                )}
+                {/* TODO: Legg inn "Kopier til NØS-knapp" her */}
             </FlexRowDiv>
         </FlexColumnDiv>
     );
