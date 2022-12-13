@@ -231,6 +231,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                             settErUlagretNyTrekkILøpendeUtbetaling
                                         }
                                         erLeservisning={vurderErLesevisning()}
+                                        settVisTrekkILøpendeUtbetaling={
+                                            settVisTrekkILøpendeUtbetaling
+                                        }
                                     />
                                 )}
                             </>

@@ -10,6 +10,7 @@ import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
+import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
@@ -78,6 +79,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
                     {åpenBehandling.årsak === BehandlingÅrsak.ÅRLIG_KONTROLL &&
+                        åpenBehandling.kategori === BehandlingKategori.EØS &&
                         toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                             <Dropdown.Menu.List.Item
                                 onClick={() => settVisTrekkILøpendeUtbetaling(true)}

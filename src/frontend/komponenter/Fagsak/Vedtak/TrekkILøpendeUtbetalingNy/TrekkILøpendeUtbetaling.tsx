@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Copy } from '@navikt/ds-icons';
+import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
@@ -13,6 +13,7 @@ interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetalingListe?: IRestTrekkILøpendeUtbetaling[];
     settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
     erLeservisning: boolean;
+    settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -33,6 +34,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     behandlingId,
     settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
     erLeservisning,
+    settVisTrekkILøpendeUtbetaling,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         !trekkILøpendeUtbetalingListe
@@ -43,7 +45,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (!trekkILøpendeUtbetalingListe && !ønskerÅLeggeTilNyPeriode) {
-        return <></>;
+        settVisTrekkILøpendeUtbetaling(false);
     }
 
     return (
