@@ -40,6 +40,10 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
         settErUlagretEndringTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
+    if (!trekkILøpendeUtbetalingListe && !ønskerÅLeggeTilNyPeriode) {
+        return <></>;
+    }
+
     return (
         <FlexColumnDiv>
             <Heading level="2" size="small" spacing>
