@@ -1,5 +1,3 @@
-// import deepEqual from 'deep-equal';
-
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -32,6 +30,7 @@ const validerTom = (
     fom: FamilieIsoDate | undefined
 ) => {
     const tom = felt.verdi;
+
     if (!erIsoStringGyldig(tom)) {
         return feil(felt, 'Du må velge t.o.m-dato');
     }
@@ -96,18 +95,8 @@ const useTrekkILøpendeUtbetaling = ({
         skjemanavn: 'Trekk i løpende utbetaling',
     });
 
-    const hentSkjemaData = () => {
-        const { fom, tom, feilutbetaltBeløp } = skjema.felter;
-        return {
-            fom: fom && fom.verdi,
-            tom: tom && tom.verdi,
-            feilutbetaltBeløp: feilutbetaltBeløp.verdi,
-        };
-    };
-
     const lagreNyPeriode = () => {
         if (kanSendeSkjema()) {
-            settFeilmelding('Klarte ikke å lagre ny periode');
             onSubmit<IRestTrekkILøpendeUtbetaling>(
                 {
                     method: 'POST',
@@ -188,9 +177,6 @@ const useTrekkILøpendeUtbetaling = ({
 
     return {
         skjema,
-        hentSkjemaData,
-        onSubmit,
-        kanSendeSkjema,
         lagreNyPeriode,
         oppdaterEksisterendePeriode,
         fjernPeriode,
