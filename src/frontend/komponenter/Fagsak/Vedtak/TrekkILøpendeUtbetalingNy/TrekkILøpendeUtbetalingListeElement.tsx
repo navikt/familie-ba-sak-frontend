@@ -21,6 +21,7 @@ interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
     erNyPeriode?: boolean;
     settErNyPeriode: (erNyPeriode: boolean) => void;
+    erLeservisning: boolean;
 }
 
 const FlexColumnDiv = styled.div`
@@ -54,6 +55,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     trekkILøpendeUtbetaling,
     erNyPeriode,
     settErNyPeriode,
+    erLeservisning,
 }) => {
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(erNyPeriode ? true : false);
     const [feilmelding, settFeilmelding] = useState<string>();
@@ -86,16 +88,24 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         settErNyPeriode(false);
     };
 
+    const håndterLukkingOgÅpningAvPanel = () => {
+        if (erLeservisning) return;
+
+        if (erRadEkspandert) {
+            if (erNyPeriode) {
+                avbrytLeggTilNy();
+            } else {
+                avbrytOppdaterEksisterende();
+            }
+        } else {
+            settErRadEkspandert(true);
+        }
+    };
+
     return (
         <Table.ExpandableRow
-            open={erNyPeriode ? erNyPeriode : erRadEkspandert}
-            onOpenChange={
-                erRadEkspandert
-                    ? erNyPeriode
-                        ? avbrytLeggTilNy
-                        : avbrytOppdaterEksisterende
-                    : () => settErRadEkspandert(true)
-            }
+            open={erLeservisning ? false : erNyPeriode ? true : erRadEkspandert}
+            onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
                     <FlexDatoInputWrapper>
@@ -184,6 +194,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                 variant="tertiary"
                                 size="small"
                                 onClick={fjernPeriode}
+                                disabled={erLeservisning}
                             />
                         </Tooltip>
                     </Table.DataCell>

@@ -12,6 +12,7 @@ interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
     trekkILøpendeUtbetalingListe?: IRestTrekkILøpendeUtbetaling[];
     settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
+    erLeservisning: boolean;
 }
 
 const FlexColumnDiv = styled.div`
@@ -31,6 +32,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetalingListe,
     behandlingId,
     settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
+    erLeservisning,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         !trekkILøpendeUtbetalingListe
@@ -68,6 +70,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                                 trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                                 settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
                                 erNyPeriode={false}
+                                erLeservisning={erLeservisning}
                             />
                         ))}
                     {ønskerÅLeggeTilNyPeriode && (
@@ -81,12 +84,13 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                             }}
                             erNyPeriode={true}
                             settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                            erLeservisning={erLeservisning}
                         />
                     )}
                 </Table.Body>
             </Table>
             <FlexRowDiv>
-                {!ønskerÅLeggeTilNyPeriode && (
+                {!ønskerÅLeggeTilNyPeriode && !erLeservisning && (
                     <Button
                         variant="tertiary"
                         size="small"
