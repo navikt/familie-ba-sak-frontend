@@ -93,9 +93,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     React.useEffect(() => {
         settVisTrekkILøpendeUtbetaling(
-            åpenBehandling.trekkILøpendeUtbetaling && toggles[ToggleNavn.trekkILøpendeUtbetaling]
-                ? true
-                : false
+            !!åpenBehandling.trekkILøpendeUtbetaling &&
+                !!toggles[ToggleNavn.trekkILøpendeUtbetaling]
         );
     }, [åpenBehandling]);
 
