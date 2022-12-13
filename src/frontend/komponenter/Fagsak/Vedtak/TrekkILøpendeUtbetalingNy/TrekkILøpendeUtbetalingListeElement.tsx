@@ -9,6 +9,8 @@ import { FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import {
+    FamilieIsoTilFørsteDagIMåneden,
+    FamilieIsoTilSisteDagIMåneden,
     periodeToString,
     serializeIso8601String,
     sisteDagIInneværendeMåned,
@@ -84,6 +86,14 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         settErNyPeriode(false);
     };
 
+    useEffect(() => {
+        console.log('fom: ', skjema.felter.fom);
+    }, [skjema.felter.fom]);
+
+    useEffect(() => {
+        console.log('tom: ', skjema.felter.tom);
+    }, [skjema.felter.tom]);
+
     return (
         <Table.ExpandableRow
             open={erNyPeriode ? erNyPeriode : erRadEkspandert}
@@ -106,9 +116,11 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                 id="id1"
                                 label="F.o.m"
                                 valgtDato={skjema.felter.fom?.verdi}
-                                onChange={(dato?: ISODateString) =>
-                                    skjema.felter.fom?.validerOgSettFelt(dato)
-                                }
+                                onChange={(dato?: ISODateString) => {
+                                    skjema.felter.fom?.validerOgSettFelt(
+                                        dato && FamilieIsoTilFørsteDagIMåneden(dato)
+                                    );
+                                }}
                                 limitations={{
                                     maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
                                 }}
@@ -121,7 +133,9 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                                 label="T.o.m"
                                 valgtDato={skjema.felter.tom?.verdi}
                                 onChange={(dato?: ISODateString) =>
-                                    skjema.felter.tom?.validerOgSettFelt(dato)
+                                    skjema.felter.tom?.validerOgSettFelt(
+                                        dato && FamilieIsoTilSisteDagIMåneden(dato)
+                                    )
                                 }
                                 limitations={{
                                     maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
