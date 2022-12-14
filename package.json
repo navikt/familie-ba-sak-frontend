@@ -39,7 +39,7 @@
     "@navikt/familie-backend": "^7.0.4",
     "@navikt/familie-clipboard": "6.0.2",
     "@navikt/familie-endringslogg": "3.0.x",
-    "@navikt/familie-form-elements": "^6.3.10",
+    "@navikt/familie-form-elements": "^6.3.12",
     "@navikt/familie-header": "^6.0.0",
     "@navikt/familie-http": "^3.0.1",
     "@navikt/familie-ikoner": "^4.0.3",
