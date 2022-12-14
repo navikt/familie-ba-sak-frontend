@@ -17,3 +17,9 @@ export interface IRestTrekkILøpendeUtbetaling {
     periode: IYearMonthPeriode;
     feilutbetaltBeløp?: number;
 }
+
+export interface IFeilutbetaltValutaSkjemaFelter {
+    fom: FamilieIsoDate | undefined;
+    tom: FamilieIsoDate | undefined;
+    feilutbetaltBeløp: number | undefined;
+}

@@ -6,6 +6,7 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import TrekkILøpendeUtbetalingNyPeriode from './NyPeriode';
 import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
 
 interface ITrekkILøpendeUtbetaling {
@@ -31,7 +32,6 @@ const FlexRowDiv = styled.div`
 
 const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetalingListe,
-    behandlingId,
     settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
     erLeservisning,
     settVisTrekkILøpendeUtbetaling,
@@ -70,23 +70,12 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                             <TrekkILøpendeUtbetalingListeElement
                                 key={indeks}
                                 trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
-                                settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
-                                erNyPeriode={false}
                                 erLeservisning={erLeservisning}
                             />
                         ))}
                     {ønskerÅLeggeTilNyPeriode && (
-                        <TrekkILøpendeUtbetalingListeElement
-                            trekkILøpendeUtbetaling={{
-                                identifikator: {
-                                    id: 0,
-                                    behandlingId: behandlingId,
-                                },
-                                periode: {},
-                            }}
-                            erNyPeriode={true}
+                        <TrekkILøpendeUtbetalingNyPeriode
                             settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
-                            erLeservisning={erLeservisning}
                         />
                     )}
                 </Table.Body>

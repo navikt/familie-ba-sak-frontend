@@ -6,6 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type {
+    IFeilutbetaltValutaSkjemaFelter,
     IRestTrekkILøpendeUtbetaling,
     IRestTrekkILøpendeUtbetalingIdentifikator,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
@@ -21,7 +22,6 @@ import {
 
 interface IProps {
     trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
-    settErNyPeriode: (erNyPeriode: boolean) => void;
     settFeilmelding: (feilmelding: string) => void;
 }
 
@@ -52,11 +52,7 @@ const validerFeilutbetaltBeløp = (felt: FeltState<number | undefined>) => {
     return ok(felt);
 };
 
-const useTrekkILøpendeUtbetaling = ({
-    settErNyPeriode,
-    trekkILøpendeUtbetaling,
-    settFeilmelding,
-}: IProps) => {
+const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate | undefined>({
@@ -68,11 +64,7 @@ const useTrekkILøpendeUtbetaling = ({
     });
 
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
-        {
-            fom: FamilieIsoDate | undefined;
-            tom: FamilieIsoDate | undefined;
-            feilutbetaltBeløp: number | undefined;
-        },
+        IFeilutbetaltValutaSkjemaFelter,
         IBehandling
     >({
         felter: {
@@ -117,7 +109,7 @@ const useTrekkILøpendeUtbetaling = ({
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
-                        settErNyPeriode(false);
+                        // settErNyPeriode(false);
                     } else {
                         settFeilmelding('Klarte ikke å lagre ny periode');
                     }
@@ -148,7 +140,6 @@ const useTrekkILøpendeUtbetaling = ({
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
-                        settErNyPeriode(false);
                     } else {
                         settFeilmelding('Klarte ikke å lagre endringer');
                     }
@@ -167,7 +158,6 @@ const useTrekkILøpendeUtbetaling = ({
             (behandling: Ressurs<IBehandling>) => {
                 if (behandling.status === RessursStatus.SUKSESS) {
                     settÅpenBehandling(behandling);
-                    settErNyPeriode(false);
                 } else {
                     settFeilmelding('Klarte ikke å slette periode');
                 }
