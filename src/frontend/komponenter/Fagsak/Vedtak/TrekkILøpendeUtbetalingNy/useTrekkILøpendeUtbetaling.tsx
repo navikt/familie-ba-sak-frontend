@@ -135,11 +135,10 @@ const useTrekkILøpendeUtbetaling = ({
 
     const fjernPeriode = async () => {
         if (trekkILøpendeUtbetaling) {
-            onSubmit<{ id: number }>(
+            onSubmit(
                 {
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}`,
-                    data: { id: trekkILøpendeUtbetaling.id },
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/${trekkILøpendeUtbetaling.id}`,
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
