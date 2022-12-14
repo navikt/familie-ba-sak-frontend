@@ -103,7 +103,7 @@ const useBehandlingssteg = (
                     'Det er lagt til panel for trekk i løpende utbetaling. Fyll ut periode og beløp, eller fjern panelet.'
                 )
             );
-        } else if (!kanSendeinnVedtak) {
+        } else if (!kanSendeinnVedtak()) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
