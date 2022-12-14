@@ -6,12 +6,14 @@ import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import { periodeToString } from '../../../../utils/kalender';
 import PeriodeSkjema from './PeriodeSkjema';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
     erLeservisning: boolean;
+    behandlingId: number;
 }
 
 const FlexColumnDiv = styled.div`
@@ -28,12 +30,14 @@ const FlexRowDiv = styled.div`
 const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetaling,
     erLeservisning,
+    behandlingId,
 }) => {
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
         useTrekkILøpendeUtbetaling({
+            behandlingId: behandlingId,
             trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
             settFeilmelding: settFeilmelding,
         });
@@ -81,10 +85,13 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
             }
         >
             <Table.DataCell scope="row">
-                periodeToString(trekkILøpendeUtbetaling.periode)
+                {periodeToString({
+                    fom: trekkILøpendeUtbetaling.fom,
+                    tom: trekkILøpendeUtbetaling.tom,
+                })}
             </Table.DataCell>
             <Table.DataCell align="right">
-                {trekkILøpendeUtbetaling.feilutbetaltBeløp} + ' kr'
+                {trekkILøpendeUtbetaling.feilutbetaltBeløp} kr
             </Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">

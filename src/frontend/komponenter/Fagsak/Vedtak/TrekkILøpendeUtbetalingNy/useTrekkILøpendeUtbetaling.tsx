@@ -7,11 +7,10 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import type {
     IFeilutbetaltValutaSkjemaFelter,
+    IRestNyFeilutbetaltValutaPeriode,
     IRestTrekkILøpendeUtbetaling,
-    IRestTrekkILøpendeUtbetalingIdentifikator,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
-import { tilFørsteDagIMåneden, tilSisteDagIMåneden } from '../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
 import {
     erFør,
@@ -21,14 +20,12 @@ import {
 } from '../../../../utils/kalender';
 
 interface IProps {
-    trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
+    behandlingId: number;
+    trekkILøpendeUtbetaling?: IRestTrekkILøpendeUtbetaling;
     settFeilmelding: (feilmelding: string) => void;
 }
 
-const validerTom = (
-    felt: FeltState<FamilieIsoDate | undefined>,
-    fom: FamilieIsoDate | undefined
-) => {
+const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
     const tom = felt.verdi;
 
     if (!erIsoStringGyldig(tom)) {
@@ -45,20 +42,22 @@ const validerTom = (
     return ok(felt);
 };
 
-const validerFeilutbetaltBeløp = (felt: FeltState<number | undefined>) => {
-    if (!felt.verdi) {
+const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
+    if (!Number(felt.verdi)) {
         return feil(felt, 'Beløp er påkrevd');
     }
     return ok(felt);
 };
 
-const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding }: IProps) => {
+const useTrekkILøpendeUtbetaling = ({
+    trekkILøpendeUtbetaling,
+    settFeilmelding,
+    behandlingId,
+}: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
-    const fomFelt = useFelt<FamilieIsoDate | undefined>({
-        verdi: trekkILøpendeUtbetaling.periode.fom
-            ? tilFørsteDagIMåneden(trekkILøpendeUtbetaling.periode.fom)
-            : undefined,
+    const fomFelt = useFelt<FamilieIsoDate>({
+        verdi: trekkILøpendeUtbetaling?.fom ?? '',
         valideringsfunksjon: felt =>
             erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
     });
@@ -69,18 +68,16 @@ const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding
     >({
         felter: {
             fom: fomFelt,
-            tom: useFelt<FamilieIsoDate | undefined>({
-                verdi: trekkILøpendeUtbetaling.periode.tom
-                    ? tilSisteDagIMåneden(trekkILøpendeUtbetaling.periode.tom)
-                    : undefined,
+            tom: useFelt<FamilieIsoDate>({
+                verdi: trekkILøpendeUtbetaling?.tom ?? '',
                 avhengigheter: {
                     fom: fomFelt,
                 },
                 valideringsfunksjon: (felt, avhengigheter) =>
-                    validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate | undefined),
+                    validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate),
             }),
-            feilutbetaltBeløp: useFelt<number | undefined>({
-                verdi: trekkILøpendeUtbetaling.feilutbetaltBeløp,
+            feilutbetaltBeløp: useFelt<string>({
+                verdi: trekkILøpendeUtbetaling?.feilutbetaltBeløp.toString() ?? '',
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
         },
@@ -89,21 +86,14 @@ const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding
 
     const lagreNyPeriode = () => {
         if (kanSendeSkjema()) {
-            onSubmit<IRestTrekkILøpendeUtbetaling>(
+            onSubmit<IRestNyFeilutbetaltValutaPeriode>(
                 {
                     method: 'POST',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}`,
                     data: {
-                        ...trekkILøpendeUtbetaling,
-                        identifikator: {
-                            id: trekkILøpendeUtbetaling.identifikator.id,
-                            behandlingId: trekkILøpendeUtbetaling.identifikator.behandlingId,
-                        },
-                        periode: {
-                            fom: skjema.felter.fom?.verdi,
-                            tom: skjema.felter.tom?.verdi,
-                        },
-                        feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
+                        fom: skjema.felter.fom?.verdi,
+                        tom: skjema.felter.tom?.verdi,
+                        feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -119,22 +109,17 @@ const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding
     };
 
     const oppdaterEksisterendePeriode = async () => {
-        if (kanSendeSkjema()) {
+        if (kanSendeSkjema() && trekkILøpendeUtbetaling) {
             onSubmit<IRestTrekkILøpendeUtbetaling>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}`,
                     data: {
                         ...trekkILøpendeUtbetaling,
-                        identifikator: {
-                            id: trekkILøpendeUtbetaling.identifikator.id,
-                            behandlingId: trekkILøpendeUtbetaling.identifikator.behandlingId,
-                        },
-                        periode: {
-                            fom: skjema.felter.fom?.verdi,
-                            tom: skjema.felter.tom?.verdi,
-                        },
-                        feilutbetaltBeløp: skjema.felter.feilutbetaltBeløp.verdi,
+                        id: trekkILøpendeUtbetaling.id,
+                        fom: skjema.felter.fom.verdi,
+                        tom: skjema.felter.tom.verdi,
+                        feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -149,20 +134,22 @@ const useTrekkILøpendeUtbetaling = ({ trekkILøpendeUtbetaling, settFeilmelding
     };
 
     const fjernPeriode = async () => {
-        onSubmit<IRestTrekkILøpendeUtbetalingIdentifikator>(
-            {
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling`,
-                data: trekkILøpendeUtbetaling.identifikator,
-            },
-            (behandling: Ressurs<IBehandling>) => {
-                if (behandling.status === RessursStatus.SUKSESS) {
-                    settÅpenBehandling(behandling);
-                } else {
-                    settFeilmelding('Klarte ikke å slette periode');
+        if (trekkILøpendeUtbetaling) {
+            onSubmit<{ id: number }>(
+                {
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}`,
+                    data: { id: trekkILøpendeUtbetaling.id },
+                },
+                (behandling: Ressurs<IBehandling>) => {
+                    if (behandling.status === RessursStatus.SUKSESS) {
+                        settÅpenBehandling(behandling);
+                    } else {
+                        settFeilmelding('Klarte ikke å slette periode');
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return {

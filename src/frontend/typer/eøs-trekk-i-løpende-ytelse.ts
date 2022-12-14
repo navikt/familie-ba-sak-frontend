@@ -1,4 +1,4 @@
-import type { FamilieIsoDate, IYearMonthPeriode } from '../utils/kalender';
+import type { FamilieIsoDate } from '../utils/kalender';
 
 export interface ITrekkILøpendeUtbetaling {
     id: number;
@@ -13,13 +13,20 @@ export interface IRestTrekkILøpendeUtbetalingIdentifikator {
 }
 
 export interface IRestTrekkILøpendeUtbetaling {
-    identifikator: IRestTrekkILøpendeUtbetalingIdentifikator;
-    periode: IYearMonthPeriode;
-    feilutbetaltBeløp?: number;
+    id: number;
+    fom: FamilieIsoDate;
+    tom: FamilieIsoDate;
+    feilutbetaltBeløp: number;
+}
+
+export interface IRestNyFeilutbetaltValutaPeriode {
+    fom: FamilieIsoDate;
+    tom: FamilieIsoDate;
+    feilutbetaltBeløp: number;
 }
 
 export interface IFeilutbetaltValutaSkjemaFelter {
-    fom: FamilieIsoDate | undefined;
-    tom: FamilieIsoDate | undefined;
-    feilutbetaltBeløp: number | undefined;
+    fom: FamilieIsoDate;
+    tom: FamilieIsoDate;
+    feilutbetaltBeløp: string;
 }

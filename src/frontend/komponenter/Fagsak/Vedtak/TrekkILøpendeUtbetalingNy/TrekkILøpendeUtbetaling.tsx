@@ -35,6 +35,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
     erLeservisning,
     settVisTrekkILøpendeUtbetaling,
+    behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         !trekkILøpendeUtbetalingListe
@@ -69,6 +70,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                         trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
                             <TrekkILøpendeUtbetalingListeElement
                                 key={indeks}
+                                behandlingId={behandlingId}
                                 trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                                 erLeservisning={erLeservisning}
                             />
@@ -76,6 +78,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                     {ønskerÅLeggeTilNyPeriode && (
                         <TrekkILøpendeUtbetalingNyPeriode
                             settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                            behandlingId={behandlingId}
                         />
                     )}
                 </Table.Body>

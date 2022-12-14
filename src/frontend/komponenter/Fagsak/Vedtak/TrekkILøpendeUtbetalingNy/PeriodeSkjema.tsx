@@ -51,10 +51,10 @@ const PeriodeSkjema: React.FunctionComponent<IPeriodeSkjemaProps> = ({ skjema })
                         {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         id="id1"
                         label="F.o.m"
-                        valgtDato={skjema.felter.fom?.verdi}
+                        valgtDato={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
                             skjema.felter.fom?.validerOgSettFelt(
-                                dato && FamilieIsoTilFørsteDagIMåneden(dato)
+                                dato ? FamilieIsoTilFørsteDagIMåneden(dato) : ''
                             );
                         }}
                         limitations={{
@@ -63,12 +63,12 @@ const PeriodeSkjema: React.FunctionComponent<IPeriodeSkjemaProps> = ({ skjema })
                     />
                     <FamilieDatovelger
                         {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="id1"
+                        id="id2"
                         label="T.o.m"
-                        valgtDato={skjema.felter.tom?.verdi}
+                        valgtDato={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.tom?.validerOgSettFelt(
-                                dato && FamilieIsoTilSisteDagIMåneden(dato)
+                                dato ? FamilieIsoTilSisteDagIMåneden(dato) : ''
                             )
                         }
                         limitations={{
@@ -84,9 +84,7 @@ const PeriodeSkjema: React.FunctionComponent<IPeriodeSkjemaProps> = ({ skjema })
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
                 onChange={changeEvent =>
-                    skjema.felter.feilutbetaltBeløp.validerOgSettFelt(
-                        Number(changeEvent.target.value)
-                    )
+                    skjema.felter.feilutbetaltBeløp.validerOgSettFelt(changeEvent.target.value)
                 }
             />
         </>
