@@ -94,8 +94,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     React.useEffect(() => {
         settVisTrekkILøpendeUtbetaling(
             !!åpenBehandling.trekkILøpendeUtbetaling &&
-                !!toggles[ToggleNavn.trekkILøpendeUtbetaling]
+                (!!toggles[ToggleNavn.trekkILøpendeUtbetaling] || true)
         );
+        console.log(åpenBehandling);
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {
