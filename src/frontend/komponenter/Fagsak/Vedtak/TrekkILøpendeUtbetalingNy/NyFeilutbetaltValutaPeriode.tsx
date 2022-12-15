@@ -65,7 +65,7 @@ const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> =
                     {feilmelding && <Alert variant="error">{feilmelding}</Alert>}
                 </FlexColumnDiv>
             }
-        ></Table.ExpandableRow>
+        />
     );
 };
 
