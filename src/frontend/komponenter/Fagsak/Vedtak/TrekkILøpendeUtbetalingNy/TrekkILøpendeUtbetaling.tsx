@@ -77,7 +77,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                         ))}
                     {ønskerÅLeggeTilNyPeriode && (
                         <NyFeilutbetaltValutaPeriode
-                            settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
+                            lukkNyPeriode={() => settØnskerÅLeggeTilNyPeriode(false)}
                             behandlingId={behandlingId}
                         />
                     )}

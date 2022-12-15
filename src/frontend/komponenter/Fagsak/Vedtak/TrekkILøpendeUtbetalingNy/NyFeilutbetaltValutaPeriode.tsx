@@ -8,7 +8,7 @@ import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface INyFeilutbetaltValutaPeriodeProps {
-    settErNyPeriode: (erNyPeriode: boolean) => void;
+    lukkNyPeriode: () => void;
     behandlingId: number;
 }
 
@@ -24,7 +24,7 @@ const FlexRowDiv = styled.div`
 `;
 
 const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> = ({
-    settErNyPeriode,
+    lukkNyPeriode,
     behandlingId,
 }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
@@ -36,12 +36,12 @@ const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> =
 
     const avbrytLeggTilNy = () => {
         nullstillSkjema();
-        settErNyPeriode(false);
+        lukkNyPeriode();
     };
 
     const lagre = () => {
         lagreNyPeriode();
-        settErNyPeriode(false);
+        lukkNyPeriode();
     };
 
     return (
