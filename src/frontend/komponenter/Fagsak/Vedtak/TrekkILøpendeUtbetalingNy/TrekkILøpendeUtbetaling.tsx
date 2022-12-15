@@ -14,7 +14,7 @@ interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
     settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
     erLesevisning: boolean;
-    settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
+    skjulTrekkILøpendeUtbetaling: () => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -34,7 +34,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetalingListe,
     settErUlagretNyTrekkILøpendeUtbetaling,
     erLesevisning,
-    settVisTrekkILøpendeUtbetaling,
+    skjulTrekkILøpendeUtbetaling,
     behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
@@ -46,7 +46,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (trekkILøpendeUtbetalingListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
-        settVisTrekkILøpendeUtbetaling(false);
+        skjulTrekkILøpendeUtbetaling();
     }
 
     return (
