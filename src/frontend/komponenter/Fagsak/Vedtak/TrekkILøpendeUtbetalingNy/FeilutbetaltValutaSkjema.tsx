@@ -51,7 +51,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                 <FlexRowDiv style={{ gap: '2rem' }}>
                     <FamilieDatovelger
                         {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="id1"
+                        id="fom-dato"
                         label="F.o.m"
                         valgtDato={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
@@ -65,7 +65,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                     />
                     <FamilieDatovelger
                         {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="id2"
+                        id="fom-dato"
                         label="T.o.m"
                         valgtDato={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
