@@ -25,6 +25,7 @@ const FlexColumnDiv = styled.div`
 
 const FlexRowDiv = styled.div`
     display: flex;
+    gap: 1rem;
 `;
 
 const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> = ({
@@ -68,7 +69,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
             content={
                 <FlexColumnDiv>
                     <FeilutbetaltValutaSkjema skjema={skjema} />
-                    <FlexRowDiv style={{ gap: '1rem' }}>
+                    <FlexRowDiv>
                         <Button
                             size="small"
                             onClick={oppdaterEksisterendePeriode}
