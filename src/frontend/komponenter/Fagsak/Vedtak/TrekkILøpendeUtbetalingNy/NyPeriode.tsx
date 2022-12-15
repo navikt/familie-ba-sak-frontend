@@ -31,7 +31,6 @@ const TrekkILøpendeUtbetalingNyPeriode: React.FC<ITrekkILøpendeUtbetaling> = (
 
     const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useTrekkILøpendeUtbetaling({
         behandlingId: behandlingId,
-        // settErNyPeriode: settErNyPeriode,
         settFeilmelding: settFeilmelding,
     });
 

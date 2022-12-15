@@ -99,7 +99,6 @@ const useTrekkILøpendeUtbetaling = ({
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
-                        // settErNyPeriode(false);
                     } else {
                         settFeilmelding('Klarte ikke å lagre ny periode');
                     }
