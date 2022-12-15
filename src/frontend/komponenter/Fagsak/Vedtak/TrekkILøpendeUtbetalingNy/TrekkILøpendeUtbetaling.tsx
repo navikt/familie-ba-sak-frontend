@@ -11,7 +11,7 @@ import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingList
 
 interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
-    trekkILøpendeUtbetalingListe?: IRestTrekkILøpendeUtbetaling[];
+    trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
     settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
     erLeservisning: boolean;
     settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
@@ -45,7 +45,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
         settErUlagretNyTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
-    if (!trekkILøpendeUtbetalingListe && !ønskerÅLeggeTilNyPeriode) {
+    if (trekkILøpendeUtbetalingListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
         settVisTrekkILøpendeUtbetaling(false);
     }
 

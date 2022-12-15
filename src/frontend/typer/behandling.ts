@@ -253,7 +253,7 @@ export interface IBehandling {
     verge?: IVerge;
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
-    trekkILøpendeUtbetaling?: IRestTrekkILøpendeUtbetaling[];
+    trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling[];
 }
 
 export interface IArbeidsfordelingPåBehandling {
