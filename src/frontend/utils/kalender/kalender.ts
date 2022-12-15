@@ -1,10 +1,4 @@
-import {
-    parseIso8601MånedString,
-    parseIso8601String,
-    parseIso8601StringMånedÅr,
-    serializeIso8601String,
-} from './io';
-import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from './kalenderMåned';
+import { parseIso8601MånedString, parseIso8601String, parseIso8601StringMånedÅr } from './io';
 import type { DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
 import { antallDagerIMåned } from './typer';
 
@@ -64,14 +58,6 @@ export const sisteDagIInneværendeMåned = (): DagMånedÅr => {
         ...inneværende,
         dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
     };
-};
-
-export const tilFørsteDagIMåneden = (yearMonth: YearMonth): FamilieIsoDate => {
-    return serializeIso8601String(hentFørsteDagIYearMonth(yearMonth));
-};
-
-export const tilSisteDagIMåneden = (yearMonth: YearMonth): FamilieIsoDate => {
-    return serializeIso8601String(hentSisteDagIYearMonth(yearMonth));
 };
 
 export const FamilieIsoTilFørsteDagIMåneden = (dato: FamilieIsoDate): FamilieIsoDate => {
