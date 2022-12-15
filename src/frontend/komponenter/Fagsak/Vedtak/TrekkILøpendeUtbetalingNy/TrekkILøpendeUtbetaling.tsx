@@ -32,7 +32,7 @@ const FlexRowDiv = styled.div`
 
 const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetalingListe,
-    settErUlagretNyTrekkILøpendeUtbetaling: settErUlagretEndringTrekkILøpendeUtbetaling,
+    settErUlagretNyTrekkILøpendeUtbetaling,
     erLeservisning,
     settVisTrekkILøpendeUtbetaling,
     behandlingId,
@@ -42,7 +42,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     );
 
     useEffect(() => {
-        settErUlagretEndringTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
+        settErUlagretNyTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (!trekkILøpendeUtbetalingListe && !ønskerÅLeggeTilNyPeriode) {
