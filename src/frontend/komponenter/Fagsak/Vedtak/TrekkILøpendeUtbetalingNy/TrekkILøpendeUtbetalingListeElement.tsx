@@ -44,10 +44,10 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         });
 
     useEffect(() => {
-        nullstillSkjema();
+        nullstillOgLukkSkjema();
     }, [trekkILøpendeUtbetaling]);
 
-    const avbryt = () => {
+    const nullstillOgLukkSkjema = () => {
         nullstillSkjema();
         settErRadEkspandert(false);
     };
@@ -56,7 +56,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         if (erLesevisning) return;
 
         if (erRadEkspandert) {
-            avbryt();
+            nullstillOgLukkSkjema();
         } else {
             settErRadEkspandert(true);
         }
@@ -77,7 +77,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                         >
                             Lagre periode
                         </Button>
-                        <Button size="small" variant="tertiary" onClick={avbryt}>
+                        <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
                             Avbryt
                         </Button>
                     </FlexRowDiv>
