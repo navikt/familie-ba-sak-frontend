@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Table, Button, Alert } from '@navikt/ds-react';
 
-import PeriodeSkjema from './PeriodeSkjema';
+import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
@@ -50,7 +50,7 @@ const TrekkILøpendeUtbetalingNyPeriode: React.FC<ITrekkILøpendeUtbetaling> = (
             open={true}
             content={
                 <FlexColumnDiv>
-                    <PeriodeSkjema skjema={skjema} />
+                    <FeilutbetaltValutaSkjema skjema={skjema} />
                     <FlexRowDiv style={{ gap: '1rem' }}>
                         <Button
                             size="small"

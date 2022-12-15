@@ -17,7 +17,7 @@ import {
     sisteDagIInneværendeMåned,
 } from '../../../../utils/kalender';
 
-interface IPeriodeSkjemaProps {
+interface IFeilutbetaltValutaSkjemaProps {
     skjema: ISkjema<IFeilutbetaltValutaSkjemaFelter, IBehandling>;
 }
 
@@ -41,7 +41,9 @@ const StyledFamilieInput = styled(FamilieInput)`
     }
 `;
 
-const PeriodeSkjema: React.FunctionComponent<IPeriodeSkjemaProps> = ({ skjema }) => {
+const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
+    skjema,
+}) => {
     return (
         <>
             <FlexDatoInputWrapper>
@@ -91,4 +93,4 @@ const PeriodeSkjema: React.FunctionComponent<IPeriodeSkjemaProps> = ({ skjema })
     );
 };
 
-export default PeriodeSkjema;
+export default FeilutbetaltValutaSkjema;

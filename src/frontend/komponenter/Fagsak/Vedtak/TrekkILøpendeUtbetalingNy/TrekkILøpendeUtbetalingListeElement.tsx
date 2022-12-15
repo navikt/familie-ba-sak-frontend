@@ -7,7 +7,7 @@ import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import { periodeToString } from '../../../../utils/kalender';
-import PeriodeSkjema from './PeriodeSkjema';
+import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
@@ -67,7 +67,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    <PeriodeSkjema skjema={skjema} />
+                    <FeilutbetaltValutaSkjema skjema={skjema} />
                     <FlexRowDiv style={{ gap: '1rem' }}>
                         <Button
                             size="small"
