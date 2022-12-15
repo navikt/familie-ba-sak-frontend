@@ -7,7 +7,7 @@ import { Table, Button, Alert } from '@navikt/ds-react';
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
-interface ITrekkILøpendeUtbetaling {
+interface INyFeilutbetaltValutaPeriodeProps {
     settErNyPeriode: (erNyPeriode: boolean) => void;
     behandlingId: number;
 }
@@ -23,7 +23,7 @@ const FlexRowDiv = styled.div`
     display: flex;
 `;
 
-const TrekkILøpendeUtbetalingNyPeriode: React.FC<ITrekkILøpendeUtbetaling> = ({
+const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> = ({
     settErNyPeriode,
     behandlingId,
 }) => {
@@ -69,4 +69,4 @@ const TrekkILøpendeUtbetalingNyPeriode: React.FC<ITrekkILøpendeUtbetaling> = (
     );
 };
 
-export default TrekkILøpendeUtbetalingNyPeriode;
+export default NyFeilutbetaltValutaPeriode;

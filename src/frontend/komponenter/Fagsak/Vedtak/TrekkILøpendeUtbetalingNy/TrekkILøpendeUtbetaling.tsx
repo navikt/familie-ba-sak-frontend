@@ -6,7 +6,7 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
 import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
-import TrekkILøpendeUtbetalingNyPeriode from './NyPeriode';
+import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
 
 interface ITrekkILøpendeUtbetaling {
@@ -76,7 +76,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                             />
                         ))}
                     {ønskerÅLeggeTilNyPeriode && (
-                        <TrekkILøpendeUtbetalingNyPeriode
+                        <NyFeilutbetaltValutaPeriode
                             settErNyPeriode={settØnskerÅLeggeTilNyPeriode}
                             behandlingId={behandlingId}
                         />
