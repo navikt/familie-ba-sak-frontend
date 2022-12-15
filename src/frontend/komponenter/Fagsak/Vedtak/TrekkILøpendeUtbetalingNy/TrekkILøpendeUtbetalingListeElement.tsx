@@ -12,7 +12,7 @@ import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
-    erLeservisning: boolean;
+    erLesevisning: boolean;
     behandlingId: number;
 }
 
@@ -29,7 +29,7 @@ const FlexRowDiv = styled.div`
 
 const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> = ({
     trekkILøpendeUtbetaling,
-    erLeservisning,
+    erLesevisning,
     behandlingId,
 }) => {
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
@@ -52,7 +52,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
-        if (erLeservisning) return;
+        if (erLesevisning) return;
 
         if (erRadEkspandert) {
             avbryt();
@@ -63,7 +63,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
 
     return (
         <Table.ExpandableRow
-            open={erLeservisning ? false : erRadEkspandert}
+            open={erLesevisning ? false : erRadEkspandert}
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
@@ -100,7 +100,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
                         variant="tertiary"
                         size="small"
                         onClick={fjernPeriode}
-                        disabled={erLeservisning}
+                        disabled={erLesevisning}
                     />
                 </Tooltip>
             </Table.DataCell>
