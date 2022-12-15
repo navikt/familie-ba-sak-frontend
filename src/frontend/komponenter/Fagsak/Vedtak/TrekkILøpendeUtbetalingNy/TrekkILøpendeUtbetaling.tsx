@@ -94,7 +94,6 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                {/* TODO: Legg inn "Kopier til NØS-knapp" her */}
             </FlexRowDiv>
         </FlexColumnDiv>
     );
