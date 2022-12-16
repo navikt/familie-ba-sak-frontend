@@ -67,9 +67,9 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                 </Table.Header>
                 <Table.Body>
                     {trekkILøpendeUtbetalingListe &&
-                        trekkILøpendeUtbetalingListe.map((trekkILøpendeUtbetaling, indeks) => (
+                        trekkILøpendeUtbetalingListe.map(trekkILøpendeUtbetaling => (
                             <TrekkILøpendeUtbetalingListeElement
-                                key={indeks}
+                                key={trekkILøpendeUtbetaling.id}
                                 behandlingId={behandlingId}
                                 trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
                                 erLesevisning={erLesevisning}
