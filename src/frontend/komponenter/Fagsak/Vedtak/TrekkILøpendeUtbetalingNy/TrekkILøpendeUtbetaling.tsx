@@ -7,7 +7,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
-import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
+import FeilutbetaltValutaListeElement from './TrekkILøpendeUtbetalingListeElement';
 
 interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
@@ -68,10 +68,10 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                 <Table.Body>
                     {trekkILøpendeUtbetalingListe &&
                         trekkILøpendeUtbetalingListe.map(trekkILøpendeUtbetaling => (
-                            <TrekkILøpendeUtbetalingListeElement
+                            <FeilutbetaltValutaListeElement
                                 key={trekkILøpendeUtbetaling.id}
                                 behandlingId={behandlingId}
-                                trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
+                                feilutbetaltValuta={trekkILøpendeUtbetaling}
                                 erLesevisning={erLesevisning}
                             />
                         ))}

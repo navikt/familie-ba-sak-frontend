@@ -10,8 +10,8 @@ import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useFeilutbetaltValuta } from './useTrekkILøpendeUtbetaling';
 
-interface ITrekkILøpendeUtbetaling {
-    trekkILøpendeUtbetaling: IRestFeilutbetaltValuta;
+interface IFeilutbetaltValutaListeElement {
+    feilutbetaltValuta: IRestFeilutbetaltValuta;
     erLesevisning: boolean;
     behandlingId: number;
 }
@@ -28,8 +28,8 @@ const FlexRowDiv = styled.div`
     gap: 1rem;
 `;
 
-const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> = ({
-    trekkILøpendeUtbetaling,
+const FeilutbetaltValutaListeElement: React.FC<IFeilutbetaltValutaListeElement> = ({
+    feilutbetaltValuta,
     erLesevisning,
     behandlingId,
 }) => {
@@ -39,13 +39,13 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
         useFeilutbetaltValuta({
             behandlingId: behandlingId,
-            feilutbetaltValuta: trekkILøpendeUtbetaling,
+            feilutbetaltValuta: feilutbetaltValuta,
             settFeilmelding: settFeilmelding,
         });
 
     useEffect(() => {
         nullstillOgLukkSkjema();
-    }, [trekkILøpendeUtbetaling]);
+    }, [feilutbetaltValuta]);
 
     const nullstillOgLukkSkjema = () => {
         nullstillSkjema();
@@ -87,13 +87,11 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         >
             <Table.DataCell scope="row">
                 {periodeToString({
-                    fom: trekkILøpendeUtbetaling.fom,
-                    tom: trekkILøpendeUtbetaling.tom,
+                    fom: feilutbetaltValuta.fom,
+                    tom: feilutbetaltValuta.tom,
                 })}
             </Table.DataCell>
-            <Table.DataCell align="right">
-                {trekkILøpendeUtbetaling.feilutbetaltBeløp} kr
-            </Table.DataCell>
+            <Table.DataCell align="right">{feilutbetaltValuta.feilutbetaltBeløp} kr</Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
                     <Button
@@ -109,4 +107,4 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     );
 };
 
-export default TrekkILøpendeUtbetalingListeElement;
+export default FeilutbetaltValutaListeElement;
