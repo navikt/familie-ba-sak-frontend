@@ -22,20 +22,19 @@ const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     .ekspanderbartPanel__hode {
         padding: 0 1rem 0 1.6rem;
     }
-    .ekspanderbartPanel__tittel {
-        width: 100%;
-    }
     .ekspanderbartPanel__innhold {
         padding: 0.5rem 2.75rem 1.5rem 1.6rem;
     }
 `;
 
 const PanelTittel = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 1rem 1rem 1rem 0rem;
+    display: grid;
+    grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
+    grid-gap: 0.5rem;
+    margin: 1rem;
+    margin-left: 0;
 `;
+
 interface IEkspanderbartBegrunnelsePanelProps {
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
@@ -64,7 +63,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
             onClick={onClick}
             tittel={
                 <PanelTittel>
-                    {periode.fom ? (
+                    {periode.fom && (
                         <Label>
                             {periodeToString({
                                 fom: periode.fom,
@@ -73,8 +72,6 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                                     : periode.tom,
                             })}
                         </Label>
-                    ) : (
-                        <Label>mm.åååå</Label>
                     )}
                     <BodyShort>{tittel}</BodyShort>
                     {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
