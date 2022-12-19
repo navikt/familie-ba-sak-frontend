@@ -9,12 +9,12 @@ import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-lø
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import FeilutbetaltValutaListeElement from './TrekkILøpendeUtbetalingListeElement';
 
-interface ITrekkILøpendeUtbetaling {
+interface IFeilutbetaltValuta {
     behandlingId: number;
-    trekkILøpendeUtbetalingListe: IRestFeilutbetaltValuta[];
-    settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
+    feilutbetaltValutaListe: IRestFeilutbetaltValuta[];
+    settErUlagretNyFeilutbetaltValuta: (erUlagretNyFeilutbetaltValuta: boolean) => void;
     erLesevisning: boolean;
-    skjulTrekkILøpendeUtbetaling: () => void;
+    skjulFeilutbetaltValuta: () => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -30,23 +30,23 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
-    trekkILøpendeUtbetalingListe,
-    settErUlagretNyTrekkILøpendeUtbetaling,
+const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
+    feilutbetaltValutaListe,
+    settErUlagretNyFeilutbetaltValuta,
     erLesevisning,
-    skjulTrekkILøpendeUtbetaling,
+    skjulFeilutbetaltValuta,
     behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        !trekkILøpendeUtbetalingListe
+        !feilutbetaltValutaListe
     );
 
     useEffect(() => {
-        settErUlagretNyTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
+        settErUlagretNyFeilutbetaltValuta(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
-    if (trekkILøpendeUtbetalingListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
-        skjulTrekkILøpendeUtbetaling();
+    if (feilutbetaltValutaListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
+        skjulFeilutbetaltValuta();
     }
 
     return (
@@ -66,12 +66,12 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {trekkILøpendeUtbetalingListe &&
-                        trekkILøpendeUtbetalingListe.map(trekkILøpendeUtbetaling => (
+                    {feilutbetaltValutaListe &&
+                        feilutbetaltValutaListe.map(feilutbetaltValuta => (
                             <FeilutbetaltValutaListeElement
-                                key={trekkILøpendeUtbetaling.id}
+                                key={feilutbetaltValuta.id}
                                 behandlingId={behandlingId}
-                                feilutbetaltValuta={trekkILøpendeUtbetaling}
+                                feilutbetaltValuta={feilutbetaltValuta}
                                 erLesevisning={erLesevisning}
                             />
                         ))}
@@ -99,4 +99,4 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     );
 };
 
-export default TrekkILøpendeUtbetaling;
+export default FeilutbetaltValuta;
