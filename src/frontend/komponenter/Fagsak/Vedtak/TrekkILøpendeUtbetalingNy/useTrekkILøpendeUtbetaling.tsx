@@ -8,7 +8,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type {
     IFeilutbetaltValutaSkjemaFelter,
     IRestNyFeilutbetaltValutaPeriode,
-    IRestTrekkILøpendeUtbetaling,
+    IRestFeilutbetaltValuta,
 } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
@@ -21,7 +21,7 @@ import {
 
 interface IProps {
     behandlingId: number;
-    trekkILøpendeUtbetaling?: IRestTrekkILøpendeUtbetaling;
+    trekkILøpendeUtbetaling?: IRestFeilutbetaltValuta;
     settFeilmelding: (feilmelding: string) => void;
 }
 
@@ -109,7 +109,7 @@ const useTrekkILøpendeUtbetaling = ({
 
     const oppdaterEksisterendePeriode = async () => {
         if (kanSendeSkjema() && trekkILøpendeUtbetaling) {
-            onSubmit<IRestTrekkILøpendeUtbetaling>(
+            onSubmit<IRestFeilutbetaltValuta>(
                 {
                     method: 'PUT',
                     url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
