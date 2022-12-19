@@ -89,7 +89,7 @@ const useTrekkILøpendeUtbetaling = ({
             onSubmit<IRestNyFeilutbetaltValutaPeriode>(
                 {
                     method: 'POST',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}`,
+                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}`,
                     data: {
                         fom: skjema.felter.fom?.verdi,
                         tom: skjema.felter.tom?.verdi,
@@ -112,7 +112,7 @@ const useTrekkILøpendeUtbetaling = ({
             onSubmit<IRestTrekkILøpendeUtbetaling>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
+                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
                     data: {
                         ...trekkILøpendeUtbetaling,
                         id: trekkILøpendeUtbetaling.id,
@@ -137,7 +137,7 @@ const useTrekkILøpendeUtbetaling = ({
             onSubmit(
                 {
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/trekk-i-loepende-utbetaling/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
+                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
