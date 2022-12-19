@@ -19,7 +19,7 @@ import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstids
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     erBehandlingMedVedtaksbrevutsending: boolean;
-    settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
+    settVisFeilutbetaltValuta: (visFeilutbetaltValuta: boolean) => void;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -35,7 +35,7 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
 const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     erBehandlingMedVedtaksbrevutsending,
-    settVisTrekkILøpendeUtbetaling,
+    settVisFeilutbetaltValuta,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
@@ -82,7 +82,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         åpenBehandling.kategori === BehandlingKategori.EØS &&
                         toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                             <Dropdown.Menu.List.Item
-                                onClick={() => settVisTrekkILøpendeUtbetaling(true)}
+                                onClick={() => settVisFeilutbetaltValuta(true)}
                             >
                                 <Calculator />
                                 Legg til feilutbetalt valuta
