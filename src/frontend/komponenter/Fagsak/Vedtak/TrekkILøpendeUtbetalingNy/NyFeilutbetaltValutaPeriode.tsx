@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Table, Button, Alert } from '@navikt/ds-react';
 
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
+import { useFeilutbetaltValuta } from './useTrekkILøpendeUtbetaling';
 
 interface INyFeilutbetaltValutaPeriodeProps {
     lukkNyPeriode: () => void;
@@ -29,7 +29,7 @@ const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> =
 }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useTrekkILøpendeUtbetaling({
+    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useFeilutbetaltValuta({
         behandlingId: behandlingId,
         settFeilmelding: settFeilmelding,
     });
