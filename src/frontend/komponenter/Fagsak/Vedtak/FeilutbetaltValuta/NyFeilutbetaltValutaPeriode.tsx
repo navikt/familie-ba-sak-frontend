@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Table, Button, Alert } from '@navikt/ds-react';
 
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useFeilutbetaltValuta } from './useTrekkILøpendeUtbetaling';
+import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
 
 interface INyFeilutbetaltValutaPeriodeProps {
     lukkNyPeriode: () => void;

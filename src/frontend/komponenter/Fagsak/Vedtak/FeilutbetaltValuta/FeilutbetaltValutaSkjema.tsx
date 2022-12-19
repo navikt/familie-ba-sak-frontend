@@ -9,7 +9,7 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
 import {
     FamilieIsoTilFørsteDagIMåneden,
     FamilieIsoTilSisteDagIMåneden,
