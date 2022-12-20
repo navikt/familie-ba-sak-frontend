@@ -24,10 +24,13 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrev
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
-export interface IOpprettBehandlingSkjemaFelter {
+export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
     behandlingsårsak: BehandlingÅrsak | '';
     behandlingstema: IBehandlingstema | undefined;
+}
+
+export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     migreringsdato: FamilieIsoDate | undefined;
     søknadMottattDato: FamilieIsoDate | undefined;
     valgteBarn: ISelectOption[];

@@ -9,17 +9,18 @@ import {
     FamilieReactSelect,
     FamilieSelect,
 } from '@navikt/familie-form-elements';
-import type { Felt } from '@navikt/familie-skjema';
+import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
+import type { ManuellJournalføringSkjemaFelter } from '../../../../../context/ManuellJournalførContext';
 import {
     BehandlingStatus,
     Behandlingstype,
     BehandlingÅrsak,
     behandlingÅrsak,
     erBehandlingHenlagt,
+    type IBehandling,
 } from '../../../../../typer/behandling';
-import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../../typer/person';
@@ -31,6 +32,7 @@ import { hentAlder } from '../../../../../utils/formatter';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
+import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 
 const FixedDatoVelger = styled(FamilieDatovelger)`
     .nav-datovelger__kalenderPortal__content {
@@ -62,18 +64,22 @@ const StyledFamilieReactSelect = styled(FamilieReactSelect)`
     margin-bottom: -1rem;
 `;
 
+const erOpprettBehandlingSkjema = (
+    skjema:
+        | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
+        | ISkjema<ManuellJournalføringSkjemaFelter, string>
+): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
+    Object.hasOwn(skjema, 'valgteBarn');
+
 interface IProps {
-    behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
-    behandlingsårsak: Felt<BehandlingÅrsak | ''>;
-    behandlingstema: Felt<IBehandlingstema | undefined>;
-    migreringsdato?: Felt<FamilieIsoDate | undefined>;
-    søknadMottattDato?: Felt<FamilieIsoDate | undefined>;
+    skjema:
+        | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
+        | ISkjema<ManuellJournalføringSkjemaFelter, string>;
     minimalFagsak?: IMinimalFagsak;
-    visFeilmeldinger: boolean;
+
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
     bruker?: IPersonInfo | undefined;
-    valgteBarn?: Felt<ISelectOption[]> | undefined;
     maksdatoForMigrering?: FamilieIsoDate | undefined;
 }
 
@@ -86,17 +92,12 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
 }
 
 const OpprettBehandlingValg: React.FC<IProps> = ({
-    behandlingstype,
-    behandlingsårsak,
-    behandlingstema,
-    migreringsdato = undefined,
-    søknadMottattDato = undefined,
+    skjema,
     minimalFagsak,
-    visFeilmeldinger,
+
     erLesevisning = false,
     manuellJournalfør = false,
     bruker = undefined,
-    valgteBarn = undefined,
     maksdatoForMigrering = undefined,
 }) => {
     const { toggles } = useApp();
@@ -118,9 +119,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
-        !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+        !manuellJournalfør &&
+        skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erHelmanuellMigrering =
-        erMigreringFraInfotrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+        erMigreringFraInfotrygd &&
+        skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
@@ -133,10 +136,12 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år)`,
         }));
 
+    const { behandlingsårsak, behandlingstype, behandlingstema } = skjema.felter;
+
     return (
         <>
             <FamilieSelect
-                {...behandlingstype.hentNavBaseSkjemaProps(visFeilmeldinger)}
+                {...behandlingstype.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 erLesevisning={erLesevisning}
                 name={'Behandling'}
                 label={'Velg type behandling'}
@@ -197,7 +202,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
             {behandlingsårsak.erSynlig && (
                 <StyledFamilieSelect
-                    {...behandlingsårsak.hentNavBaseSkjemaProps(visFeilmeldinger)}
+                    {...behandlingsårsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
@@ -258,69 +263,73 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </StyledFamilieSelect>
             )}
 
-            {erHelmanuellMigrering && valgteBarn?.erSynlig && (
-                <StyledFamilieReactSelect
-                    {...valgteBarn.hentNavInputProps(visFeilmeldinger)}
-                    label={'Legg til juridiske barn for migrering'}
-                    placeholder={'Velg barn'}
-                    options={barn}
-                    creatable={false}
-                    isMulti={true}
-                    formatOptionLabel={(
-                        option: ISelectOption,
-                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
-                    ) => {
-                        if (formatOptionLabelMeta.context === 'menu') {
-                            return (
-                                <BodyShort>
-                                    <b>{option.label}</b> | {option.value}
-                                </BodyShort>
+            {erHelmanuellMigrering &&
+                erOpprettBehandlingSkjema(skjema) &&
+                skjema.felter.valgteBarn?.erSynlig && (
+                    <StyledFamilieReactSelect
+                        {...skjema.felter.valgteBarn.hentNavInputProps(skjema.visFeilmeldinger)}
+                        label={'Legg til juridiske barn for migrering'}
+                        placeholder={'Velg barn'}
+                        options={barn}
+                        creatable={false}
+                        isMulti={true}
+                        formatOptionLabel={(
+                            option: ISelectOption,
+                            formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
+                        ) => {
+                            if (formatOptionLabelMeta.context === 'menu') {
+                                return (
+                                    <BodyShort>
+                                        <b>{option.label}</b> | {option.value}
+                                    </BodyShort>
+                                );
+                            } else {
+                                return <BodyShort>{option.value}</BodyShort>;
+                            }
+                        }}
+                        onChange={valgteOptions => {
+                            skjema.felter.valgteBarn.onChange(
+                                valgteOptions === null ? [] : (valgteOptions as ISelectOption[])
                             );
-                        } else {
-                            return <BodyShort>{option.value}</BodyShort>;
-                        }
-                    }}
-                    onChange={valgteOptions => {
-                        valgteBarn.onChange(
-                            valgteOptions === null ? [] : (valgteOptions as ISelectOption[])
-                        );
-                    }}
-                />
-            )}
+                        }}
+                    />
+                )}
 
-            {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
-                <FixedDatoVelger
-                    {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
-                    valgtDato={migreringsdato.verdi}
-                    label={'Ny migreringsdato'}
-                    placeholder={'DD.MM.ÅÅÅÅ'}
-                    limitations={{
-                        maxDate: maksdatoForMigrering,
-                    }}
-                    feil={migreringsdato.feilmelding}
-                />
-            )}
+            {erMigreringFraInfotrygd &&
+                erOpprettBehandlingSkjema(skjema) &&
+                skjema.felter.migreringsdato?.erSynlig && (
+                    <FixedDatoVelger
+                        {...skjema.felter.migreringsdato.hentNavInputProps(skjema.visFeilmeldinger)}
+                        valgtDato={skjema.felter.migreringsdato.verdi}
+                        label={'Ny migreringsdato'}
+                        placeholder={'DD.MM.ÅÅÅÅ'}
+                        limitations={{
+                            maxDate: maksdatoForMigrering,
+                        }}
+                        feil={skjema.felter.migreringsdato.feilmelding}
+                    />
+                )}
 
             {behandlingstema.erSynlig && (
                 <StyledBehandlingstemaSelect
                     behandlingstema={behandlingstema}
                     erLesevisning={erLesevisning}
-                    visFeilmeldinger={visFeilmeldinger}
+                    visFeilmeldinger={skjema.visFeilmeldinger}
                     name="Behandlingstema"
                     label="Velg behandlingstema"
                 />
             )}
 
-            {søknadMottattDato?.erSynlig && (
+            {erOpprettBehandlingSkjema(skjema) && skjema.felter.søknadMottattDato?.erSynlig && (
                 <FixedDatoVelger
-                    {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
-                    valgtDato={søknadMottattDato.verdi}
+                    {...skjema.felter.søknadMottattDato.hentNavInputProps(skjema.visFeilmeldinger)}
+                    valgtDato={skjema.felter.søknadMottattDato.verdi}
                     label={'Mottatt dato'}
                     placeholder={'DD.MM.ÅÅÅÅ'}
                     limitations={{
                         maxDate: new Date().toISOString(),
                     }}
-                    feil={søknadMottattDato.feilmelding}
+                    feil={skjema.felter.søknadMottattDato.feilmelding}
                 />
             )}
         </>

@@ -17,6 +17,7 @@ import {
 } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
+import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
@@ -37,16 +38,13 @@ import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 
-export interface ManuellJournalføringSkjemaFelter {
+export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;
-    behandlingstema: IBehandlingstema | undefined;
     dokumenter: IDokumentInfo[];
     bruker: IPersonInfo | undefined;
     avsenderNavn: string;
     avsenderIdent: string;
     knyttTilNyBehandling: boolean;
-    behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
-    behandlingsårsak: BehandlingÅrsak | '';
     tilknyttedeBehandlingIder: number[];
     fagsakType: FagsakType;
     samhandler: ISamhandlerInfo | undefined;
