@@ -37,6 +37,21 @@ import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 
+export interface ManuellJournalføringSkjemaFelter {
+    journalpostTittel: string;
+    behandlingstema: IBehandlingstema | undefined;
+    dokumenter: IDokumentInfo[];
+    bruker: IPersonInfo | undefined;
+    avsenderNavn: string;
+    avsenderIdent: string;
+    knyttTilNyBehandling: boolean;
+    behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
+    behandlingsårsak: BehandlingÅrsak | '';
+    tilknyttedeBehandlingIder: number[];
+    fagsakType: FagsakType;
+    samhandler: ISamhandlerInfo | undefined;
+}
+
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
@@ -95,20 +110,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
-        {
-            journalpostTittel: string;
-            behandlingstema: IBehandlingstema | undefined;
-            dokumenter: IDokumentInfo[];
-            bruker: IPersonInfo | undefined;
-            avsenderNavn: string;
-            avsenderIdent: string;
-            knyttTilNyBehandling: boolean;
-            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
-            behandlingsårsak: BehandlingÅrsak | '';
-            tilknyttedeBehandlingIder: number[];
-            fagsakType: FagsakType;
-            samhandler: ISamhandlerInfo | undefined;
-        },
+        ManuellJournalføringSkjemaFelter,
         string
     >({
         felter: {
