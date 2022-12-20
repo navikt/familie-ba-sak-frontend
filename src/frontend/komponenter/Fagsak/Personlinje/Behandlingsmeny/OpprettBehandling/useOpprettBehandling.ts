@@ -24,6 +24,15 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrev
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
+export interface IOpprettBehandlingSkjemaFelter {
+    behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
+    behandlingsårsak: BehandlingÅrsak | '';
+    behandlingstema: IBehandlingstema | undefined;
+    migreringsdato: FamilieIsoDate | undefined;
+    søknadMottattDato: FamilieIsoDate | undefined;
+    valgteBarn: ISelectOption[];
+}
+
 const useOpprettBehandling = (
     fagsakId: number,
     lukkModal: () => void,
@@ -166,17 +175,7 @@ const useOpprettBehandling = (
     });
 
     const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs, valideringErOk } =
-        useSkjema<
-            {
-                behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
-                behandlingsårsak: BehandlingÅrsak | '';
-                behandlingstema: IBehandlingstema | undefined;
-                migreringsdato: FamilieIsoDate | undefined;
-                søknadMottattDato: FamilieIsoDate | undefined;
-                valgteBarn: ISelectOption[];
-            },
-            IBehandling
-        >({
+        useSkjema<IOpprettBehandlingSkjemaFelter, IBehandling>({
             felter: {
                 behandlingstype,
                 behandlingsårsak,
