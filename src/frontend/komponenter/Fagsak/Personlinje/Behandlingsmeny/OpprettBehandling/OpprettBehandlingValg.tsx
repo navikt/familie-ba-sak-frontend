@@ -71,6 +71,36 @@ const erOpprettBehandlingSkjema = (
 ): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
     Object.hasOwn(skjema, 'valgteBarn');
 
+const hentTilgjengeligeBehandlingsårsaker = (
+    erMigreringFraInfotrygd: boolean,
+    kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
+    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean,
+    kanManueltKorrigereMedVedtaksbrev: boolean
+): BehandlingÅrsak[] =>
+    erMigreringFraInfotrygd
+        ? Object.values(BehandlingÅrsak).filter(
+              årsak =>
+                  (kanOpprettMigreringsbehandlingMedHelmanuellMigrering &&
+                      årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
+                  (kanOppretteMigreringsbehandlingMedEndreMigreringsdato &&
+                      årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+          )
+        : Object.values(BehandlingÅrsak).filter(
+              årsak =>
+                  årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
+                  årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
+                  årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
+                  årsak !== BehandlingÅrsak.SATSENDRING &&
+                  årsak !== BehandlingÅrsak.MIGRERING &&
+                  årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
+                  årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
+                  årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
+                  (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                      kanManueltKorrigereMedVedtaksbrev) &&
+                  årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
+                  årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
+          );
+
 interface IProps {
     skjema:
         | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
@@ -213,53 +243,22 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     <option disabled={true} value={''}>
                         Velg
                     </option>
-                    {erMigreringFraInfotrygd
-                        ? Object.values(BehandlingÅrsak)
-                              .filter(
-                                  årsak =>
-                                      (kanOpprettMigreringsbehandlingMedHelmanuellMigrering &&
-                                          årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
-                                      (kanOppretteMigreringsbehandlingMedEndreMigreringsdato &&
-                                          årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
-                              )
-                              .map(årsak => {
-                                  return (
-                                      <option
-                                          key={årsak}
-                                          aria-selected={behandlingsårsak.verdi === årsak}
-                                          value={årsak}
-                                      >
-                                          {behandlingÅrsak[årsak]}
-                                      </option>
-                                  );
-                              })
-                        : Object.values(BehandlingÅrsak)
-                              .filter(
-                                  årsak =>
-                                      årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
-                                      årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
-                                      årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
-                                      årsak !== BehandlingÅrsak.SATSENDRING &&
-                                      årsak !== BehandlingÅrsak.MIGRERING &&
-                                      årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
-                                      årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
-                                      årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
-                                      (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                                          toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev]) &&
-                                      årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
-                                      årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
-                              )
-                              .map(årsak => {
-                                  return (
-                                      <option
-                                          key={årsak}
-                                          aria-selected={behandlingsårsak.verdi === årsak}
-                                          value={årsak}
-                                      >
-                                          {behandlingÅrsak[årsak]}
-                                      </option>
-                                  );
-                              })}
+                    {hentTilgjengeligeBehandlingsårsaker(
+                        erMigreringFraInfotrygd,
+                        kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
+                        kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
+                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev]
+                    ).map(årsak => {
+                        return (
+                            <option
+                                key={årsak}
+                                aria-selected={behandlingsårsak.verdi === årsak}
+                                value={årsak}
+                            >
+                                {behandlingÅrsak[årsak]}
+                            </option>
+                        );
+                    })}
                 </StyledFamilieSelect>
             )}
 
