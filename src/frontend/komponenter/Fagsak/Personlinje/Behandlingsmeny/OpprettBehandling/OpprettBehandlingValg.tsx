@@ -182,47 +182,50 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 <option disabled={true} value={''}>
                     Velg
                 </option>
-                <option
-                    aria-selected={behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING}
-                    disabled={!kanOppretteFørstegangsbehandling}
-                    value={Behandlingstype.FØRSTEGANGSBEHANDLING}
-                >
-                    Førstegangsbehandling
-                </option>
-                <option
-                    aria-selected={behandlingstype.verdi === Behandlingstype.REVURDERING}
-                    disabled={!kanOppretteRevurdering}
-                    value={Behandlingstype.REVURDERING}
-                >
-                    Revurdering
-                </option>
+                {kanOppretteFørstegangsbehandling && (
+                    <option
+                        aria-selected={
+                            behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING
+                        }
+                        value={Behandlingstype.FØRSTEGANGSBEHANDLING}
+                    >
+                        Førstegangsbehandling
+                    </option>
+                )}
+                {kanOppretteRevurdering && (
+                    <option
+                        aria-selected={behandlingstype.verdi === Behandlingstype.REVURDERING}
+                        value={Behandlingstype.REVURDERING}
+                    >
+                        Revurdering
+                    </option>
+                )}
 
-                {kanOppretteTekniskEndring && (
+                {kanOppretteRevurdering && kanOppretteTekniskEndring && (
                     <option
                         aria-selected={behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING}
-                        disabled={!kanOppretteRevurdering}
                         value={Behandlingstype.TEKNISK_ENDRING}
                     >
                         Teknisk endring
                     </option>
                 )}
 
-                <option
-                    aria-selected={
-                        behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
-                    }
-                    disabled={!kanOppretteTilbakekreving}
-                    value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
-                >
-                    Tilbakekreving
-                </option>
+                {kanOppretteTilbakekreving && (
+                    <option
+                        aria-selected={
+                            behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
+                        }
+                        value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
+                    >
+                        Tilbakekreving
+                    </option>
+                )}
 
                 {kanOppretteMigreringFraInfotrygd && (
                     <option
                         aria-selected={
                             behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
                         }
-                        disabled={!kanOppretteMigreringFraInfotrygd}
                         value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
                     >
                         Migrering fra infotrygd
