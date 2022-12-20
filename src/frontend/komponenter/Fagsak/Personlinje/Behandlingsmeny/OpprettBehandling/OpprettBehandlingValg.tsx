@@ -221,6 +221,15 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                 )}
 
+                {toggles[ToggleNavn.kanBehandleKlage] && (
+                    <option
+                        aria-selected={behandlingstype.verdi === Behandlingstype.KLAGE}
+                        value={Behandlingstype.KLAGE}
+                    >
+                        Klage
+                    </option>
+                )}
+
                 {kanOppretteMigreringFraInfotrygd && (
                     <option
                         aria-selected={
