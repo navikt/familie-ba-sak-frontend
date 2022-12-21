@@ -95,9 +95,9 @@ const useBehandlingssteg = (
 
     const sendTilBeslutterNesteOnClick = (
         settVisModal: (visModal: boolean) => void,
-        erUlagretNyTrekkILøpendeUtbetaling: boolean
+        erUlagretNyFeilutbetaltValuta: boolean
     ) => {
-        if (erUlagretNyTrekkILøpendeUtbetaling) {
+        if (erUlagretNyFeilutbetaltValuta) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Det er lagt til panel for trekk i løpende utbetaling. Fyll ut periode og beløp, eller fjern panelet.'
