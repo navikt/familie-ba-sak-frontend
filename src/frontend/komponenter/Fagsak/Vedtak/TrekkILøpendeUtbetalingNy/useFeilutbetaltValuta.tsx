@@ -9,7 +9,7 @@ import type {
     IFeilutbetaltValutaSkjemaFelter,
     IRestNyFeilutbetaltValutaPeriode,
     IRestFeilutbetaltValuta,
-} from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+} from '../../../../typer/eøs-feilutbetalt-valuta';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
 import {
