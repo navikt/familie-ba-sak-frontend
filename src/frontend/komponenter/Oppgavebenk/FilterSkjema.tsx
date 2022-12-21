@@ -76,6 +76,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                                 );
                                             }}
                                             placeholder={datoformatNorsk.DATO}
+                                            value={oppgaveFelt.filter.selectedValue}
                                             valgtDato={oppgaveFelt.filter.selectedValue}
                                             className="filterskjema__filtre--input"
                                         />

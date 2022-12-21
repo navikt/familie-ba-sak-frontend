@@ -119,6 +119,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                         ),
                                     });
                                 }}
+                                value={avtaleDato}
                                 valgtDato={avtaleDato}
                             />
                             {index !== 0 && (

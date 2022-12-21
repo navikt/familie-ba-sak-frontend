@@ -17,6 +17,7 @@ import {
 } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
+import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
@@ -36,6 +37,18 @@ import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbeh
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
+
+export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
+    journalpostTittel: string;
+    dokumenter: IDokumentInfo[];
+    bruker: IPersonInfo | undefined;
+    avsenderNavn: string;
+    avsenderIdent: string;
+    knyttTilNyBehandling: boolean;
+    tilknyttedeBehandlingIder: number[];
+    fagsakType: FagsakType;
+    samhandler: ISamhandlerInfo | undefined;
+}
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
@@ -95,20 +108,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
-        {
-            journalpostTittel: string;
-            behandlingstema: IBehandlingstema | undefined;
-            dokumenter: IDokumentInfo[];
-            bruker: IPersonInfo | undefined;
-            avsenderNavn: string;
-            avsenderIdent: string;
-            knyttTilNyBehandling: boolean;
-            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
-            behandlingsårsak: BehandlingÅrsak | '';
-            tilknyttedeBehandlingIder: number[];
-            fagsakType: FagsakType;
-            samhandler: ISamhandlerInfo | undefined;
-        },
+        ManuellJournalføringSkjemaFelter,
         string
     >({
         felter: {

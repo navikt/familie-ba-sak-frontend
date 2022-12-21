@@ -61,6 +61,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                             {...skjema.felter.endringstidspunkt.hentNavInputProps(
                                 skjema.visFeilmeldinger
                             )}
+                            value={skjema.felter.endringstidspunkt.verdi}
                             valgtDato={skjema.felter.endringstidspunkt.verdi}
                             label={'Endringstidspunkt'}
                             placeholder={'DD.MM.ÅÅÅÅ'}
