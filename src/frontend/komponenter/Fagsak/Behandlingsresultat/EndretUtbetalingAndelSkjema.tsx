@@ -312,6 +312,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 ? skjema.felter.søknadstidspunkt.verdi
                                 : undefined
                         }
+                        valgtDato={
+                            skjema.felter.søknadstidspunkt.verdi !== null
+                                ? skjema.felter.søknadstidspunkt.verdi
+                                : undefined
+                        }
                         label={<Label>Søknadstidspunkt</Label>}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) =>
@@ -337,6 +342,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 skjema.visFeilmeldinger
                             }
                             value={
+                                skjema.felter.avtaletidspunktDeltBosted.verdi !== null
+                                    ? skjema.felter.avtaletidspunktDeltBosted.verdi
+                                    : undefined
+                            }
+                            valgtDato={
                                 skjema.felter.avtaletidspunktDeltBosted.verdi !== null
                                     ? skjema.felter.avtaletidspunktDeltBosted.verdi
                                     : undefined
