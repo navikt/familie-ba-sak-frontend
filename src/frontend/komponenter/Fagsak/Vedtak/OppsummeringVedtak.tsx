@@ -26,7 +26,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import TrekkILøpendeUtbetaling from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
+import FeilutbetaltValuta from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
@@ -222,14 +222,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {visTrekkILøpendeUtbetaling && (
-                                    <TrekkILøpendeUtbetaling
+                                    <FeilutbetaltValuta
                                         feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
-                                        settErUlagretNyTrekkILøpendeUtbetaling={
+                                        settErUlagretNyFeilutbetaltValuta={
                                             settErUlagretNyTrekkILøpendeUtbetaling
                                         }
                                         erLesevisning={vurderErLesevisning()}
-                                        skjulTrekkILøpendeUtbetaling={() =>
+                                        skjulFeilutbetaltValuta={() =>
                                             settVisTrekkILøpendeUtbetaling(false)
                                         }
                                     />
