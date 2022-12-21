@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
-import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
 
 interface ITrekkILøpendeUtbetaling {
     behandlingId: number;
-    trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
+    trekkILøpendeUtbetalingListe: IRestFeilutbetaltValuta[];
     settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
     erLesevisning: boolean;
     skjulTrekkILøpendeUtbetaling: () => void;
