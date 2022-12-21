@@ -103,7 +103,6 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     )}
                                     valgtDato={opprettBehandlingSkjema.felter.migreringsdato.verdi}
                                     label={'Ny migreringsdato'}
-                                    placeholder={'DD.MM.ÅÅÅÅ'}
                                     limitations={{
                                         maxDate: maksdatoForMigrering().toISOString(),
                                     }}
@@ -127,7 +126,6 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 )}
                                 valgtDato={opprettBehandlingSkjema.felter.søknadMottattDato.verdi}
                                 label={'Mottatt dato'}
-                                placeholder={'DD.MM.ÅÅÅÅ'}
                                 limitations={{
                                     maxDate: new Date().toISOString(),
                                 }}
@@ -149,7 +147,6 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 )}
                                 valgtDato={opprettBehandlingSkjema.felter.kravMottattDato.verdi}
                                 label={'Krav mottatt'}
-                                placeholder={'DD.MM.ÅÅÅÅ'}
                                 limitations={{
                                     maxDate: new Date().toISOString(),
                                 }}
