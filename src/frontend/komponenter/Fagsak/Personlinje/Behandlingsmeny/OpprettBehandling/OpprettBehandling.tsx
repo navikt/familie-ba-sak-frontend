@@ -6,29 +6,19 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import { Datofelt } from './Datofelt';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
-
-const FixedDatoVelger = styled(FamilieDatovelger)`
-    .nav-datovelger__kalenderPortal__content {
-        position: fixed;
-    }
-    .nav-datovelger__kalenderknapp {
-        z-index: 0;
-    }
-    margin-top: 2rem;
-`;
 
 const Knapperad = styled.div`
     margin-top: 2.5rem;
@@ -97,68 +87,33 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                         {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
                             Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
                             opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
-                                <FixedDatoVelger
-                                    {...opprettBehandlingSkjema.felter.migreringsdato.hentNavInputProps(
-                                        opprettBehandlingSkjema.visFeilmeldinger
-                                    )}
-                                    valgtDato={opprettBehandlingSkjema.felter.migreringsdato.verdi}
-                                    label={'Ny migreringsdato'}
-                                    limitations={{
+                                <Datofelt
+                                    skjemafelt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                    etikett={'Ny migreringsdato'}
+                                    begrensninger={{
                                         maxDate: maksdatoForMigrering().toISOString(),
                                     }}
-                                    onChange={input =>
-                                        opprettBehandlingSkjema.felter.migreringsdato
-                                            .hentNavInputProps(
-                                                opprettBehandlingSkjema.visFeilmeldinger
-                                            )
-                                            .onChange(input ?? '')
-                                    }
-                                    feil={
-                                        opprettBehandlingSkjema.visFeilmeldinger &&
-                                        opprettBehandlingSkjema.felter.migreringsdato.feilmelding
-                                    }
                                 />
                             )}
                         {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                            <FixedDatoVelger
-                                {...opprettBehandlingSkjema.felter.søknadMottattDato.hentNavInputProps(
-                                    opprettBehandlingSkjema.visFeilmeldinger
-                                )}
-                                valgtDato={opprettBehandlingSkjema.felter.søknadMottattDato.verdi}
-                                label={'Mottatt dato'}
-                                limitations={{
+                            <Datofelt
+                                skjemafelt={opprettBehandlingSkjema.felter.søknadMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                etikett={'Mottatt dato'}
+                                begrensninger={{
                                     maxDate: new Date().toISOString(),
                                 }}
-                                onChange={input =>
-                                    opprettBehandlingSkjema.felter.søknadMottattDato
-                                        .hentNavInputProps(opprettBehandlingSkjema.visFeilmeldinger)
-                                        .onChange(input ?? '')
-                                }
-                                feil={
-                                    opprettBehandlingSkjema.visFeilmeldinger &&
-                                    opprettBehandlingSkjema.felter.søknadMottattDato.feilmelding
-                                }
                             />
                         )}
                         {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
-                            <FixedDatoVelger
-                                {...opprettBehandlingSkjema.felter.kravMottattDato.hentNavInputProps(
-                                    opprettBehandlingSkjema.visFeilmeldinger
-                                )}
-                                valgtDato={opprettBehandlingSkjema.felter.kravMottattDato.verdi}
-                                label={'Krav mottatt'}
-                                limitations={{
+                            <Datofelt
+                                skjemafelt={opprettBehandlingSkjema.felter.kravMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                etikett={'Krav mottatt'}
+                                begrensninger={{
                                     maxDate: new Date().toISOString(),
                                 }}
-                                onChange={input =>
-                                    opprettBehandlingSkjema.felter.kravMottattDato
-                                        .hentNavInputProps(opprettBehandlingSkjema.visFeilmeldinger)
-                                        .onChange(input ?? '')
-                                }
-                                feil={
-                                    opprettBehandlingSkjema.visFeilmeldinger &&
-                                    opprettBehandlingSkjema.felter.kravMottattDato.feilmelding
-                                }
                             />
                         )}
                     </SkjemaGruppe>
