@@ -26,7 +26,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import FeilutbetaltValuta from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
+import FeilutbetaltValuta from './TrekkILøpendeUtbetalingNy/FeilutbetaltValuta';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
