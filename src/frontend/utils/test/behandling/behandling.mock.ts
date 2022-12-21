@@ -90,6 +90,7 @@ export const mockBehandling = ({
         kompetanser: [],
         utenlandskePeriodebeløp: [],
         valutakurser: [],
+        trekkILøpendeUtbetaling: [],
     };
 };
 
