@@ -38,7 +38,7 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        !trekkILøpendeUtbetalingListe
+        trekkILøpendeUtbetalingListe.length === 0
     );
 
     useEffect(() => {
