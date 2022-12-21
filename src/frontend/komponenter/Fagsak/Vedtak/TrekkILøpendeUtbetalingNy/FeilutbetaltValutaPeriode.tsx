@@ -8,7 +8,7 @@ import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useFeilutbetaltValuta } from './useTrekkILøpendeUtbetaling';
+import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
 
 interface IFeilutbetaltValutaPeriode {
     feilutbetaltValuta: IRestFeilutbetaltValuta;
