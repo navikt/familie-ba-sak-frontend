@@ -89,6 +89,7 @@ const AvslagSkjema: React.FC<IProps> = ({
                 <VedtaksbegrunnelseTeksterProvider>
                     <AvslagBegrunnelseMultiselect
                         vilkårType={redigerbartVilkår.verdi.vilkårType}
+                        regelverk={redigerbartVilkår.verdi.vurderesEtter}
                         periode={redigerbartVilkår.verdi.periode.verdi}
                         begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser.verdi}
                         onChange={(oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => {
