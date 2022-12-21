@@ -87,12 +87,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
-    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
-    const [erUlagretNyTrekkILøpendeUtbetaling, settErUlagretNyTrekkILøpendeUtbetaling] =
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
+    const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
         React.useState(false);
 
     React.useEffect(() => {
-        settVisTrekkILøpendeUtbetaling(
+        settVisFeilutbetaltValuta(
             åpenBehandling.feilutbetaltValuta.length > 0 &&
                 toggles[ToggleNavn.trekkILøpendeUtbetaling]
         );
@@ -123,7 +123,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const sendTilBeslutter = () => {
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
-            erUlagretNyTrekkILøpendeUtbetaling
+            erUlagretNyFeilutbetaltValutaPeriode
         );
     };
 
@@ -160,7 +160,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             <Vedtaksmeny
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
-                settVisTrekkILøpendeUtbetaling={settVisTrekkILøpendeUtbetaling}
+                settVisFeilutbetaltValuta={settVisFeilutbetaltValuta}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -221,16 +221,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {visTrekkILøpendeUtbetaling && (
+                                {visFeilutbetaltValuta && (
                                     <FeilutbetaltValuta
                                         feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
                                         settErUlagretNyFeilutbetaltValuta={
-                                            settErUlagretNyTrekkILøpendeUtbetaling
+                                            settErUlagretNyFeilutbetaltValutaPeriode
                                         }
                                         erLesevisning={vurderErLesevisning()}
                                         skjulFeilutbetaltValuta={() =>
-                                            settVisTrekkILøpendeUtbetaling(false)
+                                            settVisFeilutbetaltValuta(false)
                                         }
                                     />
                                 )}
