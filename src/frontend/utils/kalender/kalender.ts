@@ -1,4 +1,4 @@
-import { parseIso8601String, parseIso8601StringMånedÅr } from './io';
+import { parseIso8601MånedString, parseIso8601String, parseIso8601StringMånedÅr } from './io';
 import type { DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
 import { antallDagerIMåned } from './typer';
 
@@ -44,7 +44,7 @@ export const kalenderDatoTilDate = (
 
 export const iDag = (): DagMånedÅr => kalenderDatoFraDate(new Date());
 
-export const førsteDagIInneværendeMåned = () => {
+export const førsteDagIInneværendeMåned = (): DagMånedÅr => {
     const inneværende = iDag();
     return {
         ...inneværende,
@@ -52,10 +52,23 @@ export const førsteDagIInneværendeMåned = () => {
     };
 };
 
-export const sisteDagIInneværendeMåned = () => {
+export const sisteDagIInneværendeMåned = (): DagMånedÅr => {
     const inneværende = iDag();
     return {
         ...inneværende,
         dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
     };
+};
+
+export const FamilieIsoTilFørsteDagIMåneden = (dato: FamilieIsoDate): FamilieIsoDate => {
+    return dato.substring(0, 8) + '01';
+};
+
+export const FamilieIsoTilSisteDagIMåneden = (dato: FamilieIsoDate): FamilieIsoDate => {
+    const datoDagMånedÅr = parseIso8601MånedString(dato);
+
+    return (
+        dato.substring(0, 8) +
+        antallDagerIMåned({ måned: datoDagMånedÅr.måned, år: datoDagMånedÅr.år })
+    );
 };

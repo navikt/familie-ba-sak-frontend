@@ -116,15 +116,14 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                             id={'korriger-vedtak-dato'}
                             label={'Vedtaksdato'}
                             erLesesvisning={erLesevisning}
-                            value={skjema.felter.vedtaksdato.verdi}
-                            placeholder={datoformatNorsk.DATO}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
-                            }
-                            valgtDato={
+                            value={
                                 skjema.felter.vedtaksdato?.verdi !== null
                                     ? skjema.felter.vedtaksdato?.verdi
                                     : undefined
+                            }
+                            placeholder={datoformatNorsk.DATO}
+                            onChange={(dato?: ISODateString) =>
+                                skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
                             }
                         />
                         <StyledFamilieTextarea

@@ -10,6 +10,7 @@ import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
+import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
@@ -18,6 +19,7 @@ import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstids
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     erBehandlingMedVedtaksbrevutsending: boolean;
+    settVisTrekkILøpendeUtbetaling: (visTrekkILøpendeUtbetaling: boolean) => void;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -33,6 +35,7 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
 const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     erBehandlingMedVedtaksbrevutsending,
+    settVisTrekkILøpendeUtbetaling,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
@@ -75,12 +78,16 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
-                    {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
-                        <Dropdown.Menu.List.Item>
-                            <Calculator />
-                            Legg til trekk i løpende utbetaling
-                        </Dropdown.Menu.List.Item>
-                    )}
+                    {åpenBehandling.årsak === BehandlingÅrsak.ÅRLIG_KONTROLL &&
+                        åpenBehandling.kategori === BehandlingKategori.EØS &&
+                        toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
+                            <Dropdown.Menu.List.Item
+                                onClick={() => settVisTrekkILøpendeUtbetaling(true)}
+                            >
+                                <Calculator />
+                                Legg til feilutbetalt valuta
+                            </Dropdown.Menu.List.Item>
+                        )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>
