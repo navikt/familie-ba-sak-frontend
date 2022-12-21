@@ -291,7 +291,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
                 <FixedDatoVelger
                     {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
-                    valgtDato={migreringsdato.verdi}
+                    value={migreringsdato.verdi}
                     label={'Ny migreringsdato'}
                     placeholder={'DD.MM.ÅÅÅÅ'}
                     limitations={{
@@ -314,7 +314,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             {søknadMottattDato?.erSynlig && (
                 <FixedDatoVelger
                     {...søknadMottattDato.hentNavInputProps(visFeilmeldinger)}
-                    valgtDato={søknadMottattDato.verdi}
+                    value={søknadMottattDato.verdi}
                     label={'Mottatt dato'}
                     placeholder={'DD.MM.ÅÅÅÅ'}
                     limitations={{

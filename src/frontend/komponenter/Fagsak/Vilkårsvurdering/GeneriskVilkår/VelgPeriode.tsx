@@ -118,7 +118,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                     },
                                 });
                             }}
-                            valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
+                            value={redigerbartVilkår.verdi.periode.verdi.fom}
                         />
                     </div>
                 )}
@@ -146,7 +146,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                     },
                                 });
                             }}
-                            valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
+                            value={redigerbartVilkår.verdi.periode.verdi.tom}
                         />
                     </div>
                 )}
