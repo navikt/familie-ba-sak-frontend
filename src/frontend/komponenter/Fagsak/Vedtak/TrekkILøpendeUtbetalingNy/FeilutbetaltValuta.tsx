@@ -6,8 +6,8 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
-import FeilutbetaltValutaPeriode from './TrekkILøpendeUtbetalingListeElement';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
