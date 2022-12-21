@@ -54,6 +54,7 @@ interface IProps {
     onChange: (dato?: ISODateString) => void;
     placeholder?: string;
     value?: string;
+    valgtDato?: string;
     description?: ReactNode;
     feil: ReactNode | undefined;
 }

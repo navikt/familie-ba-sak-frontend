@@ -427,6 +427,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Samboer fra'}
                         value={skjema.felter.datoAvtale.verdi}
+                        valgtDato={skjema.felter.datoAvtale.verdi}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                     />
                 )}

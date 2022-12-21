@@ -121,6 +121,11 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                                     ? skjema.felter.vedtaksdato?.verdi
                                     : undefined
                             }
+                            valgtDato={
+                                skjema.felter.vedtaksdato?.verdi !== null
+                                    ? skjema.felter.vedtaksdato?.verdi
+                                    : undefined
+                            }
                             placeholder={datoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) =>
                                 skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
