@@ -223,9 +223,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {visTrekkILøpendeUtbetaling && (
                                     <TrekkILøpendeUtbetaling
-                                        trekkILøpendeUtbetalingListe={
-                                            åpenBehandling.feilutbetaltValuta
-                                        }
+                                        feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
                                         settErUlagretNyTrekkILøpendeUtbetaling={
                                             settErUlagretNyTrekkILøpendeUtbetaling
