@@ -225,79 +225,83 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
+    const opprettTilbakekreving = () => {
+        onSubmit<void>(
+            {
+                method: 'GET',
+                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,
+            },
+            response => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    nullstillSkjemaStatus();
+                    onOpprettTilbakekrevingSuccess();
+                }
+            }
+        );
+    };
+
+    const opprettBehandling = (søkersIdent: string, fagsakType: FagsakType) => {
+        const erMigreringFraInfoTrygd =
+            skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+        const erHelmanuellMigrering =
+            erMigreringFraInfoTrygd &&
+            skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+
+        onSubmit<IRestNyBehandling>(
+            {
+                data: {
+                    kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
+                    underkategori: skjema.felter.behandlingstema.verdi?.underkategori ?? null,
+                    søkersIdent,
+                    behandlingType: behandlingstype.verdi as Behandlingstype,
+                    behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
+                    navIdent: innloggetSaksbehandler?.navIdent,
+                    nyMigreringsdato: erMigreringFraInfoTrygd
+                        ? skjema.felter.migreringsdato.verdi
+                        : undefined,
+                    søknadMottattDato: skjema.felter.søknadMottattDato.verdi ?? undefined,
+                    barnasIdenter: erHelmanuellMigrering
+                        ? skjema.felter.valgteBarn.verdi.map(option => option.value)
+                        : undefined,
+                    fagsakType: fagsakType,
+                    fagsakId: fagsakId,
+                },
+                method: 'POST',
+                url: '/familie-ba-sak/api/behandlinger',
+            },
+            response => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    lukkModal();
+                    nullstillSkjema();
+
+                    settÅpenBehandling(response);
+                    const behandling: IBehandling | undefined = hentDataFraRessurs(response);
+
+                    if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
+                        navigate(
+                            behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE
+                                ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                                : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                        );
+                    } else {
+                        navigate(
+                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
+                        );
+                    }
+                }
+            }
+        );
+    };
+
     const onBekreft = (søkersIdent: string, fagsakType: FagsakType) => {
-        const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
             if (
                 skjema.felter.behandlingstype.verdi ===
                 Tilbakekrevingsbehandlingstype.TILBAKEKREVING
             ) {
-                onSubmit<void>(
-                    {
-                        method: 'GET',
-                        url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,
-                    },
-                    response => {
-                        if (response.status === RessursStatus.SUKSESS) {
-                            nullstillSkjemaStatus();
-                            onOpprettTilbakekrevingSuccess();
-                        }
-                    }
-                );
+                opprettTilbakekreving();
             } else {
-                const erMigreringFraInfoTrygd =
-                    skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-                const erHelmanuellMigrering =
-                    erMigreringFraInfoTrygd &&
-                    skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
-
-                onSubmit<IRestNyBehandling>(
-                    {
-                        data: {
-                            kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
-                            underkategori:
-                                skjema.felter.behandlingstema.verdi?.underkategori ?? null,
-                            søkersIdent,
-                            behandlingType: behandlingstype.verdi as Behandlingstype,
-                            behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
-                            navIdent: innloggetSaksbehandler?.navIdent,
-                            nyMigreringsdato: erMigreringFraInfoTrygd
-                                ? skjema.felter.migreringsdato.verdi
-                                : undefined,
-                            søknadMottattDato: skjema.felter.søknadMottattDato.verdi ?? undefined,
-                            barnasIdenter: erHelmanuellMigrering
-                                ? skjema.felter.valgteBarn.verdi.map(option => option.value)
-                                : undefined,
-                            fagsakType: fagsakType,
-                            fagsakId: fagsakId,
-                        },
-                        method: 'POST',
-                        url: '/familie-ba-sak/api/behandlinger',
-                    },
-                    response => {
-                        if (response.status === RessursStatus.SUKSESS) {
-                            lukkModal();
-                            nullstillSkjema();
-
-                            settÅpenBehandling(response);
-                            const behandling: IBehandling | undefined =
-                                hentDataFraRessurs(response);
-
-                            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                                navigate(
-                                    behandling.steg ===
-                                        BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE
-                                        ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
-                                        : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
-                                );
-                            } else {
-                                navigate(
-                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
-                                );
-                            }
-                        }
-                    }
-                );
+                opprettBehandling(søkersIdent, fagsakType);
             }
         }
     };
