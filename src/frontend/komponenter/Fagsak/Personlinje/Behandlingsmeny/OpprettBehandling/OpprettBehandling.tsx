@@ -8,9 +8,11 @@ import { Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import { Datofelt } from './Datofelt';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 
@@ -53,14 +55,6 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
             settVisBekreftelseTilbakekrevingModal(true);
         }
     );
-    const {
-        behandlingsårsak,
-        behandlingstype,
-        behandlingstema,
-        migreringsdato,
-        søknadMottattDato,
-        valgteBarn,
-    } = opprettBehandlingSkjema.felter;
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
@@ -86,17 +80,42 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                     >
                         <SkjultLegend>Opprett ny behandling</SkjultLegend>
                         <OpprettBehandlingValg
-                            behandlingstype={behandlingstype}
-                            behandlingsårsak={behandlingsårsak}
-                            behandlingstema={behandlingstema}
-                            migreringsdato={migreringsdato}
-                            maksdatoForMigrering={maksdatoForMigrering().toISOString()}
-                            søknadMottattDato={søknadMottattDato}
+                            skjema={opprettBehandlingSkjema}
                             minimalFagsak={minimalFagsak}
-                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                             bruker={bruker}
-                            valgteBarn={valgteBarn}
                         />
+                        {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
+                            Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                            opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                                <Datofelt
+                                    skjemafelt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                    etikett={'Ny migreringsdato'}
+                                    begrensninger={{
+                                        maxDate: maksdatoForMigrering().toISOString(),
+                                    }}
+                                />
+                            )}
+                        {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
+                            <Datofelt
+                                skjemafelt={opprettBehandlingSkjema.felter.søknadMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                etikett={'Mottatt dato'}
+                                begrensninger={{
+                                    maxDate: new Date().toISOString(),
+                                }}
+                            />
+                        )}
+                        {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
+                            <Datofelt
+                                skjemafelt={opprettBehandlingSkjema.felter.kravMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                etikett={'Krav mottatt'}
+                                begrensninger={{
+                                    maxDate: new Date().toISOString(),
+                                }}
+                            />
+                        )}
                     </SkjemaGruppe>
                     <Knapperad>
                         <div>

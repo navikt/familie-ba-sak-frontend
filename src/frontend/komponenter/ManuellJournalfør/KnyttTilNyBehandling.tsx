@@ -21,8 +21,7 @@ const StyledCheckboxDiv = styled.div`
  */
 export const KnyttTilNyBehandling: React.FC = () => {
     const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } = useManuellJournalfør();
-    const { knyttTilNyBehandling, behandlingstema, behandlingsårsak, behandlingstype } =
-        skjema.felter;
+    const { knyttTilNyBehandling, behandlingstype } = skjema.felter;
     return (
         <SkjemaGruppe>
             <Heading size={'small'} level={'2'}>
@@ -51,13 +50,10 @@ export const KnyttTilNyBehandling: React.FC = () => {
             </StyledCheckboxDiv>
             {behandlingstype.erSynlig && (
                 <OpprettBehandlingValg
-                    behandlingstype={behandlingstype}
-                    behandlingsårsak={behandlingsårsak}
+                    skjema={skjema}
                     minimalFagsak={minimalFagsak}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
                     erLesevisning={!kanKnytteJournalpostTilBehandling()}
                     manuellJournalfør
-                    behandlingstema={behandlingstema}
                 />
             )}
         </SkjemaGruppe>
