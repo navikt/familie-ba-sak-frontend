@@ -225,7 +225,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                     <FeilutbetaltValuta
                                         feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
-                                        settErUlagretNyFeilutbetaltValuta={
+                                        settErUlagretNyFeilutbetaltValutaPeriode={
                                             settErUlagretNyFeilutbetaltValutaPeriode
                                         }
                                         erLesevisning={vurderErLesevisning()}

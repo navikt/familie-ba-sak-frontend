@@ -12,7 +12,7 @@ import FeilutbetaltValutaPeriode from './TrekkILøpendeUtbetalingListeElement';
 interface IFeilutbetaltValuta {
     behandlingId: number;
     feilutbetaltValutaListe: IRestFeilutbetaltValuta[];
-    settErUlagretNyFeilutbetaltValuta: (erUlagretNyFeilutbetaltValuta: boolean) => void;
+    settErUlagretNyFeilutbetaltValutaPeriode: (erUlagretNyFeilutbetaltValuta: boolean) => void;
     erLesevisning: boolean;
     skjulFeilutbetaltValuta: () => void;
 }
@@ -32,7 +32,7 @@ const FlexRowDiv = styled.div`
 
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     feilutbetaltValutaListe,
-    settErUlagretNyFeilutbetaltValuta,
+    settErUlagretNyFeilutbetaltValutaPeriode,
     erLesevisning,
     skjulFeilutbetaltValuta,
     behandlingId,
@@ -42,7 +42,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     );
 
     useEffect(() => {
-        settErUlagretNyFeilutbetaltValuta(ønskerÅLeggeTilNyPeriode);
+        settErUlagretNyFeilutbetaltValutaPeriode(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (feilutbetaltValutaListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
