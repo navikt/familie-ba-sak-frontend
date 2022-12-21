@@ -119,7 +119,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                         ),
                                     });
                                 }}
-                                valgtDato={avtaleDato}
+                                value={avtaleDato}
                             />
                             {index !== 0 && (
                                 <FjernAvtaleKnapp
