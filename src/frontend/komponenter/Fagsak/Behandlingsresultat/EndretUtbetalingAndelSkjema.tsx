@@ -307,7 +307,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         feil={
                             !!skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger
                         }
-                        valgtDato={
+                        value={
                             skjema.felter.søknadstidspunkt.verdi !== null
                                 ? skjema.felter.søknadstidspunkt.verdi
                                 : undefined
@@ -336,7 +336,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 !!skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
                                 skjema.visFeilmeldinger
                             }
-                            valgtDato={
+                            value={
                                 skjema.felter.avtaletidspunktDeltBosted.verdi !== null
                                     ? skjema.felter.avtaletidspunktDeltBosted.verdi
                                     : undefined
