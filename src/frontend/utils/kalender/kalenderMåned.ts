@@ -14,12 +14,12 @@ export const sisteDatoIMnd = (måned: number, år: number): Date => {
     return new Date(år, måned + 1, 0);
 };
 
-export const sisteDagIMåned = (dagMånedÅr: DagMånedÅr) => ({
+export const sisteDagIMåned = (dagMånedÅr: DagMånedÅr): DagMånedÅr => ({
     ...dagMånedÅr,
     dag: antallDagerIMåned({ år: dagMånedÅr.år, måned: dagMånedÅr.måned }),
 });
 
-export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
+export const hentFørsteDagIYearMonth = (yearMonth: YearMonth): DagMånedÅr => {
     const månedÅr = kalenderMåned(yearMonth);
 
     return {
@@ -28,7 +28,7 @@ export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
     };
 };
 
-export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
+export const hentSisteDagIYearMonth = (yearMonth: YearMonth): DagMånedÅr => {
     const månedÅr = kalenderMåned(yearMonth);
 
     return {

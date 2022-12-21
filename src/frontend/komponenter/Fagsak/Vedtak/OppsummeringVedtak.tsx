@@ -26,9 +26,9 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import TrekkILøpendeUtbetaling from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import { TrekkILøpendeUtbetalingListe } from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/TrekkILøpendeUtbetaling/TrekkILøpendeUtbetalingListe';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import Vedtaksmeny from './Vedtaksmeny';
 
@@ -87,6 +87,17 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
+    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
+    const [erUlagretNyTrekkILøpendeUtbetaling, settErUlagretNyTrekkILøpendeUtbetaling] =
+        React.useState(false);
+
+    React.useEffect(() => {
+        settVisTrekkILøpendeUtbetaling(
+            åpenBehandling.trekkILøpendeUtbetaling.length > 0 &&
+                toggles[ToggleNavn.trekkILøpendeUtbetaling]
+        );
+    }, [åpenBehandling]);
+
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
         const rolle = hentSaksbehandlerRolle();
@@ -110,7 +121,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     };
 
     const sendTilBeslutter = () => {
-        sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
+        sendTilBeslutterNesteOnClick(
+            (visModal: boolean) => settVisModal(visModal),
+            erUlagretNyTrekkILøpendeUtbetaling
+        );
     };
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
@@ -146,6 +160,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             <Vedtaksmeny
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
+                settVisTrekkILøpendeUtbetaling={settVisTrekkILøpendeUtbetaling}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -206,10 +221,19 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {toggles[ToggleNavn.trekkILøpendeUtbetaling].valueOf() && (
-                                    <TrekkILøpendeUtbetalingListe
-                                        visTrekkILøpendeUtbetalinger={true}
-                                        åpenBehandling={åpenBehandling}
+                                {visTrekkILøpendeUtbetaling && (
+                                    <TrekkILøpendeUtbetaling
+                                        trekkILøpendeUtbetalingListe={
+                                            åpenBehandling.trekkILøpendeUtbetaling
+                                        }
+                                        behandlingId={åpenBehandling.behandlingId}
+                                        settErUlagretNyTrekkILøpendeUtbetaling={
+                                            settErUlagretNyTrekkILøpendeUtbetaling
+                                        }
+                                        erLesevisning={vurderErLesevisning()}
+                                        skjulTrekkILøpendeUtbetaling={() =>
+                                            settVisTrekkILøpendeUtbetaling(false)
+                                        }
                                     />
                                 )}
                             </>
