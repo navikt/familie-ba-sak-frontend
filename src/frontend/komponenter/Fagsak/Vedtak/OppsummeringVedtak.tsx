@@ -160,7 +160,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             <Vedtaksmeny
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
-                settVisFeilutbetaltValuta={settVisFeilutbetaltValuta}
+                visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
