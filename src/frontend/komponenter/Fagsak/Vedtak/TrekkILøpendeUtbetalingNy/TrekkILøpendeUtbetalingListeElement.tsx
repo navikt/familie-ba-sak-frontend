@@ -39,7 +39,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
         useTrekkILøpendeUtbetaling({
             behandlingId: behandlingId,
-            trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
+            feilutbetaltValuta: trekkILøpendeUtbetaling,
             settFeilmelding: settFeilmelding,
         });
 

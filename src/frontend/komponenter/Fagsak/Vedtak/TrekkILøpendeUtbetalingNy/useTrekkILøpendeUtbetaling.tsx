@@ -21,7 +21,7 @@ import {
 
 interface IProps {
     behandlingId: number;
-    trekkILøpendeUtbetaling?: IRestFeilutbetaltValuta;
+    feilutbetaltValuta?: IRestFeilutbetaltValuta;
     settFeilmelding: (feilmelding: string) => void;
 }
 
@@ -50,14 +50,14 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
 };
 
 const useTrekkILøpendeUtbetaling = ({
-    trekkILøpendeUtbetaling,
+    feilutbetaltValuta,
     settFeilmelding,
     behandlingId,
 }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate>({
-        verdi: trekkILøpendeUtbetaling?.fom ?? '',
+        verdi: feilutbetaltValuta?.fom ?? '',
         valideringsfunksjon: felt =>
             erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
     });
@@ -69,7 +69,7 @@ const useTrekkILøpendeUtbetaling = ({
         felter: {
             fom: fomFelt,
             tom: useFelt<FamilieIsoDate>({
-                verdi: trekkILøpendeUtbetaling?.tom ?? '',
+                verdi: feilutbetaltValuta?.tom ?? '',
                 avhengigheter: {
                     fom: fomFelt,
                 },
@@ -77,7 +77,7 @@ const useTrekkILøpendeUtbetaling = ({
                     validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate),
             }),
             feilutbetaltBeløp: useFelt<string>({
-                verdi: trekkILøpendeUtbetaling?.feilutbetaltBeløp.toString() ?? '',
+                verdi: feilutbetaltValuta?.feilutbetaltBeløp.toString() ?? '',
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
         },
@@ -108,14 +108,14 @@ const useTrekkILøpendeUtbetaling = ({
     };
 
     const oppdaterEksisterendePeriode = async () => {
-        if (kanSendeSkjema() && trekkILøpendeUtbetaling) {
+        if (kanSendeSkjema() && feilutbetaltValuta) {
             onSubmit<IRestFeilutbetaltValuta>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
+                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${feilutbetaltValuta.id}`,
                     data: {
-                        ...trekkILøpendeUtbetaling,
-                        id: trekkILøpendeUtbetaling.id,
+                        ...feilutbetaltValuta,
+                        id: feilutbetaltValuta.id,
                         fom: skjema.felter.fom.verdi,
                         tom: skjema.felter.tom.verdi,
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
@@ -133,11 +133,11 @@ const useTrekkILøpendeUtbetaling = ({
     };
 
     const fjernPeriode = async () => {
-        if (trekkILøpendeUtbetaling) {
+        if (feilutbetaltValuta) {
             onSubmit(
                 {
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${trekkILøpendeUtbetaling.id}`,
+                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${feilutbetaltValuta.id}`,
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
