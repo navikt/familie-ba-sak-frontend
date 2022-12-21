@@ -49,11 +49,7 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
     return ok(felt);
 };
 
-const useTrekkILøpendeUtbetaling = ({
-    feilutbetaltValuta,
-    settFeilmelding,
-    behandlingId,
-}: IProps) => {
+const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandlingId }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate>({
@@ -81,7 +77,7 @@ const useTrekkILøpendeUtbetaling = ({
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
         },
-        skjemanavn: 'Trekk i løpende utbetaling',
+        skjemanavn: 'Feilutbetalt valuta',
     });
 
     const lagreNyPeriode = () => {
@@ -160,4 +156,4 @@ const useTrekkILøpendeUtbetaling = ({
     };
 };
 
-export { useTrekkILøpendeUtbetaling };
+export { useFeilutbetaltValuta };

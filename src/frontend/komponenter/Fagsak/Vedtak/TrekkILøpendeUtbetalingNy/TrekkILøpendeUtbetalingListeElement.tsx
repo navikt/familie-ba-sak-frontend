@@ -8,7 +8,7 @@ import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
 import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
+import { useFeilutbetaltValuta } from './useTrekkILøpendeUtbetaling';
 
 interface ITrekkILøpendeUtbetaling {
     trekkILøpendeUtbetaling: IRestFeilutbetaltValuta;
@@ -37,7 +37,7 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useTrekkILøpendeUtbetaling({
+        useFeilutbetaltValuta({
             behandlingId: behandlingId,
             feilutbetaltValuta: trekkILøpendeUtbetaling,
             settFeilmelding: settFeilmelding,
