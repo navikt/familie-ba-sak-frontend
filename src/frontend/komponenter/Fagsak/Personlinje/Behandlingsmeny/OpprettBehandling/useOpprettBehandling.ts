@@ -218,12 +218,12 @@ const useOpprettBehandling = (
         });
 
     useEffect(() => {
-        if (skjema.felter.behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING) {
-            skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_ENDRING);
-        } else if (skjema.felter.behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING) {
-            skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.SØKNAD);
+        if (behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING) {
+            behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_ENDRING);
+        } else if (behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING) {
+            behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.SØKNAD);
         }
-    }, [skjema.felter.behandlingstype.verdi]);
+    }, [behandlingstype.verdi]);
 
     const opprettTilbakekreving = () => {
         onSubmit<void>(
@@ -240,28 +240,42 @@ const useOpprettBehandling = (
         );
     };
 
+    const opprettKlagebehandling = () => {
+        onSubmit<{ kravMottattDato: FamilieIsoDate }>(
+            {
+                method: 'POST',
+                url: `/familie-ks-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
+                data: { kravMottattDato: kravMottattDato.verdi },
+            },
+            response => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    lukkModal();
+                    nullstillSkjema();
+                }
+            }
+        );
+    };
+
     const opprettBehandling = (søkersIdent: string, fagsakType: FagsakType) => {
         const erMigreringFraInfoTrygd =
-            skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+            behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
         const erHelmanuellMigrering =
             erMigreringFraInfoTrygd &&
-            skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+            behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
         onSubmit<IRestNyBehandling>(
             {
                 data: {
-                    kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
-                    underkategori: skjema.felter.behandlingstema.verdi?.underkategori ?? null,
+                    kategori: behandlingstema.verdi?.kategori ?? null,
+                    underkategori: behandlingstema.verdi?.underkategori ?? null,
                     søkersIdent,
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
-                    nyMigreringsdato: erMigreringFraInfoTrygd
-                        ? skjema.felter.migreringsdato.verdi
-                        : undefined,
-                    søknadMottattDato: skjema.felter.søknadMottattDato.verdi ?? undefined,
+                    nyMigreringsdato: erMigreringFraInfoTrygd ? migreringsdato.verdi : undefined,
+                    søknadMottattDato: søknadMottattDato.verdi ?? undefined,
                     barnasIdenter: erHelmanuellMigrering
-                        ? skjema.felter.valgteBarn.verdi.map(option => option.value)
+                        ? valgteBarn.verdi.map(option => option.value)
                         : undefined,
                     fagsakType: fagsakType,
                     fagsakId: fagsakId,
@@ -295,11 +309,10 @@ const useOpprettBehandling = (
 
     const onBekreft = (søkersIdent: string, fagsakType: FagsakType) => {
         if (kanSendeSkjema()) {
-            if (
-                skjema.felter.behandlingstype.verdi ===
-                Tilbakekrevingsbehandlingstype.TILBAKEKREVING
-            ) {
+            if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
                 opprettTilbakekreving();
+            } else if (behandlingstype.verdi === Behandlingstype.KLAGE) {
+                opprettKlagebehandling();
             } else {
                 opprettBehandling(søkersIdent, fagsakType);
             }
