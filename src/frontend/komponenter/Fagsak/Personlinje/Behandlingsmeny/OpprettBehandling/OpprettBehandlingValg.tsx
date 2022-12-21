@@ -317,7 +317,12 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         limitations={{
                             maxDate: maksdatoForMigrering,
                         }}
-                        feil={skjema.felter.migreringsdato.feilmelding}
+                        onChange={input =>
+                            skjema.felter.migreringsdato
+                                .hentNavInputProps(skjema.visFeilmeldinger)
+                                .onChange(input ?? '')
+                        }
+                        feil={skjema.visFeilmeldinger && skjema.felter.migreringsdato.feilmelding}
                     />
                 )}
 
@@ -340,7 +345,30 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     limitations={{
                         maxDate: new Date().toISOString(),
                     }}
-                    feil={skjema.felter.søknadMottattDato.feilmelding}
+                    onChange={input =>
+                        skjema.felter.søknadMottattDato
+                            .hentNavInputProps(skjema.visFeilmeldinger)
+                            .onChange(input ?? '')
+                    }
+                    feil={skjema.visFeilmeldinger && skjema.felter.søknadMottattDato.feilmelding}
+                />
+            )}
+
+            {erOpprettBehandlingSkjema(skjema) && skjema.felter.kravMottattDato?.erSynlig && (
+                <FixedDatoVelger
+                    {...skjema.felter.kravMottattDato.hentNavInputProps(skjema.visFeilmeldinger)}
+                    valgtDato={skjema.felter.kravMottattDato.verdi}
+                    label={'Krav mottatt'}
+                    placeholder={'DD.MM.ÅÅÅÅ'}
+                    limitations={{
+                        maxDate: new Date().toISOString(),
+                    }}
+                    onChange={input =>
+                        skjema.felter.kravMottattDato
+                            .hentNavInputProps(skjema.visFeilmeldinger)
+                            .onChange(input ?? '')
+                    }
+                    feil={skjema.visFeilmeldinger && skjema.felter.kravMottattDato.feilmelding}
                 />
             )}
         </>

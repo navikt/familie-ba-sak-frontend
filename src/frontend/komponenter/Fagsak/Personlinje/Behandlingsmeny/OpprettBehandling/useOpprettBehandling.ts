@@ -31,8 +31,9 @@ export interface IOpprettBehandlingSkjemaBase {
 }
 
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
-    migreringsdato: FamilieIsoDate | undefined;
-    søknadMottattDato: FamilieIsoDate | undefined;
+    migreringsdato: FamilieIsoDate;
+    søknadMottattDato: FamilieIsoDate;
+    kravMottattDato: FamilieIsoDate;
     valgteBarn: ISelectOption[];
 }
 
@@ -103,9 +104,9 @@ const useOpprettBehandling = (
         },
     });
 
-    const migreringsdato = useFelt<FamilieIsoDate | undefined>({
-        verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
+    const migreringsdato = useFelt<FamilieIsoDate>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) =>
             felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoFørForrigeMåned(felt.verdi)
                 ? ok(felt)
                 : feil(
@@ -123,9 +124,9 @@ const useOpprettBehandling = (
         },
     });
 
-    const søknadMottattDato = useFelt<FamilieIsoDate | undefined>({
-        verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) => {
+    const søknadMottattDato = useFelt<FamilieIsoDate>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
             const erGyldigIsoString = felt.verdi && erIsoStringGyldig(felt.verdi);
             const erIFremtiden = felt.verdi && erDatoFremITid(felt.verdi);
 
@@ -137,7 +138,7 @@ const useOpprettBehandling = (
             }
 
             if (erIFremtiden) {
-                return feil(felt, 'Du kan ikke sette en mottatt dato som er frem i tid.');
+                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
             }
 
             return ok(felt);
@@ -153,6 +154,31 @@ const useOpprettBehandling = (
                     behandlingsårsakVerdi === BehandlingÅrsak.SØKNAD)
             );
         },
+    });
+
+    const kravMottattDato = useFelt<FamilieIsoDate>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
+            const erGyldigIsoString = erIsoStringGyldig(felt.verdi);
+            const erIFremtiden = erDatoFremITid(felt.verdi);
+
+            if (!erGyldigIsoString) {
+                return feil(
+                    felt,
+                    'Mottatt dato for klagen må registreres ved manuell opprettelse av klagebehandling'
+                );
+            }
+
+            if (erIFremtiden) {
+                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
+            }
+
+            return ok(felt);
+        },
+
+        avhengigheter: { behandlingstype },
+        skalFeltetVises: avhengigheter =>
+            avhengigheter.behandlingstype.verdi === Behandlingstype.KLAGE,
     });
 
     const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
@@ -185,6 +211,7 @@ const useOpprettBehandling = (
                 behandlingstema,
                 migreringsdato,
                 søknadMottattDato,
+                kravMottattDato,
                 valgteBarn,
             },
             skjemanavn: 'Opprett behandling modal',
