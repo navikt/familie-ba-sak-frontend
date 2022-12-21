@@ -62,6 +62,7 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                                 registrerBarnSkjema.visFeilmeldinger
                             )}
                             value={registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi}
+                            valgtDato={registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi}
                             label={'Fødselsdato (valgfri)'}
                             placeholder={'DD.MM.ÅÅÅÅ'}
                         />
