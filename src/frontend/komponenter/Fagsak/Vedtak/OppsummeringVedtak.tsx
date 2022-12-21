@@ -93,7 +93,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     React.useEffect(() => {
         settVisTrekkILøpendeUtbetaling(
-            åpenBehandling.trekkILøpendeUtbetaling.length > 0 &&
+            åpenBehandling.feilutbetaltValuta.length > 0 &&
                 toggles[ToggleNavn.trekkILøpendeUtbetaling]
         );
     }, [åpenBehandling]);
@@ -224,7 +224,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 {visTrekkILøpendeUtbetaling && (
                                     <TrekkILøpendeUtbetaling
                                         trekkILøpendeUtbetalingListe={
-                                            åpenBehandling.trekkILøpendeUtbetaling
+                                            åpenBehandling.feilutbetaltValuta
                                         }
                                         behandlingId={åpenBehandling.behandlingId}
                                         settErUlagretNyTrekkILøpendeUtbetaling={
