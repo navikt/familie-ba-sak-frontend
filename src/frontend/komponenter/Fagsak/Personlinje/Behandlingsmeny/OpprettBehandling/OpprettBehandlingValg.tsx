@@ -4,11 +4,7 @@ import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
 import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
-import {
-    FamilieDatovelger,
-    FamilieReactSelect,
-    FamilieSelect,
-} from '@navikt/familie-form-elements';
+import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -29,20 +25,9 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrev
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
-import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-
-const FixedDatoVelger = styled(FamilieDatovelger)`
-    .nav-datovelger__kalenderPortal__content {
-        position: fixed;
-    }
-    .nav-datovelger__kalenderknapp {
-        z-index: 0;
-    }
-    margin-top: 2rem;
-`;
 
 const StyledFamilieSelect = styled(FamilieSelect)`
     label {
@@ -106,11 +91,9 @@ interface IProps {
         | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
         | ISkjema<ManuellJournalføringSkjemaFelter, string>;
     minimalFagsak?: IMinimalFagsak;
-
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
     bruker?: IPersonInfo | undefined;
-    maksdatoForMigrering?: FamilieIsoDate | undefined;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -124,11 +107,9 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
 const OpprettBehandlingValg: React.FC<IProps> = ({
     skjema,
     minimalFagsak,
-
     erLesevisning = false,
     manuellJournalfør = false,
     bruker = undefined,
-    maksdatoForMigrering = undefined,
 }) => {
     const { toggles } = useApp();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
@@ -306,26 +287,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     />
                 )}
 
-            {erMigreringFraInfotrygd &&
-                erOpprettBehandlingSkjema(skjema) &&
-                skjema.felter.migreringsdato?.erSynlig && (
-                    <FixedDatoVelger
-                        {...skjema.felter.migreringsdato.hentNavInputProps(skjema.visFeilmeldinger)}
-                        valgtDato={skjema.felter.migreringsdato.verdi}
-                        label={'Ny migreringsdato'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                        limitations={{
-                            maxDate: maksdatoForMigrering,
-                        }}
-                        onChange={input =>
-                            skjema.felter.migreringsdato
-                                .hentNavInputProps(skjema.visFeilmeldinger)
-                                .onChange(input ?? '')
-                        }
-                        feil={skjema.visFeilmeldinger && skjema.felter.migreringsdato.feilmelding}
-                    />
-                )}
-
             {behandlingstema.erSynlig && (
                 <StyledBehandlingstemaSelect
                     behandlingstema={behandlingstema}
@@ -333,42 +294,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     name="Behandlingstema"
                     label="Velg behandlingstema"
-                />
-            )}
-
-            {erOpprettBehandlingSkjema(skjema) && skjema.felter.søknadMottattDato?.erSynlig && (
-                <FixedDatoVelger
-                    {...skjema.felter.søknadMottattDato.hentNavInputProps(skjema.visFeilmeldinger)}
-                    valgtDato={skjema.felter.søknadMottattDato.verdi}
-                    label={'Mottatt dato'}
-                    placeholder={'DD.MM.ÅÅÅÅ'}
-                    limitations={{
-                        maxDate: new Date().toISOString(),
-                    }}
-                    onChange={input =>
-                        skjema.felter.søknadMottattDato
-                            .hentNavInputProps(skjema.visFeilmeldinger)
-                            .onChange(input ?? '')
-                    }
-                    feil={skjema.visFeilmeldinger && skjema.felter.søknadMottattDato.feilmelding}
-                />
-            )}
-
-            {erOpprettBehandlingSkjema(skjema) && skjema.felter.kravMottattDato?.erSynlig && (
-                <FixedDatoVelger
-                    {...skjema.felter.kravMottattDato.hentNavInputProps(skjema.visFeilmeldinger)}
-                    valgtDato={skjema.felter.kravMottattDato.verdi}
-                    label={'Krav mottatt'}
-                    placeholder={'DD.MM.ÅÅÅÅ'}
-                    limitations={{
-                        maxDate: new Date().toISOString(),
-                    }}
-                    onChange={input =>
-                        skjema.felter.kravMottattDato
-                            .hentNavInputProps(skjema.visFeilmeldinger)
-                            .onChange(input ?? '')
-                    }
-                    feil={skjema.visFeilmeldinger && skjema.felter.kravMottattDato.feilmelding}
                 />
             )}
         </>
