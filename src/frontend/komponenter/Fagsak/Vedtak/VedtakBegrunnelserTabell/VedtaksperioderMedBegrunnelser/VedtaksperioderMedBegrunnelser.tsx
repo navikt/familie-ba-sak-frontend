@@ -16,7 +16,7 @@ import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserP
 
 const StyledHeading = styled(Heading)`
     display: flex;
-    margin-top: 1rem;
+    margin-bottom: 0.5rem;
 `;
 
 const StyledHelpText = styled(HelpText)`
@@ -26,6 +26,12 @@ const StyledHelpText = styled(HelpText)`
     & + .navds-popover {
         max-width: 20rem;
     }
+`;
+
+const VedtaksperiodeListeWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 `;
 
 interface IVedtakBegrunnelserTabell {
@@ -90,8 +96,8 @@ const VedtaksperiodeListe: React.FC<{
     }
 
     return (
-        <>
-            <StyledHeading level="2" size="small" spacing>
+        <VedtaksperiodeListeWrapper>
+            <StyledHeading level="2" size="small">
                 {overskrift}
                 <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
             </StyledHeading>
@@ -108,7 +114,7 @@ const VedtaksperiodeListe: React.FC<{
                     </VedtaksperiodeMedBegrunnelserProvider>
                 )
             )}
-        </>
+        </VedtaksperiodeListeWrapper>
     );
 };
 

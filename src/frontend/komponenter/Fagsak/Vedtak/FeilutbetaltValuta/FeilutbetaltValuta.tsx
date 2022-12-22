@@ -21,8 +21,6 @@ const FlexColumnDiv = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 3.5rem;
-    margin-top: 2rem;
 `;
 
 const FlexRowDiv = styled.div`
@@ -51,7 +49,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
 
     return (
         <FlexColumnDiv>
-            <Heading level="2" size="small" spacing>
+            <Heading level="2" size="small">
                 Feilutbetalt valuta
             </Heading>
             <Table size="small">

@@ -59,6 +59,14 @@ const Knapperad = styled.div`
     justify-content: center;
 `;
 
+const InnholdWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+    margin-top: 1.5rem;
+`;
+
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
     value: PeriodetypeIVedtaksbrev;
 }
@@ -189,53 +197,62 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 Vedtaket er korrigert etter § 35
                             </BehandlingKorrigertAlert>
                         )}
-                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
-                            <FamilieSelect
-                                label="Velg brev med eller uten perioder"
-                                erLesevisning={vurderErLesevisning()}
-                                onChange={(
-                                    event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
-                                ): void => {
-                                    overstyrFortsattInnvilgetVedtaksperioder(event.target.value);
-                                }}
-                                value={periodetypeIVedtaksbrev}
-                            >
-                                <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
-                                    Fortsatt innvilget: Uten perioder
-                                </option>
-                                <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
-                                    Fortsatt innvilget: Med perioder
-                                </option>
-                            </FamilieSelect>
-                        )}
-                        {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
-                        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                        åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
-                            <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
-                                {hentInfostripeTekst(åpenBehandling.årsak, åpenBehandling.status)}
-                            </Alert>
-                        ) : (
-                            <>
-                                <VedtaksbegrunnelseTeksterProvider>
-                                    <VedtaksperioderMedBegrunnelser
-                                        åpenBehandling={åpenBehandling}
-                                    />
-                                </VedtaksbegrunnelseTeksterProvider>
-                                {visFeilutbetaltValuta && (
-                                    <FeilutbetaltValuta
-                                        feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
-                                        behandlingId={åpenBehandling.behandlingId}
-                                        settErUlagretNyFeilutbetaltValutaPeriode={
-                                            settErUlagretNyFeilutbetaltValutaPeriode
-                                        }
-                                        erLesevisning={vurderErLesevisning()}
-                                        skjulFeilutbetaltValuta={() =>
-                                            settVisFeilutbetaltValuta(false)
-                                        }
-                                    />
-                                )}
-                            </>
-                        )}
+                        <InnholdWrapper>
+                            {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
+                                <FamilieSelect
+                                    label="Velg brev med eller uten perioder"
+                                    erLesevisning={vurderErLesevisning()}
+                                    onChange={(
+                                        event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
+                                    ): void => {
+                                        overstyrFortsattInnvilgetVedtaksperioder(
+                                            event.target.value
+                                        );
+                                    }}
+                                    value={periodetypeIVedtaksbrev}
+                                >
+                                    <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
+                                        Fortsatt innvilget: Uten perioder
+                                    </option>
+                                    <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
+                                        Fortsatt innvilget: Med perioder
+                                    </option>
+                                </FamilieSelect>
+                            )}
+                            {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
+                            åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                            åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
+                                <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
+                                    {hentInfostripeTekst(
+                                        åpenBehandling.årsak,
+                                        åpenBehandling.status
+                                    )}
+                                </Alert>
+                            ) : (
+                                <>
+                                    <VedtaksbegrunnelseTeksterProvider>
+                                        <VedtaksperioderMedBegrunnelser
+                                            åpenBehandling={åpenBehandling}
+                                        />
+                                    </VedtaksbegrunnelseTeksterProvider>
+                                    {visFeilutbetaltValuta && (
+                                        <FeilutbetaltValuta
+                                            feilutbetaltValutaListe={
+                                                åpenBehandling.feilutbetaltValuta
+                                            }
+                                            behandlingId={åpenBehandling.behandlingId}
+                                            settErUlagretNyFeilutbetaltValutaPeriode={
+                                                settErUlagretNyFeilutbetaltValutaPeriode
+                                            }
+                                            erLesevisning={vurderErLesevisning()}
+                                            skjulFeilutbetaltValuta={() =>
+                                                settVisFeilutbetaltValuta(false)
+                                            }
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </InnholdWrapper>
                         <Button
                             id={'forhandsvis-vedtaksbrev'}
                             variant={'secondary'}

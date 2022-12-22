@@ -17,8 +17,6 @@ import {
 } from '../../../../../utils/kalender';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
-    margin-bottom: 1rem;
-
     .ekspanderbartPanel__hode {
         padding: 0 1rem 0 1.6rem;
     }
