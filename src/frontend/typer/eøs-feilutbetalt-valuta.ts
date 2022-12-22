@@ -1,6 +1,6 @@
 import type { FamilieIsoDate } from '../utils/kalender';
 
-export interface IRestTrekkILøpendeUtbetaling {
+export interface IRestFeilutbetaltValuta {
     id: number;
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;

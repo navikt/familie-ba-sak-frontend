@@ -95,12 +95,12 @@ const useBehandlingssteg = (
 
     const sendTilBeslutterNesteOnClick = (
         settVisModal: (visModal: boolean) => void,
-        erUlagretNyTrekkILøpendeUtbetaling: boolean
+        erUlagretNyFeilutbetaltValuta: boolean
     ) => {
-        if (erUlagretNyTrekkILøpendeUtbetaling) {
+        if (erUlagretNyFeilutbetaltValuta) {
             settSubmitRessurs(
                 byggFeiletRessurs(
-                    'Det er lagt til panel for trekk i løpende utbetaling. Fyll ut periode og beløp, eller fjern panelet.'
+                    'Det er lagt til en ny periode med feilutbetalt valuta. Fyll ut periode og beløp, eller fjern perioden.'
                 )
             );
         } else if (!kanSendeinnVedtak()) {

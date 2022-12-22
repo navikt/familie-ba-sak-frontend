@@ -3,7 +3,7 @@ import type { ISODateString } from '@navikt/familie-form-elements';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
-import type { IRestTrekkILøpendeUtbetaling } from './eøs-trekk-i-løpende-ytelse';
+import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestValutakurs } from './eøsPerioder';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
@@ -254,7 +254,7 @@ export interface IBehandling {
     verge?: IVerge;
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
-    trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling[];
+    feilutbetaltValuta: IRestFeilutbetaltValuta[];
 }
 
 export interface IArbeidsfordelingPåBehandling {

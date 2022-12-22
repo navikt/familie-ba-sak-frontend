@@ -26,7 +26,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import TrekkILøpendeUtbetaling from './TrekkILøpendeUtbetalingNy/TrekkILøpendeUtbetaling';
+import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
@@ -87,13 +87,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp =
         !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
-    const [visTrekkILøpendeUtbetaling, settVisTrekkILøpendeUtbetaling] = React.useState(false);
-    const [erUlagretNyTrekkILøpendeUtbetaling, settErUlagretNyTrekkILøpendeUtbetaling] =
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
+    const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
         React.useState(false);
 
     React.useEffect(() => {
-        settVisTrekkILøpendeUtbetaling(
-            åpenBehandling.trekkILøpendeUtbetaling.length > 0 &&
+        settVisFeilutbetaltValuta(
+            åpenBehandling.feilutbetaltValuta.length > 0 &&
                 toggles[ToggleNavn.trekkILøpendeUtbetaling]
         );
     }, [åpenBehandling]);
@@ -123,7 +123,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const sendTilBeslutter = () => {
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
-            erUlagretNyTrekkILøpendeUtbetaling
+            erUlagretNyFeilutbetaltValutaPeriode
         );
     };
 
@@ -160,7 +160,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             <Vedtaksmeny
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
-                settVisTrekkILøpendeUtbetaling={settVisTrekkILøpendeUtbetaling}
+                visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -221,18 +221,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         åpenBehandling={åpenBehandling}
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
-                                {visTrekkILøpendeUtbetaling && (
-                                    <TrekkILøpendeUtbetaling
-                                        trekkILøpendeUtbetalingListe={
-                                            åpenBehandling.trekkILøpendeUtbetaling
-                                        }
+                                {visFeilutbetaltValuta && (
+                                    <FeilutbetaltValuta
+                                        feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
-                                        settErUlagretNyTrekkILøpendeUtbetaling={
-                                            settErUlagretNyTrekkILøpendeUtbetaling
+                                        settErUlagretNyFeilutbetaltValutaPeriode={
+                                            settErUlagretNyFeilutbetaltValutaPeriode
                                         }
                                         erLesevisning={vurderErLesevisning()}
-                                        skjulTrekkILøpendeUtbetaling={() =>
-                                            settVisTrekkILøpendeUtbetaling(false)
+                                        skjulFeilutbetaltValuta={() =>
+                                            settVisFeilutbetaltValuta(false)
                                         }
                                     />
                                 )}

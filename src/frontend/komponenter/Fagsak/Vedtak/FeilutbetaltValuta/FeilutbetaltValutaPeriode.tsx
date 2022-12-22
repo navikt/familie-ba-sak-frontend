@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
-import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useTrekkILøpendeUtbetaling } from './useTrekkILøpendeUtbetaling';
+import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
 
-interface ITrekkILøpendeUtbetaling {
-    trekkILøpendeUtbetaling: IRestTrekkILøpendeUtbetaling;
+interface IFeilutbetaltValutaPeriode {
+    feilutbetaltValuta: IRestFeilutbetaltValuta;
     erLesevisning: boolean;
     behandlingId: number;
 }
@@ -28,8 +28,8 @@ const FlexRowDiv = styled.div`
     gap: 1rem;
 `;
 
-const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> = ({
-    trekkILøpendeUtbetaling,
+const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
+    feilutbetaltValuta,
     erLesevisning,
     behandlingId,
 }) => {
@@ -37,15 +37,15 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useTrekkILøpendeUtbetaling({
+        useFeilutbetaltValuta({
             behandlingId: behandlingId,
-            trekkILøpendeUtbetaling: trekkILøpendeUtbetaling,
+            feilutbetaltValuta,
             settFeilmelding: settFeilmelding,
         });
 
     useEffect(() => {
         nullstillOgLukkSkjema();
-    }, [trekkILøpendeUtbetaling]);
+    }, [feilutbetaltValuta]);
 
     const nullstillOgLukkSkjema = () => {
         nullstillSkjema();
@@ -87,13 +87,11 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
         >
             <Table.DataCell scope="row">
                 {periodeToString({
-                    fom: trekkILøpendeUtbetaling.fom,
-                    tom: trekkILøpendeUtbetaling.tom,
+                    fom: feilutbetaltValuta.fom,
+                    tom: feilutbetaltValuta.tom,
                 })}
             </Table.DataCell>
-            <Table.DataCell align="right">
-                {trekkILøpendeUtbetaling.feilutbetaltBeløp} kr
-            </Table.DataCell>
+            <Table.DataCell align="right">{feilutbetaltValuta.feilutbetaltBeløp} kr</Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
                     <Button
@@ -109,4 +107,4 @@ const TrekkILøpendeUtbetalingListeElement: React.FC<ITrekkILøpendeUtbetaling> 
     );
 };
 
-export default TrekkILøpendeUtbetalingListeElement;
+export default FeilutbetaltValutaPeriode;

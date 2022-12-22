@@ -5,16 +5,16 @@ import styled from 'styled-components';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 
-import type { IRestTrekkILøpendeUtbetaling } from '../../../../typer/eøs-trekk-i-løpende-ytelse';
+import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
+import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
-import TrekkILøpendeUtbetalingListeElement from './TrekkILøpendeUtbetalingListeElement';
 
-interface ITrekkILøpendeUtbetaling {
+interface IFeilutbetaltValuta {
     behandlingId: number;
-    trekkILøpendeUtbetalingListe: IRestTrekkILøpendeUtbetaling[];
-    settErUlagretNyTrekkILøpendeUtbetaling: (erUlagretNyTrekkILøpendeUtbetaling: boolean) => void;
+    feilutbetaltValutaListe: IRestFeilutbetaltValuta[];
+    settErUlagretNyFeilutbetaltValutaPeriode: (erUlagretNyFeilutbetaltValuta: boolean) => void;
     erLesevisning: boolean;
-    skjulTrekkILøpendeUtbetaling: () => void;
+    skjulFeilutbetaltValuta: () => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -30,23 +30,23 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
-    trekkILøpendeUtbetalingListe,
-    settErUlagretNyTrekkILøpendeUtbetaling,
+const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
+    feilutbetaltValutaListe,
+    settErUlagretNyFeilutbetaltValutaPeriode,
     erLesevisning,
-    skjulTrekkILøpendeUtbetaling,
+    skjulFeilutbetaltValuta,
     behandlingId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        trekkILøpendeUtbetalingListe.length === 0
+        feilutbetaltValutaListe.length === 0
     );
 
     useEffect(() => {
-        settErUlagretNyTrekkILøpendeUtbetaling(ønskerÅLeggeTilNyPeriode);
+        settErUlagretNyFeilutbetaltValutaPeriode(ønskerÅLeggeTilNyPeriode);
     }, [ønskerÅLeggeTilNyPeriode]);
 
-    if (trekkILøpendeUtbetalingListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
-        skjulTrekkILøpendeUtbetaling();
+    if (feilutbetaltValutaListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
+        skjulFeilutbetaltValuta();
     }
 
     return (
@@ -66,12 +66,12 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {trekkILøpendeUtbetalingListe &&
-                        trekkILøpendeUtbetalingListe.map(trekkILøpendeUtbetaling => (
-                            <TrekkILøpendeUtbetalingListeElement
-                                key={trekkILøpendeUtbetaling.id}
+                    {feilutbetaltValutaListe &&
+                        feilutbetaltValutaListe.map(feilutbetaltValuta => (
+                            <FeilutbetaltValutaPeriode
+                                key={feilutbetaltValuta.id}
                                 behandlingId={behandlingId}
-                                trekkILøpendeUtbetaling={trekkILøpendeUtbetaling}
+                                feilutbetaltValuta={feilutbetaltValuta}
                                 erLesevisning={erLesevisning}
                             />
                         ))}
@@ -99,4 +99,4 @@ const TrekkILøpendeUtbetaling: React.FC<ITrekkILøpendeUtbetaling> = ({
     );
 };
 
-export default TrekkILøpendeUtbetaling;
+export default FeilutbetaltValuta;
