@@ -63,9 +63,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             <StyletDropdownMenu>
                 <Dropdown.Menu.List>
                     <OpprettBehandling minimalFagsak={minimalFagsak} />
-                    {toggles[ToggleNavn.støtterInstitusjon].valueOf() && !!bruker && (
-                        <OpprettFagsak personInfo={bruker} />
-                    )}
+                    {!!bruker && <OpprettFagsak personInfo={bruker} />}
                     <Dropdown.Menu.List.Item
                         onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
                     >
