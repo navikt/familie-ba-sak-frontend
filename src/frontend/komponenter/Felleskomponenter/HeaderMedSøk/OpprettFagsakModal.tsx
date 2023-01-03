@@ -263,7 +263,6 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             >
                                 Ja, opprett fagsak
                             </KnappHøyre>
-                            ,
                             <KnappHøyre variant={'secondary'} key={'avbryt'} onClick={lukkModal}>
                                 Avbryt
                             </KnappHøyre>
