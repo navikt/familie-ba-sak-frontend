@@ -5,15 +5,17 @@ import styled from 'styled-components';
 
 import { BodyShort, Heading, Switch } from '@navikt/ds-react';
 
-import type { BehandlingResultat } from '../../../typer/behandling';
-import { erBehandlingHenlagt } from '../../../typer/behandling';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
-import { Behandlingsresultatstype } from '../../../typer/tilbakekrevingsbehandling';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
-import { BehandlingEllerTilbakekreving } from './BehandlingEllerTilbakekreving';
-import type { VisningBehandling } from './visningBehandling';
+import type { Saksoversiktsbehandling } from './utlis';
+import {
+    hentBehandlingerTilSaksoversikten,
+    hentBehandlingId,
+    hentOpprettetTidspunkt,
+    skalRadVises,
+} from './utlis';
 
 const SwitchHøyre = styled(Switch)`
     margin-top: 1rem;
@@ -37,44 +39,13 @@ interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const konverterBehandling = (
-    behandlingEllerTilbakekreving: VisningBehandling | ITilbakekrevingsbehandling,
-    type: BehandlingEllerTilbakekreving
-): BehandlingTabellobjekt => {
-    return {
-        type: type,
-        behandlingEllerTilbakekreving: behandlingEllerTilbakekreving,
-    };
-};
-
-interface BehandlingTabellobjekt {
-    type: BehandlingEllerTilbakekreving;
-    behandlingEllerTilbakekreving: VisningBehandling | ITilbakekrevingsbehandling;
-}
-
-const visRad = (behandling: BehandlingTabellobjekt, visHenlagteBehandlinger: boolean) => {
-    if (visHenlagteBehandlinger) return true;
-    if (!behandling.behandlingEllerTilbakekreving.resultat) return true;
-    if (behandling.type === BehandlingEllerTilbakekreving.BEHANDLING) {
-        return !erBehandlingHenlagt(
-            behandling.behandlingEllerTilbakekreving.resultat as BehandlingResultat
-        );
-    }
-    return Behandlingsresultatstype.HENLAGT !== behandling.behandlingEllerTilbakekreving.resultat;
-};
-
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const behandlinger: BehandlingTabellobjekt[] = [
-        ...minimalFagsak.behandlinger.map(b =>
-            konverterBehandling(b, BehandlingEllerTilbakekreving.BEHANDLING)
-        ),
-        ...minimalFagsak.tilbakekrevingsbehandlinger.map(b =>
-            konverterBehandling(b, BehandlingEllerTilbakekreving.TIlBAKEBETALING)
-        ),
-    ];
+    const { klagebehandlinger } = useFagsakContext();
+
+    const behandlinger = hentBehandlingerTilSaksoversikten(minimalFagsak, klagebehandlinger);
 
     const finnesRadSomKanFiltreresBort = behandlinger.some(
-        (behandling: BehandlingTabellobjekt) => !visRad(behandling, false)
+        (behandling: Saksoversiktsbehandling) => !skalRadVises(behandling, false)
     );
 
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
@@ -99,17 +70,17 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </thead>
                     <tbody>
                         {behandlinger
-                            .filter(behandling => visRad(behandling, visHenlagteBehandlinger))
+                            .filter(behandling => skalRadVises(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
                                 kalenderDiff(
-                                    new Date(b.behandlingEllerTilbakekreving.opprettetTidspunkt),
-                                    new Date(a.behandlingEllerTilbakekreving.opprettetTidspunkt)
+                                    new Date(hentOpprettetTidspunkt(b)),
+                                    new Date(hentOpprettetTidspunkt(a))
                                 )
                             )
-                            .map((behandling: BehandlingTabellobjekt) => (
+                            .map((behandling: Saksoversiktsbehandling) => (
                                 <Behandling
-                                    key={behandling.behandlingEllerTilbakekreving.behandlingId}
-                                    behandling={behandling.behandlingEllerTilbakekreving}
+                                    key={hentBehandlingId(behandling)}
+                                    saksoversiktsbehandling={behandling}
                                     minimalFagsak={minimalFagsak}
                                 />
                             ))}

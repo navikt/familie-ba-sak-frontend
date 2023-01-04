@@ -4,14 +4,15 @@ import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingst
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
 import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
-import type { IRestValutakurs } from './eøsPerioder';
-import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp } from './eøsPerioder';
+import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { IVerge } from './institusjon-og-verge';
+import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { IGrunnlagPerson } from './person';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
 import type {
+    Behandlingsstatus,
     TilbakekrevingsbehandlingResultat,
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
@@ -74,7 +75,10 @@ export enum BehandlingÅrsak {
     OMREGNING_SMÅBARNSTILLEGG = 'OMREGNING_SMÅBARNSTILLEGG',
 }
 
-export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak, string> = {
+export const behandlingÅrsak: Record<
+    BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak,
+    string
+> = {
     SØKNAD: 'Søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
@@ -99,6 +103,14 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
     REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
         'Feilutbetalt beløp helt eller delvis bortfalt',
+
+    /** Klage: **/
+    ANNET: 'annet',
+    FEIL_ELLER_ENDRET_FAKTA: 'Feil eller endret fakta',
+    FEIL_I_LOVANDVENDELSE: 'Feil i lovanvendelse',
+    FEIL_PROSESSUELL: 'Prosessuell feil',
+    FEIL_REGELVERKSFORSTÅELSE: 'Feil regelverksforståelse',
+    KØET_BEHANDLING: 'Køet behandling',
 };
 
 export enum BehandlingSteg {
@@ -320,7 +332,7 @@ export const behandlingstyper: INøkkelPar = {
 };
 
 export const behandlingsresultater: Record<
-    BehandlingResultat | TilbakekrevingsbehandlingResultat,
+    BehandlingResultat | TilbakekrevingsbehandlingResultat | KlageResultat,
     string
 > = {
     INNVILGET: 'Innvilget',
@@ -352,14 +364,27 @@ export const behandlingsresultater: Record<
     DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
     FULL_TILBAKEBETALING: 'Full tilbakebetaling',
     HENLAGT: 'Henlagt',
+
+    /** For klagebehandlinger: **/
+    IKKE_MEDHOLD: 'Ikke medhold',
+    IKKE_MEDHOLD_FORMKRAV_AVVIST: 'Ikke medhold formkrav avvist',
+    IKKE_SATT: 'Ikke satt',
+    MEDHOLD: 'Medhold',
 };
 
-export const behandlingsstatuser: Record<BehandlingStatus, string> = {
+export const behandlingsstatuser: Record<
+    BehandlingStatus | Behandlingsstatus | KlageStatus,
+    string
+> = {
     OPPRETTET: 'Opprettet',
     UTREDES: 'Utredes',
     FATTER_VEDTAK: 'Fatter vedtak',
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
+
+    /** For klagebehandlinger: **/
+    VENTER: 'Venter',
+    FERDIGSTILT: 'Ferdigstilt',
 };
 
 export interface ISettPåVent {
