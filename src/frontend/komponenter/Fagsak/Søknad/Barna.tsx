@@ -8,7 +8,7 @@ import { Alert, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../context/FagsakContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';

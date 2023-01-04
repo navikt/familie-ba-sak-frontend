@@ -15,7 +15,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/FagsakContext';
+import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import { behandlingstemaer, type IBehandlingstema } from '../../../../../typer/behandlingstema';

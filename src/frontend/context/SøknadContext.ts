@@ -3,10 +3,10 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
@@ -27,7 +27,7 @@ import {
     TIDENES_ENDE,
 } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './FagsakContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 
 export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
     minimalFagsak.gjeldendeUtbetalingsperioder
