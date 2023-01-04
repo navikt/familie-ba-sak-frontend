@@ -1,3 +1,6 @@
+import type { IKlagebehandling } from '../frontend/typer/klage';
+import { KlageStatus } from '../frontend/typer/klage';
+
 export const oppgaveMock = {
     data: {
         antallTreffTotalt: 2,
@@ -89,4 +92,20 @@ export const profileMock = {
         '93a26831-9866-4410-927b-74ff51a9107c',
         '9449c153-5a1e-44a7-84c6-7cc7a8867233',
     ],
+};
+
+export const klagebehandlingFixture = (
+    overstyrendeVerdier: Partial<IKlagebehandling> = {}
+): IKlagebehandling => {
+    const defaultVerdier: IKlagebehandling = {
+        id: '0',
+        fagsakId: '0',
+        status: KlageStatus.OPPRETTET,
+        opprettet: '2022-10-05',
+        mottattDato: '2011-10-05',
+        vedtaksdato: '2011-10-05',
+        klageinstansResultat: [],
+    };
+
+    return { ...defaultVerdier, ...overstyrendeVerdier };
 };

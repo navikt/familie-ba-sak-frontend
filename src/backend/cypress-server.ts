@@ -1,14 +1,20 @@
 import path from 'path';
 
 import type { Express, Request, Response } from 'express';
+// eslint-disable-next-line
+import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
 
 import { logInfo } from '@navikt/familie-logging';
+import { byggDataRessurs } from '@navikt/familie-typer';
 
-import { fagsakMock, oppgaveMock, personMock, profileMock } from './mock-data';
-
-// eslint-disable-next-line
-import express from 'express';
+import {
+    fagsakMock,
+    klagebehandlingFixture,
+    oppgaveMock,
+    personMock,
+    profileMock,
+} from './mock-data';
 
 const port = 8000;
 
@@ -28,6 +34,11 @@ app.get('/familie-ba-sak/api/person', (_, res) => {
 app.get('/user/profile', (_, res) => {
     res.status(200).send(profileMock);
 });
+
+app.get('/familie-ks-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
+    res.status(200).send(byggDataRessurs([klagebehandlingFixture()]));
+});
+
 app.get('*', (_: Request, res: Response) => {
     res.sendFile('index.html', { root: path.join(process.cwd(), 'frontend_production') });
 });
