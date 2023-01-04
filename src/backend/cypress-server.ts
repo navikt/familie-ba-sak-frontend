@@ -35,7 +35,7 @@ app.get('/user/profile', (_, res) => {
     res.status(200).send(profileMock);
 });
 
-app.get('/familie-ks-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
+app.get('/familie-ba-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
     res.status(200).send(byggDataRessurs([klagebehandlingFixture()]));
 });
 
