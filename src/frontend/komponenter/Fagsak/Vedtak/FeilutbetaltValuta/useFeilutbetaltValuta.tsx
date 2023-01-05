@@ -39,8 +39,9 @@ const datoErFremITid = (dato: FamilieIsoDate): boolean => {
 const validerFom = (felt: FeltState<FamilieIsoDate>) => {
     const fom = felt.verdi;
 
+    if (fom === '') return feil(felt, 'Du må velge en f.o.m-dato');
     if (!erIsoStringGyldig(fom)) {
-        return feil(felt, 'Du må velge f.o.m-dato');
+        return feil(felt, 'Du må velge en gyldig f.o.m-dato');
     }
     if (datoErFremITid(fom)) {
         return feil(felt, 'F.o.m kan ikke være senere enn inneværende måned');
@@ -51,10 +52,10 @@ const validerFom = (felt: FeltState<FamilieIsoDate>) => {
 const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
     const tom = felt.verdi;
 
+    if (tom === '') return feil(felt, 'Du må velge en t.o.m-dato');
     if (!erIsoStringGyldig(tom)) {
-        return feil(felt, 'Du må velge t.o.m-dato');
+        return feil(felt, 'Du må velge en gyldig t.o.m-dato');
     }
-
     if (datoErFremITid(tom)) {
         return feil(felt, 'T.o.m. kan ikke være senere enn inneværende måned');
     }
