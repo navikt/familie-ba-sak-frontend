@@ -80,7 +80,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjemanavn: 'Feilutbetalt valuta',
     });
 
-    const lagreNyPeriode = () => {
+    const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
             onSubmit<IRestNyFeilutbetaltValutaPeriode>(
                 {
@@ -95,6 +95,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
+                        lukkNyPeriode();
                     } else {
                         settFeilmelding('Klarte ikke å lagre ny periode');
                     }
