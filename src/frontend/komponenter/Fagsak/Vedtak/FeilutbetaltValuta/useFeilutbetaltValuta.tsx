@@ -18,6 +18,7 @@ import {
     TIDENES_ENDE,
     TIDENES_MORGEN,
 } from '../../../../utils/kalender';
+import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
     behandlingId: number;
@@ -43,8 +44,10 @@ const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
 };
 
 const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
-    if (!Number(felt.verdi)) {
+    if (felt.verdi === '') {
         return feil(felt, 'Beløp er påkrevd');
+    } else if (!erPositivtHeltall(felt.verdi)) {
+        return feil(felt, 'Feil format. Skriv inn et gyldig siffer.');
     }
     return ok(felt);
 };
