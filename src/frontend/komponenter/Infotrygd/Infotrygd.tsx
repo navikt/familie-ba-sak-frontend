@@ -76,10 +76,7 @@ export const Infotrygd: React.FC = () => {
             migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
         ) {
             return (
-                <Alert
-                    children="Saken kan ikke migreres. Du må behandle saken i Infotrygd."
-                    variant="error"
-                />
+                <Alert children={migrerInfotrygdSakRessurs.frontendFeilmelding} variant="error" />
             );
         }
     };

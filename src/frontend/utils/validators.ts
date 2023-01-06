@@ -268,3 +268,9 @@ export const erUtdypendeVilkårsvurderingerGyldig = (
     });
     return feilmelding ? feil(felt, feilmelding) : ok(felt);
 };
+
+export const erPositivtHeltall = (string: string) => {
+    const tall = Number(string);
+
+    return Number.isInteger(tall) && tall > 0;
+};
