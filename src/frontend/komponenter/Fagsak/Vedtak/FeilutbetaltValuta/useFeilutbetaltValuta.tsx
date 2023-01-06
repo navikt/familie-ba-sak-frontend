@@ -11,13 +11,18 @@ import type {
     IRestFeilutbetaltValuta,
 } from '../../../../typer/eøs-feilutbetalt-valuta';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
-import { erIsoStringGyldig } from '../../../../utils/kalender';
+import {
+    erIsoStringGyldig,
+    kalenderDato,
+    sisteDagIInneværendeMåned,
+} from '../../../../utils/kalender';
 import {
     erFør,
     kalenderDatoMedFallback,
     TIDENES_ENDE,
     TIDENES_MORGEN,
 } from '../../../../utils/kalender';
+import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
     behandlingId: number;
@@ -25,12 +30,36 @@ interface IProps {
     settFeilmelding: (feilmelding: string) => void;
 }
 
+const datoErFremITid = (dato: FamilieIsoDate): boolean => {
+    const nå = sisteDagIInneværendeMåned();
+
+    return erFør(nå, kalenderDato(dato));
+};
+
+const validerFom = (felt: FeltState<FamilieIsoDate>) => {
+    const fom = felt.verdi;
+
+    if (fom === '') return feil(felt, 'Du må velge en f.o.m-dato');
+    if (!erIsoStringGyldig(fom)) {
+        return feil(felt, 'Du må velge en gyldig f.o.m-dato');
+    }
+    if (datoErFremITid(fom)) {
+        return feil(felt, 'F.o.m kan ikke være senere enn inneværende måned');
+    }
+    return ok(felt);
+};
+
 const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
     const tom = felt.verdi;
 
+    if (tom === '') return feil(felt, 'Du må velge en t.o.m-dato');
     if (!erIsoStringGyldig(tom)) {
-        return feil(felt, 'Du må velge t.o.m-dato');
+        return feil(felt, 'Du må velge en gyldig t.o.m-dato');
     }
+    if (datoErFremITid(tom)) {
+        return feil(felt, 'T.o.m. kan ikke være senere enn inneværende måned');
+    }
+
     const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
     const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
@@ -43,8 +72,10 @@ const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
 };
 
 const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
-    if (!Number(felt.verdi)) {
+    if (felt.verdi === '') {
         return feil(felt, 'Beløp er påkrevd');
+    } else if (!erPositivtHeltall(felt.verdi)) {
+        return feil(felt, 'Feil format. Skriv inn et gyldig siffer.');
     }
     return ok(felt);
 };
@@ -54,8 +85,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
 
     const fomFelt = useFelt<FamilieIsoDate>({
         verdi: feilutbetaltValuta?.fom ?? '',
-        valideringsfunksjon: felt =>
-            erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
+        valideringsfunksjon: validerFom,
     });
 
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
@@ -80,7 +110,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjemanavn: 'Feilutbetalt valuta',
     });
 
-    const lagreNyPeriode = () => {
+    const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
             onSubmit<IRestNyFeilutbetaltValutaPeriode>(
                 {
@@ -95,6 +125,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
+                        lukkNyPeriode();
                     } else {
                         settFeilmelding('Klarte ikke å lagre ny periode');
                     }
