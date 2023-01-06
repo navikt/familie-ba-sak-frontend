@@ -4,13 +4,16 @@ import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
+import { CopyToClipboard } from '@navikt/ds-react-internal';
 
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
+import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
+    fagsakId: string | undefined;
     feilutbetaltValutaListe: IRestFeilutbetaltValuta[];
     settErUlagretNyFeilutbetaltValutaPeriode: (erUlagretNyFeilutbetaltValuta: boolean) => void;
     erLesevisning: boolean;
@@ -36,6 +39,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     erLesevisning,
     skjulFeilutbetaltValuta,
     behandlingId,
+    fagsakId,
 }) => {
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         feilutbetaltValutaListe.length === 0
@@ -48,6 +52,23 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     if (feilutbetaltValutaListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
         skjulFeilutbetaltValuta();
     }
+
+    const totaltFeilutbetaltBeløp = feilutbetaltValutaListe.reduce(
+        (acc, val) => acc + val.feilutbetaltBeløp,
+        0
+    );
+    const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
+    \nBer om at feilutbetalingsbeløpet på grunn av valutajusteringer trekkes i fremtidige utbetalinger.
+    \nTotalt kr ${totaltFeilutbetaltBeløp}
+    \n${feilutbetaltValutaListe
+        .map(
+            feilutbetaltValuta =>
+                `${periodeToString({
+                    fom: feilutbetaltValuta.fom,
+                    tom: feilutbetaltValuta.tom,
+                })} kr ${feilutbetaltValuta.feilutbetaltBeløp}`
+        )
+        .join('\n')}`;
 
     return (
         <FlexColumnDiv>
@@ -94,6 +115,9 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
+                <CopyToClipboard copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
+                    Kopier tekst til NØS
+                </CopyToClipboard>
             </FlexRowDiv>
         </FlexColumnDiv>
     );
