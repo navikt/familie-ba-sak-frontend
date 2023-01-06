@@ -68,7 +68,7 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
             return (
                 <>
                     <Feilmelding
-                        children="Saken kan ikke migreres. Du må behandle saken i Infotrygd."
+                        children={migrerInfotrygdSakRessurs.frontendFeilmelding}
                         variant="error"
                     />
                 </>
