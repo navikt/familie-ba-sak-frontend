@@ -104,7 +104,8 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [bruker, settBruker] = useState(personInfo);
     const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
         useOpprettFagsak();
-    const { hentPerson, sjekkTilgang, toggles } = useApp();
+    const { hentPerson, sjekkTilgang } = useApp();
+    const { toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
@@ -166,6 +167,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                     }}
                     children={fagsakTypeOptions
                         .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
+                        .filter(
+                            valg =>
+                                (valg.value === FagsakType.BARN_ENSLIG_MINDREÅRIG &&
+                                    toggles[ToggleNavn.støtterEnsligMindreårig]) ||
+                                valg.value !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                        )
                         .map(option => (
                             <option key={option.value} value={option.value}>
                                 {option.label}
@@ -221,139 +228,85 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
         </>
     );
     return (
-        <>
-            {!toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
-                <Modal open={visModal} onClose={lukkModal} shouldCloseOnOverlayClick={false}>
-                    <StyledModalContent>
-                        <StyledHeading size={'small'} level={'3'}>
-                            Opprett fagsak
-                        </StyledHeading>
-                        <StyledBodyShort>
-                            Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for
-                            denne personen?
-                            {søkeresultat && (
-                                <BodyShort>{`${søkeresultat.navn} (${formaterIdent(
-                                    søkeresultat.ident
-                                )})`}</BodyShort>
-                            )}
-                            {!!feilmelding && <ErrorMessage children={feilmelding} />}
-                        </StyledBodyShort>
-                        <Knapperad>
-                            <KnappHøyre
-                                key={'bekreft'}
-                                variant={'primary'}
-                                onClick={async () => {
-                                    settSenderInn(true);
-                                    if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
-                                        opprettFagsak(
-                                            {
-                                                personIdent: søkeresultat.ident,
-                                                aktørId: null,
-                                                fagsakType: FagsakType.NORMAL,
-                                                institusjon: null,
-                                            },
-                                            lukkModal
-                                        );
-                                    } else {
-                                        settSenderInn(false);
-                                    }
-                                }}
-                                disabled={senderInn}
-                                loading={senderInn}
-                            >
-                                Ja, opprett fagsak
-                            </KnappHøyre>
-                            <KnappHøyre variant={'secondary'} key={'avbryt'} onClick={lukkModal}>
-                                Avbryt
-                            </KnappHøyre>
-                        </Knapperad>
-                    </StyledModalContent>
-                </Modal>
-            )}
-            {toggles[ToggleNavn.støtterInstitusjon].valueOf() && (
-                <Modal open={visModal} onClose={onClose} shouldCloseOnOverlayClick={false}>
-                    <StyledModalContent>
-                        <StyledHeading size={'medium'} level={'2'}>
-                            {harNormalFagsak
-                                ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-                                : 'Opprett fagsak'}
-                        </StyledHeading>
-                        <StyledBodyShort>
-                            {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
+        <Modal open={visModal} onClose={onClose} shouldCloseOnOverlayClick={false}>
+            <StyledModalContent>
+                <StyledHeading size={'medium'} level={'2'}>
+                    {harNormalFagsak
+                        ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+                        : 'Opprett fagsak'}
+                </StyledHeading>
+                <StyledBodyShort>
+                    {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
-                        </StyledBodyShort>
-                        {bruker ? (
-                            <BodyShort>
-                                &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
-                            </BodyShort>
-                        ) : (
-                            <BodyShort>
-                                &ensp;&bull;&ensp;
-                                {`${søkeresultat?.navn || ''} (${formaterIdent(
-                                    søkeresultat?.ident || ''
-                                )})`}
-                            </BodyShort>
-                        )}
-                        {harNormalFagsak ? (
-                            valgAvFagsakType()
-                        ) : (
-                            <StyledReadMore
-                                header={'Søker er en institusjon eller enslig mindreårig'}
-                                defaultOpen={false}
-                                onClick={() => {
-                                    if (fagsakType !== FagsakType.NORMAL) {
-                                        settFagsakType(FagsakType.NORMAL);
-                                    }
-                                }}
-                            >
-                                {valgAvFagsakType()}
-                            </StyledReadMore>
-                        )}
+                </StyledBodyShort>
+                {bruker ? (
+                    <BodyShort>
+                        &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
+                    </BodyShort>
+                ) : (
+                    <BodyShort>
+                        &ensp;&bull;&ensp;
+                        {`${søkeresultat?.navn || ''} (${formaterIdent(
+                            søkeresultat?.ident || ''
+                        )})`}
+                    </BodyShort>
+                )}
+                {harNormalFagsak ? (
+                    valgAvFagsakType()
+                ) : (
+                    <StyledReadMore
+                        header={'Søker er en institusjon eller enslig mindreårig'}
+                        defaultOpen={false}
+                        onClick={() => {
+                            if (fagsakType !== FagsakType.NORMAL) {
+                                settFagsakType(FagsakType.NORMAL);
+                            }
+                        }}
+                    >
+                        {valgAvFagsakType()}
+                    </StyledReadMore>
+                )}
 
-                        {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
-                        <Knapperad>
-                            <KnappHøyre
-                                key={'Bekreft'}
-                                variant={'primary'}
-                                onClick={async () => {
-                                    settSenderInn(true);
-                                    const personIdent =
-                                        søkeresultat?.ident || personInfo?.personIdent;
+                {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
+                <Knapperad>
+                    <KnappHøyre
+                        key={'Bekreft'}
+                        variant={'primary'}
+                        onClick={async () => {
+                            settSenderInn(true);
+                            const personIdent = søkeresultat?.ident || personInfo?.personIdent;
 
-                                    if (personIdent && (await sjekkTilgang(personIdent))) {
-                                        opprettFagsak(
-                                            {
-                                                personIdent: personIdent,
-                                                aktørId: null,
-                                                fagsakType: fagsakType,
-                                                institusjon: valgtSamhandler
-                                                    ? {
-                                                          orgNummer: valgtSamhandler.orgNummer,
-                                                          tssEksternId:
-                                                              valgtSamhandler.tssEksternId,
-                                                      }
-                                                    : null,
-                                            },
-                                            onClose
-                                        );
-                                    } else {
-                                        settSenderInn(false);
-                                    }
-                                    settVisFeilmelding(true);
-                                }}
-                                disabled={senderInn}
-                                loading={senderInn}
-                            >
-                                Opprett fagsak
-                            </KnappHøyre>
-                            <KnappHøyre key={'avbryt'} variant={'tertiary'} onClick={onClose}>
-                                Avbryt
-                            </KnappHøyre>
-                        </Knapperad>
-                    </StyledModalContent>
-                </Modal>
-            )}
-        </>
+                            if (personIdent && (await sjekkTilgang(personIdent))) {
+                                opprettFagsak(
+                                    {
+                                        personIdent: personIdent,
+                                        aktørId: null,
+                                        fagsakType: fagsakType,
+                                        institusjon: valgtSamhandler
+                                            ? {
+                                                  orgNummer: valgtSamhandler.orgNummer,
+                                                  tssEksternId: valgtSamhandler.tssEksternId,
+                                              }
+                                            : null,
+                                    },
+                                    onClose
+                                );
+                            } else {
+                                settSenderInn(false);
+                            }
+                            settVisFeilmelding(true);
+                        }}
+                        disabled={senderInn}
+                        loading={senderInn}
+                    >
+                        Opprett fagsak
+                    </KnappHøyre>
+                    <KnappHøyre key={'avbryt'} variant={'tertiary'} onClick={onClose}>
+                        Avbryt
+                    </KnappHøyre>
+                </Knapperad>
+            </StyledModalContent>
+        </Modal>
     );
 };
 

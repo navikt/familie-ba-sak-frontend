@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 
 import { useApp } from '../context/AppContext';
 import { BehandlingProvider } from '../context/behandlingContext/BehandlingContext';
-import { FagsakProvider } from '../context/FagsakContext';
+import { FagsakProvider } from '../context/fagsak/FagsakContext';
 import { Oppgaver } from '../context/OppgaverContext';
 import { TidslinjeProvider } from '../context/TidslinjeContext';
 import FagsakContainer from './Fagsak/FagsakContainer';

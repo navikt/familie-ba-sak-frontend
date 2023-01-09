@@ -20,6 +20,7 @@ import {
 import { BehandlingResultat } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
+import { Klagebehandlingstype } from '../../../../../typer/klage';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
@@ -217,8 +218,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
                 {toggles[ToggleNavn.kanBehandleKlage] && (
                     <option
-                        aria-selected={behandlingstype.verdi === Behandlingstype.KLAGE}
-                        value={Behandlingstype.KLAGE}
+                        aria-selected={behandlingstype.verdi === Klagebehandlingstype.KLAGE}
+                        value={Klagebehandlingstype.KLAGE}
                     >
                         Klage
                     </option>

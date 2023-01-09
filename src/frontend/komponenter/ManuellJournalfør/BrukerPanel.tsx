@@ -177,7 +177,7 @@ export const BrukerPanel: React.FC = () => {
                             variant="secondary"
                         />
                     </FlexDiv>
-                    {toggles[ToggleNavn.støtterInstitusjon] && kanKnyttesTilInstitusjonsfagsak() && (
+                    {kanKnyttesTilInstitusjonsfagsak() && (
                         <ReadMore
                             size="medium"
                             header="Søker er en institusjon eller enslig mindreårig"
@@ -194,9 +194,11 @@ export const BrukerPanel: React.FC = () => {
                             >
                                 <option value={FagsakType.NORMAL}>Velg</option>
                                 <option value={FagsakType.INSTITUSJON}>Institusjon</option>
-                                <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
-                                    Enslig mindreårig
-                                </option>
+                                {toggles[ToggleNavn.støtterEnsligMindreårig] && (
+                                    <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
+                                        Enslig mindreårig
+                                    </option>
+                                )}
                             </StyledSelect>
                             {erBrukerPåInstitusjon && (
                                 <StyledSelect

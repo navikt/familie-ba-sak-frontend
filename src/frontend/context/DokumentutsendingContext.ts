@@ -4,8 +4,8 @@ import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
 import type { ISODateString } from '@navikt/familie-form-elements';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
@@ -18,7 +18,7 @@ import { Målform } from '../typer/søknad';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
-import { useFagsakContext } from './FagsakContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 
 export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
