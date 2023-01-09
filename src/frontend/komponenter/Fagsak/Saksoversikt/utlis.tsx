@@ -23,7 +23,7 @@ import {
 } from '../../../typer/tilbakekrevingsbehandling';
 import type { VisningBehandling } from './visningBehandling';
 
-export enum Saksoversiktstype {
+export enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
     TILBAKEBETALING = 'TILBAKEBETALING',
     KLAGE = 'KLAGE',
@@ -31,13 +31,13 @@ export enum Saksoversiktstype {
 
 export type Saksoversiktsbehandling =
     | (VisningBehandling & {
-          saksoversiktstype: Saksoversiktstype.BARNETRYGD;
+          saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD;
       })
     | (ITilbakekrevingsbehandling & {
-          saksoversiktstype: Saksoversiktstype.TILBAKEBETALING;
+          saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING;
       })
     | (IKlagebehandling & {
-          saksoversiktstype: Saksoversiktstype.KLAGE;
+          saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE;
       });
 
 export const skalRadVises = (
@@ -46,28 +46,28 @@ export const skalRadVises = (
 ): boolean => {
     if (visHenlagteBehandlinger) return true;
     if (!behandling.resultat) return true;
-    if (behandling.saksoversiktstype === Saksoversiktstype.BARNETRYGD) {
+    if (behandling.saksoversiktbehandlingstype === Saksoversiktbehandlingstype.BARNETRYGD) {
         return !erBehandlingHenlagt(behandling.resultat);
     }
     return Behandlingsresultatstype.HENLAGT !== behandling.resultat;
 };
 
 export const hentOpprettetTidspunkt = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
-    switch (saksoversiktsbehandling.saksoversiktstype) {
-        case Saksoversiktstype.BARNETRYGD:
-        case Saksoversiktstype.TILBAKEBETALING:
+    switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return saksoversiktsbehandling.opprettetTidspunkt;
-        case Saksoversiktstype.KLAGE:
+        case Saksoversiktbehandlingstype.KLAGE:
             return saksoversiktsbehandling.opprettet;
     }
 };
 
 export const hentBehandlingId = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
-    switch (saksoversiktsbehandling.saksoversiktstype) {
-        case Saksoversiktstype.BARNETRYGD:
-        case Saksoversiktstype.TILBAKEBETALING:
+    switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return saksoversiktsbehandling.behandlingId;
-        case Saksoversiktstype.KLAGE:
+        case Saksoversiktbehandlingstype.KLAGE:
             return saksoversiktsbehandling.id;
     }
 };
@@ -79,18 +79,18 @@ export const hentBehandlingerTilSaksoversikten = (
     const barnetrygdBehandlinger: Saksoversiktsbehandling[] = minimalFagsak.behandlinger.map(
         behandling => ({
             ...behandling,
-            saksoversiktstype: Saksoversiktstype.BARNETRYGD,
+            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD,
         })
     );
     const tilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
         minimalFagsak.tilbakekrevingsbehandlinger.map(behandling => ({
             ...behandling,
-            saksoversiktstype: Saksoversiktstype.TILBAKEBETALING,
+            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING,
         }));
     const saksoversiktKlagebehandlinger: Saksoversiktsbehandling[] = klagebehandlinger.map(
         behandling => ({
             ...behandling,
-            saksoversiktstype: Saksoversiktstype.KLAGE,
+            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE,
         })
     );
     return [
@@ -104,8 +104,8 @@ export const lagLenkePåType = (
     fagsakId: number,
     behandling: Saksoversiktsbehandling
 ): ReactNode => {
-    switch (behandling.saksoversiktstype) {
-        case Saksoversiktstype.BARNETRYGD:
+    switch (behandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
             if (behandling.status === BehandlingStatus.AVSLUTTET) {
                 return behandlingstyper[behandling.type].navn;
             }
@@ -114,7 +114,7 @@ export const lagLenkePåType = (
                     {behandlingstyper[behandling.type].navn}
                 </Link>
             );
-        case Saksoversiktstype.TILBAKEBETALING:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return (
                 <Link
                     href={`/redirect/familie-tilbake/fagsystem/KS/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
@@ -125,7 +125,7 @@ export const lagLenkePåType = (
                     <ExternalLink />
                 </Link>
             );
-        case Saksoversiktstype.KLAGE:
+        case Saksoversiktbehandlingstype.KLAGE:
             return (
                 <Link
                     href={`/redirect/familie-klage/behandling/${behandling.id}`}
@@ -146,8 +146,8 @@ export const lagLenkePåResultat = (
     if (!behandling.resultat) {
         return '-';
     }
-    switch (behandling.saksoversiktstype) {
-        case Saksoversiktstype.BARNETRYGD:
+    switch (behandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
             if (behandling.status === BehandlingStatus.AVSLUTTET) {
                 return (
                     <Link href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
@@ -156,7 +156,7 @@ export const lagLenkePåResultat = (
                 );
             }
             return behandlingsresultater[behandling.resultat];
-        case Saksoversiktstype.TILBAKEBETALING:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return (
                 <Link
                     href={`/redirect/familie-tilbake/fagsystem/KS/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
@@ -167,7 +167,7 @@ export const lagLenkePåResultat = (
                     <ExternalLink />
                 </Link>
             );
-        case Saksoversiktstype.KLAGE:
+        case Saksoversiktbehandlingstype.KLAGE:
             return (
                 <Link
                     href={`/redirect/familie-klage/behandling/${behandling.id}`}
@@ -183,7 +183,8 @@ export const lagLenkePåResultat = (
 
 export const finnÅrsak = (saksoversiktsbehandling: Saksoversiktsbehandling): ReactNode => {
     if (
-        saksoversiktsbehandling.saksoversiktstype === Saksoversiktstype.TILBAKEBETALING &&
+        saksoversiktsbehandling.saksoversiktbehandlingstype ===
+            Saksoversiktbehandlingstype.TILBAKEBETALING &&
         saksoversiktsbehandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
     ) {
         return 'Feilutbetaling';
@@ -194,14 +195,14 @@ export const finnÅrsak = (saksoversiktsbehandling: Saksoversiktsbehandling): Re
 export const hentBehandlingstema = (
     saksoversiktsbehandling: Saksoversiktsbehandling
 ): IBehandlingstema | undefined => {
-    switch (saksoversiktsbehandling.saksoversiktstype) {
-        case Saksoversiktstype.BARNETRYGD:
+    switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
             return tilBehandlingstema(
                 saksoversiktsbehandling.kategori,
                 saksoversiktsbehandling.underkategori
             );
-        case Saksoversiktstype.TILBAKEBETALING:
-        case Saksoversiktstype.KLAGE:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
+        case Saksoversiktbehandlingstype.KLAGE:
             return undefined;
     }
 };
