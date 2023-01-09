@@ -18,7 +18,7 @@ import { hentAlder } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { identValidator } from '../utils/validators';
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './FagsakContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {

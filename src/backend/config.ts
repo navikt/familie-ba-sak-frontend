@@ -10,6 +10,7 @@ const Environment = () => {
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
             familieTilbakeUrl: 'http://localhost:8000',
+            familieKlageUrl: 'http://localhost:8000',
             endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     } else if (process.env.ENV === 'lokalt-mot-preprod') {
@@ -18,6 +19,7 @@ const Environment = () => {
             namespace: 'local',
             proxyUrl: 'https://familie-ba-sak.dev.intern.nav.no',
             familieTilbakeUrl: 'https://familie-tilbake.dev.intern.nav.no',
+            familieKlageUrl: 'https://familie-klage.dev.intern.nav.no',
             endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
@@ -26,6 +28,7 @@ const Environment = () => {
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
             familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
+            familieKlageUrl: '',
             redisUrl: 'familie-redis',
             endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
@@ -35,6 +38,7 @@ const Environment = () => {
             namespace: 'preprod',
             proxyUrl: 'http://familie-ba-sak',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
+            familieKlageUrl: 'https://familie-klage.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
             endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
@@ -45,6 +49,7 @@ const Environment = () => {
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
+        familieKlageUrl: 'https://familie-klage.intern.nav.no',
         endringsloggProxyUrl: 'https://familie-endringslogg.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
@@ -89,5 +94,6 @@ export const namespace = env.namespace;
 
 export const redirectRecords: Record<string, string> = {
     '/redirect/familie-tilbake': env.familieTilbakeUrl,
+    '/redirect/familie-klage': env.familieKlageUrl,
     '/redirect/drek': process.env.DREK_URL,
 };
