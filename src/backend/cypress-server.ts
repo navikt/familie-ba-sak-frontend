@@ -8,6 +8,7 @@ import expressStaticGzip from 'express-static-gzip';
 import { logInfo } from '@navikt/familie-logging';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
+import type { IKlagebehandling } from '../frontend/typer/klage';
 import {
     fagsakMock,
     klagebehandlingFixture,
@@ -25,6 +26,13 @@ app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_producti
 app.post('/familie-ba-sak/api/oppgave/hent-oppgaver', (_, res) => {
     res.status(200).send(oppgaveMock);
 });
+
+// Må komme før /familie-ba-sak/api/fagsaker/*
+app.get('/familie-ba-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
+    const klagebehandlinger: IKlagebehandling[] = [klagebehandlingFixture()];
+    res.status(200).send(byggDataRessurs(klagebehandlinger));
+});
+
 app.get('/familie-ba-sak/api/fagsaker/*', (_, res) => {
     res.status(200).send(fagsakMock);
 });
