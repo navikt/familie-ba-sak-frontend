@@ -17,13 +17,17 @@ import {
     erBehandlingHenlagt,
     type IBehandling,
 } from '../../../../../typer/behandling';
+import { BehandlingResultat } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import {
+    hentAktivBehandlingPåMinimalFagsak,
+    hentSisteIkkeHenlagteBehandling,
+} from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
@@ -55,6 +59,13 @@ const erOpprettBehandlingSkjema = (
         | ISkjema<ManuellJournalføringSkjemaFelter, string>
 ): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
     Object.hasOwn(skjema, 'valgteBarn');
+
+const erTekniskEndringMedOpphør = (behandling?: VisningBehandling) => {
+    return (
+        behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING &&
+        behandling.resultat === BehandlingResultat.OPPHØRT
+    );
+};
 
 const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
@@ -115,6 +126,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
+    const sisteBehandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
 
     const kanOppretteBehandling =
         !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
@@ -135,10 +147,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const erHelmanuellMigrering =
         erMigreringFraInfotrygd &&
         skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
-    const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
-        kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
-        kanOppretteMigreringFraInfotrygd && !kanOppretteMigreringsbehandlingMedEndreMigreringsdato;
+        kanOppretteMigreringFraInfotrygd &&
+        (!kanOppretteRevurdering || erTekniskEndringMedOpphør(sisteBehandling));
+    const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
+        kanOppretteMigreringFraInfotrygd && !kanOpprettMigreringsbehandlingMedHelmanuellMigrering;
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
