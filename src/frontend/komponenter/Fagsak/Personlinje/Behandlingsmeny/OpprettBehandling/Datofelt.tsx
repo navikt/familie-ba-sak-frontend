@@ -33,7 +33,6 @@ export const Datofelt: React.FC<IProps> = ({
     <FixedDatoVelger
         {...skjemafelt.hentNavInputProps(visFeilmeldinger)}
         value={skjemafelt.verdi}
-        valgtDato={skjemafelt.verdi}
         label={etikett}
         limitations={begrensninger}
         onChange={input => skjemafelt.hentNavInputProps(visFeilmeldinger).onChange(input ?? '')}

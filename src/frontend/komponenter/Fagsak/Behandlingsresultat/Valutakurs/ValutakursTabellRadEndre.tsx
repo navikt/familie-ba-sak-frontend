@@ -170,11 +170,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                     ? skjema.felter.valutakursdato?.verdi
                                     : undefined
                             }
-                            valgtDato={
-                                skjema.felter.valutakursdato?.verdi !== null
-                                    ? skjema.felter.valutakursdato?.verdi
-                                    : undefined
-                            }
                             placeholder={datoformatNorsk.DATO}
                             erLesesvisning={lesevisning}
                             onChange={(dato?: ISODateString) =>
