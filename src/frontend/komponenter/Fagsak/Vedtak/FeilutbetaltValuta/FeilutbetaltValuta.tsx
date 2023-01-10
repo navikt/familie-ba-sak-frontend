@@ -58,7 +58,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
         0
     );
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
-    \nBer om at feilutbetalingsbeløpet på grunn av valutajusteringer trekkes i fremtidige utbetalinger.
+    \nBer om at feilutbetalingsbeløpet på grunn av valuta- og satsendringer trekkes i fremtidige utbetalinger.
     \nTotalt kr ${totaltFeilutbetaltBeløp}
     \n${feilutbetaltValutaListe
         .map(
