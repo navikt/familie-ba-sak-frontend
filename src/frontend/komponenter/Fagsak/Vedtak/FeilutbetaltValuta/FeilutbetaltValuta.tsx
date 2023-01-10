@@ -73,7 +73,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     return (
         <FlexColumnDiv>
             <Heading level="2" size="small" spacing>
-                Feilutbetalt valuta
+                Feilutbetalt valuta og sats
             </Heading>
             <Table size="small">
                 <Table.Header>
