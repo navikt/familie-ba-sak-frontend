@@ -33,6 +33,12 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
+const KopierTilNøsKnapp = styled(CopyToClipboard)`
+    :not(:hover):not(:active) {
+        color: var(--navds-semantic-color-link);
+    }
+`;
+
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     feilutbetaltValutaListe,
     settErUlagretNyFeilutbetaltValutaPeriode,
@@ -115,9 +121,9 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                <CopyToClipboard copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
+                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
                     Kopier tekst til NØS
-                </CopyToClipboard>
+                </KopierTilNøsKnapp>
             </FlexRowDiv>
         </FlexColumnDiv>
     );
