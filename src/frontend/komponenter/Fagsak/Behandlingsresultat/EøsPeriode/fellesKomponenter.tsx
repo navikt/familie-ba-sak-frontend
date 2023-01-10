@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 import {
-    NavdsSemanticColorBorderMuted,
-    NavdsSemanticColorFeedbackDangerBorder,
-    NavdsSemanticColorFeedbackWarningBorder,
-    NavdsSemanticColorInteractionPrimary,
+    ABorderDefault,
+    ABorderDanger,
+    ABorderWarning,
+    ASurfaceAction,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
@@ -28,12 +28,10 @@ export const EøsPeriodeSkjemaContainer = styled.div`
         props.maxWidth ? `${props.maxWidth}rem` : '30rem'};
     border-left: 0.125rem solid
         ${(props: IEøsPeriodeSkjemaContainerProps) => {
-            if (props.lesevisning) return NavdsSemanticColorBorderMuted;
-            if (props.status === EøsPeriodeStatus.IKKE_UTFYLT)
-                return NavdsSemanticColorFeedbackWarningBorder;
-            if (props.status === EøsPeriodeStatus.UFULLSTENDIG)
-                return NavdsSemanticColorFeedbackDangerBorder;
-            return NavdsSemanticColorInteractionPrimary;
+            if (props.lesevisning) return ABorderDefault;
+            if (props.status === EøsPeriodeStatus.IKKE_UTFYLT) return ABorderWarning;
+            if (props.status === EøsPeriodeStatus.UFULLSTENDIG) return ABorderDanger;
+            return ASurfaceAction;
         }};
     padding-left: 2rem;
     margin-left: -3rem;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Delete } from '@navikt/ds-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
-import { NavdsSpacing5 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -15,7 +15,7 @@ import { VilkårType } from '../../../../typer/vilkår';
 import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const UtførKnapp = styled(Button)`
-    margin-top: ${NavdsSpacing5};
+    margin-top: ${ASpacing5};
 `;
 
 interface IProps {

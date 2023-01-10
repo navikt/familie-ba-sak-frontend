@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Cancel, Office1Filled } from '@navikt/ds-icons';
 import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
-import { NavdsSemanticColorInteractionPrimary } from '@navikt/ds-tokens/dist/tokens';
+import { ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -132,11 +132,7 @@ export const BrukerPanel: React.FC = () => {
                 <DeltagerInfo
                     ikon={
                         erBrukerPåInstitusjon ? (
-                            <Office1Filled
-                                color={NavdsSemanticColorInteractionPrimary}
-                                width={48}
-                                height={48}
-                            />
+                            <Office1Filled color={ASurfaceAction} width={48} height={48} />
                         ) : (
                             <KontoSirkel filled={åpen} width={48} height={48} />
                         )
