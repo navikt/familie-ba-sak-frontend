@@ -117,7 +117,7 @@ export const lagLenkePåType = (
         case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return (
                 <Link
-                    href={`/redirect/familie-tilbake/fagsystem/KS/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
+                    href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
                     onMouseDown={e => e.preventDefault()}
                     target="_blank"
                 >
@@ -159,7 +159,7 @@ export const lagLenkePåResultat = (
         case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return (
                 <Link
-                    href={`/redirect/familie-tilbake/fagsystem/KS/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
+                    href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
                     onMouseDown={e => e.preventDefault()}
                     target="_blank"
                 >
