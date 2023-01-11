@@ -20,10 +20,14 @@ import useDokument from '../hooks/useDokument';
 import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import { behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
-import { utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
+import {
+    behandlingstemaer,
+    type IBehandlingstema,
+    utredBehandlingstemaFraOppgave,
+} from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
+import type { Klagebehandlingstype } from '../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -77,7 +81,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         verdi: false,
     });
 
-    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
+    const behandlingstype = useFelt<
+        Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''
+    >({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''

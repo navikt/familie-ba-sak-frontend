@@ -25,7 +25,7 @@ import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './FagsakContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>,
