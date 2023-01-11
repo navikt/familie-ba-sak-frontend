@@ -246,6 +246,7 @@ const useOpprettBehandling = (
                 method: 'POST',
                 url: `/familie-ks-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: { kravMottattDato: kravMottattDato.verdi },
+                påvirkerSystemLaster: true,
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
