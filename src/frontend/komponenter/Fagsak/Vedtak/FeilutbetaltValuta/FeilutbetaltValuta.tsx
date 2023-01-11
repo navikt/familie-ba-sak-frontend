@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { NavdsSemanticColorLink } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { periodeToString } from '../../../../utils/kalender';
@@ -35,7 +36,7 @@ const FlexRowDiv = styled.div`
 
 const KopierTilNøsKnapp = styled(CopyToClipboard)`
     :not(:hover):not(:active) {
-        color: var(--navds-semantic-color-link);
+        color: ${NavdsSemanticColorLink};
     }
 `;
 
