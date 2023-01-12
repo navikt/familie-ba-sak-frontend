@@ -23,6 +23,7 @@ interface IMockBehandling {
     type?: Behandlingstype;
     skalBehandlesAutomatisk?: boolean;
     stegTilstand?: IRestStegTilstand[];
+    resultat?: BehandlingResultat;
 }
 
 export const mockBehandling = ({
@@ -101,12 +102,13 @@ export const mockVisningBehandling = ({
     aktiv = true,
     årsak = BehandlingÅrsak.SØKNAD,
     type = Behandlingstype.FØRSTEGANGSBEHANDLING,
+    resultat = BehandlingResultat.INNVILGET,
 }: IMockBehandling = {}): VisningBehandling => {
     return {
         behandlingId,
         aktiv,
         type: type,
-        resultat: BehandlingResultat.INNVILGET,
+        resultat: resultat,
         opprettetTidspunkt,
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
