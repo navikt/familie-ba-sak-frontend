@@ -61,7 +61,8 @@ const erOpprettBehandlingSkjema = (
 ): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
     Object.hasOwn(skjema, 'valgteBarn');
 
-const erTekniskEndringMedOpphør = (behandling?: VisningBehandling) => {
+const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {
+    const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
     return (
         behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING &&
         behandling.resultat === BehandlingResultat.OPPHØRT
@@ -127,7 +128,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
-    const sisteBehandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
 
     const kanOppretteBehandling =
         !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
@@ -150,7 +150,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
         kanOppretteMigreringFraInfotrygd &&
-        (!kanOppretteRevurdering || erTekniskEndringMedOpphør(sisteBehandling));
+        (!kanOppretteRevurdering || forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak));
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd && !kanOpprettMigreringsbehandlingMedHelmanuellMigrering;
 

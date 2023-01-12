@@ -37,8 +37,8 @@ export const hentSisteIkkeHenlagteBehandling = (
     if (filtrerteBehandlinger.length === 0) {
         return undefined;
     } else {
-        return filtrerteBehandlinger.sort(
-            (a, b) => Number(b.behandlingId) - Number(a.behandlingId)
+        return filtrerteBehandlinger.sort((a, b) =>
+            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
         )[0];
     }
 };
