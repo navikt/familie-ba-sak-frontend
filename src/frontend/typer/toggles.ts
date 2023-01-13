@@ -8,7 +8,6 @@ export enum ToggleNavn {
     skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
-    kunneKorrigereVedtak = 'familie-ba-sak.kunne-korrigere-vedtak',
     leggTilMottaker = 'familie-ba-sak.behandling.legg-til-mottaker',
     trekkILøpendeUtbetaling = 'familie-ba-sak.trekk-i-loepende-utbetaling',
     kanBehandleKlage = 'familie-ba-sak.klage',

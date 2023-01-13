@@ -64,9 +64,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
                             />
-                            {((toggles[ToggleNavn.kunneKorrigereVedtak] &&
-                                !kanIkkeKorrigereVedtak) ||
-                                åpenBehandling.korrigertVedtak) && (
+                            {(!kanIkkeKorrigereVedtak || åpenBehandling.korrigertVedtak) && (
                                 <KorrigerVedtak
                                     erLesevisning={vurderErLesevisning()}
                                     korrigertVedtak={åpenBehandling.korrigertVedtak}
