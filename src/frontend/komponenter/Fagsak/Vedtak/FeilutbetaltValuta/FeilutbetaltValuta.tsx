@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { NavdsSemanticColorLink } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { periodeToString } from '../../../../utils/kalender';
@@ -33,6 +34,12 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
+const KopierTilNøsKnapp = styled(CopyToClipboard)`
+    :not(:hover):not(:active) {
+        color: ${NavdsSemanticColorLink};
+    }
+`;
+
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     feilutbetaltValutaListe,
     settErUlagretNyFeilutbetaltValutaPeriode,
@@ -58,7 +65,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
         0
     );
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
-    \nBer om at feilutbetalingsbeløpet på grunn av valutajusteringer trekkes i fremtidige utbetalinger.
+    \nBer om at feilutbetalingsbeløpet på grunn av valuta- og satsendringer trekkes i fremtidige utbetalinger.
     \nTotalt kr ${totaltFeilutbetaltBeløp}
     \n${feilutbetaltValutaListe
         .map(
@@ -73,7 +80,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     return (
         <FlexColumnDiv>
             <Heading level="2" size="small" spacing>
-                Feilutbetalt valuta
+                Feilutbetalt valuta og sats
             </Heading>
             <Table size="small">
                 <Table.Header>
@@ -115,9 +122,9 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                <CopyToClipboard copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
+                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
                     Kopier tekst til NØS
-                </CopyToClipboard>
+                </KopierTilNøsKnapp>
             </FlexRowDiv>
         </FlexColumnDiv>
     );

@@ -1,4 +1,5 @@
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';
 import { kalenderDiff } from './kalender';
@@ -26,4 +27,18 @@ export const hentAktivBehandlingPåMinimalFagsak = (
     minimalFagsak: IMinimalFagsak
 ): VisningBehandling | undefined => {
     return minimalFagsak.behandlinger.find((behandling: VisningBehandling) => behandling.aktiv);
+};
+
+export const hentSisteIkkeHenlagteBehandling = (
+    fagsak?: IMinimalFagsak
+): VisningBehandling | undefined => {
+    const filtrerteBehandlinger =
+        fagsak?.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)) || [];
+    if (filtrerteBehandlinger.length === 0) {
+        return undefined;
+    } else {
+        return filtrerteBehandlinger.sort((a, b) =>
+            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+        )[0];
+    }
 };
