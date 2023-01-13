@@ -83,7 +83,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
                                 <Calculator />
-                                Legg til feilutbetalt valuta
+                                Legg til feilutbetalt valuta og sats
                             </Dropdown.Menu.List.Item>
                         )}
                 </Dropdown.Menu.List>

@@ -17,6 +17,7 @@ import {
     erBehandlingHenlagt,
     type IBehandling,
 } from '../../../../../typer/behandling';
+import { BehandlingResultat } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
@@ -24,7 +25,10 @@ import type { IPersonInfo } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import {
+    hentAktivBehandlingPåMinimalFagsak,
+    hentSisteIkkeHenlagteBehandling,
+} from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
@@ -56,6 +60,14 @@ const erOpprettBehandlingSkjema = (
         | ISkjema<ManuellJournalføringSkjemaFelter, string>
 ): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
     Object.hasOwn(skjema, 'valgteBarn');
+
+const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {
+    const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
+    return (
+        behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING &&
+        behandling.resultat === BehandlingResultat.OPPHØRT
+    );
+};
 
 const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
@@ -136,10 +148,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const erHelmanuellMigrering =
         erMigreringFraInfotrygd &&
         skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
-    const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
-        kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
-        kanOppretteMigreringFraInfotrygd && !kanOppretteMigreringsbehandlingMedEndreMigreringsdato;
+        kanOppretteMigreringFraInfotrygd &&
+        (!kanOppretteRevurdering || forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak));
+    const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
+        kanOppretteMigreringFraInfotrygd && !kanOpprettMigreringsbehandlingMedHelmanuellMigrering;
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
