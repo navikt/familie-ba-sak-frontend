@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 import { Alert, Heading } from '@navikt/ds-react';
-import { NavdsFontWeightRegular, NavdsSpacing4 } from '@navikt/ds-tokens/dist/tokens';
+import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
@@ -17,7 +17,7 @@ const Container = styled.div`
 `;
 
 const SemiBoldHeading = styled(Heading)`
-    font-weight: ${NavdsFontWeightRegular};
+    font-weight: ${AFontWeightRegular};
 `;
 
 interface IRegisteropplysningerProps {
@@ -35,14 +35,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                 Registeropplysninger
             </SemiBoldHeading>
             {manglerRegisteropplysninger ? (
-                <Alert variant="info" style={{ marginTop: NavdsSpacing4 }}>
+                <Alert variant="info" style={{ marginTop: ASpacing4 }}>
                     Det ble ikke hentet inn registeropplysninger på denne behandlingen.
                 </Alert>
             ) : (
                 <Container>
                     <HentetLabel
                         size={'small'}
-                        style={{ marginBottom: NavdsSpacing4 }}
+                        style={{ marginBottom: ASpacing4 }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +
                             formaterIsoDato(

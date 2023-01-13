@@ -6,6 +6,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
+import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieInput,
     FamilieKnapp,
@@ -66,7 +67,7 @@ const UtbetaltBeløpRad = styled.div`
 
 const UtbetaltBeløpInfo = styled(Alert)`
     width: 60rem;
-    margin-bottom: var(--navds-spacing-6);
+    margin-bottom: ${ASpacing6};
 `;
 
 const UtbetaltBeløpText = styled(BodyShort)`

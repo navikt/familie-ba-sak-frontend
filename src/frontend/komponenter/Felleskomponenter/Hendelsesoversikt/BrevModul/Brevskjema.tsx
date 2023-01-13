@@ -7,7 +7,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { AddCircle, Delete, FileContent } from '@navikt/ds-icons';
 import { Button, Label, Tag } from '@navikt/ds-react';
-import { NavdsGlobalColorGray100, NavdsGlobalColorGray600 } from '@navikt/ds-tokens/dist/tokens';
+import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieInput,
     FamilieReactSelect,
@@ -86,8 +86,8 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledTag = styled(Tag)`
-    background-color: ${NavdsGlobalColorGray100};
-    border-color: ${NavdsGlobalColorGray600};
+    background-color: ${AGray100};
+    border-color: ${AGray600};
 `;
 
 const LabelOgEtikett = styled.div`
@@ -427,7 +427,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Samboer fra'}
                         value={skjema.felter.datoAvtale.verdi}
-                        valgtDato={skjema.felter.datoAvtale.verdi}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                     />
                 )}
