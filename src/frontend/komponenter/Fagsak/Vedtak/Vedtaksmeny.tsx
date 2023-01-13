@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Calculator, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { NavdsSpacing10 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -24,8 +24,8 @@ interface IVedtakmenyProps {
 
 const KnappHøyreHjørne = styled(Button)`
     position: absolute;
-    top: ${NavdsSpacing10};
-    right: ${NavdsSpacing10};
+    top: ${ASpacing10};
+    right: ${ASpacing10};
 `;
 
 const StyledDropdownMeny = styled(Dropdown.Menu)`

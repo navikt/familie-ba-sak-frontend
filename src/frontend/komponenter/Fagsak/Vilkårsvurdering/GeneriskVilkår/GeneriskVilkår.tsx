@@ -6,7 +6,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { NavdsSpacing5, NavdsSpacing8, NavdsSpacing16 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -33,14 +33,14 @@ interface IProps {
 }
 
 const Container = styled.div`
-    margin-top: ${NavdsSpacing16};
+    margin-top: ${ASpacing16};
     &:last-child {
-        margin-bottom: ${NavdsSpacing8};
+        margin-bottom: ${ASpacing8};
     }
 `;
 
 const UtførKnapp = styled(Button)`
-    margin-top: ${NavdsSpacing5};
+    margin-top: ${ASpacing5};
 `;
 
 const GeneriskVilkår: React.FC<IProps> = ({

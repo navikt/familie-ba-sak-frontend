@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
-import { NavdsSpacing14, NavdsSpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -24,12 +24,12 @@ const AktørLinje = styled.div`
     position: sticky;
     z-index: 3;
     background-color: white;
-    padding-top: ${NavdsSpacing14};
-    padding-bottom: ${NavdsSpacing8};
+    padding-top: ${ASpacing14};
+    padding-bottom: ${ASpacing8};
 `;
 
 const IndentertInnhold = styled.div`
-    padding-left: ${NavdsSpacing14};
+    padding-left: ${ASpacing14};
 
     &.samhandler-innhold {
         margin-bottom: -1.5rem;

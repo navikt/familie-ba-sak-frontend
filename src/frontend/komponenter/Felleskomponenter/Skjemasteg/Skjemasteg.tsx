@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 import { Alert, Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import {
-    NavdsSpacing4,
-    NavdsSpacing6,
-    NavdsSpacing8,
-    NavdsSpacing10,
-    NavdsSpacing24,
+    ASpacing4,
+    ASpacing6,
+    ASpacing8,
+    ASpacing10,
+    ASpacing24,
 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
@@ -38,26 +38,26 @@ interface IProps {
 
 const Container = styled.div<{ maxWidthStyle: string }>`
     position: relative;
-    padding: ${NavdsSpacing10};
+    padding: ${ASpacing10};
     max-width: ${({ maxWidthStyle }) => maxWidthStyle};
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`
-    margin-top: ${NavdsSpacing4};
+    margin-top: ${ASpacing4};
 `;
 
 const StyledAlert = styled(Alert)`
-    margin: ${NavdsSpacing8} ${NavdsSpacing8} 0 ${NavdsSpacing8};
+    margin: ${ASpacing8} ${ASpacing8} 0 ${ASpacing8};
     width: fit-content;
 `;
 
 const Navigering = styled.div`
-    margin: ${NavdsSpacing24} 0 ${NavdsSpacing4};
+    margin: ${ASpacing24} 0 ${ASpacing4};
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
     button:not(:first-child) {
-        margin-right: ${NavdsSpacing6};
+        margin-right: ${ASpacing6};
     }
 `;
 

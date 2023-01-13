@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { AddCircle, ExpandFilled, CollapseFilled } from '@navikt/ds-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import { NavdsSpacing14, NavdsSpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -37,11 +37,11 @@ const PersonLinje = styled.div`
     top: -1px;
     z-index: 3;
     background-color: white;
-    padding: ${NavdsSpacing8} 0;
+    padding: ${ASpacing8} 0;
 `;
 
 const IndentertInnhold = styled.div`
-    padding-left: ${NavdsSpacing14};
+    padding-left: ${ASpacing14};
 `;
 
 const VilkårDiv = styled.div`

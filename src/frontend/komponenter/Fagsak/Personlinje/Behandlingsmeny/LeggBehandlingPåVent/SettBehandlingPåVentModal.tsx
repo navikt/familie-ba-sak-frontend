@@ -86,7 +86,6 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                     <FamilieDatovelgerWrapper
                         {...skjema.felter.frist.hentNavInputProps(skjema.visFeilmeldinger)}
                         value={skjema.felter.frist.verdi}
-                        valgtDato={skjema.felter.frist.verdi}
                         label={'Frist'}
                         placeholder={'DD.MM.ÅÅÅÅ'}
                     />
