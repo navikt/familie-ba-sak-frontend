@@ -6,7 +6,7 @@ import React from 'react';
 import axe from '@axe-core/react';
 import { init } from '@sentry/browser';
 import { Integrations } from '@sentry/tracing';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import App from './komponenter/App';
 
@@ -28,9 +28,11 @@ if (process.env.NODE_ENV !== 'production') {
     axe(React, ReactDOM, 1000);
 }
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = ReactDOM.createRoot(container!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
+root.render(
     <React.StrictMode>
         <App />
-    </React.StrictMode>,
-    document.getElementById('app')
+    </React.StrictMode>
 );
