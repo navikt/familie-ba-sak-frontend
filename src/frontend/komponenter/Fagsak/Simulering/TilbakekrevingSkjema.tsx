@@ -13,6 +13,7 @@ import {
     BodyShort,
     Button,
     Heading,
+    HelpText,
     Label,
     Radio,
     RadioGroup,
@@ -30,7 +31,6 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
-import HelpText from '../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
