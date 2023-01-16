@@ -12,6 +12,7 @@ import { useApp } from '../../../context/AppContext';
 
 interface IProps {
     modal?: IModal;
+    children?: React.ReactNode;
 }
 
 export const StyledButtons = styled.div`

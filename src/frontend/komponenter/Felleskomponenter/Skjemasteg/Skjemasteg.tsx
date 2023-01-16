@@ -22,6 +22,7 @@ import type { ISide } from '../Venstremeny/sider';
 import { sider } from '../Venstremeny/sider';
 
 interface IProps {
+    children?: React.ReactNode;
     className?: string;
     forrigeKnappTittel?: string;
     forrigeOnClick?: () => void;

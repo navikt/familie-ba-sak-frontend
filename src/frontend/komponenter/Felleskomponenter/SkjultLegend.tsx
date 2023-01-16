@@ -7,6 +7,8 @@ const StyledLegend = styled.legend`
     clip: rect(0 0 0 0);
 `;
 
-const SkjultLegend: React.FC = ({ children }) => <StyledLegend>{children}</StyledLegend>;
+const SkjultLegend: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
+    <StyledLegend>{children}</StyledLegend>
+);
 
 export default SkjultLegend;

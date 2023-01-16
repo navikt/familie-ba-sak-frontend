@@ -33,7 +33,7 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const LitenKnapp: React.FC = ({ children }) => {
+const LitenKnapp: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     return (
         <StyledButton size="small" variant="tertiary">
             {children}
@@ -46,25 +46,37 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
         accessor: 'opprettetTidspunkt',
         Header: <LitenKnapp>Reg. dato</LitenKnapp>,
         Cell: ({ value: opprettetTidspunkt }) => {
-            return opprettetTidspunkt ? intDatoTilNorskDato(opprettetTidspunkt) : 'Ukjent';
+            return (
+                <span>
+                    {opprettetTidspunkt ? intDatoTilNorskDato(opprettetTidspunkt) : 'Ukjent'}
+                </span>
+            );
         },
     },
     {
         accessor: 'oppgavetype',
         Header: <LitenKnapp>Oppgavetype</LitenKnapp>,
         Cell: ({ value: oppgavetype }) => {
-            return oppgavetype
-                ? oppgaveTypeFilter[oppgavetype as OppgavetypeFilter]?.navn ?? oppgavetype
-                : 'Ukjent';
+            return (
+                <span>
+                    {oppgavetype
+                        ? oppgaveTypeFilter[oppgavetype as OppgavetypeFilter]?.navn ?? oppgavetype
+                        : 'Ukjent'}
+                </span>
+            );
         },
     },
     {
         accessor: 'behandlingstema',
         Header: <LitenKnapp>Gjelder</LitenKnapp>,
         Cell: ({ value: behandlingstema }) => {
-            return behandlingstema
-                ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
-                : 'Ikke satt';
+            return (
+                <span>
+                    {behandlingstema
+                        ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
+                        : 'Ikke satt'}
+                </span>
+            );
         },
     },
     {
@@ -75,14 +87,18 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
         accessor: 'fristFerdigstillelse',
         Header: <LitenKnapp>Frist</LitenKnapp>,
         Cell: ({ value: fristFerdigstillelse }) => {
-            return fristFerdigstillelse ? intDatoTilNorskDato(fristFerdigstillelse) : 'Ukjent';
+            return (
+                <span>
+                    {fristFerdigstillelse ? intDatoTilNorskDato(fristFerdigstillelse) : 'Ukjent'}
+                </span>
+            );
         },
     },
     {
         accessor: 'prioritet',
         Header: <LitenKnapp>Prioritet</LitenKnapp>,
         Cell: ({ value: prioritet }) => {
-            return PrioritetFilter[prioritet as keyof typeof PrioritetFilter];
+            return <span>{PrioritetFilter[prioritet as keyof typeof PrioritetFilter]}</span>;
         },
     },
     {
@@ -93,7 +109,7 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
         accessor: 'ident',
         Header: <LitenKnapp>Bruker</LitenKnapp>,
         Cell: ({ value: identer }) => {
-            return hentFnrFraOppgaveIdenter(identer) || 'Ukjent';
+            return <span>{hentFnrFraOppgaveIdenter(identer) || 'Ukjent'}</span>;
         },
     },
     {

@@ -7,6 +7,7 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 
 interface IProps {
     autentisertSaksbehandler?: ISaksbehandler;
+    children?: React.ReactNode;
 }
 
 class ErrorBoundary extends React.Component<IProps> {

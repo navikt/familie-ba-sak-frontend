@@ -6,12 +6,13 @@ import { MemoryRouter as Router } from 'react-router-dom';
 import useSakOgBehandlingParams from './useSakOgBehandlingParams';
 
 const renderUseSakOgBehandlingParamsHookMedPath = (path: string) => {
+    const Wrapper: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+        return <Router initialEntries={[{ pathname: path }]}>{children}</Router>;
+    };
     const {
         result: { current },
     } = renderHook(() => useSakOgBehandlingParams(), {
-        wrapper: ({ children }) => {
-            return <Router initialEntries={[{ pathname: path }]}>{children}</Router>;
-        },
+        wrapper: Wrapper,
     });
     return current;
 };

@@ -1,4 +1,3 @@
-import type { ReactChild } from 'react';
 import React from 'react';
 
 import classNames from 'classnames';
@@ -6,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { NavHashLink as NavLink } from 'react-router-hash-link';
 
 interface Props {
-    children: ReactChild;
+    children: React.ReactNode;
     id: string;
     to?: string;
     active?: boolean;

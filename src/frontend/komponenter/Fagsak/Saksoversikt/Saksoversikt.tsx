@@ -39,6 +39,7 @@ import type { VisningBehandling } from './visningBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
+    children?: React.ReactNode;
 }
 
 enum Tabvalg {

@@ -9,6 +9,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    children?: React.ReactNode;
 }
 
 const EkspanderbartVedtaksbegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({

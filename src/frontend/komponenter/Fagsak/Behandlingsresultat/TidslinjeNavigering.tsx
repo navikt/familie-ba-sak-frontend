@@ -13,7 +13,7 @@ interface IProps {
     kanNavigereTilVenstre?: boolean;
     navigerTilVenstreTittel?: string;
     navigerTilHyøyreTittel?: string;
-    children?: React.ReactNode | React.ReactChild | React.ReactChildren;
+    children?: React.ReactNode;
 }
 
 const StyledTidslinjenavigering = styled.div`
