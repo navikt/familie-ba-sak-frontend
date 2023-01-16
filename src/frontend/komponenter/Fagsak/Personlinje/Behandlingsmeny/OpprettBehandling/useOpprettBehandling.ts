@@ -237,7 +237,6 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
-                    oppdaterKlagebehandlingerPåFagsak();
                     nullstillSkjemaStatus();
                     onOpprettTilbakekrevingSuccess();
                 }
@@ -255,6 +254,7 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
+                    oppdaterKlagebehandlingerPåFagsak();
                     lukkModal();
                     nullstillSkjema();
                 }
