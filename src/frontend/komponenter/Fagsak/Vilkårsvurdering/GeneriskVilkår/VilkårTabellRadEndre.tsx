@@ -310,40 +310,31 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                     errorId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
-                >
-                    <Radio
-                        value={'Ja'}
-                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                        checked={
-                            redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
-                        }
-                        onChange={() =>
+                    onChange={(valgt: string) => {
+                        if (redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP) {
                             radioOnChange(
-                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
+                                valgt === resultater[Resultat.OPPFYLT]
                                     ? Resultat.IKKE_OPPFYLT
                                     : Resultat.OPPFYLT
-                            )
+                            );
+                        } else {
+                            radioOnChange(
+                                valgt === resultater[Resultat.OPPFYLT]
+                                    ? Resultat.OPPFYLT
+                                    : Resultat.IKKE_OPPFYLT
+                            );
                         }
+                    }}
+                >
+                    <Radio
+                        value={resultater[Resultat.OPPFYLT]}
+                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                     >
                         {'Ja'}
                     </Radio>
                     <Radio
-                        value={'Nei'}
+                        value={resultater[Resultat.IKKE_OPPFYLT]}
                         name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                        checked={
-                            redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
-                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                        }
-                        onChange={() =>
-                            radioOnChange(
-                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                    ? Resultat.OPPFYLT
-                                    : Resultat.IKKE_OPPFYLT
-                            )
-                        }
                     >
                         {'Nei'}
                     </Radio>
