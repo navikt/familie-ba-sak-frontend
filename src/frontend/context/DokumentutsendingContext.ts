@@ -52,8 +52,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             verdi: Målform.NB,
         });
 
-        const årsak = useFelt<DokumentÅrsak>({
-            verdi: DokumentÅrsak.DELT_BOSTED,
+        const årsak = useFelt<DokumentÅrsak | undefined>({
+            verdi: undefined,
         });
 
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
