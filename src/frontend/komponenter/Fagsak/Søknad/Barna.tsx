@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-
 import { Alert, Heading, Label } from '@navikt/ds-react';
+import { FamilieCheckboxGroup } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -30,10 +29,6 @@ const StyledRødError = styled(RødError)`
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;
-`;
-
-const StyledCheckboxGruppe = styled(CheckboxGruppe)`
-    min-width: 0;
 `;
 
 const IngenBarnRegistrertInfo = styled(Alert)`
@@ -94,10 +89,11 @@ const Barna: React.FunctionComponent = () => {
             )}
 
             <br />
-            <StyledCheckboxGruppe
+            <FamilieCheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
                     skjema.visFeilmeldinger
                 )}
+                erLesevisning={lesevisning}
                 legend={
                     !lesevisning && !gjelderInstitusjon ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
@@ -105,7 +101,6 @@ const Barna: React.FunctionComponent = () => {
                         <Label>Barn det er søkt om</Label>
                     )
                 }
-                utenFeilPropagering={true}
             >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
@@ -124,7 +119,7 @@ const Barna: React.FunctionComponent = () => {
                 {!lesevisning && !gjelderInstitusjon && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
-            </StyledCheckboxGruppe>
+            </FamilieCheckboxGroup>
         </BarnaWrapper>
     );
 };
