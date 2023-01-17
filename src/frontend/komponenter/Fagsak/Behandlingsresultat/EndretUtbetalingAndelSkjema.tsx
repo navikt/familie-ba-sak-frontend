@@ -4,10 +4,9 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import variables from 'nav-frontend-core';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { BodyShort, Button, Label, Radio, RadioGroup } from '@navikt/ds-react';
+import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -44,7 +43,7 @@ const KnapperekkeVenstre = styled.div`
     flex-direction: row;
 `;
 
-const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+const StyledFieldset = styled(Fieldset)`
     margin-top: 1rem;
     margin-bottom: 1.5rem;
     padding-left: 2rem;
@@ -174,7 +173,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
     return (
         <>
-            <StyledSkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
+            <StyledFieldset
+                error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                legend="Endre utbetalingsandel"
+                hideLegend
+            >
                 <Feltmargin>
                     <StyledPersonvelger
                         {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
@@ -304,9 +307,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {...skjema.felter.søknadstidspunkt.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
-                        feil={
-                            !!skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger
-                        }
+                        feil={skjema.visFeilmeldinger && skjema.felter.søknadstidspunkt.feilmelding}
                         value={
                             skjema.felter.søknadstidspunkt.verdi !== null
                                 ? skjema.felter.søknadstidspunkt.verdi
@@ -319,11 +320,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }
                         erLesesvisning={vurderErLesevisning()}
                     />
-                    {skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger && (
-                        <StyledErrorMessage>
-                            {skjema.felter.søknadstidspunkt.feilmelding}
-                        </StyledErrorMessage>
-                    )}
                 </Feltmargin>
 
                 {skjema.felter.avtaletidspunktDeltBosted.erSynlig && (
@@ -442,7 +438,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         ) : null}
                     </Knapperekke>
                 )}
-            </StyledSkjemaGruppe>
+            </StyledFieldset>
         </>
     );
 };
