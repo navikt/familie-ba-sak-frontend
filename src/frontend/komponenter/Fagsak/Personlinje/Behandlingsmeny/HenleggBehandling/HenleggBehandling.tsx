@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Lenke from 'nav-frontend-lenker';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Modal, Link } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -45,9 +44,9 @@ const Knapperad = styled.div`
     justify-content: end;
 `;
 
-const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
+const StyledLenke = styled(Link)<{ 'data-vislenke': boolean }>`
     margin-right: auto;
-    display: ${({ visLenke }) => (visLenke ? 'flex' : 'none')};
+    display: ${({ 'data-vislenke': visLenke }) => (visLenke ? 'flex' : 'none')};
     align-items: center;
 `;
 
@@ -122,7 +121,9 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                                     url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
                                 });
                             }}
-                            visLenke={skjema.felter.årsak.verdi === HenleggÅrsak.SØKNAD_TRUKKET}
+                            data-vislenke={
+                                skjema.felter.årsak.verdi === HenleggÅrsak.SØKNAD_TRUKKET
+                            }
                         >
                             Forhåndsvis
                         </StyledLenke>,
