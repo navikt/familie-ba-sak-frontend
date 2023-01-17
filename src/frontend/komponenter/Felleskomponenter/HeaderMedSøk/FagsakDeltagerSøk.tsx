@@ -4,8 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
-import { ikoner, Søk } from '@navikt/familie-header';
+import { Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
+import {
+    MannIkon,
+    KvinneIkon,
+    NøytralPersonIkon,
+    JenteIkon,
+    GuttIkon,
+} from '@navikt/familie-ikoner';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
@@ -23,6 +30,18 @@ import { FagsakType } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
 import OpprettFagsakModal from './OpprettFagsakModal';
+
+const ikoner = {
+    FORELDER_MANN: <MannIkon width={32} heigth={32} />,
+    FORELDER_KVINNE: <KvinneIkon width={32} heigth={32} />,
+    FORELDER_UKJENT: <NøytralPersonIkon width={32} heigth={32} />,
+    BARN_KVINNE: <JenteIkon width={32} heigth={32} />,
+    BARN_MANN: <GuttIkon width={32} heigth={32} />,
+    BARN_UKJENT: <NøytralPersonIkon width={32} heigth={32} />,
+    UKJENT_UKJENT: <NøytralPersonIkon width={32} heigth={32} />,
+    UKJENT_MANN: <MannIkon width={32} heigth={32} />,
+    UKJENT_KVINNE: <KvinneIkon width={32} heigth={32} />,
+};
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -93,7 +112,11 @@ const FagsakDeltagerSøk: React.FC = () => {
                           ident: fagsakDeltager.ident,
                           ikon: fagsakDeltager.harTilgang ? (
                               fagsakDeltager.fagsakType !== FagsakType.INSTITUSJON ? (
-                                  ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
+                                  ikoner[
+                                      `${fagsakDeltager.rolle}_${
+                                          fagsakDeltager.kjønn ?? kjønnType.UKJENT
+                                      }`
+                                  ]
                               ) : (
                                   <KontorIkonGrønn height={32} width={32} />
                               )
