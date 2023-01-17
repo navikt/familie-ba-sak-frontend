@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { AddCircle, Delete, ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Button, Heading, Link, Tag, HelpText } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, Link, Tag, HelpText, Label } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';

@@ -3,9 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { HelpText, Label } from '@navikt/ds-react';
+import { HelpText, Label, Fieldset } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -35,7 +34,7 @@ const StyledLabel = styled(Label)`
     margin-right: 0.5rem;
 `;
 
-const MarginSkjemaGruppe = styled(SkjemaGruppe)`
+const MarginFieldset = styled(Fieldset)`
     margin-bottom: 1rem !important;
 `;
 
@@ -64,14 +63,16 @@ const VelgPeriode: React.FC<IProps> = ({
     const erLesevisning = vurderErLesevisning();
 
     return (
-        <MarginSkjemaGruppe
-            feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
-            feil={
+        <MarginFieldset
+            errorId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
+            error={
                 redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
                 visFeilmeldinger
                     ? redigerbartVilkår.verdi.periode.feilmelding
                     : ''
             }
+            legend="Velg periode"
+            hideLegend
         >
             {!erLesevisning && (
                 <StyledLegend>
@@ -151,7 +152,7 @@ const VelgPeriode: React.FC<IProps> = ({
                     </div>
                 )}
             </FlexDiv>
-        </MarginSkjemaGruppe>
+        </MarginFieldset>
     );
 };
 
