@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import Lenke from 'nav-frontend-lenker';
-import Tabs from 'nav-frontend-tabs';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Home, Search } from '@navikt/ds-icons';
+import { Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -42,13 +42,8 @@ interface IProps {
     children?: React.ReactNode;
 }
 
-enum Tabvalg {
-    BASAK,
-    INFOTRYGD,
-}
-
-const basakTab = { label: 'BA-sak', tabnr: 0 };
-const infotrygdTab = { label: 'Infotrygd', tabnr: 1 };
+const basakTab = { label: 'Saksoversikt', key: 'basak' };
+const infotrygdTab = { label: 'Infotrygd', key: 'infotrygd' };
 
 const FlexSpaceBetween = styled.div`
     display: flex;
@@ -57,16 +52,11 @@ const FlexSpaceBetween = styled.div`
 
 const SaksoversiktWrapper = styled.div`
     max-width: 70rem;
-    margin: 4rem;
+    margin: 2.5rem 4rem;
 `;
 
 const StyledHeading = styled(Heading)`
     margin-top: 3.75rem;
-`;
-
-const StyledTabs = styled(Tabs)`
-    margin-top: 1rem;
-    margin-bottom: 1rem;
 `;
 
 const StyledAlert = styled(Alert)`
@@ -76,8 +66,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
-
     const { settÅpenBehandling } = useBehandling();
 
     React.useEffect(() => {
@@ -196,21 +184,21 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     };
 
     return (
-        <SaksoversiktWrapper>
-            <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
-            <StyledTabs
-                tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
-                onChange={(_, tabnr) => {
-                    if (tabnr === basakTab.tabnr) {
-                        settTabvalg(Tabvalg.BASAK);
-                    } else {
-                        settTabvalg(Tabvalg.INFOTRYGD);
-                        hentInfotrygdsaker(minimalFagsak.søkerFødselsnummer);
-                    }
-                }}
-            />
-            {tabvalg === Tabvalg.BASAK ? (
-                <>
+        <Tabs
+            defaultValue={basakTab.key}
+            onChange={value => {
+                if (value === infotrygdTab.key) {
+                    hentInfotrygdsaker(minimalFagsak.søkerFødselsnummer);
+                }
+            }}
+        >
+            <Tabs.List>
+                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<Home />} />
+                <Tabs.Tab value={infotrygdTab.key} label={infotrygdTab.label} icon={<Search />} />
+            </Tabs.List>
+            <Tabs.Panel value={basakTab.key}>
+                <SaksoversiktWrapper>
+                    <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
                         <>
@@ -221,11 +209,15 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         </>
                     )}
                     <Behandlinger minimalFagsak={minimalFagsak} />
-                </>
-            ) : (
-                visTabell()
-            )}
-        </SaksoversiktWrapper>
+                </SaksoversiktWrapper>
+            </Tabs.Panel>
+            <Tabs.Panel value={infotrygdTab.key}>
+                <SaksoversiktWrapper>
+                    <Heading size={'large'} level={'1'} children={'Infotrygd'} />
+                    {visTabell()}
+                </SaksoversiktWrapper>
+            </Tabs.Panel>
+        </Tabs>
     );
 };
 
