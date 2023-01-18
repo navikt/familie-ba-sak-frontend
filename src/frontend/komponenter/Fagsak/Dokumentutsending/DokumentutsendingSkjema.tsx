@@ -111,7 +111,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     Legend={<Label children={'Målform'} />}
                 />
 
-                {visForhåndsvisningBeskjed() && (
+                {skjema.felter.årsak.verdi && visForhåndsvisningBeskjed() && (
                     <StyledAlert variant="info">
                         Du har gjort endringer i brevet som ikke er forhåndsvist
                     </StyledAlert>
@@ -134,17 +134,19 @@ const DokumentutsendingSkjema: React.FC = () => {
                         Avbryt
                     </Button>
                 </div>
-                <Button
-                    variant={'tertiary'}
-                    id={'forhandsvis-vedtaksbrev'}
-                    size={'medium'}
-                    loading={hentetDokument.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst()}
-                    onClick={hentForhåndsvisningPåFagsak}
-                    icon={<FileContent />}
-                >
-                    {'Forhåndsvis'}
-                </Button>
+                {skjema.felter.årsak.verdi && (
+                    <Button
+                        variant={'tertiary'}
+                        id={'forhandsvis-vedtaksbrev'}
+                        size={'medium'}
+                        loading={hentetDokument.status === RessursStatus.HENTER}
+                        disabled={skjemaErLåst()}
+                        onClick={hentForhåndsvisningPåFagsak}
+                        icon={<FileContent />}
+                    >
+                        {'Forhåndsvis'}
+                    </Button>
+                )}
             </Handlinger>
         </Container>
     );
