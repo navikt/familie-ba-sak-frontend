@@ -71,7 +71,6 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     summer,
     tittel,
 }) => {
-    // surface active når åpen
     return (
         <StyledAccordion>
             <Accordion.Item open={åpen}>
@@ -98,30 +97,3 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
 };
 
 export default EkspanderbartBegrunnelsePanel;
-
-/*
-        <StyledAccordion>
-            key={`${periode.fom}_${periode.tom}`}
-            apen={åpen}
-            onClick={onClick}
-            tittel={
-                <PanelTittel>
-                    {periode.fom && (
-                        <Label>
-                            {periodeToString({
-                                fom: periode.fom,
-                                tom: slutterSenereEnnInneværendeMåned(periode.tom)
-                                    ? ''
-                                    : periode.tom,
-                            })}
-                        </Label>
-                    )}
-                    <BodyShort>{tittel}</BodyShort>
-                    {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
-                </PanelTittel>
-            }
-        >
-            {children}
-        </StyledAccordion>
-
-*/
