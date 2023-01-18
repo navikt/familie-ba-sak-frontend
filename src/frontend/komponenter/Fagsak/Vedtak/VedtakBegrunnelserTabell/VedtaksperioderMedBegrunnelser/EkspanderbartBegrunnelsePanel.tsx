@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Label, Accordion } from '@navikt/ds-react';
-import { AGray500, AGray600, ASpacing1, ASurfaceSubtle } from '@navikt/ds-tokens/dist/tokens';
+import { AGray600, ASpacing1, ASurfaceSubtle } from '@navikt/ds-tokens/dist/tokens';
 
 import { formaterBeløp } from '../../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../../utils/kalender';
@@ -17,10 +17,6 @@ import {
 
 const StyledAccordion = styled(Accordion)`
     margin-bottom: 1rem;
-
-    &:hover {
-        box-shadow: ${AGray500} 0 2px 1px 0;
-    }
 
     .navds-accordion__item {
         border: 1px solid ${AGray600};
