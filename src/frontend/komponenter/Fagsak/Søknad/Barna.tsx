@@ -13,6 +13,7 @@ import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
+import { formaterIdent } from '../../../utils/formatter';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
@@ -39,7 +40,11 @@ const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
-    const { skjema } = useSøknad();
+    const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
+
+    const merkedeBarnMedLøpendeUtbetaling = skjema.felter.barnaMedOpplysninger.verdi.filter(barn =>
+        barnMedLøpendeUtbetaling.has(barn.ident)
+    );
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -101,6 +106,19 @@ const Barna: React.FunctionComponent = () => {
                         <Label>Barn det er søkt om</Label>
                     )
                 }
+                value={skjema.felter.barnaMedOpplysninger.verdi
+                    .filter(barn => barn.merket)
+                    .map(barn => barn.ident)}
+                onChange={(merkedeIdenter: string[]) => {
+                    skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                        skjema.felter.barnaMedOpplysninger.verdi.map(
+                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                ...barnMedOpplysninger,
+                                merket: merkedeIdenter.includes(barnMedOpplysninger.ident),
+                            })
+                        )
+                    );
+                }}
             >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
@@ -108,6 +126,22 @@ const Barna: React.FunctionComponent = () => {
                         barn={barnMedOpplysninger}
                     />
                 ))}
+
+                {merkedeBarnMedLøpendeUtbetaling.length !== 0 && (
+                    <Alert variant="warning">
+                        <Heading level="3" size="xsmall">
+                            {`Søker mottar allerede barnetrygd for ${
+                                merkedeBarnMedLøpendeUtbetaling.length > 1 ? 'noen' : 'ett'
+                            } av barna`}
+                        </Heading>
+                        {merkedeBarnMedLøpendeUtbetaling.length > 1 ? 'Barna ' : 'Barnet '}
+                        {merkedeBarnMedLøpendeUtbetaling
+                            .map(barn => formaterIdent(barn.ident))
+                            .join(', ')}{' '}
+                        har løpende barnetrygd. Du skal kun velge barn som det ikke utbetales
+                        barnetrygd for.
+                    </Alert>
+                )}
 
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
                     <IngenBarnRegistrertInfo
