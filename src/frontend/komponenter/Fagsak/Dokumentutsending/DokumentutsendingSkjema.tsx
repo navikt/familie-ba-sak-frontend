@@ -106,7 +106,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                 </ÅrsakSkjema>
                 <MålformVelger
                     målformFelt={skjema.felter.målform}
-                    visFeilmeldinger={false}
+                    visFeilmeldinger={skjema.visFeilmeldinger}
                     erLesevisning={false}
                     Legend={<Label children={'Målform'} />}
                 />

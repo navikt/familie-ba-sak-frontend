@@ -49,7 +49,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         >(undefined);
 
         const målform = useFelt<Målform | undefined>({
-            verdi: Målform.NB,
+            verdi: undefined,
+            valideringsfunksjon: (felt: FeltState<Målform | undefined>) =>
+                felt.verdi ? ok(felt) : feil(felt, 'Målform er ikke valgt'),
         });
 
         const årsak = useFelt<DokumentÅrsak | undefined>({
