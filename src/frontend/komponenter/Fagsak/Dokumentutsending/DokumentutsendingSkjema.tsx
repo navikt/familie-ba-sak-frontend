@@ -69,7 +69,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                 hideLegend
             >
                 <FamilieSelect
-                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
+                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={'Velg årsak'}
                     value={skjema.felter.årsak.verdi || ''}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {

@@ -111,6 +111,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             onSubmit,
             nullstillSkjema: nullstillHeleSkjema,
             settVisfeilmeldinger,
+            kanSendeSkjema,
         } = useSkjema<
             {
                 årsak: DokumentÅrsak | undefined;
@@ -249,17 +250,19 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         };
 
         const sendBrevPåFagsak = () => {
-            return onSubmit(
-                {
-                    method: 'POST',
-                    data: hentSkjemaData(),
-                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
-                },
-                () => {
-                    settVisInnsendtBrevModal(true);
-                    nullstillSkjema();
-                }
-            );
+            if (kanSendeSkjema()) {
+                onSubmit(
+                    {
+                        method: 'POST',
+                        data: hentSkjemaData(),
+                        url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
+                    },
+                    () => {
+                        settVisInnsendtBrevModal(true);
+                        nullstillSkjema();
+                    }
+                );
+            }
         };
 
         const hentSkjemaFeilmelding = () =>
