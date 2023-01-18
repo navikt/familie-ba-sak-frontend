@@ -65,7 +65,8 @@ const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFa
     const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
     return (
         behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING &&
-        behandling.resultat === BehandlingResultat.OPPHØRT
+        (behandling.resultat === BehandlingResultat.OPPHØRT ||
+            behandling.resultat === BehandlingResultat.ENDRET_OG_OPPHØRT)
     );
 };
 
