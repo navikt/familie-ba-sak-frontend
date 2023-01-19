@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -75,8 +73,10 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                     <Heading size="medium" level="2" spacing>
                         Opprett ny behandling
                     </Heading>
-                    <SkjemaGruppe
-                        feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                    <Fieldset
+                        error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                        legend="Opprett ny behandling"
+                        hideLegend
                     >
                         <SkjultLegend>Opprett ny behandling</SkjultLegend>
                         <OpprettBehandlingValg
@@ -116,7 +116,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 }}
                             />
                         )}
-                    </SkjemaGruppe>
+                    </Fieldset>
                     <Knapperad>
                         <div>
                             <KnappVenstre
