@@ -186,9 +186,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                             aktueltÅr - 1
                                         }`}
                                     >
-                                        <Detail size={'small'}>
-                                            {årISimuleringen[indexFramvistÅr]}
-                                        </Detail>
+                                        <Detail>{årISimuleringen[indexFramvistÅr]}</Detail>
                                     </TidslinjeNavigering>
                                 </Årsvelger>
                             )}
