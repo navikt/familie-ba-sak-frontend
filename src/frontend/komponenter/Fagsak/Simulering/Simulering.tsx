@@ -39,6 +39,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
+        erMigreringMedTolererbarFeilutbetaling,
         erFeilutbetaling,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
@@ -86,7 +87,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
-                !erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger
+                !erMigreringMedStoppISimulering ||
+                erMigreringMedTolererbarFeilutbetaling ||
+                skalIkkeStoppeMigreringsbehandlinger
             }
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
@@ -107,14 +110,22 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                                 />
                             )}
-                        {erMigreringMedStoppISimulering && (
-                            <Alert variant="error">
-                                Utbetalingen må være lik utbetalingen i Infotrygd.
-                                <br />
-                                Du må tilbake og gjøre nødvendige endringer for å komme videre i
-                                behandlingen
-                            </Alert>
-                        )}
+                        {erMigreringMedStoppISimulering &&
+                            (!erMigreringMedTolererbarFeilutbetaling ? (
+                                <Alert variant="error">
+                                    Utbetalingen må være lik utbetalingen i Infotrygd.
+                                    <br />
+                                    Du må tilbake og gjøre nødvendige endringer for å komme videre i
+                                    behandlingen
+                                </Alert>
+                            ) : (
+                                <Alert variant="warning" size="medium">
+                                    Behandlingen medfører en feilutbetaling. Ved
+                                    feilutbetalingsbeløp på mindre enn totalt 40 kroner, kan du gå
+                                    videre i behandlingen. Du må huske å sende oppgave til NØS om at
+                                    det ikke skal opprettes kravgrunnlag.
+                                </Alert>
+                            ))}
                     </>
                 )
             ) : (

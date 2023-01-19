@@ -32,6 +32,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         status: RessursStatus.HENTER,
     });
     const maksLengdeTekst = 1500;
+    const beløpsgrenseForMigreringMedFeilutbetaling = 40;
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
@@ -89,6 +90,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         return erFeilutbetaling || erEtterutbetaling;
     };
     const erMigreringMedStoppISimulering = erMigreringFraInfotrygd && skalStoppeISimulering();
+
+    const erMigreringMedTolererbarFeilutbetaling =
+        erMigreringFraInfotrygd &&
+        erFeilutbetaling &&
+        simResultat?.feilutbetaling < beløpsgrenseForMigreringMedFeilutbetaling &&
+        simResultat?.perioder.map(value => value.resultat || 0).every(value => value <= 1);
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -219,6 +226,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
+        erMigreringMedTolererbarFeilutbetaling,
     };
 });
 
