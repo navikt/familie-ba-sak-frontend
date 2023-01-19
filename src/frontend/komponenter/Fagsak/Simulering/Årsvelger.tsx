@@ -7,7 +7,7 @@ import { Detail } from '@navikt/ds-react';
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
 
-const ÅrsvelgerStyle = styled.div`
+const FlexColumn = styled.div`
     display: flex;
     flex-direction: column;
 `;
@@ -27,7 +27,7 @@ export const Årsvelger: React.FC<Props> = ({
     aktueltÅr,
     årISimuleringen,
 }) => (
-    <ÅrsvelgerStyle>
+    <FlexColumn>
         <TidslinjeNavigering
             naviger={retning =>
                 retning === NavigeringsRetning.VENSTRE
@@ -41,5 +41,5 @@ export const Årsvelger: React.FC<Props> = ({
         >
             <Detail>{årISimuleringen[indexFramvistÅr]}</Detail>
         </TidslinjeNavigering>
-    </ÅrsvelgerStyle>
+    </FlexColumn>
 );
