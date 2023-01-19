@@ -91,11 +91,14 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     };
     const erMigreringMedStoppISimulering = erMigreringFraInfotrygd && skalStoppeISimulering();
 
+    const erNegativeMånedsbeløpPåMaksEnKrone = (simPerioder: ISimuleringPeriode[]) =>
+        simPerioder.map(periode => periode.resultat || 0).every(beløp => beløp <= 0 && beløp >= -1);
+
     const erMigreringMedTolererbarFeilutbetaling =
         erMigreringFraInfotrygd &&
         erFeilutbetaling &&
         simResultat?.feilutbetaling < beløpsgrenseForMigreringMedFeilutbetaling &&
-        simResultat?.perioder.map(value => value.resultat || 0).every(value => value <= 1);
+        erNegativeMånedsbeløpPåMaksEnKrone(simResultat?.perioder);
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
