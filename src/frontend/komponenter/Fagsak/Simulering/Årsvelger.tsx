@@ -13,7 +13,7 @@ const ÅrsvelgerStyle = styled.div`
 `;
 
 interface Props {
-    settIndexFramistÅr: (value: ((prevState: number) => number) | number) => void;
+    settIndexFramvistÅr: (value: ((prevState: number) => number) | number) => void;
     indexFramvistÅr: number;
     erISisteÅrAvPerioden: boolean;
     aktueltÅr: number;
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const Årsvelger: React.FC<Props> = ({
-    settIndexFramistÅr,
+    settIndexFramvistÅr,
     indexFramvistÅr,
     erISisteÅrAvPerioden,
     aktueltÅr,
@@ -31,8 +31,8 @@ export const Årsvelger: React.FC<Props> = ({
         <TidslinjeNavigering
             naviger={retning =>
                 retning === NavigeringsRetning.VENSTRE
-                    ? settIndexFramistÅr(indexFramvistÅr - 1)
-                    : settIndexFramistÅr(indexFramvistÅr + 1)
+                    ? settIndexFramvistÅr(indexFramvistÅr - 1)
+                    : settIndexFramvistÅr(indexFramvistÅr + 1)
             }
             kanNavigereTilHøyre={!erISisteÅrAvPerioden}
             kanNavigereTilVenstre={!(indexFramvistÅr === 0)}

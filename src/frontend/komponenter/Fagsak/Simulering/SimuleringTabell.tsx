@@ -165,7 +165,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         <td>
                             {erMerEnn12MånederISimulering && (
                                 <Årsvelger
-                                    settIndexFramistÅr={settIndexFramvistÅr}
+                                    settIndexFramvistÅr={settIndexFramvistÅr}
                                     indexFramvistÅr={indexFramvistÅr}
                                     erISisteÅrAvPerioden={erISisteÅrAvPerioden}
                                     aktueltÅr={aktueltÅr}
