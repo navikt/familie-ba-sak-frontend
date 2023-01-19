@@ -3,11 +3,11 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
+import { Delete } from '@navikt/ds-icons';
 import { BodyShort, Button, Checkbox } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import Slett from '../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../utils/formatter';
 
@@ -87,7 +87,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                             ),
                         ]);
                     }}
-                    icon={<Slett />}
+                    icon={<Delete />}
                 >
                     {'Fjern barn'}
                 </FjernBarnKnapp>

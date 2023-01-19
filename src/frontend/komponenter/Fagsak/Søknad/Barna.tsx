@@ -13,7 +13,7 @@ import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { formaterIdent } from '../../../utils/formatter';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
@@ -34,6 +34,11 @@ const BarnaWrapper = styled.div`
 
 const IngenBarnRegistrertInfo = styled(Alert)`
     margin-bottom: 1.25rem;
+`;
+
+const SøkerMottarAlleredeBarneTrygd = styled(Alert)`
+    margin-top: 1rem;
+    margin-left: 1rem;
 `;
 
 const Barna: React.FunctionComponent = () => {
@@ -127,22 +132,6 @@ const Barna: React.FunctionComponent = () => {
                     />
                 ))}
 
-                {merkedeBarnMedLøpendeUtbetaling.length !== 0 && (
-                    <Alert variant="warning">
-                        <Heading level="3" size="xsmall">
-                            {`Søker mottar allerede barnetrygd for ${
-                                merkedeBarnMedLøpendeUtbetaling.length > 1 ? 'noen' : 'ett'
-                            } av barna`}
-                        </Heading>
-                        {merkedeBarnMedLøpendeUtbetaling.length > 1 ? 'Barna ' : 'Barnet '}
-                        {merkedeBarnMedLøpendeUtbetaling
-                            .map(barn => formaterIdent(barn.ident))
-                            .join(', ')}{' '}
-                        har løpende barnetrygd. Du skal kun velge barn som det ikke utbetales
-                        barnetrygd for.
-                    </Alert>
-                )}
-
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
                     <IngenBarnRegistrertInfo
                         variant="info"
@@ -152,6 +141,18 @@ const Barna: React.FunctionComponent = () => {
 
                 {!lesevisning && !gjelderInstitusjon && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
+                )}
+                {merkedeBarnMedLøpendeUtbetaling.length !== 0 && (
+                    <SøkerMottarAlleredeBarneTrygd variant="warning" size="small">
+                        <Heading level="3" size="xsmall">
+                            {`Søker mottar allerede barnetrygd`}
+                        </Heading>
+                        Barn født{' '}
+                        {merkedeBarnMedLøpendeUtbetaling
+                            .map(barn => formaterIsoDato(barn.fødselsdato, datoformat.DATO))
+                            .join(', ')}{' '}
+                        har løpende barnetrygd.
+                    </SøkerMottarAlleredeBarneTrygd>
                 )}
             </FamilieCheckboxGroup>
         </BarnaWrapper>
