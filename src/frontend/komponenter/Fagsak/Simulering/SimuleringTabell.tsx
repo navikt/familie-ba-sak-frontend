@@ -6,20 +6,14 @@ import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
 
-import { BodyShort, Detail, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 
-import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
-import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
-
-const Årsvelger = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
+import { Årsvelger } from './Årsvelger';
 
 const StyledTable = styled.table(
     (props: { bredde: number }) => `
@@ -170,25 +164,13 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     <tr>
                         <td>
                             {erMerEnn12MånederISimulering && (
-                                <Årsvelger>
-                                    <TidslinjeNavigering
-                                        naviger={retning =>
-                                            retning === NavigeringsRetning.VENSTRE
-                                                ? settIndexFramistÅr(indexFramvistÅr - 1)
-                                                : settIndexFramistÅr(indexFramvistÅr + 1)
-                                        }
-                                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
-                                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
-                                        navigerTilHyøyreTittel={`Vis simuleringsresultat for ${
-                                            aktueltÅr + 1
-                                        }`}
-                                        navigerTilVenstreTittel={`Vis simuleringsresultat for ${
-                                            aktueltÅr - 1
-                                        }`}
-                                    >
-                                        <Detail>{årISimuleringen[indexFramvistÅr]}</Detail>
-                                    </TidslinjeNavigering>
-                                </Årsvelger>
+                                <Årsvelger
+                                    settIndexFramistÅr={settIndexFramistÅr}
+                                    indexFramvistÅr={indexFramvistÅr}
+                                    erISisteÅrAvPerioden={erISisteÅrAvPerioden}
+                                    aktueltÅr={aktueltÅr}
+                                    årISimuleringen={årISimuleringen}
+                                />
                             )}
                         </td>
                         {perioder.map(
