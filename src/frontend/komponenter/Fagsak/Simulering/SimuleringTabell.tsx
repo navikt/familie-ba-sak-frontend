@@ -10,10 +10,11 @@ import { BodyShort, Detail, Label } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { periodeToString, kalenderDato, erEtter } from '../../../utils/kalender';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
+import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 
 const Årsvelger = styled.div`
     display: flex;
@@ -95,10 +96,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
     const erMerEnn12MånederISimulering = perioder.length > 12;
 
-    const kapitaliserTekst = (tekst: string): string => {
-        return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
-    };
-
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
         erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
@@ -106,9 +103,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
         !periodeErEtterNesteUtbetalingsPeriode(periode) &&
         (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr);
-
-    const formaterBeløpUtenValutakode = (beløp?: number) =>
-        beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
 
     const antallPerioderIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
 
