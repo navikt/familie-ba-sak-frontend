@@ -39,7 +39,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
-        erMigreringMedTolererbarFeilutbetaling,
+        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
         erFeilutbetaling,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
@@ -88,7 +88,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
                 !erMigreringMedStoppISimulering ||
-                erMigreringMedTolererbarFeilutbetaling ||
+                erMigreringMedFeilutbetalingInnenforBeløpsgrenser ||
                 skalIkkeStoppeMigreringsbehandlinger
             }
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
@@ -103,29 +103,37 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
                         {(!erMigreringMedStoppISimulering ||
+                            erMigreringMedFeilutbetalingInnenforBeløpsgrenser ||
                             skalIkkeStoppeMigreringsbehandlinger) &&
                             erFeilutbetaling && (
-                                <TilbakekrevingSkjema
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                />
+                                <>
+                                    {erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
+                                        <>
+                                            <br />
+                                            <Alert variant="warning" size="medium">
+                                                Behandlingen medfører en feilutbetaling. Ved
+                                                feilutbetalingsbeløp på mindre enn totalt 40 kroner,
+                                                kan du gå videre i behandlingen. Du må huske å sende
+                                                oppgave til NØS om at det ikke skal opprettes
+                                                kravgrunnlag.
+                                            </Alert>
+                                        </>
+                                    )}
+                                    <TilbakekrevingSkjema
+                                        søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                        harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                    />
+                                </>
                             )}
                         {erMigreringMedStoppISimulering &&
-                            (!erMigreringMedTolererbarFeilutbetaling ? (
+                            !erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
                                 <Alert variant="error">
                                     Utbetalingen må være lik utbetalingen i Infotrygd.
                                     <br />
                                     Du må tilbake og gjøre nødvendige endringer for å komme videre i
                                     behandlingen
                                 </Alert>
-                            ) : (
-                                <Alert variant="warning" size="medium">
-                                    Behandlingen medfører en feilutbetaling. Ved
-                                    feilutbetalingsbeløp på mindre enn totalt 40 kroner, kan du gå
-                                    videre i behandlingen. Du må huske å sende oppgave til NØS om at
-                                    det ikke skal opprettes kravgrunnlag.
-                                </Alert>
-                            ))}
+                            )}
                     </>
                 )
             ) : (

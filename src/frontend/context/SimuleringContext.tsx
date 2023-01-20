@@ -94,7 +94,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const erNegativeMånedsbeløpPåMaksEnKrone = (simPerioder: ISimuleringPeriode[]) =>
         simPerioder.map(periode => periode.resultat || 0).every(beløp => beløp <= 0 && beløp >= -1);
 
-    const erMigreringMedTolererbarFeilutbetaling =
+    const erMigreringMedFeilutbetalingInnenforBeløpsgrenser =
         erMigreringFraInfotrygd &&
         erFeilutbetaling &&
         simResultat?.feilutbetaling < beløpsgrenseForMigreringMedFeilutbetaling &&
@@ -229,7 +229,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
-        erMigreringMedTolererbarFeilutbetaling,
+        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
     };
 });
 
