@@ -29,6 +29,10 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 2rem;
 `;
 
+const StyledBeløpsgrenseAlert = styled(Alert)`
+    margin-top: 2rem;
+`;
+
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
@@ -39,13 +43,14 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
-        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
         erFeilutbetaling,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
     const skalIkkeStoppeMigreringsbehandlinger =
         toggles[ToggleNavn.skalIkkeStoppeMigreringsbehandlig];
+
+    const erMigreringMedFeilutbetalingInnenforBeløpsgrenser = true;
 
     const nesteOnClick = () => {
         if (vurderErLesevisning()) {
@@ -108,16 +113,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             erFeilutbetaling && (
                                 <>
                                     {erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
-                                        <>
-                                            <br />
-                                            <Alert variant="warning" size="medium">
-                                                Behandlingen medfører en feilutbetaling. Ved
-                                                feilutbetalingsbeløp på mindre enn totalt 40 kroner,
-                                                kan du gå videre i behandlingen. Du må huske å sende
-                                                oppgave til NØS om at det ikke skal opprettes
-                                                kravgrunnlag.
-                                            </Alert>
-                                        </>
+                                        <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                            Behandlingen medfører en feilutbetaling. Ved
+                                            feilutbetalingsbeløp på mindre enn totalt 40 kroner, kan
+                                            du gå videre i behandlingen. Du må huske å sende oppgave
+                                            til NØS om at det ikke skal opprettes kravgrunnlag.
+                                        </StyledBeløpsgrenseAlert>
                                     )}
                                     <TilbakekrevingSkjema
                                         søkerMålform={hentSøkersMålform(åpenBehandling)}
