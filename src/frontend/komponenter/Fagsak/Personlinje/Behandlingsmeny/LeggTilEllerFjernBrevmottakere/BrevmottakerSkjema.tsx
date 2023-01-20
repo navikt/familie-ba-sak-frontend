@@ -2,38 +2,116 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Button, Select, TextField } from '@navikt/ds-react';
+import { Button, Fieldset } from '@navikt/ds-react';
+import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
 
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
+import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import useLeggTilFjernBrevmottaker, {
+    Mottaker,
+    mottakerVisningsnavn,
+} from './useLeggTilFjernBrevmottaker';
+
+const PostnummerOgStedContainer = styled.div`
+    display: flex;
+    gap: 1rem;
+`;
 
 interface IProps {
     lukkModal: () => void;
 }
 
-const StyledInputKontainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-`;
-
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
+    const { skjema } = useLeggTilFjernBrevmottaker();
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     return (
         <>
-            <StyledInputKontainer>
-                <Select label="Mottaker">
-                    {/* TODO: Legg inn riktige valgmuligheter */}
-                    <option value="">Eksempel</option>
-                </Select>
-                <TextField label="Navn" />
-                {/* TODO: Legg inn alle felter. Kun et felt lagt inn for testing. */}
-            </StyledInputKontainer>
+            <Fieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
+                <FamilieSelect
+                    {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning}
+                    label="Mottaker"
+                    onChange={(event): void => {
+                        skjema.felter.mottaker.validerOgSettFelt(event.target.value as Mottaker);
+                    }}
+                >
+                    <option value="">Velg</option>
+                    {Object.values(Mottaker).map(mottaker => (
+                        <option value={mottaker} key={mottaker}>
+                            {mottakerVisningsnavn[mottaker]}
+                        </option>
+                    ))}
+                </FamilieSelect>
+                <FamilieInput
+                    {...skjema.felter.navn.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning}
+                    label={'Navn'}
+                    onChange={(event): void => {
+                        skjema.felter.navn.validerOgSettFelt(event.target.value);
+                    }}
+                />
+                <FamilieInput
+                    {...skjema.felter.adresselinje1.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning}
+                    label={'Adresselinje 1'}
+                    onChange={(event): void => {
+                        skjema.felter.adresselinje1.validerOgSettFelt(event.target.value);
+                    }}
+                />
+                <FamilieInput
+                    {...skjema.felter.adresselinje2.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning}
+                    label={'Adresselinje 2 (valgfri)'}
+                    onChange={(event): void => {
+                        skjema.felter.adresselinje2.validerOgSettFelt(event.target.value);
+                    }}
+                />
+                <PostnummerOgStedContainer>
+                    <FamilieInput
+                        {...skjema.felter.postnummer.hentNavBaseSkjemaProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        erLesevisning={erLesevisning}
+                        label={'Postnummer'}
+                        onChange={(event): void => {
+                            skjema.felter.postnummer.validerOgSettFelt(event.target.value);
+                        }}
+                    />
+                    <FamilieInput
+                        {...skjema.felter.poststed.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        erLesevisning={erLesevisning}
+                        label={'Poststed'}
+                        onChange={(event): void => {
+                            skjema.felter.poststed.validerOgSettFelt(event.target.value);
+                        }}
+                    />
+                </PostnummerOgStedContainer>
+
+                <FamilieLandvelger
+                    id={'land'}
+                    value={skjema.felter.land.verdi !== '' ? skjema.felter.land.verdi : undefined}
+                    label={'Land'}
+                    medFlag
+                    onChange={land => {
+                        skjema.felter.land.validerOgSettFelt(land.value);
+                    }}
+                />
+            </Fieldset>
             <ModalKnapperad>
-                <Button variant="secondary" size="medium">
-                    Legg til mottaker
-                </Button>
-                <Button variant="tertiary" size="medium" onClick={lukkModal}>
-                    Avbryt
-                </Button>
+                {!erLesevisning && (
+                    <>
+                        <Button variant="secondary" size="medium">
+                            Legg til mottaker
+                        </Button>
+                        <Button variant="tertiary" size="medium" onClick={lukkModal}>
+                            Avbryt
+                        </Button>
+                    </>
+                )}
+
+                {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
             </ModalKnapperad>
         </>
     );
