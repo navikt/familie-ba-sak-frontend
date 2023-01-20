@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 
-import NyBrevmottakerRedigerbarVisning from './NyBrevmottakerRedigerbarVisning';
+import BrevmottakerSkjema from './BrevmottakerSkjema';
 
 const StyledModal = styled(Modal)`
     width: 35rem;
@@ -41,8 +41,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC = () => {
                         kanal. Legg til mottaker dersom brev skal sendes til utenlandsk adresse,
                         fullmektig, verge eller dødsbo.
                     </StyledAlert>
-                    {/* TODO: Lag ny komponent for leservisning og legg inn sjekk for hvilken som skal vises */}
-                    <NyBrevmottakerRedigerbarVisning lukkModal={lukkModal} />
+                    <BrevmottakerSkjema lukkModal={lukkModal} />
                 </Modal.Content>
             </StyledModal>
         </>

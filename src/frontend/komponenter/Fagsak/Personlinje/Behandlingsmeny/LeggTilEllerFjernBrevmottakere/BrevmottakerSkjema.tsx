@@ -16,7 +16,7 @@ const StyledInputKontainer = styled.div`
     gap: 2rem;
 `;
 
-const NyBrevmottakerRedigerbarVisning: React.FC<IProps> = ({ lukkModal }) => {
+const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
     return (
         <>
             <StyledInputKontainer>
@@ -39,4 +39,4 @@ const NyBrevmottakerRedigerbarVisning: React.FC<IProps> = ({ lukkModal }) => {
     );
 };
 
-export default NyBrevmottakerRedigerbarVisning;
+export default BrevmottakerSkjema;
