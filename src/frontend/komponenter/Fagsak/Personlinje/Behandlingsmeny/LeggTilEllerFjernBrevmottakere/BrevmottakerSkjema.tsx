@@ -27,6 +27,10 @@ const StyledFieldset = styled(Fieldset)`
     }
 `;
 
+const MottakerSelect = styled(FamilieSelect)`
+    max-width: 19rem;
+`;
+
 interface IProps {
     lukkModal: () => void;
 }
@@ -38,7 +42,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
     return (
         <>
             <StyledFieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
-                <FamilieSelect
+                <MottakerSelect
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}
                     label="Mottaker"
@@ -52,7 +56,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                             {mottakerVisningsnavn[mottaker]}
                         </option>
                     ))}
-                </FamilieSelect>
+                </MottakerSelect>
                 <FamilieInput
                     {...skjema.felter.navn.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}
