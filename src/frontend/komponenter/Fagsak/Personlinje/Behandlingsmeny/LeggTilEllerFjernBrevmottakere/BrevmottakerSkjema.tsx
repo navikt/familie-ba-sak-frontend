@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Button, Fieldset } from '@navikt/ds-react';
 import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
@@ -23,7 +24,7 @@ interface IProps {
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema } = useLeggTilFjernBrevmottaker();
+    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker(lukkModal);
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     return (
@@ -102,10 +103,15 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
             <ModalKnapperad>
                 {!erLesevisning && (
                     <>
-                        <Button variant="secondary" size="medium">
+                        <Button
+                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            onClick={lagreMottaker}
+                        >
                             Legg til mottaker
                         </Button>
-                        <Button variant="tertiary" size="medium" onClick={lukkModal}>
+                        <Button variant="tertiary" onClick={lukkModal}>
                             Avbryt
                         </Button>
                     </>

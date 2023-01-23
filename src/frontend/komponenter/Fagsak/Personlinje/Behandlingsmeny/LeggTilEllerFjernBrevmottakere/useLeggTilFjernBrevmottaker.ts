@@ -1,6 +1,11 @@
 import { useSkjema, useFelt } from '@navikt/familie-skjema';
+import { type Ressurs, RessursStatus, byggHenterRessurs } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { AlertType, ToastTyper } from '../../../../Felleskomponenter/Toast/typer';
 
 export enum Mottaker {
     BRUKER_MED_UTENLANDSK_ADRESSE = 'BRUKER_MED_UTENLANDSK_ADRESSE',
@@ -16,7 +21,7 @@ export const mottakerVisningsnavn: Record<Mottaker, string> = {
     DØDSBO: 'Dødsbo',
 };
 
-export interface ILeggTilFjernBrevmottakerSkjemaFelter {
+export interface ILeggTilFjernBrevmottakerSkjema {
     mottaker: Mottaker | '';
     navn: string;
     adresselinje1: string;
@@ -26,7 +31,11 @@ export interface ILeggTilFjernBrevmottakerSkjemaFelter {
     land: string;
 }
 
-const useLeggTilFjernBrevmottaker = () => {
+const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
+    const { settToast } = useApp();
+    const { settÅpenBehandling } = useBehandling();
+    const { behandlingId } = useSakOgBehandlingParams();
+
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
     });
@@ -49,7 +58,15 @@ const useLeggTilFjernBrevmottaker = () => {
         verdi: '',
     });
 
-    const { skjema } = useSkjema<ILeggTilFjernBrevmottakerSkjemaFelter, IBehandling>({
+    const {
+        skjema,
+        kanSendeSkjema,
+        settVisfeilmeldinger,
+        onSubmit,
+        nullstillSkjema,
+        settSubmitRessurs,
+        valideringErOk,
+    } = useSkjema<ILeggTilFjernBrevmottakerSkjema, IBehandling>({
         felter: {
             mottaker,
             navn,
@@ -62,8 +79,48 @@ const useLeggTilFjernBrevmottaker = () => {
         skjemanavn: 'Legg til eller fjern brevmottaker',
     });
 
+    const lagreMottaker = () => {
+        if (kanSendeSkjema()) {
+            settSubmitRessurs(byggHenterRessurs());
+            settVisfeilmeldinger(false);
+            onSubmit(
+                {
+                    method: 'POST',
+                    data: {
+                        type: skjema.felter.mottaker.verdi,
+                        navn: skjema.felter.navn.verdi,
+                        adresselinje1: skjema.felter.adresselinje1.verdi,
+                        adresselinje2:
+                            skjema.felter.adresselinje2.verdi !== ''
+                                ? skjema.felter.adresselinje2.verdi
+                                : undefined,
+                        postnummer: skjema.felter.postnummer.verdi,
+                        poststed: skjema.felter.poststed.verdi,
+                        landkode: skjema.felter.land.verdi,
+                    },
+                    url: `/familie-ba-sak/api/brevmottaker/${behandlingId}`,
+                },
+                (response: Ressurs<IBehandling>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        nullstillSkjema();
+                        lukkModal();
+                        settToast(ToastTyper.MOTTAKER_LAGRET, {
+                            alertType: AlertType.SUCCESS,
+                            tekst: 'Mottaker ble lagret',
+                        });
+                        settÅpenBehandling(response);
+                    }
+                }
+            );
+        } else {
+            settVisfeilmeldinger(true);
+        }
+    };
+
     return {
         skjema,
+        lagreMottaker,
+        valideringErOk,
     };
 };
 
