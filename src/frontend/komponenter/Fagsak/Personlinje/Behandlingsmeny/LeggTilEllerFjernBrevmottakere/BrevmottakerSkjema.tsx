@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Button, Fieldset } from '@navikt/ds-react';
-import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -16,13 +16,14 @@ import useLeggTilFjernBrevmottaker, {
 } from './useLeggTilFjernBrevmottaker';
 
 const PostnummerOgStedContainer = styled.div`
-    display: flex;
-    gap: 1rem;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 8rem 24rem;
 `;
 
 const StyledFieldset = styled(Fieldset)`
     &.navds-fieldset > div:not(:first-of-type):not(:empty) {
-        margin-top: ${ASpacing8};
+        margin-top: ${ASpacing6};
     }
 `;
 
