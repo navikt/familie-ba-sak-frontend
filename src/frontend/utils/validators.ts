@@ -274,3 +274,9 @@ export const erPositivtHeltall = (string: string) => {
 
     return Number.isInteger(tall) && tall > 0;
 };
+
+export const erLik0 = (string: string) => {
+    const tall = Number(string);
+
+    return Number.isInteger(tall) && tall === 0;
+};
