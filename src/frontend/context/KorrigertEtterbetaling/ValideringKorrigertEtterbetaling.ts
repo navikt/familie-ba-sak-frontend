@@ -15,7 +15,7 @@ export const erÅrsakForKorrigeringGyldig = (felt: FeltState<string>) => {
 };
 
 export const erEtterbetalingsbeløpGyldig = (felt: FeltState<string>) => {
-    return !isEmpty(felt.verdi) && erPositivtHeltall(felt.verdi)
+    return !isEmpty(felt.verdi) && (erPositivtHeltall(felt.verdi) || Number(felt.verdi) === 0)
         ? ok(felt)
         : feil(felt, 'Skriv inn etterbetalingsbeløp. Desimaltall støttes ikke.');
 };
