@@ -104,7 +104,7 @@ const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         nullstillSkjema();
                         lukkModal();
-                        settToast(ToastTyper.MOTTAKER_LAGRET, {
+                        settToast(ToastTyper.BREVMOTTAKER_LAGRET, {
                             alertType: AlertType.SUCCESS,
                             tekst: 'Mottaker ble lagret',
                         });
