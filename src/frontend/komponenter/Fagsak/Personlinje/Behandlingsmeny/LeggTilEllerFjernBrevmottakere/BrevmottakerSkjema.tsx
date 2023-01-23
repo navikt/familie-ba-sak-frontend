@@ -104,6 +104,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     label={'Land'}
                     medFlag
                     utenMargin
+                    erLesevisning={erLesevisning}
                     onChange={land => {
                         skjema.felter.land.validerOgSettFelt(land.value);
                     }}
