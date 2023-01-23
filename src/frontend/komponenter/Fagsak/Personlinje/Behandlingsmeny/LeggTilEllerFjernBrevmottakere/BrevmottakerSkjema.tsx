@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Button, Fieldset } from '@navikt/ds-react';
+import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -19,6 +20,12 @@ const PostnummerOgStedContainer = styled.div`
     gap: 1rem;
 `;
 
+const StyledFieldset = styled(Fieldset)`
+    &.navds-fieldset > div:not(:first-of-type):not(:empty) {
+        margin-top: ${ASpacing8};
+    }
+`;
+
 interface IProps {
     lukkModal: () => void;
 }
@@ -29,7 +36,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
     const erLesevisning = vurderErLesevisning();
     return (
         <>
-            <Fieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
+            <StyledFieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
                 <FamilieSelect
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}
@@ -95,11 +102,12 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     value={skjema.felter.land.verdi !== '' ? skjema.felter.land.verdi : undefined}
                     label={'Land'}
                     medFlag
+                    utenMargin
                     onChange={land => {
                         skjema.felter.land.validerOgSettFelt(land.value);
                     }}
                 />
-            </Fieldset>
+            </StyledFieldset>
             <ModalKnapperad>
                 {!erLesevisning && (
                     <>

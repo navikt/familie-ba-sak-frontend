@@ -12,7 +12,7 @@ const StyledModal = styled(Modal)`
 `;
 
 const StyledAlert = styled(Alert)`
-    margin: 2rem 0;
+    margin: 1rem 0 2.5rem;
 `;
 
 const LeggTilEllerFjernBrevmottakere: React.FC = () => {
