@@ -3,7 +3,7 @@ import { feil, ok } from '@navikt/familie-skjema';
 
 import { KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
 import { isEmpty } from '../../utils/eøsValidators';
-import { erPositivtHeltall } from '../../utils/validators';
+import { erLik0, erPositivtHeltall } from '../../utils/validators';
 
 export const erÅrsakForKorrigeringGyldig = (felt: FeltState<string>) => {
     if (isEmpty(felt.verdi)) {
@@ -15,7 +15,7 @@ export const erÅrsakForKorrigeringGyldig = (felt: FeltState<string>) => {
 };
 
 export const erEtterbetalingsbeløpGyldig = (felt: FeltState<string>) => {
-    return !isEmpty(felt.verdi) && (erPositivtHeltall(felt.verdi) || Number(felt.verdi) === 0)
+    return !isEmpty(felt.verdi) && (erPositivtHeltall(felt.verdi) || erLik0(felt.verdi))
         ? ok(felt)
         : feil(felt, 'Skriv inn etterbetalingsbeløp. Desimaltall støttes ikke.');
 };
