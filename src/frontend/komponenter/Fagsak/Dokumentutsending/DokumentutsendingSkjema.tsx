@@ -71,12 +71,13 @@ const DokumentutsendingSkjema: React.FC = () => {
                 <FamilieSelect
                     {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={'Velg årsak'}
-                    value={skjema.felter.årsak.verdi}
+                    value={skjema.felter.årsak.verdi || ''}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         skjema.felter.årsak.onChange(event.target.value as DokumentÅrsak);
                     }}
                     size={'medium'}
                 >
+                    <option value="">Velg</option>
                     {Object.values(DokumentÅrsak).map(årsak => {
                         return (
                             <option
@@ -134,17 +135,19 @@ const DokumentutsendingSkjema: React.FC = () => {
                         Avbryt
                     </Button>
                 </div>
-                <Button
-                    variant={'tertiary'}
-                    id={'forhandsvis-vedtaksbrev'}
-                    size={'medium'}
-                    loading={hentetDokument.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst()}
-                    onClick={hentForhåndsvisningPåFagsak}
-                    icon={<FileContent />}
-                >
-                    {'Forhåndsvis'}
-                </Button>
+                {skjema.felter.årsak.verdi && (
+                    <Button
+                        variant={'tertiary'}
+                        id={'forhandsvis-vedtaksbrev'}
+                        size={'medium'}
+                        loading={hentetDokument.status === RessursStatus.HENTER}
+                        disabled={skjemaErLåst()}
+                        onClick={hentForhåndsvisningPåFagsak}
+                        icon={<FileContent />}
+                    >
+                        {'Forhåndsvis'}
+                    </Button>
+                )}
             </Handlinger>
         </Container>
     );
