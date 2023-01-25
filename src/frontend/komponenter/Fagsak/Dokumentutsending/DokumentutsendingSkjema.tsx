@@ -2,10 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { FileContent } from '@navikt/ds-icons';
-import { Alert, Button, Heading, Label } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -23,7 +21,7 @@ const Container = styled.div`
     overflow: auto;
 `;
 
-const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+const StyledFieldset = styled(Fieldset)`
     max-width: 30rem;
     margin-top: 2rem;
 `;
@@ -64,9 +62,14 @@ const DokumentutsendingSkjema: React.FC = () => {
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
 
-            <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
+            <StyledFieldset
+                error={hentSkjemaFeilmelding()}
+                errorPropagation={false}
+                legend="Send informasjonsbrev"
+                hideLegend
+            >
                 <FamilieSelect
-                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
+                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={'Velg årsak'}
                     value={skjema.felter.årsak.verdi}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -87,13 +90,6 @@ const DokumentutsendingSkjema: React.FC = () => {
                     })}
                 </FamilieSelect>
 
-                <MålformVelger
-                    målformFelt={skjema.felter.målform}
-                    visFeilmeldinger={false}
-                    erLesevisning={false}
-                    Legend={<Label children={'Målform'} />}
-                />
-
                 <ÅrsakSkjema>
                     {skjema.felter.årsak.verdi === DokumentÅrsak.DELT_BOSTED && (
                         <DeltBostedSkjema
@@ -108,12 +104,19 @@ const DokumentutsendingSkjema: React.FC = () => {
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>
 
-                {visForhåndsvisningBeskjed() && (
+                <MålformVelger
+                    målformFelt={skjema.felter.målform}
+                    visFeilmeldinger={false}
+                    erLesevisning={false}
+                    Legend={<Label children={'Målform'} />}
+                />
+
+                {skjema.felter.årsak.verdi && visForhåndsvisningBeskjed() && (
                     <StyledAlert variant="info">
                         Du har gjort endringer i brevet som ikke er forhåndsvist
                     </StyledAlert>
                 )}
-            </StyledSkjemaGruppe>
+            </StyledFieldset>
 
             <Handlinger>
                 <div>
