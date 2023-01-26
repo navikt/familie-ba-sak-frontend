@@ -32,7 +32,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         status: RessursStatus.HENTER,
     });
     const maksLengdeTekst = 1500;
-    const beløpsgrenseForMigreringMedFeilutbetaling = 40;
+    const beløpsgrenseForMigreringMedFeilutbetaling = 100;
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
