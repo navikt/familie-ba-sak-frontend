@@ -114,7 +114,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     {erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
                                         <StyledBeløpsgrenseAlert variant="warning" size="medium">
                                             Behandlingen medfører en feilutbetaling. Ved
-                                            feilutbetalingsbeløp på mindre enn totalt 40 kroner, kan
+                                            feilutbetalingsbeløp på mindre enn totalt 100 kroner, kan
                                             du gå videre i behandlingen. Du må huske å sende oppgave
                                             til NØS om at det ikke skal opprettes kravgrunnlag.
                                         </StyledBeløpsgrenseAlert>
