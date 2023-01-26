@@ -49,11 +49,16 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         >(undefined);
 
         const målform = useFelt<Målform | undefined>({
-            verdi: Målform.NB,
+            verdi: undefined,
+            valideringsfunksjon: (felt: FeltState<Målform | undefined>) =>
+                felt.verdi ? ok(felt) : feil(felt, 'Målform er ikke valgt'),
         });
 
-        const årsak = useFelt<DokumentÅrsak>({
-            verdi: DokumentÅrsak.DELT_BOSTED,
+        const årsak = useFelt<DokumentÅrsak | undefined>({
+            verdi: undefined,
+            valideringsfunksjon: (felt: FeltState<DokumentÅrsak | undefined>) => {
+                return felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak');
+            },
         });
 
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
@@ -108,9 +113,10 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             onSubmit,
             nullstillSkjema: nullstillHeleSkjema,
             settVisfeilmeldinger,
+            kanSendeSkjema,
         } = useSkjema<
             {
-                årsak: DokumentÅrsak;
+                årsak: DokumentÅrsak | undefined;
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
                 dokumenter: ISelectOptionMedBrevtekst[];
@@ -192,7 +198,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         };
 
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
-            if (bruker.status === RessursStatus.SUKSESS) {
+            if (bruker.status === RessursStatus.SUKSESS && skjema.felter.årsak.verdi) {
                 switch (skjema.felter.årsak.verdi) {
                     case DokumentÅrsak.DELT_BOSTED:
                         return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);
@@ -246,17 +252,19 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         };
 
         const sendBrevPåFagsak = () => {
-            return onSubmit(
-                {
-                    method: 'POST',
-                    data: hentSkjemaData(),
-                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
-                },
-                () => {
-                    settVisInnsendtBrevModal(true);
-                    nullstillSkjema();
-                }
-            );
+            if (kanSendeSkjema()) {
+                onSubmit(
+                    {
+                        method: 'POST',
+                        data: hentSkjemaData(),
+                        url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
+                    },
+                    () => {
+                        settVisInnsendtBrevModal(true);
+                        nullstillSkjema();
+                    }
+                );
+            }
         };
 
         const hentSkjemaFeilmelding = () =>
