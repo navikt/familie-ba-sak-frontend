@@ -37,7 +37,7 @@ const MålformVelger: React.FC<IProps> = ({
         <StyledFamilieRadioGruppe
             {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             erLesevisning={erLesevisning}
-            value={målformFelt.verdi ? målform[målformFelt.verdi] : undefined}
+            value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
             legend={Legend}
         >
             <StyledRadio
