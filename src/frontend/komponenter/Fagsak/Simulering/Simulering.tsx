@@ -44,13 +44,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
         erFeilutbetaling,
+        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
     const skalIkkeStoppeMigreringsbehandlinger =
         toggles[ToggleNavn.skalIkkeStoppeMigreringsbehandlig];
-
-    const erMigreringMedFeilutbetalingInnenforBeløpsgrenser = true;
 
     const nesteOnClick = () => {
         if (vurderErLesevisning()) {
