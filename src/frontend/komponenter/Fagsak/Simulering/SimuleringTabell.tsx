@@ -113,9 +113,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         periode => periode.manuellPostering && periode.manuellPostering !== 0
     );
 
-    const erPeriodeMedKorrigertResultat = perioder.some(
-        periode => periode.resultat !== periode.korrigertResultat
-    );
+    const erPeriodeMedKorrigertResultat = perioder.some(periode => {
+        return (periode.resultat ?? 0) !== (periode.korrigertResultat ?? 0);
+    });
 
     const TabellSkillelinje = (props: { erHeader?: boolean }) => (
         <Skillelinje erHeader={props.erHeader}>
