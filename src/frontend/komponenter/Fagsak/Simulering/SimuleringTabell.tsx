@@ -113,6 +113,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         periode => periode.manuellPostering && periode.manuellPostering !== 0
     );
 
+    const erPeriodeMedKorrigertResultat = perioder.some(
+        periode => periode.resultat !== periode.korrigertResultat
+    );
+
     const TabellSkillelinje = (props: { erHeader?: boolean }) => (
         <Skillelinje erHeader={props.erHeader}>
             <hr />
@@ -292,6 +296,48 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 )
                         )}
                     </tr>
+                    {erPeriodeMedKorrigertResultat && (
+                        <tr>
+                            <td>Korrigert resultat</td>
+                            {perioder.map(
+                                periode =>
+                                    periodeSkalVisesITabell(periode) && (
+                                        <React.Fragment key={'korrigert resultat - ' + periode.fom}>
+                                            {erNestePeriode(periode) && <TabellSkillelinje />}
+                                            <HøyrestiltTd>
+                                                {fomDatoNestePeriode === periode.fom ? (
+                                                    <LabelMedFarge
+                                                        farge={
+                                                            periode.korrigertResultat &&
+                                                            periode.korrigertResultat < 0
+                                                                ? navFarger.navRod
+                                                                : navFarger.navGronnDarken40
+                                                        }
+                                                    >
+                                                        {formaterBeløpUtenValutakode(
+                                                            periode.resultat
+                                                        )}
+                                                    </LabelMedFarge>
+                                                ) : (
+                                                    <BodyshortMedFarge
+                                                        farge={
+                                                            periode.korrigertResultat &&
+                                                            periode.korrigertResultat < 0
+                                                                ? navFarger.navRod
+                                                                : navFarger.navMorkGra
+                                                        }
+                                                    >
+                                                        {formaterBeløpUtenValutakode(
+                                                            periode.korrigertResultat
+                                                        )}
+                                                    </BodyshortMedFarge>
+                                                )}
+                                            </HøyrestiltTd>
+                                        </React.Fragment>
+                                    )
+                            )}
+                        </tr>
+                    )}
                 </tbody>
             </StyledTable>
         </>
