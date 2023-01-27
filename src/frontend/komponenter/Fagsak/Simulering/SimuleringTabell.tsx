@@ -277,11 +277,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                             {erNestePeriode(periode) && <TabellSkillelinje />}
                                             <HøyrestiltTd>
                                                 <BodyShort>
-                                                    <Label>
-                                                        {formaterBeløpUtenValutakode(
-                                                            periode.manuellPostering
-                                                        )}
-                                                    </Label>
+                                                    {formaterBeløpUtenValutakode(
+                                                        periode.manuellPostering
+                                                    )}
                                                 </BodyShort>
                                             </HøyrestiltTd>
                                         </React.Fragment>
