@@ -113,9 +113,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         periode => periode.manuellPostering && periode.manuellPostering !== 0
     );
 
-    const erPeriodeMedKorrigertResultat = perioder.some(
-        periode => periode.resultat !== periode.korrigertResultat
-    );
+    const erPeriodeMedKorrigertResultat = perioder.some(periode => {
+        return (periode.resultat ?? 0) !== (periode.korrigertResultat ?? 0);
+    });
 
     const TabellSkillelinje = (props: { erHeader?: boolean }) => (
         <Skillelinje erHeader={props.erHeader}>
@@ -215,35 +215,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 )
                         )}
                     </tr>
-                    {erManuellPosteringIBehandling && (
-                        <tr>
-                            <td>Manuell postering</td>
-                            {perioder.map(
-                                periode =>
-                                    periodeSkalVisesITabell(periode) && (
-                                        <React.Fragment key={'manuell postering - ' + periode.fom}>
-                                            {erNestePeriode(periode) && <TabellSkillelinje />}
-                                            <HøyrestiltTd>
-                                                <BodyShort>
-                                                    <LabelMedFarge
-                                                        farge={
-                                                            periode.manuellPostering &&
-                                                            periode.manuellPostering < 0
-                                                                ? navFarger.navRod
-                                                                : navFarger.navGronnDarken40
-                                                        }
-                                                    >
-                                                        {formaterBeløpUtenValutakode(
-                                                            periode.manuellPostering
-                                                        )}
-                                                    </LabelMedFarge>
-                                                </BodyShort>
-                                            </HøyrestiltTd>
-                                        </React.Fragment>
-                                    )
-                            )}
-                        </tr>
-                    )}
                     <tr>
                         <td>Tidligere utbetalt</td>
                         {perioder.map(
@@ -296,6 +267,26 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 )
                         )}
                     </tr>
+                    {erManuellPosteringIBehandling && (
+                        <tr>
+                            <td>Manuell postering</td>
+                            {perioder.map(
+                                periode =>
+                                    periodeSkalVisesITabell(periode) && (
+                                        <React.Fragment key={'manuell postering - ' + periode.fom}>
+                                            {erNestePeriode(periode) && <TabellSkillelinje />}
+                                            <HøyrestiltTd>
+                                                <BodyShort>
+                                                    {formaterBeløpUtenValutakode(
+                                                        periode.manuellPostering
+                                                    )}
+                                                </BodyShort>
+                                            </HøyrestiltTd>
+                                        </React.Fragment>
+                                    )
+                            )}
+                        </tr>
+                    )}
                     {erPeriodeMedKorrigertResultat && (
                         <tr>
                             <td>Korrigert resultat</td>
