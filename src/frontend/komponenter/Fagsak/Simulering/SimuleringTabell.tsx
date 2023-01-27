@@ -215,35 +215,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 )
                         )}
                     </tr>
-                    {erManuellPosteringIBehandling && (
-                        <tr>
-                            <td>Manuell postering</td>
-                            {perioder.map(
-                                periode =>
-                                    periodeSkalVisesITabell(periode) && (
-                                        <React.Fragment key={'manuell postering - ' + periode.fom}>
-                                            {erNestePeriode(periode) && <TabellSkillelinje />}
-                                            <HøyrestiltTd>
-                                                <BodyShort>
-                                                    <LabelMedFarge
-                                                        farge={
-                                                            periode.manuellPostering &&
-                                                            periode.manuellPostering < 0
-                                                                ? navFarger.navRod
-                                                                : navFarger.navGronnDarken40
-                                                        }
-                                                    >
-                                                        {formaterBeløpUtenValutakode(
-                                                            periode.manuellPostering
-                                                        )}
-                                                    </LabelMedFarge>
-                                                </BodyShort>
-                                            </HøyrestiltTd>
-                                        </React.Fragment>
-                                    )
-                            )}
-                        </tr>
-                    )}
                     <tr>
                         <td>Tidligere utbetalt</td>
                         {perioder.map(
@@ -296,6 +267,28 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 )
                         )}
                     </tr>
+                    {erManuellPosteringIBehandling && (
+                        <tr>
+                            <td>Manuell postering</td>
+                            {perioder.map(
+                                periode =>
+                                    periodeSkalVisesITabell(periode) && (
+                                        <React.Fragment key={'manuell postering - ' + periode.fom}>
+                                            {erNestePeriode(periode) && <TabellSkillelinje />}
+                                            <HøyrestiltTd>
+                                                <BodyShort>
+                                                    <Label>
+                                                        {formaterBeløpUtenValutakode(
+                                                            periode.manuellPostering
+                                                        )}
+                                                    </Label>
+                                                </BodyShort>
+                                            </HøyrestiltTd>
+                                        </React.Fragment>
+                                    )
+                            )}
+                        </tr>
+                    )}
                     {erPeriodeMedKorrigertResultat && (
                         <tr>
                             <td>Korrigert resultat</td>
