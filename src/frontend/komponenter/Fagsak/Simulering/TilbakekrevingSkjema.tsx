@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLink, FileContent } from '@navikt/ds-icons';
 import {
     Alert,
     BodyLong,
@@ -26,7 +26,6 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
@@ -41,6 +40,10 @@ const ForhåndsvisVarselKnappContainer = styled.div`
 
 const FritekstVarsel = styled.div`
     margin-left: 2rem;
+
+    label {
+        width: 100%;
+    }
 `;
 
 const FritektsVarselLabel = styled.div`
@@ -161,7 +164,10 @@ const TilbakekrevingSkjema: React.FC<{
                 pdfdata={hentetDokument}
             />
 
-            <TilbakekrevingFieldset legend="Tilbakekreving">
+            <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
+                <Heading level="2" size="medium">
+                    Tilbakekreving
+                </Heading>
                 <FamilieTextarea
                     label={
                         <FlexDiv>
@@ -362,7 +368,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                     hentetDokument.status === RessursStatus.HENTER
                                                 }
                                                 size={'small'}
-                                                icon={<DokumentIkon />}
+                                                icon={<FileContent />}
                                             >
                                                 {'Forhåndsvis varsel'}
                                             </Button>
