@@ -2,10 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Table, BodyShort, Heading, Button } from '@navikt/ds-react';
 import CountryData from '@navikt/land-verktoy';
 
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useLeggTilFjernBrevmottaker, { mottakerVisningsnavn } from './useLeggTilFjernBrevmottaker';
 import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
 
@@ -14,8 +15,12 @@ const FlexDiv = styled.div`
     justify-content: space-between;
 `;
 
-const StyledButton = styled(Button)`
+const FjernKnapp = styled(Button)`
     float: right;
+`;
+
+const LeggTilKnapp = styled(Button)`
+    margin-top: 1rem;
 `;
 
 const StyledBodyShort = styled(BodyShort)`
@@ -28,24 +33,31 @@ const StyledDiv = styled.div`
 
 interface IProps {
     mottaker: IRestBrevmottaker;
+    visLeggTilKnapp: boolean;
+    leggTilOnClick: () => void;
 }
-const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
+const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggTilOnClick }) => {
     const { fjernMottaker } = useLeggTilFjernBrevmottaker();
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
+
     return (
         <StyledDiv>
             <FlexDiv>
                 <Heading size="medium" children={mottakerVisningsnavn[mottaker.type]} />
-                <StyledButton
-                    variant={'tertiary'}
-                    onClick={() => fjernMottaker(mottaker.id)}
-                    loading={false}
-                    disabled={false}
-                    size={'small'}
-                    icon={<Delete />}
-                >
-                    {'Fjern'}
-                </StyledButton>
+                {!erLesevisning && (
+                    <FjernKnapp
+                        variant={'tertiary'}
+                        onClick={() => fjernMottaker(mottaker.id)}
+                        loading={false}
+                        disabled={false}
+                        size={'small'}
+                        icon={<Delete />}
+                    >
+                        {'Fjern'}
+                    </FjernKnapp>
+                )}
             </FlexDiv>
             <FlexDiv role="grid" aria-colcount={2} aria-rowcount={6}>
                 <Table>
@@ -117,6 +129,16 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                     </Table.Body>
                 </Table>
             </FlexDiv>
+            {!erLesevisning && visLeggTilKnapp && (
+                <LeggTilKnapp
+                    variant="tertiary"
+                    size="small"
+                    icon={<AddCircle />}
+                    onClick={leggTilOnClick}
+                >
+                    Legg til ny mottaker
+                </LeggTilKnapp>
+            )}
         </StyledDiv>
     );
 };
