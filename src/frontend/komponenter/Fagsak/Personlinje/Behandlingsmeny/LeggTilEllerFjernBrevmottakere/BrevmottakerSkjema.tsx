@@ -44,7 +44,7 @@ interface IProps {
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker(lukkModal);
+    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     return (

@@ -43,7 +43,7 @@ export interface IRestBrevmottaker {
     landkode: string;
 }
 
-const useLeggTilFjernBrevmottaker = (lukkModal?: () => void) => {
+const useLeggTilFjernBrevmottaker = () => {
     const { settToast } = useApp();
     const { settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
@@ -132,7 +132,6 @@ const useLeggTilFjernBrevmottaker = (lukkModal?: () => void) => {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         nullstillSkjema();
-                        lukkModal && lukkModal();
                         settToast(ToastTyper.BREVMOTTAKER_LAGRET, {
                             alertType: AlertType.SUCCESS,
                             tekst: 'Mottaker ble lagret',

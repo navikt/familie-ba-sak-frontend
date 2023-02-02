@@ -22,14 +22,18 @@ const StyledBodyShort = styled(BodyShort)`
     font-weight: 600;
 `;
 
+const StyledDiv = styled.div`
+    margin-top: 2.5rem;
+`;
+
 interface IProps {
     mottaker: IRestBrevmottaker;
 }
-export const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
-    const { fjernMottaker } = useLeggTilFjernBrevmottaker(undefined);
+const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
+    const { fjernMottaker } = useLeggTilFjernBrevmottaker();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
     return (
-        <>
+        <StyledDiv>
             <FlexDiv>
                 <Heading size="medium" children={mottakerVisningsnavn[mottaker.type]} />
                 <StyledButton
@@ -113,6 +117,8 @@ export const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                     </Table.Body>
                 </Table>
             </FlexDiv>
-        </>
+        </StyledDiv>
     );
 };
+
+export default BrevmottakerTabell;
