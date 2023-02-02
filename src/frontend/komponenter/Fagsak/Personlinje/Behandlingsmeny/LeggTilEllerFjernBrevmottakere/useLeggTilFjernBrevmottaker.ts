@@ -1,5 +1,5 @@
 import { useHttp } from '@navikt/familie-http';
-import { useFelt, useSkjema } from '@navikt/familie-skjema';
+import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus, byggHenterRessurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -51,24 +51,40 @@ const useLeggTilFjernBrevmottaker = (lukkModal?: () => void) => {
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
     });
     const navn = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Navn på person eller organisasjon er påkrevd'),
     });
     const adresselinje1 = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
     });
     const adresselinje2 = useFelt<string>({
         verdi: '',
     });
     const postnummer = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
     });
     const poststed = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
     });
     const land = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.'),
     });
 
     const {
