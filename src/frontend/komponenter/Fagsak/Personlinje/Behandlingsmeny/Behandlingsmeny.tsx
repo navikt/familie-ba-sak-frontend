@@ -106,7 +106,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         åpenBehandling.data.status === BehandlingStatus.UTREDES &&
                         (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                             åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
-                            <LeggTilEllerFjernBrevmottakere />
+                            <LeggTilEllerFjernBrevmottakere åpenBehandling={åpenBehandling.data} />
                         )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>

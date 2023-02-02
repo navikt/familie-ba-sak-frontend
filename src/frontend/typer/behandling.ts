@@ -1,5 +1,6 @@
 import type { ISODateString } from '@navikt/familie-form-elements';
 
+import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
@@ -267,6 +268,7 @@ export interface IBehandling {
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
+    brevmottakere: IRestBrevmottaker[];
 }
 
 export interface IArbeidsfordelingPåBehandling {
