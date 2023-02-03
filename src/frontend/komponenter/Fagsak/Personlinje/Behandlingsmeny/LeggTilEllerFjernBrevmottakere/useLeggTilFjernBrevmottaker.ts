@@ -56,28 +56,54 @@ const useLeggTilFjernBrevmottaker = () => {
     });
     const navn = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== ''
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Navn på person eller organisasjon er påkrevd');
+            }
+            return felt.verdi.length <= 80
                 ? ok(felt)
-                : feil(felt, 'Navn på person eller organisasjon er påkrevd'),
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+        },
     });
     const adresselinje1 = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 80
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+        },
     });
     const adresselinje2 = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi.length <= 80
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn'),
     });
     const postnummer = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 10
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
+        },
     });
     const poststed = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 50
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
+        },
     });
     const land = useFelt<string>({
         verdi: '',
