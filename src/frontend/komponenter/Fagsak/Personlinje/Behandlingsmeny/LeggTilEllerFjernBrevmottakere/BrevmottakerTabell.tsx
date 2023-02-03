@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Table, BodyShort, Heading, Button } from '@navikt/ds-react';
+import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -15,16 +16,12 @@ const FlexDiv = styled.div`
     justify-content: space-between;
 `;
 
-const FjernKnapp = styled(Button)`
-    float: right;
-`;
-
 const LeggTilKnapp = styled(Button)`
     margin-top: 1rem;
 `;
 
 const StyledBodyShort = styled(BodyShort)`
-    font-weight: 600;
+    font-weight: ${AFontWeightBold};
 `;
 
 const StyledDiv = styled.div`
@@ -48,7 +45,7 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggT
             <FlexDiv>
                 <Heading size="medium" children={mottakerVisningsnavn[mottaker.type]} />
                 {!erLesevisning && (
-                    <FjernKnapp
+                    <Button
                         variant={'tertiary'}
                         onClick={() => fjernMottaker(mottaker.id)}
                         loading={false}
@@ -57,7 +54,7 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggT
                         icon={<Delete />}
                     >
                         {'Fjern'}
-                    </FjernKnapp>
+                    </Button>
                 )}
             </FlexDiv>
             <FlexDiv role="grid" aria-colcount={2} aria-rowcount={6}>

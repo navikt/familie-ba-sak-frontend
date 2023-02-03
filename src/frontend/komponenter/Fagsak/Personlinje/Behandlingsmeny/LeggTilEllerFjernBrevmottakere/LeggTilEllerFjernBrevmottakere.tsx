@@ -62,12 +62,10 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
                         <BrevmottakerSkjema lukkModal={lukkModal} />
                     ) : (
                         <>
-                            {åpenBehandling.brevmottakere.map((mottaker, index) => (
+                            {åpenBehandling.brevmottakere.map(mottaker => (
                                 <BrevmottakerTabell
                                     mottaker={mottaker}
-                                    visLeggTilKnapp={
-                                        index === 0 && åpenBehandling.brevmottakere.length === 1
-                                    }
+                                    visLeggTilKnapp={åpenBehandling.brevmottakere.length === 1}
                                     leggTilOnClick={() => settVisSkjema(true)}
                                 />
                             ))}
