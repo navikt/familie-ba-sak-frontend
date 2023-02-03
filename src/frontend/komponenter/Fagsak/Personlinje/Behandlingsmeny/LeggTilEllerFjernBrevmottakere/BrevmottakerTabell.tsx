@@ -36,6 +36,7 @@ interface IProps {
     visLeggTilKnapp: boolean;
     leggTilOnClick: () => void;
 }
+
 const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggTilOnClick }) => {
     const { fjernMottaker } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
