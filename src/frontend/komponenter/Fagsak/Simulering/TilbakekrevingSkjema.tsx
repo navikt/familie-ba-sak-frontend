@@ -91,6 +91,14 @@ const StyledLabel = styled(Label)`
     margin-top: 4rem;
 `;
 
+const HeadingMedEkstraLuft = styled(Heading)`
+    margin-bottom: 2rem;
+`;
+
+const TextareaMedEkstraLuft = styled(FamilieTextarea)`
+    margin-bottom: 2rem;
+`;
+
 interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
     fritekst: string;
 }
@@ -165,10 +173,10 @@ const TilbakekrevingSkjema: React.FC<{
             />
 
             <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
-                <Heading level="2" size="medium">
+                <HeadingMedEkstraLuft level="2" size="medium">
                     Tilbakekreving
-                </Heading>
-                <FamilieTextarea
+                </HeadingMedEkstraLuft>
+                <TextareaMedEkstraLuft
                     label={
                         <FlexDiv>
                             Årsak til feilutbetaling og videre behandling
