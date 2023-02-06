@@ -76,7 +76,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.endringstidspunkt && (
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
-                    {åpenBehandling.årsak === BehandlingÅrsak.ÅRLIG_KONTROLL &&
+                    {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS &&
                         toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
