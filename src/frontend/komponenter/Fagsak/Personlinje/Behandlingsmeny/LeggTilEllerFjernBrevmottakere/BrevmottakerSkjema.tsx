@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Button, Fieldset } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -19,6 +20,13 @@ const PostnummerOgStedContainer = styled.div`
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: 8rem 24rem;
+
+    &:has(.navds-text-field--error) {
+        .navds-form-field .navds-form-field__error {
+            height: 3rem;
+            display: initial;
+        }
+    }
 `;
 
 const StyledFieldset = styled(Fieldset)`
@@ -36,7 +44,7 @@ interface IProps {
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker(lukkModal);
+    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     return (
@@ -108,6 +116,12 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     label={'Land'}
                     medFlag
                     utenMargin
+                    feil={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
+                            ? skjema.felter.land.feilmelding?.toString()
+                            : ''
+                    }
                     erLesevisning={erLesevisning}
                     onChange={land => {
                         skjema.felter.land.validerOgSettFelt(land.value);
