@@ -61,7 +61,7 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({
             )}
             {kjørSatsendringRessurs.status === RessursStatus.FEILET && (
                 <StyledErrorMessage>
-                    Det har skjedd en feil, og satsendringen er ikke gjennomført. Prøv igjen eller
+                    Det har skjedd en feil, og satsendringen ble ikke gjennomført. Prøv igjen eller
                     kontakt brukerstøtte hvis problemet vedvarer.
                 </StyledErrorMessage>
             )}
