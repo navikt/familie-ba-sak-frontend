@@ -50,7 +50,7 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({
 
     return (
         <>
-            <StyledButton err icon={<AddCircle />} onClick={oppdaterFagsakMedSatsendring}>
+            <StyledButton icon={<AddCircle />} onClick={oppdaterFagsakMedSatsendring}>
                 Gjennomfør satsendring
             </StyledButton>
 
