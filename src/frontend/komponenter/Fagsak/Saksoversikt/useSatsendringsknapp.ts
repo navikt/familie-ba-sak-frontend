@@ -16,7 +16,7 @@ export const useSatsendringsknapp = ({ fagsakId }: IProps) => {
     );
 
     const oppdaterKanKjøreSatsendring = () => {
-        request<{ brukerIdent: string }, boolean>({
+        request<undefined, boolean>({
             method: 'GET',
             url: `/familie-ba-sak/api/satsendring/${fagsakId}/kan-kjore-satsendring`,
             påvirkerSystemLaster: true,

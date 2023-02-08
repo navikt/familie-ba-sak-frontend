@@ -34,11 +34,11 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) 
     );
 
     const oppdaterFagsakMedSatsendring = () => {
-        request<{ brukerIdent: string }, void>({
+        request<undefined, undefined>({
             method: 'PUT',
             url: `/familie-ba-sak/api/satsendring/${fagsakId}/kjor-satsendring-synkront`,
             påvirkerSystemLaster: true,
-        }).then((kjørSatsendringRessurs: Ressurs<void>) => {
+        }).then((kjørSatsendringRessurs: Ressurs<undefined>) => {
             settKjørSatsendringRessurs(kjørSatsendringRessurs);
 
             if (kjørSatsendringRessurs.status === RessursStatus.SUKSESS) {
