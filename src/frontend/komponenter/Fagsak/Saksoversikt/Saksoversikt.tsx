@@ -82,7 +82,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
     const { settÅpenBehandling } = useBehandling();
-    const { kanKjøreSatsendring, oppdaterKanKjøreSatsendring } = useSatsendringsknapp({
+    const { kanKjøreSatsendring } = useSatsendringsknapp({
         fagsakId: minimalFagsak.id,
     });
     const { toggles } = useApp();
@@ -217,10 +217,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 }}
             />
             {toggles[ToggleNavn.kanKjøreSatsendringManuelt] && kanKjøreSatsendring && (
-                <SatsendringKnapp
-                    fagsakId={minimalFagsak.id}
-                    oppdaterKanKjøreSatsendring={oppdaterKanKjøreSatsendring}
-                />
+                <SatsendringKnapp fagsakId={minimalFagsak.id} />
             )}
             {tabvalg === Tabvalg.BASAK ? (
                 <>

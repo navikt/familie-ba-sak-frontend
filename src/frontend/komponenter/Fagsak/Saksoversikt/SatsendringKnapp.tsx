@@ -9,6 +9,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import { useSatsendringsknapp } from './useSatsendringsknapp';
 
 const StyledButton = styled(Button)`
     margin-top: 1rem;
@@ -20,14 +21,13 @@ const StyledErrorMessage = styled(ErrorMessage)`
 
 interface IProps {
     fagsakId: number;
-    oppdaterKanKjøreSatsendring: () => void;
 }
 
-export const SatsendringKnapp: React.FunctionComponent<IProps> = ({
-    fagsakId,
-    oppdaterKanKjøreSatsendring,
-}) => {
+export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) => {
     const { request } = useHttp();
+    const { oppdaterKanKjøreSatsendring } = useSatsendringsknapp({
+        fagsakId,
+    });
     const { oppdaterGjeldendeFagsak } = useFagsakContext();
     const [kjørSatsendringRessurs, settKjørSatsendringRessurs] = useState<Ressurs<void>>(
         byggTomRessurs()
