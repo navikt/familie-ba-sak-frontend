@@ -8,6 +8,7 @@ import Tabs from 'nav-frontend-tabs';
 import { Alert, Heading } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
@@ -18,6 +19,7 @@ import {
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -34,6 +36,8 @@ import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
+import { SatsendringKnapp } from './SatsendringKnapp';
+import { useSatsendringsknapp } from './useSatsendringsknapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 
@@ -78,6 +82,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
     const { settÅpenBehandling } = useBehandling();
+    const { kanKjøreSatsendring, oppdaterKanKjøreSatsendring } = useSatsendringsknapp({
+        fagsakId: minimalFagsak.id,
+    });
+    const { toggles } = useApp();
 
     React.useEffect(() => {
         settÅpenBehandling(byggTomRessurs(), false);
@@ -208,6 +216,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                     }
                 }}
             />
+            {toggles[ToggleNavn.kanKjøreSatsendringManuelt] && kanKjøreSatsendring && (
+                <SatsendringKnapp
+                    fagsakId={minimalFagsak.id}
+                    oppdaterKanKjøreSatsendring={oppdaterKanKjøreSatsendring}
+                />
+            )}
             {tabvalg === Tabvalg.BASAK ? (
                 <>
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
