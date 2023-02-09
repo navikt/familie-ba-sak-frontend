@@ -12,7 +12,7 @@ import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSatsendringsknapp } from './useSatsendringsknapp';
 
 const StyledButton = styled(Button)`
-    margin-top: 1rem;
+    margin-top: 2rem;
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`
