@@ -23,11 +23,38 @@ const LukkKnapp = styled(Button)`
 
 interface IProps {
     åpenBehandling: IBehandling;
+    erLesevisning: boolean;
 }
 
-const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) => {
+const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
+    if (erLesevisning) {
+        return antallMottakere === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
+    } else {
+        return antallMottakere === 0
+            ? 'Legg til brevmottaker'
+            : antallMottakere === 1
+            ? 'Legg til eller fjern brevmottaker'
+            : 'Se eller fjern brevmottakere';
+    }
+};
+
+const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
+    if (erLesevisning) {
+        return antallMottakere === 1 ? 'Brevmottaker' : 'Brevmottakere';
+    } else {
+        return antallMottakere === 0
+            ? 'Legg til brevmottaker'
+            : antallMottakere === 1
+            ? 'Legg til eller fjern brevmottaker'
+            : 'Brevmottakere';
+    }
+};
+
+const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling, erLesevisning }) => {
     const [visModal, settVisModal] = useState(false);
     const [visSkjema, settVisSkjema] = useState(true);
+    const [heading, settHeading] = useState('');
+    const [menyinnslag, settMenyinnslag] = useState('');
 
     const lukkModal = () => {
         settVisModal(false);
@@ -36,22 +63,24 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
 
     useEffect(() => {
         settVisSkjema(åpenBehandling.brevmottakere.length === 0);
+        settMenyinnslag(utledMenyinnslag(åpenBehandling.brevmottakere.length, erLesevisning));
+        settHeading(utledHeading(åpenBehandling.brevmottakere.length, erLesevisning));
     }, [åpenBehandling]);
 
     return (
         <>
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                Legg til / fjern brevmottakere
+                {menyinnslag}
             </Dropdown.Menu.List.Item>
             <StyledModal
                 open={visModal}
-                aria-label="Legg til eller fjern brevmottakere"
+                aria-label={heading}
                 onClose={lukkModal}
                 shouldCloseOnOverlayClick={false}
             >
                 <Modal.Content>
                     <Heading spacing level="2" size="medium" id="modal-heading">
-                        Legg til eller fjern brevmottakere
+                        {heading}
                     </Heading>
                     <StyledAlert variant="info">
                         Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken
