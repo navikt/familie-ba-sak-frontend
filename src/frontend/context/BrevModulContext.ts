@@ -129,8 +129,17 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const behandlingKategori =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.kategori : undefined;
 
+    const personer =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
+    const brevmottakere =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.brevmottakere : [];
+    const institusjon =
+        minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data.institusjon : undefined;
+
     const mottakerIdent = useFelt({
-        verdi: '',
+        verdi: institusjon
+            ? institusjon.orgNummer
+            : personer.find(person => person.type === PersonType.SØKER)?.personIdent || '',
         valideringsfunksjon: (felt: FeltState<string>) =>
             felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
     });
@@ -333,18 +342,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjema.felter.mottakerlandSed.nullstill();
     }, [skjema.felter.brevmal.verdi]);
 
-    const personer =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
-
     const mottakersMålform = (): Målform =>
         mottakersMålformImplementering(
             personer,
             skjema.felter.mottakerIdent.valideringsstatus,
             skjema.felter.mottakerIdent.verdi
         );
-
-    const institusjon =
-        minimalFagsak.status === RessursStatus.SUKSESS ? minimalFagsak.data.institusjon : undefined;
 
     const hentMuligeBrevMaler = (): Brevmal[] =>
         hentMuligeBrevmalerImplementering(åpenBehandling, !!institusjon);
@@ -454,6 +457,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekst,
         institusjon,
+        brevmottakere,
     };
 });
 

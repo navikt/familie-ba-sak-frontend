@@ -27,7 +27,6 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { målform } from '../../../../typer/søknad';
-import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
@@ -197,44 +196,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 legend="Send brev"
                 hideLegend
             >
-                <StyledFamilieSelect
-                    {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}
-                    label={'Velg mottaker'}
-                    placeholder={'Velg mottaker'}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        skjema.felter.mottakerIdent.onChange(event.target.value);
-                    }}
-                >
-                    <option value={''}>Velg</option>
-                    {personer
-                        .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
-                        .map((person, index) => {
-                            return (
-                                <option
-                                    aria-selected={
-                                        person.personIdent === skjema.felter.mottakerIdent.verdi
-                                    }
-                                    key={`${index}_${person.fødselsdato}`}
-                                    value={person.personIdent}
-                                >
-                                    {lagPersonLabel(person.personIdent, personer)}
-                                </option>
-                            );
-                        })}
-                    {institusjon && (
-                        <option
-                            aria-selected={
-                                institusjon.orgNummer === skjema.felter.mottakerIdent.verdi
-                            }
-                            key={`institusjon_${institusjon.orgNummer}`}
-                            value={institusjon.orgNummer}
-                        >
-                            {`Institusjon | ${institusjon.navn?.concat(' |') || ''} ${formaterIdent(
-                                institusjon.orgNummer
-                            )}`}
-                        </option>
-                    )}
-                </StyledFamilieSelect>
+                <Label>Brev sendes til</Label>
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={
