@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { AddCircle } from '@navikt/ds-icons';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 
@@ -15,6 +16,14 @@ const StyledModal = styled(Modal)`
 
 const StyledAlert = styled(Alert)`
     margin: 1rem 0 2.5rem;
+`;
+
+const StyledHeading = styled(Heading)`
+    margin: 1rem 0 0.75rem;
+`;
+
+const LeggTilKnapp = styled(Button)`
+    margin-top: 1rem;
 `;
 
 const LukkKnapp = styled(Button)`
@@ -87,18 +96,31 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling, erL
                         kanal. Legg til mottaker dersom brev skal sendes til utenlandsk adresse,
                         fullmektig, verge eller dødsbo.
                     </StyledAlert>
+                    {åpenBehandling.brevmottakere.map(mottaker => (
+                        <BrevmottakerTabell mottaker={mottaker} />
+                    ))}
                     {visSkjema ? (
-                        <BrevmottakerSkjema lukkModal={lukkModal} />
+                        <>
+                            {åpenBehandling.brevmottakere.length === 1 && (
+                                <StyledHeading size="medium">Ny mottaker</StyledHeading>
+                            )}
+                            <BrevmottakerSkjema lukkModal={lukkModal} />
+                        </>
                     ) : (
                         <>
-                            {åpenBehandling.brevmottakere.map(mottaker => (
-                                <BrevmottakerTabell
-                                    mottaker={mottaker}
-                                    visLeggTilKnapp={åpenBehandling.brevmottakere.length === 1}
-                                    leggTilOnClick={() => settVisSkjema(true)}
-                                />
-                            ))}
-                            <LukkKnapp onClick={lukkModal}>Lukk vindu</LukkKnapp>
+                            {åpenBehandling.brevmottakere.length === 1 && !erLesevisning && (
+                                <LeggTilKnapp
+                                    variant="tertiary"
+                                    size="small"
+                                    icon={<AddCircle />}
+                                    onClick={() => settVisSkjema(true)}
+                                >
+                                    Legg til ny mottaker
+                                </LeggTilKnapp>
+                            )}
+                            <div>
+                                <LukkKnapp onClick={lukkModal}>Lukk vindu</LukkKnapp>
+                            </div>
                         </>
                     )}
                 </Modal.Content>
