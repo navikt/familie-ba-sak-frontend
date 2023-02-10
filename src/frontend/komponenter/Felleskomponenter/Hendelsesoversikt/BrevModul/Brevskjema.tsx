@@ -36,6 +36,7 @@ import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamh
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
+import BrevmottakerListe from './BrevmottakerListe';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
 import {
     Brevmal,
@@ -123,6 +124,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekst,
         institusjon,
+        brevmottakere,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -197,6 +199,11 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 hideLegend
             >
                 <Label>Brev sendes til</Label>
+                <BrevmottakerListe
+                    personer={personer}
+                    institusjon={institusjon}
+                    brevmottakere={brevmottakere}
+                />
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={
