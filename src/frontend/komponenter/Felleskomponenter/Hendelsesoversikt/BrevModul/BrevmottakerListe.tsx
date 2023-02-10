@@ -35,9 +35,9 @@ const BrevmottakerListe: React.FC<IProps> = ({ personer, institusjon, brevmottak
                 <li key="søker">{lagPersonLabel(søker.personIdent || '', personer)}</li>
             )}
             {skalViseInstitusjon && (
-                <li>{`Institusjon | ${institusjon.navn?.concat(' |') || ''} ${formaterIdent(
-                    institusjon.orgNummer
-                )}`}</li>
+                <li key="institusjon">{`Institusjon | ${
+                    institusjon.navn?.concat(' |') || ''
+                } ${formaterIdent(institusjon.orgNummer)}`}</li>
             )}
             {harUtenlandskAdresse && !harFullmektig && søker && (
                 <li key="utenlandsk-adresse">
@@ -49,15 +49,17 @@ const BrevmottakerListe: React.FC<IProps> = ({ personer, institusjon, brevmottak
                     {søker.navn} | {formaterIdent(søker.personIdent)} | Utenlandsk adresse
                 </li>
             )}
-            {harManuellDødsboadresse && søker && <li>{søker.navn} | Dødsbo</li>}
+            {harManuellDødsboadresse && søker && <li key="dødsbo">{søker.navn} | Dødsbo</li>}
             {harFullmektig &&
                 brevmottakere
                     .filter(mottaker => mottaker.type === Mottaker.FULLMEKTIG)
-                    .map(mottaker => <li>{mottaker.navn} | Fullmektig</li>)}
+                    .map(mottaker => (
+                        <li key={`fullmektig-${mottaker.id}`}>{mottaker.navn} | Fullmektig</li>
+                    ))}
             {harVerge &&
                 brevmottakere
                     .filter(mottaker => mottaker.type === Mottaker.VERGE)
-                    .map(mottaker => <li>{mottaker.navn} | Verge</li>)}
+                    .map(mottaker => <li key={`verge-${mottaker.id}`}>{mottaker.navn} | Verge</li>)}
         </ul>
     );
 };
