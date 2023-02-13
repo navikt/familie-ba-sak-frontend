@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Delete } from '@navikt/ds-icons';
 import { Table, BodyShort, Heading, Button } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
@@ -16,10 +16,6 @@ const FlexDiv = styled.div`
     justify-content: space-between;
 `;
 
-const LeggTilKnapp = styled(Button)`
-    margin-top: 1rem;
-`;
-
 const StyledBodyShort = styled(BodyShort)`
     font-weight: ${AFontWeightBold};
 `;
@@ -30,11 +26,9 @@ const StyledDiv = styled.div`
 
 interface IProps {
     mottaker: IRestBrevmottaker;
-    visLeggTilKnapp: boolean;
-    leggTilOnClick: () => void;
 }
 
-const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggTilOnClick }) => {
+const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
     const { fjernMottaker } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
@@ -127,16 +121,6 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggT
                     </Table.Body>
                 </Table>
             </FlexDiv>
-            {!erLesevisning && visLeggTilKnapp && (
-                <LeggTilKnapp
-                    variant="tertiary"
-                    size="small"
-                    icon={<AddCircle />}
-                    onClick={leggTilOnClick}
-                >
-                    Legg til ny mottaker
-                </LeggTilKnapp>
-            )}
         </StyledDiv>
     );
 };
