@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { AddCircle, Delete, FileContent } from '@navikt/ds-icons';
-import { Button, Label, Tag } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Tag } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieInput,
@@ -29,7 +27,6 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { målform } from '../../../../typer/søknad';
-import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
@@ -38,8 +35,8 @@ import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltB
 import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import SkjultLegend from '../../SkjultLegend';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
+import BrevmottakerListe from './BrevmottakerListe';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
 import {
     Brevmal,
@@ -127,6 +124,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekst,
         institusjon,
+        brevmottakere,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -141,6 +139,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         settForhåndsviningModal(false);
     }, []);
 
+    const erLesevisning = vurderErLesevisning();
+
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
@@ -149,7 +149,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
-    const skjemaGruppeId = 'Fritekster-brev';
+    const fritekstSkjemaGruppeId = 'Fritekster-brev';
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
     const behandlingSteg =
@@ -190,51 +190,20 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 onRequestClose={() => settForhåndsviningModal(false)}
                 pdfdata={hentetDokument}
             />
-            <SkjemaGruppe
-                feil={
+            <Fieldset
+                error={
                     hentFrontendFeilmelding(skjema.submitRessurs) ||
                     hentFrontendFeilmelding(hentetDokument)
                 }
+                legend="Send brev"
+                hideLegend
             >
-                <SkjultLegend>Send brev</SkjultLegend>
-                <StyledFamilieSelect
-                    {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}
-                    label={'Velg mottaker'}
-                    placeholder={'Velg mottaker'}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        skjema.felter.mottakerIdent.onChange(event.target.value);
-                    }}
-                >
-                    <option value={''}>Velg</option>
-                    {personer
-                        .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
-                        .map((person, index) => {
-                            return (
-                                <option
-                                    aria-selected={
-                                        person.personIdent === skjema.felter.mottakerIdent.verdi
-                                    }
-                                    key={`${index}_${person.fødselsdato}`}
-                                    value={person.personIdent}
-                                >
-                                    {lagPersonLabel(person.personIdent, personer)}
-                                </option>
-                            );
-                        })}
-                    {institusjon && (
-                        <option
-                            aria-selected={
-                                institusjon.orgNummer === skjema.felter.mottakerIdent.verdi
-                            }
-                            key={`institusjon_${institusjon.orgNummer}`}
-                            value={institusjon.orgNummer}
-                        >
-                            {`Institusjon | ${institusjon.navn?.concat(' |') || ''} ${formaterIdent(
-                                institusjon.orgNummer
-                            )}`}
-                        </option>
-                    )}
-                </StyledFamilieSelect>
+                <Label>Brev sendes til</Label>
+                <BrevmottakerListe
+                    personer={personer}
+                    institusjon={institusjon}
+                    brevmottakere={brevmottakere}
+                />
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={
@@ -277,7 +246,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         {...skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={<Label>Velg dokumenter</Label>}
                         creatable={false}
-                        erLesevisning={vurderErLesevisning()}
+                        erLesevisning={erLesevisning}
                         isMulti={true}
                         onChange={valgteOptions => {
                             skjema.felter.dokumenter.onChange(
@@ -295,9 +264,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 )}
                 {skjema.felter.fritekster.erSynlig && (
                     <FritekstWrapper>
-                        <Label htmlFor={skjemaGruppeId}>Legg til kulepunkt</Label>
-                        {vurderErLesevisning() ? (
-                            <StyledList id={skjemaGruppeId}>
+                        <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
+                        {erLesevisning ? (
+                            <StyledList id={fritekstSkjemaGruppeId}>
                                 {skjema.felter.fritekster.verdi.map(
                                     (fritekst: FeltState<IFritekstFelt>) => (
                                         <li>{fritekst.verdi.tekst}</li>
@@ -306,9 +275,11 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             </StyledList>
                         ) : (
                             <>
-                                <SkjemaGruppe
-                                    id={skjemaGruppeId}
-                                    feil={
+                                <Fieldset
+                                    legend="Legg til kulepunkt"
+                                    hideLegend
+                                    id={fritekstSkjemaGruppeId}
+                                    error={
                                         skjema.visFeilmeldinger &&
                                         hentFrontendFeilmelding(skjema.submitRessurs)
                                     }
@@ -372,20 +343,19 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                             );
                                         }
                                     )}
-                                </SkjemaGruppe>
+                                </Fieldset>
 
-                                {!erMaksAntallKulepunkter &&
-                                    (!vurderErLesevisning() ? (
-                                        <Button
-                                            variant={'tertiary'}
-                                            onClick={() => leggTilFritekst()}
-                                            id={`legg-til-fritekst`}
-                                            size={'small'}
-                                            icon={<AddCircle />}
-                                        >
-                                            {'Legg til kulepunkt'}
-                                        </Button>
-                                    ) : null)}
+                                {!erMaksAntallKulepunkter && !erLesevisning && (
+                                    <Button
+                                        variant={'tertiary'}
+                                        onClick={() => leggTilFritekst()}
+                                        id={`legg-til-fritekst`}
+                                        size={'small'}
+                                        icon={<AddCircle />}
+                                    >
+                                        {'Legg til kulepunkt'}
+                                    </Button>
+                                )}
                             </>
                         )}
                     </FritekstWrapper>
@@ -471,9 +441,9 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             }
                         />
                     )}
-            </SkjemaGruppe>
+            </Fieldset>
             <Knapperekke>
-                {!vurderErLesevisning() && (
+                {!erLesevisning && (
                     <Button
                         variant={'tertiary'}
                         id={'forhandsvis-vedtaksbrev'}

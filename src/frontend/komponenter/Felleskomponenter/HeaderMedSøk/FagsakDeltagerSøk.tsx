@@ -124,7 +124,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 }
             />
 
-            {innloggetSaksbehandler && (
+            {innloggetSaksbehandler?.navIdent && (
                 <Endringslogg
                     userId={innloggetSaksbehandler.navIdent}
                     dataFetchingIntervalSeconds={60 * 15}

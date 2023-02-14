@@ -18,6 +18,8 @@ export interface ISimuleringPeriode {
     resultat?: number;
     etterbetaling?: number;
     feilutbetaling?: number;
+    manuellPostering?: number;
+    korrigertResultat?: number;
 }
 
 export enum Tilbakekrevingsvalg {

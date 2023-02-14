@@ -142,6 +142,11 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         oppdaterKlagebehandlingerPåFagsak,
     });
 
+    const oppdaterGjeldendeFagsak = () => {
+        const fagsakId = hentDataFraRessurs(minimalFagsak)?.id;
+        fagsakId && hentMinimalFagsak(fagsakId);
+    };
+
     return {
         bruker,
         fagsakerPåBruker,
@@ -154,6 +159,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         hentFagsakerForPerson,
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
+        oppdaterGjeldendeFagsak,
     };
 });
 

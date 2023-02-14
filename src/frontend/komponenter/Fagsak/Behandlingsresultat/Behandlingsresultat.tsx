@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Feiloppsummering } from 'nav-frontend-skjema';
-
 import { Edit } from '@navikt/ds-icons';
-import { Alert, Button, ErrorMessage, Label } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -54,7 +52,7 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
-const StyledFeiloppsummering = styled(Feiloppsummering)`
+const StyledErrorSummary = styled(ErrorSummary)`
     margin-top: 5rem;
 `;
 
@@ -254,9 +252,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 />
             )}
             {visFeilmeldinger && !erEøsInformasjonGyldig() && (
-                <StyledFeiloppsummering
-                    tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={[
+                <StyledErrorSummary heading={'For å gå videre må du rette opp følgende:'}>
+                    {[
                         ...hentKompetanserMedFeil().map((kompetanse: IRestKompetanse) => ({
                             feilmelding: `Kompetanse barn: ${kompetanse.barnIdenter}, f.o.m.: ${kompetanse.fom} er ikke fullstendig.`,
                             skjemaelementId: kompetanseFeilmeldingId(kompetanse),
@@ -272,8 +269,12 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                             feilmelding: `Valutakurs barn: ${valutakurs.barnIdenter}, f.o.m.: ${valutakurs.fom} er ikke fullstendig.`,
                             skjemaelementId: valutakursFeilmeldingId(valutakurs),
                         })),
-                    ]}
-                />
+                    ].map(item => (
+                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
+                            {item.feilmelding}
+                        </ErrorSummary.Item>
+                    ))}
+                </StyledErrorSummary>
             )}
         </Skjemasteg>
     );

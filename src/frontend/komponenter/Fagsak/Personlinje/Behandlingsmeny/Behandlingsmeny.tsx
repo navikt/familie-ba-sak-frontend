@@ -42,6 +42,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
     const { toggles } = useApp();
+    const erLesevisning = vurderErLesevisning();
 
     const brukerHarStrengtFortroligAdresse =
         bruker &&
@@ -103,10 +104,13 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     {toggles[ToggleNavn.leggTilMottaker] &&
                         !brukerHarStrengtFortroligAdresse &&
                         åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.status === BehandlingStatus.UTREDES &&
+                        (!erLesevisning || åpenBehandling.data.brevmottakere.length > 0) &&
                         (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                             åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
-                            <LeggTilEllerFjernBrevmottakere />
+                            <LeggTilEllerFjernBrevmottakere
+                                åpenBehandling={åpenBehandling.data}
+                                erLesevisning={erLesevisning}
+                            />
                         )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>

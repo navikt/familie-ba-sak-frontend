@@ -2,9 +2,17 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
 import { BodyShort, Heading } from '@navikt/ds-react';
+import {
+    ABlue700,
+    AGray100,
+    AGray300,
+    AGray400,
+    AGray600,
+    AGray900,
+    AGreen600,
+    ARed600,
+} from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -27,49 +35,49 @@ interface IBehandlingskortProps {
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return navFarger.navGra20;
+        return AGray300;
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return navFarger.navGronnDarken20;
+            return AGreen600;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return navFarger.navDypBlaDarken20;
+            return ABlue700;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return navFarger.redErrorDarken20;
+            return ARed600;
         case BehandlingResultat.IKKE_VURDERT:
-            return '#F2F2F2';
+            return AGray100;
         default:
-            return navFarger.navGra60;
+            return AGray600;
     }
 };
 
 const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return navFarger.navMorkGra;
+        return AGray900;
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return navFarger.navGronnDarken20;
+            return AGreen600;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return navFarger.navDypBlaDarken20;
+            return ABlue700;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return navFarger.redErrorDarken20;
+            return ARed600;
         default:
-            return navFarger.navMorkGra;
+            return AGray900;
     }
 };
 
 const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
-    border: 1px solid ${navFarger.navGra40};
-    border-left: 0.5rem solid ${navFarger.navGra40};
+    border: 1px solid ${AGray400};
+    border-left: 0.5rem solid ${AGray400};
     border-radius: 0.25rem;
     padding: 0.5rem;
     margin: 0.5rem;
@@ -83,7 +91,7 @@ const StyledHeading = styled(Heading)`
 
 const StyledHr = styled.hr`
     border: none;
-    border-bottom: 1px solid ${navFarger.navLysGra};
+    border-bottom: 1px solid ${AGray100};
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {

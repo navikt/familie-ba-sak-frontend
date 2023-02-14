@@ -12,6 +12,9 @@ export enum ToggleNavn {
     trekkILøpendeUtbetaling = 'familie-ba-sak.trekk-i-loepende-utbetaling',
     kanBehandleKlage = 'familie-ba-sak.klage',
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
+    kanKjøreSatsendringManuelt = 'familie-ba-sak.kan-kjore-satsendring-manuelt',
+    kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
+    nyMåteÅBeregneBehandlingsresultat = 'familie-ba-sak.behandling.behandlingsresultat',
 }
 
 export const alleTogglerAv = (): IToggles => {
