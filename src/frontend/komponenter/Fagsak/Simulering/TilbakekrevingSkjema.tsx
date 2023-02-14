@@ -2,22 +2,22 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import Lenke from 'nav-frontend-lenker';
-import { Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLink, FileContent } from '@navikt/ds-icons';
 import {
     Alert,
     BodyLong,
     BodyShort,
     Button,
+    ErrorSummary,
+    Fieldset,
+    Link,
     Heading,
     Label,
     Radio,
     RadioGroup,
     Tag,
 } from '@navikt/ds-react';
+import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -26,7 +26,6 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
-import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
@@ -41,6 +40,10 @@ const ForhåndsvisVarselKnappContainer = styled.div`
 
 const FritekstVarsel = styled.div`
     margin-left: 2rem;
+
+    label {
+        width: 100%;
+    }
 `;
 
 const FritektsVarselLabel = styled.div`
@@ -66,16 +69,16 @@ const StyledHelpTextContainer = styled.div`
 
 const StyledTag = styled(Tag)`
     margin-left: auto;
-    background-color: ${navFarger.navLysGra};
-    border-color: ${navFarger.navGra60};
+    background-color: ${AGray100};
+    border-color: ${AGray600};
 `;
 
-const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
+const TilbakekrevingFieldset = styled(Fieldset)`
     margin-top: 4rem;
     width: 90%;
     max-width: 40rem;
 
-    .radiogruppe {
+    .navds-radio-group {
         margin-top: 2rem;
     }
 `;
@@ -86,6 +89,14 @@ const StyledAlert = styled(Alert)`
 
 const StyledLabel = styled(Label)`
     margin-top: 4rem;
+`;
+
+const HeadingMedEkstraLuft = styled(Heading)`
+    margin-bottom: 2rem;
+`;
+
+const TextareaMedEkstraLuft = styled(FamilieTextarea)`
+    margin-bottom: 2rem;
 `;
 
 interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
@@ -161,8 +172,11 @@ const TilbakekrevingSkjema: React.FC<{
                 pdfdata={hentetDokument}
             />
 
-            <TilbakekrevingSkjemaGruppe legend="Tilbakekreving">
-                <FamilieTextarea
+            <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
+                <HeadingMedEkstraLuft level="2" size="medium">
+                    Tilbakekreving
+                </HeadingMedEkstraLuft>
+                <TextareaMedEkstraLuft
                     label={
                         <FlexDiv>
                             Årsak til feilutbetaling og videre behandling
@@ -315,7 +329,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                                     allerede utbetalt barnetrygd for
                                                                     perioden (Fom dato - Tom dato).
                                                                 </BodyLong>
-                                                                <Lenke
+                                                                <Link
                                                                     href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
                                                                     target="_blank"
                                                                 >
@@ -324,7 +338,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                                         klarspråk:
                                                                     </span>
                                                                     <ExternalLink />
-                                                                </Lenke>
+                                                                </Link>
                                                             </StyledHelpTextContainer>
                                                         </StyledHelpText>
                                                     </FlexRad>
@@ -362,7 +376,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                     hentetDokument.status === RessursStatus.HENTER
                                                 }
                                                 size={'small'}
-                                                icon={<DokumentIkon />}
+                                                icon={<FileContent />}
                                             >
                                                 {'Forhåndsvis varsel'}
                                             </Button>
@@ -396,12 +410,15 @@ const TilbakekrevingSkjema: React.FC<{
                 )}
 
                 {tilbakekrevingSkjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <Feiloppsummering
-                        tittel={'For å gå videre må du rette opp følgende:'}
-                        feil={hentFeilTilOppsummering()}
-                    />
+                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'}>
+                        {hentFeilTilOppsummering().map(item => (
+                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
+                                {item.feilmelding}
+                            </ErrorSummary.Item>
+                        ))}
+                    </ErrorSummary>
                 )}
-            </TilbakekrevingSkjemaGruppe>
+            </TilbakekrevingFieldset>
         </>
     );
 };

@@ -44,7 +44,7 @@ interface IProps {
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker(lukkModal);
+    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     return (
@@ -116,6 +116,11 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     label={'Land'}
                     medFlag
                     utenMargin
+                    eksluderLand={
+                        skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                            ? ['NO']
+                            : []
+                    }
                     feil={
                         skjema.visFeilmeldinger &&
                         skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL

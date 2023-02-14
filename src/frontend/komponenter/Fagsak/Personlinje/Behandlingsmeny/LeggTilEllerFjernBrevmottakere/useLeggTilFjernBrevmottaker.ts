@@ -1,3 +1,4 @@
+import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
 import { type Ressurs, RessursStatus, byggHenterRessurs } from '@navikt/familie-typer';
 
@@ -31,10 +32,22 @@ export interface ILeggTilFjernBrevmottakerSkjema {
     land: string;
 }
 
-const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
+export interface IRestBrevmottaker {
+    id: number;
+    type: Mottaker;
+    navn: string;
+    adresselinje1: string;
+    adresselinje2?: string;
+    postnummer: string;
+    poststed: string;
+    landkode: string;
+}
+
+const useLeggTilFjernBrevmottaker = () => {
     const { settToast } = useApp();
     const { settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
+    const { request } = useHttp();
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
@@ -43,28 +56,54 @@ const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
     });
     const navn = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== ''
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Navn på person eller organisasjon er påkrevd');
+            }
+            return felt.verdi.length <= 80
                 ? ok(felt)
-                : feil(felt, 'Navn på person eller organisasjon er påkrevd'),
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+        },
     });
     const adresselinje1 = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 80
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+        },
     });
     const adresselinje2 = useFelt<string>({
         verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi.length <= 80
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn'),
     });
     const postnummer = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 10
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
+        },
     });
     const poststed = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            return felt.verdi.length <= 50
+                ? ok(felt)
+                : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
+        },
     });
     const land = useFelt<string>({
         verdi: '',
@@ -119,7 +158,6 @@ const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         nullstillSkjema();
-                        lukkModal();
                         settToast(ToastTyper.BREVMOTTAKER_LAGRET, {
                             alertType: AlertType.SUCCESS,
                             tekst: 'Mottaker ble lagret',
@@ -133,10 +171,23 @@ const useLeggTilFjernBrevmottaker = (lukkModal: () => void) => {
         }
     };
 
+    const fjernMottaker = (mottakerId: number) => {
+        return request<void, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/brevmottaker/${behandlingId}/${mottakerId}`,
+            påvirkerSystemLaster: false,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(response);
+            }
+        });
+    };
+
     return {
         skjema,
         lagreMottaker,
         valideringErOk,
+        fjernMottaker,
     };
 };
 

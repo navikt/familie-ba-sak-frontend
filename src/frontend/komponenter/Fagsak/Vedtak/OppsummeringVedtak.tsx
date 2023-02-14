@@ -189,25 +189,28 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 Vedtaket er korrigert etter § 35
                             </BehandlingKorrigertAlert>
                         )}
-                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && (
-                            <FamilieSelect
-                                label="Velg brev med eller uten perioder"
-                                erLesevisning={vurderErLesevisning()}
-                                onChange={(
-                                    event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
-                                ): void => {
-                                    overstyrFortsattInnvilgetVedtaksperioder(event.target.value);
-                                }}
-                                value={periodetypeIVedtaksbrev}
-                            >
-                                <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
-                                    Fortsatt innvilget: Uten perioder
-                                </option>
-                                <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
-                                    Fortsatt innvilget: Med perioder
-                                </option>
-                            </FamilieSelect>
-                        )}
+                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
+                            !toggles[ToggleNavn.nyMåteÅBeregneBehandlingsresultat] && (
+                                <FamilieSelect
+                                    label="Velg brev med eller uten perioder"
+                                    erLesevisning={vurderErLesevisning()}
+                                    onChange={(
+                                        event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
+                                    ): void => {
+                                        overstyrFortsattInnvilgetVedtaksperioder(
+                                            event.target.value
+                                        );
+                                    }}
+                                    value={periodetypeIVedtaksbrev}
+                                >
+                                    <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
+                                        Fortsatt innvilget: Uten perioder
+                                    </option>
+                                    <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
+                                        Fortsatt innvilget: Med perioder
+                                    </option>
+                                </FamilieSelect>
+                            )}
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                         åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
