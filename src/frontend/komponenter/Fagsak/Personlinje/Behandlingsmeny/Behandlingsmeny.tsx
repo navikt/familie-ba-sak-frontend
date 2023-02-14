@@ -44,11 +44,18 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { toggles } = useApp();
     const erLesevisning = vurderErLesevisning();
 
-    const brukerHarStrengtFortroligAdresse =
+    const brukerEllerBarnHarStrengtFortroligAdresse =
         bruker &&
         (bruker.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
             bruker.adressebeskyttelseGradering ===
-                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND);
+                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ||
+            bruker.forelderBarnRelasjonMaskert.some(
+                relasjon =>
+                    relasjon.adressebeskyttelseGradering ===
+                        Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                    relasjon.adressebeskyttelseGradering ===
+                        Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND
+            ));
 
     return (
         <Dropdown>
@@ -102,7 +109,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             <TaBehandlingAvVent behandling={åpenBehandling.data} />
                         )}
                     {toggles[ToggleNavn.leggTilMottaker] &&
-                        !brukerHarStrengtFortroligAdresse &&
+                        !brukerEllerBarnHarStrengtFortroligAdresse &&
                         åpenBehandling.status === RessursStatus.SUKSESS &&
                         (!erLesevisning || åpenBehandling.data.brevmottakere.length > 0) &&
                         (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
