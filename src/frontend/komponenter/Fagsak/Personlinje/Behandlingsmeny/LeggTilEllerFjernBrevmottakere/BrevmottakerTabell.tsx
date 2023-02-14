@@ -1,10 +1,9 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Table, BodyShort, Heading, Button } from '@navikt/ds-react';
+import { Heading, Button } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
@@ -21,13 +20,22 @@ const LeggTilKnapp = styled(Button)`
     margin-top: 1rem;
 `;
 
-const StyledBodyShort = styled(BodyShort)`
-    font-weight: ${AFontWeightBold};
-    word-break: break-word;
-`;
-
 const StyledDiv = styled.div`
     margin-top: 2.5rem;
+`;
+
+const DefinitionList = styled.dl`
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 10rem 20rem;
+    margin-left: 1rem;
+
+    dt {
+        font-weight: ${AFontWeightBold};
+    }
+    dd {
+        margin-left: 0;
+    }
 `;
 
 interface IProps {
@@ -38,31 +46,9 @@ interface IProps {
 
 const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggTilOnClick }) => {
     const { fjernMottaker } = useLeggTilFjernBrevmottaker();
-    const { vurderErLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
-
-    const [heightNavn, settHeightNavn] = useState('initial');
-    const [heightAdresselinje1, settHeightAdresselinje1] = useState('initial');
-    const [heightAdresselinje2, settHeightAdresselinje2] = useState('initial');
-    const [heightPostnummer, settHeightPostnummer] = useState('initial');
-    const [heightPoststed, settHeightPoststed] = useState('initial');
-    const [heightLand, settHeightLand] = useState('initial');
-
-    useEffect(() => {
-        settHeightNavn(`${document.getElementById(`navn-${mottaker.id}`)?.offsetHeight}px`);
-        settHeightAdresselinje1(
-            `${document.getElementById(`adresselinje1-${mottaker.id}`)?.offsetHeight}px`
-        );
-        settHeightAdresselinje2(
-            `${document.getElementById(`adresselinje2-${mottaker.id}`)?.offsetHeight}px`
-        );
-        settHeightPostnummer(
-            `${document.getElementById(`postnummer-${mottaker.id}`)?.offsetHeight}px`
-        );
-        settHeightPoststed(`${document.getElementById(`poststed-${mottaker.id}`)?.offsetHeight}px`);
-        settHeightLand(`${document.getElementById(`land-${mottaker.id}`)?.offsetHeight}px`);
-    }, [åpenBehandling]);
 
     return (
         <StyledDiv>
@@ -81,124 +67,20 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, visLeggTilKnapp, leggT
                     </Button>
                 )}
             </FlexDiv>
-            <FlexDiv role="grid" aria-colcount={2} aria-rowcount={6}>
-                <Table>
-                    <Table.Header>
-                        <Table.Row role="row" aria-rowindex={1}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightNavn }}
-                            >
-                                <BodyShort>Navn</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={2}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightAdresselinje1 }}
-                            >
-                                <BodyShort>Adresselinje 1</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={3}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightAdresselinje2 }}
-                            >
-                                <BodyShort>Adresselinje 2</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={4}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightPostnummer }}
-                            >
-                                <BodyShort>Postnummer</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={5}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightPoststed }}
-                            >
-                                <BodyShort>Poststed</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={6}>
-                            <Table.HeaderCell
-                                role="columnheader"
-                                aria-colindex={1}
-                                style={{ height: heightLand }}
-                            >
-                                <BodyShort>Land</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                </Table>
-                <Table>
-                    <Table.Body>
-                        <Table.Row role="row" aria-rowindex={1}>
-                            <Table.DataCell
-                                id={`navn-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{mottaker.navn}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={2}>
-                            <Table.DataCell
-                                id={`adresselinje1-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{mottaker.adresselinje1}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={3}>
-                            <Table.DataCell
-                                id={`adresselinje2-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{mottaker.adresselinje2 || '-'}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={4}>
-                            <Table.DataCell
-                                id={`postnummer-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{mottaker.postnummer}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={5}>
-                            <Table.DataCell
-                                id={`poststed-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{mottaker.poststed}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={6}>
-                            <Table.DataCell
-                                id={`land-${mottaker.id}`}
-                                role="gridcell"
-                                aria-colindex={2}
-                            >
-                                <StyledBodyShort>{land.label}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
-            </FlexDiv>
+            <DefinitionList>
+                <dt>Navn</dt>
+                <dd>{mottaker.navn}</dd>
+                <dt>Adresselinje 1</dt>
+                <dd>{mottaker.adresselinje1}</dd>
+                <dt>Adresselinje 2</dt>
+                <dd>{mottaker.adresselinje2 || '-'}</dd>
+                <dt>Postnummer</dt>
+                <dd>{mottaker.postnummer}</dd>
+                <dt>Poststed</dt>
+                <dd>{mottaker.poststed}</dd>
+                <dt>Land</dt>
+                <dd>{land.label}</dd>
+            </DefinitionList>
             {!erLesevisning && visLeggTilKnapp && (
                 <LeggTilKnapp
                     variant="tertiary"
