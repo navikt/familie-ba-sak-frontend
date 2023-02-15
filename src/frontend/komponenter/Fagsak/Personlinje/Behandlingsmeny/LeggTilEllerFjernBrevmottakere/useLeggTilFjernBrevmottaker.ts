@@ -178,6 +178,10 @@ const useLeggTilFjernBrevmottaker = () => {
             påvirkerSystemLaster: false,
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
+                settToast(ToastTyper.BREVMOTTAKER_FJERNET, {
+                    alertType: AlertType.SUCCESS,
+                    tekst: 'Mottaker fjernet',
+                });
                 settÅpenBehandling(response);
             }
         });

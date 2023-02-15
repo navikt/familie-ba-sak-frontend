@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Delete } from '@navikt/ds-icons';
-import { Table, BodyShort, Heading, Button } from '@navikt/ds-react';
+import { Heading, Button } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
@@ -16,12 +16,22 @@ const FlexDiv = styled.div`
     justify-content: space-between;
 `;
 
-const StyledBodyShort = styled(BodyShort)`
-    font-weight: ${AFontWeightBold};
-`;
-
 const StyledDiv = styled.div`
     margin-top: 2.5rem;
+`;
+
+const DefinitionList = styled.dl`
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 10rem 20rem;
+    margin-left: 1rem;
+
+    dt {
+        font-weight: ${AFontWeightBold};
+    }
+    dd {
+        margin-left: 0;
+    }
 `;
 
 interface IProps {
@@ -51,76 +61,20 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                     </Button>
                 )}
             </FlexDiv>
-            <FlexDiv role="grid" aria-colcount={2} aria-rowcount={6}>
-                <Table>
-                    <Table.Header>
-                        <Table.Row role="row" aria-rowindex={1}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Navn</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={2}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Adresselinje 1</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={3}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Adresselinje 2</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={4}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Postnummer</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={5}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Poststed</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={6}>
-                            <Table.HeaderCell role="columnheader" aria-colindex={1}>
-                                <BodyShort>Land</BodyShort>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                </Table>
-                <Table>
-                    <Table.Body>
-                        <Table.Row role="row" aria-rowindex={1}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{mottaker.navn}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={2}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{mottaker.adresselinje1}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={3}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{mottaker.adresselinje2 || '-'}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={4}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{mottaker.postnummer}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={5}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{mottaker.poststed}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row role="row" aria-rowindex={6}>
-                            <Table.DataCell role="gridcell" aria-colindex={2}>
-                                <StyledBodyShort>{land.label}</StyledBodyShort>
-                            </Table.DataCell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
-            </FlexDiv>
+            <DefinitionList>
+                <dt>Navn</dt>
+                <dd>{mottaker.navn}</dd>
+                <dt>Adresselinje 1</dt>
+                <dd>{mottaker.adresselinje1}</dd>
+                <dt>Adresselinje 2</dt>
+                <dd>{mottaker.adresselinje2 || '-'}</dd>
+                <dt>Postnummer</dt>
+                <dd>{mottaker.postnummer}</dd>
+                <dt>Poststed</dt>
+                <dd>{mottaker.poststed}</dd>
+                <dt>Land</dt>
+                <dd>{land.label}</dd>
+            </DefinitionList>
         </StyledDiv>
     );
 };
