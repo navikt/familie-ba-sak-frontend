@@ -28,12 +28,12 @@ const StyledAccordion = styled(Accordion)`
         }
     }
     .navds-accordion__header {
-        padding-left: 1.6rem;
-        padding-right: 2.75rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
         border-bottom: none;
     }
     .navds-accordion__content {
-        padding: 0.5rem 2.75rem 1.5rem 1.6rem;
+        padding: 0.5rem 1.5rem 1.5rem;
         border-bottom: none;
     }
 `;
