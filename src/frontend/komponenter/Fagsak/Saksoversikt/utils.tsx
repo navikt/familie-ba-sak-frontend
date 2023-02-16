@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
-import { ExternalLink } from '@navikt/ds-icons';
-import { Link } from '@navikt/ds-react';
+import { ExternalLink, Warning } from '@navikt/ds-icons';
+import { Link, Tooltip } from '@navikt/ds-react';
 
 import {
     behandlingsresultater,
@@ -14,7 +14,11 @@ import {
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { IKlagebehandling } from '../../../typer/klage';
+import {
+    type IKlagebehandling,
+    KlageinstansEventType,
+    klageinstansUtfallTilTekst,
+} from '../../../typer/klage';
 import { Klagebehandlingstype } from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
@@ -139,6 +143,25 @@ export const lagLenkePåType = (
     }
 };
 
+const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => {
+    const klageBehandlingAvsluttetUtfall = behandling.klageinstansResultat?.find(
+        resultat =>
+            resultat.utfall && resultat.type === KlageinstansEventType.KLAGEBEHANDLING_AVSLUTTET
+    )?.utfall;
+
+    if (klageBehandlingAvsluttetUtfall) {
+        return klageinstansUtfallTilTekst[klageBehandlingAvsluttetUtfall];
+    }
+};
+
+const ankeHarEksistertPåBehandling = (behandling: IKlagebehandling) => {
+    return behandling.klageinstansResultat?.some(
+        resultat =>
+            resultat.type === KlageinstansEventType.ANKEBEHANDLING_OPPRETTET ||
+            resultat.type === KlageinstansEventType.ANKEBEHANDLING_AVSLUTTET
+    );
+};
+
 export const lagLenkePåResultat = (
     minimalFagsak: IMinimalFagsak,
     behandling: Saksoversiktsbehandling
@@ -169,14 +192,21 @@ export const lagLenkePåResultat = (
             );
         case Saksoversiktbehandlingstype.KLAGE:
             return (
-                <Link
-                    href={`/redirect/familie-klage/behandling/${behandling.id}`}
-                    onMouseDown={e => e.preventDefault()}
-                    target="_blank"
-                >
-                    <span>{behandlingsresultater[behandling.resultat]}</span>
-                    <ExternalLink />
-                </Link>
+                <>
+                    <Link
+                        href={`/redirect/familie-klage/behandling/${behandling.id}`}
+                        onMouseDown={e => e.preventDefault()}
+                        target="_blank"
+                    >
+                        <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
+                        <ExternalLink />
+                    </Link>
+                    {ankeHarEksistertPåBehandling(behandling) && (
+                        <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
+                            <Warning title={'Har ankeinformasjon'} />
+                        </Tooltip>
+                    )}
+                </>
             );
     }
 };
