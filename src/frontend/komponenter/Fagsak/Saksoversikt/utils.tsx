@@ -155,6 +155,7 @@ const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => 
     if (klageBehandlingAvsluttetUtfall) {
         return klageinstansUtfallTilTekst[klageBehandlingAvsluttetUtfall];
     }
+    return '-';
 };
 
 const ankeHarEksistertPåBehandling = (behandling: IKlagebehandling) => {
