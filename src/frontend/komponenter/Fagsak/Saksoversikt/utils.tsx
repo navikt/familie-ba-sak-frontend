@@ -155,6 +155,10 @@ const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => 
     if (klageBehandlingAvsluttetUtfall) {
         return klageinstansUtfallTilTekst[klageBehandlingAvsluttetUtfall];
     }
+    if (behandling.resultat) {
+        return behandlingsresultater[behandling.resultat];
+    }
+
     return '-';
 };
 
