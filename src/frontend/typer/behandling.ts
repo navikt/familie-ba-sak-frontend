@@ -106,7 +106,7 @@ export const behandlingÅrsak: Record<
         'Feilutbetalt beløp helt eller delvis bortfalt',
 
     /** Klage: **/
-    ANNET: 'annet',
+    ANNET: 'Annet',
     FEIL_ELLER_ENDRET_FAKTA: 'Feil eller endret fakta',
     FEIL_I_LOVANDVENDELSE: 'Feil i lovanvendelse',
     FEIL_PROSESSUELL: 'Prosessuell feil',
