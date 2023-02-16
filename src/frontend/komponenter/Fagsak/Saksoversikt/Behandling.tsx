@@ -3,7 +3,7 @@ import React from 'react';
 import { behandlingsstatuser } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import type { Saksoversiktsbehandling } from './utlis';
+import type { Saksoversiktsbehandling } from './utils';
 import {
     finnÅrsak,
     hentBehandlingId,
@@ -11,7 +11,7 @@ import {
     hentOpprettetTidspunkt,
     lagLenkePåResultat,
     lagLenkePåType,
-} from './utlis';
+} from './utils';
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;

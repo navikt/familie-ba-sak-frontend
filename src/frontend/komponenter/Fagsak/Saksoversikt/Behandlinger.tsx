@@ -9,13 +9,13 @@ import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
-import type { Saksoversiktsbehandling } from './utlis';
+import type { Saksoversiktsbehandling } from './utils';
 import {
     hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
     hentOpprettetTidspunkt,
     skalRadVises,
-} from './utlis';
+} from './utils';
 
 const SwitchHøyre = styled(Switch)`
     margin-top: 1rem;
