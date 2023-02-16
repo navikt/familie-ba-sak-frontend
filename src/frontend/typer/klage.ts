@@ -29,7 +29,7 @@ export enum KlageResultat {
     HENLAGT = 'HENLAGT',
 }
 
-enum KlageinstansUtfall {
+export enum KlageinstansUtfall {
     TRUKKET = 'TRUKKET',
     RETUR = 'RETUR',
     OPPHEVET = 'OPPHEVET',
