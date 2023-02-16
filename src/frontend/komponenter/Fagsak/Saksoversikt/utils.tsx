@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
-import { ExternalLink, Warning } from '@navikt/ds-icons';
+import styled from 'styled-components';
+
+import { ExternalLink, WarningColored } from '@navikt/ds-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
+import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
 import {
     behandlingsresultater,
@@ -162,6 +165,11 @@ const ankeHarEksistertPåBehandling = (behandling: IKlagebehandling) => {
     );
 };
 
+const ResultatCelle = styled.div`
+    display: flex;
+    gap: ${ASpacing3};
+`;
+
 export const lagLenkePåResultat = (
     minimalFagsak: IMinimalFagsak,
     behandling: Saksoversiktsbehandling
@@ -190,24 +198,28 @@ export const lagLenkePåResultat = (
                     <ExternalLink />
                 </Link>
             );
-        case Saksoversiktbehandlingstype.KLAGE:
-            return (
-                <>
-                    <Link
-                        href={`/redirect/familie-klage/behandling/${behandling.id}`}
-                        onMouseDown={e => e.preventDefault()}
-                        target="_blank"
-                    >
-                        <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
-                        <ExternalLink />
-                    </Link>
-                    {ankeHarEksistertPåBehandling(behandling) && (
-                        <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
-                            <Warning title={'Har ankeinformasjon'} />
-                        </Tooltip>
-                    )}
-                </>
+        case Saksoversiktbehandlingstype.KLAGE: {
+            const LenkeTilKlage = () => (
+                <Link
+                    href={`/redirect/familie-klage/behandling/${behandling.id}`}
+                    onMouseDown={e => e.preventDefault()}
+                    target="_blank"
+                >
+                    <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
+                    <ExternalLink />
+                </Link>
             );
+            return ankeHarEksistertPåBehandling(behandling) ? (
+                <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
+                    <ResultatCelle>
+                        <WarningColored height={24} width={24} />
+                        <LenkeTilKlage />
+                    </ResultatCelle>
+                </Tooltip>
+            ) : (
+                <LenkeTilKlage />
+            );
+        }
     }
 };
 
