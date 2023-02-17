@@ -18,7 +18,6 @@ import {
 } from './utlis';
 
 const SwitchHøyre = styled(Switch)`
-    margin-top: 1rem;
     margin-right: 0.275rem;
     float: right;
 `;
@@ -52,7 +51,22 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <StyledHeading level="2" size={'medium'} children={'Behandlinger'} spacing />
+            <StyledHeading level="2" size={'medium'} spacing>
+                Behandlinger
+                {finnesRadSomKanFiltreresBort && (
+                    <SwitchHøyre
+                        size="small"
+                        position="left"
+                        id={'vis-henlagte-behandlinger'}
+                        checked={visHenlagteBehandlinger}
+                        onChange={() => {
+                            setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
+                        }}
+                    >
+                        Vis henlagte behandlinger
+                    </SwitchHøyre>
+                )}
+            </StyledHeading>
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
@@ -88,19 +102,6 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 </table>
             ) : (
                 <BodyShort children={'Ingen tidligere behandlinger'} />
-            )}
-            {finnesRadSomKanFiltreresBort && (
-                <SwitchHøyre
-                    size="small"
-                    position="left"
-                    id={'vis-henlagte-behandlinger'}
-                    checked={visHenlagteBehandlinger}
-                    onChange={() => {
-                        setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                    }}
-                >
-                    Vis henlagte behandlinger
-                </SwitchHøyre>
             )}
         </div>
     );
