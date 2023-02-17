@@ -24,7 +24,7 @@ const Container = styled.div`
     margin-left: 3rem;
 `;
 
-export const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil: boolean }>`
+export const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil?: React.ReactNode }>`
     .nav-datovelger {
         margin-top: 0.5rem;
     }
