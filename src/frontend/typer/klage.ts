@@ -29,7 +29,7 @@ export enum KlageResultat {
     HENLAGT = 'HENLAGT',
 }
 
-enum KlageinstansUtfall {
+export enum KlageinstansUtfall {
     TRUKKET = 'TRUKKET',
     RETUR = 'RETUR',
     OPPHEVET = 'OPPHEVET',
@@ -40,14 +40,14 @@ enum KlageinstansUtfall {
     AVVIST = 'AVVIST',
 }
 
-enum BehandlingEventType {
+export enum KlageinstansEventType {
     KLAGEBEHANDLING_AVSLUTTET = 'KLAGEBEHANDLING_AVSLUTTET',
     ANKEBEHANDLING_OPPRETTET = 'ANKEBEHANDLING_OPPRETTET',
     ANKEBEHANDLING_AVSLUTTET = 'ANKEBEHANDLING_AVSLUTTET',
 }
 
 interface KlageinstansResultat {
-    type: BehandlingEventType;
+    type: KlageinstansEventType;
     utfall?: KlageinstansUtfall;
     mottattEllerAvsluttetTidspunkt: ISODateString;
     journalpostReferanser: string[];
@@ -63,3 +63,14 @@ export enum KlageStatus {
 export enum Klagebehandlingstype {
     KLAGE = 'KLAGE',
 }
+
+export const klageinstansUtfallTilTekst: Record<KlageinstansUtfall, string> = {
+    TRUKKET: 'Trukket KA',
+    RETUR: 'Retur KA',
+    OPPHEVET: 'Opphevet KA',
+    MEDHOLD: 'Medhold KA',
+    DELVIS_MEDHOLD: 'Delvis medhold KA',
+    STADFESTELSE: 'Stadfestelse KA',
+    UGUNST: 'Ugunst (Ugyldig) KA',
+    AVVIST: 'Avvist KA',
+};
