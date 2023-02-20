@@ -2,10 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Back, Next } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
-import FamilieChevron from '../../../ikoner/FamilieChevron';
 
 interface IProps {
     naviger: (retning: NavigeringsRetning) => void;
@@ -50,7 +50,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 disabled={!kanNavigereTilVenstre}
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
             >
-                <FamilieChevron title={'Naviger til venstre'} retning={'venstre'} />
+                <Back title={'Naviger til venstre'} />
                 <span className="sr-only">
                     {navigerTilVenstreTittel
                         ? navigerTilVenstreTittel
@@ -65,7 +65,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 disabled={!kanNavigereTilHøyre}
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
             >
-                <FamilieChevron title={'Naviger til høyre'} />
+                <Next title={'Naviger til høyre'} />
                 <span className="sr-only">
                     {navigerTilHøyreTittel
                         ? navigerTilHøyreTittel
