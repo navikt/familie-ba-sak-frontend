@@ -19,16 +19,10 @@ interface IProps {
 const StyledTidslinjenavigering = styled.div`
     display: flex;
     flex-direction: row;
-
-    & > button {
-        &:first-child {
-            margin-right: 0.625rem;
-        }
-    }
+    gap: 0.625rem;
 `;
 
 const DivMedHøyremargin = styled.div`
-    margin-right: 0.625rem;
     display: flex;
     align-items: center;
 `;
@@ -37,41 +31,29 @@ const TidslinjeNavigering: React.FC<IProps> = ({
     naviger,
     kanNavigereTilHøyre = true,
     kanNavigereTilVenstre = true,
-    navigerTilVenstreTittel,
-    navigerTilHøyreTittel,
+    navigerTilVenstreTittel = 'Naviger til venstre i tidslinjen',
+    navigerTilHøyreTittel = 'Naviger til høyre i tidslinjen',
     children,
 }) => {
     return (
         <StyledTidslinjenavigering className={'tidslinje-header__navigering'}>
             <Button
-                title={'Naviger til venstre'}
+                title={navigerTilVenstreTittel}
                 variant="tertiary"
                 size="small"
                 disabled={!kanNavigereTilVenstre}
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
-            >
-                <Back title={'Naviger til venstre'} />
-                <span className="sr-only">
-                    {navigerTilVenstreTittel
-                        ? navigerTilVenstreTittel
-                        : 'Naviger til venstre i tidslinjen'}
-                </span>
-            </Button>
+                icon={<Back title={navigerTilVenstreTittel} />}
+            />
             {children && <DivMedHøyremargin>{children}</DivMedHøyremargin>}
             <Button
-                title={'Naviger til høyre'}
+                title={navigerTilHøyreTittel}
                 variant="tertiary"
                 size="small"
                 disabled={!kanNavigereTilHøyre}
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
-            >
-                <Next title={'Naviger til høyre'} />
-                <span className="sr-only">
-                    {navigerTilHøyreTittel
-                        ? navigerTilHøyreTittel
-                        : 'Naviger til høyre i tidslinjen'}
-                </span>
-            </Button>
+                icon={<Next title={navigerTilHøyreTittel} />}
+            />
         </StyledTidslinjenavigering>
     );
 };
