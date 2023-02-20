@@ -12,7 +12,7 @@ interface IProps {
     kanNavigereTilHøyre?: boolean;
     kanNavigereTilVenstre?: boolean;
     navigerTilVenstreTittel?: string;
-    navigerTilHyøyreTittel?: string;
+    navigerTilHøyreTittel?: string;
     children?: React.ReactNode | React.ReactChild | React.ReactChildren;
 }
 
@@ -38,7 +38,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
     kanNavigereTilHøyre = true,
     kanNavigereTilVenstre = true,
     navigerTilVenstreTittel,
-    navigerTilHyøyreTittel,
+    navigerTilHøyreTittel,
     children,
 }) => {
     return (
@@ -67,8 +67,8 @@ const TidslinjeNavigering: React.FC<IProps> = ({
             >
                 <FamilieChevron title={'Naviger til høyre'} />
                 <span className="sr-only">
-                    {navigerTilHyøyreTittel
-                        ? navigerTilHyøyreTittel
+                    {navigerTilHøyreTittel
+                        ? navigerTilHøyreTittel
                         : 'Naviger til høyre i tidslinjen'}
                 </span>
             </Button>
