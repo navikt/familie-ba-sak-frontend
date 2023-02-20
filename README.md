@@ -9,8 +9,9 @@ Frontend app for barnetrygd sak
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
 
-Hente avhengigheter krever at du har et Personal Access Token i GitHub med SSO til Nav-IT. 
-[Se denne slack-tråden](https://nav-it.slack.com/archives/CJN0STWB0/p1643811612252659) for hvordan du oppretter det og logger inn. 
+Hente avhengigheter krever at du har et Personal Access Token i GitHub med SSO til Nav-IT. For å opprette det må du gjøre følgende:
+1. Lag/forny access token med read rettigheter på pakker i Github (under developer settings)
+2. Logg inn på npm med `npm login --scope=@navikt --registry=https://npm.pkg.github.com` og benytt brukernavn, epost og tokenet du nettopp genererte
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. 
 Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
