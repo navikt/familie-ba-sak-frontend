@@ -11,6 +11,7 @@ const Vinduvelger: React.FunctionComponent = () => {
         <ToggleGroup
             defaultValue={aktivtTidslinjeVindu.vindu.id.toString()}
             size="small"
+            variant="neutral"
             onChange={vinduId => endreTidslinjeVindu(tidslinjeVinduer[Number(vinduId)])}
         >
             {tidslinjeVinduer.map(vindu => (
