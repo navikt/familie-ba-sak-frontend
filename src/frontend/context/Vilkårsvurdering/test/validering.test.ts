@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { kjørValidering } from '../validering';

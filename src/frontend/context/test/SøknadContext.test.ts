@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { kjønnType } from '@navikt/familie-typer';
 
 import { YtelseType } from '../../typer/beregning';
