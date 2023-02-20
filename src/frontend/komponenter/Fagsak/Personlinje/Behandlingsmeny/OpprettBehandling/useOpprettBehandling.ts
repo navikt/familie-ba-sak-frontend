@@ -187,7 +187,7 @@ const useOpprettBehandling = (
     };
 
     const erDatoMindreEllerLikMaksdato = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) <= maksdatoForMigrering().getTime();
+        return Date.parse(dato.toString()) <= MAKSDATO_FOR_MIGRERING.getTime();
     };
 
     const valgteBarn = useFelt({
@@ -327,16 +327,14 @@ const useOpprettBehandling = (
         nullstillSkjema();
     };
 
-    const maksdatoForMigrering = () => {
-        return new Date('2023-01-01');
-    };
+    const MAKSDATO_FOR_MIGRERING = new Date('2023-01-01');
 
     return {
         onBekreft,
         opprettBehandlingSkjema: skjema,
         nullstillSkjemaStatus,
         bruker,
-        maksdatoForMigrering,
+        maksdatoForMigrering: MAKSDATO_FOR_MIGRERING,
         valideringErOk,
     };
 };

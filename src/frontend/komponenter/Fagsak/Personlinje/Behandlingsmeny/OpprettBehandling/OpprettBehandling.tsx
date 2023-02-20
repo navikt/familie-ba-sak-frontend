@@ -92,7 +92,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                                     etikett={'Ny migreringsdato'}
                                     begrensninger={{
-                                        maxDate: maksdatoForMigrering().toISOString(),
+                                        maxDate: maksdatoForMigrering.toISOString(),
                                     }}
                                 />
                             )}
