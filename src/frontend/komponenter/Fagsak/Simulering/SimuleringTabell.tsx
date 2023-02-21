@@ -6,7 +6,7 @@ import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
 
-import { BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -22,6 +22,10 @@ const StyledTable = styled.table(
     table-layout: fixed;
 `
 );
+
+const StyledAlert = styled(Alert)`
+    margin-bottom: 1rem;
+`;
 
 const HøyrestiltTd = styled.td`
     text-align: right !important;
@@ -132,6 +136,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     return (
         <>
+            {erManuellPosteringSamtidigSomResultatIkkeErNull && (
+                <StyledAlert variant={'warning'}>
+                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
+                    sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
+                    tilsvarende de manuelle posteringene i tabellen.
+                </StyledAlert>
+            )}
+
             <SimuleringTabellOverskrift>
                 <Label>
                     Simuleringsresultat for{' '}
