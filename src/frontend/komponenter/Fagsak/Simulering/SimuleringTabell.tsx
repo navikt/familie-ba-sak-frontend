@@ -76,6 +76,12 @@ interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
 
+const TabellSkillelinje = (props: { erHeader?: boolean }) => (
+    <Skillelinje erHeader={props.erHeader}>
+        <hr />
+    </Skillelinje>
+);
+
 const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulering }) => {
     const {
         fomDatoNestePeriode,
@@ -94,11 +100,13 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         fomDatoNestePeriode &&
         erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
-    const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
-        !periodeErEtterNesteUtbetalingsPeriode(periode) &&
-        (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr);
+    const perioderSomSkalVisesITabellen = perioder.filter(
+        periode =>
+            !periodeErEtterNesteUtbetalingsPeriode(periode) &&
+            (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr)
+    );
 
-    const antallPerioderIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
+    const antallPerioderIFremvistÅr = perioderSomSkalVisesITabellen.length;
 
     const erISisteÅrAvPerioden = indexFramvistÅr === hentÅrISimuleringen(perioder).length - 1;
 
@@ -109,18 +117,12 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
 
-    const erManuellPosteringIBehandling = perioder.some(
-        periode => periode.manuellPostering && periode.manuellPostering !== 0
-    );
-
-    const erPeriodeMedKorrigertResultat = perioder.some(periode => {
-        return (periode.resultat ?? 0) !== (periode.korrigertResultat ?? 0);
-    });
-
-    const TabellSkillelinje = (props: { erHeader?: boolean }) => (
-        <Skillelinje erHeader={props.erHeader}>
-            <hr />
-        </Skillelinje>
+    const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
+        periode =>
+            periode.manuellPostering &&
+            periode.manuellPostering !== 0 &&
+            periode.resultat &&
+            periode.resultat !== 0
     );
 
     const tilOgFraDatoForSimulering = `${periodeToString({
@@ -150,17 +152,15 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
             >
                 <colgroup>
                     <VenstreKolonne />
-                    {perioder.map(
-                        periode =>
-                            periodeSkalVisesITabell(periode) &&
-                            (fomDatoNestePeriode === periode.fom ? (
-                                <React.Fragment key={'col - ' + periode.fom}>
-                                    <SkillelinjeKolonne />
-                                    <DataKolonne />
-                                </React.Fragment>
-                            ) : (
-                                <DataKolonne key={'col - ' + periode.fom} />
-                            ))
+                    {perioderSomSkalVisesITabellen.map(periode =>
+                        fomDatoNestePeriode === periode.fom ? (
+                            <React.Fragment key={'col - ' + periode.fom}>
+                                <SkillelinjeKolonne />
+                                <DataKolonne />
+                            </React.Fragment>
+                        ) : (
+                            <DataKolonne key={'col - ' + periode.fom} />
+                        )
                     )}
                 </colgroup>
 
@@ -177,156 +177,92 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 />
                             )}
                         </td>
-                        {perioder.map(
-                            periode =>
-                                periodeSkalVisesITabell(periode) && (
-                                    <React.Fragment key={'måned - ' + periode.fom}>
-                                        {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
-                                        <HøyrestiltTh>
-                                            <Label>
-                                                {kapitaliserTekst(
-                                                    formaterIsoDato(
-                                                        periode.fom,
-                                                        datoformat.MÅNED_NAVN
-                                                    )
-                                                )}
-                                            </Label>
-                                        </HøyrestiltTh>
-                                    </React.Fragment>
-                                )
-                        )}
+                        {perioderSomSkalVisesITabellen.map(periode => (
+                            <React.Fragment key={'måned - ' + periode.fom}>
+                                {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
+                                <HøyrestiltTh>
+                                    <Label>
+                                        {kapitaliserTekst(
+                                            formaterIsoDato(periode.fom, datoformat.MÅNED_NAVN)
+                                        )}
+                                    </Label>
+                                </HøyrestiltTh>
+                            </React.Fragment>
+                        ))}
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
                         <td>Nytt beløp</td>
-                        {perioder.map(
-                            periode =>
-                                periodeSkalVisesITabell(periode) && (
-                                    <React.Fragment key={'nytt beløp - ' + periode.fom}>
-                                        {erNestePeriode(periode) && <TabellSkillelinje />}
-                                        <HøyrestiltTd>
-                                            <BodyShort>
-                                                {formaterBeløpUtenValutakode(periode.nyttBeløp)}
-                                            </BodyShort>
-                                        </HøyrestiltTd>
-                                    </React.Fragment>
-                                )
-                        )}
+                        {perioderSomSkalVisesITabellen.map(periode => (
+                            <React.Fragment key={'nytt beløp - ' + periode.fom}>
+                                {erNestePeriode(periode) && <TabellSkillelinje />}
+                                <HøyrestiltTd>
+                                    <BodyShort>
+                                        {formaterBeløpUtenValutakode(periode.nyttBeløp)}
+                                    </BodyShort>
+                                </HøyrestiltTd>
+                            </React.Fragment>
+                        ))}
                     </tr>
                     <tr>
                         <td>Tidligere utbetalt</td>
-                        {perioder.map(
-                            periode =>
-                                periodeSkalVisesITabell(periode) && (
-                                    <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
-                                        {erNestePeriode(periode) && <TabellSkillelinje />}
-                                        <HøyrestiltTd>
-                                            <BodyShort>
-                                                {formaterBeløpUtenValutakode(
-                                                    periode.tidligereUtbetalt
-                                                )}
-                                            </BodyShort>
-                                        </HøyrestiltTd>
-                                    </React.Fragment>
-                                )
-                        )}
+                        {perioderSomSkalVisesITabellen.map(periode => (
+                            <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
+                                {erNestePeriode(periode) && <TabellSkillelinje />}
+                                <HøyrestiltTd>
+                                    <BodyShort>
+                                        {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
+                                    </BodyShort>
+                                </HøyrestiltTd>
+                            </React.Fragment>
+                        ))}
                     </tr>
                     <tr>
                         <td>Resultat</td>
-                        {perioder.map(
-                            periode =>
-                                periodeSkalVisesITabell(periode) && (
-                                    <React.Fragment key={'resultat - ' + periode.fom}>
-                                        {erNestePeriode(periode) && <TabellSkillelinje />}
-                                        <HøyrestiltTd>
-                                            {fomDatoNestePeriode === periode.fom ? (
-                                                <LabelMedFarge
-                                                    farge={
-                                                        periode.resultat && periode.resultat < 0
-                                                            ? navFarger.navRod
-                                                            : navFarger.navGronnDarken40
-                                                    }
-                                                >
-                                                    {formaterBeløpUtenValutakode(periode.resultat)}
-                                                </LabelMedFarge>
-                                            ) : (
-                                                <BodyshortMedFarge
-                                                    farge={
-                                                        periode.resultat && periode.resultat < 0
-                                                            ? navFarger.navRod
-                                                            : navFarger.navMorkGra
-                                                    }
-                                                >
-                                                    {formaterBeløpUtenValutakode(periode.resultat)}
-                                                </BodyshortMedFarge>
-                                            )}
-                                        </HøyrestiltTd>
-                                    </React.Fragment>
-                                )
-                        )}
+                        {perioderSomSkalVisesITabellen.map(periode => (
+                            <React.Fragment key={'resultat - ' + periode.fom}>
+                                {erNestePeriode(periode) && <TabellSkillelinje />}
+                                <HøyrestiltTd>
+                                    {fomDatoNestePeriode === periode.fom ? (
+                                        <LabelMedFarge
+                                            farge={
+                                                periode.resultat && periode.resultat < 0
+                                                    ? navFarger.navRod
+                                                    : navFarger.navGronnDarken40
+                                            }
+                                        >
+                                            {formaterBeløpUtenValutakode(periode.resultat)}
+                                        </LabelMedFarge>
+                                    ) : (
+                                        <BodyshortMedFarge
+                                            farge={
+                                                periode.resultat && periode.resultat < 0
+                                                    ? navFarger.navRod
+                                                    : navFarger.navMorkGra
+                                            }
+                                        >
+                                            {formaterBeløpUtenValutakode(periode.resultat)}
+                                        </BodyshortMedFarge>
+                                    )}
+                                </HøyrestiltTd>
+                            </React.Fragment>
+                        ))}
                     </tr>
-                    {erManuellPosteringIBehandling && (
+                    {erManuellPosteringSamtidigSomResultatIkkeErNull && (
                         <tr>
                             <td>Manuell postering</td>
-                            {perioder.map(
-                                periode =>
-                                    periodeSkalVisesITabell(periode) && (
-                                        <React.Fragment key={'manuell postering - ' + periode.fom}>
-                                            {erNestePeriode(periode) && <TabellSkillelinje />}
-                                            <HøyrestiltTd>
-                                                <BodyShort>
-                                                    {formaterBeløpUtenValutakode(
-                                                        periode.manuellPostering
-                                                    )}
-                                                </BodyShort>
-                                            </HøyrestiltTd>
-                                        </React.Fragment>
-                                    )
-                            )}
-                        </tr>
-                    )}
-                    {erPeriodeMedKorrigertResultat && (
-                        <tr>
-                            <td>Korrigert resultat</td>
-                            {perioder.map(
-                                periode =>
-                                    periodeSkalVisesITabell(periode) && (
-                                        <React.Fragment key={'korrigert resultat - ' + periode.fom}>
-                                            {erNestePeriode(periode) && <TabellSkillelinje />}
-                                            <HøyrestiltTd>
-                                                {fomDatoNestePeriode === periode.fom ? (
-                                                    <LabelMedFarge
-                                                        farge={
-                                                            periode.korrigertResultat &&
-                                                            periode.korrigertResultat < 0
-                                                                ? navFarger.navRod
-                                                                : navFarger.navGronnDarken40
-                                                        }
-                                                    >
-                                                        {formaterBeløpUtenValutakode(
-                                                            periode.resultat
-                                                        )}
-                                                    </LabelMedFarge>
-                                                ) : (
-                                                    <BodyshortMedFarge
-                                                        farge={
-                                                            periode.korrigertResultat &&
-                                                            periode.korrigertResultat < 0
-                                                                ? navFarger.navRod
-                                                                : navFarger.navMorkGra
-                                                        }
-                                                    >
-                                                        {formaterBeløpUtenValutakode(
-                                                            periode.korrigertResultat
-                                                        )}
-                                                    </BodyshortMedFarge>
-                                                )}
-                                            </HøyrestiltTd>
-                                        </React.Fragment>
-                                    )
-                            )}
+                            {perioderSomSkalVisesITabellen.map(periode => (
+                                <React.Fragment key={'manuell postering - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje />}
+                                    <HøyrestiltTd>
+                                        <BodyShort>
+                                            {formaterBeløpUtenValutakode(periode.manuellPostering)}
+                                        </BodyShort>
+                                    </HøyrestiltTd>
+                                </React.Fragment>
+                            ))}
                         </tr>
                     )}
                 </tbody>
