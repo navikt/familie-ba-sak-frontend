@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
@@ -6,12 +10,12 @@ import { Brevmal } from '../../komponenter/Felleskomponenter/Hendelsesoversikt/B
 import type { IBehandling } from '../../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
-import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
-import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
 import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
-} from '../BrevModulContext';
+} from '../../utils/brevmal';
+import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
+import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
 
 describe('BrevmodulContext', () => {
     describe('hentMuligeBrevmalerImplementering', () => {
