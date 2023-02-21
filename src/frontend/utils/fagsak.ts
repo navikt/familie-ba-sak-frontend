@@ -2,7 +2,13 @@ import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visni
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';
-import { kalenderDiff } from './kalender';
+import {
+    erEtter,
+    kalenderDatoFraDate,
+    kalenderDatoMedFallback,
+    kalenderDiff,
+    TIDENES_ENDE,
+} from './kalender';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
     minimalFagsak.behandlinger.length === 0
@@ -42,3 +48,19 @@ export const hentSisteIkkeHenlagteBehandling = (
         )[0];
     }
 };
+
+export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
+    minimalFagsak.gjeldendeUtbetalingsperioder
+        .filter(utbetalingsperiode =>
+            erEtter(
+                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
+                kalenderDatoFraDate(new Date())
+            )
+        )
+        .reduce((acc, utbetalingsperiode) => {
+            utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
+                acc.add(utbetalingsperiodeDetalj.person.personIdent)
+            );
+
+            return acc;
+        }, new Set());
