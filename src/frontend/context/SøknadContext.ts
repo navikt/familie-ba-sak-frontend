@@ -11,7 +11,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
-import type { IMinimalFagsak } from '../typer/fagsak';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type {
@@ -20,30 +19,9 @@ import type {
     IRestRegistrerSøknad,
     Målform,
 } from '../typer/søknad';
-import {
-    erEtter,
-    kalenderDatoFraDate,
-    kalenderDatoMedFallback,
-    TIDENES_ENDE,
-} from '../utils/kalender';
+import { hentBarnMedLøpendeUtbetaling } from '../utils/fagsak';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
-
-export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
-    minimalFagsak.gjeldendeUtbetalingsperioder
-        .filter(utbetalingsperiode =>
-            erEtter(
-                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
-                kalenderDatoFraDate(new Date())
-            )
-        )
-        .reduce((acc, utbetalingsperiode) => {
-            utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
-                acc.add(utbetalingsperiodeDetalj.person.personIdent)
-            );
-
-            return acc;
-        }, new Set());
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
