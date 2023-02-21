@@ -9,16 +9,15 @@ import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
-import type { Saksoversiktsbehandling } from './utlis';
+import type { Saksoversiktsbehandling } from './utils';
 import {
     hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
     hentOpprettetTidspunkt,
     skalRadVises,
-} from './utlis';
+} from './utils';
 
 const SwitchHøyre = styled(Switch)`
-    margin-top: 1rem;
     margin-right: 0.275rem;
     float: right;
 `;
@@ -52,7 +51,22 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <StyledHeading level="2" size={'medium'} children={'Behandlinger'} spacing />
+            <StyledHeading level="2" size={'medium'} spacing>
+                Behandlinger
+                {finnesRadSomKanFiltreresBort && (
+                    <SwitchHøyre
+                        size="small"
+                        position="left"
+                        id={'vis-henlagte-behandlinger'}
+                        checked={visHenlagteBehandlinger}
+                        onChange={() => {
+                            setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
+                        }}
+                    >
+                        Vis henlagte behandlinger
+                    </SwitchHøyre>
+                )}
+            </StyledHeading>
             {behandlinger.length > 0 ? (
                 <table
                     className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
@@ -88,19 +102,6 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 </table>
             ) : (
                 <BodyShort children={'Ingen tidligere behandlinger'} />
-            )}
-            {finnesRadSomKanFiltreresBort && (
-                <SwitchHøyre
-                    size="small"
-                    position="left"
-                    id={'vis-henlagte-behandlinger'}
-                    checked={visHenlagteBehandlinger}
-                    onChange={() => {
-                        setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                    }}
-                >
-                    Vis henlagte behandlinger
-                </SwitchHøyre>
             )}
         </div>
     );
