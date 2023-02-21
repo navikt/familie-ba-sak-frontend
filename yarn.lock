@@ -2977,10 +2977,10 @@
     nav-frontend-typografi-style "^2.0.1"
     react-select "^5.4.0"
 
-"@navikt/familie-header@10.1.0":
-  version "10.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/10.1.0/7e74bd9e7e581cddc434cc5a5703ab10052d812e#7e74bd9e7e581cddc434cc5a5703ab10052d812e"
-  integrity sha512-Txh9ISmUKaHjP74K6/1dXzT2GfuSq63qsHNlQ8bTerqy2+UwxRYWuW9SudNlHkQxbARQgIFYqj1wILVQNiZ7RQ==
+"@navikt/familie-header@10.1.1":
+  version "10.1.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/10.1.1/9470062335d7d1e1530b500bb6df9f458fe9dc31#9470062335d7d1e1530b500bb6df9f458fe9dc31"
+  integrity sha512-KNP7rhIEx3kPD800w/jAOScQNa8V2jJzHaerWv41wBys/vuiOoP0tBF6uQirxSJVl1+Uy1A7Mp57lTyj1aR3Sw==
   dependencies:
     "@babel/preset-typescript" "^7.18.6"
     "@navikt/familie-ikoner" "^7.0.0"
