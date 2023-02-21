@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@axe-core/react": "^4.4.0",
+    "@axe-core/react": "^4.6.0",
     "@navikt/ds-css": "2.0.12",
     "@navikt/ds-css-internal": "2.0.12",
     "@navikt/ds-icons": "2.0.12",
