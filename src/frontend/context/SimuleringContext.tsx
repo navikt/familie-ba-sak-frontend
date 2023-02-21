@@ -11,6 +11,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
 import {
@@ -38,7 +39,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         status: RessursStatus.HENTER,
     });
     const maksLengdeTekst = 1500;
-    const beløpsgrenseForMigreringMedFeilutbetaling = 100;
+    const maksgrenseForAvvikIBeløpVedMigrering = 100;
     const mars2023 = '2023-03-01';
 
     useEffect(() => {
@@ -82,33 +83,58 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const simResultat =
         simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
+    const simPerioderFørMars2023 =
+        simResultat?.perioder.filter(periode =>
+            erFør(kalenderDato(periode.fom), kalenderDato(mars2023))
+        ) || [];
+    const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(
+        periode => periode.resultat || 0
+    );
+    const totalEtterbetalingFørMars2023 = simPerioderFørMars2023.reduce(
+        (acc, periode) => acc + (periode.etterbetaling || 0),
+        0
+    );
+
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
-    const erEtterutbetaling = simResultat && simResultat.etterbetaling > 0;
+    const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const skalStoppeISimulering = () => {
         if (åpenBehandling.årsak === BehandlingÅrsak.HELMANUELL_MIGRERING && simResultat) {
-            const tidligereUtbetaltPerioderEtterbetalingOver220 = simResultat.perioder
-                .filter(periode => erFør(kalenderDato(periode.fom), kalenderDato(mars2023)))
-                .filter(periode => periode.etterbetaling && periode.etterbetaling > 220);
+            const tidligereUtbetaltPerioderEtterbetalingOver220 = simPerioderFørMars2023.filter(
+                periode => periode.etterbetaling && periode.etterbetaling > 220
+            );
             return erFeilutbetaling || tidligereUtbetaltPerioderEtterbetalingOver220.length > 0;
         }
         return erFeilutbetaling || erEtterutbetaling;
     };
     const erMigreringMedStoppISimulering = erMigreringFraInfotrygd && skalStoppeISimulering();
 
-    const erNegativeMånedsbeløpPåMaksEnKrone = (simPerioder: ISimuleringPeriode[]) =>
-        simPerioder
-            .filter(periode => erFør(kalenderDato(periode.fom), kalenderDato(mars2023)))
-            .map(periode => periode.resultat || 0)
-            .every(beløp => beløp <= 0 && beløp >= -1);
+    const harKunNegativeEllerKunPositiveAvvik = (perioderesultater: number[]) => {
+        return (
+            perioderesultater.every(beløp => beløp <= 0) ||
+            perioderesultater.every(beløp => beløp >= 0)
+        );
+    };
 
-    const erMigreringMedFeilutbetalingInnenforBeløpsgrenser =
-        erMigreringFraInfotrygd &&
-        erFeilutbetaling &&
-        simResultat?.feilutbetaling < beløpsgrenseForMigreringMedFeilutbetaling &&
-        erNegativeMånedsbeløpPåMaksEnKrone(simResultat?.perioder);
+    const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
+        const antallBarn = åpenBehandling.personer.filter(
+            person => person.type === PersonType.BARN
+        ).length;
+        return perioderesultater.every(beløp => Math.abs(beløp) <= antallBarn);
+    };
+
+    const harTotaltAvvikUnderBeløpsgrense = (perioderesultater: number[]) => {
+        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val));
+        return totaltAvvik <= maksgrenseForAvvikIBeløpVedMigrering;
+    };
+
+    const harStoppetMigreringAvvikInnenforBeløpsgrenser =
+        erMigreringMedStoppISimulering &&
+        harKunNegativeEllerKunPositiveAvvik(perioderesultaterFørMars2023) &&
+        harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) &&
+        harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023);
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -239,7 +265,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
-        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
+        harStoppetMigreringAvvikInnenforBeløpsgrenser,
     };
 });
 
