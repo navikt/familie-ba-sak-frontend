@@ -3,10 +3,8 @@ import { useState } from 'react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -16,7 +14,6 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
-    const { minimalFagsak } = useFagsakContext();
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
@@ -67,10 +64,6 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     };
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerIdent:
-            minimalFagsak.status === RessursStatus.SUKSESS
-                ? minimalFagsak.data.søkerFødselsnummer
-                : '',
         multiselectVerdier: [],
         brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
         barnIBrev: [],
