@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { BackFilled, NextFilled } from '@navikt/ds-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
+import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -24,6 +25,8 @@ const ToggleVisningVenstremeny = styled(Button)`
     padding: 0px;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    background-color: ${ASurfaceDefault};
+    z-index: 1; // for å ligge foran innhold i hovedvisningen
 `;
 
 const ÅpenMenyContainer = styled.div`
