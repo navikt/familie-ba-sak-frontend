@@ -22,7 +22,7 @@ const StyledTidslinjenavigering = styled.div`
     gap: 0.625rem;
 `;
 
-const DivMedHøyremargin = styled.div`
+const FlexMedSentrering = styled.div`
     display: flex;
     align-items: center;
 `;
@@ -45,7 +45,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
                 icon={<Back title={navigerTilVenstreTittel} />}
             />
-            {children && <DivMedHøyremargin>{children}</DivMedHøyremargin>}
+            {children && <FlexMedSentrering>{children}</FlexMedSentrering>}
             <Button
                 title={navigerTilHøyreTittel}
                 variant="tertiary"
