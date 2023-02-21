@@ -19,11 +19,9 @@ export const hentEnkeltInformasjonsbrevRequest = ({
 }: IHentEnkeltInformasjonsbrevRequestInput): IManueltBrevRequestPåFagsak => {
     if (bruker.status === RessursStatus.SUKSESS) {
         return {
-            mottakerIdent: bruker.data.personIdent,
             multiselectVerdier: [],
             barnIBrev: [],
             mottakerMålform: målform,
-            mottakerNavn: bruker.data.navn,
             brevmal: brevmal,
         };
     } else {

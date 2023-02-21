@@ -12,7 +12,6 @@ import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/Brev
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
-import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { Målform } from '../typer/søknad';
 import {
@@ -43,13 +42,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const brevmottakere = åpenBehandling?.brevmottakere ?? [];
     const institusjon = minimalFagsak?.institusjon;
 
-    const mottakerIdent = useFelt({
-        verdi: institusjon
-            ? institusjon.orgNummer
-            : personer.find(person => person.type === PersonType.SØKER)?.personIdent || '',
-        valideringsfunksjon: (felt: FeltState<string>) =>
-            felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
-    });
     const brevmal = useFelt({
         verdi: '',
         valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
@@ -204,7 +196,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const { kanSendeSkjema, onSubmit, skjema, settVisfeilmeldinger } = useSkjema<
         {
-            mottakerIdent: string;
             brevmal: Brevmal | '';
             dokumenter: ISelectOptionMedBrevtekst[];
             fritekster: FeltState<IFritekstFelt>[];
@@ -218,7 +209,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         IBehandling
     >({
         felter: {
-            mottakerIdent,
             brevmal,
             dokumenter,
             fritekster,
@@ -249,12 +239,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjema.felter.mottakerlandSed.nullstill();
     }, [skjema.felter.brevmal.verdi]);
 
-    const mottakersMålform = (): Målform =>
-        mottakersMålformImplementering(
-            personer,
-            skjema.felter.mottakerIdent.valideringsstatus,
-            skjema.felter.mottakerIdent.verdi
-        );
+    const mottakersMålform = (): Målform => mottakersMålformImplementering(personer, !!institusjon);
 
     const hentMuligeBrevMaler = (): Brevmal[] =>
         hentMuligeBrevmalerImplementering(åpenBehandlingRessurs, !!institusjon);
@@ -317,7 +302,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             );
 
             return {
-                mottakerIdent: skjema.felter.mottakerIdent.verdi,
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
@@ -326,10 +310,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 behandlingKategori,
                 antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
                 mottakerMålform: mottakersMålform(),
-                mottakerNavn:
-                    mottakerIdent.verdi === institusjon?.orgNummer
-                        ? institusjon.navn
-                        : personer.find(person => person.personIdent === mottakerIdent.verdi)?.navn,
                 mottakerlandSed: mottakerlandSed.verdi,
             };
         }
@@ -339,7 +319,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         const merkedeBarn = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
         return {
-            mottakerIdent: skjema.felter.mottakerIdent.verdi,
             multiselectVerdier: merkedeBarn.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
             barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,

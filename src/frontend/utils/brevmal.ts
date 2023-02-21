@@ -1,4 +1,3 @@
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -9,7 +8,6 @@ import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
-import { erOrgNr } from './formatter';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>,
@@ -90,15 +88,9 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
 
 export const mottakersMålformImplementering = (
     personer: IGrunnlagPerson[],
-    skjemaValideringsStatus: Valideringsstatus,
-    mottakerIdent: string | readonly string[] | number
+    erInstitusjon: boolean
 ) =>
-    (erOrgNr(mottakerIdent.toString())
+    erInstitusjon
         ? personer[0]?.målform
-        : personer.find((person: IGrunnlagPerson) => {
-              if (skjemaValideringsStatus === Valideringsstatus.OK) {
-                  return person.personIdent === mottakerIdent;
-              } else {
-                  return person.type === PersonType.SØKER;
-              }
-          })?.målform) ?? Målform.NB;
+        : personer.find((person: IGrunnlagPerson) => person.type === PersonType.SØKER)?.målform ??
+          Målform.NB;

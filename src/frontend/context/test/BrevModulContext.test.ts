@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
@@ -89,24 +88,17 @@ describe('BrevmodulContext', () => {
 
     describe('mottakersMålformImplementering', () => {
         const personIdent = '12345678930';
-        const orgNummer = '123456789';
         const personerNB = [mockBarn, mockSøker({ målform: Målform.NB, personIdent })];
         const personerNN = [mockBarn, mockSøker({ målform: Målform.NN, personIdent })];
         test('Skal returnere NB når søkers målform er NB', () => {
-            expect(
-                mottakersMålformImplementering(personerNB, Valideringsstatus.OK, personIdent)
-            ).toEqual(Målform.NB);
+            expect(mottakersMålformImplementering(personerNB, false)).toEqual(Målform.NB);
         });
 
         test('Skal returnere NN når søkers målform er NN', () => {
-            expect(
-                mottakersMålformImplementering(personerNN, Valideringsstatus.OK, personIdent)
-            ).toEqual(Målform.NN);
+            expect(mottakersMålformImplementering(personerNN, false)).toEqual(Målform.NN);
         });
         test('Skal returnere målformen registrert på barnet når mottakeren er en institusjon', () => {
-            expect(
-                mottakersMålformImplementering([mockBarn], Valideringsstatus.OK, orgNummer)
-            ).toEqual(mockBarn.målform);
+            expect(mottakersMålformImplementering([mockBarn], true)).toEqual(mockBarn.målform);
         });
     });
 });

@@ -159,11 +159,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
                 return {
-                    mottakerIdent: bruker.data.personIdent,
                     multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
-                    mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
                 };
             } else {
@@ -185,11 +183,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 });
 
                 return {
-                    mottakerIdent: bruker.data.personIdent,
                     multiselectVerdier: dokumenter.concat(fritekster),
                     barnIBrev: [],
                     mottakerMålform: målform,
-                    mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
                 };
             } else {
