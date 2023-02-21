@@ -26,6 +26,7 @@ const ToggleVisningVenstremeny = styled(Button)`
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
+    z-index: 1; // for å ligge foran innhold i hovedvisningen
 `;
 
 const ÅpenMenyContainer = styled.div`

@@ -29,7 +29,6 @@
     ]
   },
   "dependencies": {
-
     "@axe-core/react": "^4.6.0",
     "@navikt/ds-css": "2.2.0",
     "@navikt/ds-css-internal": "2.2.0",
