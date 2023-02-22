@@ -13,7 +13,13 @@ import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
-import { kalenderDato, kalenderDatoTilDate, kalenderDiff, TIDENES_MORGEN } from '../utils/kalender';
+import {
+    erFør,
+    kalenderDato,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    TIDENES_MORGEN,
+} from '../utils/kalender';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -33,6 +39,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     });
     const maksLengdeTekst = 1500;
     const beløpsgrenseForMigreringMedFeilutbetaling = 100;
+    const mars2023 = '2023-03-01';
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
@@ -82,9 +89,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const skalStoppeISimulering = () => {
         if (åpenBehandling.årsak === BehandlingÅrsak.HELMANUELL_MIGRERING && simResultat) {
-            const tidligereUtbetaltPerioderEtterbetalingOver220 = simResultat.perioder.filter(
-                periode => periode.etterbetaling && periode.etterbetaling > 220
-            );
+            const tidligereUtbetaltPerioderEtterbetalingOver220 = simResultat.perioder
+                .filter(periode => erFør(kalenderDato(periode.fom), kalenderDato(mars2023)))
+                .filter(periode => periode.etterbetaling && periode.etterbetaling > 220);
             return erFeilutbetaling || tidligereUtbetaltPerioderEtterbetalingOver220.length > 0;
         }
         return erFeilutbetaling || erEtterutbetaling;
@@ -92,7 +99,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const erMigreringMedStoppISimulering = erMigreringFraInfotrygd && skalStoppeISimulering();
 
     const erNegativeMånedsbeløpPåMaksEnKrone = (simPerioder: ISimuleringPeriode[]) =>
-        simPerioder.map(periode => periode.resultat || 0).every(beløp => beløp <= 0 && beløp >= -1);
+        simPerioder
+            .filter(periode => erFør(kalenderDato(periode.fom), kalenderDato(mars2023)))
+            .map(periode => periode.resultat || 0)
+            .every(beløp => beløp <= 0 && beløp >= -1);
 
     const erMigreringMedFeilutbetalingInnenforBeløpsgrenser =
         erMigreringFraInfotrygd &&
