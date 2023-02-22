@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { BehandlingResultat } from '../../typer/behandling';
 import { hentSisteIkkeHenlagteBehandling } from '../fagsak';
 import { mockVisningBehandling } from './behandling/behandling.mock';

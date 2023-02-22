@@ -1,9 +1,14 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { kjønnType } from '@navikt/familie-typer';
 
 import { YtelseType } from '../../typer/beregning';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { Vedtaksperiodetype } from '../../typer/vedtaksperiode';
+import { hentBarnMedLøpendeUtbetaling } from '../../utils/fagsak';
 import {
     kalenderDatoFraDate,
     KalenderEnhet,
@@ -11,7 +16,6 @@ import {
     serializeIso8601String,
 } from '../../utils/kalender';
 import { mockMinimalFagsak } from '../../utils/test/minimalFagsak/minimalFagsak.mock';
-import { hentBarnMedLøpendeUtbetaling } from '../SøknadContext';
 
 describe('SøknadContext', () => {
     test('Hent barn med løpende utbetalinger på fagsak', () => {

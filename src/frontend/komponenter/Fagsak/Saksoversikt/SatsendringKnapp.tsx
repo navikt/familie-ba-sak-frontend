@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -11,8 +11,12 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSatsendringsknapp } from './useSatsendringsknapp';
 
-const StyledButton = styled(Button)`
+const StyledAlert = styled(Alert)`
     margin-top: 2rem;
+`;
+
+const StyledButton = styled(Button)`
+    margin-top: 1rem;
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`
@@ -50,6 +54,12 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) 
 
     return (
         <>
+            <StyledAlert variant={'warning'}>
+                NB! Du skal kun bruke "Gjennomfør satsendring"-knappen når du skal gjennomføre en
+                revurdering uten endringer med resultat "fortsatt innvilget". I alle andre
+                behandlinger vil satsendringen legges til automatisk.
+            </StyledAlert>
+
             <StyledButton icon={<AddCircle />} onClick={oppdaterFagsakMedSatsendring}>
                 Gjennomfør satsendring
             </StyledButton>
