@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import { FileContent } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
@@ -24,6 +25,7 @@ import {
 } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import BrevmottakerListe from '../../Felleskomponenter/Hendelsesoversikt/BrevModul/BrevmottakerListe';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
@@ -68,6 +70,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+
+    const personer = åpenBehandling?.personer ?? [];
+    const brevmottakere = åpenBehandling?.brevmottakere ?? [];
+    const institusjon = hentDataFraRessurs(minimalFagsakRessurs)?.institusjon;
 
     const { overstyrFortsattInnvilgetVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
         åpenBehandling,
@@ -184,6 +192,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         {åpenBehandling.korrigertVedtak && (
                             <BehandlingKorrigertAlert variant="info">
                                 Vedtaket er korrigert etter § 35
+                            </BehandlingKorrigertAlert>
+                        )}
+                        {brevmottakere && brevmottakere.length !== 0 && (
+                            <BehandlingKorrigertAlert variant="info">
+                                Brevmottaker(e) er endret, og vedtak sendes til:
+                                <BrevmottakerListe
+                                    brevmottakere={brevmottakere}
+                                    institusjon={institusjon}
+                                    personer={personer}
+                                />
                             </BehandlingKorrigertAlert>
                         )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
