@@ -48,6 +48,7 @@ export enum AnnenForelderAktivitet {
     MOTTAR_PENSJON = 'MOTTAR_PENSJON',
     INAKTIV = 'INAKTIV',
     IKKE_AKTUELT = 'IKKE_AKTUELT',
+    UTSENDT_ARBEIDSTAKER = 'UTSENDT_ARBEIDSTAKER',
 }
 
 export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = {
@@ -57,6 +58,7 @@ export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = 
     MOTTAR_PENSJON: 'Mottar pensjon',
     INAKTIV: 'Inaktiv',
     IKKE_AKTUELT: 'Ikke aktuelt',
+    UTSENDT_ARBEIDSTAKER: 'Utsendt arbeidstaker',
 };
 
 export enum KompetanseResultat {
