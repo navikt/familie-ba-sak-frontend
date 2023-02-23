@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { FileContent } from '@navikt/ds-icons';
-import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -28,6 +28,7 @@ import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import BrevmottakerListe from '../../Felleskomponenter/Hendelsesoversikt/BrevModul/BrevmottakerListe';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
@@ -46,19 +47,6 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
 
 const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
-`;
-
-const Modaltekst = styled(BodyShort)`
-    margin: 2rem 0;
-`;
-
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: center;
 `;
 
 interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
@@ -267,42 +255,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         </Button>
                     </div>
 
-                    <Modal
-                        open={visModal}
-                        onClose={() => settVisModal(false)}
-                        closeButton={true}
-                        shouldCloseOnOverlayClick={false}
-                    >
-                        <Modal.Content>
-                            <Heading size={'medium'} level={'2'}>
-                                Totrinnskontroll
-                            </Heading>
-                            <Modaltekst>Behandlingen er nå sendt til totrinnskontroll</Modaltekst>
-                            <Knapperad>
-                                <Button
-                                    key={'oppgavebenk'}
-                                    variant={'secondary'}
-                                    size={'medium'}
-                                    onClick={() => {
-                                        settVisModal(false);
-                                        navigate('/oppgaver');
-                                    }}
-                                    children={'Gå til oppgavebenken'}
-                                />
-                                <KnappHøyre
-                                    key={'saksoversikt'}
-                                    variant={'secondary'}
-                                    size={'medium'}
-                                    onClick={() => {
-                                        settVisModal(false);
-                                        navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                                        window.location.reload();
-                                    }}
-                                    children={'Gå til saksoversikten'}
-                                />
-                            </Knapperad>
-                        </Modal.Content>
-                    </Modal>
+                    <BehandlingSendtTilTotrinnskontrollModal
+                        visModal={visModal}
+                        settVisModal={settVisModal}
+                    />
                 </>
             ) : erMigreringFraInfotrygd ? (
                 <Alert variant="info">
