@@ -155,6 +155,7 @@ const useLeggTilFjernBrevmottaker = () => {
         nullstillSkjema,
         settSubmitRessurs,
         valideringErOk,
+        validerAlleSynligeFelter,
     } = useSkjema<ILeggTilFjernBrevmottakerSkjema, IBehandling>({
         felter: {
             mottaker,
@@ -217,6 +218,7 @@ const useLeggTilFjernBrevmottaker = () => {
                     tekst: 'Mottaker fjernet',
                 });
                 settÅpenBehandling(response);
+                validerAlleSynligeFelter();
             }
         });
     };
