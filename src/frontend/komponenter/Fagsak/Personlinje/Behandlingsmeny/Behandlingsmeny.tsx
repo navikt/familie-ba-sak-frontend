@@ -7,10 +7,11 @@ import '@navikt/ds-css-internal';
 import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { Adressebeskyttelsegradering, RessursStatus } from '@navikt/familie-typer';
+import { Adressebeskyttelsegradering, hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
@@ -39,10 +40,15 @@ const StyletDropdownMenu = styled(Dropdown.Menu)`
 `;
 
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
-    const { åpenBehandling, vurderErLesevisning } = useBehandling();
+    const { åpenBehandling: åpenBehandlingRessurs, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
     const { toggles } = useApp();
+    const { behandlingId: behandlingIdFraURL } = useSakOgBehandlingParams();
+
     const erLesevisning = vurderErLesevisning();
+    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
+
+    const erPåBehandling = !!behandlingIdFraURL && !!åpenBehandling;
 
     const brukerEllerBarnHarStrengtFortroligAdresse =
         bruker &&
@@ -77,45 +83,42 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     >
                         Send informasjonsbrev
                     </Dropdown.Menu.List.Item>
-                    {åpenBehandling.status === RessursStatus.SUKSESS && <Dropdown.Menu.Divider />}
-                    {åpenBehandling.status === RessursStatus.SUKSESS && (
+                    {erPåBehandling && <Dropdown.Menu.Divider />}
+                    {erPåBehandling && (
                         <HenleggBehandling
                             fagsakId={minimalFagsak.id}
-                            behandling={åpenBehandling.data}
+                            behandling={åpenBehandling}
                         />
                     )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS && <EndreBehandlendeEnhet />}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
+                    {erPåBehandling && <EndreBehandlendeEnhet />}
+                    {erPåBehandling &&
+                        åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD &&
                         minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && (
                             <EndreBehandlingstema />
                         )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                    {erPåBehandling &&
                         !vurderErLesevisning() &&
-                        (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
-                            åpenBehandling.data.type ===
-                                Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
-                            <LeggTilBarnPBehandling behandling={åpenBehandling.data} />
+                        (åpenBehandling.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
+                            åpenBehandling.årsak === BehandlingÅrsak.KLAGE ||
+                            åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+                            åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
+                            <LeggTilBarnPBehandling behandling={åpenBehandling} />
                         )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.status === BehandlingStatus.UTREDES && (
-                            <SettEllerOppdaterVenting behandling={åpenBehandling.data} />
-                        )}
-                    {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.aktivSettPåVent && (
-                            <TaBehandlingAvVent behandling={åpenBehandling.data} />
-                        )}
+                    {erPåBehandling && åpenBehandling.status === BehandlingStatus.UTREDES && (
+                        <SettEllerOppdaterVenting behandling={åpenBehandling} />
+                    )}
+                    {erPåBehandling && åpenBehandling.aktivSettPåVent && (
+                        <TaBehandlingAvVent behandling={åpenBehandling} />
+                    )}
                     {toggles[ToggleNavn.leggTilMottaker] &&
                         !brukerEllerBarnHarStrengtFortroligAdresse &&
-                        åpenBehandling.status === RessursStatus.SUKSESS &&
-                        (!erLesevisning || åpenBehandling.data.brevmottakere.length > 0) &&
-                        (åpenBehandling.data.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
-                            åpenBehandling.data.type === Behandlingstype.REVURDERING) && (
+                        erPåBehandling &&
+                        (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
+                        (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                            åpenBehandling.type === Behandlingstype.REVURDERING) && (
                             <LeggTilEllerFjernBrevmottakere
-                                åpenBehandling={åpenBehandling.data}
+                                åpenBehandling={åpenBehandling}
                                 erLesevisning={erLesevisning}
                             />
                         )}
