@@ -111,12 +111,9 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate>({
         verdi: '',
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoFørForrigeMåned(felt.verdi)
+            felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoMindreEllerLikMaksdato(felt.verdi)
                 ? ok(felt)
-                : feil(
-                      felt,
-                      'Du må velge en migreringsdato som er før inneværende eller forrige måned'
-                  ),
+                : feil(felt, 'Du må velge 01.01.23 eller tidligere som migreringsdato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -189,8 +186,8 @@ const useOpprettBehandling = (
         return Date.parse(dato.toString()) > new Date().getTime();
     };
 
-    const erDatoFørForrigeMåned = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) <= dagenførForrigeMånedStartet().getTime();
+    const erDatoMindreEllerLikMaksdato = (dato: FamilieIsoDate): boolean => {
+        return Date.parse(dato.toString()) <= MAKSDATO_FOR_MIGRERING.getTime();
     };
 
     const valgteBarn = useFelt({
@@ -330,19 +327,14 @@ const useOpprettBehandling = (
         nullstillSkjema();
     };
 
-    const dagenførForrigeMånedStartet = () => {
-        const dato = new Date();
-        dato.setMonth(dato.getMonth() - 1);
-        dato.setDate(0);
-        return dato;
-    };
+    const MAKSDATO_FOR_MIGRERING = new Date('2023-01-01');
 
     return {
         onBekreft,
         opprettBehandlingSkjema: skjema,
         nullstillSkjemaStatus,
         bruker,
-        maksdatoForMigrering: dagenførForrigeMånedStartet,
+        maksdatoForMigrering: MAKSDATO_FOR_MIGRERING,
         valideringErOk,
     };
 };

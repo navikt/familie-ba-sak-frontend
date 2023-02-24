@@ -31,6 +31,7 @@ const StyledAlert = styled(Alert)`
 
 const StyledBeløpsgrenseAlert = styled(Alert)`
     margin-top: 2rem;
+    width: fit-content;
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
@@ -44,7 +45,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
         erFeilutbetaling,
-        erMigreringMedFeilutbetalingInnenforBeløpsgrenser,
+        harStoppetMigreringAvvikInnenforBeløpsgrenser,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
@@ -92,7 +93,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
                 !erMigreringMedStoppISimulering ||
-                erMigreringMedFeilutbetalingInnenforBeløpsgrenser ||
+                harStoppetMigreringAvvikInnenforBeløpsgrenser ||
                 skalIkkeStoppeMigreringsbehandlinger
             }
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
@@ -107,27 +108,27 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
                         {(!erMigreringMedStoppISimulering ||
-                            erMigreringMedFeilutbetalingInnenforBeløpsgrenser ||
-                            skalIkkeStoppeMigreringsbehandlinger) &&
-                            erFeilutbetaling && (
-                                <>
-                                    {erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
-                                        <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                            Behandlingen medfører en feilutbetaling. Ved
-                                            feilutbetalingsbeløp på mindre enn totalt 100 kroner,
-                                            kan du gå videre i behandlingen. Du må huske å sende
-                                            oppgave til NØS om at det ikke skal opprettes
-                                            kravgrunnlag.
-                                        </StyledBeløpsgrenseAlert>
-                                    )}
+                            harStoppetMigreringAvvikInnenforBeløpsgrenser ||
+                            skalIkkeStoppeMigreringsbehandlinger) && (
+                            <>
+                                {harStoppetMigreringAvvikInnenforBeløpsgrenser && (
+                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                        Behandlingen medfører avvik i simulering. Ved avvik på
+                                        mindre enn totalt 100 kroner, kan du gå videre i
+                                        behandlingen. Du må huske å sende oppgave til NØS om at det
+                                        ikke skal etterbetales / opprettes kravgrunnlag.
+                                    </StyledBeløpsgrenseAlert>
+                                )}
+                                {erFeilutbetaling && (
                                     <TilbakekrevingSkjema
                                         søkerMålform={hentSøkersMålform(åpenBehandling)}
                                         harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                                     />
-                                </>
-                            )}
+                                )}
+                            </>
+                        )}
                         {erMigreringMedStoppISimulering &&
-                            !erMigreringMedFeilutbetalingInnenforBeløpsgrenser && (
+                            !harStoppetMigreringAvvikInnenforBeløpsgrenser && (
                                 <Alert variant="error">
                                     Utbetalingen må være lik utbetalingen i Infotrygd.
                                     <br />

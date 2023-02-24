@@ -69,7 +69,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         erMigreringsbehandling ||
         hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
-        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KLAGE;
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KLAGE ||
+        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
 
     const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
         personResultat.vilkårResultater.some(
