@@ -1,6 +1,11 @@
 import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus, byggHenterRessurs } from '@navikt/familie-typer';
+import {
+    type Ressurs,
+    RessursStatus,
+    byggHenterRessurs,
+    hentDataFraRessurs,
+} from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
@@ -45,14 +50,43 @@ export interface IRestBrevmottaker {
 
 const useLeggTilFjernBrevmottaker = () => {
     const { settToast } = useApp();
-    const { settÅpenBehandling } = useBehandling();
+    const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
+    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== '' ? ok(felt) : feil(felt, 'Feltet er påkrevd'),
+        valideringsfunksjon: felt => {
+            if (felt.verdi === '') {
+                return feil(felt, 'Feltet er påkrevd');
+            }
+            if (åpenBehandling?.brevmottakere.length) {
+                const eksisterendeBrevmottakerType = åpenBehandling.brevmottakere[0].type;
+                if (felt.verdi === eksisterendeBrevmottakerType) {
+                    return feil(felt, `${mottakerVisningsnavn[felt.verdi]} er allerede lagt til`);
+                }
+                if (
+                    felt.verdi === Mottaker.DØDSBO ||
+                    eksisterendeBrevmottakerType === Mottaker.DØDSBO
+                ) {
+                    return feil(felt, 'Dødsbo kan ikke kombineres med andre brevmottakere');
+                }
+                if (
+                    felt.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE ||
+                    eksisterendeBrevmottakerType === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                ) {
+                    return ok(felt);
+                }
+                return feil(
+                    felt,
+                    `${
+                        mottakerVisningsnavn[eksisterendeBrevmottakerType]
+                    } kan ikke kombineres med ${mottakerVisningsnavn[felt.verdi].toLowerCase()}.`
+                );
+            }
+            return ok(felt);
+        },
     });
     const navn = useFelt<string>({
         verdi: '',
