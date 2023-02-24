@@ -113,10 +113,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                         (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                             åpenBehandling.type === Behandlingstype.REVURDERING) && (
-                            <LeggTilEllerFjernBrevmottakere
-                                åpenBehandling={åpenBehandling}
-                                erLesevisning={erLesevisning}
-                            />
+                            <LeggTilEllerFjernBrevmottakere åpenBehandling={åpenBehandling} />
                         )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>
