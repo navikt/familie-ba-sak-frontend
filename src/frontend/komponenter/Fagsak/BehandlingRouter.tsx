@@ -24,7 +24,7 @@ import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 
-const BehandlingContainer: React.FunctionComponent = () => {
+const BehandlingRouter: React.FunctionComponent = () => {
     const { loggSidevisning } = useAmplitude();
     const location = useLocation();
     const { åpenBehandling, leggTilBesøktSide } = useBehandling();
@@ -110,4 +110,4 @@ const BehandlingContainer: React.FunctionComponent = () => {
     }
 };
 
-export default BehandlingContainer;
+export default BehandlingRouter;

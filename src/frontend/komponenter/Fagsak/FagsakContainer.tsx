@@ -10,7 +10,7 @@ import { useFagsakContext } from '../../context/fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
-import BehandlingContainer from './BehandlingContainer';
+import BehandlingRouter from './BehandlingRouter';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import Høyremeny from './Høyremeny/Høyremeny';
 import JournalpostListe from './journalposter/JournalpostListe';
@@ -99,7 +99,7 @@ const FagsakContainer: React.FunctionComponent = () => {
 
                                         <Route
                                             path="/:behandlingId/*"
-                                            element={<BehandlingContainer />}
+                                            element={<BehandlingRouter />}
                                         />
                                         <Route
                                             path="/"
