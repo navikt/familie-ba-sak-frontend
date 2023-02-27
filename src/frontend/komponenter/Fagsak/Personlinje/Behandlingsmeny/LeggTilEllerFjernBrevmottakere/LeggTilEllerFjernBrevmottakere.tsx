@@ -97,7 +97,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling, erL
                         fullmektig, verge eller dødsbo.
                     </StyledAlert>
                     {åpenBehandling.brevmottakere.map(mottaker => (
-                        <BrevmottakerTabell mottaker={mottaker} />
+                        <BrevmottakerTabell mottaker={mottaker} key={`mottaker-${mottaker.id}`} />
                     ))}
                     {visSkjema ? (
                         <>
