@@ -57,12 +57,15 @@ const useLeggTilFjernBrevmottaker = () => {
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
-        valideringsfunksjon: felt => {
+        avhengigheter: { åpenBehandling },
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const eksisterendeMottakere: IRestBrevmottaker[] =
+                avhengigheter?.åpenBehandling.brevmottakere;
             if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
-            if (åpenBehandling?.brevmottakere.length) {
-                const eksisterendeBrevmottakerType = åpenBehandling.brevmottakere[0].type;
+            if (eksisterendeMottakere.length) {
+                const eksisterendeBrevmottakerType = eksisterendeMottakere[0].type;
                 if (felt.verdi === eksisterendeBrevmottakerType) {
                     return feil(felt, `${mottakerVisningsnavn[felt.verdi]} er allerede lagt til`);
                 }
@@ -155,7 +158,6 @@ const useLeggTilFjernBrevmottaker = () => {
         nullstillSkjema,
         settSubmitRessurs,
         valideringErOk,
-        validerAlleSynligeFelter,
     } = useSkjema<ILeggTilFjernBrevmottakerSkjema, IBehandling>({
         felter: {
             mottaker,
@@ -218,7 +220,6 @@ const useLeggTilFjernBrevmottaker = () => {
                     tekst: 'Mottaker fjernet',
                 });
                 settÅpenBehandling(response);
-                validerAlleSynligeFelter();
             }
         });
     };
