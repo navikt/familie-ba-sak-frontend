@@ -9,10 +9,8 @@ import { DokumentutsendingProvider } from '../../context/DokumentutsendingContex
 import { useFagsakContext } from '../../context/fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useAmplitude } from '../../utils/amplitude';
-import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
-import BehandlingRouter from './BehandlingRouter';
+import BehandlingContainer from './BehandlingContainer';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
-import Høyremeny from './Høyremeny/Høyremeny';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
@@ -23,12 +21,7 @@ const FagsakContainer: React.FunctionComponent = () => {
     const location = useLocation();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = location.pathname.includes('saksoversikt');
-    const erPåDokumentliste = location.pathname.includes('dokumenter');
     const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
-
-    const skalHaVenstremeny = !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending;
-
-    const skalHaHøyremeny = !erPåSaksoversikt && !erPåDokumentutsending;
 
     const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 
@@ -64,11 +57,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                             <Personlinje bruker={bruker.data} minimalFagsak={minimalFagsak.data} />
 
                             <div className={'fagsakcontainer__content'}>
-                                {skalHaVenstremeny && (
-                                    <div className={'fagsakcontainer__content--venstremeny'}>
-                                        <Venstremeny />
-                                    </div>
-                                )}
                                 <div
                                     id={'fagsak-main'}
                                     className={'fagsakcontainer__content--main'}
@@ -99,7 +87,7 @@ const FagsakContainer: React.FunctionComponent = () => {
 
                                         <Route
                                             path="/:behandlingId/*"
-                                            element={<BehandlingRouter />}
+                                            element={<BehandlingContainer />}
                                         />
                                         <Route
                                             path="/"
@@ -109,11 +97,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                     </Routes>
                                 </div>
-                                {skalHaHøyremeny && (
-                                    <div className={'fagsakcontainer__content--høyremeny'}>
-                                        <Høyremeny />
-                                    </div>
-                                )}
                             </div>
                         </>
                     );
