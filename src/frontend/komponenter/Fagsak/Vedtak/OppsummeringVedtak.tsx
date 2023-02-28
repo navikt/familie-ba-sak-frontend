@@ -92,10 +92,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         React.useState(false);
 
     React.useEffect(() => {
-        settVisFeilutbetaltValuta(
-            åpenBehandling.feilutbetaltValuta.length > 0 &&
-                toggles[ToggleNavn.trekkILøpendeUtbetaling]
-        );
+        settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {

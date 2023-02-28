@@ -7,11 +7,9 @@ import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
 import { BehandlingKategori } from '../../../typer/behandlingstema';
-import { ToggleNavn } from '../../../typer/toggles';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
@@ -38,7 +36,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const { toggles } = useApp();
 
     const kanIkkeKorrigereVedtak =
         åpenBehandling.type === Behandlingstype.REVURDERING &&
@@ -77,8 +74,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     )}
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
-                        åpenBehandling.kategori === BehandlingKategori.EØS &&
-                        toggles[ToggleNavn.trekkILøpendeUtbetaling] && (
+                        åpenBehandling.kategori === BehandlingKategori.EØS && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
                                 <Calculator />
                                 Legg til feilutbetalt valuta og sats
