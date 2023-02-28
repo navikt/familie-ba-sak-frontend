@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -11,7 +10,6 @@ import { useSøknad } from '../../../context/SøknadContext';
 import Slett from '../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../utils/formatter';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -47,7 +45,6 @@ const FjernBarnKnapp = styled(Button)`
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
     const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
-    const [visHarLøpendeModal, settVisHarLøpendeModal] = useState(false);
 
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
 
@@ -92,12 +89,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     checked={barn.merket}
                     onChange={() => {
                         const nyMerketStatus = !barn.merket;
-
-                        if (barnetHarLøpendeUtbetaling && nyMerketStatus) {
-                            settVisHarLøpendeModal(true);
-                        } else {
-                            oppdaterBarnMerket(nyMerketStatus);
-                        }
+                        oppdaterBarnMerket(nyMerketStatus);
                     }}
                 >
                     <LabelContent>
@@ -125,39 +117,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     {'Fjern barn'}
                 </FjernBarnKnapp>
             )}
-            <UIModalWrapper
-                modal={{
-                    tittel: 'Søker mottar allerede barnetrygd for dette barnet',
-                    lukkKnapp: true,
-                    visModal: visHarLøpendeModal,
-                    actions: [
-                        <Button
-                            variant={'secondary'}
-                            key={'avbryt'}
-                            size={'small'}
-                            onClick={() => {
-                                settVisHarLøpendeModal(false);
-                            }}
-                            children={'Avbryt'}
-                        />,
-                        <Button
-                            variant={'secondary'}
-                            key={'velg-barnet'}
-                            size={'small'}
-                            onClick={() => {
-                                settVisHarLøpendeModal(false);
-                                oppdaterBarnMerket(true);
-                            }}
-                            children={'Velg barnet'}
-                        />,
-                    ],
-                }}
-            >
-                <BodyShort>
-                    Barnet ({formaterIdent(barn.ident)}) har løpende barnetrygd. Du skal kun velge
-                    barn som det ikke utbetales barnetrygd for.
-                </BodyShort>
-            </UIModalWrapper>
         </CheckboxOgSlettknapp>
     );
 };
