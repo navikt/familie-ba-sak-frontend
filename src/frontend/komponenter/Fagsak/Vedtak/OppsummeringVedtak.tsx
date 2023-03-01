@@ -25,10 +25,10 @@ import {
 } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import BrevmottakerListe from '../../Felleskomponenter/Hendelsesoversikt/BrevModul/BrevmottakerListe';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import { BrevmottakereAlert } from './BrevmottakereAlert';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
@@ -45,7 +45,7 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     }
 `;
 
-const BehandlingKorrigertAlert = styled(Alert)`
+export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
@@ -58,6 +58,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
@@ -80,8 +81,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
-    const visSubmitKnapp =
-        !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
+    const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
@@ -183,20 +183,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             </BehandlingKorrigertAlert>
                         )}
                         {brevmottakere && brevmottakere.length !== 0 && (
-                            <BehandlingKorrigertAlert variant="info">
-                                Brevmottaker(e) er endret, og vedtak sendes til:
-                                <BrevmottakerListe
-                                    brevmottakere={brevmottakere}
-                                    institusjon={institusjon}
-                                    personer={personer}
-                                />
-                            </BehandlingKorrigertAlert>
+                            <BrevmottakereAlert
+                                brevmottakere={brevmottakere}
+                                institusjon={institusjon}
+                                personer={personer}
+                                åpenBehandling={åpenBehandling}
+                            />
                         )}
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
                             !toggles[ToggleNavn.nyMåteÅBeregneBehandlingsresultat] && (
                                 <FamilieSelect
                                     label="Velg brev med eller uten perioder"
-                                    erLesevisning={vurderErLesevisning()}
+                                    erLesevisning={erLesevisning}
                                     onChange={(
                                         event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
                                     ): void => {
@@ -235,7 +233,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         settErUlagretNyFeilutbetaltValutaPeriode={
                                             settErUlagretNyFeilutbetaltValutaPeriode
                                         }
-                                        erLesevisning={vurderErLesevisning()}
+                                        erLesevisning={erLesevisning}
                                         skjulFeilutbetaltValuta={() =>
                                             settVisFeilutbetaltValuta(false)
                                         }
