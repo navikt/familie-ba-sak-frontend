@@ -2672,7 +2672,7 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/2.0.12/415923ba949853ce4946700f5bf16bbde68512d6#415923ba949853ce4946700f5bf16bbde68512d6"
   integrity sha512-+XbDY6AMrWYifMr1dQ8QF5IIUhVj1Rhz8se0XS8wDiXMkNwsSPRenLipYplDY3qmUz7GBg4XEgFhGqHTIM7jkw==
 
-"@navikt/ds-icons@2.0.12", "@navikt/ds-icons@^2.0.12", "@navikt/ds-icons@^2.0.x":
+"@navikt/ds-icons@2.0.12", "@navikt/ds-icons@^2.0.12":
   version "2.0.12"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.0.12/5a501c8994d587dfee3a6cddb6387ee1f05652f5#5a501c8994d587dfee3a6cddb6387ee1f05652f5"
   integrity sha512-56ywftdtL5B4oZUb0ouO9rdN6X/refmDKJ+jtHt5jtnpjE+STpmCWmDCxacRSLb34YHmGJCl3zoyhPdelCZe9w==
@@ -2687,7 +2687,7 @@
     clsx "^1.1.1"
     copy-to-clipboard "^3.3.1"
 
-"@navikt/ds-react@2.0.12", "@navikt/ds-react@2.0.x", "@navikt/ds-react@^2.0.12", "@navikt/ds-react@^2.0.x":
+"@navikt/ds-react@2.0.12", "@navikt/ds-react@2.0.x", "@navikt/ds-react@^2.0.12":
   version "2.0.12"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-react/2.0.12/8336c595bb47b32a004c28a0aa0c43485f9d5484#8336c595bb47b32a004c28a0aa0c43485f9d5484"
   integrity sha512-i7rQQMDMPUtP+WDJTQ44rQ2xfE3mBzsD2LwgJ0+q4yV7HfMuCknM6DMs0hrwxWaO0i7qLAOv7bmDop+mTBXP1Q==
@@ -2744,13 +2744,11 @@
     framer-motion "^6.3.16"
     react-tooltip "^4.2.21"
 
-"@navikt/familie-endringslogg@6.0.0":
-  version "6.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/6.0.0/5d94837092dcd143da0cc34e516d1e8a50e6ba8c#5d94837092dcd143da0cc34e516d1e8a50e6ba8c"
-  integrity sha512-MWYMP0rPsLF/i7DsZCSLF6wt5oGAV2E+yEeHMGykL3tzNDNOCQxihD9ufrFa0Kilpii4xvXh3Cg9/DvTamvO8g==
+"@navikt/familie-endringslogg@8.1.0":
+  version "8.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/8.1.0/65a9ce7f00f2407365192368ff184055e3d2096d#65a9ce7f00f2407365192368ff184055e3d2096d"
+  integrity sha512-omz6oUk208AfxjbK8V2G9sRffX8kVK1xWedtDO9TPQGzbHEgYJZkqKsUmNIMyANZ5nH0VjKIvrfhrz1DnYUcRw==
   dependencies:
-    "@navikt/ds-icons" "^2.0.x"
-    "@navikt/ds-react" "^2.0.x"
     "@portabletext/react" "^1.0.6"
     "@types/react-modal" "^3.13.1"
     classnames "^2.3.1"
