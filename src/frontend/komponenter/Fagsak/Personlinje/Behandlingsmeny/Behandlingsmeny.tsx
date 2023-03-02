@@ -9,13 +9,11 @@ import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { Adressebeskyttelsegradering, hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
-import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
@@ -42,7 +40,6 @@ const StyletDropdownMenu = styled(Dropdown.Menu)`
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { åpenBehandling: åpenBehandlingRessurs, vurderErLesevisning } = useBehandling();
     const navigate = useNavigate();
-    const { toggles } = useApp();
     const { behandlingId: behandlingIdFraURL } = useSakOgBehandlingParams();
 
     const erLesevisning = vurderErLesevisning();
@@ -111,8 +108,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     {erPåBehandling && åpenBehandling.aktivSettPåVent && (
                         <TaBehandlingAvVent behandling={åpenBehandling} />
                     )}
-                    {toggles[ToggleNavn.leggTilMottaker] &&
-                        !brukerEllerBarnHarStrengtFortroligAdresse &&
+                    {!brukerEllerBarnHarStrengtFortroligAdresse &&
                         erPåBehandling &&
                         (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                         (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
