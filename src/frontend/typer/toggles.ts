@@ -3,16 +3,18 @@ export interface IToggles {
 }
 
 export enum ToggleNavn {
+    // Operasjonelle
     kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
     skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
+    kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
+
+    // Release
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
-    leggTilMottaker = 'familie-ba-sak.behandling.legg-til-mottaker',
     kanBehandleKlage = 'familie-ba-sak.klage',
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
     kanKjøreSatsendringManuelt = 'familie-ba-sak.kan-kjore-satsendring-manuelt',
-    kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
     nyMåteÅBeregneBehandlingsresultat = 'familie-ba-sak.behandling.behandlingsresultat',
     manuellPostering = 'familie-ba-sak.manuell-postering',
 }
