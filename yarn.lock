@@ -2803,14 +2803,7 @@
     "@sentry/core" "^7.5.0"
     constate "^3.3.2"
 
-"@navikt/familie-ikoner@^4.0.3":
-  version "4.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/4.0.3/37e0a24c0d83d77cd5d257ab729f1332cbabe096#37e0a24c0d83d77cd5d257ab729f1332cbabe096"
-  integrity sha512-0rG+jTzBxP3XtfWKx1JIHiVk0pwNMd+FzHTj+kWLQWSiIlOORp8axj35p1NqKj2w7ZSRxLSgHIq4HksmegHH+g==
-  dependencies:
-    "@navikt/familie-typer" "^5.0.0"
-
-"@navikt/familie-ikoner@^7.0.0":
+"@navikt/familie-ikoner@7.0.0", "@navikt/familie-ikoner@^7.0.0":
   version "7.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/7.0.0/8629366b465243d28ae1a9c199153529b5583817#8629366b465243d28ae1a9c199153529b5583817"
   integrity sha512-SowUSxLMw7jhGWgyOM9u//orOUcGb1VXYPwDj+8dumuTQqyxWcF/Q0Y+txVI6uCMmFOlUYTRoCGNP7J2/B7C1g==

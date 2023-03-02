@@ -42,7 +42,7 @@
     "@navikt/familie-form-elements": "9.0.0",
     "@navikt/familie-header": "10.1.2",
     "@navikt/familie-http": "^3.0.1",
-    "@navikt/familie-ikoner": "^4.0.3",
+    "@navikt/familie-ikoner": "7.0.0",
     "@navikt/familie-logging": "^3.0.0",
     "@navikt/familie-skjema": "4.0.9",
     "@navikt/familie-tidslinje": "5.1.0",
