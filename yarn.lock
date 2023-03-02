@@ -2841,15 +2841,15 @@
     classnames "^2.3.1"
     nanoid "^4.0.0"
 
+"@navikt/familie-typer@8.0.0", "@navikt/familie-typer@^8.0.0":
+  version "8.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.0/f950131d30a4561cba4e35e262d5b71874d7abe0#f950131d30a4561cba4e35e262d5b71874d7abe0"
+  integrity sha512-+Lt3+u8CNvCaNN3pnaodWq+NE8sHWyJ/bXWYj1fgKHLY9/WnJCQDrhHiHy3xAwJM1HSkfrmApwRZnwOqywG5MA==
+
 "@navikt/familie-typer@^5.0.0":
   version "5.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/5.0.0/457a7865af7d164c5ea26ba942fec62da74e02c0fdcd48165fc6c1c8c9d19f1c#9b59ac4a1b044de72586339c2e3e4af60c9baac4"
   integrity sha512-rHc1Q+ND28qJ02A7ddn7Y3LDZBelvZv/g528GvxNhgYidpN+nD75czbUje/x3ZwD3W+f+WealUlcDMf057DTGg==
-
-"@navikt/familie-typer@^8.0.0":
-  version "8.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.0/f950131d30a4561cba4e35e262d5b71874d7abe0#f950131d30a4561cba4e35e262d5b71874d7abe0"
-  integrity sha512-+Lt3+u8CNvCaNN3pnaodWq+NE8sHWyJ/bXWYj1fgKHLY9/WnJCQDrhHiHy3xAwJM1HSkfrmApwRZnwOqywG5MA==
 
 "@navikt/familie-validering@^5.0.1":
   version "5.0.1"
