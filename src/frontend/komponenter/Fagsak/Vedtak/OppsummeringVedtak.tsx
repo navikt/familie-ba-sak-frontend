@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { FileContent } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
-import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
@@ -15,19 +14,16 @@ import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlerRolle,
-    BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
     Behandlingstype,
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import { PeriodetypeIVedtaksbrev, useVedtak } from './useVedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import Vedtaksmeny from './Vedtaksmeny';
@@ -59,19 +55,11 @@ const Knapperad = styled.div`
     justify-content: center;
 `;
 
-interface FortsattInnvilgetPerioderSelect extends HTMLSelectElement {
-    value: PeriodetypeIVedtaksbrev;
-}
-
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, toggles } = useApp();
+    const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
-
-    const { overstyrFortsattInnvilgetVedtaksperioder, periodetypeIVedtaksbrev } = useVedtak({
-        åpenBehandling,
-    });
 
     const navigate = useNavigate();
 
@@ -186,28 +174,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 Vedtaket er korrigert etter § 35
                             </BehandlingKorrigertAlert>
                         )}
-                        {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
-                            !toggles[ToggleNavn.nyMåteÅBeregneBehandlingsresultat] && (
-                                <FamilieSelect
-                                    label="Velg brev med eller uten perioder"
-                                    erLesevisning={vurderErLesevisning()}
-                                    onChange={(
-                                        event: React.ChangeEvent<FortsattInnvilgetPerioderSelect>
-                                    ): void => {
-                                        overstyrFortsattInnvilgetVedtaksperioder(
-                                            event.target.value
-                                        );
-                                    }}
-                                    value={periodetypeIVedtaksbrev}
-                                >
-                                    <option value={PeriodetypeIVedtaksbrev.UTEN_PERIODER}>
-                                        Fortsatt innvilget: Uten perioder
-                                    </option>
-                                    <option value={PeriodetypeIVedtaksbrev.MED_PERIODER}>
-                                        Fortsatt innvilget: Med perioder
-                                    </option>
-                                </FamilieSelect>
-                            )}
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                         åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
