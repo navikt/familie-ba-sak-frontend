@@ -182,14 +182,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 Vedtaket er korrigert etter § 35
                             </BehandlingKorrigertAlert>
                         )}
-                        {brevmottakere && brevmottakere.length !== 0 && (
-                            <BrevmottakereAlert
-                                brevmottakere={brevmottakere}
-                                institusjon={institusjon}
-                                personer={personer}
-                                åpenBehandling={åpenBehandling}
-                            />
-                        )}
+                        <BrevmottakereAlert
+                            brevmottakere={brevmottakere}
+                            institusjon={institusjon}
+                            personer={personer}
+                            åpenBehandling={åpenBehandling}
+                        />
                         {åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET &&
                             !toggles[ToggleNavn.nyMåteÅBeregneBehandlingsresultat] && (
                                 <FamilieSelect

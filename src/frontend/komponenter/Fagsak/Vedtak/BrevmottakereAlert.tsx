@@ -29,22 +29,24 @@ export const BrevmottakereAlert: React.FC<Props> = ({
 
     return (
         <>
-            <BehandlingKorrigertAlert variant="info">
-                Brevmottaker(e) er endret, og vedtak sendes til:
-                <BrevmottakerListe
-                    brevmottakere={brevmottakere}
-                    institusjon={institusjon}
-                    personer={personer}
-                />
-                <Button
-                    variant={'tertiary'}
-                    onClick={() => settVisManuelleMottakereModal(true)}
-                    icon={<Search />}
-                    size={'xsmall'}
-                >
-                    Se detaljer
-                </Button>
-            </BehandlingKorrigertAlert>
+            {brevmottakere && brevmottakere.length !== 0 && (
+                <BehandlingKorrigertAlert variant="info">
+                    Brevmottaker(e) er endret, og vedtak sendes til:
+                    <BrevmottakerListe
+                        brevmottakere={brevmottakere}
+                        institusjon={institusjon}
+                        personer={personer}
+                    />
+                    <Button
+                        variant={'tertiary'}
+                        onClick={() => settVisManuelleMottakereModal(true)}
+                        icon={<Search />}
+                        size={'xsmall'}
+                    >
+                        Se detaljer
+                    </Button>
+                </BehandlingKorrigertAlert>
+            )}
 
             <LeggTilBrevmottakerModal
                 åpenBehandling={åpenBehandling}
