@@ -2667,7 +2667,7 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css-internal/2.0.12/4c6153732513d8f3874b04afa3d1a3b2c58584fa#4c6153732513d8f3874b04afa3d1a3b2c58584fa"
   integrity sha512-Ps+frViIdaXNvWfQhbZDBUoFgGQx/BOaqwr6t+tej7yqydZ7nfScU+XZPh9cnhaKrRxFtogKxn7Zko1mvQIrDA==
 
-"@navikt/ds-css@2.0.12", "@navikt/ds-css@2.0.x":
+"@navikt/ds-css@2.0.12":
   version "2.0.12"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/2.0.12/415923ba949853ce4946700f5bf16bbde68512d6#415923ba949853ce4946700f5bf16bbde68512d6"
   integrity sha512-+XbDY6AMrWYifMr1dQ8QF5IIUhVj1Rhz8se0XS8wDiXMkNwsSPRenLipYplDY3qmUz7GBg4XEgFhGqHTIM7jkw==
@@ -2687,7 +2687,7 @@
     clsx "^1.1.1"
     copy-to-clipboard "^3.3.1"
 
-"@navikt/ds-react@2.0.12", "@navikt/ds-react@2.0.x", "@navikt/ds-react@^2.0.12":
+"@navikt/ds-react@2.0.12", "@navikt/ds-react@^2.0.12":
   version "2.0.12"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-react/2.0.12/8336c595bb47b32a004c28a0aa0c43485f9d5484#8336c595bb47b32a004c28a0aa0c43485f9d5484"
   integrity sha512-i7rQQMDMPUtP+WDJTQ44rQ2xfE3mBzsD2LwgJ0+q4yV7HfMuCknM6DMs0hrwxWaO0i7qLAOv7bmDop+mTBXP1Q==
@@ -2701,7 +2701,7 @@
     react-day-picker "8.3.4"
     react-modal "3.15.1"
 
-"@navikt/ds-tokens@2.0.12", "@navikt/ds-tokens@2.0.x":
+"@navikt/ds-tokens@2.0.12":
   version "2.0.12"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/2.0.12/5b2d1cf1dcdd52250d47b8523b0b6db88796f973#5b2d1cf1dcdd52250d47b8523b0b6db88796f973"
   integrity sha512-GQtxAvqcehQUfMZ9sf9xZf5BzInGIgnAYggtjSFLIfgznAbbKJ7XWMY7oDjmnNvb2/1tXh3pbdkmaMqpCVxXtg==
@@ -2755,14 +2755,11 @@
     react-modal "^3.15.1"
     react-transition-group "^4.4.2"
 
-"@navikt/familie-form-elements@9.0.0":
-  version "9.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/9.0.0/75ed6c1e1791849cdee97a48a39b1e93d9e62aac#75ed6c1e1791849cdee97a48a39b1e93d9e62aac"
-  integrity sha512-qGpHtVKTxCal1wisDGjVdnCQVSoM2MjGNFDsHEbSX9QekWzT4MhCLTS3e21n75e8Wd6uy08YAE0a5DU+ldDl/A==
+"@navikt/familie-form-elements@10.1.0":
+  version "10.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/10.1.0/9b06276ba9b2f50054ee28b43952ec4d025a8a5a#9b06276ba9b2f50054ee28b43952ec4d025a8a5a"
+  integrity sha512-18GhBsl6kDxPPgcqndGHjlDT6yxAn1FHee7JF5niRfZrgZVJjbFwi8svbaYZ2OQOf/Q52kLltTLSRFCLWoST4w==
   dependencies:
-    "@navikt/ds-css" "2.0.x"
-    "@navikt/ds-react" "2.0.x"
-    "@navikt/ds-tokens" "2.0.x"
     "@types/classnames" "^2.3.1"
     "@types/react-select" "^5.0.1"
     classnames "^2.3.1"
