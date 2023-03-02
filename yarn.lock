@@ -2735,7 +2735,7 @@
     request-promise "^4.2.5"
     snyk "^1.473.0"
 
-"@navikt/familie-clipboard@10.1.0", "@navikt/familie-clipboard@^10.0.0":
+"@navikt/familie-clipboard@10.1.0", "@navikt/familie-clipboard@^10.1.0":
   version "10.1.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-clipboard/10.1.0/21bcdebdae72ea9383dca9ccb348845f909641af#21bcdebdae72ea9383dca9ccb348845f909641af"
   integrity sha512-ZINIwlyV4O01vq+hiRFTn8WSAFp3ZUPt/wNEspVR1M8GrdFaZ/TT1213IB8feUaYidoTSBRAxHdv1TSvRen8Lg==
@@ -2856,12 +2856,12 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/5.0.1/2bed76615da2a17deea126ad6d78125b11173266#2bed76615da2a17deea126ad6d78125b11173266"
   integrity sha512-vt50wm46VQPSv9YH5zMCHfp6CmYFYl3b3llWuTyFOmy26DfRk20736dt+lx/XIWFYuZZ5GWZRlS7fSx5S/Q4lA==
 
-"@navikt/familie-visittkort@8.0.0":
-  version "8.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/8.0.0/0bbbd5004b096aaa946103e01b4f7c4c8e9b9186#0bbbd5004b096aaa946103e01b4f7c4c8e9b9186"
-  integrity sha512-7XGOMnudMU3YU7LmD7Ea0/G6RXiRsAinQThGm4WARIEuh0soTrPFFo4Sd8hxIGY++Pjb0KuWFXCDBBrSuuMcBg==
+"@navikt/familie-visittkort@8.1.0":
+  version "8.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/8.1.0/3e877867f6e44b8112d777231b8668f10c07a882#3e877867f6e44b8112d777231b8668f10c07a882"
+  integrity sha512-A2LYQv2bzh1s4ztaW1/sKKOwXm63DyZC1S9wDGO9SxnKADYnuXWy24gtUZ9g25yhItxgL29TJlq6bnmqdgvXJw==
   dependencies:
-    "@navikt/familie-clipboard" "^10.0.0"
+    "@navikt/familie-clipboard" "^10.1.0"
     "@navikt/familie-ikoner" "^7.0.0"
     "@navikt/familie-typer" "^8.0.0"
     classnames "^2.3.1"
