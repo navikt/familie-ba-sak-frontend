@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { FileContent } from '@navikt/ds-icons';
-import { Alert, BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Alert, Button } from '@navikt/ds-react';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
@@ -23,6 +24,8 @@ import {
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import { BrevmottakereAlert } from './BrevmottakereAlert';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
@@ -38,21 +41,8 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     }
 `;
 
-const BehandlingKorrigertAlert = styled(Alert)`
+export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
-`;
-
-const Modaltekst = styled(BodyShort)`
-    margin: 2rem 0;
-`;
-
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: center;
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
@@ -60,6 +50,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+
+    const personer = åpenBehandling?.personer ?? [];
+    const brevmottakere = åpenBehandling?.brevmottakere ?? [];
+    const institusjon = hentDataFraRessurs(minimalFagsakRessurs)?.institusjon;
 
     const navigate = useNavigate();
 
@@ -72,8 +69,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     } = useDokument();
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
-    const visSubmitKnapp =
-        !vurderErLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
+    const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
@@ -174,6 +170,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 Vedtaket er korrigert etter § 35
                             </BehandlingKorrigertAlert>
                         )}
+                        <BrevmottakereAlert
+                            brevmottakere={brevmottakere}
+                            institusjon={institusjon}
+                            personer={personer}
+                            åpenBehandling={åpenBehandling}
+                        />
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                         åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
@@ -195,7 +197,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         settErUlagretNyFeilutbetaltValutaPeriode={
                                             settErUlagretNyFeilutbetaltValutaPeriode
                                         }
-                                        erLesevisning={vurderErLesevisning()}
+                                        erLesevisning={erLesevisning}
                                         skjulFeilutbetaltValuta={() =>
                                             settVisFeilutbetaltValuta(false)
                                         }
@@ -215,42 +217,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         </Button>
                     </div>
 
-                    <Modal
-                        open={visModal}
-                        onClose={() => settVisModal(false)}
-                        closeButton={true}
-                        shouldCloseOnOverlayClick={false}
-                    >
-                        <Modal.Content>
-                            <Heading size={'medium'} level={'2'}>
-                                Totrinnskontroll
-                            </Heading>
-                            <Modaltekst>Behandlingen er nå sendt til totrinnskontroll</Modaltekst>
-                            <Knapperad>
-                                <Button
-                                    key={'oppgavebenk'}
-                                    variant={'secondary'}
-                                    size={'medium'}
-                                    onClick={() => {
-                                        settVisModal(false);
-                                        navigate('/oppgaver');
-                                    }}
-                                    children={'Gå til oppgavebenken'}
-                                />
-                                <KnappHøyre
-                                    key={'saksoversikt'}
-                                    variant={'secondary'}
-                                    size={'medium'}
-                                    onClick={() => {
-                                        settVisModal(false);
-                                        navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                                        window.location.reload();
-                                    }}
-                                    children={'Gå til saksoversikten'}
-                                />
-                            </Knapperad>
-                        </Modal.Content>
-                    </Modal>
+                    <BehandlingSendtTilTotrinnskontrollModal
+                        visModal={visModal}
+                        settVisModal={settVisModal}
+                    />
                 </>
             ) : erMigreringFraInfotrygd ? (
                 <Alert variant="info">
