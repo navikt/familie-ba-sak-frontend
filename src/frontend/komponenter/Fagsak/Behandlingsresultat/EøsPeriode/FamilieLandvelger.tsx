@@ -128,7 +128,6 @@ interface IBaseFamilieLandvelgerProps {
     feil?: string;
     label: string | JSX.Element;
     placeholder?: string | undefined;
-    isMulti?: boolean;
     kunEøs?: boolean;
     medFlag?: boolean;
     medWave?: boolean;
@@ -150,7 +149,6 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
     feil,
     label,
     placeholder,
-    isMulti = false,
     kunEøs = false,
     sirkulær = false,
     size = 'small',
@@ -169,7 +167,65 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
         values: value,
         placeholder,
         error: feil ? feil : undefined,
-        isMulti,
+        isMulti: false,
+        type: 'country',
+        flags: medFlag,
+        flagWave: medFlag && medWave,
+        flagType: sirkulær ? 'circle' : 'original',
+        closeMenuOnSelect: true,
+        size,
+        isDisabled: erLesevisning,
+        onOptionSelected: onChange,
+        isClearable: kanNullstilles,
+    };
+    if (kunEøs) {
+        landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
+    }
+    if (eksluderLand && eksluderLand.length > 0) {
+        landvelgerProps = { ...landvelgerProps, excludeList: eksluderLand };
+    }
+    return (
+        <BaseFamilieLandvelger
+            countrySelectProps={landvelgerProps}
+            label={label}
+            className={className}
+            utenMargin={utenMargin}
+            kanNullstilles={kanNullstilles}
+            feil={feil}
+        />
+    );
+};
+
+interface IFamilieMultiLandvelgerProps extends IBaseFamilieLandvelgerProps {
+    onChange: (value: Country[]) => void;
+    eksluderLand?: string[];
+}
+
+const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
+    className,
+    value,
+    feil,
+    label,
+    placeholder,
+    kunEøs = false,
+    sirkulær = false,
+    size = 'small',
+    medFlag = false,
+    medWave = false,
+    erLesevisning = false,
+    onChange,
+    utenMargin = false,
+    kanNullstilles = false,
+    eksluderLand = null,
+}) => {
+    const id = `country-select-${label}`;
+
+    let landvelgerProps: CountrySelectProps<Country | Currency> = {
+        id,
+        values: value,
+        placeholder,
+        error: feil ? feil : undefined,
+        isMulti: true,
         type: 'country',
         flags: medFlag,
         flagWave: medFlag && medWave,
@@ -199,6 +255,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
 };
 
 interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
+    isMulti?: boolean;
     onChange: (value: Currency) => void;
 }
 
@@ -258,4 +315,4 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
     );
 };
 
-export { FamilieLandvelger, FamilieValutavelger };
+export { FamilieLandvelger, FamilieMultiLandvelger, FamilieValutavelger };
