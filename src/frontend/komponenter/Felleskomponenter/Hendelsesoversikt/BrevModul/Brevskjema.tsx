@@ -30,7 +30,7 @@ import { målform } from '../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
-import { FamilieLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import Knapperekke from '../../Knapperekke';
@@ -100,7 +100,7 @@ const StyledFamilieInput = styled(FamilieInput)`
     width: fit-content;
 `;
 
-const StyledFamilieLandvelger = styled(FamilieLandvelger)`
+const StyledLandvelger = styled(FamilieMultiLandvelger)`
     margin-top: 1.5rem;
 `;
 
@@ -418,7 +418,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                         Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                     ].includes(skjema.felter.brevmal.verdi) && (
-                        <StyledFamilieLandvelger
+                        <StyledLandvelger
                             erLesevisning={false}
                             id={'mottakerlandSED'}
                             label={'SED er sendt til'}
@@ -428,9 +428,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             size="medium"
                             kanNullstilles
                             value={skjema.felter.mottakerlandSed?.verdi}
-                            onChange={(value: Country) => {
-                                const nyVerdi = value ? value.value : '';
-                                skjema.felter.mottakerlandSed.validerOgSettFelt(nyVerdi);
+                            onChange={(value: Country[]) => {
+                                skjema.felter.mottakerlandSed.validerOgSettFelt(
+                                    value.map(land => land.value)
+                                );
                             }}
                             feil={
                                 skjema.visFeilmeldinger &&
