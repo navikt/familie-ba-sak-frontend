@@ -25,7 +25,12 @@ import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
-        const { vurderErLesevisning, settÅpenBehandling, gjelderInstitusjon } = useBehandling();
+        const {
+            vurderErLesevisning,
+            settÅpenBehandling,
+            gjelderInstitusjon,
+            gjelderEnsligMindreårig,
+        } = useBehandling();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { bruker, minimalFagsak } = useFagsakContext();
@@ -80,7 +85,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             if (bruker.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
                 let barnaMedOpplysninger: IBarnMedOpplysninger[];
-                if (gjelderInstitusjon) {
+                if (gjelderInstitusjon || gjelderEnsligMindreårig) {
                     barnaMedOpplysninger = [
                         {
                             merket: true,

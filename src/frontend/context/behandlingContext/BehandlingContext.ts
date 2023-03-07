@@ -220,6 +220,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         minimalFagsak.status === RessursStatus.SUKSESS &&
         minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
 
+    const gjelderEnsligMindreårig =
+        minimalFagsak.status === RessursStatus.SUKSESS &&
+        minimalFagsak.data.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+
     const samhandlerOrgnr = gjelderInstitusjon
         ? minimalFagsak.data.institusjon?.orgNummer
         : undefined;
@@ -252,6 +256,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         erBehandlingAvsluttet,
         gjelderInstitusjon,
         samhandlerOrgnr,
+        gjelderEnsligMindreårig,
     };
 });
 

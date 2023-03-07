@@ -41,7 +41,7 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 `;
 
 const Barna: React.FunctionComponent = () => {
-    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig } = useBehandling();
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
     const { skjema } = useSøknad();
@@ -99,7 +99,7 @@ const Barna: React.FunctionComponent = () => {
                     skjema.visFeilmeldinger
                 )}
                 legend={
-                    !lesevisning && !gjelderInstitusjon ? (
+                    !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>
@@ -121,7 +121,7 @@ const Barna: React.FunctionComponent = () => {
                     />
                 )}
 
-                {!lesevisning && !gjelderInstitusjon && (
+                {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
             </StyledCheckboxGruppe>
