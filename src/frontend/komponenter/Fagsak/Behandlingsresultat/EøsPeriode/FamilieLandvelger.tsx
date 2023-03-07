@@ -158,11 +158,11 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
     onChange,
     utenMargin = false,
     kanNullstilles = false,
-    eksluderLand = null,
+    eksluderLand = undefined,
 }) => {
     const id = `country-select-${label}`;
 
-    let landvelgerProps: CountrySelectProps<Country | Currency> = {
+    const landvelgerProps: CountrySelectProps<Country | Currency> = {
         id,
         values: value,
         placeholder,
@@ -177,13 +177,9 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
+        includeList: kunEøs ? CountryFilter.EEA({}) : undefined,
+        excludeList: eksluderLand,
     };
-    if (kunEøs) {
-        landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
-    }
-    if (eksluderLand && eksluderLand.length > 0) {
-        landvelgerProps = { ...landvelgerProps, excludeList: eksluderLand };
-    }
     return (
         <BaseFamilieLandvelger
             countrySelectProps={landvelgerProps}
@@ -216,11 +212,11 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
     onChange,
     utenMargin = false,
     kanNullstilles = false,
-    eksluderLand = null,
+    eksluderLand = undefined,
 }) => {
     const id = `country-select-${label}`;
 
-    let landvelgerProps: CountrySelectProps<Country | Currency> = {
+    const landvelgerProps: CountrySelectProps<Country | Currency> = {
         id,
         values: value,
         placeholder,
@@ -235,13 +231,10 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
+        includeList: kunEøs ? CountryFilter.EEA({}) : undefined,
+        excludeList: eksluderLand,
     };
-    if (kunEøs) {
-        landvelgerProps = { ...landvelgerProps, includeList: CountryFilter.EEA({}) };
-    }
-    if (eksluderLand && eksluderLand.length > 0) {
-        landvelgerProps = { ...landvelgerProps, excludeList: eksluderLand };
-    }
+
     return (
         <BaseFamilieLandvelger
             countrySelectProps={landvelgerProps}
