@@ -175,9 +175,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const mottakerlandSed = useFelt<string[]>({
         verdi: [],
         valideringsfunksjon: (felt: FeltState<string[]>) => {
-            return felt.verdi.includes('NO')
-                ? feil(felt, 'Norge kan ikke velges som mottakerland')
-                : felt.verdi.length
+            return felt.verdi.length
                 ? ok(felt)
                 : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
