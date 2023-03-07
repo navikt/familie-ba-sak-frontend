@@ -271,7 +271,7 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
 }) => {
     const id = `currency-select-${label}`;
 
-    let landvelgerProps: CountrySelectProps<Country | Currency> = {
+    const landvelgerProps: CountrySelectProps<Country | Currency> = {
         id,
         values: value,
         placeholder,
@@ -286,14 +286,8 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
         isDisabled: erLesevisning,
         onOptionSelected: onChange,
         isClearable: kanNullstilles,
+        includeList: kunEøs ? EØS_CURRENCY : undefined,
     };
-
-    if (kunEøs) {
-        landvelgerProps = {
-            ...landvelgerProps,
-            includeList: EØS_CURRENCY,
-        };
-    }
 
     return (
         <div className={classNames('skjemaelement', className)}>
