@@ -20,7 +20,6 @@ import {
     mottakersMålformImplementering,
 } from '../utils/brevmal';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { isEmpty } from '../utils/eøsValidators';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
@@ -173,12 +172,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
-    const mottakerlandSed = useFelt<string>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<string>) => {
-            return felt.verdi === 'NO'
-                ? feil(felt, 'Norge kan ikke velges som mottakerland')
-                : !isEmpty(felt.verdi)
+    const mottakerlandSed = useFelt<string[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<string[]>) => {
+            return felt.verdi.length
                 ? ok(felt)
                 : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
@@ -213,7 +210,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
             antallUkerSvarfrist: number;
-            mottakerlandSed: string;
+            mottakerlandSed: string[];
         },
         IBehandling
     >({
