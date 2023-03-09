@@ -119,7 +119,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     eksluderLand={
                         skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
                             ? ['NO']
-                            : []
+                            : undefined
                     }
                     feil={
                         skjema.visFeilmeldinger &&
