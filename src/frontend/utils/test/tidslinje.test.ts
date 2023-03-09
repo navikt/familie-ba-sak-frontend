@@ -10,7 +10,7 @@ import {
     kalenderDatoTilDate,
     serializeIso8601String,
 } from '../kalender';
-import { splittUtvidetVedEndringerPåSmåbarnstillegg } from '../tidslinje';
+import { splittYtelseVedEndringerPåAnnenYtelse } from '../tidslinje';
 
 describe('utils/tidslinje', () => {
     const utvidetYtelsePeriode: IYtelsePeriode = {
@@ -52,7 +52,7 @@ describe('utils/tidslinje', () => {
     };
 
     test('Utvidet periode blir splittet i 3 av fom og tom fra småbarnstilleggperiode', () => {
-        const splittaPerioder = splittUtvidetVedEndringerPåSmåbarnstillegg(
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
             periode,
             utvidetYtelsePeriode,
             [småbarnstilleggPeriodeMidtIÅret]
@@ -82,7 +82,7 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 2 av fom småbarnstilleggperiode', () => {
-        const splittaPerioder = splittUtvidetVedEndringerPåSmåbarnstillegg(
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
             periode,
             utvidetYtelsePeriode,
             [småbarnstilleggPeriodeOverlapperStartenAvÅret]
@@ -105,7 +105,7 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 2 av tom småbarnstilleggperiode', () => {
-        const splittaPerioder = splittUtvidetVedEndringerPåSmåbarnstillegg(
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
             periode,
             utvidetYtelsePeriode,
             [småbarnstilleggPeriodeOverlapperSluttenAvÅret]
@@ -128,7 +128,7 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 5 av 3 småbarnstilleggperioder', () => {
-        const splittaPerioder = splittUtvidetVedEndringerPåSmåbarnstillegg(
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
             periode,
             utvidetYtelsePeriode,
             [

@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
-import type { Periode, Etikett } from '@navikt/familie-tidslinje';
+import type { Etikett, Periode } from '@navikt/familie-tidslinje';
 
 import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { YtelseType } from '../typer/beregning';
+import { FagsakType } from '../typer/fagsak';
 import type { IGrunnlagPerson } from '../typer/person';
 import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import {
@@ -14,11 +15,11 @@ import {
     kalenderDatoTilDate,
     KalenderEnhet,
     leggTil,
+    nesteMåned,
     sisteDagIMåned,
     trekkFra,
-    nesteMåned,
 } from '../utils/kalender';
-import { splittUtvidetVedEndringerPåSmåbarnstillegg } from '../utils/tidslinje';
+import { splittYtelseVedEndringerPåAnnenYtelse } from '../utils/tidslinje';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -93,9 +94,33 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         }));
     };
 
+    interface YtelseSplittForTidslinje {
+        ytelseSomSkalSplittesOpp: YtelseType;
+        ytelseSomSplitterOpp: YtelseType;
+    }
+
+    const ytelserSomMåSplittes = (fagsakType?: FagsakType): YtelseSplittForTidslinje => {
+        switch (fagsakType) {
+            case FagsakType.NORMAL:
+            case FagsakType.INSTITUSJON:
+            case undefined:
+                return {
+                    ytelseSomSkalSplittesOpp: YtelseType.UTVIDET_BARNETRYGD,
+                    ytelseSomSplitterOpp: YtelseType.SMÅBARNSTILLEGG,
+                };
+            case FagsakType.BARN_ENSLIG_MINDREÅRIG:
+                return {
+                    ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                    ytelseSomSplitterOpp: YtelseType.UTVIDET_BARNETRYGD,
+                };
+        }
+    };
+
     const genererRader = (
+        fagsakType?: FagsakType,
         personerMedAndelerTilkjentYtelse?: IPersonMedAndelerTilkjentYtelse[]
     ): Periode[][] => {
+        const ytelseSomMåSplittes = ytelserSomMåSplittes(fagsakType);
         return personerMedAndelerTilkjentYtelse
             ? personerMedAndelerTilkjentYtelse.map(
                   (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
@@ -115,23 +140,29 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                                   status: ytelsePeriode.skalUtbetales ? 'suksess' : 'feil',
                               };
 
-                              if (ytelsePeriode.ytelseType === YtelseType.UTVIDET_BARNETRYGD) {
-                                  const småbarnstilleggAndeler =
+                              if (
+                                  ytelsePeriode.ytelseType ===
+                                  ytelseSomMåSplittes.ytelseSomSkalSplittesOpp
+                              ) {
+                                  const andelerSomSkalSplitteOpp =
                                       personMedAndelerTilkjentYtelse.ytelsePerioder.filter(
                                           ytelsePeriodeFilter =>
                                               ytelsePeriodeFilter.ytelseType ===
-                                              YtelseType.SMÅBARNSTILLEGG
+                                              ytelseSomMåSplittes.ytelseSomSplitterOpp
                                       );
 
                                   return [
                                       ...acc,
-                                      ...splittUtvidetVedEndringerPåSmåbarnstillegg(
+                                      ...splittYtelseVedEndringerPåAnnenYtelse(
                                           periode,
                                           ytelsePeriode,
-                                          småbarnstilleggAndeler
+                                          andelerSomSkalSplitteOpp
                                       ),
                                   ];
-                              } else if (ytelsePeriode.ytelseType !== YtelseType.SMÅBARNSTILLEGG) {
+                              } else if (
+                                  ytelsePeriode.ytelseType !==
+                                  ytelseSomMåSplittes.ytelseSomSplitterOpp
+                              ) {
                                   return [...acc, periode];
                               } else {
                                   return acc;

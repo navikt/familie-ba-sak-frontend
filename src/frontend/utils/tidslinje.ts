@@ -12,7 +12,7 @@ import {
     trekkFra,
 } from './kalender';
 
-export const splittUtvidetVedEndringerPåSmåbarnstillegg = (
+export const splittYtelseVedEndringerPåAnnenYtelse = (
     opprinneligPeriode: Periode,
     utvidetYtelsePeriode: IYtelsePeriode,
     småbarnstilleggAndeler: IYtelsePeriode[]
