@@ -159,7 +159,7 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         key: 'UTVIDET_BARNETRYGD',
         tittel: 'Utvidet barnetrygd',
         spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
-        parterDetteGjelderFor: [PersonType.SØKER],
+        parterDetteGjelderFor: [PersonType.SØKER, PersonType.BARN],
     },
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
