@@ -86,8 +86,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         valideringsfunksjon: (felt: FeltState<number | ''>) => {
             if (felt.verdi === '') return feil(felt, 'Antall uker svarfrist er ikke satt');
 
-            if (isNaN(felt.verdi)) {
-                return feil(felt, 'Antall uker svarfrist må være et tall');
+            if (isNaN(felt.verdi) || felt.verdi < 1) {
+                return feil(felt, 'Antall uker svarfrist må være et positivt tall');
             }
 
             // Maksimal saksbehandlingstid er 5 måneder. Svarfristen må derfor være mindre enn dette.
