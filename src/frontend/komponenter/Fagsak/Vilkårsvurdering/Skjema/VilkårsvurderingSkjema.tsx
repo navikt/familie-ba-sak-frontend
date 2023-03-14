@@ -5,6 +5,7 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import { FagsakType } from '../../../../typer/fagsak';
+import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaOrdinær from './VilkårsvurderingSkjemaOrdinær';
 
@@ -28,6 +29,9 @@ const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
                 orgNummer={samhandlerOrgnr}
             />
         );
+    }
+    if (minimalFagsak?.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
+        return <VilkårsvurderingSkjemaEnsligMindreårig visFeilmeldinger={visFeilmeldinger} />;
     }
     return null;
 };

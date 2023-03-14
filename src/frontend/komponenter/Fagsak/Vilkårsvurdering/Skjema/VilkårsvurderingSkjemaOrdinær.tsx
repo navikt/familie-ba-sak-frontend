@@ -29,7 +29,7 @@ interface IVilkårsvurderingSkjemaOrdinær {
     visFeilmeldinger: boolean;
 }
 
-const PersonLinje = styled.div`
+export const PersonLinje = styled.div`
     display: flex;
     justify-content: space-between;
     position: -webkit-sticky;
@@ -40,7 +40,7 @@ const PersonLinje = styled.div`
     padding: ${ASpacing8} 0;
 `;
 
-const IndentertInnhold = styled.div`
+export const IndentertInnhold = styled.div`
     padding-left: ${ASpacing14};
 `;
 
