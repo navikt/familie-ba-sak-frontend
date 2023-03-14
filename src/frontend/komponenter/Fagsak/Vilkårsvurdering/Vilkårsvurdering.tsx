@@ -30,7 +30,7 @@ import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderi
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
-import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
+import VilkårsvurderingSkjemaOrdinær from './VilkårsvurderingSkjema';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 
 const UregistrerteBarnListe = styled.ol`
@@ -176,7 +176,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                     orgNummer={samhandlerOrgnr}
                 />
             ) : (
-                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+                <VilkårsvurderingSkjemaOrdinær visFeilmeldinger={visFeilmeldinger} />
             )}
             {uregistrerteBarn.length > 0 && (
                 <Alert variant="info">
