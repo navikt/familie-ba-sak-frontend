@@ -52,7 +52,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
-        'INNVILGET_SATSENDRING',
+        'Standardbegrunnelse$INNVILGET_SATSENDRING',
         Standardbegrunnelse.REDUKSJON_SATSENDRING,
         Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
         Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,

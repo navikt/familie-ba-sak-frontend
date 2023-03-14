@@ -70,10 +70,10 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
 };
 
 export enum Standardbegrunnelse {
-    REDUKSJON_SATSENDRING = 'REDUKSJON_SATSENDRING',
-    REDUKSJON_UNDER_6_ÅR = 'REDUKSJON_UNDER_6_ÅR',
-    REDUKSJON_UNDER_18_ÅR = 'REDUKSJON_UNDER_18_ÅR',
-    ETTER_ENDRET_UTBETALING_ETTERBETALING = 'ETTER_ENDRET_UTBETALING_ETTERBETALING',
+    REDUKSJON_SATSENDRING = 'Standardbegrunnelse$REDUKSJON_SATSENDRING',
+    REDUKSJON_UNDER_6_ÅR = 'Standardbegrunnelse$REDUKSJON_UNDER_6_ÅR',
+    REDUKSJON_UNDER_18_ÅR = 'Standardbegrunnelse$REDUKSJON_UNDER_18_ÅR',
+    ETTER_ENDRET_UTBETALING_ETTERBETALING = 'Standardbegrunnelse$ETTER_ENDRET_UTBETALING_ETTERBETALING',
 }
 
 export interface IRestKorrigertEtterbetaling {
