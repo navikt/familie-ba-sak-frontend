@@ -305,6 +305,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             {behandlingstema.erSynlig && (
                 <StyledBehandlingstemaSelect
                     behandlingstema={behandlingstema}
+                    fagsakType={minimalFagsak?.fagsakType}
                     erLesevisning={erLesevisning}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     name="Behandlingstema"
