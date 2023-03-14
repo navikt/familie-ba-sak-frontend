@@ -6,16 +6,16 @@ import { Alert } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { PersonType } from '../../../typer/person';
-import type { IPersonResultat } from '../../../typer/vilkår';
-import { annenVurderingConfig, AnnenVurderingType, vilkårConfig } from '../../../typer/vilkår';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import SamhandlerInformasjon from '../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
-import { useSamhandlerRequest } from '../InstitusjonOgVerge/useSamhandler';
-import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
+import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { PersonType } from '../../../../typer/person';
+import type { IPersonResultat } from '../../../../typer/vilkår';
+import { annenVurderingConfig, AnnenVurderingType, vilkårConfig } from '../../../../typer/vilkår';
+import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import SamhandlerInformasjon from '../../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
+import { useSamhandlerRequest } from '../../InstitusjonOgVerge/useSamhandler';
+import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 
 const AktørLinje = styled.div`
     display: flex;
