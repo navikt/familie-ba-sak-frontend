@@ -30,8 +30,8 @@ import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderi
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
-import VilkårsvurderingSkjemaOrdinær from './VilkårsvurderingSkjema';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
+import VilkårsvurderingSkjemaOrdinær from './VilkårsvurderingSkjemaOrdinær';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
