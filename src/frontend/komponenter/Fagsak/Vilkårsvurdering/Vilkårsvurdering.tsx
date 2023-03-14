@@ -30,8 +30,7 @@ import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderi
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
-import VilkårsvurderingSkjemaInstitusjon from './Skjema/VilkårsvurderingSkjemaInstitusjon';
-import VilkårsvurderingSkjemaOrdinær from './Skjema/VilkårsvurderingSkjemaOrdinær';
+import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -66,7 +65,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         oppdaterRegisteropplysninger,
         vilkårsvurderingNesteOnClick,
         behandlingsstegSubmitressurs,
-        samhandlerOrgnr,
     } = useBehandling();
 
     const registeropplysningerHentetTidpsunkt =
@@ -170,14 +168,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
             )}
 
-            {samhandlerOrgnr ? (
-                <VilkårsvurderingSkjemaInstitusjon
-                    visFeilmeldinger={visFeilmeldinger}
-                    orgNummer={samhandlerOrgnr}
-                />
-            ) : (
-                <VilkårsvurderingSkjemaOrdinær visFeilmeldinger={visFeilmeldinger} />
-            )}
+            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             {uregistrerteBarn.length > 0 && (
                 <Alert variant="info">
                     <BodyShort>
