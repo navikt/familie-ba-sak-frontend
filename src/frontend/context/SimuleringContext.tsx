@@ -133,8 +133,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const harStoppetMigreringAvvikInnenforBeløpsgrenser =
         erMigreringMedStoppISimulering &&
         harKunNegativeEllerKunPositiveAvvik(perioderesultaterFørMars2023) &&
-        harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) &&
         harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023);
+
+    const erMaks1KroneIAvvikPerBarn = harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023);
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -266,6 +267,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         harÅpenTilbakekrevingRessurs,
         erMigreringMedStoppISimulering,
         harStoppetMigreringAvvikInnenforBeløpsgrenser,
+        erMaks1KroneIAvvikPerBarn,
     };
 });
 

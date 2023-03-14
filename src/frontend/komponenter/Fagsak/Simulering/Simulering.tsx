@@ -46,6 +46,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         erMigreringMedStoppISimulering,
         erFeilutbetaling,
         harStoppetMigreringAvvikInnenforBeløpsgrenser,
+        erMaks1KroneIAvvikPerBarn,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
@@ -111,14 +112,27 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             harStoppetMigreringAvvikInnenforBeløpsgrenser ||
                             skalIkkeStoppeMigreringsbehandlinger) && (
                             <>
-                                {harStoppetMigreringAvvikInnenforBeløpsgrenser && (
-                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                        Behandlingen medfører avvik i simulering. Ved avvik på
-                                        mindre enn totalt 100 kroner, kan du gå videre i
-                                        behandlingen. Du må huske å sende oppgave til NØS om at det
-                                        ikke skal etterbetales / opprettes kravgrunnlag.
-                                    </StyledBeløpsgrenseAlert>
-                                )}
+                                {harStoppetMigreringAvvikInnenforBeløpsgrenser &&
+                                    (erMaks1KroneIAvvikPerBarn ? (
+                                        <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                            Behandlingen medfører avvik i simulering. Ved avvik på
+                                            mindre enn totalt 100 kroner, kan du gå videre i
+                                            behandlingen. Du må huske å sende oppgave til NØS om at
+                                            det ikke skal etterbetales / opprettes kravgrunnlag.
+                                        </StyledBeløpsgrenseAlert>
+                                    ) : (
+                                        <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                            Simuleringen viser en feilutbetaling eller
+                                            etterbetaling. Hvis du velger å gå videre i behandlingen
+                                            kreves det to-trinnskontroll. Det må sendes manuell
+                                            oppgave til NØS for å sikre at det ikke går ut
+                                            etterbetaling eller blir opprettet feilutbetalingssak i
+                                            migreringsbehandlingen. Hvis bruker skal ha en
+                                            etterbetaling eller feilutbetaling, må dette behandles i
+                                            en egen revurderingsbehandling med vedtaksbrev til
+                                            bruker.
+                                        </StyledBeløpsgrenseAlert>
+                                    ))}
                                 {erFeilutbetaling && (
                                     <TilbakekrevingSkjema
                                         søkerMålform={hentSøkersMålform(åpenBehandling)}
