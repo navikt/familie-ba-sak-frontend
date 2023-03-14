@@ -10,6 +10,7 @@ import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
@@ -50,6 +51,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+
+    const { harStoppetMigreringAvvikInnenforBeløpsgrenser, erMaks1KroneIAvvikPerBarn } =
+        useSimulering();
+
     const erLesevisning = vurderErLesevisning();
 
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
@@ -131,7 +136,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
-            nesteKnappTittel={erMigreringFraInfotrygd ? 'Bekreft migrering' : 'Til godkjenning'}
+            nesteKnappTittel={
+                erMigreringFraInfotrygd &&
+                harStoppetMigreringAvvikInnenforBeløpsgrenser &&
+                !erMaks1KroneIAvvikPerBarn
+                    ? 'Bekreft migrering'
+                    : 'Til godkjenning'
+            }
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             maxWidthStyle="54rem"
             className={'vedtak'}
