@@ -191,12 +191,15 @@ export const vilkårConfigInstitusjon = Object.values(vilkårConfig).filter(vilk
 export const vilkårConfigEnsligMindreårig: Record<VilkårType, IVilkårConfig> = {
     BOSATT_I_RIKET: vilkårConfig.BOSATT_I_RIKET,
     LOVLIG_OPPHOLD: vilkårConfig.LOVLIG_OPPHOLD,
-    UTVIDET_BARNETRYGD: vilkårConfig.UTVIDET_BARNETRYGD,
     BOR_MED_SØKER: {
         ...vilkårConfig.BOR_MED_SØKER,
         beskrivelse: 'enslig mindreårig',
         tittel: 'Enslig mindreårig',
         spørsmål: () => 'Er barnet enslig mindreårig asylsøker eller flyktning?',
+    },
+    UTVIDET_BARNETRYGD: {
+        ...vilkårConfig.UTVIDET_BARNETRYGD,
+        parterDetteGjelderFor: [PersonType.BARN],
     },
     UNDER_18_ÅR: vilkårConfig.UNDER_18_ÅR,
     GIFT_PARTNERSKAP: vilkårConfig.GIFT_PARTNERSKAP,
