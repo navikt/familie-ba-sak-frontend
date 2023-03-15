@@ -52,8 +52,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
 
-    const { harStoppetMigreringAvvikInnenforBeløpsgrenser, erMaks1KroneIAvvikPerBarn } =
-        useSimulering();
+    const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -137,9 +136,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             }
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={
-                erMigreringFraInfotrygd &&
-                harStoppetMigreringAvvikInnenforBeløpsgrenser &&
-                !erMaks1KroneIAvvikPerBarn
+                erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
                     ? 'Bekreft migrering'
                     : 'Til godkjenning'
             }

@@ -10,7 +10,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
-import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { Behandlingstype } from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
@@ -100,23 +100,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const skalStoppeISimulering = () => {
-        if (åpenBehandling.årsak === BehandlingÅrsak.HELMANUELL_MIGRERING && simResultat) {
-            const tidligereUtbetaltPerioderEtterbetalingOver220 = simPerioderFørMars2023.filter(
-                periode => periode.etterbetaling && periode.etterbetaling > 220
-            );
-            return erFeilutbetaling || tidligereUtbetaltPerioderEtterbetalingOver220.length > 0;
-        }
-        return erFeilutbetaling || erEtterutbetaling;
-    };
-    const erMigreringMedStoppISimulering = erMigreringFraInfotrygd && skalStoppeISimulering();
+    const erAvvikIBehandling = erFeilutbetaling || erEtterutbetaling;
 
-    const harKunNegativeEllerKunPositiveAvvik = (perioderesultater: number[]) => {
-        return (
-            perioderesultater.every(beløp => beløp <= 0) ||
-            perioderesultater.every(beløp => beløp >= 0)
-        );
-    };
+    const erMigreringFraInfotrygdMedAvvik = erMigreringFraInfotrygd && erAvvikIBehandling;
 
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
         const antallBarn = åpenBehandling.personer.filter(
@@ -130,24 +116,27 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         return totaltAvvik <= maksgrenseForAvvikIBeløpVedMigrering;
     };
 
-    const harStoppetMigreringAvvikInnenforBeløpsgrenser =
-        erMigreringMedStoppISimulering &&
-        harKunNegativeEllerKunPositiveAvvik(perioderesultaterFørMars2023) &&
+    const behandlingErMigreringMedAvvikInnenforBeløpsgrenser =
+        erMigreringFraInfotrygdMedAvvik &&
+        harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) &&
         harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023);
 
-    const erMaks1KroneIAvvikPerBarn = harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023);
+    const behandlingErMigreringMedAvvikUtenforBeløpsgrenser =
+        erMigreringFraInfotrygdMedAvvik &&
+        (!harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) ||
+            !harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023));
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
         avhengigheter: {
-            erMigreringMedStoppISimulering,
+            erMigreringFraInfotrygdMedAvvik,
             erFeilutbetaling,
             harÅpenTilbakekreving,
         },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
-        valideringsfunksjon: (felt, avhengigheter) =>
-            !avhengigheter?.erMigreringMedStoppISimulering && felt.verdi === undefined
+        valideringsfunksjon: felt =>
+            felt.verdi === undefined
                 ? feil(
                       felt,
                       'Resultatet medfører en feilutbetaling. Du må velge om det skal opprettes tilbakekrevingsbehandling.'
@@ -157,7 +146,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const fritekstVarsel = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.varsel ?? '',
         avhengigheter: {
-            erMigreringMedStoppISimulering,
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
             maksLengdeTekst,
@@ -175,7 +163,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                   )
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
-            !avhengigheter?.erMigreringMedStoppISimulering &&
             avhengigheter?.erFeilutbetaling &&
             avhengigheter?.tilbakekreving?.verdi ===
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
@@ -183,15 +170,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const begrunnelse = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
         avhengigheter: {
-            erMigreringMedStoppISimulering,
             erFeilutbetaling,
             maksLengdeTekst: maksLengdeTekst,
             harÅpenTilbakekreving,
         },
         skalFeltetVises: avhengigheter =>
-            !avhengigheter?.erMigreringMedStoppISimulering &&
-            avhengigheter?.erFeilutbetaling &&
-            !avhengigheter?.harÅpenTilbakekreving,
+            avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
@@ -265,9 +249,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentSkjemadata,
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
-        erMigreringMedStoppISimulering,
-        harStoppetMigreringAvvikInnenforBeløpsgrenser,
-        erMaks1KroneIAvvikPerBarn,
+        erMigreringFraInfotrygdMedAvvik: erMigreringFraInfotrygdMedAvvik,
+        behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
+        behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
     };
 });
 
