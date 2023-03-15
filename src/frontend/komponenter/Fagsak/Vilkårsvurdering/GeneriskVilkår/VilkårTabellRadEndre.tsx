@@ -108,7 +108,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { åpenBehandling, settÅpenBehandling, gjelderInstitusjon } = useBehandling();
+    const { åpenBehandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
+        useBehandling();
     const årsakErSøknad =
         åpenBehandling.status !== RessursStatus.SUKSESS ||
         åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
@@ -229,6 +230,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET);
 
     const visRegelverkValg = (): boolean =>
+        !gjelderEnsligMindreårig &&
         !gjelderInstitusjon &&
         [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET, VilkårType.LOVLIG_OPPHOLD].includes(
             vilkårFraConfig.key as VilkårType
