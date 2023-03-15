@@ -25,7 +25,7 @@ import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurde
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 
-interface IVilkårsvurderingSkjemaOrdinær {
+interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
 }
 
@@ -53,7 +53,7 @@ const VilkårDiv = styled.div`
     }
 `;
 
-const VilkårsvurderingSkjemaOrdinær: React.FunctionComponent<IVilkårsvurderingSkjemaOrdinær> = ({
+const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
@@ -240,4 +240,4 @@ const VilkårsvurderingSkjemaOrdinær: React.FunctionComponent<IVilkårsvurderin
     );
 };
 
-export default VilkårsvurderingSkjemaOrdinær;
+export default VilkårsvurderingSkjemaNormal;

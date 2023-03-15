@@ -7,7 +7,7 @@ import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import { FagsakType } from '../../../../typer/fagsak';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
-import VilkårsvurderingSkjemaOrdinær from './VilkårsvurderingSkjemaOrdinær';
+import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaOrdinær';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -20,7 +20,7 @@ const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
     const { samhandlerOrgnr } = useBehandling();
 
     if (minimalFagsak?.fagsakType === FagsakType.NORMAL) {
-        return <VilkårsvurderingSkjemaOrdinær visFeilmeldinger={visFeilmeldinger} />;
+        return <VilkårsvurderingSkjemaNormal visFeilmeldinger={visFeilmeldinger} />;
     }
     if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && samhandlerOrgnr) {
         return (
