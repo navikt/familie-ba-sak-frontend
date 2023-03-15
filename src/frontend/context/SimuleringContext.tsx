@@ -250,7 +250,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentSkjemadata,
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
-        erMigreringFraInfotrygdMedAvvik: erMigreringFraInfotrygdMedAvvik,
+        erMigreringFraInfotrygdMedAvvik,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
     };
