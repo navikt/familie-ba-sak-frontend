@@ -29,7 +29,7 @@ interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
 }
 
-export const PersonLinje = styled.div`
+export const PersonHeader = styled.div`
     display: flex;
     justify-content: space-between;
     position: -webkit-sticky;
@@ -118,7 +118,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <PersonLinje>
+                        <PersonHeader>
                             <PersonInformasjon person={personResultat.person} somOverskrift />
 
                             {!vurderErLesevisning() &&
@@ -168,7 +168,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                     ? 'Skjul vilkårsvurdering'
                                     : 'Vis vilkårsvurdering'}
                             </Button>
-                        </PersonLinje>
+                        </PersonHeader>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
                             <IndentertInnhold>

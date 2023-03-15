@@ -8,7 +8,7 @@ import { vilkårConfigEnsligMindreårig, type IPersonResultat } from '../../../.
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
-import { PersonLinje, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
+import { PersonHeader, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -22,9 +22,9 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     );
     return personResultat ? (
         <>
-            <PersonLinje>
+            <PersonHeader>
                 <PersonInformasjon person={personResultat.person} somOverskrift />
-            </PersonLinje>
+            </PersonHeader>
 
             <IndentertInnhold>
                 {personResultat.person.registerhistorikk ? (
