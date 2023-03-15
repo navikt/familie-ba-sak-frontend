@@ -4,7 +4,11 @@ import { Alert } from '@navikt/ds-react';
 
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
-import { vilkårConfigEnsligMindreårig, type IPersonResultat } from '../../../../typer/vilkår';
+import {
+    vilkårConfigEnsligMindreårig,
+    VilkårType,
+    type IPersonResultat,
+} from '../../../../typer/vilkår';
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
@@ -33,6 +37,15 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                 )}
                 {Object.values(vilkårConfigEnsligMindreårig).map(vilkårConfig => {
+                    if (vilkårConfig.key === VilkårType.UTVIDET_BARNETRYGD) {
+                        if (
+                            !personResultat.vilkårResultater.find(
+                                vilkår => vilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+                            )
+                        ) {
+                            return null;
+                        }
+                    }
                     return (
                         <GeneriskVilkår
                             key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
