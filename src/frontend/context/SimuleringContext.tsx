@@ -100,9 +100,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const erAvvikIBehandling = erFeilutbetaling || erEtterutbetaling;
+    const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterutbetaling;
 
-    const erMigreringFraInfotrygdMedAvvik = erMigreringFraInfotrygd && erAvvikIBehandling;
+    const erMigreringFraInfotrygdMedAvvik =
+        erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
 
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
         const antallBarn = åpenBehandling.personer.filter(
