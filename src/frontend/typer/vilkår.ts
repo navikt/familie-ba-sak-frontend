@@ -154,19 +154,19 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
+    UTVIDET_BARNETRYGD: {
+        beskrivelse: 'utvidet barnetrygd',
+        key: 'UTVIDET_BARNETRYGD',
+        tittel: 'Utvidet barnetrygd',
+        spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
+        parterDetteGjelderFor: [PersonType.SØKER],
+    },
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
         key: 'BOR_MED_SØKER',
         tittel: 'Bor fast hos søker',
         spørsmål: () => `Bor barnet fast hos søker?`,
         parterDetteGjelderFor: [PersonType.BARN],
-    },
-    UTVIDET_BARNETRYGD: {
-        beskrivelse: 'utvidet barnetrygd',
-        key: 'UTVIDET_BARNETRYGD',
-        tittel: 'Utvidet barnetrygd',
-        spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
-        parterDetteGjelderFor: [PersonType.SØKER, PersonType.BARN],
     },
     UNDER_18_ÅR: {
         beskrivelse: 'under 18 år',
