@@ -7,7 +7,7 @@ import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import { FagsakType } from '../../../../typer/fagsak';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
-import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaOrdinær';
+import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
 
 interface IProps {
     visFeilmeldinger: boolean;

@@ -8,7 +8,7 @@ import { vilkårConfigEnsligMindreårig, type IPersonResultat } from '../../../.
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
-import { PersonLinje, IndentertInnhold } from './VilkårsvurderingSkjemaOrdinær';
+import { PersonLinje, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
 
 interface IProps {
     visFeilmeldinger: boolean;
