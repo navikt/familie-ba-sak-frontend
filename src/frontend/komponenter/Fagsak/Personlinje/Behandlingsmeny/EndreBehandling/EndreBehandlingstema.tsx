@@ -4,9 +4,10 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
@@ -18,6 +19,9 @@ const EndreBehandlingstema: React.FC = () => {
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const { vurderErLesevisning, åpenBehandling } = useBehandling();
 
@@ -68,6 +72,7 @@ const EndreBehandlingstema: React.FC = () => {
                     <SkjultLegend>Endre behandligstema</SkjultLegend>
                     <BehandlingstemaSelect
                         behandlingstema={skjema.felter.behandlingstema}
+                        fagsakType={minimalFagsak?.fagsakType}
                         erLesevisning={vurderErLesevisning()}
                         label="Behandlingstema"
                     />

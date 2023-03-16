@@ -5,14 +5,17 @@ import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/sele
 import type { Felt } from '@navikt/familie-skjema';
 
 import {
-    BehandlingUnderkategori,
+    BehandlingKategori,
     type Behandlingstema,
+    behandlingstemaer,
+    BehandlingUnderkategori,
     type IBehandlingstema,
 } from '../../typer/behandlingstema';
-import { behandlingstemaer } from '../../typer/behandlingstema';
+import { FagsakType } from '../../typer/fagsak';
 
 interface EgneProps {
     behandlingstema: Felt<IBehandlingstema | undefined>;
+    fagsakType?: FagsakType;
     visFeilmeldinger?: boolean;
     erLesevisning?: boolean;
 }
@@ -21,6 +24,7 @@ type Props = EgneProps & Omit<IFamilieSelectProps, 'children'>;
 
 export const BehandlingstemaSelect = ({
     behandlingstema,
+    fagsakType,
     visFeilmeldinger = false,
     erLesevisning = false,
     ...familieSelectProps
@@ -51,6 +55,11 @@ export const BehandlingstemaSelect = ({
             )}
             {Object.values(behandlingstemaer)
                 .filter(it => it.underkategori !== BehandlingUnderkategori.INSTITUSJON)
+                .filter(
+                    it =>
+                        it.kategori !== BehandlingKategori.EØS ||
+                        fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                )
                 .map(tema => {
                     return (
                         <option

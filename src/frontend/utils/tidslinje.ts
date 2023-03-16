@@ -12,36 +12,36 @@ import {
     trekkFra,
 } from './kalender';
 
-export const splittUtvidetVedEndringerPåSmåbarnstillegg = (
+export const splittYtelseVedEndringerPåAnnenYtelse = (
     opprinneligPeriode: Periode,
-    utvidetYtelsePeriode: IYtelsePeriode,
-    småbarnstilleggAndeler: IYtelsePeriode[]
+    periodeSomSkalSplittesOpp: IYtelsePeriode,
+    perioderSomSplitterOpp: IYtelsePeriode[]
 ): Periode[] => {
-    return småbarnstilleggAndeler.reduce(
-        (acc, ytelsePeriodeSmåbarnstillegg) => {
+    return perioderSomSplitterOpp.reduce(
+        (acc, periodeSomSplitterOpp) => {
             const sisteElement: Periode = acc[acc.length - 1];
 
-            const småFom = ytelsePeriodeSmåbarnstillegg.stønadFom;
-            const småTom = ytelsePeriodeSmåbarnstillegg.stønadTom;
+            const småFom = periodeSomSplitterOpp.stønadFom;
+            const småTom = periodeSomSplitterOpp.stønadTom;
 
             const småFomErInnafor =
                 erEtter(
                     hentFørsteDagIYearMonth(småFom),
-                    hentFørsteDagIYearMonth(utvidetYtelsePeriode.stønadFom)
+                    hentFørsteDagIYearMonth(periodeSomSkalSplittesOpp.stønadFom)
                 ) &&
                 erFør(
                     hentFørsteDagIYearMonth(småFom),
-                    hentSisteDagIYearMonth(utvidetYtelsePeriode.stønadTom)
+                    hentSisteDagIYearMonth(periodeSomSkalSplittesOpp.stønadTom)
                 );
 
             const småTomErInnafor =
                 erEtter(
                     hentSisteDagIYearMonth(småTom),
-                    hentFørsteDagIYearMonth(utvidetYtelsePeriode.stønadFom)
+                    hentFørsteDagIYearMonth(periodeSomSkalSplittesOpp.stønadFom)
                 ) &&
                 erFør(
                     hentSisteDagIYearMonth(småTom),
-                    hentSisteDagIYearMonth(utvidetYtelsePeriode.stønadTom)
+                    hentSisteDagIYearMonth(periodeSomSkalSplittesOpp.stønadTom)
                 );
 
             if (småFomErInnafor && småTomErInnafor) {

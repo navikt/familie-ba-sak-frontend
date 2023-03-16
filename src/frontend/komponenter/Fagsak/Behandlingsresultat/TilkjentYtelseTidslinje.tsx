@@ -7,6 +7,7 @@ import { Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
+import type { FagsakType } from '../../../typer/fagsak';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { formaterIdent } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
@@ -58,12 +59,17 @@ const TidslinjeLabels = styled.div`
 interface IProps {
     grunnlagPersoner: IGrunnlagPerson[];
     tidslinjePersoner: IPersonMedAndelerTilkjentYtelse[];
+    fagsakType?: FagsakType;
 }
 
-const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinjePersoner }) => {
+const TilkjentYtelseTidslinje: React.FC<IProps> = ({
+    grunnlagPersoner,
+    tidslinjePersoner,
+    fagsakType,
+}) => {
     const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
         useTidslinje();
-    const tidslinjeRader = genererRader(tidslinjePersoner);
+    const tidslinjeRader = genererRader(fagsakType, tidslinjePersoner);
 
     return (
         <>

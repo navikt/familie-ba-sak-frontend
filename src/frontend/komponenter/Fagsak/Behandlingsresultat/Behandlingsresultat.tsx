@@ -7,11 +7,12 @@ import styled from 'styled-components';
 import { Edit } from '@navikt/ds-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/KompetanseSkjemaContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
@@ -65,6 +66,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -200,6 +204,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
+                fagsakType={minimalFagsak?.fagsakType}
             />
             {!vurderErLesevisning() && (
                 <EndretUtbetalingAndel>
