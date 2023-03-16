@@ -123,9 +123,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023);
 
     const behandlingErMigreringMedAvvikUtenforBeløpsgrenser =
-        erMigreringFraInfotrygdMedAvvik &&
-        (!harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) ||
-            !harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023));
+        erMigreringFraInfotrygdMedAvvik && !behandlingErMigreringMedAvvikInnenforBeløpsgrenser;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
