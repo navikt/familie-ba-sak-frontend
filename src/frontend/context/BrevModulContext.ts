@@ -20,7 +20,6 @@ import {
     mottakersMålformImplementering,
 } from '../utils/brevmal';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { isEmpty } from '../utils/eøsValidators';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
@@ -84,9 +83,11 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const antallUkerSvarfrist = useFelt({
         verdi: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
-        valideringsfunksjon: (felt: FeltState<number>) => {
-            if (isNaN(felt.verdi)) {
-                return feil(felt, 'Antall uker svarfrist må være et tall');
+        valideringsfunksjon: (felt: FeltState<number | ''>) => {
+            if (felt.verdi === '') return feil(felt, 'Antall uker svarfrist er ikke satt');
+
+            if (isNaN(felt.verdi) || felt.verdi < 1) {
+                return feil(felt, 'Antall uker svarfrist må være et positivt tall');
             }
 
             // Maksimal saksbehandlingstid er 5 måneder. Svarfristen må derfor være mindre enn dette.
@@ -173,12 +174,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
-    const mottakerlandSed = useFelt<string>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<string>) => {
-            return felt.verdi === 'NO'
-                ? feil(felt, 'Norge kan ikke velges som mottakerland')
-                : !isEmpty(felt.verdi)
+    const mottakerlandSed = useFelt<string[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<string[]>) => {
+            return felt.verdi.length
                 ? ok(felt)
                 : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
@@ -212,8 +211,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
             datoAvtale: ISODateString | undefined;
-            antallUkerSvarfrist: number;
-            mottakerlandSed: string;
+            antallUkerSvarfrist: number | '';
+            mottakerlandSed: string[];
         },
         IBehandling
     >({
@@ -324,7 +323,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
                 datoAvtale: skjema.felter.datoAvtale.verdi,
                 behandlingKategori,
-                antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
+                antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),
                 mottakerNavn:
                     mottakerIdent.verdi === institusjon?.orgNummer
@@ -344,7 +343,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
             behandlingKategori,
-            antallUkerSvarfrist: skjema.felter.antallUkerSvarfrist.verdi,
+            antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
         };
     };
 

@@ -23,13 +23,13 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://barnetrygd.dev.intern.nav.no
+    - https://barnetrygd.intern.dev.nav.no
   azure:
     application:
       enabled: true
       tenant: trygdeetaten.no
       replyURLs:
-        - https://barnetrygd.dev.intern.nav.no/auth/openid/callback
+        - https://barnetrygd.intern.dev.nav.no/auth/openid/callback
       claims:
         groups:
           - id: "93a26831-9866-4410-927b-74ff51a9107c"  # VEILEDER_ROLLE
@@ -46,6 +46,8 @@ spec:
       rules:
         - application: familie-ba-sak
         - application: familie-ba-sak-frontend-redis
+      external:
+        - host: familie-endringslogg.intern.dev.nav.no
   envFrom:
     - secret: ba-sak-frontend
   env:

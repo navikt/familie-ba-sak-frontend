@@ -10,26 +10,26 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
-} from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type { IBehandling } from '../../../typer/behandling';
-import { BehandlingÅrsak } from '../../../typer/behandling';
-import { PersonType } from '../../../typer/person';
-import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../typer/vilkår';
-import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../typer/vilkår';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
+} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
+import { PersonType } from '../../../../typer/person';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../../typer/vilkår';
+import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 
-interface IVilkårsvurderingSkjema {
+interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
 }
 
-const PersonLinje = styled.div`
+export const PersonHeader = styled.div`
     display: flex;
     justify-content: space-between;
     position: -webkit-sticky;
@@ -40,7 +40,7 @@ const PersonLinje = styled.div`
     padding: ${ASpacing8} 0;
 `;
 
-const IndentertInnhold = styled.div`
+export const IndentertInnhold = styled.div`
     padding-left: ${ASpacing14};
 `;
 
@@ -53,7 +53,7 @@ const VilkårDiv = styled.div`
     }
 `;
 
-const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
+const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
@@ -118,7 +118,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <PersonLinje>
+                        <PersonHeader>
                             <PersonInformasjon person={personResultat.person} somOverskrift />
 
                             {!vurderErLesevisning() &&
@@ -168,7 +168,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     ? 'Skjul vilkårsvurdering'
                                     : 'Vis vilkårsvurdering'}
                             </Button>
-                        </PersonLinje>
+                        </PersonHeader>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
                             <IndentertInnhold>
@@ -240,4 +240,4 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     );
 };
 
-export default VilkårsvurderingSkjema;
+export default VilkårsvurderingSkjemaNormal;

@@ -11,16 +11,16 @@ const Environment = () => {
             proxyUrl: 'http://localhost:8089',
             familieTilbakeUrl: 'http://localhost:8000',
             familieKlageUrl: 'http://localhost:8000',
-            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
+            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'lokalt-mot-preprod') {
         return {
             buildPath: 'frontend_development',
             namespace: 'local',
-            proxyUrl: 'https://familie-ba-sak.dev.intern.nav.no',
-            familieTilbakeUrl: 'https://familie-tilbake.dev.intern.nav.no',
-            familieKlageUrl: 'https://familie-klage.dev.intern.nav.no',
-            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
+            proxyUrl: 'https://familie-ba-sak.intern.dev.nav.no',
+            familieTilbakeUrl: 'https://familie-tilbake.intern.dev.nav.no',
+            familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
+            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
         return {
@@ -30,17 +30,17 @@ const Environment = () => {
             familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
             familieKlageUrl: '',
             redisUrl: 'familie-redis',
-            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
+            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
             buildPath: 'frontend_production',
             namespace: 'preprod',
             proxyUrl: 'http://familie-ba-sak',
-            familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
-            familieKlageUrl: 'https://familie-klage.dev.intern.nav.no',
+            familieTilbakeUrl: 'https://familie-tilbake-frontend.intern.dev.nav.no',
+            familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
-            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
+            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
     }
 

@@ -6,16 +6,20 @@ import { Alert } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { PersonType } from '../../../typer/person';
-import type { IPersonResultat } from '../../../typer/vilkår';
-import { annenVurderingConfig, AnnenVurderingType, vilkårConfig } from '../../../typer/vilkår';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import SamhandlerInformasjon from '../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
-import { useSamhandlerRequest } from '../InstitusjonOgVerge/useSamhandler';
-import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
+import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { PersonType } from '../../../../typer/person';
+import type { IPersonResultat } from '../../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    AnnenVurderingType,
+    vilkårConfigInstitusjon,
+} from '../../../../typer/vilkår';
+import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import SamhandlerInformasjon from '../../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
+import { useSamhandlerRequest } from '../../InstitusjonOgVerge/useSamhandler';
+import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 
 const AktørLinje = styled.div`
     display: flex;
@@ -59,10 +63,6 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
 
-    const vilkårTilVurdering = Object.values(vilkårConfig).filter(vilkår =>
-        vilkår.parterDetteGjelderFor.includes(PersonType.BARN)
-    );
-
     return personResultat ? (
         <>
             {opplysningsplikt && (
@@ -103,7 +103,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                 ) : (
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                 )}
-                {vilkårTilVurdering.map(vilkårConfig => {
+                {vilkårConfigInstitusjon.map(vilkårConfig => {
                     return (
                         <GeneriskVilkår
                             key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
