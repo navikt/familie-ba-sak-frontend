@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Radio } from '@navikt/ds-react';
+import { Fieldset, Radio } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -26,6 +23,7 @@ import type {
     IPersonResultat,
 } from '../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../typer/vilkår';
+import { Container } from '../GeneriskVilkår/VilkårTabellRadEndre';
 import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,
@@ -42,22 +40,19 @@ interface IProps {
     settEkspandertAnnenVurdering: (ekspandertAnnenVurdering: boolean) => void;
 }
 
-const Container = styled.div`
-    max-width: 30rem;
-    border-left: 1px solid ${navFarger.navBlaLighten20};
-    padding-left: 2rem;
-    .skjemagruppe.radiogruppe {
-        margin-bottom: 0 !important;
-    }
-    .begrunnelse-textarea {
-        min-height: 8rem !important;
-    }
-`;
-
 const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
+`;
+
+const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+    && {
+        margin: 1rem 0;
+        legend {
+            margin-bottom: 0rem;
+        }
+    }
 `;
 
 const AnnenVurderingRadEndre: React.FC<IProps> = ({
@@ -165,12 +160,17 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe
-            feil={redigerbartAnnenVurdering.feilmelding || undefined}
-            utenFeilPropagering={true}
+        <Fieldset
+            error={redigerbartAnnenVurdering.feilmelding || undefined}
+            errorPropagation={false}
+            legend={'Skjema for å gjøre vurderingen'}
+            hideLegend
         >
-            <Container>
-                <FamilieRadioGruppe
+            <Container
+                lesevisning={erLesevisning}
+                vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
+            >
+                <StyledFamilieRadioGruppe
                     erLesevisning={erLesevisning}
                     value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
@@ -206,7 +206,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     >
                         {'Nei'}
                     </Radio>
-                </FamilieRadioGruppe>
+                </StyledFamilieRadioGruppe>
 
                 <FamilieTextarea
                     erLesevisning={erLesevisning}
@@ -240,7 +240,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         <FamilieKnapp
                             erLesevisning={erLesevisning}
                             onClick={onClickFerdig}
-                            size="small"
+                            size="medium"
                             variant="secondary"
                             loading={vilkårSubmit === VilkårSubmit.PUT}
                             disabled={vilkårSubmit === VilkårSubmit.PUT}
@@ -251,7 +251,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             style={{ marginLeft: '1rem' }}
                             erLesevisning={erLesevisning}
                             onClick={() => toggleForm(false)}
-                            size="small"
+                            size="medium"
                             variant="tertiary"
                         >
                             Avbryt
@@ -259,7 +259,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     </div>
                 </Knapperad>
             </Container>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 
