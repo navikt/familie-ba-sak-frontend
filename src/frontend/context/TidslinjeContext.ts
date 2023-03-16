@@ -95,15 +95,13 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     };
 
     interface YtelseSplittForTidslinje {
-        ytelseSomSkalSplittesOpp: YtelseType;
-        ytelseSomSplitterOpp: YtelseType;
+        ytelseSomSkalSplittesOpp?: YtelseType;
+        ytelseSomSplitterOpp?: YtelseType;
     }
 
     const ytelserSomMåSplittes = (fagsakType?: FagsakType): YtelseSplittForTidslinje => {
         switch (fagsakType) {
             case FagsakType.NORMAL:
-            case FagsakType.INSTITUSJON:
-            case undefined:
                 return {
                     ytelseSomSkalSplittesOpp: YtelseType.UTVIDET_BARNETRYGD,
                     ytelseSomSplitterOpp: YtelseType.SMÅBARNSTILLEGG,
@@ -112,6 +110,12 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                 return {
                     ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
                     ytelseSomSplitterOpp: YtelseType.UTVIDET_BARNETRYGD,
+                };
+            case FagsakType.INSTITUSJON:
+            case undefined:
+                return {
+                    ytelseSomSkalSplittesOpp: undefined,
+                    ytelseSomSplitterOpp: undefined,
                 };
         }
     };
