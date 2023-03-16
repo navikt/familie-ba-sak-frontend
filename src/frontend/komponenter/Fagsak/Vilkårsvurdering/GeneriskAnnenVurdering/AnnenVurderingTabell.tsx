@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IGrunnlagPerson } from '../../../../typer/person';
@@ -27,31 +28,18 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const Tabell = styled.table`
-    table-layout: fixed;
-    td:first-child .checkboks + .skjemaelement__label {
-        margin-bottom: 1rem;
-        text-indent: 2rem;
-        width: 13rem;
-    }
-`;
-// Midlertidig styling. Se issue: https://github.com/navikt/nav-frontend-moduler/issues/997
-
-const TabellHeader = styled.th`
+const TabellHeader = styled(Table.HeaderCell)`
     &:nth-of-type(1) {
-        width: 10rem;
+        width: 21rem;
     }
     &:nth-of-type(2) {
-        width: 12rem;
+        width: 20rem;
+    }
+    &:nth-of-type(3) {
+        width: 15rem;
     }
     &:nth-of-type(4) {
-        width: 7rem;
-    }
-    &:nth-of-type(5) {
-        width: 3rem;
-    }
-    &:nth-of-type(6) {
-        width: 15rem;
+        width: 2.25rem;
     }
 `;
 
@@ -62,29 +50,31 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     return (
-        <Tabell className={'tabell'}>
-            <thead>
-                <tr>
+        <Table>
+            <Table.Header>
+                <Table.Row>
                     <TabellHeader>Vurdering</TabellHeader>
-                    <TabellHeader />
                     <TabellHeader>Begrunnelse</TabellHeader>
+                    <TabellHeader>Vurdert av</TabellHeader>
                     <TabellHeader />
-                    <TabellHeader />
-                    <TabellHeader />
-                </tr>
-            </thead>
-            {andreVurderinger.map((annenVurdering: FeltState<IAnnenVurdering>, index: number) => {
-                return (
-                    <AnnenVurderingTabellRad
-                        key={`${index}_${person.fødselsdato}_${annenVurdering.verdi.type}`}
-                        annenVurderingConfig={annenVurderingConfig}
-                        person={person}
-                        annenVurdering={annenVurdering}
-                        visFeilmeldinger={visFeilmeldinger}
-                    />
-                );
-            })}
-        </Tabell>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {andreVurderinger.map(
+                    (annenVurdering: FeltState<IAnnenVurdering>, index: number) => {
+                        return (
+                            <AnnenVurderingTabellRad
+                                key={`${index}_${person.fødselsdato}_${annenVurdering.verdi.type}`}
+                                annenVurderingConfig={annenVurderingConfig}
+                                person={person}
+                                annenVurdering={annenVurdering}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        );
+                    }
+                )}
+            </Table.Body>
+        </Table>
     );
 };
 

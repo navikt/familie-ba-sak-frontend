@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { BodyShort, Button } from '@navikt/ds-react';
+import { People } from '@navikt/ds-icons';
+import { BodyShort, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
@@ -22,10 +21,6 @@ interface IProps {
     annenVurderingConfig: IAnnenVurderingConfig;
     annenVurdering: FeltState<IAnnenVurdering>;
     visFeilmeldinger: boolean;
-}
-
-interface IEkspanderbarTrProps {
-    ekspandert?: boolean;
 }
 
 const BeskrivelseCelle = styled(BodyShort)`
@@ -41,15 +36,14 @@ const VurderingCelle = styled.div`
     }
 `;
 
-const EkspanderbarTr = styled.tr`
-    td {
-        border-bottom: ${(props: IEkspanderbarTrProps) =>
-            props.ekspandert ? 'none' : '1px solid rgba(0, 0, 0, 0.15)'} !important;
+const FlexDiv = styled.div`
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    > div:nth-child(n + 2) {
+        padding-left: 0.5rem;
     }
-`;
-
-const EkspandertTd = styled.td`
-    padding: 0 1rem 1rem 1.6rem;
 `;
 
 const AnnenVurderingTabellRad: React.FC<IProps> = ({
@@ -80,73 +74,54 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     };
 
     return (
-        <>
-            <EkspanderbarTr {...{ ekspandert: ekspandertAnnenVurdering }}>
-                <td>
-                    <VurderingCelle>
-                        <VilkårResultatIkon
-                            resultat={annenVurdering.verdi.resultat.verdi}
-                            width={20}
-                            height={20}
-                        />
-                        <BodyShort children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
-                    </VurderingCelle>
-                </td>
-                <td />
-                <td>
-                    <BeskrivelseCelle children={annenVurdering.verdi.begrunnelse.verdi} />
-                </td>
-                <td>
-                    {!vurderErLesevisning() && (
-                        <Button
-                            variant={'tertiary'}
-                            onClick={() => toggleForm(true)}
-                            id={annenVurderingFeilmeldingId(annenVurdering.verdi)}
-                            size={'small'}
-                            icon={
-                                <FamilieChevron
-                                    retning={ekspandertAnnenVurdering ? 'opp' : 'ned'}
-                                />
-                            }
-                            iconPosition={'right'}
-                        >
-                            {!ekspandertAnnenVurdering
-                                ? annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-                                    ? 'Vurder'
-                                    : 'Endre'
-                                : 'Lukk'}
-                        </Button>
-                    )}
-                </td>
-                <td>
-                    <ManuellVurdering />
-                </td>
-                <td>
-                    <i>
+        <Table.ExpandableRow
+            open={ekspandertAnnenVurdering}
+            togglePlacement="right"
+            onOpenChange={() => toggleForm(true)}
+            id={annenVurderingFeilmeldingId(annenVurdering.verdi)}
+            content={
+                <AnnenVurderingRadEndre
+                    person={person}
+                    annenVurderingConfig={annenVurderingConfig}
+                    annenVurdering={annenVurdering}
+                    visFeilmeldinger={visFeilmeldinger}
+                    toggleForm={toggleForm}
+                    redigerbartAnnenVurdering={redigerbartAnnenVurdering}
+                    settRedigerbartAnnenVurdering={settRedigerbartAnnenVurdering}
+                    settEkspandertAnnenVurdering={settEkspandertAnnenVurdering}
+                />
+            }
+        >
+            <Table.DataCell>
+                <VurderingCelle>
+                    <VilkårResultatIkon
+                        resultat={annenVurdering.verdi.resultat.verdi}
+                        width={20}
+                        height={20}
+                    />
+                    <BodyShort children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
+                </VurderingCelle>
+            </Table.DataCell>
+            <Table.DataCell>
+                <BeskrivelseCelle children={annenVurdering.verdi.begrunnelse.verdi} />
+            </Table.DataCell>
+            <Table.DataCell>
+                <FlexDiv>
+                    <People
+                        width={24}
+                        height={24}
+                        aria-labelledby={'ManuellVurdering'}
+                        viewBox={'0 0 24 24'}
+                    />
+                    <div>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
                         annenVurdering.verdi.erVurdert
                             ? 'Vurdert i denne behandlingen'
                             : ''}
-                    </i>
-                </td>
-            </EkspanderbarTr>
-            {ekspandertAnnenVurdering && (
-                <tr>
-                    <EkspandertTd colSpan={6}>
-                        <AnnenVurderingRadEndre
-                            person={person}
-                            annenVurderingConfig={annenVurderingConfig}
-                            annenVurdering={annenVurdering}
-                            visFeilmeldinger={visFeilmeldinger}
-                            toggleForm={toggleForm}
-                            redigerbartAnnenVurdering={redigerbartAnnenVurdering}
-                            settRedigerbartAnnenVurdering={settRedigerbartAnnenVurdering}
-                            settEkspandertAnnenVurdering={settEkspandertAnnenVurdering}
-                        />
-                    </EkspandertTd>
-                </tr>
-            )}
-        </>
+                    </div>
+                </FlexDiv>
+            </Table.DataCell>
+        </Table.ExpandableRow>
     );
 };
 
