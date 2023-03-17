@@ -55,7 +55,7 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-const Container = styled.div`
+export const Container = styled.div`
     max-width: 30rem;
     border-left: 0.125rem solid
         ${(props: { lesevisning: boolean; vilkårResultat: Resultat }) => {
@@ -69,13 +69,6 @@ const Container = styled.div`
         }};
     padding-left: 2rem;
     margin-left: -3rem;
-
-    .skjemagruppe.radiogruppe {
-        margin-bottom: 0 !important;
-    }
-    .begrunnelse-textarea {
-        min-height: 8rem !important;
-    }
 `;
 
 const Knapperad = styled.div`
