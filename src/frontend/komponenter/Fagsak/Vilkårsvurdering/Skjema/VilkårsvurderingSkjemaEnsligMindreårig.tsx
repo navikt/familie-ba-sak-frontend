@@ -5,11 +5,14 @@ import { Alert } from '@navikt/ds-react';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
 import {
+    AnnenVurderingType,
+    annenVurderingConfig,
     vilkårConfigEnsligMindreårig,
     VilkårType,
     type IPersonResultat,
 } from '../../../../typer/vilkår';
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { PersonHeader, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
@@ -24,6 +27,9 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     const personResultat = vilkårsvurdering.find(
         (value: IPersonResultat) => value.person.type === PersonType.BARN
     );
+    const opplysningsplikt = personResultat?.andreVurderinger.find(
+        value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
+    );
     return personResultat ? (
         <>
             <PersonHeader>
@@ -35,6 +41,16 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                     <Registeropplysninger opplysninger={personResultat.person.registerhistorikk} />
                 ) : (
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
+                )}
+                {opplysningsplikt && (
+                    <GeneriskAnnenVurdering
+                        person={personResultat.person}
+                        andreVurderinger={personResultat.andreVurderinger}
+                        annenVurderingConfig={
+                            annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]
+                        }
+                        visFeilmeldinger={visFeilmeldinger}
+                    />
                 )}
                 {Object.values(vilkårConfigEnsligMindreårig).map(vilkårConfig => {
                     if (vilkårConfig.key === VilkårType.UTVIDET_BARNETRYGD) {
