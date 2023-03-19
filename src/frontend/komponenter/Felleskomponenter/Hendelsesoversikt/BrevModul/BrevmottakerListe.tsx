@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { FagsakType } from '../../../../typer/fagsak';
 import type { IInstitusjon } from '../../../../typer/institusjon-og-verge';
 import { type IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
@@ -12,9 +13,15 @@ interface IProps {
     personer: IGrunnlagPerson[];
     institusjon: IInstitusjon | undefined;
     brevmottakere: IRestBrevmottaker[];
+    fagsakType?: FagsakType;
 }
 
-const BrevmottakerListe: React.FC<IProps> = ({ personer, institusjon, brevmottakere }) => {
+const BrevmottakerListe: React.FC<IProps> = ({
+    personer,
+    institusjon,
+    brevmottakere,
+    fagsakType,
+}) => {
     const skalViseInstitusjon = !!institusjon;
     const harUtenlandskAdresse = brevmottakere.some(
         mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
@@ -29,10 +36,24 @@ const BrevmottakerListe: React.FC<IProps> = ({ personer, institusjon, brevmottak
     const skalViseSøker =
         søker && !institusjon && !harManuellDødsboadresse && !harUtenlandskAdresse;
 
+    const skalViseEnsligMindreårig = fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+
     return (
         <ul>
             {skalViseSøker && (
                 <li key="søker">{lagPersonLabel(søker.personIdent || '', personer)}</li>
+            )}
+            {skalViseEnsligMindreårig && (
+                <>
+                    <li key="barnet">
+                        {lagPersonLabel(
+                            personer.find(person => person.type === PersonType.BARN)?.personIdent ||
+                                '',
+                            personer
+                        )}
+                    </li>
+                    <li key="verge">Registrert verge</li>
+                </>
             )}
             {skalViseInstitusjon && (
                 <li key="institusjon">{`Institusjon | ${
