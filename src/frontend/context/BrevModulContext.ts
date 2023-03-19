@@ -12,6 +12,7 @@ import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/Brev
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
+import { FagsakType } from '../typer/fagsak';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { Målform } from '../typer/søknad';
@@ -41,11 +42,20 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const personer = åpenBehandling?.personer ?? [];
     const brevmottakere = åpenBehandling?.brevmottakere ?? [];
     const institusjon = minimalFagsak?.institusjon;
+    const fagsakType = minimalFagsak?.fagsakType;
+
+    const velgMottaker = (): string | undefined => {
+        if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && institusjon) {
+            return institusjon.orgNummer;
+        }
+        if (minimalFagsak?.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
+            return personer[0].personIdent;
+        }
+        return personer.find(person => person.type === PersonType.SØKER)?.personIdent;
+    };
 
     const mottakerIdent = useFelt({
-        verdi: institusjon
-            ? institusjon.orgNummer
-            : personer.find(person => person.type === PersonType.SØKER)?.personIdent || '',
+        verdi: velgMottaker() || '',
         valideringsfunksjon: (felt: FeltState<string>) =>
             felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
     });
@@ -364,6 +374,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         erBrevmalMedObligatoriskFritekst,
         institusjon,
         brevmottakere,
+        fagsakType,
     };
 });
 
