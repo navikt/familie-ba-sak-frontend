@@ -46,8 +46,6 @@ const Knapperad = styled.div`
 
 const StyledLenke = styled(Link)`
     margin-right: auto;
-    display: flex;
-    align-items: center;
 `;
 
 const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
