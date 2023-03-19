@@ -67,6 +67,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
+        harInnloggetSaksbehandlerSuperbrukerTilgang,
         innloggetSaksbehandler,
         hentSaksbehandlerRolle,
     } = useApp();
@@ -154,16 +155,19 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         }
 
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
+        const saksbehandlerHarSuperbrukerRolle = harInnloggetSaksbehandlerSuperbrukerTilgang();
         const behandlingsårsak = åpenBehandlingData?.årsak;
         const behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak =
             behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING ||
             behandlingsårsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV;
 
         const saksbehandlerHarTilgangTilEnhet =
+            behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak ||
+            saksbehandlerHarSuperbrukerRolle ||
             harTilgangTilEnhet(
                 åpenBehandlingData?.arbeidsfordelingPåBehandling.behandlendeEnhetId ?? '',
                 innloggetSaksbehandler?.groups ?? []
-            ) || behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak;
+            );
 
         const steg = hentStegPåÅpenBehandling();
 
