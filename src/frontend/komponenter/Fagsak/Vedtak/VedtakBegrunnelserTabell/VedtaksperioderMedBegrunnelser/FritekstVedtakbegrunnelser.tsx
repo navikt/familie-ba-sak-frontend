@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { AddCircle, Delete, ExternalLink } from '@navikt/ds-icons';
 import { BodyLong, Button, Fieldset, Heading, Link, Tag, Label } from '@navikt/ds-react';
-import { ABgSubtle } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -19,7 +18,6 @@ import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const FritekstContainer = styled.div`
-    background-color: ${ABgSubtle};
     padding: 1rem;
 `;
 
