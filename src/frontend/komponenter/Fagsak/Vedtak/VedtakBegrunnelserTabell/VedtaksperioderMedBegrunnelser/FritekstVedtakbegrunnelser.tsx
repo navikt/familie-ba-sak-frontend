@@ -111,8 +111,28 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             }),
         ]);
 
-    return vedtaksperiodeMedBegrunnelser.fritekster.length > 0 ||
-        skjema.felter.fritekster.verdi.length > 0 ? (
+    if (
+        !vedtaksperiodeMedBegrunnelser.fritekster.length &&
+        !skjema.felter.fritekster.verdi.length
+    ) {
+        return (
+            <>
+                {!erLesevisning && (
+                    <Button
+                        variant={'tertiary'}
+                        onClick={leggTilFritekst}
+                        id={`legg-til-fritekst`}
+                        size={'small'}
+                        icon={<AddCircle />}
+                    >
+                        {'Legg til fritekst'}
+                    </Button>
+                )}
+            </>
+        );
+    }
+
+    return (
         <FritekstContainer>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
@@ -240,17 +260,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </>
             )}
         </FritekstContainer>
-    ) : !erLesevisning ? (
-        <Button
-            variant={'tertiary'}
-            onClick={leggTilFritekst}
-            id={`legg-til-fritekst`}
-            size={'small'}
-            icon={<AddCircle />}
-        >
-            {'Legg til fritekst'}
-        </Button>
-    ) : null;
+    );
 };
 
 export default FritekstVedtakbegrunnelser;
