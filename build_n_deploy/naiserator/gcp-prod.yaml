@@ -34,7 +34,7 @@ spec:
           - id: "199c2b39-e535-4ae8-ac59-8ccbee7991ae"  # VEILEDER_ROLLE
           - id: "847e3d72-9dc1-41c3-80ff-f5d4acdd5d46"  # SAKSBEHANDLER_ROLLE
           - id: "7a271f87-39fb-468b-a9ee-6cf3c070f548"  # BESLUTTER_ROLLE
-          - id: "c31541cc-6590-4986-b6a7-cc0b040888dc"  # SUPERBRUKER_RETTIGHET
+          - id: "c31541cc-6590-4986-b6a7-cc0b040888dc"  # SUPERBRUKER_ROLLE
           - id: "833f1f77-b64b-4708-b479-389ca4009af5"  # MEDLEM: 2103 NAV Vikafossen
           - id: "c2cf4114-1f5d-47f2-bb6e-c7a06fd26412"  # MEDLEM: 4806 NAV Familie- og pensjonsytelser Drammen
           - id: "6c8c5d93-0e08-4bd8-960c-5c4c0ce5c609"  # MEDLEM: 4820 NAV Familie- og pensjonsytelser Vadsø
