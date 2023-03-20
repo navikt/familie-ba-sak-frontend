@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { Datofelt } from './Datofelt';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
@@ -22,9 +19,6 @@ interface IProps {
 
 const Knapperad = styled.div`
     margin-top: 2.5rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
 `;
 
 const StyledModal = styled(Modal)`
@@ -72,13 +66,14 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                 aria-label="Opprett ny behandling"
             >
                 <Modal.Content>
-                    <Heading size="medium" level="2" spacing>
-                        Opprett ny behandling
-                    </Heading>
-                    <SkjemaGruppe
-                        feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                    <Fieldset
+                        error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                        legend={
+                            <Heading size="medium" level="2">
+                                Opprett ny behandling
+                            </Heading>
+                        }
                     >
-                        <SkjultLegend>Opprett ny behandling</SkjultLegend>
                         <OpprettBehandlingValg
                             skjema={opprettBehandlingSkjema}
                             minimalFagsak={minimalFagsak}
@@ -116,35 +111,33 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 }}
                             />
                         )}
-                    </SkjemaGruppe>
+                    </Fieldset>
                     <Knapperad>
-                        <div>
-                            <KnappVenstre
-                                key={'bekreft'}
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
-                                onClick={() =>
-                                    onBekreft(
-                                        minimalFagsak.søkerFødselsnummer,
-                                        minimalFagsak.fagsakType
-                                    )
-                                }
-                                children={'Bekreft'}
-                                loading={
-                                    opprettBehandlingSkjema.submitRessurs.status ===
-                                    RessursStatus.HENTER
-                                }
-                                disabled={
-                                    opprettBehandlingSkjema.submitRessurs.status ===
-                                    RessursStatus.HENTER
-                                }
-                            />
-                            <Button
-                                key={'avbryt'}
-                                variant="tertiary"
-                                onClick={lukkOpprettBehandlingModal}
-                                children={'Avbryt'}
-                            />
-                        </div>
+                        <KnappVenstre
+                            key={'bekreft'}
+                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            onClick={() =>
+                                onBekreft(
+                                    minimalFagsak.søkerFødselsnummer,
+                                    minimalFagsak.fagsakType
+                                )
+                            }
+                            children={'Bekreft'}
+                            loading={
+                                opprettBehandlingSkjema.submitRessurs.status ===
+                                RessursStatus.HENTER
+                            }
+                            disabled={
+                                opprettBehandlingSkjema.submitRessurs.status ===
+                                RessursStatus.HENTER
+                            }
+                        />
+                        <Button
+                            key={'avbryt'}
+                            variant="tertiary"
+                            onClick={lukkOpprettBehandlingModal}
+                            children={'Avbryt'}
+                        />
                     </Knapperad>
                 </Modal.Content>
             </StyledModal>
