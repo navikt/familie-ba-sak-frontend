@@ -36,7 +36,7 @@ export const Årsvelger: React.FC<Props> = ({
             }
             kanNavigereTilHøyre={!erISisteÅrAvPerioden}
             kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
-            navigerTilHyøyreTittel={`Vis simuleringsresultat for ${aktueltÅr + 1}`}
+            navigerTilHøyreTittel={`Vis simuleringsresultat for ${aktueltÅr + 1}`}
             navigerTilVenstreTittel={`Vis simuleringsresultat for ${aktueltÅr - 1}`}
         >
             <Detail>{årISimuleringen[indexFramvistÅr]}</Detail>
