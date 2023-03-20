@@ -44,7 +44,7 @@ const StyledLabel = styled(Label)`
 `;
 
 const InfoBoks = styled.div`
-    margin-right: 5.6875rem;
+    margin-right: 5.85rem;
     display: flex;
     align-items: center;
     text-align: center;
