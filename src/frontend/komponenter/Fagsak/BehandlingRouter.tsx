@@ -91,7 +91,11 @@ const BehandlingRouter: React.FunctionComponent = () => {
                     />
                     <Route
                         path="/vedtak"
-                        element={<OppsummeringVedtak åpenBehandling={åpenBehandling.data} />}
+                        element={
+                            <SimuleringProvider åpenBehandling={åpenBehandling.data}>
+                                <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
+                            </SimuleringProvider>
+                        }
                     />
                 </Routes>
             );
