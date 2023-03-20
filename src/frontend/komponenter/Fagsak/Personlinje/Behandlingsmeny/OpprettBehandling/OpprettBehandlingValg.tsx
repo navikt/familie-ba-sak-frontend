@@ -10,14 +10,14 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { useApp } from '../../../../../context/AppContext';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../../context/ManuellJournalførContext';
 import {
+    BehandlingResultat,
     BehandlingStatus,
     Behandlingstype,
-    BehandlingÅrsak,
     behandlingÅrsak,
+    BehandlingÅrsak,
     erBehandlingHenlagt,
     type IBehandling,
 } from '../../../../../typer/behandling';
-import { BehandlingResultat } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
@@ -151,9 +151,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
         kanOppretteMigreringFraInfotrygd &&
-        (!kanOppretteRevurdering || forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak));
+        (forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak) ||
+            minimalFagsak?.status !== FagsakStatus.LØPENDE);
+
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
-        kanOppretteMigreringFraInfotrygd && !kanOpprettMigreringsbehandlingMedHelmanuellMigrering;
+        kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
