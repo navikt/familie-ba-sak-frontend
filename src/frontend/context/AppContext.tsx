@@ -17,7 +17,7 @@ import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
 import type { IToggles } from '../typer/toggles';
 import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
-import { gruppeIdTilRolle } from '../utils/behandling';
+import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
 import { tilFeilside } from '../utils/commons';
 
 const FEM_MINUTTER = 300000;
@@ -248,11 +248,15 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         return rolle >= BehandlerRolle.SAKSBEHANDLER;
     };
 
+    const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
+        innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
+
     return {
         autentisert,
         hentSaksbehandlerRolle,
         innloggetSaksbehandler,
         harInnloggetSaksbehandlerSkrivetilgang,
+        harInnloggetSaksbehandlerSuperbrukerTilgang,
         lukkModal,
         modal,
         settModal,
