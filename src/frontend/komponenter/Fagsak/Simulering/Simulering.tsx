@@ -121,13 +121,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         vedtaksbrev til bruker.
                                     </StyledBeløpsgrenseAlert>
                                 )}
-                                {erFeilutbetaling && (
-                                    <TilbakekrevingSkjema
-                                        søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                        harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                    />
-                                )}
                             </>
+                        )}
+                        {erFeilutbetaling && (
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                            />
                         )}
                     </>
                 )
