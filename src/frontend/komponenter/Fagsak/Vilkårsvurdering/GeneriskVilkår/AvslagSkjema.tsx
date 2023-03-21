@@ -22,9 +22,6 @@ interface IProps {
 
 const MarginFieldset = styled(Fieldset)`
     margin: 1.5rem 0 2.5rem 0 !important;
-    .skjemaelement {
-        margin-bottom: 0 !important;
-    }
     > div:nth-child(2) {
         margin: 0.5rem 0 0 0;
         & > div {
