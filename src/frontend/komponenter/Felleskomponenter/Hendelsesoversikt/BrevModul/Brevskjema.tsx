@@ -125,6 +125,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         erBrevmalMedObligatoriskFritekst,
         institusjon,
         brevmottakere,
+        fagsakType,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -203,6 +204,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     personer={personer}
                     institusjon={institusjon}
                     brevmottakere={brevmottakere}
+                    fagsakType={fagsakType}
                 />
                 <StyledFamilieSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
