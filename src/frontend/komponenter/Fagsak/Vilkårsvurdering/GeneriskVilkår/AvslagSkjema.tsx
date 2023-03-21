@@ -3,9 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { BodyShort, Checkbox } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Fieldset } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -22,7 +20,7 @@ interface IProps {
     settVisFeilmeldingerForEttVilkår: (visFeilmeldinger: boolean) => void;
 }
 
-const MarginSkjemaGruppe = styled(SkjemaGruppe)`
+const MarginFieldset = styled(Fieldset)`
     margin: 1.5rem 0 2.5rem 0 !important;
     .skjemaelement {
         margin-bottom: 0 !important;
@@ -46,13 +44,15 @@ const AvslagSkjema: React.FC<IProps> = ({
     const erLesevisning = vurderErLesevisning();
 
     return (
-        <MarginSkjemaGruppe
-            feil={
+        <MarginFieldset
+            error={
                 redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus ===
                     Valideringsstatus.FEIL && visFeilmeldinger
                     ? redigerbartVilkår.verdi.avslagBegrunnelser.feilmelding
                     : ''
             }
+            legend="Er vurderingen et avslag?"
+            hideLegend
         >
             {erLesevisning ? (
                 redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
@@ -107,7 +107,7 @@ const AvslagSkjema: React.FC<IProps> = ({
                     />
                 </VedtaksbegrunnelseTeksterProvider>
             )}
-        </MarginSkjemaGruppe>
+        </MarginFieldset>
     );
 };
 
