@@ -2,11 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { AddCircle, Delete, ExternalLink } from '@navikt/ds-icons';
-import { BodyLong, Button, Heading, Link, Tag } from '@navikt/ds-react';
+import { BodyLong, Button, Fieldset, Heading, Link, Tag, Label, HelpText } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -15,13 +12,10 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import HelpText from '../../../../Felleskomponenter/HelpText';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
-import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const FritekstContainer = styled.div`
-    background-color: ${navFarger.navGraBakgrunn};
     padding: 1rem;
 `;
 
@@ -46,16 +40,13 @@ const StyledLabel = styled(Label)`
 `;
 
 const InfoBoks = styled.div`
-    margin-right: 5.6875rem;
+    margin-right: 5.85rem;
     display: flex;
     align-items: center;
-    text-align: center;
 `;
 
 const StyledTag = styled(Tag)`
     margin-left: auto;
-    background-color: ${navFarger.navLysGra};
-    border-color: ${navFarger.navGra60};
 `;
 
 const SletteKnapp = styled(Button)`
@@ -78,10 +69,10 @@ const ItalicText = styled(BodyLong)`
 
 const FritekstVedtakbegrunnelser: React.FC = () => {
     const { vurderErLesevisning, søkersMålform } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const {
         skjema,
         leggTilFritekst,
-        id,
         makslengdeFritekst,
         maksAntallKulepunkter,
         onPanelClose,
@@ -90,8 +81,6 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
     } = useVedtaksperiodeMedBegrunnelser();
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
-
-    const skjemaGruppeId = `Fritekster ${id}`;
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -110,12 +99,31 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             }),
         ]);
 
-    return vedtaksperiodeMedBegrunnelser.fritekster.length > 0 ||
-        skjema.felter.fritekster.verdi.length > 0 ? (
+    if (
+        !vedtaksperiodeMedBegrunnelser.fritekster.length &&
+        !skjema.felter.fritekster.verdi.length
+    ) {
+        return (
+            <>
+                {!erLesevisning && (
+                    <Button
+                        variant={'tertiary'}
+                        onClick={leggTilFritekst}
+                        id={`legg-til-fritekst`}
+                        size={'small'}
+                        icon={<AddCircle />}
+                    >
+                        {'Legg til fritekst'}
+                    </Button>
+                )}
+            </>
+        );
+    }
+
+    return (
         <FritekstContainer>
-            <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
-                <StyledLabel htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</StyledLabel>
+                <StyledLabel>Fritekst til kulepunkt i brev</StyledLabel>
                 <StyledHelpText placement="top-start">
                     <BodyLong size="small" spacing>
                         Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
@@ -138,118 +146,103 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg
                     </ItalicText>
                 </StyledHelpText>
-                <StyledTag variant="info" size="small">
+                <StyledTag variant="neutral" size="small">
                     Skriv {målform[søkersMålform].toLowerCase()}
                 </StyledTag>
             </InfoBoks>
-
-            {vurderErLesevisning() ? (
-                <StyledList id={skjemaGruppeId}>
-                    {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => (
-                        <li>{fritekst.verdi.tekst}</li>
-                    ))}
-                </StyledList>
-            ) : (
-                <>
-                    <SkjemaGruppe
-                        id={skjemaGruppeId}
-                        feil={
-                            skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)
-                        }
-                    >
+            <Fieldset
+                error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
+                legend={'Fritekst til kulepunkt i brev'}
+                hideLegend
+            >
+                {erLesevisning ? (
+                    <StyledList>
                         {skjema.felter.fritekster.verdi.map(
-                            (fritekst: FeltState<IFritekstFelt>) => {
-                                const fritekstId = fritekst.verdi.id;
-
-                                return (
-                                    <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                                        <FamilieTextareaBegrunnelseFritekst
-                                            erLesevisning={false}
-                                            key={`fritekst-${fritekstId}`}
-                                            id={`${fritekstId}`}
-                                            className={'fritekst-textarea'}
-                                            label={`Kulepunkt ${fritekstId}`}
-                                            hideLabel
-                                            resize
-                                            value={fritekst.verdi.tekst}
-                                            maxLength={makslengdeFritekst}
-                                            onChange={event => onChangeFritekst(event, fritekstId)}
-                                            error={skjema.visFeilmeldinger && fritekst.feilmelding}
-                                            /* eslint-disable-next-line jsx-a11y/no-autofocus */
-                                            autoFocus
-                                        />
-                                        <SletteKnapp
-                                            variant={'tertiary'}
-                                            onClick={() => {
-                                                skjema.felter.fritekster.validerOgSettFelt([
-                                                    ...skjema.felter.fritekster.verdi.filter(
-                                                        mapFritekst =>
-                                                            mapFritekst.verdi.id !==
-                                                            fritekst.verdi.id
-                                                    ),
-                                                ]);
-                                            }}
-                                            id={`fjern_fritekst-${fritekstId}`}
-                                            size={'small'}
-                                            aria-label={'Fjern fritekst'}
-                                            icon={<Delete />}
-                                        >
-                                            {'Fjern'}
-                                        </SletteKnapp>
-                                    </StyledFamilieFritekstFelt>
-                                );
-                            }
+                            (fritekst: FeltState<IFritekstFelt>) => (
+                                <li>{fritekst.verdi.tekst}</li>
+                            )
                         )}
-                    </SkjemaGruppe>
-                    {!erMaksAntallKulepunkter && !vurderErLesevisning() && (
-                        <Button
-                            variant={'tertiary'}
-                            onClick={leggTilFritekst}
-                            id={`legg-til-fritekst`}
-                            size={'small'}
-                            icon={<AddCircle />}
-                        >
-                            {'Legg til fritekst'}
-                        </Button>
-                    )}
-                    <Knapperekke>
-                        <FamilieKnapp
-                            erLesevisning={vurderErLesevisning()}
-                            onClick={() => {
-                                putVedtaksperiodeMedFritekster();
-                            }}
-                            size="small"
-                            variant="secondary"
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Lagre
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            erLesevisning={vurderErLesevisning()}
-                            onClick={() => {
-                                onPanelClose(false);
-                            }}
-                            size="small"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </Knapperekke>
-                </>
+                    </StyledList>
+                ) : (
+                    skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
+                        const fritekstId = fritekst.verdi.id;
+
+                        return (
+                            <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
+                                <FamilieTextareaBegrunnelseFritekst
+                                    erLesevisning={false}
+                                    key={`fritekst-${fritekstId}`}
+                                    id={`${fritekstId}`}
+                                    className={'fritekst-textarea'}
+                                    label={`Kulepunkt ${fritekstId}`}
+                                    hideLabel
+                                    resize
+                                    value={fritekst.verdi.tekst}
+                                    maxLength={makslengdeFritekst}
+                                    onChange={event => onChangeFritekst(event, fritekstId)}
+                                    error={skjema.visFeilmeldinger && fritekst.feilmelding}
+                                    /* eslint-disable-next-line jsx-a11y/no-autofocus */
+                                    autoFocus
+                                />
+                                <SletteKnapp
+                                    variant={'tertiary'}
+                                    onClick={() => {
+                                        skjema.felter.fritekster.validerOgSettFelt([
+                                            ...skjema.felter.fritekster.verdi.filter(
+                                                mapFritekst =>
+                                                    mapFritekst.verdi.id !== fritekst.verdi.id
+                                            ),
+                                        ]);
+                                    }}
+                                    id={`fjern_fritekst-${fritekstId}`}
+                                    size={'small'}
+                                    aria-label={'Fjern fritekst'}
+                                    icon={<Delete />}
+                                >
+                                    {'Fjern'}
+                                </SletteKnapp>
+                            </StyledFamilieFritekstFelt>
+                        );
+                    })
+                )}
+            </Fieldset>
+            {!erMaksAntallKulepunkter && !erLesevisning && (
+                <Button
+                    variant={'tertiary'}
+                    onClick={leggTilFritekst}
+                    id={`legg-til-fritekst`}
+                    size={'small'}
+                    icon={<AddCircle />}
+                >
+                    {'Legg til fritekst'}
+                </Button>
             )}
+            <Knapperekke>
+                <FamilieKnapp
+                    erLesevisning={erLesevisning}
+                    onClick={() => {
+                        putVedtaksperiodeMedFritekster();
+                    }}
+                    size="small"
+                    variant="secondary"
+                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                >
+                    Lagre
+                </FamilieKnapp>
+                <FamilieKnapp
+                    erLesevisning={erLesevisning}
+                    onClick={() => {
+                        onPanelClose(false);
+                    }}
+                    size="small"
+                    variant="tertiary"
+                >
+                    Avbryt
+                </FamilieKnapp>
+            </Knapperekke>
         </FritekstContainer>
-    ) : !vurderErLesevisning() ? (
-        <Button
-            variant={'tertiary'}
-            onClick={leggTilFritekst}
-            id={`legg-til-fritekst`}
-            size={'small'}
-            icon={<AddCircle />}
-        >
-            {'Legg til fritekst'}
-        </Button>
-    ) : null;
+    );
 };
 
 export default FritekstVedtakbegrunnelser;
