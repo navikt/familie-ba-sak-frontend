@@ -37,18 +37,10 @@ const MarginFieldset = styled(Fieldset)`
 `;
 
 const FlexDiv = styled.div`
-    width: 23rem;
     display: flex;
-    justify-content: space-between;
-    & .lese-element {
-        width: 50%;
-    }
-    .skjemaelement__label {
-        color: ${navFarger.navMorkGra};
-        font-size: 16px;
-        font-weight: normal;
-        height: 22px;
-        line-height: 22px;
+    gap: 1.125rem;
+    & > * {
+        min-width: 11rem;
     }
 `;
 
