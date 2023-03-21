@@ -29,7 +29,7 @@ const baseConfig = {
         }),
         new CaseSensitivePathsPlugin(),
         new CopyWebpackPlugin({
-            patterns: [{ from: 'src/frontend/public/favicon.ico', to: '.' + publicUrl }],
+            patterns: [{ from: 'src/frontend/public/favicon.svg', to: '.' + publicUrl }],
         }),
         new TypeScriptTypeChecker({
             typescript: {

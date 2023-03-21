@@ -19,7 +19,7 @@ export default merge.mergeWithRules({
     plugins: [new ReactRefreshWebpackPlugin(), new webpack.HotModuleReplacementPlugin()],
     output: {
         path: path.join(process.cwd(), 'frontend_development'),
-        publicPath: '/assets',
+        publicPath: '/assets/',
     },
     module: {
         rules: [

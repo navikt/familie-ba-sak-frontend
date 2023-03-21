@@ -4,6 +4,7 @@ import path from 'path';
 
 import bodyParser from 'body-parser';
 import type { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { v4 as uuidv4 } from 'uuid';
 import webpack from 'webpack';
@@ -39,6 +40,8 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     } else {
         app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
     }
+
+    app.use('/assets/favicon.svg', express.static('./frontend_development/assets/favicon.svg'));
 
     app.use((req: Request, _res: Response, next: NextFunction) => {
         req.headers['nav-call-id'] = uuidv4();
