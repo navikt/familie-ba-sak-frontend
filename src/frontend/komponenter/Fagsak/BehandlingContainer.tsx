@@ -19,6 +19,7 @@ const VenstremenyContainer = styled.div`
 `;
 
 const HovedinnholdContainer = styled.div`
+    height: calc(100vh - 6rem);
     flex: 1;
     overflow: auto;
 `;
