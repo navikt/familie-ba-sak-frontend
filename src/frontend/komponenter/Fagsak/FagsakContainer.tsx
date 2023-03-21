@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -14,6 +15,11 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+
+const HovedInnhold = styled.div`
+    height: calc(100vh - 6rem);
+    overflow: auto;
+`;
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
@@ -55,33 +61,43 @@ const FagsakContainer: React.FunctionComponent = () => {
                     return (
                         <>
                             <Personlinje bruker={bruker.data} minimalFagsak={minimalFagsak.data} />
+                            <HovedInnhold>
+                                <Routes>
+                                    <Route
+                                        path="/saksoversikt"
+                                        element={
+                                            <Saksoversikt minimalFagsak={minimalFagsak.data} />
+                                        }
+                                    />
 
-                            <Routes>
-                                <Route
-                                    path="/saksoversikt"
-                                    element={<Saksoversikt minimalFagsak={minimalFagsak.data} />}
-                                />
+                                    <Route
+                                        path="/dokumentutsending"
+                                        element={
+                                            <DokumentutsendingProvider
+                                                fagsakId={minimalFagsak.data.id}
+                                            >
+                                                <Dokumentutsending />
+                                            </DokumentutsendingProvider>
+                                        }
+                                    />
 
-                                <Route
-                                    path="/dokumentutsending"
-                                    element={
-                                        <DokumentutsendingProvider fagsakId={minimalFagsak.data.id}>
-                                            <Dokumentutsending />
-                                        </DokumentutsendingProvider>
-                                    }
-                                />
+                                    <Route
+                                        path="/dokumenter"
+                                        element={<JournalpostListe bruker={bruker.data} />}
+                                    />
 
-                                <Route
-                                    path="/dokumenter"
-                                    element={<JournalpostListe bruker={bruker.data} />}
-                                />
-
-                                <Route path="/:behandlingId/*" element={<BehandlingContainer />} />
-                                <Route
-                                    path="/"
-                                    element={<Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />}
-                                />
-                            </Routes>
+                                    <Route
+                                        path="/:behandlingId/*"
+                                        element={<BehandlingContainer />}
+                                    />
+                                    <Route
+                                        path="/"
+                                        element={
+                                            <Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />
+                                        }
+                                    />
+                                </Routes>
+                            </HovedInnhold>
                         </>
                     );
                 case RessursStatus.FEILET:
