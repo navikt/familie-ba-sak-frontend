@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Fieldset } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -74,9 +72,11 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                 ],
             }}
         >
-            <SkjemaGruppe
-                feil={hentFrontendFeilmelding(skjema.submitRessurs)}
-                utenFeilPropagering={true}
+            <Fieldset
+                error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                errorPropagation={false}
+                legend="Sett behandling på vent"
+                hideLegend
             >
                 {erBehandlingAlleredePåVent && (
                     <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>
@@ -104,7 +104,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                         ))}
                     </FamilieSelect>
                 </Feltmargin>
-            </SkjemaGruppe>
+            </Fieldset>
         </UIModalWrapper>
     );
 };
