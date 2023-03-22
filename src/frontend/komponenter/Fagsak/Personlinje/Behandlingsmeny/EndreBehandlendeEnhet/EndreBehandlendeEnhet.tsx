@@ -96,7 +96,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
             >
                 <Fieldset
                     error={hentFrontendFeilmelding(submitRessurs)}
-                    legend={'Endre enhet'}
+                    legend="Endre enhet"
                     hideLegend
                 >
                     <FamilieSelect
