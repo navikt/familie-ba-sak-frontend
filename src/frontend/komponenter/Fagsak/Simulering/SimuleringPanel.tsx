@@ -3,7 +3,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Label, Panel } from '@navikt/ds-react';
-import { AGray900, ABorderDefault, ANavRed, AGreen700 } from '@navikt/ds-tokens/dist/tokens';
+import {
+    ABorderDefault,
+    AGreen700,
+    ATextDefault,
+    ATextDanger,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
@@ -34,7 +39,7 @@ const StyledTd = styled.th(
 );
 
 const LabelMedFarge = styled(Label)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : AGray900)};
+    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
 `;
 
 const StyledHr = styled.hr`
@@ -98,7 +103,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <BodyShort>Feilutbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <LabelMedFarge farge={feilutbetaling > 0 ? ANavRed : AGray900}>
+                            <LabelMedFarge farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
                                 {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                             </LabelMedFarge>
                         </StyledTd>
@@ -149,7 +154,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                                     farge={
                                         nestePeriode?.resultat && nestePeriode.resultat > 0
                                             ? AGreen700
-                                            : AGray900
+                                            : ATextDefault
                                     }
                                 >
                                     {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
