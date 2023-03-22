@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Alert, Button, HelpText } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Fieldset } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -34,7 +32,7 @@ interface IProps {
     behandling: IBehandling;
 }
 
-const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
+const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
@@ -158,9 +156,11 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
                     },
                 }}
             >
-                <SkjemaGruppe
-                    feil={hentFrontendFeilmelding(skjema.submitRessurs)}
-                    utenFeilPropagering={true}
+                <Fieldset
+                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                    errorPropagation={false}
+                    legend="Legg til barn på behandling"
+                    hideLegend
                 >
                     <FamilieInput
                         {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
@@ -171,10 +171,10 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
                         Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke
                         reverseres uten å henlegge.
                     </Alert>
-                </SkjemaGruppe>
+                </Fieldset>
             </UIModalWrapper>
         </>
     );
 };
 
-export default LeggTiLBarnPåBehandling;
+export default LeggTilBarnPåBehandling;
