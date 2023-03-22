@@ -37,11 +37,11 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
 
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
+        app.use('/assets/favicon.svg', express.static('./frontend_development/assets/favicon.svg'));
     } else {
         app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
+        app.use('/assets/favicon.svg', express.static('./frontend_production/assets/favicon.svg'));
     }
-
-    app.use('/assets/favicon.svg', express.static('./frontend_development/assets/favicon.svg'));
 
     app.use((req: Request, _res: Response, next: NextFunction) => {
         req.headers['nav-call-id'] = uuidv4();
