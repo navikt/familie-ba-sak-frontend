@@ -71,7 +71,7 @@ const KanSøkeFritekst = ({
             <Fieldset
                 id={skjemaGruppeId}
                 error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
-                legend="Fritekst felt til kulepunkt i brev"
+                legend="Fritekst til kulepunkt i brev"
             >
                 {friteksterFelt.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
                     const fritekstId = fritekst.verdi.id;
