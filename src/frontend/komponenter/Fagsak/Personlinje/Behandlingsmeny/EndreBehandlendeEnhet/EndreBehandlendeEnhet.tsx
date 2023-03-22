@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Button } from '@navikt/ds-react';
+import { Button, Fieldset } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -14,7 +12,6 @@ import type { IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
 import { behandendeEnheter } from '../../../../../typer/enhet';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
 const EndreBehandlendeEnhet: React.FC = () => {
@@ -97,8 +94,11 @@ const EndreBehandlendeEnhet: React.FC = () => {
                     visModal: visModal && !erBehandlingAvsluttet,
                 }}
             >
-                <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
-                    <SkjultLegend>Endre enhet</SkjultLegend>
+                <Fieldset
+                    error={hentFrontendFeilmelding(submitRessurs)}
+                    legend={'Endre Enhet'}
+                    hideLegend
+                >
                     <FamilieSelect
                         erLesevisning={erLesevisningPåBehandling()}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
@@ -139,7 +139,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
                             settSubmitRessurs(byggTomRessurs());
                         }}
                     />
-                </SkjemaGruppe>
+                </Fieldset>
             </UIModalWrapper>
         </>
     );
