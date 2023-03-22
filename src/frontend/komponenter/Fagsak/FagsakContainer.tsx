@@ -16,7 +16,7 @@ import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 
-const Hovedinnhold = styled.div`
+const HovedInnhold = styled.div`
     height: calc(100vh - 6rem);
     overflow: auto;
 `;
@@ -61,8 +61,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                     return (
                         <>
                             <Personlinje bruker={bruker.data} minimalFagsak={minimalFagsak.data} />
-
-                            <Hovedinnhold>
+                            <HovedInnhold>
                                 <Routes>
                                     <Route
                                         path="/saksoversikt"
@@ -98,7 +97,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         }
                                     />
                                 </Routes>
-                            </Hovedinnhold>
+                            </HovedInnhold>
                         </>
                     );
                 case RessursStatus.FEILET:
