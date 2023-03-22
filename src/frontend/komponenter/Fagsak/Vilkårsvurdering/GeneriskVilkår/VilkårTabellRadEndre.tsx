@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button, Radio, Label } from '@navikt/ds-react';
+import { Button, Label, Radio } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieKnapp,
@@ -14,10 +14,10 @@ import {
     FamilieSelect,
     FamilieTextarea,
 } from '@navikt/familie-form-elements';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
@@ -30,8 +30,7 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Regelverk } from '../../../../typer/vilkår';
-import { Resultat, resultater, VilkårType } from '../../../../typer/vilkår';
+import { Regelverk, Resultat, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
@@ -205,15 +204,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             });
     };
 
-    const vilkårResultatForEkteskapVisning = (resultat: Resultat) => {
-        if (resultat === Resultat.OPPFYLT) {
-            return resultater[Resultat.IKKE_OPPFYLT];
-        } else if (resultat === Resultat.IKKE_OPPFYLT) return resultater[Resultat.OPPFYLT];
-        else {
-            return resultater[Resultat.IKKE_VURDERT];
-        }
-    };
-
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
         (redigerbartVilkår.verdi.vurderesEtter === Regelverk.NASJONALE_REGLER &&
@@ -284,13 +274,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <StyledFamilieRadioGruppe
                     erLesevisning={lesevisning}
-                    value={
-                        redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                            ? vilkårResultatForEkteskapVisning(
-                                  redigerbartVilkår.verdi.resultat.verdi
-                              )
-                            : resultater[redigerbartVilkår.verdi.resultat.verdi]
-                    }
+                    value={redigerbartVilkår.verdi.resultat.verdi}
                     legend={
                         <Label>
                             {vilkårFraConfig.spørsmål
@@ -305,42 +289,27 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                     errorId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                    onChange={(val: Resultat) => radioOnChange(val)}
                 >
                     <Radio
-                        value={'Ja'}
-                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                        checked={
+                        value={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
+                                ? Resultat.IKKE_OPPFYLT
+                                : Resultat.OPPFYLT
                         }
-                        onChange={() =>
-                            radioOnChange(
-                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                    ? Resultat.IKKE_OPPFYLT
-                                    : Resultat.OPPFYLT
-                            )
-                        }
+                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                     >
-                        {'Ja'}
+                        Ja
                     </Radio>
                     <Radio
-                        value={'Nei'}
-                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                        checked={
+                        value={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
-                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
+                                ? Resultat.OPPFYLT
+                                : Resultat.IKKE_OPPFYLT
                         }
-                        onChange={() =>
-                            radioOnChange(
-                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                    ? Resultat.OPPFYLT
-                                    : Resultat.IKKE_OPPFYLT
-                            )
-                        }
+                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                     >
-                        {'Nei'}
+                        Nei
                     </Radio>
                 </StyledFamilieRadioGruppe>
                 {!gjelderInstitusjon && (
