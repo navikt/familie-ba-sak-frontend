@@ -2,20 +2,11 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Label } from '@navikt/ds-react';
+import { Fieldset } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
-
-const StyledLegend = styled.legend`
-    && {
-        display: flex;
-        margin-bottom: 0;
-    }
-`;
 
 const FlexDiv = styled.div`
     width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '28rem')};
@@ -54,14 +45,13 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe
+        <Fieldset
             className={lesevisning ? 'lesevisning' : ''}
-            feilmeldingId={periodeFeilmeldingId}
-            feil={visFeilmeldinger && periode.feilmelding}
+            errorId={periodeFeilmeldingId}
+            error={visFeilmeldinger && periode.feilmelding}
+            legend="Periode"
+            size="small"
         >
-            <StyledLegend>
-                <Label size="small">Periode</Label>
-            </StyledLegend>
             <FlexDiv maxWidth={maxWidth}>
                 <MånedÅrVelger
                     lesevisning={lesevisning}
@@ -100,7 +90,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
                     }}
                 />
             </FlexDiv>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 
