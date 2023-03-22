@@ -19,7 +19,7 @@ import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
-import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
+import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import LeggTilEllerFjernBrevmottakere from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
@@ -100,7 +100,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                             åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                             åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
                             åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
-                            <LeggTilBarnPBehandling behandling={åpenBehandling} />
+                            <LeggTilBarnPåBehandling behandling={åpenBehandling} />
                         )}
                     {erPåBehandling && åpenBehandling.status === BehandlingStatus.UTREDES && (
                         <SettEllerOppdaterVenting behandling={åpenBehandling} />
