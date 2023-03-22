@@ -2,10 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import Panel from 'nav-frontend-paneler';
-
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label, Panel } from '@navikt/ds-react';
+import { AGray900, ABorderDefault, ANavRed, AGreen700 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
@@ -36,11 +34,11 @@ const StyledTd = styled.th(
 );
 
 const LabelMedFarge = styled(Label)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
+    color: ${(props: { farge?: string }) => (props.farge ? props.farge : AGray900)};
 `;
 
 const StyledHr = styled.hr`
-    border-top: 1px solid ${navFarger.navGra40};
+    border-top: 1px solid ${ABorderDefault};
     margin-left: 0.125rem;
 `;
 
@@ -100,9 +98,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <BodyShort>Feilutbetaling</BodyShort>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <LabelMedFarge
-                                farge={feilutbetaling > 0 ? navFarger.navRod : navFarger.navMorkGra}
-                            >
+                            <LabelMedFarge farge={feilutbetaling > 0 ? ANavRed : AGray900}>
                                 {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                             </LabelMedFarge>
                         </StyledTd>
@@ -152,8 +148,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                                 <LabelMedFarge
                                     farge={
                                         nestePeriode?.resultat && nestePeriode.resultat > 0
-                                            ? navFarger.navGronnDarken40
-                                            : navFarger.navMorkGra
+                                            ? AGreen700
+                                            : AGray900
                                     }
                                 >
                                     {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
