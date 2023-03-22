@@ -2,11 +2,14 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
-import 'nav-frontend-tabell-style';
-
-import navFarger from 'nav-frontend-core';
 
 import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import {
+    ABorderDefault,
+    ATextDanger,
+    ATextDefault,
+    AGreen700,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import { useApp } from '../../../context/AppContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
@@ -38,7 +41,7 @@ const HøyrestiltTh = styled.th`
 `;
 
 const BodyshortMedFarge = styled(BodyShort)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
+    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
 `;
 
 const VenstreKolonne = styled.col`
@@ -60,7 +63,7 @@ const Skillelinje = styled.td`
 
     hr {
         border: none;
-        border-right: 1px dashed ${navFarger.navGra60};
+        border-right: 1px dashed ${ABorderDefault};
         height: ${(props: { erHeader?: boolean }) => (props.erHeader ? '3.875rem' : '3.25rem')};
         position: absolute;
         top: -0.375rem;
@@ -75,7 +78,7 @@ const SimuleringTabellOverskrift = styled.div`
 `;
 
 const LabelMedFarge = styled(Label)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
+    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
 `;
 
 interface ISimuleringProps {
@@ -245,8 +248,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         <LabelMedFarge
                                             farge={
                                                 periode.resultat && periode.resultat < 0
-                                                    ? navFarger.navRod
-                                                    : navFarger.navGronnDarken40
+                                                    ? ATextDanger
+                                                    : AGreen700
                                             }
                                         >
                                             {formaterBeløpUtenValutakode(periode.resultat)}
@@ -255,8 +258,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         <BodyshortMedFarge
                                             farge={
                                                 periode.resultat && periode.resultat < 0
-                                                    ? navFarger.navRod
-                                                    : navFarger.navMorkGra
+                                                    ? ATextDanger
+                                                    : ATextDefault
                                             }
                                         >
                                             {formaterBeløpUtenValutakode(periode.resultat)}
