@@ -2,10 +2,8 @@ import * as React from 'react';
 
 import styled, { css } from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { Cancel, Notes } from '@navikt/ds-icons';
-import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -53,7 +51,7 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
     ${baseSkjemaelementStyle}
 `;
 
-const StyledSkjema = styled(SkjemaGruppe)`
+const StyledFieldset = styled(Fieldset)`
     margin-bottom: 2.5rem;
 `;
 
@@ -119,7 +117,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                     <StyledModalHeader size="medium" level={'2'}>
                         Korriger etterbetaling
                     </StyledModalHeader>
-                    <StyledSkjema feil={false}>
+                    <StyledFieldset error={false} legend="Korriger etterbetaling" hideLegend>
                         <div>
                             <StyledFamilieSelect
                                 label={'Årsak'}
@@ -197,7 +195,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                 )}
                             </>
                         )}
-                    </StyledSkjema>
+                    </StyledFieldset>
                     <Knapperad>
                         {!erLesevisning && (
                             <>
