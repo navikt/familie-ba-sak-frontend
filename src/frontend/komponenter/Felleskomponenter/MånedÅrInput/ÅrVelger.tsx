@@ -50,6 +50,7 @@ const Årvelger: React.FC<ÅrProps> = ({
             disabled={disabled}
             error={feil}
             label={'År'}
+            hideLabel
         >
             <option value="">År</option>
             {årOptions}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { ErrorMessage } from '@navikt/ds-react';
+import { ErrorMessage, Label } from '@navikt/ds-react';
 
 import MånedVelger from './MånedVelger';
 import Årvelger from './ÅrVelger';
@@ -26,7 +26,7 @@ const Knapperad = styled.div`
     flex-direction: row;
 `;
 
-const DatolabelStyle = styled.label`
+const DatolabelStyle = styled(Label)`
     margin-bottom: 0.5em;
 `;
 
