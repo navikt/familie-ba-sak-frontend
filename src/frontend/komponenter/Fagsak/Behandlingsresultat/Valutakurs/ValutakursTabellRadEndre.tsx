@@ -2,10 +2,13 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { Delete } from '@navikt/ds-icons';
-import { Alert, Label, Link, Heading, Button } from '@navikt/ds-react';
+import { Alert, Link, Heading, Button, Fieldset } from '@navikt/ds-react';
+import {
+    AFontLineHeightLarge,
+    AFontSizeLarge,
+    AFontWeightRegular,
+} from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieDatovelger,
     FamilieInput,
@@ -25,45 +28,62 @@ import { EøsPeriodeStatus, type IValutakurs } from '../../../../typer/eøsPerio
 import { datoformatNorsk } from '../../../../utils/formatter';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
-import {
-    EøsPeriodeSkjemaContainer,
-    Knapperad,
-    StyledLegend,
-} from '../EøsPeriode/fellesKomponenter';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
+import { FamilieValutavelgerCSS } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
 
 const ValutakursRad = styled.div`
     width: 32rem;
     display: flex;
     justify-content: space-between;
-
-    & div.nav-datovelger__inputContainer {
-        width: 8.1rem;
-    }
-
-    div.skjemaelement {
-        margin-bottom: 0rem;
-
-        label {
-            font-weight: normal;
-            margin-bottom: 0.5rem;
-        }
-
-        p.navds-label {
-            font-weight: normal;
-            margin-bottom: 0.5rem;
-        }
-
-        &:nth-of-type(3) {
-            width: 7.5rem;
-        }
-        &:nth-of-type(2) {
-            width: 13rem;
-        }
-    }
 `;
 
 const StyledISKAlert = styled(Alert)`
     margin-top: 2rem;
+`;
+
+const StyledFamilieValutavelger = styled(FamilieValutavelger)`
+    ${FamilieValutavelgerCSS};
+
+    label {
+        opacity: 0.3;
+    }
+`;
+
+const StyledFamilieDatovelger = styled(FamilieDatovelger)`
+    .nav-datovelger {
+        margin-top: 9px;
+    }
+    .nav-datovelger__input {
+        min-height: 48px;
+        font-size: ${AFontSizeLarge};
+        font-weight: ${AFontWeightRegular};
+        letter-spacing: 0;
+        line-height: ${AFontLineHeightLarge};
+    }
+
+    .nav-datovelger__inputContainer {
+        width: 9rem;
+    }
+
+    label {
+        font-size: ${AFontSizeLarge};
+        letter-spacing: 0;
+        font-weight: bold;
+        margin: 0;
+        line-height: ${AFontLineHeightLarge};
+    }
+`;
+
+const StyledFamilieInput = styled(FamilieInput)`
+    width: 8rem;
+`;
+
+const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
+    margin-top: 1.5rem;
+`;
+
+const StyledFieldset = styled(Fieldset)`
+    margin-top: 1.5rem;
 `;
 
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
@@ -125,22 +145,24 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
+        <Fieldset
+            error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
+            legend={'Valutakurs skjema'}
+            hideLegend
+        >
             <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
-                <div className={'skjemaelement'}>
-                    <FamilieReactSelect
-                        {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                        erLesevisning={lesevisning}
-                        label={'Barn'}
-                        isMulti
-                        options={tilgjengeligeBarn}
-                        value={skjema.felter.barnIdenter.verdi}
-                        onChange={options =>
-                            skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
-                        }
-                    />
-                </div>
-                <EøsPeriodeSkjema
+                <FamilieReactSelect
+                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
+                    erLesevisning={lesevisning}
+                    label={'Barn'}
+                    isMulti
+                    options={tilgjengeligeBarn}
+                    value={skjema.felter.barnIdenter.verdi}
+                    onChange={options =>
+                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    }
+                />
+                <StyledEøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
@@ -148,21 +170,19 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     lesevisning={lesevisning}
                     maxWidth={32}
                 />
-                <SkjemaGruppe
+                <StyledFieldset
                     className={lesevisning ? 'lesevisning' : ''}
-                    feilmeldingId={valutakursValutaFeilmeldingId(skjema)}
-                    feil={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
+                    errorId={valutakursValutaFeilmeldingId(skjema)}
+                    error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
+                    legend={'Registrer valutakursdato'}
                 >
-                    <StyledLegend>
-                        <Label size="small">Registrer valutakursdato</Label>
-                    </StyledLegend>
                     <ValutakursRad>
-                        <FamilieDatovelger
+                        <StyledFamilieDatovelger
                             {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
                                 skjema.visFeilmeldinger
                             )}
                             limitations={{ weekendsNotSelectable: true }}
-                            className="skjemaelement"
+                            // className="skjemaelement"
                             id={`valutakurs_${skjema.felter.periodeId}`}
                             label={'Valutakursdato'}
                             value={
@@ -176,7 +196,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 skjema.felter.valutakursdato?.validerOgSettFelt(dato)
                             }
                         />
-                        <FamilieValutavelger
+                        <StyledFamilieValutavelger
                             erLesevisning={true}
                             id={'valuta'}
                             label={'Valuta'}
@@ -194,7 +214,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             utenMargin
                             kanNullstilles
                         />
-                        <FamilieInput
+                        <StyledFamilieInput
                             label={'Valutakurs'}
                             erLesevisning={lesevisning}
                             value={skjema.felter.kurs?.verdi}
@@ -220,7 +240,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             .
                         </StyledISKAlert>
                     )}
-                </SkjemaGruppe>
+                </StyledFieldset>
 
                 <Knapperad>
                     <div>
@@ -263,7 +283,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         )}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

@@ -30,6 +30,7 @@ interface IProps {
     visFeilmeldinger: boolean;
     lesevisning: boolean;
     maxWidth?: number;
+    className?: string;
 }
 
 const EøsPeriodeSkjema: React.FC<IProps> = ({
@@ -39,6 +40,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
     visFeilmeldinger,
     lesevisning,
     maxWidth,
+    className,
 }) => {
     const finnÅrTilbakeTil = (): number => {
         return new Date().getFullYear() - new Date(initielFom.verdi).getFullYear();
@@ -46,11 +48,11 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
 
     return (
         <Fieldset
-            className={lesevisning ? 'lesevisning' : ''}
+            className={`${className} ${lesevisning ? 'lesevisning' : ''}`}
             errorId={periodeFeilmeldingId}
             error={visFeilmeldinger && periode.feilmelding}
             legend="Periode"
-            size="small"
+            size="medium"
         >
             <FlexDiv maxWidth={maxWidth}>
                 <MånedÅrVelger
