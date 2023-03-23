@@ -247,7 +247,7 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
     );
 };
 
-interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
+export interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
     isMulti?: boolean;
     onChange: (value: Currency) => void;
 }

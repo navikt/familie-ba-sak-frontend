@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Delete } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Fieldset } from '@navikt/ds-react';
@@ -40,7 +40,7 @@ const UtbetaltBeløpRad = styled.div`
     justify-content: space-between;
 `;
 
-export const FamilieValutavelgerCSS = css`
+export const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEtikett?: boolean }>`
     width: 13rem;
 
     label {
@@ -62,10 +62,10 @@ export const FamilieValutavelgerCSS = css`
             min-height: 46px;
         }
     }
-`;
 
-const StyledFamilieValutavelger = styled(FamilieValutavelger)`
-    ${FamilieValutavelgerCSS};
+    &.navds-select--disabled label {
+        opacity: ${({ dempetEtikett }) => (dempetEtikett ? '0.3' : 'unset')};
+    }
 `;
 
 const UtbetaltBeløpInfo = styled(Alert)`

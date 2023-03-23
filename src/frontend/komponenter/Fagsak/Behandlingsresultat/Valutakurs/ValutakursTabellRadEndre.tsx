@@ -27,9 +27,8 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { EøsPeriodeStatus, type IValutakurs } from '../../../../typer/eøsPerioder';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
-import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
-import { FamilieValutavelgerCSS } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
+import { StyledFamilieValutavelger } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
 
 const ValutakursRad = styled.div`
     width: 32rem;
@@ -39,14 +38,6 @@ const ValutakursRad = styled.div`
 
 const StyledISKAlert = styled(Alert)`
     margin-top: 2rem;
-`;
-
-const StyledFamilieValutavelger = styled(FamilieValutavelger)`
-    ${FamilieValutavelgerCSS};
-
-    label {
-        opacity: 0.3;
-    }
 `;
 
 const StyledFamilieDatovelger = styled(FamilieDatovelger)`
@@ -213,6 +204,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             }}
                             utenMargin
                             kanNullstilles
+                            dempetEtikett={!lesevisning}
                         />
                         <StyledFamilieInput
                             label={'Valutakurs'}
