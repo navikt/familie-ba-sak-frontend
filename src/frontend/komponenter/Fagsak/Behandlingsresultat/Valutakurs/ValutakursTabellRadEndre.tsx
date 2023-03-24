@@ -173,7 +173,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 skjema.visFeilmeldinger
                             )}
                             limitations={{ weekendsNotSelectable: true }}
-                            // className="skjemaelement"
                             id={`valutakurs_${skjema.felter.periodeId}`}
                             label={'Valutakursdato'}
                             value={
