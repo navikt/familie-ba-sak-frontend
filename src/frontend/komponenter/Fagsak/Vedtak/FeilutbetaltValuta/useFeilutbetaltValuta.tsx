@@ -60,12 +60,14 @@ const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
         return feil(felt, 'T.o.m. kan ikke være senere enn inneværende måned');
     }
 
-    const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
-    const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
-    const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
+    if (erIsoStringGyldig(fom)) {
+        const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
+        const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
+        const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
 
-    if (!fomDatoErFørTomDato) {
-        return feil(felt, 'T.o.m. må være senere enn f.o.m');
+        if (!fomDatoErFørTomDato) {
+            return feil(felt, 'T.o.m. må være senere enn f.o.m');
+        }
     }
 
     return ok(felt);
