@@ -40,6 +40,7 @@ const MånedVelger: React.FC<MånedProps> = ({
             lesevisningVerdi={måned ? månedValg.find(mnd => mnd.mndNr === måned)?.verdi : ''}
             value={måned ?? ''}
             label={'Måned'}
+            hideLabel
             className={className}
             onChange={event => {
                 event.persist();

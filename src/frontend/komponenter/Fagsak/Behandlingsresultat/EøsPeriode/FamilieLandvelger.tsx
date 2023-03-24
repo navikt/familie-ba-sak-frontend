@@ -247,7 +247,7 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
     );
 };
 
-interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
+export interface IFamilieValutavelgerProps extends IBaseFamilieLandvelgerProps {
     isMulti?: boolean;
     onChange: (value: Currency) => void;
 }
@@ -290,15 +290,14 @@ const FamilieValutavelger: React.FC<IFamilieValutavelgerProps> = ({
     };
 
     return (
-        <div className={classNames('skjemaelement', className)}>
-            <Landvelger
-                utenMargin={utenMargin}
-                feil={feil}
-                {...landvelgerProps}
-                place
-                label={<Label size={size}>{label}</Label>}
-            />
-        </div>
+        <Landvelger
+            className={className}
+            utenMargin={utenMargin}
+            feil={feil}
+            {...landvelgerProps}
+            place
+            label={label}
+        />
     );
 };
 

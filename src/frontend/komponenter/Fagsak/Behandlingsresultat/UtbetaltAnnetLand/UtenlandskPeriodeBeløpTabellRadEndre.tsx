@@ -2,11 +2,14 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { Delete } from '@navikt/ds-icons';
-import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, BodyShort, Button, Fieldset } from '@navikt/ds-react';
+import {
+    ABorderDefault,
+    AFontLineHeightLarge,
+    AFontSizeLarge,
+    ASpacing6,
+} from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieInput,
     FamilieKnapp,
@@ -29,49 +32,60 @@ import {
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
-import {
-    EøsPeriodeSkjemaContainer,
-    Knapperad,
-    StyledLegend,
-} from '../EøsPeriode/fellesKomponenter';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
 
 const UtbetaltBeløpRad = styled.div`
     width: 32rem;
     display: flex;
     justify-content: space-between;
+`;
 
-    div.skjemaelement {
-        margin-bottom: 0rem;
+export const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEtikett?: boolean }>`
+    width: 13rem;
 
-        label {
-            font-weight: normal;
-            margin-bottom: 0.5rem;
+    label {
+        font-size: ${AFontSizeLarge};
+        letter-spacing: 0;
+        font-weight: bold;
+        margin: 0;
+        line-height: ${AFontLineHeightLarge};
+    }
+
+    div.c-countrySelect__select {
+        margin-top: 9px;
+
+        .c-countrySelect__select__control {
+            border: 1px solid ${ABorderDefault};
         }
 
-        p.navds-label {
-            font-weight: normal;
-            margin-bottom: 0.5rem;
+        .c-countrySelect__select__value-container {
+            min-height: 46px;
         }
+    }
 
-        &:nth-of-type(1) {
-            width: 6.5rem;
-        }
-        &:nth-of-type(2) {
-            width: 16rem;
-        }
-        &:nth-of-type(3) {
-            width: 7rem;
-        }
+    &.navds-select--disabled label {
+        opacity: ${({ dempetEtikett }) => (dempetEtikett ? '0.3' : 'unset')};
     }
 `;
 
 const UtbetaltBeløpInfo = styled(Alert)`
-    width: 60rem;
     margin-bottom: ${ASpacing6};
 `;
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
+`;
+
+const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
+    margin-top: 1.5rem;
+`;
+
+const StyledFieldset = styled(Fieldset)`
+    margin-top: 1.5rem;
+`;
+
+const StyledFamilieInput = styled(FamilieInput)`
+    width: 8rem;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
@@ -133,7 +147,11 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe feil={skjema.visFeilmeldinger && visSubmitFeilmelding()}>
+        <Fieldset
+            error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
+            legend={'Utenlandsk periodebeløp'}
+            hideLegend
+        >
             <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
                 <UtbetaltBeløpInfo variant="info" inline>
                     <UtbetaltBeløpText size="small">
@@ -141,20 +159,18 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         registreres separat
                     </UtbetaltBeløpText>
                 </UtbetaltBeløpInfo>
-                <div className={'skjemaelement'}>
-                    <FamilieReactSelect
-                        {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                        erLesevisning={lesevisning}
-                        label={'Barn'}
-                        isMulti
-                        options={tilgjengeligeBarn}
-                        value={skjema.felter.barnIdenter.verdi}
-                        onChange={options =>
-                            skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
-                        }
-                    />
-                </div>
-                <EøsPeriodeSkjema
+                <FamilieReactSelect
+                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
+                    erLesevisning={lesevisning}
+                    label={'Barn'}
+                    isMulti
+                    options={tilgjengeligeBarn}
+                    value={skjema.felter.barnIdenter.verdi}
+                    onChange={options =>
+                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    }
+                />
+                <StyledEøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
@@ -162,30 +178,29 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     lesevisning={lesevisning}
                     maxWidth={32}
                 />
-                <SkjemaGruppe
+                <StyledFieldset
                     className={lesevisning ? 'lesevisning' : ''}
-                    feilmeldingId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
-                    feil={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
+                    errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
+                    error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
+                    legend={'Utbetalt i det andre landet'}
+                    size={'medium'}
                 >
-                    <StyledLegend>
-                        <Label size="small">Utbetalt i det andre landet</Label>
-                    </StyledLegend>
                     <UtbetaltBeløpRad>
-                        <FamilieInput
+                        <StyledFamilieInput
                             label={'Beløp per barn'}
                             erLesevisning={lesevisning}
                             value={skjema.felter.beløp?.verdi}
                             onChange={event =>
                                 skjema.felter.beløp?.validerOgSettFelt(event.target.value)
                             }
+                            size={'medium'}
                         />
-                        <FamilieValutavelger
+                        <StyledFamilieValutavelger
                             erLesevisning={lesevisning}
                             id={'valuta'}
                             label={'Valuta'}
                             kunEøs
                             medFlag
-                            size="small"
                             value={skjema.felter.valutakode?.verdi}
                             onChange={(value: Currency) => {
                                 if (value) {
@@ -195,7 +210,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 }
                             }}
                             utenMargin
-                            kanNullstilles
                         />
                         <FamilieSelect
                             label={'Intervall'}
@@ -213,6 +227,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                       ]
                                     : ''
                             }
+                            size={'medium'}
                         >
                             <option key={'-'} value={''}>
                                 Velg
@@ -226,7 +241,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </FamilieSelect>
                     </UtbetaltBeløpRad>
-                </SkjemaGruppe>
+                </StyledFieldset>
 
                 <Knapperad>
                     <div>
@@ -269,7 +284,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         )}
                 </Knapperad>
             </EøsPeriodeSkjemaContainer>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 
