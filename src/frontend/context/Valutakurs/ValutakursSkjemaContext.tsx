@@ -17,7 +17,7 @@ import {
     tellAntallDesimaler,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
-import { sammenlignDatoer } from '../../utils/kalender';
+import { erIsoStringGyldig, sammenlignDatoer } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
@@ -27,8 +27,14 @@ import {
 
 const erValutakursDatoGyldig = (
     felt: FeltState<string | undefined>
-): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Valutakursdato er påkrevd, men mangler input');
+): FeltState<string | undefined> => {
+    if (isEmpty(felt.verdi)) {
+        return feil(felt, 'Valutakursdato er påkrevd, men mangler input');
+    } else if (!erIsoStringGyldig(felt.verdi)) {
+        return feil(felt, 'Ugyldig format på valutakursdato');
+    }
+    return ok(felt);
+};
 const erValutakursGyldig = (
     felt: FeltState<string | undefined>,
     skalValideres: boolean
