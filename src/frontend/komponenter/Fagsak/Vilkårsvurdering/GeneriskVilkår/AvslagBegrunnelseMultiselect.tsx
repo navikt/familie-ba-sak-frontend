@@ -118,6 +118,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
                 container: provided => ({
                     ...provided,
                     maxWidth: '25rem',
+                    zIndex: 3,
                 }),
                 groupHeading: provided => ({
                     ...provided,
