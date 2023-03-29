@@ -3,6 +3,7 @@ import React from 'react';
 import navFarger from 'nav-frontend-core';
 
 import { Alert } from '@navikt/ds-react';
+import { AZIndexFocus } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -118,7 +119,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
                 container: provided => ({
                     ...provided,
                     maxWidth: '25rem',
-                    zIndex: 3,
+                    zIndex: AZIndexFocus.valueOf(),
                 }),
                 groupHeading: provided => ({
                     ...provided,
