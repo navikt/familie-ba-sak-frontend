@@ -139,7 +139,7 @@ const TilbakekrevingSkjema: React.FC<{
     if (
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
         harÅpenTilbakekrevingRessurs.data &&
-        !vurderErLesevisning()
+        !erLesevisning
     ) {
         return (
             <>
@@ -152,7 +152,7 @@ const TilbakekrevingSkjema: React.FC<{
         );
     }
 
-    if (vurderErLesevisning() && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
+    if (erLesevisning && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
         return (
             <>
                 <StyledLabel>Tilbakekrevingsvalg</StyledLabel>
@@ -225,7 +225,7 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger ||
                             begrunnelse.verdi.length > maksLengdeTekst
                     )}
-                    erLesevisning={vurderErLesevisning()}
+                    erLesevisning={erLesevisning}
                     maxLength={maksLengdeTekst}
                     description="Hva er årsaken til feilutbetaling? Hvordan og når ble feilutbetalingen oppdaget? Begrunn hvordan feilutbetalingen skal behandles videre."
                 />
@@ -351,7 +351,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                 tilbakekrevingSkjema.visFeilmeldinger ||
                                                     fritekstVarsel.verdi.length > maksLengdeTekst
                                             )}
-                                            erLesevisning={vurderErLesevisning()}
+                                            erLesevisning={erLesevisning}
                                             maxLength={maksLengdeTekst}
                                         />
 
@@ -401,11 +401,11 @@ const TilbakekrevingSkjema: React.FC<{
                         </Radio>
                     </RadioGroup>
                 )}
-                {vurderErLesevisning() && fritekstVarsel.erSynlig && (
+                {erLesevisning && fritekstVarsel.erSynlig && (
                     <FamilieTextarea
                         label="Fritekst i varselet"
                         {...fritekstVarsel.hentNavInputProps(tilbakekrevingSkjema.visFeilmeldinger)}
-                        erLesevisning={vurderErLesevisning()}
+                        erLesevisning={erLesevisning}
                     />
                 )}
 

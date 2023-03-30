@@ -36,6 +36,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
 }) => {
     const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     const kanIkkeKorrigereVedtak =
         åpenBehandling.type === Behandlingstype.REVURDERING &&
@@ -57,13 +58,13 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {erBehandlingMedVedtaksbrevutsending && (
                         <>
                             <KorrigerEtterbetaling
-                                erLesevisning={vurderErLesevisning()}
+                                erLesevisning={erLesevisning}
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
                             />
                             {(!kanIkkeKorrigereVedtak || åpenBehandling.korrigertVedtak) && (
                                 <KorrigerVedtak
-                                    erLesevisning={vurderErLesevisning()}
+                                    erLesevisning={erLesevisning}
                                     korrigertVedtak={åpenBehandling.korrigertVedtak}
                                     behandlingId={åpenBehandling.behandlingId}
                                 />
