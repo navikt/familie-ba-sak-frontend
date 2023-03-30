@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 interface IProps {
     fagsakId: number;
@@ -29,12 +29,15 @@ export const useSatsendringsknapp = ({ fagsakId }: IProps) => {
         oppdaterKanKjøreSatsendring();
     }, [fagsakId]);
 
+    const settKanKjøreSatsendringTilFalse = () =>
+        settKanKjøreSatsendringRessurs(byggSuksessRessurs(false));
+
     const kanKjøreSatsendring =
         kanKjøreSatsendringRessurs.status === RessursStatus.SUKSESS &&
         kanKjøreSatsendringRessurs.data;
 
     return {
         kanKjøreSatsendring,
-        oppdaterKanKjøreSatsendring,
+        settKanKjøreSatsendringTilFalse,
     };
 };
