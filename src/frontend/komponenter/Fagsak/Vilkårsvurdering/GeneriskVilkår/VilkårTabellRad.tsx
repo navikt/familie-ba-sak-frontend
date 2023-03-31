@@ -51,7 +51,7 @@ const FlexDiv = styled.div`
     }
 `;
 
-const StyleTooltip = styled(Tooltip)`
+const StyledTooltip = styled(Tooltip)`
     padding-top: 8px;
     padding-bottom: 8px;
     max-width: 500px;
