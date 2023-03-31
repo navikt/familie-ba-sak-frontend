@@ -1,8 +1,7 @@
 import React from 'react';
 
-import navFarger from 'nav-frontend-core';
-
 import { BodyShort } from '@navikt/ds-react';
+import { ABlue500 } from '@navikt/ds-tokens/dist/tokens';
 import type { ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { useFelt } from '@navikt/familie-skjema';
@@ -40,7 +39,7 @@ const Personvelger: React.FC = () => {
                 multiValueRemove: provided => ({
                     ...provided,
                     ':hover': {
-                        backgroundColor: navFarger.navBla,
+                        backgroundColor: ABlue500,
                         color: 'white',
                         borderRadius: '0 .4rem .4rem 0',
                     },
