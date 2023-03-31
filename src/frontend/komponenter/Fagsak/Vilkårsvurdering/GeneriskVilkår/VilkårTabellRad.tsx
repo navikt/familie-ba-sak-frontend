@@ -127,12 +127,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
-                {vilkårResultat.verdi.begrunnelse.verdi ? (
+                {vilkårResultat.verdi.begrunnelse.verdi && (
                     <StyleTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
                         <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
                     </StyleTooltip>
-                ) : (
-                    <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
                 )}
             </Table.DataCell>
             <Table.DataCell>
