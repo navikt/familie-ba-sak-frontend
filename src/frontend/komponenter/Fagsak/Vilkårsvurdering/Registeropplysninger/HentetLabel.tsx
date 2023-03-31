@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
 import { Detail } from '@navikt/ds-react';
+import { AGray600 } from '@navikt/ds-tokens/dist/tokens';
 
 export const HentetLabel = styled(Detail)`
-    color: ${navFarger.navGra60};
+    color: ${AGray600};
 `;
