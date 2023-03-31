@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
+import { ABlue400 } from '@navikt/ds-tokens/dist/tokens';
 
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
 import type { Resultat } from '../../../typer/vilkår';
@@ -21,7 +21,7 @@ const StatuslinjeWrapper = styled.div`
 const Linje = styled.span`
     margin-top: 5px;
     width: 1px;
-    background-color: ${navFarger.navBlaLighten20};
+    background-color: ${ABlue400};
     height: 100%;
 `;
 
