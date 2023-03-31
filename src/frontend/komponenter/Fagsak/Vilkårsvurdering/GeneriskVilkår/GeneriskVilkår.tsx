@@ -51,6 +51,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     generiskVilkårKey,
 }) => {
     const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -90,7 +91,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseLeggTilKnapp = () => {
-        if (vurderErLesevisning()) {
+        if (erLesevisning) {
             return false;
         }
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
@@ -100,7 +101,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseFjernUtvidetBarnetrygdKnapp = () => {
-        if (vurderErLesevisning()) {
+        if (erLesevisning) {
             return false;
         }
         const utvidetVilkår = vilkårResultater.filter(

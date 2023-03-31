@@ -44,6 +44,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     regelverk,
 }) => {
     const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
@@ -108,8 +109,8 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={vurderErLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
-            erLesevisning={vurderErLesevisning()}
+            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+            erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);
