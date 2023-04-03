@@ -128,9 +128,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 {vilkårResultat.verdi.begrunnelse.verdi && (
-                    <StyleTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
+                    <StyledTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
                         <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
-                    </StyleTooltip>
+                    </StyledTooltip>
                 )}
             </Table.DataCell>
             <Table.DataCell>
