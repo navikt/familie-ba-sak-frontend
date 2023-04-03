@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-import NavFrontendSpinner from 'nav-frontend-spinner';
-
-import { Heading } from '@navikt/ds-react';
+import { Loader, Heading } from '@navikt/ds-react';
 
 const SystemetLaster = () => {
     return (
@@ -13,10 +11,7 @@ const SystemetLaster = () => {
                     className={'systemet-laster__content--tekst'}
                     children={'Systemet laster'}
                 />
-                <NavFrontendSpinner
-                    className={'systemet-laster__content--spinner'}
-                    transparent={true}
-                />
+                <Loader size="large" transparent={true} title="Systemet laster data" />
             </div>
         </div>
     );
