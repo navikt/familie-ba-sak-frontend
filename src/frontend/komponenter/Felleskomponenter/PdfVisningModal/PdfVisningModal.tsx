@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import Modal from 'nav-frontend-modal';
-
-import { Loader, Alert, Heading } from '@navikt/ds-react';
+import { Modal, Loader, Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -18,7 +16,7 @@ interface IPdfVisningModalProps {
 const StyledModal = styled(Modal)`
     width: 80%;
     height: 80%;
-
+    overflow: hidden;
     section {
         height: 100%;
         width: 90%;
@@ -41,9 +39,9 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     return (
         <StyledModal
             className={'pdfvisning-modal'}
-            isOpen={åpen}
-            onRequestClose={onRequestClose}
-            contentLabel={'pdfvisning'}
+            open={åpen}
+            onClose={onRequestClose}
+            aria-label={'pdfvisning'}
         >
             <Dokument pdfdata={pdfdata} />
         </StyledModal>
