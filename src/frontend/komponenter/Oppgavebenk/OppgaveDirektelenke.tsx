@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import NavFrontendSpinner from 'nav-frontend-spinner';
-
-import { Button } from '@navikt/ds-react';
+import { Button, Loader } from '@navikt/ds-react';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -57,7 +55,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     };
 
     if (laster) {
-        return <NavFrontendSpinner style={{ height: '1rem' }} />;
+        return <Loader size="xsmall" title="Laster.." />;
     } else {
         switch (oppgavetype) {
             case OppgavetypeFilter.JFR:
