@@ -8,7 +8,6 @@ import { Home, Search } from '@navikt/ds-icons';
 import { Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
@@ -19,7 +18,6 @@ import {
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
-import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -73,7 +71,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { kanKjøreSatsendring } = useSatsendringsknapp({
         fagsakId: minimalFagsak.id,
     });
-    const { toggles } = useApp();
 
     React.useEffect(() => {
         settÅpenBehandling(byggTomRessurs(), false);
@@ -207,9 +204,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
 
-                    {toggles[ToggleNavn.kanKjøreSatsendringManuelt] && kanKjøreSatsendring && (
-                        <SatsendringKnapp fagsakId={minimalFagsak.id} />
-                    )}
+                    {kanKjøreSatsendring && <SatsendringKnapp fagsakId={minimalFagsak.id} />}
 
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (

@@ -14,7 +14,6 @@ export enum ToggleNavn {
     endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
     kanBehandleKlage = 'familie-ba-sak.klage',
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
-    kanKjøreSatsendringManuelt = 'familie-ba-sak.kan-kjore-satsendring-manuelt',
     manuellPostering = 'familie-ba-sak.manuell-postering',
 }
 

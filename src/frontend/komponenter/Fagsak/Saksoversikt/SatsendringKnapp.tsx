@@ -29,7 +29,7 @@ interface IProps {
 
 export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) => {
     const { request } = useHttp();
-    const { oppdaterKanKjøreSatsendring } = useSatsendringsknapp({
+    const { settKanKjøreSatsendringTilFalse } = useSatsendringsknapp({
         fagsakId,
     });
     const { oppdaterGjeldendeFagsak } = useFagsakContext();
@@ -46,7 +46,7 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) 
             settKjørSatsendringRessurs(kjørSatsendringRessurs);
 
             if (kjørSatsendringRessurs.status === RessursStatus.SUKSESS) {
-                oppdaterKanKjøreSatsendring();
+                settKanKjøreSatsendringTilFalse();
                 oppdaterGjeldendeFagsak();
             }
         });

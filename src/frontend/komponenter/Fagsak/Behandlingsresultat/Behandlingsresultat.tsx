@@ -110,6 +110,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         hentValutakurserMedFeil,
     } = useEøs();
 
+    const erLesevisning = vurderErLesevisning();
+
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
     }, [åpenBehandling]);
@@ -176,7 +178,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             className="behandlingsresultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
-                if (vurderErLesevisning()) {
+                if (erLesevisning) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
@@ -206,7 +208,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 tidslinjePersoner={tidslinjePersoner}
                 fagsakType={minimalFagsak?.fagsakType}
             />
-            {!vurderErLesevisning() && (
+            {!erLesevisning && (
                 <EndretUtbetalingAndel>
                     <Button
                         variant="tertiary"

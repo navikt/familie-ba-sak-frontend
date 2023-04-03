@@ -9,6 +9,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import type { PersonType } from '../../../../typer/person';
 import {
+    Regelverk,
     UtdypendeVilkårsvurderingDeltBosted,
     UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
     UtdypendeVilkårsvurderingEøsBarnBosattIRiket,
@@ -168,7 +169,11 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     return (
         <StyledFamilieReactSelect
             id="UtdypendeVilkarsvurderingMultiselect"
-            label="Utdypende vilkårsvurdering"
+            label={
+                redigerbartVilkår.verdi.vurderesEtter === Regelverk.NASJONALE_REGLER
+                    ? 'Utdypende vilkårsvurdering (valgfri)'
+                    : 'Utdypende vilkårsvurdering'
+            }
             value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}

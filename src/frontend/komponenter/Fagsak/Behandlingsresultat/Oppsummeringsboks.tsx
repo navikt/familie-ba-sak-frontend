@@ -158,6 +158,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 }) => {
     const { request } = useHttp();
     const { settÅpenBehandling, åpenBehandling, vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();
 
@@ -340,7 +341,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
+                                disabled={justererSmåbarnstillegg || erLesevisning}
                                 onClick={() =>
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
@@ -356,7 +357,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
+                                disabled={justererSmåbarnstillegg || erLesevisning}
                                 onClick={() =>
                                     leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }

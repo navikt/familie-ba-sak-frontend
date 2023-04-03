@@ -25,6 +25,7 @@ const RegistrerMottaker: React.FC = () => {
     const { fagsakType, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
         useInstitusjonOgVerge();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     return (
         <>
@@ -33,14 +34,14 @@ const RegistrerMottaker: React.FC = () => {
                     className={'mottaker'}
                     tittel={'Registrer mottaker'}
                     nesteOnClick={onSubmitMottaker}
-                    nesteKnappTittel={vurderErLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
+                    nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
                     {fagsakType === FagsakType.INSTITUSJON ? (
                         <Institusjon />
                     ) : (
-                        <Verge erLesevisning={vurderErLesevisning()} />
+                        <Verge erLesevisning={erLesevisning} />
                     )}
                     {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>

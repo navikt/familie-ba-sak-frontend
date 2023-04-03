@@ -3,6 +3,7 @@ import React from 'react';
 import navFarger from 'nav-frontend-core';
 
 import { Alert } from '@navikt/ds-react';
+import { AZIndexFocus } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -43,6 +44,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     regelverk,
 }) => {
     const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
@@ -107,8 +109,8 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={vurderErLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
-            erLesevisning={vurderErLesevisning()}
+            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+            erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);
@@ -118,6 +120,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
                 container: provided => ({
                     ...provided,
                     maxWidth: '25rem',
+                    zIndex: AZIndexFocus.valueOf(),
                 }),
                 groupHeading: provided => ({
                     ...provided,
