@@ -3,10 +3,9 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import variables from 'nav-frontend-core';
-
 import { Delete } from '@navikt/ds-icons';
 import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset } from '@navikt/ds-react';
+import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -48,7 +47,7 @@ const StyledFieldset = styled(Fieldset)`
     margin-bottom: 1.5rem;
     padding-left: 2rem;
     margin-right: 2rem;
-    border-left: 0.0625rem solid ${variables.navBla};
+    border-left: 0.0625rem solid ${ABorderAction};
     max-width: 30rem;
 `;
 
