@@ -4,7 +4,7 @@ import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -49,6 +49,13 @@ const FlexDiv = styled.div`
     > div:nth-child(n + 2) {
         padding-left: 0.5rem;
     }
+`;
+
+const StyledTooltip = styled(Tooltip)`
+    padding-top: 8px;
+    padding-bottom: 8px;
+    max-width: 500px;
+    text-align: left;
 `;
 
 const VilkårTabellRad: React.FC<IProps> = ({
@@ -121,7 +128,11 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
-                <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
+                {vilkårResultat.verdi.begrunnelse.verdi && (
+                    <StyledTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
+                        <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
+                    </StyledTooltip>
+                )}
             </Table.DataCell>
             <Table.DataCell>
                 {redigerbartVilkår.verdi.vurderesEtter ? (
