@@ -2,16 +2,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
 import { Tag } from '@navikt/ds-react';
+import { AGray900 } from '@navikt/ds-tokens/dist/tokens';
 
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
 const StyletTag = styled(Tag)`
     color: white;
-    background-color: ${navFarger.navMorkGra};
-    border-color: ${navFarger.navMorkGra};
+    background-color: ${AGray900};
+    border-color: ${AGray900};
 `;
 
 interface IDødsfallTagProps {
