@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+
+import { ANavRed, ABorderDanger, ABlue800, ABlue500 } from '@navikt/ds-tokens/dist/tokens';
 
 export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase).withConfig({
     shouldForwardProp: prop => !['visFeilmeldinger', 'valgt'].includes(prop),
@@ -15,12 +16,12 @@ export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase).withC
     ${({ visFeilmeldinger }) =>
         visFeilmeldinger
             ? `&& {
-                border: ${navFarger.navRod} solid;
+                border: ${ANavRed} solid;
                 &:hover {
-                    border-color: ${navFarger.redError};
+                    border-color: ${ABorderDanger};
                 }
                 &:focus {
-                    border-color: ${navFarger.redError};
+                    border-color: ${ABorderDanger};
                 }
         }`
             : ''}
@@ -28,12 +29,12 @@ export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase).withC
     ${({ valgt }) =>
         valgt
             ? `&& {
-                border: 3px solid ${navFarger.fokusFarge};
+                border: 3px solid ${ABlue800};
                 &:hover {
-                    border-color: ${navFarger.navBla};
+                    border-color: ${ABlue500};
                 }
                 &:focus {
-                    border-color: ${navFarger.fokusFarge};
+                    border-color: ${ABlue800};
                 }
             }`
             : ''}
