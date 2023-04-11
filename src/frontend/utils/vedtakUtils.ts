@@ -1,5 +1,14 @@
-import navFarger from 'nav-frontend-core';
-
+import {
+    AGreen100,
+    ARed50,
+    AOrange100,
+    AGray100,
+    ABlue100,
+    AGreen500,
+    ARed600,
+    AOrange600,
+    AGray600,
+} from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -112,18 +121,18 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return navFarger.navGronnLighten80;
+            return AGreen100;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return navFarger.redErrorLighten80;
+            return ARed50;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return navFarger.navOransjeLighten80;
+            return AOrange100;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return navFarger.navLysGra;
+            return AGray100;
         default:
-            return navFarger.navBlaLighten80;
+            return ABlue100;
     }
 };
 
@@ -133,17 +142,17 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return navFarger.navGronn;
+            return AGreen500;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return navFarger.redErrorDarken20;
+            return ARed600;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return navFarger.navOransjeDarken20;
+            return AOrange600;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return navFarger.navGra60;
+            return AGray600;
         default:
-            return navFarger.navBlaLighten80;
+            return ABlue100;
     }
 };

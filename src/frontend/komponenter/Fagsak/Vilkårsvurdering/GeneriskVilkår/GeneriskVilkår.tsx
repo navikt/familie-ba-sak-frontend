@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Fieldset, Button, Heading } from '@navikt/ds-react';
 import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -117,7 +115,11 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     return (
         <Container>
-            <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
+            <Fieldset
+                error={visFeilmeldingerForVilkår ? feilmelding : undefined}
+                legend={vilkårFraConfig.tittel}
+                hideLegend
+            >
                 <Heading size="medium" level="3">
                     {vilkårFraConfig.tittel}
                 </Heading>
@@ -153,7 +155,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                     />
                 )}
-            </SkjemaGruppe>
+            </Fieldset>
         </Container>
     );
 };

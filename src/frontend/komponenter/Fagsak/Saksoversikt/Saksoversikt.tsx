@@ -2,10 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Lenke from 'nav-frontend-lenker';
-
 import { Home, Search } from '@navikt/ds-icons';
-import { Alert, Heading, Tabs } from '@navikt/ds-react';
+import { Link, Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -113,11 +111,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     const lenkeTilBehandlingsresultat = () => {
         return aktivBehandling ? (
-            <Lenke
+            <Link
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
             >
                 Se detaljer
-            </Lenke>
+            </Link>
         ) : null;
     };
 

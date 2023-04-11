@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
+import { ABlue800 } from '@navikt/ds-tokens/dist/tokens';
 
 const FamilieBaseKnapp = styled.button`
     background: none;
@@ -12,7 +12,7 @@ const FamilieBaseKnapp = styled.button`
     outline: inherit;
 
     :focus {
-        box-shadow: 0 0 0 3px ${navFarger.fokusFarge};
+        box-shadow: 0 0 0 3px ${ABlue800};
     }
 `;
 

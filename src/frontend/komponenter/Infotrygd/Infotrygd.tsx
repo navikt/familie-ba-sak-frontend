@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Input } from 'nav-frontend-skjema';
 
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -34,7 +34,7 @@ const HentSakerButton = styled(Button)`
 const FlyttSakButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 30px;
-    margint-bottom: auto;
+    margin-bottom: auto;
     height: 40px;
 `;
 
@@ -87,7 +87,11 @@ export const Infotrygd: React.FC = () => {
                 Visningsside for Infotrygd
             </Heading>
             <HentSakerFlex>
-                <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
+                <Fieldset
+                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                    legend="søk infotrygd på fødselsnummer eller d-nummer"
+                    hideLegend
+                >
                     <Input
                         {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
                         id={'hent-person'}
@@ -95,7 +99,7 @@ export const Infotrygd: React.FC = () => {
                         bredde={'XL'}
                         placeholder={'fnr/dnr'}
                     />
-                </SkjemaGruppe>
+                </Fieldset>
                 <HentSakerButton
                     variant={'secondary'}
                     size={'small'}

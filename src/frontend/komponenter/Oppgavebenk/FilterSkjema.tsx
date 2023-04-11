@@ -2,10 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Select } from 'nav-frontend-skjema';
 
-import { Button, Label } from '@navikt/ds-react';
+import { Fieldset, Button, Label } from '@navikt/ds-react';
+import { ATextDanger } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -19,7 +19,7 @@ import type { IOppgaveFelt } from './oppgavefelter';
 
 const StyledLabel = styled(Label)`
     margin-top: 0.5rem;
-    color: ${navFarger.redError};
+    color: ${ATextDanger};
 `;
 
 const DatoVelgerContainer = styled.div`
@@ -57,7 +57,7 @@ const FilterSkjema: React.FunctionComponent = () => {
     } = useOppgaver();
 
     return (
-        <SkjemaGruppe className="filterskjema" aria-label="oppgavebenken-filterskjema">
+        <Fieldset className="filterskjema" legend="Oppgavebenken filterskjema" hideLegend>
             <div className="filterskjema__filtre">
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
@@ -152,7 +152,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     children={'Tilbakestill filtrering'}
                 />
             </div>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 
