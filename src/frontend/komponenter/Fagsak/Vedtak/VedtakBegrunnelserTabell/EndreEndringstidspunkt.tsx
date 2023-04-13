@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Calender } from '@navikt/ds-icons';
 import { Dropdown } from '@navikt/ds-react-internal';
+import type { ISODateString } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -10,13 +11,16 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 
-const EndreEndringstidspunkt: React.FC<{
+interface Props {
     åpenBehandling: IBehandling;
-}> = ({ åpenBehandling }) => {
+    endringstidspunkt: ISODateString;
+}
+
+const EndreEndringstidspunkt: React.FC<Props> = ({ åpenBehandling, endringstidspunkt }) => {
     const [visModal, settVisModal] = useState(false);
     const { settÅpenBehandling } = useBehandling();
     const { skjema, kanSendeSkjema, onSubmit } = useOppdaterEndringstidspunktSkjema(
-        åpenBehandling.endringstidspunkt,
+        endringstidspunkt,
         visModal
     );
     const oppdaterEndringstidspunkt = () => {

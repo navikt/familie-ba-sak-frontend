@@ -6,6 +6,7 @@ import { Calculator, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
+import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
@@ -13,6 +14,7 @@ import { BehandlingKategori } from '../../../typer/behandlingstema';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
+import { useHentEndringstidspunkt } from './VedtakBegrunnelserTabell/useHentEndringstidspunkt';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
@@ -40,6 +42,9 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     const kanIkkeKorrigereVedtak =
         åpenBehandling.type === Behandlingstype.REVURDERING &&
         [BehandlingÅrsak.KLAGE, BehandlingÅrsak.DØDSFALL_BRUKER].includes(åpenBehandling.årsak);
+
+    const { endringstidspunktRessurs } = useHentEndringstidspunkt(åpenBehandling.behandlingId);
+    const endringstidspunkt = hentDataFraRessurs(endringstidspunktRessurs);
 
     return (
         <Dropdown>
@@ -70,8 +75,11 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             )}
                         </>
                     )}
-                    {åpenBehandling.endringstidspunkt && (
-                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
+                    {endringstidspunkt && (
+                        <EndreEndringstidspunkt
+                            åpenBehandling={åpenBehandling}
+                            endringstidspunkt={endringstidspunkt}
+                        />
                     )}
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS && (
