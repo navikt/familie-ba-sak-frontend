@@ -5,6 +5,7 @@ import { Search } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 
 import type { IBehandling } from '../../../typer/behandling';
+import type { FagsakType } from '../../../typer/fagsak';
 import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import BrevmottakerListe from '../../Felleskomponenter/Hendelsesoversikt/BrevModul/BrevmottakerListe';
@@ -14,9 +15,10 @@ import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
 
 interface Props {
     brevmottakere: IRestBrevmottaker[];
-    institusjon: IInstitusjon | undefined;
+    institusjon?: IInstitusjon;
     personer: IGrunnlagPerson[];
     åpenBehandling: IBehandling;
+    fagsakType?: FagsakType;
 }
 
 export const BrevmottakereAlert: React.FC<Props> = ({
@@ -24,6 +26,7 @@ export const BrevmottakereAlert: React.FC<Props> = ({
     institusjon,
     personer,
     åpenBehandling,
+    fagsakType,
 }) => {
     const [visManuelleMottakereModal, settVisManuelleMottakereModal] = useState(false);
 
@@ -36,6 +39,7 @@ export const BrevmottakereAlert: React.FC<Props> = ({
                         brevmottakere={brevmottakere}
                         institusjon={institusjon}
                         personer={personer}
+                        fagsakType={fagsakType}
                     />
                     <Button
                         variant={'tertiary'}

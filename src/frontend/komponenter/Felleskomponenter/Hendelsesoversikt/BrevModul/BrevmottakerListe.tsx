@@ -44,16 +44,12 @@ const BrevmottakerListe: React.FC<IProps> = ({
                 <li key="søker">{lagPersonLabel(søker.personIdent || '', personer)}</li>
             )}
             {skalViseEnsligMindreårig && (
-                <>
-                    <li key="barnet">
-                        {lagPersonLabel(
-                            personer.find(person => person.type === PersonType.BARN)?.personIdent ||
-                                '',
-                            personer
-                        )}
-                    </li>
-                    <li key="verge">Registrert verge</li>
-                </>
+                <li key="barnet">
+                    {lagPersonLabel(
+                        personer.find(person => person.type === PersonType.BARN)?.personIdent || '',
+                        personer
+                    )}
+                </li>
             )}
             {skalViseInstitusjon && (
                 <li key="institusjon">{`Institusjon | ${

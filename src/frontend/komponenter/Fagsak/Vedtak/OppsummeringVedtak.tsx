@@ -60,7 +60,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const personer = åpenBehandling?.personer ?? [];
     const brevmottakere = åpenBehandling?.brevmottakere ?? [];
-    const institusjon = hentDataFraRessurs(minimalFagsakRessurs)?.institusjon;
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const navigate = useNavigate();
 
@@ -180,9 +180,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         )}
                         <BrevmottakereAlert
                             brevmottakere={brevmottakere}
-                            institusjon={institusjon}
+                            institusjon={minimalFagsak?.institusjon}
                             personer={personer}
                             åpenBehandling={åpenBehandling}
+                            fagsakType={minimalFagsak?.fagsakType}
                         />
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
