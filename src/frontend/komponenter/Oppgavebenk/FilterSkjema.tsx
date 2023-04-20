@@ -2,12 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Select } from 'nav-frontend-skjema';
-
 import { Fieldset, Button, Label } from '@navikt/ds-react';
 import { ATextDanger } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger, FamilieSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -87,8 +85,8 @@ const FilterSkjema: React.FunctionComponent = () => {
                                 );
                             case 'select':
                                 return (
-                                    <Select
-                                        bredde={'l'}
+                                    <FamilieSelect
+                                        size={'small'}
                                         label={oppgaveFelt.label}
                                         onChange={event =>
                                             settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)
@@ -96,7 +94,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         value={oppgaveFelt.filter.selectedValue}
                                         className="filterskjema__filtre--input"
-                                        feil={
+                                        error={
                                             oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
                                                 ? oppgaveFelt.feilmelding
                                                 : undefined
@@ -128,7 +126,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                                         </option>
                                                     );
                                                 })}
-                                    </Select>
+                                    </FamilieSelect>
                                 );
                             default:
                                 return null;
