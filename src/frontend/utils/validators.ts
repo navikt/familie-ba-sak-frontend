@@ -108,17 +108,15 @@ export const erPeriodeGyldig = (
             return feil(felt, 'Ugyldig t.o.m.');
         }
 
-        if (!erEksplisittAvslagPåSøknad) {
-            if (person && person.type === PersonType.BARN) {
-                if (finnesDatoFørFødselsdato(person, fom, tom)) {
-                    return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
-                }
-                if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
-                    return feil(
-                        felt,
-                        'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
-                    );
-                }
+        if (person && person.type === PersonType.BARN) {
+            if (finnesDatoFørFødselsdato(person, fom, tom)) {
+                return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
+            }
+            if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
+                return feil(
+                    felt,
+                    'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
+                );
             }
         }
 
