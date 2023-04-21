@@ -76,11 +76,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
+    const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(false);
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
         React.useState(false);
 
     React.useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
+        // todo: legge til refusjon her også?
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {
@@ -150,6 +152,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
                 visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
+                visRefusjonEøs={() => settVisRefusjonEøs(true)}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -212,6 +215,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         }
                                     />
                                 )}
+                                {visRefusjonEøs && <div>Placholder for Refusjon Eøs Panel</div>}
                             </>
                         )}
                         <Button
