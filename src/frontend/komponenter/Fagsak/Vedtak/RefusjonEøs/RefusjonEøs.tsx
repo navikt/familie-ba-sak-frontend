@@ -7,7 +7,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
-import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
+import type { IRestRefusjonEøsPeriode } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
@@ -15,7 +15,7 @@ import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 interface IRefusjonEøs {
     behandlingId: number;
     fagsakId: string | undefined;
-    refusjonEøsListe: IRestRefusjonEøs[];
+    refusjonEøsListe: IRestRefusjonEøsPeriode[];
     settErUlagretNyRefusjonEøsPeriode: (erUlagretNyRefusjonEøs: boolean) => void;
     erLesevisning: boolean;
     skjulRefusjonEøs: () => void;
@@ -61,7 +61,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     }
 
     const totaltFeilutbetaltBeløp = refusjonEøsListe.reduce(
-        (acc, val) => acc + val.feilutbetaltBeløp,
+        (acc, val) => acc + val.refusjonsbeløp,
         0
     );
 
@@ -75,7 +75,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
                 `${periodeToString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
-                })} kr ${refusjonEøs.feilutbetaltBeløp}`
+                })} kr ${refusjonEøs.refusjonsbeløp}`
         )
         .join('\n')}`;
 

@@ -9,7 +9,7 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
+import type { IRefusjonEøsPeriodeSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import {
     erIsoStringGyldig,
@@ -20,7 +20,7 @@ import {
 } from '../../../../utils/kalender';
 
 interface IRefusjonEøsSkjemaProps {
-    skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
+    skjema: ISkjema<IRefusjonEøsPeriodeSkjemaFelter, IBehandling>;
 }
 
 const FlexDatoInputWrapper = styled.div`
@@ -89,13 +89,13 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 </FlexRowDiv>
             </FlexDatoInputWrapper>
             <StyledFamilieInput
-                {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
                 label="Feilutbetalt beløp"
-                value={skjema.felter.feilutbetaltBeløp.verdi}
+                value={skjema.felter.refusjonsbeløp.verdi}
                 type="number"
                 onChange={changeEvent =>
-                    skjema.felter.feilutbetaltBeløp.validerOgSettFelt(changeEvent.target.value)
+                    skjema.felter.refusjonsbeløp.validerOgSettFelt(changeEvent.target.value)
                 }
             />
         </>

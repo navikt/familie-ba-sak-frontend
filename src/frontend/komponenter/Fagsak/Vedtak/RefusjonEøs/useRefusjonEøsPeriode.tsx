@@ -6,9 +6,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type {
-    IRefusjonEøsSkjemaFelter,
+    IRefusjonEøsPeriodeSkjemaFelter,
     IRestNyRefusjonEøsPeriode,
-    IRestRefusjonEøs,
+    IRestRefusjonEøsPeriode,
 } from '../../../../typer/refusjon-eøs';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import {
@@ -25,8 +25,8 @@ import {
 import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
-    behandlingId: number;
-    refusjonEøs?: IRestRefusjonEøs;
+    _behandlingId: number;
+    refusjonEøs?: IRestRefusjonEøsPeriode;
     settFeilmelding: (feilmelding: string) => void;
 }
 
@@ -82,7 +82,7 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
     return ok(felt);
 };
 
-const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps) => {
+const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate>({
@@ -91,7 +91,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
     });
 
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
-        IRefusjonEøsSkjemaFelter,
+        IRefusjonEøsPeriodeSkjemaFelter,
         IBehandling
     >({
         felter: {
@@ -104,8 +104,8 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                 valideringsfunksjon: (felt, avhengigheter) =>
                     validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate),
             }),
-            feilutbetaltBeløp: useFelt<string>({
-                verdi: refusjonEøs?.feilutbetaltBeløp.toString() ?? '',
+            refusjonsbeløp: useFelt<string>({
+                verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
         },
@@ -117,11 +117,11 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             onSubmit<IRestNyRefusjonEøsPeriode>(
                 {
                     method: 'POST',
-                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}`,
+                    url: ``, //todo: legge til riktig api-url
                     data: {
                         fom: skjema.felter.fom?.verdi,
                         tom: skjema.felter.tom?.verdi,
-                        feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
+                        refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -138,16 +138,16 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
 
     const oppdaterEksisterendePeriode = async () => {
         if (kanSendeSkjema() && refusjonEøs) {
-            onSubmit<IRestRefusjonEøs>(
+            onSubmit<IRestRefusjonEøsPeriode>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
+                    url: ``, //todo: legge til riktig api-url
                     data: {
                         ...refusjonEøs,
                         id: refusjonEøs.id,
                         fom: skjema.felter.fom.verdi,
                         tom: skjema.felter.tom.verdi,
-                        feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
+                        refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -166,7 +166,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             onSubmit(
                 {
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
+                    url: ``, //todo: legge til riktig api-url
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
@@ -189,4 +189,4 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
     };
 };
 
-export { useRefusjonEøs };
+export { useRefusjonEøsPeriode };

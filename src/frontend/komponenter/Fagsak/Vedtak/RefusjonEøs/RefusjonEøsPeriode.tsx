@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
-import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
+import type { IRestRefusjonEøsPeriode } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
-import { useRefusjonEøs } from './useRefusjonEøs';
+import { useRefusjonEøsPeriode } from './useRefusjonEøsPeriode';
 
 interface IRefusjonEøsPeriode {
-    refusjonEøs: IRestRefusjonEøs;
+    refusjonEøs: IRestRefusjonEøsPeriode;
     erLesevisning: boolean;
     behandlingId: number;
 }
@@ -37,8 +37,8 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useRefusjonEøs({
-            behandlingId: behandlingId,
+        useRefusjonEøsPeriode({
+            _behandlingId: behandlingId,
             refusjonEøs,
             settFeilmelding: settFeilmelding,
         });
@@ -91,7 +91,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
                     tom: refusjonEøs.tom,
                 })}
             </Table.DataCell>
-            <Table.DataCell align="right">{refusjonEøs.feilutbetaltBeløp} kr</Table.DataCell>
+            <Table.DataCell align="right">{refusjonEøs.refusjonsbeløp} kr</Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
                     <Button
