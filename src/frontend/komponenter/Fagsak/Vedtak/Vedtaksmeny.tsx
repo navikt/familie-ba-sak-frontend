@@ -100,7 +100,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         vedtakHarFortsattUtbetaling(åpenBehandling.resultat) && (
                             <Dropdown.Menu.List.Item onClick={visRefusjonEøs}>
                                 <Eu />
-                                Refusjon EØS
+                                Legg til refusjon EØS
                             </Dropdown.Menu.List.Item>
                         )}
                 </Dropdown.Menu.List>

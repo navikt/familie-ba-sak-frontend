@@ -95,12 +95,19 @@ const useBehandlingssteg = (
 
     const sendTilBeslutterNesteOnClick = (
         settVisModal: (visModal: boolean) => void,
-        erUlagretNyFeilutbetaltValuta: boolean
+        erUlagretNyFeilutbetaltValuta: boolean,
+        erUlagretNyRefusjonEøs: boolean
     ) => {
         if (erUlagretNyFeilutbetaltValuta) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Det er lagt til en ny periode med feilutbetalt valuta. Fyll ut periode og beløp, eller fjern perioden.'
+                )
+            );
+        } else if (erUlagretNyRefusjonEøs) {
+            settSubmitRessurs(
+                byggFeiletRessurs(
+                    'Det er lagt til en ny periode med refusjon til eøs. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
                 )
             );
         } else if (!kanSendeinnVedtak()) {
