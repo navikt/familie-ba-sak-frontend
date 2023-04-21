@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-
+import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IPersonInfo } from '../../../../typer/person';
@@ -18,7 +17,12 @@ interface IProps {
 }
 
 const DeltBostedSkjema = (props: IProps) => {
-    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger } = props;
+    const {
+        barnMedDeltBostedFelt,
+        avtalerOmDeltBostedPerBarnFelt,
+        // visFeilmeldinger,
+        settVisFeilmeldinger,
+    } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -40,9 +44,33 @@ const DeltBostedSkjema = (props: IProps) => {
     );
 
     return (
-        <CheckboxGruppe
-            {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
+        <CheckboxGroup
+            /* {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)} */
             legend={'Hvilke barn har delt bosted?'}
+            onChange={(identList: string[]) => {
+                const oppdatertBarnMedDeltBostedFelt: IBarnMedOpplysninger[] =
+                    barnMedDeltBostedFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => {
+                        const nyMerketStatus = !!identList.find(
+                            (ident: string) => barnMedOpplysninger.ident === ident
+                        );
+                        return {
+                            ...barnMedOpplysninger,
+                            merket: nyMerketStatus,
+                        };
+                    });
+                barnMedDeltBostedFelt.validerOgSettFelt(oppdatertBarnMedDeltBostedFelt);
+                settVisFeilmeldinger(false);
+                oppdatertBarnMedDeltBostedFelt.forEach(barnMedOpplysninger =>
+                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                        [barnMedOpplysninger.ident]: identList.find(
+                            (ident: string) => barnMedOpplysninger.ident === ident
+                        )
+                            ? ['']
+                            : [],
+                    })
+                );
+            }}
         >
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                 <BarnCheckbox
@@ -61,7 +89,7 @@ const DeltBostedSkjema = (props: IProps) => {
                     });
                 }}
             />
-        </CheckboxGruppe>
+        </CheckboxGroup>
     );
 };
 
