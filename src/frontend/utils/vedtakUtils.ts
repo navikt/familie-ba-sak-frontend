@@ -139,6 +139,7 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
     }
 };
 
+// todo: utvide denne til å inneholde riktige behandlingsresultater
 export const vedtakHarFortsattUtbetaling = (behandlingResultat: BehandlingResultat) =>
     [BehandlingResultat.INNVILGET, BehandlingResultat.FORTSATT_INNVILGET].includes(
         behandlingResultat

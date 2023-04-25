@@ -60,22 +60,18 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
         skjulRefusjonEøs();
     }
 
-    const totaltFeilutbetaltBeløp = refusjonEøsListe.reduce(
-        (acc, val) => acc + val.refusjonsbeløp,
-        0
-    );
+    const totaltRefusjonsbeløp = refusjonEøsListe.reduce((acc, val) => acc + val.refusjonsbeløp, 0);
 
-    //todo: endre denne teksten
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
-    \nBer om at feilutbetalingsbeløpet på grunn av valuta- og satsendringer trekkes i fremtidige utbetalinger.
-    \nTotalt kr ${totaltFeilutbetaltBeløp}
+    \nAnnet EØS land har bedt om refusjon i etterbetaling. Vi ber derfor om at følgende beløp holdes tilbake:
+    \nTotalt ${totaltRefusjonsbeløp} kroner
     \n${refusjonEøsListe
         .map(
             refusjonEøs =>
                 `${periodeToString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
-                })} kr ${refusjonEøs.refusjonsbeløp}`
+                })} kr/mnd ${refusjonEøs.refusjonsbeløp}`
         )
         .join('\n')}`;
 
