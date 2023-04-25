@@ -5,7 +5,8 @@ import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import cl from 'clsx';
 
 import { Helptext as HelpTextIcon, HelptextFilled } from '@navikt/ds-icons';
-import { Popover, type PopoverProps } from '@navikt/ds-react';
+import type { PopoverProps } from '@navikt/ds-react';
+import { Popover } from '@navikt/ds-react';
 
 // https://github.com/gregberge/react-merge-refs
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

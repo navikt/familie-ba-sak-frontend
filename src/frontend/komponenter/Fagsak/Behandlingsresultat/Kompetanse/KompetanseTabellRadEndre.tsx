@@ -5,23 +5,20 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Fieldset } from '@navikt/ds-react';
 import { Alert, Button } from '@navikt/ds-react';
-import {
-    FamilieKnapp,
-    FamilieReactSelect,
-    FamilieSelect,
-    type OptionType,
-} from '@navikt/familie-form-elements';
-import { type ISkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { OptionType } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { IKompetanse } from '../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
     annenForelderAktiviteter,
     EøsPeriodeStatus,
-    type IKompetanse,
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,

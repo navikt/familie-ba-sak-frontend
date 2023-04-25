@@ -6,8 +6,10 @@ import styled from 'styled-components';
 import { Globe as Eu, Home as NorwegianFlag } from '@navikt/ds-icons';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { type Periode, Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
-import { byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Tidslinje } from '@navikt/familie-tidslinje';
+import type { Periode, Etikett } from '@navikt/familie-tidslinje';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { PersonType } from '../../../typer/person';
@@ -18,7 +20,8 @@ import type {
     ITidslinjer,
     IVilkårRegelverkResultat,
 } from '../../../typer/tidslinjer';
-import { type IVilkårConfig, Regelverk, Resultat, vilkårConfig } from '../../../typer/vilkår';
+import type { IVilkårConfig } from '../../../typer/vilkår';
+import { Regelverk, Resultat, vilkårConfig } from '../../../typer/vilkår';
 import { formaterIdent } from '../../../utils/formatter';
 import {
     kalenderDato,

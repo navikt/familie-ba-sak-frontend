@@ -17,11 +17,8 @@ import {
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import {
-    type IKlagebehandling,
-    KlageinstansEventType,
-    klageinstansUtfallTilTekst,
-} from '../../../typer/klage';
+import type { IKlagebehandling } from '../../../typer/klage';
+import { KlageinstansEventType, klageinstansUtfallTilTekst } from '../../../typer/klage';
 import { Klagebehandlingstype } from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {

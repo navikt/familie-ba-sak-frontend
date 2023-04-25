@@ -12,7 +12,8 @@ import {
     FamilieSelect,
     FamilieTextarea,
 } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';

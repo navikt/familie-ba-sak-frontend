@@ -3,14 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-} from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -18,7 +12,8 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
-import { behandlingstemaer, type IBehandlingstema } from '../../../../../typer/behandlingstema';
+import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
+import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';

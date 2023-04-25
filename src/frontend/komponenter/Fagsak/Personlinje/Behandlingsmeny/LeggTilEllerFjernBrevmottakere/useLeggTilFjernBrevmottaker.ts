@@ -1,11 +1,7 @@
 import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
-import {
-    type Ressurs,
-    RessursStatus,
-    byggHenterRessurs,
-    hentDataFraRessurs,
-} from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus, byggHenterRessurs, hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';

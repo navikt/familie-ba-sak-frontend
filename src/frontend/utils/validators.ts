@@ -1,11 +1,5 @@
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    type ValiderFelt,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';

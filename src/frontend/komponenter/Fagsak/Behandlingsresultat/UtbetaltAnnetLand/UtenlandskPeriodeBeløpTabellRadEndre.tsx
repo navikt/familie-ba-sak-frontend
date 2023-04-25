@@ -10,12 +10,12 @@ import {
     AFontSizeLarge,
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
+import type { OptionType } from '@navikt/familie-form-elements';
 import {
     FamilieInput,
     FamilieKnapp,
     FamilieReactSelect,
     FamilieSelect,
-    type OptionType,
 } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';

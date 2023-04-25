@@ -6,7 +6,8 @@ import { Cancel, Office1Filled } from '@navikt/ds-icons';
 import { Alert, Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
