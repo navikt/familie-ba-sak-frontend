@@ -25,7 +25,7 @@ import {
 import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
-    _behandlingId: number;
+    behandlingId: number;
     refusjonEøs?: IRestRefusjonEøs;
     settFeilmelding: (feilmelding: string) => void;
 }
@@ -82,7 +82,7 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
     return ok(felt);
 };
 
-const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProps) => {
+const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate>({
@@ -109,7 +109,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProp
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
         },
-        skjemanavn: 'Feilutbetalt valuta',
+        skjemanavn: 'Refusjon EØS',
     });
 
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
@@ -117,7 +117,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProp
             onSubmit<IRestNyRefusjonEøs>(
                 {
                     method: 'POST',
-                    url: ``, //todo: legge til riktig api-url
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}`,
                     data: {
                         fom: skjema.felter.fom?.verdi,
                         tom: skjema.felter.tom?.verdi,
@@ -141,7 +141,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProp
             onSubmit<IRestRefusjonEøs>(
                 {
                     method: 'PUT',
-                    url: ``, //todo: legge til riktig api-url
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
                     data: {
                         ...refusjonEøs,
                         id: refusjonEøs.id,
@@ -166,7 +166,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProp
             onSubmit(
                 {
                     method: 'DELETE',
-                    url: ``, //todo: legge til riktig api-url
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
