@@ -1,15 +1,9 @@
 import type { OptionType } from '@navikt/familie-form-elements';
-import { type Avhengigheter, feil, type FeltState, ok } from '@navikt/familie-skjema';
+import { feil, ok } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
-import {
-    type IYearMonthPeriode,
-    type MånedÅr,
-    type YearMonth,
-    yearMonthTilKalenderMåned,
-    iDag,
-    leggTil,
-    KalenderEnhet,
-} from './kalender';
+import type { IYearMonthPeriode, MånedÅr, YearMonth } from './kalender';
+import { yearMonthTilKalenderMåned, iDag, leggTil, KalenderEnhet } from './kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;

@@ -2,12 +2,11 @@ import React from 'react';
 
 import { FagsakType } from '../../../../typer/fagsak';
 import type { IInstitusjon } from '../../../../typer/institusjon-og-verge';
-import { type IGrunnlagPerson, PersonType } from '../../../../typer/person';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
 import { formaterIdent, lagPersonLabel } from '../../../../utils/formatter';
-import {
-    type IRestBrevmottaker,
-    Mottaker,
-} from '../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { IRestBrevmottaker } from '../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import { Mottaker } from '../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 
 interface IProps {
     personer: IGrunnlagPerson[];

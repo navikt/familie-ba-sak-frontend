@@ -3,7 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { Tidslinje, type Etikett } from '@navikt/familie-tidslinje';
+import type { Etikett } from '@navikt/familie-tidslinje';
+import { Tidslinje } from '@navikt/familie-tidslinje';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';

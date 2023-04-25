@@ -4,12 +4,11 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
 import type { Felt } from '@navikt/familie-skjema';
 
+import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
 import {
     BehandlingKategori,
-    type Behandlingstema,
     behandlingstemaer,
     BehandlingUnderkategori,
-    type IBehandlingstema,
 } from '../../typer/behandlingstema';
 import { FagsakType } from '../../typer/fagsak';
 

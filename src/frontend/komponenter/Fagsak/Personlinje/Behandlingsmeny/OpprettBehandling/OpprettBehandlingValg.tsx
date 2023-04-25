@@ -9,6 +9,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../../context/ManuellJournalførContext';
+import type { IBehandling } from '../../../../../typer/behandling';
 import {
     BehandlingResultat,
     BehandlingStatus,
@@ -16,7 +17,6 @@ import {
     behandlingÅrsak,
     BehandlingÅrsak,
     erBehandlingHenlagt,
-    type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';

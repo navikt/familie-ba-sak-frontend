@@ -12,7 +12,8 @@ import { Adressebeskyttelsegradering, hentDataFraRessurs } from '@navikt/familie
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../../typer/fagsak';
+import { FagsakType } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';

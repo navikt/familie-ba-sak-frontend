@@ -8,7 +8,8 @@ import { Dropdown } from '@navikt/ds-react-internal';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../typer/behandling';
 import { BehandlingKategori } from '../../../typer/behandlingstema';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';

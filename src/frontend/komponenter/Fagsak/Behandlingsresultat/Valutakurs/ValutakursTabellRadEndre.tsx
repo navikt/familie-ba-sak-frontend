@@ -9,13 +9,12 @@ import {
     AFontSizeLarge,
     AFontWeightRegular,
 } from '@navikt/ds-tokens/dist/tokens';
+import type { ISODateString, OptionType } from '@navikt/familie-form-elements';
 import {
     FamilieDatovelger,
     FamilieInput,
     FamilieKnapp,
     FamilieReactSelect,
-    type ISODateString,
-    type OptionType,
 } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -24,7 +23,8 @@ import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import { EøsPeriodeStatus, type IValutakurs } from '../../../../typer/eøsPerioder';
+import type { IValutakurs } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';

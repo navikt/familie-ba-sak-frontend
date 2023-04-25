@@ -25,7 +25,8 @@ import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/ty
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
 import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
-import { FagsakStatus, type IMinimalFagsak } from '../typer/fagsak';
+import type { IMinimalFagsak } from '../typer/fagsak';
+import { FagsakStatus } from '../typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
 import {
     BehandlingstypeFilter,
