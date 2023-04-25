@@ -2,11 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Label } from '@navikt/ds-react';
+import { Label, Radio, RadioGroup } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Country } from '@navikt/land-verktoy';
 
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
@@ -18,6 +20,7 @@ import {
     serializeIso8601String,
     sisteDagIInneværendeMåned,
 } from '../../../../utils/kalender';
+import { FamilieLandvelger } from '../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 
 interface IRefusjonEøsSkjemaProps {
     skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
@@ -56,6 +59,42 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
     return (
         <>
             <FlexDatoInputWrapper>
+                <FamilieLandvelger
+                    label={'EØS-land'}
+                    id={'refusjon-eøs-land'}
+                    value={skjema.felter.land.verdi}
+                    placeholder={'Velg'}
+                    onChange={(value: Country) => {
+                        skjema.felter.land.validerOgSettFelt(value.value);
+                    }}
+                    feil={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
+                            ? skjema.felter.land.feilmelding?.toString()
+                            : ''
+                    }
+                />
+
+                <RadioGroup
+                    legend={<Label>Tekst i vedtaksbrev</Label>}
+                    defaultChecked={skjema.felter.refusjonAvklart.verdi}
+                    onChange={(val: boolean | undefined) =>
+                        skjema.felter.refusjonAvklart.validerOgSettFelt(val)
+                    }
+                    error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
+                >
+                    <Radio name={'refusjonAvklart'} value={true} id={'ja-refusjon-er-avklart'}>
+                        {'Refusjon avklart'}
+                    </Radio>
+                    <Radio
+                        name={'refusjonAvklart'}
+                        value={false}
+                        id={'nei-refusjon-er-ikke-avklart'}
+                    >
+                        {'Refusjon ikke avklart'}
+                    </Radio>
+                </RadioGroup>
+
                 <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
                 <FlexRowDiv style={{ gap: '2rem' }}>
                     <FamilieDatovelger

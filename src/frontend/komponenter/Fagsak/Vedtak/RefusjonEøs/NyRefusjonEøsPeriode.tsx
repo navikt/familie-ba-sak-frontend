@@ -30,7 +30,7 @@ const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useRefusjonEøs({
-        _behandlingId: behandlingId,
+        behandlingId,
         settFeilmelding: settFeilmelding,
     });
 

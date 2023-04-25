@@ -38,7 +38,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
         useRefusjonEøs({
-            _behandlingId: behandlingId,
+            behandlingId,
             refusjonEøs,
             settFeilmelding: settFeilmelding,
         });

@@ -90,6 +90,17 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
         valideringsfunksjon: validerFom,
     });
 
+    const land = useFelt<string>({
+        verdi: refusjonEøs?.land ?? '',
+        valideringsfunksjon: felt => (felt.verdi ? ok(felt) : feil(felt, 'todo: feilmelding')),
+    });
+
+    const refusjonAvklart = useFelt<boolean | undefined>({
+        verdi: refusjonEøs?.refusjonAvklart ?? undefined,
+        valideringsfunksjon: felt =>
+            felt.verdi !== undefined ? ok(felt) : feil(felt, 'todo: feilmelding'),
+    });
+
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
         IRefusjonEøsSkjemaFelter,
         IBehandling
@@ -108,6 +119,8 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                 verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
                 valideringsfunksjon: validerFeilutbetaltBeløp,
             }),
+            land,
+            refusjonAvklart,
         },
         skjemanavn: 'Refusjon EØS',
     });
@@ -119,9 +132,11 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                     method: 'POST',
                     url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}`,
                     data: {
-                        fom: skjema.felter.fom?.verdi,
-                        tom: skjema.felter.tom?.verdi,
+                        fom: skjema.felter.fom.verdi,
+                        tom: skjema.felter.tom.verdi,
                         refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
+                        land: skjema.felter.land.verdi,
+                        refusjonAvklart: !!skjema.felter.refusjonAvklart?.verdi,
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -148,6 +163,8 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                         fom: skjema.felter.fom.verdi,
                         tom: skjema.felter.tom.verdi,
                         refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
+                        land: skjema.felter.land.verdi,
+                        refusjonAvklart: !!skjema.felter.refusjonAvklart?.verdi,
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {

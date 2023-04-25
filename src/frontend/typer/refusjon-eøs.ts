@@ -4,19 +4,22 @@ export interface IRestRefusjonEøs {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     refusjonsbeløp: number;
-    //todo: land og refusjonAvklart
+    land: string;
+    refusjonAvklart: boolean;
 }
 
 export interface IRestNyRefusjonEøs {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     refusjonsbeløp: number;
-    //todo: land og refusjonAvklart
+    land: string;
+    refusjonAvklart: boolean;
 }
 
 export interface IRefusjonEøsSkjemaFelter {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     refusjonsbeløp: string;
-    //todo: land og refusjonAvklart
+    land: string;
+    refusjonAvklart: boolean | undefined;
 }
