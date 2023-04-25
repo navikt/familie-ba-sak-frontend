@@ -7,7 +7,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
-import type { IRestRefusjonEøsPeriode } from '../../../../typer/refusjon-eøs';
+import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
@@ -15,7 +15,7 @@ import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 interface IRefusjonEøs {
     behandlingId: number;
     fagsakId: string | undefined;
-    refusjonEøsListe: IRestRefusjonEøsPeriode[];
+    refusjonEøsListe: IRestRefusjonEøs[];
     settErUlagretNyRefusjonEøsPeriode: (erUlagretNyRefusjonEøs: boolean) => void;
     erLesevisning: boolean;
     skjulRefusjonEøs: () => void;

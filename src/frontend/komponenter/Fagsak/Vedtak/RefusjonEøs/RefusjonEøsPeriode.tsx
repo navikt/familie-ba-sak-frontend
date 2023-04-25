@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
-import type { IRestRefusjonEøsPeriode } from '../../../../typer/refusjon-eøs';
+import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
-import { useRefusjonEøsPeriode } from './useRefusjonEøsPeriode';
+import { useRefusjonEøs } from './useRefusjonEøs';
 
 interface IRefusjonEøsPeriode {
-    refusjonEøs: IRestRefusjonEøsPeriode;
+    refusjonEøs: IRestRefusjonEøs;
     erLesevisning: boolean;
     behandlingId: number;
 }
@@ -37,7 +37,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useRefusjonEøsPeriode({
+        useRefusjonEøs({
             _behandlingId: behandlingId,
             refusjonEøs,
             settFeilmelding: settFeilmelding,

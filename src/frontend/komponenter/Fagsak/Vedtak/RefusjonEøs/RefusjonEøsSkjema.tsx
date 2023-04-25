@@ -9,7 +9,7 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IRefusjonEøsPeriodeSkjemaFelter } from '../../../../typer/refusjon-eøs';
+import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import {
     erIsoStringGyldig,
@@ -20,7 +20,7 @@ import {
 } from '../../../../utils/kalender';
 
 interface IRefusjonEøsSkjemaProps {
-    skjema: ISkjema<IRefusjonEøsPeriodeSkjemaFelter, IBehandling>;
+    skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
 }
 
 const FlexDatoInputWrapper = styled.div`

@@ -6,9 +6,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type {
-    IRefusjonEøsPeriodeSkjemaFelter,
-    IRestNyRefusjonEøsPeriode,
-    IRestRefusjonEøsPeriode,
+    IRefusjonEøsSkjemaFelter,
+    IRestNyRefusjonEøs,
+    IRestRefusjonEøs,
 } from '../../../../typer/refusjon-eøs';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import {
@@ -26,7 +26,7 @@ import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
     _behandlingId: number;
-    refusjonEøs?: IRestRefusjonEøsPeriode;
+    refusjonEøs?: IRestRefusjonEøs;
     settFeilmelding: (feilmelding: string) => void;
 }
 
@@ -82,7 +82,7 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
     return ok(felt);
 };
 
-const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProps) => {
+const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, _behandlingId }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
 
     const fomFelt = useFelt<FamilieIsoDate>({
@@ -91,7 +91,7 @@ const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }
     });
 
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
-        IRefusjonEøsPeriodeSkjemaFelter,
+        IRefusjonEøsSkjemaFelter,
         IBehandling
     >({
         felter: {
@@ -114,7 +114,7 @@ const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }
 
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
-            onSubmit<IRestNyRefusjonEøsPeriode>(
+            onSubmit<IRestNyRefusjonEøs>(
                 {
                     method: 'POST',
                     url: ``, //todo: legge til riktig api-url
@@ -138,7 +138,7 @@ const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }
 
     const oppdaterEksisterendePeriode = async () => {
         if (kanSendeSkjema() && refusjonEøs) {
-            onSubmit<IRestRefusjonEøsPeriode>(
+            onSubmit<IRestRefusjonEøs>(
                 {
                     method: 'PUT',
                     url: ``, //todo: legge til riktig api-url
@@ -189,4 +189,4 @@ const useRefusjonEøsPeriode = ({ refusjonEøs, settFeilmelding, _behandlingId }
     };
 };
 
-export { useRefusjonEøsPeriode };
+export { useRefusjonEøs };

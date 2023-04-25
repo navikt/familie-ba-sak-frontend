@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Table, Button, Alert } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
-import { useRefusjonEøsPeriode } from './useRefusjonEøsPeriode';
+import { useRefusjonEøs } from './useRefusjonEøs';
 
 interface INyRefusjonEøsPeriodeProps {
     lukkNyPeriode: () => void;
@@ -29,7 +29,7 @@ const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({
 }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useRefusjonEøsPeriode({
+    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useRefusjonEøs({
         _behandlingId: behandlingId,
         settFeilmelding: settFeilmelding,
     });

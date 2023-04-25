@@ -1,11 +1,5 @@
 import type { FamilieIsoDate } from '../utils/kalender';
-
 export interface IRestRefusjonEøs {
-    land: string;
-    avklart: boolean;
-    perioder: IRestRefusjonEøsPeriode[];
-}
-export interface IRestRefusjonEøsPeriode {
     id: number;
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
@@ -13,14 +7,14 @@ export interface IRestRefusjonEøsPeriode {
     //todo: land og refusjonAvklart
 }
 
-export interface IRestNyRefusjonEøsPeriode {
+export interface IRestNyRefusjonEøs {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     refusjonsbeløp: number;
     //todo: land og refusjonAvklart
 }
 
-export interface IRefusjonEøsPeriodeSkjemaFelter {
+export interface IRefusjonEøsSkjemaFelter {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     refusjonsbeløp: string;

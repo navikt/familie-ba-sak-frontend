@@ -10,7 +10,7 @@ import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { IVerge } from './institusjon-og-verge';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { IGrunnlagPerson } from './person';
-import type { IRestRefusjonEøsPeriode } from './refusjon-eøs';
+import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
 import type {
@@ -275,7 +275,7 @@ export interface IBehandling {
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
-    refusjonEøs?: IRestRefusjonEøsPeriode[];
+    refusjonEøs?: IRestRefusjonEøs[];
     brevmottakere: IRestBrevmottaker[];
 }
 
