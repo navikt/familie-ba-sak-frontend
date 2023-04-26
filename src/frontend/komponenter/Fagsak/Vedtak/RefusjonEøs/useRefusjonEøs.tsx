@@ -130,7 +130,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             onSubmit<IRestNyRefusjonEøs>(
                 {
                     method: 'POST',
-                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}`,
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}`,
                     data: {
                         fom: skjema.felter.fom.verdi,
                         tom: skjema.felter.tom.verdi,
@@ -156,7 +156,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             onSubmit<IRestRefusjonEøs>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}/perioder/${refusjonEøs.id}`,
                     data: {
                         ...refusjonEøs,
                         id: refusjonEøs.id,
@@ -183,7 +183,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             onSubmit(
                 {
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/refusjon-eøs/behandling/${behandlingId}/periode/${refusjonEøs.id}`,
+                    url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}/perioder/${refusjonEøs.id}`,
                 },
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
