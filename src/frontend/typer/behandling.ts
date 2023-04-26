@@ -275,7 +275,7 @@ export interface IBehandling {
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
-    refusjonEøs?: IRestRefusjonEøs[]; //todo: endre denne til å ikke være optional når backend er på plass?
+    refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: IRestBrevmottaker[];
 }
 

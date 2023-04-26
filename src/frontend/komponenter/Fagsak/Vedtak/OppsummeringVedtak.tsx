@@ -80,7 +80,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         åpenBehandling.feilutbetaltValuta.length > 0
     );
     const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(
-        !!åpenBehandling.refusjonEøs && åpenBehandling.refusjonEøs?.length > 0
+        åpenBehandling.refusjonEøs.length > 0
     );
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
         React.useState(false);
@@ -90,7 +90,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     React.useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
-        settVisRefusjonEøs(!!åpenBehandling.refusjonEøs && åpenBehandling.refusjonEøs?.length > 0);
+        settVisRefusjonEøs(åpenBehandling.refusjonEøs.length > 0);
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {

@@ -26,7 +26,7 @@ import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
     behandlingId: number;
-    refusjonEøs?: IRestRefusjonEøs; //todo: endre denne til å ikke være optional når backend er på plass?
+    refusjonEøs?: IRestRefusjonEøs;
     settFeilmelding: (feilmelding: string) => void;
 }
 
