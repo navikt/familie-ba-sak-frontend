@@ -77,12 +77,13 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 />
 
                 <RadioGroup
-                    legend={<Label>Tekst i vedtaksbrev</Label>}
+                    legend="Tekst i vedtaksbrev"
                     value={skjema.felter.refusjonAvklart.verdi}
                     onChange={(val: boolean | undefined) =>
                         skjema.felter.refusjonAvklart.validerOgSettFelt(val)
                     }
                     error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
+                    size="small"
                 >
                     <Radio name={'refusjonAvklart'} value={true} id={'ja-refusjon-er-avklart'}>
                         {'Refusjon avklart'}
@@ -96,37 +97,39 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                     </Radio>
                 </RadioGroup>
 
-                <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
-                <FlexRowDiv style={{ gap: '2rem' }}>
-                    <FamilieDatovelger
-                        {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
-                        label="F.o.m"
-                        value={skjema.felter.fom.verdi}
-                        onChange={(dato?: ISODateString) => {
-                            skjema.felter.fom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
-                            );
-                        }}
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
-                    />
-                    <FamilieDatovelger
-                        {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
-                        label="T.o.m"
-                        value={skjema.felter.tom.verdi}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.tom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
-                            )
-                        }
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
-                    />
-                </FlexRowDiv>
+                <div>
+                    <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
+                    <FlexRowDiv style={{ gap: '2rem' }}>
+                        <FamilieDatovelger
+                            {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                            id="fom-dato"
+                            label="F.o.m"
+                            value={skjema.felter.fom.verdi}
+                            onChange={(dato?: ISODateString) => {
+                                skjema.felter.fom?.validerOgSettFelt(
+                                    gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
+                                );
+                            }}
+                            limitations={{
+                                maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                            }}
+                        />
+                        <FamilieDatovelger
+                            {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                            id="fom-dato"
+                            label="T.o.m"
+                            value={skjema.felter.tom.verdi}
+                            onChange={(dato?: ISODateString) =>
+                                skjema.felter.tom?.validerOgSettFelt(
+                                    gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
+                                )
+                            }
+                            limitations={{
+                                maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                            }}
+                        />
+                    </FlexRowDiv>
+                </div>
             </FlexDatoInputWrapper>
             <StyledFamilieInput
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
