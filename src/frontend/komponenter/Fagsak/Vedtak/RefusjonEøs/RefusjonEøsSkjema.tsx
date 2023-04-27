@@ -136,7 +136,9 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 size="small"
                 label="Refusjonsbeløp (kr/mnd)"
                 value={skjema.felter.refusjonsbeløp.verdi}
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 onChange={changeEvent =>
                     skjema.felter.refusjonsbeløp.validerOgSettFelt(changeEvent.target.value)
                 }
