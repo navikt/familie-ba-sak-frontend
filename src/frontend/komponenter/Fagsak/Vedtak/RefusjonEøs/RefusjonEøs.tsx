@@ -7,6 +7,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
@@ -17,7 +18,6 @@ interface IRefusjonEøs {
     fagsakId: string | undefined;
     refusjonEøsListe: IRestRefusjonEøs[];
     settErUlagretNyRefusjonEøsPeriode: (erUlagretNyRefusjonEøs: boolean) => void;
-    erLesevisning: boolean;
     skjulRefusjonEøs: () => void;
 }
 
@@ -43,11 +43,13 @@ const KopierTilNøsKnapp = styled(CopyToClipboard)`
 const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     refusjonEøsListe,
     settErUlagretNyRefusjonEøsPeriode,
-    erLesevisning,
     skjulRefusjonEøs,
     behandlingId,
     fagsakId,
 }) => {
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         refusjonEøsListe.length === 0
     );
@@ -98,7 +100,6 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
                                 key={refusjonEøs.id}
                                 behandlingId={behandlingId}
                                 refusjonEøs={refusjonEøs}
-                                erLesevisning={erLesevisning}
                             />
                         ))}
                     {ønskerÅLeggeTilNyPeriode && (

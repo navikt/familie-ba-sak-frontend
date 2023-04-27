@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
@@ -12,7 +13,6 @@ import { useRefusjonEøs } from './useRefusjonEøs';
 
 interface IRefusjonEøsPeriode {
     refusjonEøs: IRestRefusjonEøs;
-    erLesevisning: boolean;
     behandlingId: number;
 }
 
@@ -28,11 +28,10 @@ const FlexRowDiv = styled.div`
     gap: 1rem;
 `;
 
-const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
-    refusjonEøs,
-    erLesevisning,
-    behandlingId,
-}) => {
+const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, behandlingId }) => {
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
@@ -59,8 +58,6 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
-        if (erLesevisning) return;
-
         if (erRadEkspandert) {
             nullstillOgLukkSkjema();
         } else {
@@ -71,23 +68,25 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
 
     return (
         <Table.ExpandableRow
-            open={erLesevisning ? false : erRadEkspandert}
+            open={erRadEkspandert}
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
                     <RefusjonEøsSkjema skjema={skjema} />
-                    <FlexRowDiv>
-                        <Button
-                            size="small"
-                            onClick={oppdaterEksisterendePeriode}
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                        >
-                            Lagre periode
-                        </Button>
-                        <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
-                            Avbryt
-                        </Button>
-                    </FlexRowDiv>
+                    {!erLesevisning && (
+                        <FlexRowDiv>
+                            <Button
+                                size="small"
+                                onClick={oppdaterEksisterendePeriode}
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                            >
+                                Lagre periode
+                            </Button>
+                            <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
+                                Avbryt
+                            </Button>
+                        </FlexRowDiv>
+                    )}
                     {feilmelding && <Alert variant="error">{feilmelding}</Alert>}
                 </FlexColumnDiv>
             }
@@ -100,15 +99,17 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
             </Table.DataCell>
             <Table.DataCell align="right">{refusjonEøs.refusjonsbeløp} kr/mnd</Table.DataCell>
             <Table.DataCell align="center">
-                <Tooltip content="Fjern periode">
-                    <Button
-                        icon={<Delete />}
-                        variant="tertiary"
-                        size="small"
-                        onClick={fjernPeriode}
-                        disabled={erLesevisning}
-                    />
-                </Tooltip>
+                {!erLesevisning && (
+                    <Tooltip content="Fjern periode">
+                        <Button
+                            icon={<Delete />}
+                            variant="tertiary"
+                            size="small"
+                            onClick={fjernPeriode}
+                            disabled={erLesevisning}
+                        />
+                    </Tooltip>
+                )}
             </Table.DataCell>
         </Table.ExpandableRow>
     );

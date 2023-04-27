@@ -232,7 +232,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         settErUlagretNyRefusjonEøsPeriode={
                                             settErUlagretNyRefusjonEøsPeriode
                                         }
-                                        erLesevisning={erLesevisning}
                                         skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}

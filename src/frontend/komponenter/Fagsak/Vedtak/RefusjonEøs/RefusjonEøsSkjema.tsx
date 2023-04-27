@@ -2,15 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Label, Radio, RadioGroup } from '@navikt/ds-react';
+import { Label, Radio } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieInput } from '@navikt/familie-form-elements';
+import { FamilieInput, FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../utils/commons';
@@ -46,7 +47,7 @@ const FlexRowDiv = styled.div`
 `;
 
 const StyledFamilieInput = styled(FamilieInput)`
-    width: 7.5rem;
+    width: 11rem;
     .navds-label {
         width: 18rem;
     }
@@ -65,10 +66,14 @@ const gjørOmDatoHvisGyldigInput = (
 };
 
 const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({ skjema }) => {
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
     const inputUuid = randomUUID();
     return (
         <>
             <StyledFamilieLandvelger
+                erLesevisning={erLesevisning}
                 label={'EØS-land'}
                 id={`refusjon-eøs-land-${inputUuid}`}
                 value={skjema.felter.land.verdi}
@@ -85,9 +90,16 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 }
             />
 
-            <RadioGroup
+            <FamilieRadioGruppe
+                erLesevisning={erLesevisning}
                 legend="Tekst i vedtaksbrev"
-                value={skjema.felter.refusjonAvklart.verdi}
+                value={
+                    erLesevisning
+                        ? `Refusjon ${
+                              skjema.felter.refusjonAvklart.verdi ? 'avklart' : 'ikke avklart'
+                          }`
+                        : skjema.felter.refusjonAvklart.verdi
+                }
                 onChange={(val: boolean | undefined) =>
                     skjema.felter.refusjonAvklart.validerOgSettFelt(val)
                 }
@@ -108,7 +120,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 >
                     {'Refusjon ikke avklart'}
                 </Radio>
-            </RadioGroup>
+            </FamilieRadioGruppe>
             <FlexDatoInputWrapper>
                 <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
                 <FlexRowDiv style={{ gap: '2rem' }}>
@@ -125,6 +137,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         limitations={{
                             maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
                         }}
+                        erLesesvisning={erLesevisning}
                     />
                     <FamilieDatovelger
                         {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
@@ -139,6 +152,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         limitations={{
                             maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
                         }}
+                        erLesesvisning={erLesevisning}
                     />
                 </FlexRowDiv>
             </FlexDatoInputWrapper>
@@ -153,6 +167,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 onChange={changeEvent =>
                     skjema.felter.refusjonsbeløp.validerOgSettFelt(changeEvent.target.value)
                 }
+                erLesevisning={erLesevisning}
             />
         </>
     );
