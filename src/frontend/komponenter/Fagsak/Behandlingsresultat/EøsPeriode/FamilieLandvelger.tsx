@@ -191,6 +191,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
             utenMargin={utenMargin}
             kanNullstilles={kanNullstilles}
             feil={feil}
+            size={size}
         />
     );
 };
@@ -246,6 +247,7 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
             utenMargin={utenMargin}
             kanNullstilles={kanNullstilles}
             feil={feil}
+            size={size}
         />
     );
 };
