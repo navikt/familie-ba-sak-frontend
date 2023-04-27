@@ -78,7 +78,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     return (
         <FlexColumnDiv>
             <Heading level="2" size="small" spacing>
-                Refusjon Eøs
+                Refusjon EØS
             </Heading>
             <Table size="small">
                 <Table.Header>
