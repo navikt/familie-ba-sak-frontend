@@ -36,12 +36,18 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useRefusjonEøs({
-            behandlingId,
-            refusjonEøs,
-            settFeilmelding: settFeilmelding,
-        });
+    const {
+        skjema,
+        oppdaterEksisterendePeriode,
+        nullstillSkjema,
+        fjernPeriode,
+        valideringErOk,
+        validerAlleSynligeFelter,
+    } = useRefusjonEøs({
+        behandlingId,
+        refusjonEøs,
+        settFeilmelding: settFeilmelding,
+    });
 
     useEffect(() => {
         nullstillOgLukkSkjema();
@@ -58,6 +64,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
         if (erRadEkspandert) {
             nullstillOgLukkSkjema();
         } else {
+            validerAlleSynligeFelter();
             settErRadEkspandert(true);
         }
     };

@@ -101,10 +101,14 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             felt.verdi !== undefined ? ok(felt) : feil(felt, 'todo: feilmelding'),
     });
 
-    const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
-        IRefusjonEøsSkjemaFelter,
-        IBehandling
-    >({
+    const {
+        skjema,
+        kanSendeSkjema,
+        onSubmit,
+        nullstillSkjema,
+        valideringErOk,
+        validerAlleSynligeFelter,
+    } = useSkjema<IRefusjonEøsSkjemaFelter, IBehandling>({
         felter: {
             fom: fomFelt,
             tom: useFelt<FamilieIsoDate>({
@@ -203,6 +207,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
         fjernPeriode,
         nullstillSkjema,
         valideringErOk,
+        validerAlleSynligeFelter,
     };
 };
 
