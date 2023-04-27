@@ -13,6 +13,7 @@ import type { Country } from '@navikt/land-verktoy';
 
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
+import { randomUUID } from '../../../../utils/commons';
 import type { FamilieIsoDate } from '../../../../utils/kalender';
 import {
     erIsoStringGyldig,
@@ -64,11 +65,12 @@ const gjørOmDatoHvisGyldigInput = (
 };
 
 const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({ skjema }) => {
+    const inputUuid = randomUUID();
     return (
         <>
             <StyledFamilieLandvelger
                 label={'EØS-land'}
-                id={'refusjon-eøs-land'}
+                id={`refusjon-eøs-land-${inputUuid}`}
                 value={skjema.felter.land.verdi}
                 placeholder={'Velg'}
                 onChange={(value: Country) => {
@@ -92,10 +94,18 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
                 size="small"
             >
-                <Radio name={'refusjonAvklart'} value={true} id={'ja-refusjon-er-avklart'}>
+                <Radio
+                    name={'refusjonAvklart'}
+                    value={true}
+                    id={`ja-refusjon-er-avklart-${inputUuid}`}
+                >
                     {'Refusjon avklart'}
                 </Radio>
-                <Radio name={'refusjonAvklart'} value={false} id={'nei-refusjon-er-ikke-avklart'}>
+                <Radio
+                    name={'refusjonAvklart'}
+                    value={false}
+                    id={`nei-refusjon-er-ikke-avklart-${inputUuid}`}
+                >
                     {'Refusjon ikke avklart'}
                 </Radio>
             </RadioGroup>
@@ -104,7 +114,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 <FlexRowDiv style={{ gap: '2rem' }}>
                     <FamilieDatovelger
                         {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
+                        id={`fom-dato-${inputUuid}`}
                         label="F.o.m"
                         value={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
@@ -118,7 +128,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                     />
                     <FamilieDatovelger
                         {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
+                        id={`fom-dato-${inputUuid}`}
                         label="T.o.m"
                         value={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
