@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Label, Radio, RadioGroup } from '@navikt/ds-react';
+import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-form-elements';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
@@ -26,10 +27,17 @@ interface IRefusjonEøsSkjemaProps {
     skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
 }
 
+const StyledFamilieLandvelger = styled(FamilieLandvelger)`
+    max-width: 24rem;
+    > * {
+        margin: 0;
+    }
+`;
+
 const FlexDatoInputWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${ASpacing3};
 `;
 
 const FlexRowDiv = styled.div`
@@ -58,78 +66,71 @@ const gjørOmDatoHvisGyldigInput = (
 const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({ skjema }) => {
     return (
         <>
+            <StyledFamilieLandvelger
+                label={'EØS-land'}
+                id={'refusjon-eøs-land'}
+                value={skjema.felter.land.verdi}
+                placeholder={'Velg'}
+                onChange={(value: Country) => {
+                    skjema.felter.land.validerOgSettFelt(value.value);
+                }}
+                kunEøs
+                feil={
+                    skjema.visFeilmeldinger &&
+                    skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
+                        ? skjema.felter.land.feilmelding?.toString()
+                        : ''
+                }
+            />
+
+            <RadioGroup
+                legend="Tekst i vedtaksbrev"
+                value={skjema.felter.refusjonAvklart.verdi}
+                onChange={(val: boolean | undefined) =>
+                    skjema.felter.refusjonAvklart.validerOgSettFelt(val)
+                }
+                error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
+                size="small"
+            >
+                <Radio name={'refusjonAvklart'} value={true} id={'ja-refusjon-er-avklart'}>
+                    {'Refusjon avklart'}
+                </Radio>
+                <Radio name={'refusjonAvklart'} value={false} id={'nei-refusjon-er-ikke-avklart'}>
+                    {'Refusjon ikke avklart'}
+                </Radio>
+            </RadioGroup>
             <FlexDatoInputWrapper>
-                <FamilieLandvelger
-                    label={'EØS-land'}
-                    id={'refusjon-eøs-land'}
-                    value={skjema.felter.land.verdi}
-                    placeholder={'Velg'}
-                    onChange={(value: Country) => {
-                        skjema.felter.land.validerOgSettFelt(value.value);
-                    }}
-                    kunEøs
-                    feil={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.land.feilmelding?.toString()
-                            : ''
-                    }
-                />
-
-                <RadioGroup
-                    legend="Tekst i vedtaksbrev"
-                    value={skjema.felter.refusjonAvklart.verdi}
-                    onChange={(val: boolean | undefined) =>
-                        skjema.felter.refusjonAvklart.validerOgSettFelt(val)
-                    }
-                    error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
-                    size="small"
-                >
-                    <Radio name={'refusjonAvklart'} value={true} id={'ja-refusjon-er-avklart'}>
-                        {'Refusjon avklart'}
-                    </Radio>
-                    <Radio
-                        name={'refusjonAvklart'}
-                        value={false}
-                        id={'nei-refusjon-er-ikke-avklart'}
-                    >
-                        {'Refusjon ikke avklart'}
-                    </Radio>
-                </RadioGroup>
-
-                <div>
-                    <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
-                    <FlexRowDiv style={{ gap: '2rem' }}>
-                        <FamilieDatovelger
-                            {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                            id="fom-dato"
-                            label="F.o.m"
-                            value={skjema.felter.fom.verdi}
-                            onChange={(dato?: ISODateString) => {
-                                skjema.felter.fom?.validerOgSettFelt(
-                                    gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
-                                );
-                            }}
-                            limitations={{
-                                maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                            }}
-                        />
-                        <FamilieDatovelger
-                            {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                            id="fom-dato"
-                            label="T.o.m"
-                            value={skjema.felter.tom.verdi}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.tom?.validerOgSettFelt(
-                                    gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
-                                )
-                            }
-                            limitations={{
-                                maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                            }}
-                        />
-                    </FlexRowDiv>
-                </div>
+                <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
+                <FlexRowDiv style={{ gap: '2rem' }}>
+                    <FamilieDatovelger
+                        {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        id="fom-dato"
+                        label="F.o.m"
+                        value={skjema.felter.fom.verdi}
+                        onChange={(dato?: ISODateString) => {
+                            skjema.felter.fom?.validerOgSettFelt(
+                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
+                            );
+                        }}
+                        limitations={{
+                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                        }}
+                    />
+                    <FamilieDatovelger
+                        {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        id="fom-dato"
+                        label="T.o.m"
+                        value={skjema.felter.tom.verdi}
+                        onChange={(dato?: ISODateString) =>
+                            skjema.felter.tom?.validerOgSettFelt(
+                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
+                            )
+                        }
+                        limitations={{
+                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
+                        }}
+                    />
+                </FlexRowDiv>
             </FlexDatoInputWrapper>
             <StyledFamilieInput
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
