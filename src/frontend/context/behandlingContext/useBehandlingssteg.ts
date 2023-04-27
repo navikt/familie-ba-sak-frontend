@@ -107,7 +107,7 @@ const useBehandlingssteg = (
         } else if (erUlagretNyRefusjonEøs) {
             settSubmitRessurs(
                 byggFeiletRessurs(
-                    'Det er lagt til en ny periode med refusjon til eøs. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
+                    'Det er lagt til en ny periode med refusjon EØS. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
                 )
             );
         } else if (!kanSendeinnVedtak()) {
