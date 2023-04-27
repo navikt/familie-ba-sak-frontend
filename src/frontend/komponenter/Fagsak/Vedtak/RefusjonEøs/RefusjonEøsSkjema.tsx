@@ -77,7 +77,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
 
                 <RadioGroup
                     legend={<Label>Tekst i vedtaksbrev</Label>}
-                    defaultChecked={skjema.felter.refusjonAvklart.verdi}
+                    value={skjema.felter.refusjonAvklart.verdi}
                     onChange={(val: boolean | undefined) =>
                         skjema.felter.refusjonAvklart.validerOgSettFelt(val)
                     }
