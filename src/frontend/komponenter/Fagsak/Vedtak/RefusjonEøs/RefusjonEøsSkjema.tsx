@@ -131,7 +131,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
             <StyledFamilieInput
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label="Feilutbetalt beløp"
+                label="Refusjonsbeløp (kr/mnd)"
                 value={skjema.felter.refusjonsbeløp.verdi}
                 type="number"
                 onChange={changeEvent =>

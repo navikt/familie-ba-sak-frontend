@@ -91,7 +91,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({
                     tom: refusjonEøs.tom,
                 })}
             </Table.DataCell>
-            <Table.DataCell align="right">{refusjonEøs.refusjonsbeløp} kr</Table.DataCell>
+            <Table.DataCell align="right">{refusjonEøs.refusjonsbeløp} kr/mnd</Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
                     <Button
