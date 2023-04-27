@@ -1,4 +1,4 @@
-import type { FamilieIsoDate, IPeriode, IYearMonthPeriode } from '.';
+import type { FamilieIsoDate, IPeriode, IYearMonthPeriode, YearMonth } from '.';
 import {
     erEtter,
     erFør,
@@ -13,7 +13,6 @@ import {
     kalenderDatoTilDate,
     yearMonthTilVisning,
     yearMonthTilKalenderMåned,
-    type YearMonth,
 } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {

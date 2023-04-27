@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import {
-    feil,
-    type FeltState,
-    ok,
-    useFelt,
-    useSkjema,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
-import { byggHenterRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../typer/vedtak';

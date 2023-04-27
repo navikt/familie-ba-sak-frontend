@@ -4,7 +4,8 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';

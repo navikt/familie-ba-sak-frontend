@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import { ToastTyper, AlertType } from '../../komponenter/Felleskomponenter/Toast/typer';
 import type { IBehandling } from '../../typer/behandling';
-import { type IRestKorrigertEtterbetaling, KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
+import type { IRestKorrigertEtterbetaling } from '../../typer/vedtak';
+import { KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
 import { useApp } from '../AppContext';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {

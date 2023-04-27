@@ -4,12 +4,12 @@ import { Alert } from '@navikt/ds-react';
 
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
+import type { IPersonResultat } from '../../../../typer/vilkår';
 import {
     AnnenVurderingType,
     annenVurderingConfig,
     vilkårConfigEnsligMindreårig,
     VilkårType,
-    type IPersonResultat,
 } from '../../../../typer/vilkår';
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';

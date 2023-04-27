@@ -1,10 +1,5 @@
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
 import type { VedtakBegrunnelse } from '../../typer/vedtak';
 import type {

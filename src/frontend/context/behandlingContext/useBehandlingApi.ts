@@ -4,8 +4,8 @@ import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
-    type Ressurs,
     byggTomRessurs,
     byggHenterRessurs,
     byggFeiletRessurs,
