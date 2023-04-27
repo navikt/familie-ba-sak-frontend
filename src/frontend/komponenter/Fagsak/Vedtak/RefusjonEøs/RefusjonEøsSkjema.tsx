@@ -67,6 +67,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                     onChange={(value: Country) => {
                         skjema.felter.land.validerOgSettFelt(value.value);
                     }}
+                    kunEøs
                     feil={
                         skjema.visFeilmeldinger &&
                         skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
