@@ -92,13 +92,13 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
 
     const land = useFelt<string>({
         verdi: refusjonEøs?.land ?? '',
-        valideringsfunksjon: felt => (felt.verdi ? ok(felt) : feil(felt, 'todo: feilmelding')),
+        valideringsfunksjon: felt => (felt.verdi ? ok(felt) : feil(felt, 'Du må velge et land')),
     });
 
     const refusjonAvklart = useFelt<boolean | undefined>({
         verdi: refusjonEøs?.refusjonAvklart ?? undefined,
         valideringsfunksjon: felt =>
-            felt.verdi !== undefined ? ok(felt) : feil(felt, 'todo: feilmelding'),
+            felt.verdi !== undefined ? ok(felt) : feil(felt, 'Du må oppgi om refusjon er avklart'),
     });
 
     const {
