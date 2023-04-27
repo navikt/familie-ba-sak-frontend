@@ -108,7 +108,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         label="F.o.m"
                         value={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
-                            skjema.felter.fom?.validerOgSettFelt(
+                            skjema.felter.fom.validerOgSettFelt(
                                 gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
                             );
                         }}
@@ -122,7 +122,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         label="T.o.m"
                         value={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
-                            skjema.felter.tom?.validerOgSettFelt(
+                            skjema.felter.tom.validerOgSettFelt(
                                 gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
                             )
                         }
