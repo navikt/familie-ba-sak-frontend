@@ -65,7 +65,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     const totaltRefusjonsbeløp = refusjonEøsListe.reduce((acc, val) => acc + val.refusjonsbeløp, 0);
 
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
-    \nAnnet EØS land har bedt om refusjon i etterbetaling. Vi ber derfor om at følgende beløp holdes tilbake:
+    \nAnnet EØS-land har bedt om refusjon i etterbetaling. Vi ber derfor om at følgende beløp holdes tilbake:
     \nTotalt ${totaltRefusjonsbeløp} kroner
     \n${refusjonEøsListe
         .map(
