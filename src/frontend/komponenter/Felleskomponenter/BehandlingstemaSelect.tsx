@@ -21,6 +21,13 @@ interface EgneProps {
 
 type Props = EgneProps & Omit<IFamilieSelectProps, 'children'>;
 
+const filtrerVekkEØSForEnsligMindreårig = (it: IBehandlingstema, fagsakType?: FagsakType) =>
+    fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG || it.kategori !== BehandlingKategori.EØS;
+
+const filtrerVekkUtvidetForEnsligMindreårig = (it: IBehandlingstema, fagsakType?: FagsakType) =>
+    fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG ||
+    it.underkategori !== BehandlingUnderkategori.UTVIDET;
+
 export const BehandlingstemaSelect = ({
     behandlingstema,
     fagsakType,
@@ -54,11 +61,8 @@ export const BehandlingstemaSelect = ({
             )}
             {Object.values(behandlingstemaer)
                 .filter(it => it.underkategori !== BehandlingUnderkategori.INSTITUSJON)
-                .filter(
-                    it =>
-                        it.kategori !== BehandlingKategori.EØS ||
-                        fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
-                )
+                .filter(it => filtrerVekkEØSForEnsligMindreårig(it, fagsakType))
+                .filter(it => filtrerVekkUtvidetForEnsligMindreårig(it, fagsakType))
                 .map(tema => {
                     return (
                         <option
