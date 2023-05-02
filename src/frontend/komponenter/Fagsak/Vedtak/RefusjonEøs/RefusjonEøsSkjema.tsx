@@ -67,6 +67,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                     skjema.felter.land.validerOgSettFelt(value.value);
                 }}
                 kunEøs
+                eksluderLand={['NO']}
                 feil={
                     skjema.visFeilmeldinger &&
                     skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
