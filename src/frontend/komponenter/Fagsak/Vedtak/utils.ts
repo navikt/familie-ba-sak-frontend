@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 
 import type { IRestRefusjonEøs } from '../../../typer/refusjon-eøs';
+import type { FamilieIsoDate } from '../../../utils/kalender';
 import {
-    type FamilieIsoDate,
     erIsoStringGyldig,
     FamilieIsoTilFørsteDagIMåneden,
     FamilieIsoTilSisteDagIMåneden,
