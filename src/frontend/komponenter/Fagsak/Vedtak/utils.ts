@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+
+import type { IRestRefusjonEøs } from '../../../typer/refusjon-eøs';
 import {
     type FamilieIsoDate,
     erIsoStringGyldig,
@@ -20,4 +23,17 @@ export const tilFørsteDagIMånedenHvisGyldigInput = (dato: string | undefined):
 
 export const tilSisteDagIMånedenHvisGyldigInput = (dato: string | undefined): string => {
     return gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden);
+};
+
+export const summerRefusjonsbeløpForPerioder = (periodeListe: IRestRefusjonEøs[]): number => {
+    return periodeListe.reduce(
+        (sum, periode) => sum + periode.refusjonsbeløp * antallMånederIPeriode(periode),
+        0
+    );
+};
+
+export const antallMånederIPeriode = (periode: IRestRefusjonEøs): number => {
+    const fomMåned = dayjs(periode.fom);
+    const førsteDagMånedenEtterTomdato = dayjs(periode.tom).add(1, 'day');
+    return førsteDagMånedenEtterTomdato.diff(fomMåned, 'months');
 };

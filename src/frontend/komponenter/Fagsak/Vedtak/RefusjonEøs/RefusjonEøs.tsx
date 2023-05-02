@@ -10,6 +10,7 @@ import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
+import { summerRefusjonsbeløpForPerioder } from '../utils';
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 
@@ -62,7 +63,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
         skjulRefusjonEøs();
     }
 
-    const totaltRefusjonsbeløp = refusjonEøsListe.reduce((acc, val) => acc + val.refusjonsbeløp, 0);
+    const totaltRefusjonsbeløp = summerRefusjonsbeløpForPerioder(refusjonEøsListe);
 
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
     \nAnnet EØS-land har bedt om refusjon i etterbetaling. Vi ber derfor om at følgende beløp holdes tilbake:
