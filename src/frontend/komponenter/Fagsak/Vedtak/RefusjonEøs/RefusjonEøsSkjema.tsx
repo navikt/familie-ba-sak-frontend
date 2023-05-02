@@ -15,15 +15,9 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../utils/commons';
-import type { FamilieIsoDate } from '../../../../utils/kalender';
-import {
-    erIsoStringGyldig,
-    FamilieIsoTilFørsteDagIMåneden,
-    FamilieIsoTilSisteDagIMåneden,
-    serializeIso8601String,
-    sisteDagIInneværendeMåned,
-} from '../../../../utils/kalender';
+import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
 import { FamilieLandvelger } from '../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
 
 interface IRefusjonEøsSkjemaProps {
     skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
@@ -55,15 +49,6 @@ const StyledFamilieInput = styled(FamilieInput)`
         width: 11rem;
     }
 `;
-
-const gjørOmDatoHvisGyldigInput = (
-    dato: string | undefined,
-    omgjøringsfunksjon: (dato: FamilieIsoDate) => FamilieIsoDate
-): string => {
-    if (dato === undefined) return '';
-    if (erIsoStringGyldig(dato)) return omgjøringsfunksjon(dato);
-    else return dato;
-};
 
 const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({ skjema }) => {
     const { vurderErLesevisning } = useBehandling();
@@ -131,7 +116,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         value={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
                             skjema.felter.fom.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
+                                tilFørsteDagIMånedenHvisGyldigInput(dato)
                             );
                         }}
                         limitations={{
@@ -146,7 +131,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         value={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.tom.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
+                                tilSisteDagIMånedenHvisGyldigInput(dato)
                             )
                         }
                         limitations={{
