@@ -17,7 +17,7 @@ import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from 
 import { VedtakBegrunnelseType } from '../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../typer/vedtaksperiode';
-import type { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
+import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
     kalenderDatoMedFallback,
@@ -97,24 +97,6 @@ export const finnVedtakBegrunnelseType = (
         : undefined;
 };
 
-export const finnVedtakBegrunnelseVilkår = (
-    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>,
-    vedtakBegrunnelse: VedtakBegrunnelse
-): VilkårType | undefined => {
-    if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
-        Object.keys(vilkårBegrunnelser.data).forEach(vedtakBegrunnelseType => {
-            const match = vilkårBegrunnelser.data[
-                vedtakBegrunnelseType as VedtakBegrunnelseType
-            ].find(
-                (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                    vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
-            );
-            if (match !== undefined) return match.vilkår;
-        });
-    }
-    return undefined;
-};
-
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGET:
@@ -156,3 +138,21 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
             return ABlue100;
     }
 };
+
+export const vedtakHarFortsattUtbetaling = (behandlingResultat: BehandlingResultat) =>
+    [
+        BehandlingResultat.INNVILGET,
+        BehandlingResultat.INNVILGET_OG_OPPHØRT,
+        BehandlingResultat.INNVILGET_OG_ENDRET,
+        BehandlingResultat.INNVILGET_ENDRET_OG_OPPHØRT,
+        BehandlingResultat.ENDRET_OG_FORTSATT_INNVILGET,
+        BehandlingResultat.DELVIS_INNVILGET,
+        BehandlingResultat.DELVIS_INNVILGET_OG_OPPHØRT,
+        BehandlingResultat.DELVIS_INNVILGET_OG_ENDRET,
+        BehandlingResultat.DELVIS_INNVILGET_ENDRET_OG_OPPHØRT,
+        BehandlingResultat.AVSLÅTT_OG_ENDRET,
+        BehandlingResultat.AVSLÅTT_ENDRET_OG_OPPHØRT,
+        BehandlingResultat.ENDRET_UTBETALING,
+        BehandlingResultat.ENDRET_OG_OPPHØRT,
+        BehandlingResultat.FORTSATT_INNVILGET,
+    ].includes(behandlingResultat);

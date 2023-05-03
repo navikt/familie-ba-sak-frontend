@@ -10,14 +10,8 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
-import type { FamilieIsoDate } from '../../../../utils/kalender';
-import {
-    erIsoStringGyldig,
-    FamilieIsoTilFørsteDagIMåneden,
-    FamilieIsoTilSisteDagIMåneden,
-    serializeIso8601String,
-    sisteDagIInneværendeMåned,
-} from '../../../../utils/kalender';
+import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
+import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
 
 interface IFeilutbetaltValutaSkjemaProps {
     skjema: ISkjema<IFeilutbetaltValutaSkjemaFelter, IBehandling>;
@@ -43,15 +37,6 @@ const StyledFamilieInput = styled(FamilieInput)`
     }
 `;
 
-const gjørOmDatoHvisGyldigInput = (
-    dato: string | undefined,
-    omgjøringsfunksjon: (dato: FamilieIsoDate) => FamilieIsoDate
-): string => {
-    if (dato === undefined) return '';
-    if (erIsoStringGyldig(dato)) return omgjøringsfunksjon(dato);
-    else return dato;
-};
-
 const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
     skjema,
 }) => {
@@ -67,7 +52,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                         value={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
                             skjema.felter.fom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
+                                tilFørsteDagIMånedenHvisGyldigInput(dato)
                             );
                         }}
                         limitations={{
@@ -81,7 +66,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                         value={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.tom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
+                                tilSisteDagIMånedenHvisGyldigInput(dato)
                             )
                         }
                         limitations={{

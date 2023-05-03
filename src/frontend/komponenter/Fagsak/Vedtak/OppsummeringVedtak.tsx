@@ -28,6 +28,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { BrevmottakereAlert } from './BrevmottakereAlert';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
+import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import Vedtaksmeny from './Vedtaksmeny';
@@ -75,12 +76,21 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
-    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(
+        åpenBehandling.feilutbetaltValuta.length > 0
+    );
+    const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(
+        åpenBehandling.refusjonEøs.length > 0
+    );
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
+        React.useState(false);
+
+    const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] =
         React.useState(false);
 
     React.useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
+        settVisRefusjonEøs(åpenBehandling.refusjonEøs.length > 0);
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {
@@ -108,7 +118,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const sendTilBeslutter = () => {
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
-            erUlagretNyFeilutbetaltValutaPeriode
+            erUlagretNyFeilutbetaltValutaPeriode,
+            erUlagretNyRefusjonEøsPeriode
         );
     };
 
@@ -150,6 +161,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
                 visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
+                visRefusjonEøs={() => settVisRefusjonEøs(true)}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -210,6 +222,17 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         skjulFeilutbetaltValuta={() =>
                                             settVisFeilutbetaltValuta(false)
                                         }
+                                    />
+                                )}
+                                {visRefusjonEøs && (
+                                    <RefusjonEøs
+                                        refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
+                                        behandlingId={åpenBehandling.behandlingId}
+                                        fagsakId={fagsakId}
+                                        settErUlagretNyRefusjonEøsPeriode={
+                                            settErUlagretNyRefusjonEøsPeriode
+                                        }
+                                        skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}
                             </>
