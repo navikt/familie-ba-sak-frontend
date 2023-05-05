@@ -52,7 +52,7 @@ const useLeggTilFjernBrevmottaker = () => {
     const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
-    const [navnErFastsatt, settNavnErFastsatt] = useState(false);
+    const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
 
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
     const søker = åpenBehandling?.personer.find(person => person.type === PersonType.SØKER);
@@ -153,13 +153,13 @@ const useLeggTilFjernBrevmottaker = () => {
     });
 
     useEffect(() => {
-        const skalNavnVæreFastsatt =
+        const skalNavnVærePreutfylt =
             mottaker.verdi === Mottaker.DØDSBO ||
             mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
 
-        if (skalNavnVæreFastsatt !== navnErFastsatt) {
-            settNavnErFastsatt(skalNavnVæreFastsatt);
-            navn.validerOgSettFelt(skalNavnVæreFastsatt && søker?.navn ? søker.navn : '');
+        if (skalNavnVærePreutfylt !== navnErPreutfylt) {
+            settNavnErPreutfylt(skalNavnVærePreutfylt);
+            navn.validerOgSettFelt(skalNavnVærePreutfylt && søker?.navn ? søker.navn : '');
         }
     }, [mottaker.verdi]);
 

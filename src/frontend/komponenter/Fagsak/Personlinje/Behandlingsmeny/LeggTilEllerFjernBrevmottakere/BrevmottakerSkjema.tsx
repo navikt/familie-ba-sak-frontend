@@ -47,7 +47,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
     const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const navnErFastsatt =
+    const navnErPreutfylt =
         skjema.felter.mottaker.verdi === Mottaker.DØDSBO ||
         skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
     return (
@@ -70,7 +70,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                 </MottakerSelect>
                 <FamilieInput
                     {...skjema.felter.navn.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning || navnErFastsatt}
+                    erLesevisning={erLesevisning || navnErPreutfylt}
                     label={'Navn'}
                     onChange={(event): void => {
                         skjema.felter.navn.validerOgSettFelt(event.target.value);
