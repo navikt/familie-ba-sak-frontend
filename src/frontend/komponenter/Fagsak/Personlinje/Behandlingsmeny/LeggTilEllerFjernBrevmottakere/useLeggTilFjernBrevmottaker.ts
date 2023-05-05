@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -7,6 +9,7 @@ import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { PersonType } from '../../../../../typer/person';
 import { AlertType, ToastTyper } from '../../../../Felleskomponenter/Toast/typer';
 
 export enum Mottaker {
@@ -49,7 +52,10 @@ const useLeggTilFjernBrevmottaker = () => {
     const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
+    const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
+
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
+    const søker = åpenBehandling?.personer.find(person => person.type === PersonType.SØKER);
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
@@ -146,6 +152,17 @@ const useLeggTilFjernBrevmottaker = () => {
                 : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.'),
     });
 
+    useEffect(() => {
+        const skalNavnVærePreutfylt =
+            mottaker.verdi === Mottaker.DØDSBO ||
+            mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+
+        if (skalNavnVærePreutfylt !== navnErPreutfylt) {
+            settNavnErPreutfylt(skalNavnVærePreutfylt);
+            navn.validerOgSettFelt(skalNavnVærePreutfylt && søker?.navn ? søker.navn : '');
+        }
+    }, [mottaker.verdi]);
+
     const {
         skjema,
         kanSendeSkjema,
@@ -225,6 +242,7 @@ const useLeggTilFjernBrevmottaker = () => {
         lagreMottaker,
         valideringErOk,
         fjernMottaker,
+        navnErPreutfylt,
     };
 };
 
