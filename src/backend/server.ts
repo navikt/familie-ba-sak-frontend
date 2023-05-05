@@ -56,7 +56,12 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         doProxy()
     );
 
-    app.use('/endringslogg', ensureAuthenticated(azureAuthClient, true), doEndringslogProxy());
+    app.use(
+        '/endringslogg',
+        ensureAuthenticated(azureAuthClient, true),
+        attachToken(azureAuthClient),
+        doEndringslogProxy()
+    );
 
     app.use('/redirect', doRedirectProxy());
 

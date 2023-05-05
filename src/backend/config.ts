@@ -40,7 +40,7 @@ const Environment = () => {
             familieTilbakeUrl: 'https://familie-tilbake-frontend.intern.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
-            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
+            endringsloggProxyUrl: 'http://familie-endringslogg',
         };
     }
 
@@ -50,7 +50,7 @@ const Environment = () => {
         proxyUrl: 'http://familie-ba-sak',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         familieKlageUrl: 'https://familie-klage.intern.nav.no',
-        endringsloggProxyUrl: 'https://familie-endringslogg.intern.nav.no',
+        endringsloggProxyUrl: 'http://familie-endringslogg',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
 };
