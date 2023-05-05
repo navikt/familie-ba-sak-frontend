@@ -3,17 +3,15 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label, Switch } from '@navikt/ds-react';
 import {
     ABorderDefault,
+    AGreen700,
     ATextDanger,
     ATextDefault,
-    AGreen700,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useApp } from '../../../context/AppContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { ToggleNavn } from '../../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
@@ -81,6 +79,16 @@ const LabelMedFarge = styled(Label)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
 `;
 
+const StyledSwitch = styled(Switch)`
+    float: right;
+`;
+
+const TableContainer = styled.div(
+    (props: { bredde: number }) => `
+    width: ${props.bredde}rem;
+`
+);
+
 interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
@@ -102,9 +110,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
     const årISimuleringen = hentÅrISimuleringen(perioder);
     const [indexFramvistÅr, settIndexFramvistÅr] = useState(årISimuleringen.length - 1);
+    const [visManuellePosteringer, setVisManuellePosteringer] = useState(false);
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
     const erMerEnn12MånederISimulering = perioder.length > 12;
-    const { toggles } = useApp();
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
@@ -127,6 +135,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
 
+    const finnesManuellePosteringer = perioder.some(
+        periode => periode.manuellPostering && periode.manuellPostering !== 0
+    );
+
     const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
         periode =>
             periode.manuellPostering &&
@@ -142,15 +154,13 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     return (
         <>
-            {toggles[ToggleNavn.manuellPostering] &&
-                erManuellPosteringSamtidigSomResultatIkkeErNull && (
-                    <StyledAlert variant={'warning'}>
-                        Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
-                        sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
-                        tilsvarende de manuelle posteringene i tabellen.
-                    </StyledAlert>
-                )}
-
+            {erManuellPosteringSamtidigSomResultatIkkeErNull && (
+                <StyledAlert variant={'warning'}>
+                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
+                    sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
+                    tilsvarende de manuelle posteringene i tabellen.
+                </StyledAlert>
+            )}
             <SimuleringTabellOverskrift>
                 <Label>
                     Simuleringsresultat for{' '}
@@ -159,118 +169,127 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         : `perioden ${tilOgFraDatoForSimulering}`}
                 </Label>
             </SimuleringTabellOverskrift>
+            <TableContainer bredde={tabellbredde}>
+                <StyledSwitch
+                    checked={visManuellePosteringer}
+                    onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
+                >
+                    Vis manuelle posteringer
+                </StyledSwitch>
+                <StyledTable
+                    aria-label={`Simuleringsresultat for ${
+                        erMerEnn12MånederISimulering
+                            ? aktueltÅr
+                            : `perioden ${tilOgFraDatoForSimulering}`
+                    }`}
+                    className="tabell"
+                    bredde={tabellbredde}
+                >
+                    <colgroup>
+                        <VenstreKolonne />
+                        {perioderSomSkalVisesITabellen.map(periode =>
+                            fomDatoNestePeriode === periode.fom ? (
+                                <React.Fragment key={'col - ' + periode.fom}>
+                                    <SkillelinjeKolonne />
+                                    <DataKolonne />
+                                </React.Fragment>
+                            ) : (
+                                <DataKolonne key={'col - ' + periode.fom} />
+                            )
+                        )}
+                    </colgroup>
 
-            <StyledTable
-                aria-label={`Simuleringsresultat for ${
-                    erMerEnn12MånederISimulering
-                        ? aktueltÅr
-                        : `perioden ${tilOgFraDatoForSimulering}`
-                }`}
-                className="tabell"
-                bredde={tabellbredde}
-            >
-                <colgroup>
-                    <VenstreKolonne />
-                    {perioderSomSkalVisesITabellen.map(periode =>
-                        fomDatoNestePeriode === periode.fom ? (
-                            <React.Fragment key={'col - ' + periode.fom}>
-                                <SkillelinjeKolonne />
-                                <DataKolonne />
-                            </React.Fragment>
-                        ) : (
-                            <DataKolonne key={'col - ' + periode.fom} />
-                        )
-                    )}
-                </colgroup>
+                    <thead>
+                        <tr>
+                            <td>
+                                {erMerEnn12MånederISimulering && (
+                                    <Årsvelger
+                                        settIndexFramvistÅr={settIndexFramvistÅr}
+                                        indexFramvistÅr={indexFramvistÅr}
+                                        erISisteÅrAvPerioden={erISisteÅrAvPerioden}
+                                        aktueltÅr={aktueltÅr}
+                                        årISimuleringen={årISimuleringen}
+                                    />
+                                )}
+                            </td>
+                            {perioderSomSkalVisesITabellen.map(periode => (
+                                <React.Fragment key={'måned - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
+                                    <HøyrestiltTh>
+                                        <Label>
+                                            {kapitaliserTekst(
+                                                formaterIsoDato(periode.fom, datoformat.MÅNED_NAVN)
+                                            )}
+                                        </Label>
+                                    </HøyrestiltTh>
+                                </React.Fragment>
+                            ))}
+                        </tr>
+                    </thead>
 
-                <thead>
-                    <tr>
-                        <td>
-                            {erMerEnn12MånederISimulering && (
-                                <Årsvelger
-                                    settIndexFramvistÅr={settIndexFramvistÅr}
-                                    indexFramvistÅr={indexFramvistÅr}
-                                    erISisteÅrAvPerioden={erISisteÅrAvPerioden}
-                                    aktueltÅr={aktueltÅr}
-                                    årISimuleringen={årISimuleringen}
-                                />
-                            )}
-                        </td>
-                        {perioderSomSkalVisesITabellen.map(periode => (
-                            <React.Fragment key={'måned - ' + periode.fom}>
-                                {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
-                                <HøyrestiltTh>
-                                    <Label>
-                                        {kapitaliserTekst(
-                                            formaterIsoDato(periode.fom, datoformat.MÅNED_NAVN)
+                    <tbody>
+                        <tr>
+                            <td>Nytt beløp</td>
+                            {perioderSomSkalVisesITabellen.map(periode => (
+                                <React.Fragment key={'nytt beløp - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje />}
+                                    <HøyrestiltTd>
+                                        <BodyShort>
+                                            {formaterBeløpUtenValutakode(periode.nyttBeløp)}
+                                        </BodyShort>
+                                    </HøyrestiltTd>
+                                </React.Fragment>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>Tidligere utbetalt</td>
+                            {perioderSomSkalVisesITabellen.map(periode => {
+                                return (
+                                    <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
+                                        <HøyrestiltTd>
+                                            <BodyShort>
+                                                {formaterBeløpUtenValutakode(
+                                                    periode.tidligereUtbetalt
+                                                )}
+                                            </BodyShort>
+                                        </HøyrestiltTd>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </tr>
+                        <tr>
+                            <td>Resultat</td>
+                            {perioderSomSkalVisesITabellen.map(periode => (
+                                <React.Fragment key={'resultat - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje />}
+                                    <HøyrestiltTd>
+                                        {fomDatoNestePeriode === periode.fom ? (
+                                            <LabelMedFarge
+                                                farge={
+                                                    periode.resultat && periode.resultat < 0
+                                                        ? ATextDanger
+                                                        : AGreen700
+                                                }
+                                            >
+                                                {formaterBeløpUtenValutakode(periode.resultat)}
+                                            </LabelMedFarge>
+                                        ) : (
+                                            <BodyshortMedFarge
+                                                farge={
+                                                    periode.resultat && periode.resultat < 0
+                                                        ? ATextDanger
+                                                        : ATextDefault
+                                                }
+                                            >
+                                                {formaterBeløpUtenValutakode(periode.resultat)}
+                                            </BodyshortMedFarge>
                                         )}
-                                    </Label>
-                                </HøyrestiltTh>
-                            </React.Fragment>
-                        ))}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>Nytt beløp</td>
-                        {perioderSomSkalVisesITabellen.map(periode => (
-                            <React.Fragment key={'nytt beløp - ' + periode.fom}>
-                                {erNestePeriode(periode) && <TabellSkillelinje />}
-                                <HøyrestiltTd>
-                                    <BodyShort>
-                                        {formaterBeløpUtenValutakode(periode.nyttBeløp)}
-                                    </BodyShort>
-                                </HøyrestiltTd>
-                            </React.Fragment>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>Tidligere utbetalt</td>
-                        {perioderSomSkalVisesITabellen.map(periode => (
-                            <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
-                                {erNestePeriode(periode) && <TabellSkillelinje />}
-                                <HøyrestiltTd>
-                                    <BodyShort>
-                                        {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
-                                    </BodyShort>
-                                </HøyrestiltTd>
-                            </React.Fragment>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>Resultat</td>
-                        {perioderSomSkalVisesITabellen.map(periode => (
-                            <React.Fragment key={'resultat - ' + periode.fom}>
-                                {erNestePeriode(periode) && <TabellSkillelinje />}
-                                <HøyrestiltTd>
-                                    {fomDatoNestePeriode === periode.fom ? (
-                                        <LabelMedFarge
-                                            farge={
-                                                periode.resultat && periode.resultat < 0
-                                                    ? ATextDanger
-                                                    : AGreen700
-                                            }
-                                        >
-                                            {formaterBeløpUtenValutakode(periode.resultat)}
-                                        </LabelMedFarge>
-                                    ) : (
-                                        <BodyshortMedFarge
-                                            farge={
-                                                periode.resultat && periode.resultat < 0
-                                                    ? ATextDanger
-                                                    : ATextDefault
-                                            }
-                                        >
-                                            {formaterBeløpUtenValutakode(periode.resultat)}
-                                        </BodyshortMedFarge>
-                                    )}
-                                </HøyrestiltTd>
-                            </React.Fragment>
-                        ))}
-                    </tr>
-                    {toggles[ToggleNavn.manuellPostering] &&
-                        erManuellPosteringSamtidigSomResultatIkkeErNull && (
+                                    </HøyrestiltTd>
+                                </React.Fragment>
+                            ))}
+                        </tr>
+                        {finnesManuellePosteringer && visManuellePosteringer && (
                             <tr>
                                 <td>Manuell postering</td>
                                 {perioderSomSkalVisesITabellen.map(periode => (
@@ -287,8 +306,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 ))}
                             </tr>
                         )}
-                </tbody>
-            </StyledTable>
+                    </tbody>
+                </StyledTable>
+            </TableContainer>
         </>
     );
 };
