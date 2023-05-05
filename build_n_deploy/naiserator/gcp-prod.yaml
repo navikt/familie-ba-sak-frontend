@@ -52,6 +52,7 @@ spec:
       rules:
         - application: familie-ba-sak
         - application: familie-ba-sak-frontend-redis
+        - application: familie-endringslogg
   envFrom:
     - secret: ba-sak-frontend
   env:

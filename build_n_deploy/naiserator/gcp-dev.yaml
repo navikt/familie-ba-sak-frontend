@@ -47,8 +47,7 @@ spec:
       rules:
         - application: familie-ba-sak
         - application: familie-ba-sak-frontend-redis
-      external:
-        - host: familie-endringslogg.intern.dev.nav.no
+        - application: familie-endringslogg
   envFrom:
     - secret: ba-sak-frontend
   env:
