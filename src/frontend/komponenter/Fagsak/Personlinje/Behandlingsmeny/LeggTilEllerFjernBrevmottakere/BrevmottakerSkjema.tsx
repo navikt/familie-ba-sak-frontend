@@ -44,12 +44,10 @@ interface IProps {
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk } = useLeggTilFjernBrevmottaker();
+    const { skjema, lagreMottaker, valideringErOk, navnErPreutfylt } =
+        useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const navnErPreutfylt =
-        skjema.felter.mottaker.verdi === Mottaker.DØDSBO ||
-        skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
     return (
         <>
             <StyledFieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>

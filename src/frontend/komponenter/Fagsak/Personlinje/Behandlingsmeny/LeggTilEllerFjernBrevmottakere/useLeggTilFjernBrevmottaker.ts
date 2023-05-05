@@ -242,6 +242,7 @@ const useLeggTilFjernBrevmottaker = () => {
         lagreMottaker,
         valideringErOk,
         fjernMottaker,
+        navnErPreutfylt,
     };
 };
 
