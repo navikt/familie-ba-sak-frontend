@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 
-import type { IRestRefusjonEøs } from '../../../typer/refusjon-eøs';
 import type { FamilieIsoDate } from '../../../utils/kalender';
 import {
     erIsoStringGyldig,
@@ -25,14 +24,19 @@ export const tilSisteDagIMånedenHvisGyldigInput = (dato: string | undefined): s
     return gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden);
 };
 
-export const summerRefusjonsbeløpForPerioder = (periodeListe: IRestRefusjonEøs[]): number => {
+interface PeriodeMedBeløp {
+    fom: FamilieIsoDate;
+    tom: FamilieIsoDate;
+    beløp: number;
+}
+export const summerBeløpForPerioder = (periodeListe: PeriodeMedBeløp[]): number => {
     return periodeListe.reduce(
-        (sum, periode) => sum + periode.refusjonsbeløp * antallMånederIPeriode(periode),
+        (sum, periode) => sum + periode.beløp * antallMånederIPeriode(periode),
         0
     );
 };
 
-export const antallMånederIPeriode = (periode: IRestRefusjonEøs): number => {
+export const antallMånederIPeriode = (periode: PeriodeMedBeløp): number => {
     const fomMåned = dayjs(periode.fom);
     const førsteDagMånedenEtterTomdato = dayjs(periode.tom).add(1, 'day');
     return førsteDagMånedenEtterTomdato.diff(fomMåned, 'months');

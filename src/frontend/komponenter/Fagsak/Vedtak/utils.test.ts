@@ -1,35 +1,26 @@
 import {
     antallMånederIPeriode,
-    summerRefusjonsbeløpForPerioder,
+    summerBeløpForPerioder,
     tilFørsteDagIMånedenHvisGyldigInput,
     tilSisteDagIMånedenHvisGyldigInput,
 } from './utils';
 
 const REFUSJONSPERIODE_FIRE_MÅNEDER = {
-    id: 1000001,
     fom: '2022-06-01',
     tom: '2022-09-30',
-    refusjonsbeløp: 25,
-    land: 'SE',
-    refusjonAvklart: true,
+    beløp: 25,
 };
 
 const REFUSJONSPERIODE_TRE_MÅNEDER = {
-    id: 1000002,
     fom: '2023-01-01',
     tom: '2023-03-31',
-    refusjonsbeløp: 250,
-    land: 'DK',
-    refusjonAvklart: true,
+    beløp: 250,
 };
 
 const REFUSJONSPERIODE_EN_MÅNED = {
-    id: 1000003,
     fom: '2023-05-01',
     tom: '2023-05-31',
-    refusjonsbeløp: 100,
-    land: 'SE',
-    refusjonAvklart: true,
+    beløp: 100,
 };
 
 describe('Vedtakutils', () => {
@@ -49,9 +40,9 @@ describe('Vedtakutils', () => {
     });
 
     test('summerRefusjonsbeløpForPerioder skal finne totalt refusjonsbeløp for alle perioder', () => {
-        expect(summerRefusjonsbeløpForPerioder([])).toBe(0);
+        expect(summerBeløpForPerioder([])).toBe(0);
         expect(
-            summerRefusjonsbeløpForPerioder([
+            summerBeløpForPerioder([
                 REFUSJONSPERIODE_FIRE_MÅNEDER,
                 REFUSJONSPERIODE_TRE_MÅNEDER,
                 REFUSJONSPERIODE_EN_MÅNED,
