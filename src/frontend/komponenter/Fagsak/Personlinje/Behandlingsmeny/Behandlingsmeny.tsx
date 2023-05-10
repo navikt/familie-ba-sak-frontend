@@ -111,6 +111,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     )}
                     {!brukerEllerBarnHarStrengtFortroligAdresse &&
                         erPåBehandling &&
+                        minimalFagsak.fagsakType !== FagsakType.INSTITUSJON &&
                         (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                         (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                             åpenBehandling.type === Behandlingstype.REVURDERING) && (
