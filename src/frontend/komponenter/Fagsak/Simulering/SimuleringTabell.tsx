@@ -113,6 +113,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const [indexFramvistÅr, settIndexFramvistÅr] = useState(årISimuleringen.length - 1);
 
+    const finnesManuellePosteringer = perioder.some(
+        periode => periode.manuellPostering && periode.manuellPostering !== 0
+    );
+
     const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
         periode =>
             periode.manuellPostering &&
@@ -173,14 +177,16 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 </Label>
             </SimuleringTabellOverskrift>
 
-            <StyledSwitch
-                checked={visManuellePosteringer}
-                onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
-                position="right"
-                size="small"
-            >
-                Vis manuelle posteringer
-            </StyledSwitch>
+            {erManuelPosteringTogglePå && finnesManuellePosteringer && (
+                <StyledSwitch
+                    checked={visManuellePosteringer}
+                    onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
+                    position="right"
+                    size="small"
+                >
+                    Vis manuelle posteringer
+                </StyledSwitch>
+            )}
             <StyledTable
                 aria-label={`Simuleringsresultat for ${
                     erMerEnn12MånederISimulering
