@@ -117,7 +117,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     };
 
     const harTotaltAvvikUnderBeløpsgrense = (perioderesultater: number[]) => {
-        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val));
+        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val, 0));
         return totaltAvvik <= maksgrenseForAvvikIBeløpVedMigrering;
     };
 
