@@ -30,6 +30,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const { request } = useHttp();
     const { fagsakId } = useSakOgBehandlingParams();
     const vedtak = åpenBehandling.vedtak;
+    const personerMedAndelerTilkjentYtelse = åpenBehandling.personerMedAndelerTilkjentYtelse;
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
@@ -108,6 +109,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const harManuellePosteringer = simResultat?.perioder.some(
         periode => periode.manuellPostering && periode.manuellPostering > 0
     );
+
+    const behandlingErMigreringFraInfotrygdMedKun0Utbetalinger =
+        erMigreringFraInfotrygd &&
+        !personerMedAndelerTilkjentYtelse.some(
+            personMedAndelerTilkjentYtelse => personMedAndelerTilkjentYtelse.beløp !== 0
+        );
 
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
         const antallBarn = åpenBehandling.personer.filter(
@@ -259,6 +266,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
+        behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
     };
 });
 

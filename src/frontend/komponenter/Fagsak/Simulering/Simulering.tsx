@@ -45,6 +45,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
+        behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
 
@@ -89,11 +90,19 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
+            {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
+                <StyledAlert variant={'warning'}>
+                    Migrering av denne saken gir ingen utbetaling for periodene etter
+                    migreringsdato. Når behandlingsresultatet blir 0 kr i alle perioder, får vi ikke
+                    simulert mot økonomi for å se eventuelle avvik. Det er derfor viktig at du selv
+                    sjekker at det ikke har vært noen utbetalinger fra Infotrygd i disse periodene.
+                </StyledAlert>
+            )}
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
-                    <Alert variant="info">
+                    <StyledAlert variant="info">
                         Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                    </Alert>
+                    </StyledAlert>
                 ) : (
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
