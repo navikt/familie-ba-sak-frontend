@@ -146,10 +146,18 @@ const useLeggTilFjernBrevmottaker = () => {
     });
     const land = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== ''
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const norgeErUlovligValgt =
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === 'NO';
+            if (norgeErUlovligValgt) {
+                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
+            }
+            return felt.verdi !== ''
                 ? ok(felt)
-                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.'),
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        },
+        avhengigheter: { mottaker },
     });
 
     useEffect(() => {
