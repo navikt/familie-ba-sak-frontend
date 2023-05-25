@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import { Alert, Heading, HelpText } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
@@ -35,6 +37,7 @@ interface IVedtakBegrunnelserTabell {
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
 }) => {
+    const { toggles } = useApp();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
@@ -50,10 +53,18 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
         return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</Alert>;
     }
 
-    const avslagOgResterende = partition(
-        vedtaksperiode => vedtaksperiode.type === Vedtaksperiodetype.AVSLAG,
-        vedtaksperioderSomSkalvises
-    );
+    const avslagOgResterende = toggles[ToggleNavn.organiserAvslag]
+        ? partition(
+              vedtaksperiode =>
+                  vedtaksperiode.type === Vedtaksperiodetype.AVSLAG &&
+                  !vedtaksperiode.fom &&
+                  !vedtaksperiode.tom,
+              vedtaksperioderSomSkalvises
+          )
+        : partition(
+              vedtaksperiode => vedtaksperiode.type === Vedtaksperiodetype.AVSLAG,
+              vedtaksperioderSomSkalvises
+          );
 
     return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
@@ -61,15 +72,23 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={
-                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
+                    toggles[ToggleNavn.organiserAvslag]
+                        ? 'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon, opphør og avslag med start- eller sluttdato.'
+                        : 'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
                 }
                 åpenBehandling={åpenBehandling}
             />
             <VedtaksperiodeListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
-                overskrift={'Begrunnelser for avslag i vedtaksbrev'}
+                overskrift={
+                    toggles[ToggleNavn.organiserAvslag]
+                        ? 'Generelle avslagsbegrunnelser'
+                        : 'Begrunnelser for avslag i vedtaksbrev'
+                }
                 hjelpetekst={
-                    'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
+                    toggles[ToggleNavn.organiserAvslag]
+                        ? 'Her har vi hentet begrunnelsestekster for avslag som ikke har en start- eller sluttdato.'
+                        : 'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
                 }
                 åpenBehandling={åpenBehandling}
             />

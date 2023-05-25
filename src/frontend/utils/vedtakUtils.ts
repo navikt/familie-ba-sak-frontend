@@ -1,13 +1,13 @@
 import {
-    AGreen100,
-    ARed50,
-    AOrange100,
-    AGray100,
     ABlue100,
-    AGreen500,
-    ARed600,
-    AOrange600,
+    AGray100,
     AGray600,
+    AGreen100,
+    AGreen500,
+    AOrange100,
+    AOrange600,
+    ARed50,
+    ARed600,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -35,12 +35,23 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 ): IVedtaksperiodeMedBegrunnelser[] => {
     const sorterteOgFiltrertePerioder = vedtaksperioder
         .slice()
-        .sort((a, b) =>
-            kalenderDiff(
+        .sort((a, b) => {
+            const diff = kalenderDiff(
                 kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)),
                 kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN))
-            )
-        )
+            );
+            if (diff === 0) {
+                if (a.type === Vedtaksperiodetype.AVSLAG) {
+                    return 1;
+                } else if (b.type === Vedtaksperiodetype.AVSLAG) {
+                    return -1;
+                } else {
+                    return diff;
+                }
+            } else {
+                return diff;
+            }
+        })
         .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
             if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
                 return harPeriodeBegrunnelse(vedtaksperiode);
