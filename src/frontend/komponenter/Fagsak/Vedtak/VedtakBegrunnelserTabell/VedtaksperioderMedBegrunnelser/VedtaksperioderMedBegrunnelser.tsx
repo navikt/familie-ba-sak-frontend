@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading, HelpText } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -19,15 +19,6 @@ import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserP
 const StyledHeading = styled(Heading)`
     display: flex;
     margin-top: 1rem;
-`;
-
-const StyledHelpText = styled(HelpText)`
-    margin-top: 0.1rem;
-    margin-left: 0.6rem;
-
-    & + .navds-popover {
-        max-width: 20rem;
-    }
 `;
 
 interface IVedtakBegrunnelserTabell {
@@ -71,11 +62,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
             <VedtaksperiodeListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
                 overskrift={'Begrunnelser i vedtaksbrev'}
-                hjelpetekst={
-                    toggles[ToggleNavn.organiserAvslag]
-                        ? 'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon, opphør og avslag med start- eller sluttdato.'
-                        : 'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
-                }
                 åpenBehandling={åpenBehandling}
             />
             <VedtaksperiodeListe
@@ -84,11 +70,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                     toggles[ToggleNavn.organiserAvslag]
                         ? 'Generelle avslagsbegrunnelser'
                         : 'Begrunnelser for avslag i vedtaksbrev'
-                }
-                hjelpetekst={
-                    toggles[ToggleNavn.organiserAvslag]
-                        ? 'Her har vi hentet begrunnelsestekster for avslag som ikke har en start- eller sluttdato.'
-                        : 'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
                 }
                 åpenBehandling={åpenBehandling}
             />
@@ -101,9 +82,8 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 const VedtaksperiodeListe: React.FC<{
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
-    hjelpetekst: string;
     åpenBehandling: IBehandling;
-}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
+}> = ({ vedtaksperioderMedBegrunnelser, overskrift, åpenBehandling }) => {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
         return <></>;
     }
@@ -112,7 +92,6 @@ const VedtaksperiodeListe: React.FC<{
         <>
             <StyledHeading level="2" size="small" spacing>
                 {overskrift}
-                <StyledHelpText placement="right">{hjelpetekst}</StyledHelpText>
             </StyledHeading>
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (

@@ -35,13 +35,6 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 ): IVedtaksperiodeMedBegrunnelser[] => {
     const sorterteOgFiltrertePerioder = vedtaksperioder
         .slice()
-        .sort((a, b) => {
-            const diff = kalenderDiff(
-                kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)),
-                kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN))
-            );
-            return sorterAvslagNederst(diff, a, b);
-        })
         .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
             if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
                 return harPeriodeBegrunnelse(vedtaksperiode);
@@ -57,24 +50,6 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
         return hentSisteOpphørsperiode(sorterteOgFiltrertePerioder);
     } else {
         return sorterteOgFiltrertePerioder;
-    }
-
-    function sorterAvslagNederst(
-        diff: number | number,
-        a: IVedtaksperiodeMedBegrunnelser,
-        b: IVedtaksperiodeMedBegrunnelser
-    ) {
-        if (diff === 0) {
-            if (a.type === Vedtaksperiodetype.AVSLAG) {
-                return 1;
-            } else if (b.type === Vedtaksperiodetype.AVSLAG) {
-                return -1;
-            } else {
-                return diff;
-            }
-        } else {
-            return diff;
-        }
     }
 };
 
