@@ -20,15 +20,17 @@ import {
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
+import type { IBehandling } from '../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
+import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import HelpText from '../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -99,6 +101,10 @@ const TextareaMedEkstraLuft = styled(FamilieTextarea)`
     margin-bottom: 2rem;
 `;
 
+const StyledBrevmottakereAlert = styled(BrevmottakereAlert)`
+    margin: 1rem 0 3rem 2rem;
+`;
+
 interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
     fritekst: string;
 }
@@ -106,15 +112,19 @@ interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
 const TilbakekrevingSkjema: React.FC<{
     søkerMålform: Målform;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
-}> = ({ søkerMålform, harÅpenTilbakekrevingRessurs }) => {
-    const { vurderErLesevisning, åpenBehandling } = useBehandling();
+    åpenBehandling: IBehandling;
+}> = ({ søkerMålform, harÅpenTilbakekrevingRessurs, åpenBehandling }) => {
+    const { vurderErLesevisning } = useBehandling();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
-    const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
-    const { bruker: brukerRessurs } = useFagsakContext();
-    const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
+    const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
+    const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
+    const bruker = hentDataFraRessurs(brukerRessurs);
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const personer = åpenBehandling.personer ?? [];
+    const brevmottakere = åpenBehandling.brevmottakere ?? [];
     const erLesevisning = vurderErLesevisning();
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
@@ -288,6 +298,16 @@ const TilbakekrevingSkjema: React.FC<{
                                 >
                                     {'Opprett tilbakekreving, send varsel'}
                                 </Radio>
+                                {tilbakekrevingsvalg.verdi ===
+                                    Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
+                                    <StyledBrevmottakereAlert
+                                        brevmottakere={brevmottakere}
+                                        institusjon={minimalFagsak?.institusjon}
+                                        personer={personer}
+                                        åpenBehandling={åpenBehandling}
+                                        fagsakType={minimalFagsak?.fagsakType}
+                                    />
+                                )}
                                 {fritekstVarsel.erSynlig && (
                                     <FritekstVarsel>
                                         <FamilieTextarea
@@ -360,12 +380,10 @@ const TilbakekrevingSkjema: React.FC<{
                                                 variant={'tertiary'}
                                                 id={'forhandsvis-varsel'}
                                                 onClick={() =>
-                                                    åpenBehandling.status ===
-                                                        RessursStatus.SUKSESS &&
                                                     hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
                                                         {
                                                             method: 'POST',
-                                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
+                                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.behandlingId}/forhandsvis-varselbrev`,
                                                             data: {
                                                                 fritekst: fritekstVarsel.verdi,
                                                             },
