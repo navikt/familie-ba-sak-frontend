@@ -21,23 +21,6 @@ describe('VedtakBegrunnelserContext', () => {
         const tom = '2020-02-28';
         const opphørFom = '2020-03-01';
 
-        test(`Test at returnerte perioder er sortert på fom-dato.`, () => {
-            const vedtaksperioder: IVedtaksperiodeMedBegrunnelser[] = [
-                mockOpphørsperiode({ fom: opphørFom }),
-                mockUtbetalingsperiode({ fom: fom, tom: tom }),
-                mockAvslagsperiode({ fom: fom, tom: tom }),
-            ];
-            const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
-                vedtaksperioder,
-                BehandlingResultat.AVSLÅTT_ENDRET_OG_OPPHØRT,
-                BehandlingStatus.UTREDES
-            );
-            expect(perioder.length).toBe(3);
-            expect(perioder[0].type).toBe(Vedtaksperiodetype.UTBETALING);
-            expect(perioder[1].type).toBe(Vedtaksperiodetype.AVSLAG);
-            expect(perioder[2].type).toBe(Vedtaksperiodetype.OPPHØR);
-        });
-
         describe('Test lesevisning', () => {
             test(`Test at ubegrunnede perioder ikke returneres ved avsluttet behandling`, () => {
                 const vedtaksperioder: IVedtaksperiodeMedBegrunnelser[] = [

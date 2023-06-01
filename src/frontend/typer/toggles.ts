@@ -16,6 +16,7 @@ export enum ToggleNavn {
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
     manuellPostering = 'familie-ba-sak.manuell-postering',
     støtterRefusjonEøs = 'familie-ba-sak.behandling.refusjon-eos',
+    organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
 }
 
 export const alleTogglerAv = (): IToggles => {
