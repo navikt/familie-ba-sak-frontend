@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { Search } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 
@@ -8,10 +10,12 @@ import type { IBehandling } from '../../typer/behandling';
 import type { FagsakType } from '../../typer/fagsak';
 import type { IInstitusjon } from '../../typer/institusjon-og-verge';
 import type { IGrunnlagPerson } from '../../typer/person';
+import { hentSideHref } from '../../utils/miljø';
 import { LeggTilBrevmottakerModal } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModal';
 import type { IRestBrevmottaker } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 import { BehandlingKorrigertAlert } from '../Fagsak/Vedtak/OppsummeringVedtak';
 import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
+import { sider } from './Venstremeny/sider';
 
 interface Props {
     brevmottakere: IRestBrevmottaker[];
@@ -30,13 +34,16 @@ export const BrevmottakereAlert: React.FC<Props> = ({
     fagsakType,
     className,
 }) => {
+    const location = useLocation();
     const [visManuelleMottakereModal, settVisManuelleMottakereModal] = useState(false);
+    const vedtakEllerVarselTekst =
+        hentSideHref(location.pathname) === sider.SIMULERING.href ? 'varsel' : 'vedtak';
 
     return (
         <>
             {brevmottakere && brevmottakere.length !== 0 && (
                 <BehandlingKorrigertAlert variant="info" className={className}>
-                    Brevmottaker(e) er endret, og vedtak sendes til:
+                    {`Brevmottaker(e) er endret, og ${vedtakEllerVarselTekst} sendes til:`}
                     <BrevmottakerListe
                         brevmottakere={brevmottakere}
                         institusjon={institusjon}
