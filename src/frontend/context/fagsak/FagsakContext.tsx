@@ -14,8 +14,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
-import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
+import type { IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
 import type { IPersonInfo } from '../../typer/person';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
@@ -27,7 +26,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     );
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
-    const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
         byggTomRessurs()
     );
@@ -84,13 +82,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
             const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
             settBruker(brukerEtterTilgangssjekk);
-            if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
-                hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
-                    if (fagsaker.status === RessursStatus.SUKSESS) {
-                        settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
-                    }
-                });
-            }
         });
     };
 
@@ -106,18 +97,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             .catch(() => {
                 settInternstatistikk(byggFeiletRessurs('Feil ved lasting av internstatistikk'));
             });
-    };
-
-    const hentFagsakerForPerson = async (personId: string) => {
-        return request<{ personIdent: string }, IMinimalFagsak[]>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
-            return fagsaker;
-        });
     };
 
     const oppdaterKlagebehandlingerPåFagsak = () => {
@@ -149,14 +128,12 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     return {
         bruker,
-        fagsakerPåBruker,
         hentInternstatistikk,
         hentMinimalFagsak,
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
         hentBruker,
-        hentFagsakerForPerson,
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
         oppdaterGjeldendeFagsak,

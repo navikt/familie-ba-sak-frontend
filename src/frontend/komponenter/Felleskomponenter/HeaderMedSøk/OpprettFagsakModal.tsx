@@ -14,11 +14,13 @@ import {
 import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
-import type { IBaseFagsak } from '../../../typer/fagsak';
-import { FagsakType } from '../../../typer/fagsak';
+import { useHentFagsakerForPerson } from '../../../context/fagsak/useHentFagsakerForPerson';
+import type { IBaseFagsak, IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakType, mapMinimalFagsakTilBaseFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { ToggleNavn } from '../../../typer/toggles';
@@ -31,7 +33,6 @@ export interface IOpprettFagsakModal {
     lukkModal: () => void;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
-    fagsakerPåBruker?: IBaseFagsak[];
 }
 
 const StyledDiv = styled.div`
@@ -99,14 +100,16 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
     personInfo,
-    fagsakerPåBruker,
 }) => {
     const [bruker, settBruker] = useState(personInfo);
+    const [fagsakerPåBruker, settFagsakerPåBruker] = useState<IBaseFagsak[]>();
+    const [harHentetFagsaker, settHarHentetFagsaker] = useState<boolean>(false);
     const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
         useOpprettFagsak();
     const { hentPerson, sjekkTilgang } = useApp();
     const { toggles } = useApp();
-    const visModal = !!søkeresultat || !!personInfo;
+    const { hentFagsakerForPerson } = useHentFagsakerForPerson();
+    const visModal = (!!personInfo && harHentetFagsaker) || !!søkeresultat;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
         fagsak => fagsak.fagsakType === FagsakType.NORMAL
@@ -146,6 +149,20 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
             });
         }
     }, [søkeresultat]);
+
+    useEffect(() => {
+        // Henter kun fagsaker fra saksoversikten
+        if (personInfo && personInfo.harTilgang) {
+            hentFagsakerForPerson(personInfo.personIdent).then(
+                (fagsaker: Ressurs<IMinimalFagsak[]>) => {
+                    if (fagsaker.status === RessursStatus.SUKSESS) {
+                        settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
+                    }
+                    settHarHentetFagsaker(true);
+                }
+            );
+        }
+    }, [personInfo]);
 
     useEffect(() => {
         if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {

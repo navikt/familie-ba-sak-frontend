@@ -38,7 +38,7 @@ import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
+import { useHentFagsakerForPerson } from './fagsak/useHentFagsakerForPerson';
 import type { IOppgaveRad } from './OppgaverContextUtils';
 import { kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 
@@ -199,7 +199,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
     };
 
-    const { hentFagsakerForPerson } = useFagsakContext();
+    const { hentFagsakerForPerson } = useHentFagsakerForPerson();
 
     const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
         const fagsaker = await hentFagsakerForPerson(personident);

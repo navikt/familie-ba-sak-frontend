@@ -53,7 +53,7 @@ export interface IGrunnlagPerson {
 export interface IPersonInfo {
     kommunenummer: string;
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
-    harTilgang?: boolean;
+    harTilgang: boolean;
     forelderBarnRelasjon: IForelderBarnRelasjon[];
     forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert[];
     fødselsdato: string;
