@@ -3,7 +3,8 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
-import type { Avhengigheter } from '@navikt/familie-skjema';
+import { useHttp } from '@navikt/familie-http';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -36,10 +37,42 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { bruker, minimalFagsak } = useFagsakContext();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
+        const { request } = useHttp();
+        const [antallBrevmottakere, settAntallBrevmottakere] = React.useState<number>(0);
+        const [fortroligeBarnIdenter, settFortroligeBarnIdenter] = React.useState<string[]>([]);
+        const [fortroligeBarnFeilmelding, settFortroligeBarnFeilmelding] =
+            React.useState<string>('');
+
         const barnMedLøpendeUtbetaling =
             minimalFagsak.status === RessursStatus.SUKSESS
                 ? hentBarnMedLøpendeUtbetaling(minimalFagsak.data)
                 : new Set();
+
+        const validerBarnaMedOpplysninger = (
+            felt: FeltState<IBarnMedOpplysninger[]>,
+            avhengigheter?: Avhengigheter
+        ) => {
+            if (
+                felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
+                (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
+            ) {
+                if (avhengigheter?.fortroligeBarnFeilmelding) {
+                    return feil(felt, 'Feil: ' + avhengigheter?.fortroligeBarnFeilmelding);
+                } else if (
+                    avhengigheter?.antallBrevmottakere &&
+                    avhengigheter?.fortroligeBarnIdenter.length
+                ) {
+                    return feil(
+                        felt,
+                        'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
+                    );
+                } else {
+                    return ok(felt);
+                }
+            } else {
+                return feil(felt, 'Ingen av barna er valgt.');
+            }
+        };
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -59,13 +92,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
-                    valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
-                        return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
-                            (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
-                            ? ok(felt)
-                            : feil(felt, 'Ingen av barna er valgt.');
+                    valideringsfunksjon: validerBarnaMedOpplysninger,
+                    avhengigheter: {
+                        barnMedLøpendeUtbetaling,
+                        antallBrevmottakere,
+                        fortroligeBarnIdenter,
+                        fortroligeBarnFeilmelding,
                     },
-                    avhengigheter: { barnMedLøpendeUtbetaling },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
                     verdi: '',
@@ -120,6 +153,14 @@ const [SøknadProvider, useSøknad] = createUseContext(
         };
 
         React.useEffect(() => {
+            const merkedeBarn = skjema.felter.barnaMedOpplysninger.verdi.filter(
+                barn => barn.merket
+            );
+            const merkedeBarnIdentArray = merkedeBarn.map(p => p.ident);
+            hentPersonerMedAdresseBeskyttelse(merkedeBarnIdentArray);
+        }, [skjema.felter.barnaMedOpplysninger.verdi]);
+
+        React.useEffect(() => {
             tilbakestillSøknad();
         }, [bruker.status]);
 
@@ -148,6 +189,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
             }
+            settAntallBrevmottakere(åpenBehandling.brevmottakere.length);
         }, [åpenBehandling]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
@@ -198,6 +240,44 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         }
                     );
                 }
+            }
+        };
+
+        const hentPersonerMedAdresseBeskyttelse = async (merkedeBarnIdentArray: string[]) => {
+            if (merkedeBarnIdentArray.length && antallBrevmottakere) {
+                settFortroligeBarnFeilmelding('');
+                await request<string[], string[]>({
+                    method: 'POST',
+                    url: '/familie-ba-sak/api/person/personidenterMedStrengtFortroligGradering',
+                    data: merkedeBarnIdentArray,
+                })
+                    .then((response: Ressurs<string[]>) => {
+                        if (response.status === RessursStatus.SUKSESS) {
+                            settFortroligeBarnIdenter(response.data);
+                        } else if (
+                            response.status === RessursStatus.FEILET ||
+                            response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                            response.status === RessursStatus.IKKE_TILGANG
+                        ) {
+                            settFortroligeBarnFeilmelding(
+                                'Feil ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                                    response.frontendFeilmelding
+                            );
+                        } else {
+                            settFortroligeBarnFeilmelding(
+                                'Ugyldig status returnert ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                                    response.status
+                            );
+                        }
+                    })
+                    .catch(err => {
+                        settFortroligeBarnFeilmelding(
+                            'En feil oppstod ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                                err.message
+                        );
+                    });
+            } else {
+                settFortroligeBarnIdenter([]);
             }
         };
 
