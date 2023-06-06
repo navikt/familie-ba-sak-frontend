@@ -23,10 +23,10 @@ import {
     hentStegNummer,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import { BrevmottakereAlert } from './BrevmottakereAlert';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';

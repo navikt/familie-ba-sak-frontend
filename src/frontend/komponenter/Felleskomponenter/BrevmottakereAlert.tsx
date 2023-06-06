@@ -1,17 +1,21 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { Search } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 
-import type { IBehandling } from '../../../typer/behandling';
-import type { FagsakType } from '../../../typer/fagsak';
-import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
-import type { IGrunnlagPerson } from '../../../typer/person';
-import BrevmottakerListe from '../../Felleskomponenter/Hendelsesoversikt/BrevModul/BrevmottakerListe';
-import { LeggTilBrevmottakerModal } from '../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModal';
-import type { IRestBrevmottaker } from '../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
-import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
+import type { IBehandling } from '../../typer/behandling';
+import type { FagsakType } from '../../typer/fagsak';
+import type { IInstitusjon } from '../../typer/institusjon-og-verge';
+import type { IGrunnlagPerson } from '../../typer/person';
+import { hentSideHref } from '../../utils/miljø';
+import { LeggTilBrevmottakerModal } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModal';
+import type { IRestBrevmottaker } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import { BehandlingKorrigertAlert } from '../Fagsak/Vedtak/OppsummeringVedtak';
+import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
+import { sider } from './Venstremeny/sider';
 
 interface Props {
     brevmottakere: IRestBrevmottaker[];
@@ -19,6 +23,7 @@ interface Props {
     personer: IGrunnlagPerson[];
     åpenBehandling: IBehandling;
     fagsakType?: FagsakType;
+    className?: string;
 }
 
 export const BrevmottakereAlert: React.FC<Props> = ({
@@ -27,14 +32,18 @@ export const BrevmottakereAlert: React.FC<Props> = ({
     personer,
     åpenBehandling,
     fagsakType,
+    className,
 }) => {
+    const location = useLocation();
     const [visManuelleMottakereModal, settVisManuelleMottakereModal] = useState(false);
+    const vedtakEllerVarselTekst =
+        hentSideHref(location.pathname) === sider.SIMULERING.href ? 'varsel' : 'vedtak';
 
     return (
         <>
             {brevmottakere && brevmottakere.length !== 0 && (
-                <BehandlingKorrigertAlert variant="info">
-                    Brevmottaker(e) er endret, og vedtak sendes til:
+                <BehandlingKorrigertAlert variant="info" className={className}>
+                    {`Brevmottaker(e) er endret, og ${vedtakEllerVarselTekst} sendes til:`}
                     <BrevmottakerListe
                         brevmottakere={brevmottakere}
                         institusjon={institusjon}
