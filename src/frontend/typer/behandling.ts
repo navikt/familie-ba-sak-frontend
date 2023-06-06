@@ -175,8 +175,9 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
 };
 
 export enum BehandlingStatus {
-    OPPRETTET = 'OPPRETTET',
     UTREDES = 'UTREDES',
+    SATT_PÅ_VENT = 'SATT_PÅ_VENT',
+    SATT_PÅ_MASKINELL_VENT = 'SATT_PÅ_MASKINELL_VENT',
     FATTER_VEDTAK = 'FATTER_VEDTAK',
     IVERKSETTER_VEDTAK = 'IVERKSETTER_VEDTAK',
     AVSLUTTET = 'AVSLUTTET',
@@ -391,13 +392,15 @@ export const behandlingsstatuser: Record<
     BehandlingStatus | Behandlingsstatus | KlageStatus,
     string
 > = {
-    OPPRETTET: 'Opprettet',
     UTREDES: 'Utredes',
+    SATT_PÅ_VENT: 'Satt på vent',
+    SATT_PÅ_MASKINELL_VENT: 'Satt på maskinell vent',
     FATTER_VEDTAK: 'Fatter vedtak',
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
 
     /** For klagebehandlinger: **/
+    OPPRETTET: 'Opprettet',
     VENTER: 'Venter',
     FERDIGSTILT: 'Ferdigstilt',
 };
