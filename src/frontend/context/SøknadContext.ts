@@ -38,9 +38,10 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
         const { request } = useHttp();
+        const mountedRef = React.useRef(true);
         const [antallBrevmottakere, settAntallBrevmottakere] = React.useState<number>(0);
-        const [fortroligeBarnIdenter, settFortroligeBarnIdenter] = React.useState<string[]>([]);
-        const [fortroligeBarnFeilmelding, settFortroligeBarnFeilmelding] =
+        const [fortroligePersonIdenter, settFortroligePersonIdenter] = React.useState<string[]>([]);
+        const [fortroligePersonIdenterFeilmelding, settFortroligePersonIdenterFeilmelding] =
             React.useState<string>('');
 
         const barnMedLøpendeUtbetaling =
@@ -56,15 +57,17 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
                 (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
             ) {
-                if (avhengigheter?.fortroligeBarnFeilmelding) {
-                    return feil(felt, 'Feil: ' + avhengigheter?.fortroligeBarnFeilmelding);
+                if (avhengigheter?.fortroligePersonIdenterFeilmelding) {
+                    return feil(felt, 'Feil: ' + avhengigheter?.fortroligePersonIdenterFeilmelding);
                 } else if (
                     avhengigheter?.antallBrevmottakere &&
-                    avhengigheter?.fortroligeBarnIdenter.length
+                    avhengigheter?.fortroligePersonIdenter.length
                 ) {
                     return feil(
                         felt,
-                        'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
+                        'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge personer med ' +
+                            'diskresjonskode. Følgende personer har diskresjonskode: ' +
+                            avhengigheter?.fortroligePersonIdenter
                     );
                 } else {
                     return ok(felt);
@@ -96,8 +99,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     avhengigheter: {
                         barnMedLøpendeUtbetaling,
                         antallBrevmottakere,
-                        fortroligeBarnIdenter,
-                        fortroligeBarnFeilmelding,
+                        fortroligePersonIdenter,
+                        fortroligePersonIdenterFeilmelding,
                     },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
@@ -153,11 +156,19 @@ const [SøknadProvider, useSøknad] = createUseContext(
         };
 
         React.useEffect(() => {
+            return () => {
+                mountedRef.current = false;
+            };
+        }, []);
+
+        React.useEffect(() => {
             const merkedeBarn = skjema.felter.barnaMedOpplysninger.verdi.filter(
                 barn => barn.merket
             );
-            const merkedeBarnIdentArray = merkedeBarn.map(p => p.ident);
-            hentPersonerMedAdresseBeskyttelse(merkedeBarnIdentArray);
+            const personIdentArray = merkedeBarn.map(p => p.ident);
+            const brukerData = bruker.status === RessursStatus.SUKSESS ? bruker.data : undefined;
+            personIdentArray.push(brukerData?.personIdent ?? '');
+            hentPersonerMedAdresseBeskyttelse(personIdentArray);
         }, [skjema.felter.barnaMedOpplysninger.verdi]);
 
         React.useEffect(() => {
@@ -243,41 +254,43 @@ const [SøknadProvider, useSøknad] = createUseContext(
             }
         };
 
-        const hentPersonerMedAdresseBeskyttelse = async (merkedeBarnIdentArray: string[]) => {
-            if (merkedeBarnIdentArray.length && antallBrevmottakere) {
-                settFortroligeBarnFeilmelding('');
+        const hentPersonerMedAdresseBeskyttelse = async (personIdentArray: string[]) => {
+            if (personIdentArray.length) {
+                settFortroligePersonIdenterFeilmelding('');
                 await request<string[], string[]>({
                     method: 'POST',
                     url: '/familie-ba-sak/api/person/personidenterMedStrengtFortroligGradering',
-                    data: merkedeBarnIdentArray,
+                    data: personIdentArray,
                 })
                     .then((response: Ressurs<string[]>) => {
+                        if (!mountedRef.current) return null;
                         if (response.status === RessursStatus.SUKSESS) {
-                            settFortroligeBarnIdenter(response.data);
+                            settFortroligePersonIdenter(response.data);
                         } else if (
                             response.status === RessursStatus.FEILET ||
                             response.status === RessursStatus.FUNKSJONELL_FEIL ||
                             response.status === RessursStatus.IKKE_TILGANG
                         ) {
-                            settFortroligeBarnFeilmelding(
-                                'Feil ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                            settFortroligePersonIdenterFeilmelding(
+                                'Feil ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
                                     response.frontendFeilmelding
                             );
                         } else {
-                            settFortroligeBarnFeilmelding(
-                                'Ugyldig status returnert ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                            settFortroligePersonIdenterFeilmelding(
+                                'Ugyldig status returnert ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
                                     response.status
                             );
                         }
                     })
                     .catch(err => {
-                        settFortroligeBarnFeilmelding(
-                            'En feil oppstod ved validering for barn med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                        if (!mountedRef.current) return null;
+                        settFortroligePersonIdenterFeilmelding(
+                            'En feil oppstod ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
                                 err.message
                         );
                     });
             } else {
-                settFortroligeBarnIdenter([]);
+                settFortroligePersonIdenter([]);
             }
         };
 
