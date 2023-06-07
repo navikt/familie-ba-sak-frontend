@@ -5,12 +5,12 @@ import styled from 'styled-components';
 
 import { Input } from 'nav-frontend-skjema';
 
-import { Alert, Button, Fieldset, Heading } from '@navikt/ds-react';
+import { Button, Fieldset, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
-import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
+import { useInfotrygdSkjema } from './useInfotrygd';
 
 const InfotrygdContainer = styled.div`
     padding: 1rem;
@@ -31,16 +31,8 @@ const HentSakerButton = styled(Button)`
     height: 40px;
 `;
 
-const FlyttSakButton = styled(Button)`
-    margin-left: 1rem;
-    margin-top: 30px;
-    margin-bottom: auto;
-    height: 40px;
-`;
-
 export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
-    const { flyttBrukerTilBaSak, migrerInfotrygdSakRessurs } = useInfotrygdMigrering();
 
     const location = useLocation();
     useEffect(() => {
@@ -52,34 +44,6 @@ export const Infotrygd: React.FC = () => {
     }, []);
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
-
-    const visFlyttSakKnapp = () => {
-        if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            return (
-                <FlyttSakButton
-                    variant={'secondary'}
-                    size={'small'}
-                    disabled={migrerInfotrygdSakRessurs.status === RessursStatus.HENTER}
-                    onClick={() => {
-                        flyttBrukerTilBaSak(ident);
-                    }}
-                >
-                    Flytt til BA-sak
-                </FlyttSakButton>
-            );
-        }
-    };
-
-    const visFlyttSakAlert = () => {
-        if (
-            migrerInfotrygdSakRessurs.status === RessursStatus.FEILET ||
-            migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-        ) {
-            return (
-                <Alert children={migrerInfotrygdSakRessurs.frontendFeilmelding} variant="error" />
-            );
-        }
-    };
 
     return (
         <InfotrygdContainer>
@@ -109,9 +73,7 @@ export const Infotrygd: React.FC = () => {
                 >
                     Hent saker
                 </HentSakerButton>
-                {visFlyttSakKnapp()}
             </HentSakerFlex>
-            {visFlyttSakAlert()}
             {skjema.submitRessurs.status === RessursStatus.SUKSESS ? (
                 <Infotrygdtabeller ident={ident} saker={skjema.submitRessurs.data.saker} />
             ) : undefined}
