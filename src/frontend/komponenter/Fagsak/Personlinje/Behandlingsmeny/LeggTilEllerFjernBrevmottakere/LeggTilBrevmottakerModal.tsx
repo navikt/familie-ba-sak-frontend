@@ -4,11 +4,15 @@ import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
+import BrevmottakerValideringAlert from './BrevmottakerValideringAlert';
 
 const StyledModal = styled(Modal)`
     width: 35rem;
@@ -56,6 +60,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
 
+    const mountedRef = React.useRef(true);
+    const [fortroligePersonIdenter, settFortroligePersonIdenter] = React.useState<string[]>([]);
+    const [fortroligePersonIdenterFeilmelding, settFortroligePersonIdenterFeilmelding] =
+        React.useState<string>('');
+    const deaktiverSkjema =
+        fortroligePersonIdenterFeilmelding !== '' || fortroligePersonIdenter.length > 0;
+
     const erSkjemaSynlig =
         (åpenBehandling.brevmottakere.length === 0 && !erLesevisning) ||
         (åpenBehandling.brevmottakere.length === 1 && visSkjemaNårDetErÉnBrevmottaker);
@@ -63,6 +74,59 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     const lukkModalOgSkjema = () => {
         lukkModal();
         settVisSkjemaNårDetErÉnBrevmottaker(false);
+    };
+
+    const { request } = useHttp();
+
+    React.useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
+
+    React.useEffect(() => {
+        const personIdentArray = åpenBehandling.personer.map(p => p.personIdent);
+        hentPersonerMedAdresseBeskyttelse(personIdentArray);
+    }, [åpenBehandling.personer]);
+
+    const hentPersonerMedAdresseBeskyttelse = async (personIdentArray: string[]) => {
+        if (personIdentArray.length) {
+            settFortroligePersonIdenterFeilmelding('');
+            await request<string[], string[]>({
+                method: 'POST',
+                url: '/familie-ba-sak/api/person/personidenterMedStrengtFortroligGradering',
+                data: personIdentArray,
+            })
+                .then((response: Ressurs<string[]>) => {
+                    if (!mountedRef.current) return null;
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settFortroligePersonIdenter(response.data);
+                    } else if (
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
+                    ) {
+                        settFortroligePersonIdenterFeilmelding(
+                            'Feil ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                                response.frontendFeilmelding
+                        );
+                    } else {
+                        settFortroligePersonIdenterFeilmelding(
+                            'Ugyldig status returnert ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                                response.status
+                        );
+                    }
+                })
+                .catch(err => {
+                    if (!mountedRef.current) return null;
+                    settFortroligePersonIdenterFeilmelding(
+                        'En feil oppstod ved validering for personer med strengt fortrolig adresse med manuelle brevmottakere satt: ' +
+                            err.message
+                    );
+                });
+        } else {
+            settFortroligePersonIdenter([]);
+        }
     };
 
     return (
@@ -89,20 +153,36 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         {åpenBehandling.brevmottakere.length === 1 && (
                             <StyledHeading size="medium">Ny mottaker</StyledHeading>
                         )}
-                        <BrevmottakerSkjema lukkModal={lukkModalOgSkjema} />
+                        <BrevmottakerSkjema
+                            lukkModal={lukkModalOgSkjema}
+                            åpenBehandling={åpenBehandling}
+                            fortroligePersonIdenter={fortroligePersonIdenter}
+                            fortroligePersonIdenterFeilmelding={fortroligePersonIdenterFeilmelding}
+                            deaktiverSkjema={deaktiverSkjema}
+                        />
                     </>
                 ) : (
                     <>
                         {åpenBehandling.brevmottakere.length === 1 && !erLesevisning && (
-                            <LeggTilKnapp
-                                variant="tertiary"
-                                size="small"
-                                icon={<AddCircle />}
-                                onClick={() => settVisSkjemaNårDetErÉnBrevmottaker(true)}
-                            >
-                                Legg til ny mottaker
-                            </LeggTilKnapp>
+                            <>
+                                <LeggTilKnapp
+                                    disabled={deaktiverSkjema}
+                                    variant="tertiary"
+                                    size="small"
+                                    icon={<AddCircle />}
+                                    onClick={() => settVisSkjemaNårDetErÉnBrevmottaker(true)}
+                                >
+                                    Legg til ny mottaker
+                                </LeggTilKnapp>
+                            </>
                         )}
+
+                        <BrevmottakerValideringAlert
+                            åpenBehandling={åpenBehandling}
+                            fortroligePersonIdenter={fortroligePersonIdenter}
+                            fortroligePersonIdenterFeilmelding={fortroligePersonIdenterFeilmelding}
+                        />
+
                         <div>
                             <LukkKnapp onClick={lukkModal}>Lukk vindu</LukkKnapp>
                         </div>
