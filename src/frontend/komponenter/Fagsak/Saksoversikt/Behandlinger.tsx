@@ -13,7 +13,7 @@ import type { Saksoversiktsbehandling } from './utils';
 import {
     hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
-    hentOpprettetTidspunkt,
+    hentTidspunktforSortering,
     skalRadVises,
 } from './utils';
 
@@ -87,8 +87,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             .filter(behandling => skalRadVises(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
                                 kalenderDiff(
-                                    new Date(hentOpprettetTidspunkt(b)),
-                                    new Date(hentOpprettetTidspunkt(a))
+                                    new Date(hentTidspunktforSortering(b)),
+                                    new Date(hentTidspunktforSortering(a))
                                 )
                             )
                             .map((behandling: Saksoversiktsbehandling) => (
