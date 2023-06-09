@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
@@ -35,14 +35,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { bruker, minimalFagsak } = useFagsakContext();
-        const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
+        const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
         const { request } = useHttp();
-        const mountedRef = React.useRef(true);
-        const [antallBrevmottakere, settAntallBrevmottakere] = React.useState<number>(0);
-        const [fortroligePersonIdenter, settFortroligePersonIdenter] = React.useState<string[]>([]);
+        const mountedRef = useRef(true);
+        const [fortroligePersonIdenter, settFortroligePersonIdenter] = useState<string[]>([]);
         const [fortroligePersonIdenterFeilmelding, settFortroligePersonIdenterFeilmelding] =
-            React.useState<string>('');
+            useState<string>('');
 
         const barnMedLøpendeUtbetaling =
             minimalFagsak.status === RessursStatus.SUKSESS
@@ -59,7 +58,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
             ) {
                 if (avhengigheter?.fortroligePersonIdenterFeilmelding) {
                     return feil(felt, 'Feil: ' + avhengigheter?.fortroligePersonIdenterFeilmelding);
-                } else if (
+                }
+                if (
                     avhengigheter?.antallBrevmottakere &&
                     avhengigheter?.fortroligePersonIdenter.length
                 ) {
@@ -69,9 +69,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
                             'diskresjonskode. Følgende personer har diskresjonskode: ' +
                             avhengigheter?.fortroligePersonIdenter
                     );
-                } else {
-                    return ok(felt);
                 }
+                return ok(felt);
             } else {
                 return feil(felt, 'Ingen av barna er valgt.');
             }
@@ -98,7 +97,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     valideringsfunksjon: validerBarnaMedOpplysninger,
                     avhengigheter: {
                         barnMedLøpendeUtbetaling,
-                        antallBrevmottakere,
+                        antallBrevmottakere: åpenBehandling.brevmottakere.length,
                         fortroligePersonIdenter,
                         fortroligePersonIdenterFeilmelding,
                     },
@@ -115,7 +114,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             skjemanavn: 'Registrer søknad',
         });
 
-        const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
+        const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
 
         const tilbakestillSøknad = () => {
             if (bruker.status === RessursStatus.SUKSESS) {
@@ -155,27 +154,27 @@ const [SøknadProvider, useSøknad] = createUseContext(
             settSøknadErLastetFraBackend(false);
         };
 
-        React.useEffect(() => {
+        useEffect(() => {
             return () => {
                 mountedRef.current = false;
             };
         }, []);
 
-        React.useEffect(() => {
+        useEffect(() => {
             const merkedeBarn = skjema.felter.barnaMedOpplysninger.verdi.filter(
                 barn => barn.merket
             );
-            const personIdentArray = merkedeBarn.map(p => p.ident);
-            const brukerData = bruker.status === RessursStatus.SUKSESS ? bruker.data : undefined;
+            const personIdentArray = merkedeBarn.map(person => person.ident);
+            const brukerData = hentDataFraRessurs(bruker);
             personIdentArray.push(brukerData?.personIdent ?? '');
             hentPersonerMedAdresseBeskyttelse(personIdentArray);
         }, [skjema.felter.barnaMedOpplysninger.verdi]);
 
-        React.useEffect(() => {
+        useEffect(() => {
             tilbakestillSøknad();
         }, [bruker.status]);
 
-        React.useEffect(() => {
+        useEffect(() => {
             if (åpenBehandling.søknadsgrunnlag) {
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
@@ -200,7 +199,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
             }
-            settAntallBrevmottakere(åpenBehandling.brevmottakere.length);
         }, [åpenBehandling]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
