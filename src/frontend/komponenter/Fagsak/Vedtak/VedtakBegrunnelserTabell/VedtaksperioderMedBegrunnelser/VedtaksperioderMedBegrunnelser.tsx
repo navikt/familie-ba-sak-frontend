@@ -33,7 +33,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
         åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [],
-        åpenBehandling.resultat,
         åpenBehandling.status
     );
 
