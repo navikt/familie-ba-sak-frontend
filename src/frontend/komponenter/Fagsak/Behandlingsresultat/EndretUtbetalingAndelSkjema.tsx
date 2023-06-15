@@ -155,11 +155,10 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     };
 
     const endringsårsakSkalVises = (årsak: IEndretUtbetalingAndelÅrsak): boolean => {
-        if (
-            årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT ||
-            årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
-        ) {
+        if (årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER) {
             return toggles[ToggleNavn.endreMottakerEndringsårsaker];
+        } else if (årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT) {
+            return toggles[ToggleNavn.eøsPraksisendringSeptember2023];
         } else {
             return true;
         }
