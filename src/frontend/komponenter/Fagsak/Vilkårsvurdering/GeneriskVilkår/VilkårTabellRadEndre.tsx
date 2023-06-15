@@ -19,6 +19,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import {
@@ -29,6 +30,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Regelverk, Resultat, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
@@ -99,6 +101,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
+    const { toggles } = useApp();
 
     const { åpenBehandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
         useBehandling();
@@ -311,6 +314,16 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     >
                         Nei
                     </Radio>
+                    {toggles[ToggleNavn.eøsPraksisendringSeptember2023] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.LOVLIG_OPPHOLD &&
+                        redigerbartVilkår.verdi.vurderesEtter === Regelverk.EØS_FORORDNINGEN && (
+                            <Radio
+                                value={Resultat.IKKE_AKTUELT}
+                                name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                            >
+                                Ikke aktuelt
+                            </Radio>
+                        )}
                 </StyledFamilieRadioGruppe>
                 {!gjelderInstitusjon && (
                     <UtdypendeVilkårsvurderingMultiselect

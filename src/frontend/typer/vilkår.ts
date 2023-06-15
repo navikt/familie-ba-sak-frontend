@@ -14,18 +14,21 @@ export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
     OPPFYLT = 'OPPFYLT',
     IKKE_VURDERT = 'IKKE_VURDERT',
+    IKKE_AKTUELT = 'IKKE_AKTUELT',
 }
 
 export const uiResultat: Record<Resultat, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
+    IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
 export const resultater: Record<Resultat, string> = {
     OPPFYLT: 'Ja',
     IKKE_OPPFYLT: 'Nei',
     IKKE_VURDERT: 'Kanskje',
+    IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
 export enum AnnenVurderingType {
