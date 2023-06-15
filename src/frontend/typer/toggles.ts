@@ -18,6 +18,7 @@ export enum ToggleNavn {
     manuellPostering = 'familie-ba-sak.manuell-postering',
     støtterRefusjonEøs = 'familie-ba-sak.behandling.refusjon-eos',
     organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
+    eøsPraksisendringSeptember2023 = 'familie-ba-sak.behandling.eos-annen-forelder-omfattet-av-norsk-lovgivning',
 }
 
 export const alleTogglerAv = (): IToggles => {

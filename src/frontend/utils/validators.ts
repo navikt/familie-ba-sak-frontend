@@ -172,12 +172,6 @@ export const erAvslagBegrunnelserGyldig = (
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
-export const erUtfylt = (felt: FeltState<string>): FeltState<string> => {
-    if (felt.verdi === '') {
-        return feil(felt, ikkeUtfyltFelt);
-    }
-    return ok(felt);
-};
 
 export const lagInitiellFelt = <Value>(
     value: Value,
@@ -189,20 +183,6 @@ export const lagInitiellFelt = <Value>(
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         verdi: value,
     };
-};
-
-export const validerFelt = <Value, Context>(
-    nyVerdi: Value,
-    felt: FeltState<Value>,
-    context?: Context
-): FeltState<Value> => {
-    return felt.valider(
-        {
-            ...felt,
-            verdi: nyVerdi,
-        },
-        context ? context : {}
-    );
 };
 
 export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => {
