@@ -64,8 +64,8 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     const [fortroligePersonIdenter, settFortroligePersonIdenter] = React.useState<string[]>([]);
     const [fortroligePersonIdenterFeilmelding, settFortroligePersonIdenterFeilmelding] =
         React.useState<string>('');
-    const deaktiverSkjema = false;
-    // fortroligePersonIdenterFeilmelding !== '' || fortroligePersonIdenter.length > 0;
+    const deaktiverSkjema =
+        fortroligePersonIdenterFeilmelding !== '' || fortroligePersonIdenter.length > 0;
 
     const erSkjemaSynlig =
         (åpenBehandling.brevmottakere.length === 0 && !erLesevisning) ||
