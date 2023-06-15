@@ -10,7 +10,13 @@ import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    Adressebeskyttelsegradering,
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    hentDataFraRessurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
@@ -40,6 +46,12 @@ const DrekLenkeContainer = styled.div`
     margin-bottom: 1.25rem;
 `;
 
+const StyledFieldset = styled(Fieldset)`
+    p.navds-error-message.navds-label {
+        max-width: 35rem;
+    }
+`;
+
 export interface IRegistrerBarnSkjema {
     ident: string;
     erFolkeregistrert: boolean;
@@ -54,7 +66,22 @@ interface IProps {
 
 const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
-    const { logg } = useBehandling();
+    const { logg, åpenBehandling: åpenBehandlingRessurs } = useBehandling();
+    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
+
+    const getDiskresjonskodeNavn = (diskresjonskode: string) => {
+        if (Adressebeskyttelsegradering.UGRADERT === diskresjonskode) {
+            return '"UGRADERT"';
+        } else if (Adressebeskyttelsegradering.FORTROLIG === diskresjonskode) {
+            return '"Fortrolig"';
+        } else if (Adressebeskyttelsegradering.STRENGT_FORTROLIG === diskresjonskode) {
+            return '"Strengt fortrolig"';
+        } else if (Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND === diskresjonskode) {
+            return '"Strengt fortrolig utland"';
+        } else {
+            return '"UGYLDIG KODE: ' + diskresjonskode + '"';
+        }
+    };
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
@@ -176,20 +203,36 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                                 settSubmitRessurs(hentetPerson);
                                 if (hentetPerson.status === RessursStatus.SUKSESS) {
-                                    barnaMedOpplysninger.validerOgSettFelt([
-                                        ...barnaMedOpplysninger.verdi,
-                                        {
-                                            fødselsdato: hentetPerson.data.fødselsdato,
-                                            ident: hentetPerson.data.personIdent,
-                                            merket: true,
-                                            manueltRegistrert: true,
-                                            navn: hentetPerson.data.navn,
-                                            erFolkeregistrert: true,
-                                        },
-                                    ]);
-                                    onSuccess && onSuccess(hentetPerson.data);
+                                    if (
+                                        (hentetPerson.data.adressebeskyttelseGradering ===
+                                            Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                                            hentetPerson.data.adressebeskyttelseGradering ===
+                                                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND) &&
+                                        åpenBehandling?.brevmottakere.length
+                                    ) {
+                                        settSubmitRessurs(
+                                            byggFeiletRessurs(
+                                                `Barnet du prøver å legge til har diskresjonskode: ${getDiskresjonskodeNavn(
+                                                    hentetPerson.data.adressebeskyttelseGradering
+                                                )}. Brevmottaker(e) er endret og må fjernes før du kan legge til barnet.`
+                                            )
+                                        );
+                                    } else {
+                                        barnaMedOpplysninger.validerOgSettFelt([
+                                            ...barnaMedOpplysninger.verdi,
+                                            {
+                                                fødselsdato: hentetPerson.data.fødselsdato,
+                                                ident: hentetPerson.data.personIdent,
+                                                merket: true,
+                                                manueltRegistrert: true,
+                                                navn: hentetPerson.data.navn,
+                                                erFolkeregistrert: true,
+                                            },
+                                        ]);
+                                        onSuccess && onSuccess(hentetPerson.data);
 
-                                    settVisModal(false);
+                                        settVisModal(false);
+                                    }
                                 }
                             });
                         } else {
@@ -258,7 +301,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             </BodyLong>
                         </StyledHelpText>
                     </StyledHeading>
-                    <Fieldset
+                    <StyledFieldset
                         error={
                             registrerBarnSkjema.visFeilmeldinger &&
                             (registrerBarnSkjema.submitRessurs.status === RessursStatus.FEILET ||
@@ -326,7 +369,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                 children={'Avbryt'}
                             />
                         </ModalKnapperad>
-                    </Fieldset>
+                    </StyledFieldset>
                 </Modal.Content>
             </StyledModal>
         </>
