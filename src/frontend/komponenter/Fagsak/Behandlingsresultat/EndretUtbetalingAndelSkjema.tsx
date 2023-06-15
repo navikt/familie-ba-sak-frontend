@@ -158,7 +158,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         if (årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER) {
             return toggles[ToggleNavn.endreMottakerEndringsårsaker];
         } else if (årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT) {
-            return toggles[ToggleNavn.praksisEndringEøs];
+            return toggles[ToggleNavn.eøsPraksisendringSeptember2023];
         } else {
             return true;
         }
