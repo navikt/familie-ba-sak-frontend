@@ -1,12 +1,16 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
-import type { Avhengigheter } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import {
+    Adressebeskyttelsegradering,
+    hentDataFraRessurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
@@ -34,12 +38,48 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { bruker, minimalFagsak } = useFagsakContext();
-        const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
+        const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
         const barnMedLøpendeUtbetaling =
             minimalFagsak.status === RessursStatus.SUKSESS
                 ? hentBarnMedLøpendeUtbetaling(minimalFagsak.data)
                 : new Set();
+
+        const brukerData = hentDataFraRessurs(bruker);
+        function sjekkAtBarnIkkeErFortrolig(person: IBarnMedOpplysninger) {
+            return !brukerData?.forelderBarnRelasjon.some(
+                barn =>
+                    barn.personIdent === person.ident &&
+                    (Adressebeskyttelsegradering.STRENGT_FORTROLIG ===
+                        barn.adressebeskyttelseGradering ||
+                        Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ===
+                            barn.adressebeskyttelseGradering)
+            );
+        }
+
+        const validerBarnaMedOpplysninger = (
+            felt: FeltState<IBarnMedOpplysninger[]>,
+            avhengigheter?: Avhengigheter
+        ) => {
+            if (
+                felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
+                (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
+            ) {
+                const merkedeBarn = felt.verdi.filter(barn => barn.merket);
+                const finnesFortroligBarn = !merkedeBarn.every(person =>
+                    sjekkAtBarnIkkeErFortrolig(person)
+                );
+                if (avhengigheter?.antallBrevmottakere && finnesFortroligBarn) {
+                    return feil(
+                        felt,
+                        'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
+                    );
+                }
+                return ok(felt);
+            } else {
+                return feil(felt, 'Ingen av barna er valgt.');
+            }
+        };
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -59,13 +99,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
-                    valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
-                        return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
-                            (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
-                            ? ok(felt)
-                            : feil(felt, 'Ingen av barna er valgt.');
+                    valideringsfunksjon: validerBarnaMedOpplysninger,
+                    avhengigheter: {
+                        barnMedLøpendeUtbetaling,
+                        antallBrevmottakere: åpenBehandling.brevmottakere.length,
                     },
-                    avhengigheter: { barnMedLøpendeUtbetaling },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
                     verdi: '',
@@ -79,7 +117,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             skjemanavn: 'Registrer søknad',
         });
 
-        const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
+        const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
 
         const tilbakestillSøknad = () => {
             if (bruker.status === RessursStatus.SUKSESS) {
@@ -119,11 +157,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
             settSøknadErLastetFraBackend(false);
         };
 
-        React.useEffect(() => {
+        useEffect(() => {
             tilbakestillSøknad();
         }, [bruker.status]);
 
-        React.useEffect(() => {
+        useEffect(() => {
             if (åpenBehandling.søknadsgrunnlag) {
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
