@@ -68,26 +68,9 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
     const { logg, åpenBehandling: åpenBehandlingRessurs } = useBehandling();
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
-
-    const getDiskresjonskodeNavn = (diskresjonskode: string) => {
-        if (Adressebeskyttelsegradering.UGRADERT === diskresjonskode) {
-            return '"UGRADERT"';
-        } else if (Adressebeskyttelsegradering.FORTROLIG === diskresjonskode) {
-            return '"Fortrolig"';
-        } else if (Adressebeskyttelsegradering.STRENGT_FORTROLIG === diskresjonskode) {
-            return '"Strengt fortrolig"';
-        } else if (Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND === diskresjonskode) {
-            return '"Strengt fortrolig utland"';
-        } else {
-            return '"UGYLDIG KODE: ' + diskresjonskode + '"';
-        }
-    };
-
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
-
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
-
     const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
         inputNode?.focus();
         settFnrInputNode(inputNode);
@@ -204,17 +187,19 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                 settSubmitRessurs(hentetPerson);
                                 if (hentetPerson.status === RessursStatus.SUKSESS) {
                                     if (
-                                        (hentetPerson.data.adressebeskyttelseGradering ===
+                                        (ressurs.data.adressebeskyttelsegradering ===
                                             Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
-                                            hentetPerson.data.adressebeskyttelseGradering ===
+                                            ressurs.data.adressebeskyttelsegradering ===
                                                 Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND) &&
                                         åpenBehandling?.brevmottakere.length
                                     ) {
                                         settSubmitRessurs(
                                             byggFeiletRessurs(
-                                                `Barnet du prøver å legge til har diskresjonskode: ${getDiskresjonskodeNavn(
-                                                    hentetPerson.data.adressebeskyttelseGradering
-                                                )}. Brevmottaker(e) er endret og må fjernes før du kan legge til barnet.`
+                                                `Barnet du prøver å legge til har diskresjonskode: "${
+                                                    adressebeskyttelsestyper[
+                                                        ressurs.data.adressebeskyttelsegradering
+                                                    ] ?? 'ukjent'
+                                                }". Brevmottaker(e) er endret og må fjernes før du kan legge til barnet.`
                                             )
                                         );
                                     } else {
