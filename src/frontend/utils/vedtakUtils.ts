@@ -1,13 +1,13 @@
 import {
-    AGreen100,
-    ARed50,
-    AOrange100,
-    AGray100,
     ABlue100,
-    AGreen500,
-    ARed600,
-    AOrange600,
+    AGray100,
     AGray600,
+    AGreen100,
+    AGreen500,
+    AOrange100,
+    AOrange600,
+    ARed50,
+    ARed600,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -16,7 +16,6 @@ import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
 import { VedtakBegrunnelseType } from '../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../typer/vedtaksperiode';
 import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
@@ -30,33 +29,15 @@ import {
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
-    behandlingResultat: BehandlingResultat,
     behandlingStatus: BehandlingStatus
 ): IVedtaksperiodeMedBegrunnelser[] => {
-    const sorterteOgFiltrertePerioder = vedtaksperioder
-        .slice()
-        .sort((a, b) =>
-            kalenderDiff(
-                kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)),
-                kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN))
-            )
-        )
-        .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-            if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
-                return harPeriodeBegrunnelse(vedtaksperiode);
-            } else {
-                return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
-            }
-        });
-
-    if (
-        behandlingResultat === BehandlingResultat.OPPHØRT ||
-        behandlingResultat === BehandlingResultat.FORTSATT_OPPHØRT
-    ) {
-        return hentSisteOpphørsperiode(sorterteOgFiltrertePerioder);
-    } else {
-        return sorterteOgFiltrertePerioder;
-    }
+    return vedtaksperioder.slice().filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+        if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
+            return harPeriodeBegrunnelse(vedtaksperiode);
+        } else {
+            return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
+        }
+    });
 };
 
 const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
@@ -69,16 +50,6 @@ const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBeg
 
 const harPeriodeBegrunnelse = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
     return !!vedtaksperiode.begrunnelser.length || !!vedtaksperiode.fritekster.length;
-};
-
-const hentSisteOpphørsperiode = (sortertePerioder: IVedtaksperiodeMedBegrunnelser[]) => {
-    const sorterteOgFiltrerteOpphørsperioder = sortertePerioder.filter(
-        (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) =>
-            vedtaksperiode.type === Vedtaksperiodetype.OPPHØR
-    );
-    const sisteOpphørsPeriode =
-        sorterteOgFiltrerteOpphørsperioder[sorterteOgFiltrerteOpphørsperioder.length - 1];
-    return sisteOpphørsPeriode ? [sisteOpphørsPeriode] : [];
 };
 
 export const finnVedtakBegrunnelseType = (

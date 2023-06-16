@@ -239,6 +239,7 @@ export enum UtdypendeVilkårsvurderingDeltBosted {
 export enum UtdypendeVilkårsvurderingEøsSøkerBosattIRiket {
     OMFATTET_AV_NORSK_LOVGIVNING = 'OMFATTET_AV_NORSK_LOVGIVNING',
     OMFATTET_AV_NORSK_LOVGIVNING_UTLAND = 'OMFATTET_AV_NORSK_LOVGIVNING_UTLAND',
+    ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING = 'ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING',
 }
 
 export enum UtdypendeVilkårsvurderingEøsBarnBosattIRiket {

@@ -44,6 +44,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         erFeilutbetaling,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
+        behandlingErMigreringMedManuellePosteringer,
+        behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
 
@@ -88,17 +90,26 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
+            {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
+                <StyledAlert variant={'warning'}>
+                    Migrering av denne saken gir ingen utbetaling for periodene etter
+                    migreringsdato. Når behandlingsresultatet blir 0 kr i alle perioder, får vi ikke
+                    simulert mot økonomi for å se eventuelle avvik. Det er derfor viktig at du selv
+                    sjekker at det ikke har vært noen utbetalinger fra Infotrygd i disse periodene.
+                </StyledAlert>
+            )}
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
-                    <Alert variant="info">
+                    <StyledAlert variant="info">
                         Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                    </Alert>
+                    </StyledAlert>
                 ) : (
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
                         {(behandlingErMigreringMedAvvikInnenforBeløpsgrenser ||
-                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser) && (
+                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser ||
+                            behandlingErMigreringMedManuellePosteringer) && (
                             <>
                                 {behandlingErMigreringMedAvvikInnenforBeløpsgrenser && (
                                     <StyledBeløpsgrenseAlert variant="warning" size="medium">
@@ -109,7 +120,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         kravgrunnlag.
                                     </StyledBeløpsgrenseAlert>
                                 )}
-                                {behandlingErMigreringMedAvvikUtenforBeløpsgrenser && (
+                                {behandlingErMigreringMedAvvikUtenforBeløpsgrenser ? (
                                     <StyledBeløpsgrenseAlert variant="warning" size="medium">
                                         Simuleringen viser en feilutbetaling eller etterbetaling.
                                         Hvis du velger å gå videre i behandlingen kreves det
@@ -120,13 +131,20 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         dette behandles i en egen revurderingsbehandling med
                                         vedtaksbrev til bruker.
                                     </StyledBeløpsgrenseAlert>
-                                )}
+                                ) : behandlingErMigreringMedManuellePosteringer ? (
+                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                        Det finnes manuelle posteringer tilknyttet tidligere
+                                        behandling. Hvis du velger å gå videre i behandlingen kreves
+                                        det to-trinnskontroll.
+                                    </StyledBeløpsgrenseAlert>
+                                ) : null}
                             </>
                         )}
                         {erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                åpenBehandling={åpenBehandling}
                             />
                         )}
                     </>

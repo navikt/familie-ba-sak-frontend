@@ -3,12 +3,13 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label, Switch } from '@navikt/ds-react';
 import {
     ABorderDefault,
+    AGreen700,
+    ASurfaceSubtle,
     ATextDanger,
     ATextDefault,
-    AGreen700,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useApp } from '../../../context/AppContext';
@@ -77,8 +78,16 @@ const SimuleringTabellOverskrift = styled.div`
     margin-bottom: 1rem;
 `;
 
+const ManuellPosteringRad = styled.tr`
+    background-color: ${ASurfaceSubtle};
+`;
+
 const LabelMedFarge = styled(Label)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
+`;
+
+const StyledSwitch = styled(Switch)`
+    width: fit-content;
 `;
 
 interface ISimuleringProps {
@@ -101,10 +110,28 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     } = simulering;
     const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
     const årISimuleringen = hentÅrISimuleringen(perioder);
+
     const [indexFramvistÅr, settIndexFramvistÅr] = useState(årISimuleringen.length - 1);
+
+    const finnesManuellePosteringer = perioder.some(
+        periode => periode.manuellPostering && periode.manuellPostering !== 0
+    );
+
+    const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
+        periode =>
+            periode.manuellPostering &&
+            periode.manuellPostering !== 0 &&
+            periode.resultat &&
+            periode.resultat !== 0
+    );
+    const [visManuellePosteringer, setVisManuellePosteringer] = useState(
+        erManuellPosteringSamtidigSomResultatIkkeErNull
+    );
+
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
     const erMerEnn12MånederISimulering = perioder.length > 12;
     const { toggles } = useApp();
+    const erManuelPosteringTogglePå = toggles[ToggleNavn.manuellPostering];
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
@@ -127,14 +154,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
 
-    const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
-        periode =>
-            periode.manuellPostering &&
-            periode.manuellPostering !== 0 &&
-            periode.resultat &&
-            periode.resultat !== 0
-    );
-
     const tilOgFraDatoForSimulering = `${periodeToString({
         fom,
         tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
@@ -142,15 +161,13 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     return (
         <>
-            {toggles[ToggleNavn.manuellPostering] &&
-                erManuellPosteringSamtidigSomResultatIkkeErNull && (
-                    <StyledAlert variant={'warning'}>
-                        Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
-                        sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
-                        tilsvarende de manuelle posteringene i tabellen.
-                    </StyledAlert>
-                )}
-
+            {erManuelPosteringTogglePå && erManuellPosteringSamtidigSomResultatIkkeErNull && (
+                <StyledAlert variant={'warning'}>
+                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
+                    sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
+                    tilsvarende de manuelle posteringene i tabellen.
+                </StyledAlert>
+            )}
             <SimuleringTabellOverskrift>
                 <Label>
                     Simuleringsresultat for{' '}
@@ -160,6 +177,16 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 </Label>
             </SimuleringTabellOverskrift>
 
+            {erManuelPosteringTogglePå && finnesManuellePosteringer && (
+                <StyledSwitch
+                    checked={visManuellePosteringer}
+                    onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
+                    position="right"
+                    size="small"
+                >
+                    Vis manuelle posteringer
+                </StyledSwitch>
+            )}
             <StyledTable
                 aria-label={`Simuleringsresultat for ${
                     erMerEnn12MånederISimulering
@@ -227,16 +254,18 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     </tr>
                     <tr>
                         <td>Tidligere utbetalt</td>
-                        {perioderSomSkalVisesITabellen.map(periode => (
-                            <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
-                                {erNestePeriode(periode) && <TabellSkillelinje />}
-                                <HøyrestiltTd>
-                                    <BodyShort>
-                                        {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
-                                    </BodyShort>
-                                </HøyrestiltTd>
-                            </React.Fragment>
-                        ))}
+                        {perioderSomSkalVisesITabellen.map(periode => {
+                            return (
+                                <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje />}
+                                    <HøyrestiltTd>
+                                        <BodyShort>
+                                            {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
+                                        </BodyShort>
+                                    </HøyrestiltTd>
+                                </React.Fragment>
+                            );
+                        })}
                     </tr>
                     <tr>
                         <td>Resultat</td>
@@ -269,24 +298,21 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             </React.Fragment>
                         ))}
                     </tr>
-                    {toggles[ToggleNavn.manuellPostering] &&
-                        erManuellPosteringSamtidigSomResultatIkkeErNull && (
-                            <tr>
-                                <td>Manuell postering</td>
-                                {perioderSomSkalVisesITabellen.map(periode => (
-                                    <React.Fragment key={'manuell postering - ' + periode.fom}>
-                                        {erNestePeriode(periode) && <TabellSkillelinje />}
-                                        <HøyrestiltTd>
-                                            <BodyShort>
-                                                {formaterBeløpUtenValutakode(
-                                                    periode.manuellPostering
-                                                )}
-                                            </BodyShort>
-                                        </HøyrestiltTd>
-                                    </React.Fragment>
-                                ))}
-                            </tr>
-                        )}
+                    {erManuelPosteringTogglePå && visManuellePosteringer && (
+                        <ManuellPosteringRad>
+                            <td>Manuell postering</td>
+                            {perioderSomSkalVisesITabellen.map(periode => (
+                                <React.Fragment key={'manuell postering - ' + periode.fom}>
+                                    {erNestePeriode(periode) && <TabellSkillelinje />}
+                                    <HøyrestiltTd>
+                                        <BodyShort>
+                                            {formaterBeløpUtenValutakode(periode.manuellPostering)}
+                                        </BodyShort>
+                                    </HøyrestiltTd>
+                                </React.Fragment>
+                            ))}
+                        </ManuellPosteringRad>
+                    )}
                 </tbody>
             </StyledTable>
         </>

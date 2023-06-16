@@ -33,12 +33,6 @@ import {
     identValidator,
 } from '../validators';
 
-export declare const nyFeltTestState: <T>(
-    verdi: T,
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    valideringsfunksjon?: (felt: any, metadata?: any) => any | undefined
-) => FeltState<T>;
-
 describe('utils/validators', () => {
     const nyFeltState = <T>(verdi: T): FeltState<T> => ({
         feilmelding: '',

@@ -47,6 +47,13 @@ export interface IRestBrevmottaker {
     landkode: string;
 }
 
+const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
+    if (mottaker === Mottaker.DØDSBO) {
+        return !land || land === 'NO' ? `${navn} v/dødsbo` : `Estate of ${navn}`;
+    }
+    return navn;
+};
+
 const useLeggTilFjernBrevmottaker = () => {
     const { settToast } = useApp();
     const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
@@ -146,10 +153,18 @@ const useLeggTilFjernBrevmottaker = () => {
     });
     const land = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== ''
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const norgeErUlovligValgt =
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === 'NO';
+            if (norgeErUlovligValgt) {
+                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
+            }
+            return felt.verdi !== ''
                 ? ok(felt)
-                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.'),
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        },
+        avhengigheter: { mottaker },
     });
 
     useEffect(() => {
@@ -157,11 +172,15 @@ const useLeggTilFjernBrevmottaker = () => {
             mottaker.verdi === Mottaker.DØDSBO ||
             mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
 
-        if (skalNavnVærePreutfylt !== navnErPreutfylt) {
-            settNavnErPreutfylt(skalNavnVærePreutfylt);
-            navn.validerOgSettFelt(skalNavnVærePreutfylt && søker?.navn ? søker.navn : '');
+        if (skalNavnVærePreutfylt || skalNavnVærePreutfylt !== navnErPreutfylt) {
+            navn.validerOgSettFelt(
+                skalNavnVærePreutfylt && søker?.navn
+                    ? preutfyltNavnFixed(mottaker.verdi, land.verdi, søker.navn)
+                    : ''
+            );
         }
-    }, [mottaker.verdi]);
+        settNavnErPreutfylt(skalNavnVærePreutfylt);
+    }, [mottaker.verdi, land.verdi]);
 
     const {
         skjema,

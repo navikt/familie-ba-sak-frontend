@@ -10,12 +10,6 @@ export interface IInfotrygdsakerRequest {
     ident: string;
 }
 
-export interface IInfotrygdstønader {
-    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
-    harTilgang: boolean;
-    stønader: IInfotrygdStønad[];
-}
-
 export interface IInfotrygdSak {
     behenEnhet?: string;
     iverksattdato?: string;
@@ -60,9 +54,4 @@ export interface IDelytelse {
     typeDelytelse?: string;
     oppgjørsordning?: string;
     typeUtbetaling?: string;
-}
-
-export interface IMigreringResponseDto {
-    fagsakId: number;
-    behandlingId: number;
 }

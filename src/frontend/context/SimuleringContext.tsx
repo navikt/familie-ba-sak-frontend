@@ -30,6 +30,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const { request } = useHttp();
     const { fagsakId } = useSakOgBehandlingParams();
     const vedtak = åpenBehandling.vedtak;
+    const personerMedAndelerTilkjentYtelse = åpenBehandling.personerMedAndelerTilkjentYtelse;
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
@@ -105,6 +106,16 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const erMigreringFraInfotrygdMedAvvik =
         erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
 
+    const harManuellePosteringer = simResultat?.perioder.some(
+        periode => periode.manuellPostering && periode.manuellPostering > 0
+    );
+
+    const behandlingErMigreringFraInfotrygdMedKun0Utbetalinger =
+        erMigreringFraInfotrygd &&
+        !personerMedAndelerTilkjentYtelse.some(
+            personMedAndelerTilkjentYtelse => personMedAndelerTilkjentYtelse.beløp !== 0
+        );
+
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
         const antallBarn = åpenBehandling.personer.filter(
             person => person.type === PersonType.BARN
@@ -113,7 +124,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     };
 
     const harTotaltAvvikUnderBeløpsgrense = (perioderesultater: number[]) => {
-        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val));
+        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val, 0));
         return totaltAvvik <= maksgrenseForAvvikIBeløpVedMigrering;
     };
 
@@ -124,6 +135,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const behandlingErMigreringMedAvvikUtenforBeløpsgrenser =
         erMigreringFraInfotrygdMedAvvik && !behandlingErMigreringMedAvvikInnenforBeløpsgrenser;
+
+    const behandlingErMigreringMedManuellePosteringer =
+        erMigreringFraInfotrygd && harManuellePosteringer;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -251,6 +265,8 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         erMigreringFraInfotrygdMedAvvik,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
+        behandlingErMigreringMedManuellePosteringer,
+        behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
     };
 });
 

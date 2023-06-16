@@ -1,18 +1,18 @@
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { PersonType } from '../typer/person';
+import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../typer/vilkår';
 import {
-    Resultat,
     Regelverk,
-    VilkårType,
+    Resultat,
     UtdypendeVilkårsvurderingDeltBosted,
     UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
     UtdypendeVilkårsvurderingEøsBarnBosattIRiket,
     UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
+    VilkårType,
 } from '../typer/vilkår';
-import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../typer/vilkår';
 
 export interface UtdypendeVilkårsvurderingAvhengigheter {
     personType: PersonType;
@@ -41,6 +41,7 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
             return [
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
+                UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING,
             ];
         }
         if (vilkårType === VilkårType.BOSATT_I_RIKET && personType === PersonType.BARN) {
