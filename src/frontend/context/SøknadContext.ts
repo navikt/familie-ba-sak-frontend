@@ -56,7 +56,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
             brukerData?.adressebeskyttelseGradering ===
                 Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
-        function sjekkAtBarnIkkeErFortrolig(person: IBarnMedOpplysninger) {
+
+        const sjekkAtBarnIkkeErFortrolig = (person: IBarnMedOpplysninger) => {
             return !brukerData?.forelderBarnRelasjon.some(
                 barn =>
                     barn.personIdent === person.ident &&
@@ -65,7 +66,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ===
                             barn.adressebeskyttelseGradering)
             );
-        }
+        };
 
         const validerBrukerOgBarnaMedOpplysninger = (
             felt: FeltState<IBarnMedOpplysninger[]>,
