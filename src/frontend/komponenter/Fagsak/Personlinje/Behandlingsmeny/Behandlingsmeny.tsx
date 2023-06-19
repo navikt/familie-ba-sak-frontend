@@ -7,7 +7,7 @@ import '@navikt/ds-css-internal';
 import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react-internal';
-import { Adressebeskyttelsegradering, hentDataFraRessurs } from '@navikt/familie-typer';
+import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
@@ -45,21 +45,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
 
     const erLesevisning = vurderErLesevisning();
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
-
     const erPåBehandling = !!behandlingIdFraURL && !!åpenBehandling;
-
-    const brukerEllerBarnHarStrengtFortroligAdresse =
-        bruker &&
-        (bruker.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
-            bruker.adressebeskyttelseGradering ===
-                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ||
-            bruker.forelderBarnRelasjonMaskert.some(
-                relasjon =>
-                    relasjon.adressebeskyttelseGradering ===
-                        Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
-                    relasjon.adressebeskyttelseGradering ===
-                        Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND
-            ));
 
     return (
         <Dropdown>
@@ -109,8 +95,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     {erPåBehandling && åpenBehandling.aktivSettPåVent && (
                         <TaBehandlingAvVent behandling={åpenBehandling} />
                     )}
-                    {!brukerEllerBarnHarStrengtFortroligAdresse &&
-                        erPåBehandling &&
+                    {erPåBehandling &&
                         minimalFagsak.fagsakType !== FagsakType.INSTITUSJON &&
                         (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                         (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||

@@ -9,8 +9,10 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
 import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import BrevmottakerValideringAlert from './BrevmottakerValideringAlert';
 import useLeggTilFjernBrevmottaker, {
     Mottaker,
     mottakerVisningsnavn,
@@ -33,6 +35,14 @@ const StyledFieldset = styled(Fieldset)`
     &.navds-fieldset > div:not(:first-of-type):not(:empty) {
         margin-top: ${ASpacing6};
     }
+    & :disabled {
+        .skjemaelement {
+            opacity: 0.3;
+            div.c-countrySelect__select .c-countrySelect__select__control {
+                cursor: not-allowed;
+            }
+        }
+    }
 `;
 
 const MottakerSelect = styled(FamilieSelect)`
@@ -41,16 +51,30 @@ const MottakerSelect = styled(FamilieSelect)`
 
 interface IProps {
     lukkModal: () => void;
+    åpenBehandling: IBehandling;
+    finnesFortroligBarnIBehandling: boolean;
+    skjemaHarValgtFortroligBarn: boolean;
 }
 
-const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
+const BrevmottakerSkjema: React.FC<IProps> = ({
+    lukkModal,
+    åpenBehandling,
+    finnesFortroligBarnIBehandling,
+    skjemaHarValgtFortroligBarn,
+}) => {
     const { skjema, lagreMottaker, valideringErOk, navnErPreutfylt } =
         useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
+    const deaktiverSkjema = finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+
     return (
         <>
-            <StyledFieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
+            <StyledFieldset
+                legend="Skjema for å legge til eller fjerne brevmottaker"
+                hideLegend
+                disabled={deaktiverSkjema}
+            >
                 <MottakerSelect
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}
@@ -140,7 +164,10 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                         <Button
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={
+                                skjema.submitRessurs.status === RessursStatus.HENTER ||
+                                deaktiverSkjema
+                            }
                             onClick={lagreMottaker}
                         >
                             Legg til mottaker
@@ -153,6 +180,12 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
 
                 {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
             </ModalKnapperad>
+
+            <BrevmottakerValideringAlert
+                åpenBehandling={åpenBehandling}
+                finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
+                skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+            />
         </>
     );
 };

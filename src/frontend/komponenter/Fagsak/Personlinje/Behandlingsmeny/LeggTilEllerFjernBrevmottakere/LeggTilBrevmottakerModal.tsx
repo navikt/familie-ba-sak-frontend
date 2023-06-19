@@ -4,11 +4,15 @@ import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { Adressebeskyttelsegradering, hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../../typer/person';
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
+import BrevmottakerValideringAlert from './BrevmottakerValideringAlert';
 
 const StyledModal = styled(Modal)`
     width: 35rem;
@@ -50,9 +54,27 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     åpenBehandling,
 }: Props) => {
     const { vurderErLesevisning } = useBehandling();
+    const { bruker, skjemaHarValgtFortroligBarn } = useFagsakContext();
     const erLesevisning = vurderErLesevisning();
 
     const heading = utledHeading(åpenBehandling.brevmottakere.length, erLesevisning);
+
+    const brukerData = hentDataFraRessurs(bruker);
+    function sjekkAtBarnIkkeErFortrolig(person: IGrunnlagPerson) {
+        return !brukerData?.forelderBarnRelasjon.some(
+            barn =>
+                barn.personIdent === person.personIdent &&
+                (Adressebeskyttelsegradering.STRENGT_FORTROLIG ===
+                    barn.adressebeskyttelseGradering ||
+                    Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ===
+                        barn.adressebeskyttelseGradering)
+        );
+    }
+
+    const finnesFortroligBarnIBehandling = !åpenBehandling.personer.every(person =>
+        sjekkAtBarnIkkeErFortrolig(person)
+    );
+    const deaktiverSkjema = finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
 
@@ -89,12 +111,18 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         {åpenBehandling.brevmottakere.length === 1 && (
                             <StyledHeading size="medium">Ny mottaker</StyledHeading>
                         )}
-                        <BrevmottakerSkjema lukkModal={lukkModalOgSkjema} />
+                        <BrevmottakerSkjema
+                            lukkModal={lukkModalOgSkjema}
+                            åpenBehandling={åpenBehandling}
+                            finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
+                            skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+                        />
                     </>
                 ) : (
                     <>
                         {åpenBehandling.brevmottakere.length === 1 && !erLesevisning && (
                             <LeggTilKnapp
+                                disabled={deaktiverSkjema}
                                 variant="tertiary"
                                 size="small"
                                 icon={<AddCircle />}
@@ -103,6 +131,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                                 Legg til ny mottaker
                             </LeggTilKnapp>
                         )}
+
+                        <BrevmottakerValideringAlert
+                            åpenBehandling={åpenBehandling}
+                            finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
+                            skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+                        />
+
                         <div>
                             <LukkKnapp onClick={lukkModal}>Lukk vindu</LukkKnapp>
                         </div>

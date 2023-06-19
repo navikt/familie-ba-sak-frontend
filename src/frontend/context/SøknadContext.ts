@@ -37,7 +37,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
         } = useBehandling();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
-        const { bruker, minimalFagsak } = useFagsakContext();
+        const {
+            bruker,
+            minimalFagsak,
+            skjemaHarValgtFortroligBarn,
+            settSkjemaHarValgtFortroligBarn,
+        } = useFagsakContext();
         const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
         const barnMedLøpendeUtbetaling =
@@ -65,11 +70,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
                 (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
             ) {
-                const merkedeBarn = felt.verdi.filter(barn => barn.merket);
-                const finnesFortroligBarn = !merkedeBarn.every(person =>
-                    sjekkAtBarnIkkeErFortrolig(person)
-                );
-                if (avhengigheter?.antallBrevmottakere && finnesFortroligBarn) {
+                if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesFortroligBarn) {
                     return feil(
                         felt,
                         'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
@@ -103,6 +104,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     avhengigheter: {
                         barnMedLøpendeUtbetaling,
                         antallBrevmottakere: åpenBehandling.brevmottakere.length,
+                        finnesFortroligBarn: skjemaHarValgtFortroligBarn,
                     },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
@@ -187,6 +189,16 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 tilbakestillSøknad();
             }
         }, [åpenBehandling]);
+
+        useEffect(() => {
+            const merkedeBarn = skjema.felter.barnaMedOpplysninger.verdi.filter(
+                barn => barn.merket
+            );
+            const finnesFortroligMerkedeBarn = !merkedeBarn.every(person =>
+                sjekkAtBarnIkkeErFortrolig(person)
+            );
+            settSkjemaHarValgtFortroligBarn(finnesFortroligMerkedeBarn);
+        }, [skjema.felter.barnaMedOpplysninger.verdi]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
