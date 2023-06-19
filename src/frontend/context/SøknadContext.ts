@@ -72,8 +72,10 @@ const [SøknadProvider, useSøknad] = createUseContext(
             avhengigheter?: Avhengigheter
         ) => {
             if (
-                felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
-                (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
+                !(
+                    felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
+                    (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
+                )
             ) {
                 return feil(felt, 'Ingen av barna er valgt.');
             }
