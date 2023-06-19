@@ -34,8 +34,10 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[]>([]);
 
-    const [skjemaHarValgtFortroligBarn, settSkjemaHarValgtFortroligBarn] =
-        React.useState<boolean>(false);
+    const [
+        søknadsskjemaHarValgtStrengtFortroligBarn,
+        settSøknadsskjemaHarValgtStrengtFortroligBarn,
+    ] = React.useState<boolean>(false);
 
     const { request } = useHttp();
 
@@ -163,8 +165,8 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
         oppdaterGjeldendeFagsak,
-        skjemaHarValgtFortroligBarn,
-        settSkjemaHarValgtFortroligBarn,
+        søknadsskjemaHarValgtStrengtFortroligBarn,
+        settSøknadsskjemaHarValgtStrengtFortroligBarn,
     };
 });
 

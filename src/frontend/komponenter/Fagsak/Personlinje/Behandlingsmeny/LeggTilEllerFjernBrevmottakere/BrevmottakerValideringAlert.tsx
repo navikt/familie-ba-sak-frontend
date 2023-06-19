@@ -11,28 +11,30 @@ const StyledAlert = styled(Alert)`
 `;
 interface IProps {
     åpenBehandling: IBehandling;
-    erBrukerFortrolig: boolean;
-    finnesFortroligBarnIBehandling: boolean;
-    skjemaHarValgtFortroligBarn: boolean;
+    erBrukerStrengtFortrolig: boolean;
+    finnesStrengtFortroligBarnIBehandling: boolean;
+    søknadsskjemaHarValgtStrengtFortroligBarn: boolean;
 }
 
 const BrevmottakerValideringAlert: React.FC<IProps> = ({
     åpenBehandling,
-    erBrukerFortrolig,
-    finnesFortroligBarnIBehandling,
-    skjemaHarValgtFortroligBarn,
+    erBrukerStrengtFortrolig,
+    finnesStrengtFortroligBarnIBehandling,
+    søknadsskjemaHarValgtStrengtFortroligBarn,
 }) => {
     const deaktiverSkjema =
-        erBrukerFortrolig || finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+        erBrukerStrengtFortrolig ||
+        finnesStrengtFortroligBarnIBehandling ||
+        søknadsskjemaHarValgtStrengtFortroligBarn;
     return (
         <>
             {deaktiverSkjema && (
                 <StyledAlert variant={åpenBehandling.brevmottakere.length ? 'error' : 'warning'}>
-                    {erBrukerFortrolig ? (
+                    {erBrukerStrengtFortrolig ? (
                         <>Brukeren i behandlingen </>
                     ) : (
                         <>
-                            {finnesFortroligBarnIBehandling
+                            {finnesStrengtFortroligBarnIBehandling
                                 ? 'Barn lagt til i behandlingen '
                                 : 'Barn valgt i behandlingen '}
                         </>

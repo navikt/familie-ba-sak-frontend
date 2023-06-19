@@ -54,13 +54,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     åpenBehandling,
 }: Props) => {
     const { vurderErLesevisning } = useBehandling();
-    const { bruker, skjemaHarValgtFortroligBarn } = useFagsakContext();
+    const { bruker, søknadsskjemaHarValgtStrengtFortroligBarn } = useFagsakContext();
     const erLesevisning = vurderErLesevisning();
 
     const heading = utledHeading(åpenBehandling.brevmottakere.length, erLesevisning);
 
     const brukerData = hentDataFraRessurs(bruker);
-    const erBrukerFortrolig =
+    const erBrukerStrengtFortrolig =
         brukerData?.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
         brukerData?.adressebeskyttelseGradering ===
             Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
@@ -75,11 +75,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
         );
     };
 
-    const finnesFortroligBarnIBehandling = !åpenBehandling.personer.every(person =>
+    const finnesStrengtFortroligBarnIBehandling = !åpenBehandling.personer.every(person =>
         sjekkAtBarnIkkeErStrengtFortrolig(person)
     );
     const deaktiverSkjema =
-        erBrukerFortrolig || finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+        erBrukerStrengtFortrolig ||
+        finnesStrengtFortroligBarnIBehandling ||
+        søknadsskjemaHarValgtStrengtFortroligBarn;
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
 
@@ -119,9 +121,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         <BrevmottakerSkjema
                             lukkModal={lukkModalOgSkjema}
                             åpenBehandling={åpenBehandling}
-                            erBrukerFortrolig={erBrukerFortrolig}
-                            finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
-                            skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+                            erBrukerStrengtFortrolig={erBrukerStrengtFortrolig}
+                            finnesStrengtFortroligBarnIBehandling={
+                                finnesStrengtFortroligBarnIBehandling
+                            }
+                            søknadsskjemaHarValgtStrengtFortroligBarn={
+                                søknadsskjemaHarValgtStrengtFortroligBarn
+                            }
                         />
                     </>
                 ) : (
@@ -140,9 +146,13 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
 
                         <BrevmottakerValideringAlert
                             åpenBehandling={åpenBehandling}
-                            erBrukerFortrolig={erBrukerFortrolig}
-                            finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
-                            skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+                            erBrukerStrengtFortrolig={erBrukerStrengtFortrolig}
+                            finnesStrengtFortroligBarnIBehandling={
+                                finnesStrengtFortroligBarnIBehandling
+                            }
+                            søknadsskjemaHarValgtStrengtFortroligBarn={
+                                søknadsskjemaHarValgtStrengtFortroligBarn
+                            }
                         />
 
                         <div>

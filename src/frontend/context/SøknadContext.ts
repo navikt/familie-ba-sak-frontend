@@ -40,8 +40,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const {
             bruker,
             minimalFagsak,
-            skjemaHarValgtFortroligBarn,
-            settSkjemaHarValgtFortroligBarn,
+            søknadsskjemaHarValgtStrengtFortroligBarn,
+            settSøknadsskjemaHarValgtStrengtFortroligBarn,
         } = useFagsakContext();
         const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
@@ -57,7 +57,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             brukerData?.adressebeskyttelseGradering ===
                 Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
 
-        const sjekkAtBarnIkkeErFortrolig = (person: IBarnMedOpplysninger) => {
+        const sjekkAtBarnIkkeErStrengtFortrolig = (person: IBarnMedOpplysninger) => {
             return !brukerData?.forelderBarnRelasjon.some(
                 barn =>
                     barn.personIdent === person.ident &&
@@ -86,7 +86,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     'Brevmottaker(e) er manuelt registrert og må fjernes da brukeren har diskresjonskode.'
                 );
             }
-            if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesFortroligBarn) {
+            if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesStrengtFortroligBarn) {
                 return feil(
                     felt,
                     'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
@@ -118,7 +118,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         barnMedLøpendeUtbetaling,
                         antallBrevmottakere: åpenBehandling.brevmottakere.length,
                         erBrukerStrengtFortrolig,
-                        finnesFortroligBarn: skjemaHarValgtFortroligBarn,
+                        finnesStrengtFortroligBarn: søknadsskjemaHarValgtStrengtFortroligBarn,
                     },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
@@ -208,10 +208,10 @@ const [SøknadProvider, useSøknad] = createUseContext(
             const merkedeBarn = skjema.felter.barnaMedOpplysninger.verdi.filter(
                 barn => barn.merket
             );
-            const finnesFortroligMerkedeBarn = !merkedeBarn.every(person =>
-                sjekkAtBarnIkkeErFortrolig(person)
+            const finnesStrengtFortroligMerkedeBarn = !merkedeBarn.every(person =>
+                sjekkAtBarnIkkeErStrengtFortrolig(person)
             );
-            settSkjemaHarValgtFortroligBarn(finnesFortroligMerkedeBarn);
+            settSøknadsskjemaHarValgtStrengtFortroligBarn(finnesStrengtFortroligMerkedeBarn);
         }, [skjema.felter.barnaMedOpplysninger.verdi]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {

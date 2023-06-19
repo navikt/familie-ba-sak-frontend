@@ -52,24 +52,26 @@ const MottakerSelect = styled(FamilieSelect)`
 interface IProps {
     lukkModal: () => void;
     åpenBehandling: IBehandling;
-    erBrukerFortrolig: boolean;
-    finnesFortroligBarnIBehandling: boolean;
-    skjemaHarValgtFortroligBarn: boolean;
+    erBrukerStrengtFortrolig: boolean;
+    finnesStrengtFortroligBarnIBehandling: boolean;
+    søknadsskjemaHarValgtStrengtFortroligBarn: boolean;
 }
 
 const BrevmottakerSkjema: React.FC<IProps> = ({
     lukkModal,
     åpenBehandling,
-    erBrukerFortrolig,
-    finnesFortroligBarnIBehandling,
-    skjemaHarValgtFortroligBarn,
+    erBrukerStrengtFortrolig,
+    finnesStrengtFortroligBarnIBehandling,
+    søknadsskjemaHarValgtStrengtFortroligBarn,
 }) => {
     const { skjema, lagreMottaker, valideringErOk, navnErPreutfylt } =
         useLeggTilFjernBrevmottaker();
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const deaktiverSkjema =
-        erBrukerFortrolig || finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+        erBrukerStrengtFortrolig ||
+        finnesStrengtFortroligBarnIBehandling ||
+        søknadsskjemaHarValgtStrengtFortroligBarn;
 
     return (
         <>
@@ -186,9 +188,11 @@ const BrevmottakerSkjema: React.FC<IProps> = ({
 
             <BrevmottakerValideringAlert
                 åpenBehandling={åpenBehandling}
-                erBrukerFortrolig={erBrukerFortrolig}
-                finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
-                skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
+                erBrukerStrengtFortrolig={erBrukerStrengtFortrolig}
+                finnesStrengtFortroligBarnIBehandling={finnesStrengtFortroligBarnIBehandling}
+                søknadsskjemaHarValgtStrengtFortroligBarn={
+                    søknadsskjemaHarValgtStrengtFortroligBarn
+                }
             />
         </>
     );
