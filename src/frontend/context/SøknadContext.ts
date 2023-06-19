@@ -51,6 +51,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 : new Set();
 
         const brukerData = hentDataFraRessurs(bruker);
+        const erBrukerFortrolig =
+            brukerData?.adressebeskyttelseGradering ===
+                Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+            brukerData?.adressebeskyttelseGradering ===
+                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
         function sjekkAtBarnIkkeErFortrolig(person: IBarnMedOpplysninger) {
             return !brukerData?.forelderBarnRelasjon.some(
                 barn =>
@@ -62,7 +67,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             );
         }
 
-        const validerBarnaMedOpplysninger = (
+        const validerBrukerOgBarnaMedOpplysninger = (
             felt: FeltState<IBarnMedOpplysninger[]>,
             avhengigheter?: Avhengigheter
         ) => {
@@ -70,6 +75,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
                 (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
             ) {
+                if (avhengigheter?.antallBrevmottakere && avhengigheter?.erBrukerFortrolig) {
+                    return feil(
+                        felt,
+                        'Brevmottaker(e) er manuelt registrert og må fjernes da brukeren har diskresjonskode.'
+                    );
+                }
                 if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesFortroligBarn) {
                     return feil(
                         felt,
@@ -100,10 +111,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
-                    valideringsfunksjon: validerBarnaMedOpplysninger,
+                    valideringsfunksjon: validerBrukerOgBarnaMedOpplysninger,
                     avhengigheter: {
                         barnMedLøpendeUtbetaling,
                         antallBrevmottakere: åpenBehandling.brevmottakere.length,
+                        erBrukerFortrolig,
                         finnesFortroligBarn: skjemaHarValgtFortroligBarn,
                     },
                 }),

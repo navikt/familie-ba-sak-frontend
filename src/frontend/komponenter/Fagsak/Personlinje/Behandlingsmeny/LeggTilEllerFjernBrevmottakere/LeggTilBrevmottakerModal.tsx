@@ -60,6 +60,10 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     const heading = utledHeading(åpenBehandling.brevmottakere.length, erLesevisning);
 
     const brukerData = hentDataFraRessurs(bruker);
+    const erBrukerFortrolig =
+        brukerData?.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+        brukerData?.adressebeskyttelseGradering ===
+            Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
     function sjekkAtBarnIkkeErFortrolig(person: IGrunnlagPerson) {
         return !brukerData?.forelderBarnRelasjon.some(
             barn =>
@@ -74,7 +78,8 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     const finnesFortroligBarnIBehandling = !åpenBehandling.personer.every(person =>
         sjekkAtBarnIkkeErFortrolig(person)
     );
-    const deaktiverSkjema = finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+    const deaktiverSkjema =
+        erBrukerFortrolig || finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
 
@@ -114,6 +119,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         <BrevmottakerSkjema
                             lukkModal={lukkModalOgSkjema}
                             åpenBehandling={åpenBehandling}
+                            erBrukerFortrolig={erBrukerFortrolig}
                             finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
                             skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
                         />
@@ -134,6 +140,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
 
                         <BrevmottakerValideringAlert
                             åpenBehandling={åpenBehandling}
+                            erBrukerFortrolig={erBrukerFortrolig}
                             finnesFortroligBarnIBehandling={finnesFortroligBarnIBehandling}
                             skjemaHarValgtFortroligBarn={skjemaHarValgtFortroligBarn}
                         />

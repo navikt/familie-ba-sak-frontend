@@ -11,24 +11,32 @@ const StyledAlert = styled(Alert)`
 `;
 interface IProps {
     åpenBehandling: IBehandling;
+    erBrukerFortrolig: boolean;
     finnesFortroligBarnIBehandling: boolean;
     skjemaHarValgtFortroligBarn: boolean;
 }
 
 const BrevmottakerValideringAlert: React.FC<IProps> = ({
     åpenBehandling,
+    erBrukerFortrolig,
     finnesFortroligBarnIBehandling,
     skjemaHarValgtFortroligBarn,
 }) => {
-    const deaktiverSkjema = finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
+    const deaktiverSkjema =
+        erBrukerFortrolig || finnesFortroligBarnIBehandling || skjemaHarValgtFortroligBarn;
     return (
         <>
             {deaktiverSkjema && (
                 <StyledAlert variant={åpenBehandling.brevmottakere.length ? 'error' : 'warning'}>
-                    Enkelte personer
-                    {finnesFortroligBarnIBehandling
-                        ? ' lagt til i behandlingen '
-                        : ' valgt i behandlingen '}
+                    {erBrukerFortrolig ? (
+                        <>Brukeren i behandlingen </>
+                    ) : (
+                        <>
+                            {finnesFortroligBarnIBehandling
+                                ? 'Barn lagt til i behandlingen '
+                                : 'Barn valgt i behandlingen '}
+                        </>
+                    )}
                     har diskresjonskode som innebærer at det ikke er tillatt med manuelle
                     brevmottakere.
                     {åpenBehandling.brevmottakere.length > 0 && (
