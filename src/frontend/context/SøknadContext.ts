@@ -75,22 +75,21 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
                 (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
             ) {
-                if (avhengigheter?.antallBrevmottakere && avhengigheter?.erBrukerFortrolig) {
-                    return feil(
-                        felt,
-                        'Brevmottaker(e) er manuelt registrert og må fjernes da brukeren har diskresjonskode.'
-                    );
-                }
-                if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesFortroligBarn) {
-                    return feil(
-                        felt,
-                        'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
-                    );
-                }
-                return ok(felt);
-            } else {
                 return feil(felt, 'Ingen av barna er valgt.');
             }
+            if (avhengigheter?.antallBrevmottakere && avhengigheter?.erBrukerFortrolig) {
+                return feil(
+                    felt,
+                    'Brevmottaker(e) er manuelt registrert og må fjernes da brukeren har diskresjonskode.'
+                );
+            }
+            if (avhengigheter?.antallBrevmottakere && avhengigheter?.finnesFortroligBarn) {
+                return feil(
+                    felt,
+                    'Brevmottaker(e) er manuelt registrert og må fjernes før du kan velge barn med diskresjonskode.'
+                );
+            }
+            return ok(felt);
         };
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
