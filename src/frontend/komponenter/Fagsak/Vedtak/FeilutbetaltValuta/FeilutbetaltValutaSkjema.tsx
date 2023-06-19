@@ -8,8 +8,10 @@ import { FamilieInput } from '@navikt/familie-form-elements';
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import { useApp } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
 import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
 
@@ -40,6 +42,7 @@ const StyledFamilieInput = styled(FamilieInput)`
 const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
     skjema,
 }) => {
+    const { toggles } = useApp();
     return (
         <>
             <FlexDatoInputWrapper>
@@ -78,7 +81,11 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
             <StyledFamilieInput
                 {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label="Feilutbetalt beløp"
+                label={
+                    toggles[ToggleNavn.feilutbetaltValutaPerMåned]
+                        ? 'Feilutbetalt beløp'
+                        : 'Feilutbetalt beløp per måned'
+                }
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
                 onChange={changeEvent =>
