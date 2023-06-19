@@ -51,7 +51,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 : new Set();
 
         const brukerData = hentDataFraRessurs(bruker);
-        const erBrukerFortrolig =
+        const erBrukerStrengtFortrolig =
             brukerData?.adressebeskyttelseGradering ===
                 Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
             brukerData?.adressebeskyttelseGradering ===
@@ -80,7 +80,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             ) {
                 return feil(felt, 'Ingen av barna er valgt.');
             }
-            if (avhengigheter?.antallBrevmottakere && avhengigheter?.erBrukerFortrolig) {
+            if (avhengigheter?.antallBrevmottakere && avhengigheter?.erBrukerStrengtFortrolig) {
                 return feil(
                     felt,
                     'Brevmottaker(e) er manuelt registrert og må fjernes da brukeren har diskresjonskode.'
@@ -117,7 +117,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     avhengigheter: {
                         barnMedLøpendeUtbetaling,
                         antallBrevmottakere: åpenBehandling.brevmottakere.length,
-                        erBrukerFortrolig,
+                        erBrukerStrengtFortrolig,
                         finnesFortroligBarn: skjemaHarValgtFortroligBarn,
                     },
                 }),
