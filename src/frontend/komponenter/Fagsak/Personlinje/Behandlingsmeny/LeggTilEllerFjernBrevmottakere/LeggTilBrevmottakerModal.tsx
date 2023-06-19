@@ -64,7 +64,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
         brukerData?.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
         brukerData?.adressebeskyttelseGradering ===
             Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
-    function sjekkAtBarnIkkeErFortrolig(person: IGrunnlagPerson) {
+    const sjekkAtBarnIkkeErFortrolig = (person: IGrunnlagPerson) => {
         return !brukerData?.forelderBarnRelasjon.some(
             barn =>
                 barn.personIdent === person.personIdent &&
@@ -73,7 +73,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                     Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND ===
                         barn.adressebeskyttelseGradering)
         );
-    }
+    };
 
     const finnesFortroligBarnIBehandling = !åpenBehandling.personer.every(person =>
         sjekkAtBarnIkkeErFortrolig(person)

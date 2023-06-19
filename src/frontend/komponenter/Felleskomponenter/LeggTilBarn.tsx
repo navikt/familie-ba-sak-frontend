@@ -143,6 +143,17 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
         nullstillRegistrerBarnSkjema();
     };
 
+    const harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse = (
+        adressebeskyttelsegradering: Adressebeskyttelsegradering,
+        antallBrevmottakere: number
+    ): boolean => {
+        return (
+            (adressebeskyttelsegradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                adressebeskyttelsegradering ===
+                    Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND) &&
+            antallBrevmottakere > 0
+        );
+    };
     const leggTilOnClick = () => {
         const erSkjemaOk = kanSendeSkjema();
         if (
@@ -187,11 +198,10 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                 settSubmitRessurs(hentetPerson);
                                 if (hentetPerson.status === RessursStatus.SUKSESS) {
                                     if (
-                                        (ressurs.data.adressebeskyttelsegradering ===
-                                            Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
-                                            ressurs.data.adressebeskyttelsegradering ===
-                                                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND) &&
-                                        åpenBehandling?.brevmottakere.length
+                                        harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse(
+                                            ressurs.data.adressebeskyttelsegradering,
+                                            åpenBehandling?.brevmottakere.length ?? 0
+                                        )
                                     ) {
                                         settSubmitRessurs(
                                             byggFeiletRessurs(
