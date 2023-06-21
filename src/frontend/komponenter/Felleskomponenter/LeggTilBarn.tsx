@@ -182,6 +182,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 nullstillRegistrerBarnSkjema();
             } else {
                 settSubmitRessurs(byggHenterRessurs());
+
                 request<{ brukerIdent: string }, IRestTilgang>({
                     method: 'POST',
                     url: '/familie-ba-sak/api/tilgang',
