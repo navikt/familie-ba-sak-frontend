@@ -83,8 +83,8 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                 size="small"
                 label={
                     toggles[ToggleNavn.feilutbetaltValutaPerMåned]
-                        ? 'Feilutbetalt beløp'
-                        : 'Feilutbetalt beløp per måned'
+                        ? 'Feilutbetalt beløp per måned'
+                        : 'Feilutbetalt beløp'
                 }
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
