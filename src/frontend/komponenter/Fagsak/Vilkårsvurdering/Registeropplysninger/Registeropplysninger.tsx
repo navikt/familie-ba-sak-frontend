@@ -3,12 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { FlowerBladeFall, Globe, Heart, Home, Passport } from '@navikt/ds-icons';
+import SvgCalender from '@navikt/ds-icons/esm/Calender';
 import { Alert, Heading } from '@navikt/ds-react';
 import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
+import { kalenderDato, tilVisning } from '../../../../utils/kalender';
 import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
@@ -21,13 +23,17 @@ const SemiBoldHeading = styled(Heading)`
 `;
 
 interface IRegisteropplysningerProps {
-    opplysninger: IRestRegisterhistorikk;
+    registerHistorikk: IRestRegisterhistorikk;
+    fødselsdato: string;
 }
 
-const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysninger }) => {
-    const manglerRegisteropplysninger = opplysninger.statsborgerskap.length === 0;
+const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
+    registerHistorikk,
+    fødselsdato,
+}) => {
+    const manglerRegisteropplysninger = registerHistorikk.statsborgerskap.length === 0;
 
-    const personErDød = opplysninger.dødsboadresse.length > 0;
+    const personErDød = registerHistorikk.dødsboadresse.length > 0;
 
     return (
         <>
@@ -46,10 +52,22 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                         children={
                             'Sist hentet fra Folkeregisteret ' +
                             formaterIsoDato(
-                                opplysninger.hentetTidspunkt,
+                                registerHistorikk.hentetTidspunkt,
                                 datoformat.DATO_TID_SEKUNDER
                             )
                         }
+                    />
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.FØDSELSDATO}
+                        ikon={
+                            <SvgCalender
+                                style={{ fontSize: '1.5rem' }}
+                                aria-label="Kalender ikon"
+                                role="img"
+                                focusable="false"
+                            />
+                        }
+                        historikk={[{ verdi: tilVisning(kalenderDato(fødselsdato)) }]}
                     />
                     {personErDød && (
                         <RegisteropplysningerTabell
@@ -62,7 +80,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                                     focusable="false"
                                 />
                             }
-                            historikk={opplysninger.dødsboadresse}
+                            historikk={registerHistorikk.dødsboadresse}
                         />
                     )}
                     <RegisteropplysningerTabell
@@ -75,7 +93,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                                 focusable="false"
                             />
                         }
-                        historikk={opplysninger.sivilstand}
+                        historikk={registerHistorikk.sivilstand}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.OPPHOLD}
@@ -87,7 +105,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                                 focusable="false"
                             />
                         }
-                        historikk={opplysninger.oppholdstillatelse}
+                        historikk={registerHistorikk.oppholdstillatelse}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.STATSBORGERSKAP}
@@ -99,7 +117,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                                 focusable="false"
                             />
                         }
-                        historikk={opplysninger.statsborgerskap}
+                        historikk={registerHistorikk.statsborgerskap}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.BOSTEDSADRESSE}
@@ -111,7 +129,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                                 focusable="false"
                             />
                         }
-                        historikk={opplysninger.bostedsadresse}
+                        historikk={registerHistorikk.bostedsadresse}
                     />
                 </Container>
             )}

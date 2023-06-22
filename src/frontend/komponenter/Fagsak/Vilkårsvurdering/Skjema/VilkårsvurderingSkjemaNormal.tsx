@@ -176,7 +176,10 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 <>
                                     {personResultat.person.registerhistorikk ? (
                                         <Registeropplysninger
-                                            opplysninger={personResultat.person.registerhistorikk}
+                                            registerHistorikk={
+                                                personResultat.person.registerhistorikk
+                                            }
+                                            fødselsdato={personResultat.person.fødselsdato}
                                         />
                                     ) : (
                                         <Alert

@@ -38,7 +38,10 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
 
             <IndentertInnhold>
                 {personResultat.person.registerhistorikk ? (
-                    <Registeropplysninger opplysninger={personResultat.person.registerhistorikk} />
+                    <Registeropplysninger
+                        registerHistorikk={personResultat.person.registerhistorikk}
+                        fødselsdato={personResultat.person.fødselsdato}
+                    />
                 ) : (
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                 )}
