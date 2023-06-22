@@ -17,6 +17,8 @@ const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({ height, resultat,
             return <StatusIkon status={Status.FEIL} height={height} width={width} />;
         case Resultat.IKKE_VURDERT:
             return <StatusIkon status={Status.ADVARSEL} height={height} width={width} />;
+        case Resultat.IKKE_AKTUELT:
+            return <StatusIkon status={Status.INFO} height={height} width={width} />;
     }
 };
 
