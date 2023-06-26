@@ -1,4 +1,4 @@
-FROM navikt/node-express:16-alpine
+FROM ghcr.io/navikt/baseimages/node-express:16-alpine
 USER root
 USER apprunner
 
