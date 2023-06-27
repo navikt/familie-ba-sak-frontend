@@ -110,6 +110,9 @@ const Barna: React.FunctionComponent = () => {
 
             <br />
             <StyledCheckboxGruppe
+                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
+                    skjema.visFeilmeldinger
+                )}
                 legend={
                     !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
