@@ -14,10 +14,15 @@ export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
     OPPFYLT = 'OPPFYLT',
     IKKE_VURDERT = 'IKKE_VURDERT',
+}
+
+export enum ResultatBegrunnelse {
     IKKE_AKTUELT = 'IKKE_AKTUELT',
 }
 
-export const uiResultat: Record<Resultat, string> = {
+type ResultatUI = Resultat | ResultatBegrunnelse;
+
+export const uiResultat: Record<ResultatUI, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
@@ -28,7 +33,6 @@ export const resultater: Record<Resultat, string> = {
     OPPFYLT: 'Ja',
     IKKE_OPPFYLT: 'Nei',
     IKKE_VURDERT: 'Kanskje',
-    IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
 export enum AnnenVurderingType {
@@ -82,6 +86,7 @@ export interface IVilkårResultat {
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
     utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
+    resultatBegrunnelse: ResultatBegrunnelse | null;
 }
 
 // Vilkårsvurdering typer for api
@@ -107,6 +112,7 @@ export interface IRestVilkårResultat {
     periodeFom?: FamilieIsoDate;
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
+    resultatBegrunnelse: ResultatBegrunnelse | null;
     erEksplisittAvslagPåSøknad?: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;

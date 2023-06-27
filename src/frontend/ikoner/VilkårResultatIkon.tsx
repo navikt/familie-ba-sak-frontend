@@ -1,5 +1,6 @@
 import React from 'react';
 
+import type { ResultatBegrunnelse } from '../typer/vilkår';
 import { Resultat } from '../typer/vilkår';
 import StatusIkon, { Status } from './StatusIkon';
 
@@ -7,9 +8,18 @@ interface IVilkårResultatIkon {
     height?: number;
     resultat: Resultat;
     width?: number;
+    resultatBegrunnelse?: ResultatBegrunnelse | null;
 }
 
-const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({ height, resultat, width }) => {
+const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({
+    height,
+    resultat,
+    width,
+    resultatBegrunnelse,
+}) => {
+    if (resultatBegrunnelse && resultat === Resultat.OPPFYLT) {
+        return <StatusIkon status={Status.INFO} height={height} width={width} />;
+    }
     switch (resultat) {
         case Resultat.OPPFYLT:
             return <StatusIkon status={Status.OK} height={height} width={width} />;
@@ -17,8 +27,6 @@ const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({ height, resultat,
             return <StatusIkon status={Status.FEIL} height={height} width={width} />;
         case Resultat.IKKE_VURDERT:
             return <StatusIkon status={Status.ADVARSEL} height={height} width={width} />;
-        case Resultat.IKKE_AKTUELT:
-            return <StatusIkon status={Status.INFO} height={height} width={width} />;
     }
 };
 

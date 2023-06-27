@@ -5,7 +5,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType, ResultatBegrunnelse } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -161,7 +161,7 @@ export const erResultatGyldig = (
     avhengigheter?: Avhengigheter
 ): FeltState<Resultat> => {
     return (avhengigheter?.vurderesEtter !== Regelverk.EØS_FORORDNINGEN &&
-        felt.verdi === Resultat.IKKE_AKTUELT) ||
+        avhengigheter?.resultatBegrunnelse === ResultatBegrunnelse.IKKE_AKTUELT) ||
         felt.verdi === Resultat.IKKE_VURDERT
         ? feil(felt, 'Resultat er ikke satt')
         : ok(felt);

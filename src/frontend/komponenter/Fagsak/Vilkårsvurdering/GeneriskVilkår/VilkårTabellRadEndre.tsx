@@ -32,7 +32,7 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Regelverk, Resultat, VilkårType } from '../../../../typer/vilkår';
+import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
@@ -115,15 +115,18 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
 
-    const radioOnChange = (resultat: Resultat) => {
+    const radioOnChange = (resultat: Resultat | ResultatBegrunnelse) => {
         validerOgSettRedigerbartVilkår({
             ...redigerbartVilkår,
             verdi: {
                 ...redigerbartVilkår.verdi,
                 resultat: {
                     ...redigerbartVilkår.verdi.resultat,
-                    verdi: resultat,
+                    verdi:
+                        resultat === ResultatBegrunnelse.IKKE_AKTUELT ? Resultat.OPPFYLT : resultat,
                 },
+                resultatBegrunnelse:
+                    resultat === ResultatBegrunnelse.IKKE_AKTUELT ? resultat : null,
                 erEksplisittAvslagPåSøknad: false,
                 avslagBegrunnelser: {
                     ...redigerbartVilkår.verdi.avslagBegrunnelser,
@@ -132,7 +135,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             },
         });
     };
-
     const skalViseFeilmeldinger = () => {
         return visFeilmeldinger || visFeilmeldingerForEttVilkår;
     };
@@ -277,7 +279,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <StyledFamilieRadioGruppe
                     erLesevisning={lesevisning}
-                    value={redigerbartVilkår.verdi.resultat.verdi}
+                    value={
+                        redigerbartVilkår.verdi.resultatBegrunnelse
+                            ? redigerbartVilkår.verdi.resultatBegrunnelse
+                            : redigerbartVilkår.verdi.resultat.verdi
+                    }
                     legend={
                         <Label>
                             {vilkårFraConfig.spørsmål
@@ -292,7 +298,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                     errorId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
-                    onChange={(val: Resultat) => radioOnChange(val)}
+                    onChange={(val: Resultat | ResultatBegrunnelse) => radioOnChange(val)}
                 >
                     <Radio
                         value={
@@ -318,7 +324,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         redigerbartVilkår.verdi.vilkårType === VilkårType.LOVLIG_OPPHOLD &&
                         redigerbartVilkår.verdi.vurderesEtter === Regelverk.EØS_FORORDNINGEN && (
                             <Radio
-                                value={Resultat.IKKE_AKTUELT}
+                                value={ResultatBegrunnelse.IKKE_AKTUELT}
                                 name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                             >
                                 Ikke aktuelt

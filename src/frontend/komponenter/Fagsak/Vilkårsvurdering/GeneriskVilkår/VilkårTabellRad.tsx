@@ -68,8 +68,11 @@ const VilkårTabellRad: React.FC<IProps> = ({
     const { vurderErLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
+    const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
+    const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
+
     const hentInitiellEkspandering = () =>
-        erLesevisning || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+        erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] =
@@ -115,11 +118,16 @@ const VilkårTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <VurderingCelle>
                     <VilkårResultatIkon
-                        resultat={vilkårResultat.verdi.resultat.verdi}
+                        resultat={vilkårResultatVerdi}
+                        resultatBegrunnelse={vilkårResultatbegrunnelse}
                         width={20}
                         height={20}
                     />
-                    <BodyShort>{uiResultat[vilkårResultat.verdi.resultat.verdi]}</BodyShort>
+                    <BodyShort>
+                        {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
+                            ? uiResultat[vilkårResultatbegrunnelse]
+                            : uiResultat[vilkårResultatVerdi]}
+                    </BodyShort>
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>

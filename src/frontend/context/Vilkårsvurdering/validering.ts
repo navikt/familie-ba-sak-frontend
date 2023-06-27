@@ -37,7 +37,10 @@ export const validerVilkår = (
 
     const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
         nyttVilkårResultat.verdi.resultat,
-        { vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter }
+        {
+            vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
+            resultatBegrunnelse: nyttVilkårResultat.verdi.resultatBegrunnelse,
+        }
     );
 
     const nyeAvslagbegrunnelser: FeltState<VedtakBegrunnelse[]> =
