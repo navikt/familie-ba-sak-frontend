@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-
-import { Alert, Heading, Label } from '@navikt/ds-react';
+import { Alert, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -32,7 +30,7 @@ const BarnaWrapper = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledCheckboxGruppe = styled(CheckboxGruppe)`
+const StyledCheckboxGruppe = styled(CheckboxGroup)`
     min-width: 0;
 `;
 
@@ -73,6 +71,23 @@ const Barna: React.FunctionComponent = () => {
               )
             : [];
 
+    const oppdaterBarnMedMerketStatus = (barnaSomErSjekketAv: string[]) => {
+        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+            skjema.felter.barnaMedOpplysninger.verdi.map(
+                (barnMedOpplysninger: IBarnMedOpplysninger) =>
+                    barnaSomErSjekketAv.includes(barnMedOpplysninger.ident)
+                        ? {
+                              ...barnMedOpplysninger,
+                              merket: true,
+                          }
+                        : {
+                              ...barnMedOpplysninger,
+                              merket: false,
+                          }
+            )
+        );
+    };
+
     return (
         <BarnaWrapper className={'søknad__barna'}>
             <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
@@ -95,9 +110,6 @@ const Barna: React.FunctionComponent = () => {
 
             <br />
             <StyledCheckboxGruppe
-                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
-                    skjema.visFeilmeldinger
-                )}
                 legend={
                     !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
@@ -105,7 +117,12 @@ const Barna: React.FunctionComponent = () => {
                         <Label>Barn det er søkt om</Label>
                     )
                 }
-                utenFeilPropagering={true}
+                value={skjema.felter.barnaMedOpplysninger.verdi
+                    .filter(
+                        (barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.merket
+                    )
+                    .map((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.ident)}
+                onChange={(merkedeBarn: string[]) => oppdaterBarnMedMerketStatus(merkedeBarn)}
             >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
