@@ -53,13 +53,34 @@ interface IRegisteropplysningerTabellProps {
     historikk: IRestRegisteropplysning[];
 }
 
-const hentDatoHeader = (opplysningstype: Registeropplysning) => {
-    if (opplysningstype === Registeropplysning.SIVILSTAND) {
-        return 'Dato';
-    } else if (opplysningstype === Registeropplysning.DØDSBOADRESSE) {
-        return 'Dødsdato';
-    } else {
-        return 'Periode';
+const hentDatoHeader = (opplysningstype: Registeropplysning): string => {
+    switch (opplysningstype) {
+        case Registeropplysning.SIVILSTAND:
+            return 'Dato';
+        case Registeropplysning.DØDSBOADRESSE:
+            return 'Dødsdato';
+        case Registeropplysning.FØDSELSDATO:
+            return '';
+        default:
+            return 'Periode';
+    }
+};
+
+const hentDatoVerdi = (
+    opplysningstype: Registeropplysning,
+    periode: IRestRegisteropplysning
+): string => {
+    switch (opplysningstype) {
+        case Registeropplysning.SIVILSTAND:
+        case Registeropplysning.DØDSBOADRESSE:
+            return tilVisning(periode.fom ? kalenderDato(periode.fom) : undefined);
+        case Registeropplysning.FØDSELSDATO:
+            return '';
+        default:
+            return periodeToString({
+                fom: periode.fom,
+                tom: periode.tom,
+            });
     }
 };
 
@@ -114,19 +135,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                                 <Table.Row key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
                                     <Table.DataCell children={periode.verdi} />
                                     <Table.DataCell
-                                        children={
-                                            opplysningstype === Registeropplysning.SIVILSTAND ||
-                                            opplysningstype === Registeropplysning.DØDSBOADRESSE
-                                                ? tilVisning(
-                                                      periode.fom
-                                                          ? kalenderDato(periode.fom)
-                                                          : undefined
-                                                  )
-                                                : periodeToString({
-                                                      fom: periode.fom,
-                                                      tom: periode.tom,
-                                                  })
-                                        }
+                                        children={hentDatoVerdi(opplysningstype, periode)}
                                     />
                                 </Table.Row>
                             ))}

@@ -5,6 +5,7 @@ export interface IRestFeilutbetaltValuta {
     fom: FamilieIsoDate;
     tom: FamilieIsoDate;
     feilutbetaltBeløp: number;
+    erPerMåned?: boolean;
 }
 
 export interface IRestNyFeilutbetaltValutaPeriode {
