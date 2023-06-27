@@ -194,7 +194,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
             />
             <Fieldset
                 error={
-                    hentFrontendFeilmelding(skjema.submitRessurs) ||
+                    (skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)) ||
                     hentFrontendFeilmelding(hentetDokument)
                 }
                 legend="Send brev"
@@ -282,10 +282,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     legend="Legg til kulepunkt"
                                     hideLegend
                                     id={fritekstSkjemaGruppeId}
-                                    error={
-                                        skjema.visFeilmeldinger &&
-                                        hentFrontendFeilmelding(skjema.submitRessurs)
-                                    }
                                 >
                                     {skjema.felter.fritekster.verdi.map(
                                         (fritekst: FeltState<IFritekstFelt>, index: number) => {
