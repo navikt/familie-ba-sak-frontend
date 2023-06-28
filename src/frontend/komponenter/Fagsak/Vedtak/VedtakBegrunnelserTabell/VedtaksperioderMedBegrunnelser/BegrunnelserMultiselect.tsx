@@ -4,6 +4,7 @@ import type { GroupBase } from 'react-select';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
+import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type {
     ActionMeta,
     FormatOptionLabelMeta,
@@ -102,7 +103,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 container: provided => ({
                     ...provided,
                     maxWidth: '50rem',
-                    zIndex: 10,
+                    zIndex: AZIndexPopover,
                 }),
                 groupHeading: provided => ({
                     ...provided,
