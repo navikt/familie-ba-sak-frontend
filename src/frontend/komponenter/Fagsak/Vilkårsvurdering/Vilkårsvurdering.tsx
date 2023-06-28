@@ -192,7 +192,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             )}
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (
-                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'}>
+                    <ErrorSummary
+                        heading={'For å gå videre må du rette opp følgende:'}
+                        size="small"
+                    >
                         {[
                             ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
                                 feilmelding: `Et vilkår av typen '${

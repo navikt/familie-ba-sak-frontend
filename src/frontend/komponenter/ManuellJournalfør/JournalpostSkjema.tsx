@@ -88,7 +88,7 @@ export const JournalpostSkjema: React.FC = () => {
                     <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <ErrorSummary heading={'For å gå videre må du rette opp følgende'}>
+                    <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">
                         {hentFeilTilOppsummering().map(item => (
                             <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
                                 {item.feilmelding}
