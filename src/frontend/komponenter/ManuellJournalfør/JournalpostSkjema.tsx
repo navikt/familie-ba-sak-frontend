@@ -23,7 +23,6 @@ import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
 const Container = styled.div`
     padding: 2rem;
-    overflow: auto;
 `;
 
 const StyledSectionDiv = styled.div`
