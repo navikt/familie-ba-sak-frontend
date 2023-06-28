@@ -34,39 +34,35 @@ interface IProps {
     behandlingsSteg?: BehandlingSteg;
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
-    alternativer: IBarnMedOpplysninger[];
 }
 
 const BarnBrevetGjelder = (props: IProps) => {
-    const {
-        barnBrevetGjelderFelt,
-        behandlingsSteg,
-        visFeilmeldinger,
-        settVisFeilmeldinger,
-        alternativer,
-    } = props;
+    const { barnBrevetGjelderFelt, behandlingsSteg, visFeilmeldinger, settVisFeilmeldinger } =
+        props;
 
     const skalViseVarselOmManglendeBarn =
         behandlingsSteg &&
         hentStegNummer(behandlingsSteg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
-        alternativer.length === 0;
+        barnBrevetGjelderFelt.verdi.length === 0;
 
-    alternativer.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-        if (!a.fødselsdato || a.fødselsdato === '') {
-            return 1;
+    const sorterteBarn = barnBrevetGjelderFelt.verdi.sort(
+        (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+            if (!a.fødselsdato || a.fødselsdato === '') {
+                return 1;
+            }
+
+            if (!b.fødselsdato || b.fødselsdato === '') {
+                return -1;
+            }
+
+            return !a.ident
+                ? 1
+                : kalenderDiff(
+                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
+                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
+                  );
         }
-
-        if (!b.fødselsdato || b.fødselsdato === '') {
-            return -1;
-        }
-
-        return !a.ident
-            ? 1
-            : kalenderDiff(
-                  kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
-                  kalenderDatoTilDate(kalenderDato(a.fødselsdato))
-              );
-    });
+    );
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         barnBrevetGjelderFelt.validerOgSettFelt(
@@ -89,7 +85,7 @@ const BarnBrevetGjelder = (props: IProps) => {
                 settVisFeilmeldinger(false);
             }}
         >
-            {alternativer.map((barn: IBarnMedOpplysninger, index: number) => {
+            {sorterteBarn.map((barn: IBarnMedOpplysninger, index: number) => {
                 const barnLabel = lagBarnLabel(barn);
                 return (
                     <StyledCheckbox value={barn.ident} key={'barn-' + index}>
