@@ -9,7 +9,7 @@ import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
 interface IEkspanderbartBegrunnelsePanelProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
-    onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    onClick?: () => void;
 }
 
 const EkspanderbartVedtaksbegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
