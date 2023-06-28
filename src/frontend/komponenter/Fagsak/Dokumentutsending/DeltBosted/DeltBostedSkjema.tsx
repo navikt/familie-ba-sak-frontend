@@ -43,12 +43,41 @@ const DeltBostedSkjema = (props: IProps) => {
         }
     );
 
-    const oppdaterBarnMedMerketStatus = (barnaSomErMerket: string[]) => {
+    const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         barnMedDeltBostedFelt.validerOgSettFelt(
             barnMedDeltBostedFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
                 ...barnMedOpplysninger,
                 merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
             }))
+        );
+    };
+
+    const oppdaterAvtalerOmDeltBostedPerBarn = (barnaSomErMerket: string[]) => {
+        const barnHvorMerkingErFjernet = barnMedDeltBostedFelt.verdi
+            .filter(
+                (barn: IBarnMedOpplysninger) =>
+                    barn.merket && !barnaSomErMerket.includes(barn.ident)
+            )
+            .map((barn: IBarnMedOpplysninger) => barn.ident);
+        const barnHvorMerkingErLagtTil = barnMedDeltBostedFelt.verdi
+            .filter(
+                (barn: IBarnMedOpplysninger) =>
+                    !barn.merket && barnaSomErMerket.includes(barn.ident)
+            )
+            .map((barn: IBarnMedOpplysninger) => barn.ident);
+
+        barnHvorMerkingErFjernet.forEach((ident: string) =>
+            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                [ident]: [],
+            })
+        );
+
+        barnHvorMerkingErLagtTil.forEach((ident: string) =>
+            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                [ident]: [''],
+            })
         );
     };
 
@@ -60,36 +89,9 @@ const DeltBostedSkjema = (props: IProps) => {
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .map((barn: IBarnMedOpplysninger) => barn.ident)}
             onChange={(barnaSomErMerket: string[]) => {
-                const barnHvorMerkingErFjernet = barnMedDeltBostedFelt.verdi
-                    .filter(
-                        (barn: IBarnMedOpplysninger) =>
-                            barn.merket && !barnaSomErMerket.includes(barn.ident)
-                    )
-                    .map((barn: IBarnMedOpplysninger) => barn.ident);
-                const barnHvorMerkingErLagtTil = barnMedDeltBostedFelt.verdi
-                    .filter(
-                        (barn: IBarnMedOpplysninger) =>
-                            !barn.merket && barnaSomErMerket.includes(barn.ident)
-                    )
-                    .map((barn: IBarnMedOpplysninger) => barn.ident);
-
-                barnHvorMerkingErFjernet.forEach((ident: string) =>
-                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                        [ident]: [],
-                    })
-                );
-
-                barnHvorMerkingErLagtTil.forEach((ident: string) =>
-                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                        [ident]: [''],
-                    })
-                );
-
+                oppdaterAvtalerOmDeltBostedPerBarn(barnaSomErMerket);
                 settVisFeilmeldinger(false);
-
-                oppdaterBarnMedMerketStatus(barnaSomErMerket);
+                oppdaterBarnMedNyMerketStatus(barnaSomErMerket);
             }}
         >
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
