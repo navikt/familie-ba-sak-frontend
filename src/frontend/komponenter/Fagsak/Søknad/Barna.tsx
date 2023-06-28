@@ -74,16 +74,10 @@ const Barna: React.FunctionComponent = () => {
     const oppdaterBarnMedMerketStatus = (barnaSomErSjekketAv: string[]) => {
         skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
             skjema.felter.barnaMedOpplysninger.verdi.map(
-                (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                    barnaSomErSjekketAv.includes(barnMedOpplysninger.ident)
-                        ? {
-                              ...barnMedOpplysninger,
-                              merket: true,
-                          }
-                        : {
-                              ...barnMedOpplysninger,
-                              merket: false,
-                          }
+                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                    ...barnMedOpplysninger,
+                    merket: barnaSomErSjekketAv.includes(barnMedOpplysninger.ident),
+                })
             )
         );
     };
