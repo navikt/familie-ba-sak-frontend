@@ -8151,16 +8151,6 @@ nav-frontend-core@^6.0.1, nav-frontend-core@^6.0.x:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-6.0.1.tgz#81feef412890cb84074d329a2e3a8b6bca4ba314"
   integrity sha512-zFAPRXgmS3Nhu5SyafsTnCFg2/PEbrUF+g1xGo+pKIxGfJgCeLi47gPSe7Kjeh3IwIo0ex3cA7tfbUIWOY65dQ==
 
-nav-frontend-ekspanderbartpanel-style@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel-style/-/nav-frontend-ekspanderbartpanel-style-2.0.1.tgz#dcba50be930eabace6ac2ba73b296d19cf756051"
-  integrity sha512-TpkisCN9nb+x8mVcGe37xH/8RXWjrOpnx+KGnvwDkYaQ8j3OL82eSmy/zdWQVeBCSuKYLzhQKA5k6+gCbPKh1w==
-
-nav-frontend-ekspanderbartpanel@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-4.0.1.tgz#9847cbe816eb3a0100e4f82d9e98e5f21dc0edb4"
-  integrity sha512-MZQOKZc97Z0+kmU0nqC6y8GQyNFLUJhrYEoTwFWrVP+Uf2x0olqsKqaB5dHNjaxUdWBsZmw53749VweBUjzyhg==
-
 nav-frontend-ikoner-assets@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-3.0.1.tgz#7531ea6da2a5b2d9cd7071b2b3a495fdf6b309e7"
