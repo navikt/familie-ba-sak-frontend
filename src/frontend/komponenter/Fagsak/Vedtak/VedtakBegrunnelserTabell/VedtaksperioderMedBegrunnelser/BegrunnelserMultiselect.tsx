@@ -100,10 +100,10 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             id={`${id}`}
             value={standardbegrunnelser}
             propSelectStyles={{
-                container: provided => ({
+                container: (provided, props) => ({
                     ...provided,
                     maxWidth: '50rem',
-                    zIndex: AZIndexPopover,
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
                 }),
                 groupHeading: provided => ({
                     ...provided,

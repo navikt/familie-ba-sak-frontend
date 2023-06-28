@@ -115,10 +115,10 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             }}
             options={muligeOptions}
             propSelectStyles={{
-                container: provided => ({
+                container: (provided, props) => ({
                     ...provided,
                     maxWidth: '25rem',
-                    zIndex: AZIndexPopover,
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
                 }),
                 groupHeading: provided => ({
                     ...provided,
