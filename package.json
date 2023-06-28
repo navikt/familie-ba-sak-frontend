@@ -32,7 +32,6 @@
     "@axe-core/react": "^4.6.0",
     "@navikt/ds-css": "4.4.2",
     "@navikt/ds-css-internal": "2.2.0",
-    "@navikt/aksel-icons": "4.4.2",
     "@navikt/ds-react": "4.4.2",
     "@navikt/ds-react-internal": "2.2.0",
     "@navikt/ds-tokens": "4.4.2",

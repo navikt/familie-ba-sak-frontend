@@ -1954,7 +1954,7 @@
     hey-listen "^1.0.8"
     tslib "^2.3.1"
 
-"@navikt/aksel-icons@4.4.2", "@navikt/aksel-icons@^4.4.2":
+"@navikt/aksel-icons@^4.4.2":
   version "4.4.2"
   resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/4.4.2/3547541631b662313ce39f1bb0fe59b52bfd80f9#3547541631b662313ce39f1bb0fe59b52bfd80f9"
   integrity sha512-i4ubW/IR5yZxHftHrmaftPHBelvpcfzxbuamrKM5tiniGWJzH7Gk8AvT6pXqzqi+l4wXW4pSYitAlMVxEeGDAA==
