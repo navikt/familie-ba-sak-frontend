@@ -30,7 +30,7 @@ const BarnaWrapper = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledCheckboxGruppe = styled(CheckboxGroup)`
+const StyledCheckboxGroup = styled(CheckboxGroup)`
     min-width: 0;
 `;
 
@@ -103,7 +103,7 @@ const Barna: React.FunctionComponent = () => {
             )}
 
             <br />
-            <StyledCheckboxGruppe
+            <StyledCheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
                     skjema.visFeilmeldinger
                 )}
@@ -138,7 +138,7 @@ const Barna: React.FunctionComponent = () => {
                 {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
-            </StyledCheckboxGruppe>
+            </StyledCheckboxGroup>
         </BarnaWrapper>
     );
 };
