@@ -12,7 +12,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Resultat, uiResultat } from '../../../../typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';
@@ -125,8 +125,8 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     />
                     <BodyShort>
                         {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
-                            ? uiResultat[vilkårResultatbegrunnelse]
-                            : uiResultat[vilkårResultatVerdi]}
+                            ? resultatVisningsnavn[vilkårResultatbegrunnelse]
+                            : resultatVisningsnavn[vilkårResultatVerdi]}
                     </BodyShort>
                 </VurderingCelle>
             </Table.DataCell>

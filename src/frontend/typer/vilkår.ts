@@ -22,7 +22,7 @@ export enum ResultatBegrunnelse {
 
 type ResultatUI = Resultat | ResultatBegrunnelse;
 
-export const uiResultat: Record<ResultatUI, string> = {
+export const resultatVisningsnavn: Record<ResultatUI, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
