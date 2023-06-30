@@ -88,6 +88,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         vilkårResultat.resultat,
                                         erResultatGyldig
                                     ),
+                                    resultatBegrunnelse: vilkårResultat.resultatBegrunnelse,
                                     vilkårType: vilkårResultat.vilkårType,
                                     endretAv: vilkårResultat.endretAv,
                                     erVurdert: vilkårResultat.erVurdert,
