@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
-import { Behandlingstype } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
@@ -138,6 +138,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const behandlingErMigreringMedManuellePosteringer =
         erMigreringFraInfotrygd && harManuellePosteringer;
+
+    const behandlingErEndreMigreringsdato =
+        åpenBehandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -267,6 +270,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
+        behandlingErEndreMigreringsdato,
     };
 });
 

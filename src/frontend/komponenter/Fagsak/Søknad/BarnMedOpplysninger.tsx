@@ -52,20 +52,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
         barn.fødselsdato
     )}) | ${formaterIdent(barn.ident)} ${barnetHarLøpendeUtbetaling ? '(løpende)' : ''}`;
 
-    const oppdaterBarnMerket = (nyMerketStatus: boolean) => {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-            skjema.felter.barnaMedOpplysninger.verdi.map(
-                (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                    barnMedOpplysninger.ident === barn.ident
-                        ? {
-                              ...barnMedOpplysninger,
-                              merket: nyMerketStatus,
-                          }
-                        : barnMedOpplysninger
-            )
-        );
-    };
-
     return (
         <CheckboxOgSlettknapp>
             {erLesevisning || gjelderInstitusjon || gjelderEnsligMindreårig ? (
@@ -80,18 +66,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
                 ) : null
             ) : (
-                <StyledCheckbox
-                    value={
-                        <LabelContent>
-                            <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-                        </LabelContent>
-                    }
-                    checked={barn.merket}
-                    onChange={() => {
-                        const nyMerketStatus = !barn.merket;
-                        oppdaterBarnMerket(nyMerketStatus);
-                    }}
-                >
+                <StyledCheckbox value={barn.ident}>
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
                     </LabelContent>

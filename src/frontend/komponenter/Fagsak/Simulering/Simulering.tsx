@@ -46,6 +46,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
+        behandlingErEndreMigreringsdato,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
 
@@ -107,39 +108,47 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {(behandlingErMigreringMedAvvikInnenforBeløpsgrenser ||
-                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser ||
-                            behandlingErMigreringMedManuellePosteringer) && (
-                            <>
-                                {behandlingErMigreringMedAvvikInnenforBeløpsgrenser && (
-                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                        Behandlingen medfører avvik i simulering. Ved avvik på
-                                        mindre enn totalt 100 kroner, kan du gå videre i
-                                        behandlingen uten totrinnskontroll. Du må huske å sende
-                                        oppgave til NØS om at det ikke skal etterbetales / opprettes
-                                        kravgrunnlag.
-                                    </StyledBeløpsgrenseAlert>
-                                )}
-                                {behandlingErMigreringMedAvvikUtenforBeløpsgrenser ? (
-                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                        Simuleringen viser en feilutbetaling eller etterbetaling.
-                                        Hvis du velger å gå videre i behandlingen kreves det
-                                        to-trinnskontroll. Det må sendes manuell oppgave til NØS for
-                                        å sikre at det ikke går ut etterbetaling eller blir
-                                        opprettet feilutbetalingssak i migreringsbehandlingen. Hvis
-                                        bruker skal ha en etterbetaling eller feilutbetaling, må
-                                        dette behandles i en egen revurderingsbehandling med
-                                        vedtaksbrev til bruker.
-                                    </StyledBeløpsgrenseAlert>
-                                ) : behandlingErMigreringMedManuellePosteringer ? (
-                                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                        Det finnes manuelle posteringer tilknyttet tidligere
-                                        behandling. Hvis du velger å gå videre i behandlingen kreves
-                                        det to-trinnskontroll.
-                                    </StyledBeløpsgrenseAlert>
-                                ) : null}
-                            </>
-                        )}
+                        {behandlingErEndreMigreringsdato &&
+                            (behandlingErMigreringMedAvvikUtenforBeløpsgrenser ||
+                                behandlingErMigreringMedAvvikUtenforBeløpsgrenser) && (
+                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                    Simuleringen viser en feilutbetaling eller etterbetaling. Du
+                                    trenger ikke sende oppgave til NØS, da beløpet ikke sendes til
+                                    oppdrag. Hvis bruker skal ha en etterbetaling eller
+                                    feilutbetaling må dette behandles i en egen
+                                    revurderingsbehandling med vedtaksbrev til bruker.
+                                </StyledBeløpsgrenseAlert>
+                            )}
+                        {!behandlingErEndreMigreringsdato &&
+                            behandlingErMigreringMedAvvikInnenforBeløpsgrenser && (
+                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                    Behandlingen medfører avvik i simulering. Ved avvik på mindre
+                                    enn totalt 100 kroner, kan du gå videre i behandlingen uten
+                                    totrinnskontroll. Du må huske å sende oppgave til NØS om at det
+                                    ikke skal etterbetales / opprettes kravgrunnlag.
+                                </StyledBeløpsgrenseAlert>
+                            )}
+                        {!behandlingErEndreMigreringsdato &&
+                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser && (
+                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                    Simuleringen viser en feilutbetaling eller etterbetaling. Hvis
+                                    du velger å gå videre i behandlingen kreves det
+                                    to-trinnskontroll. Det må sendes manuell oppgave til NØS for å
+                                    sikre at det ikke går ut etterbetaling eller blir opprettet
+                                    feilutbetalingssak i migreringsbehandlingen. Hvis bruker skal ha
+                                    en etterbetaling eller feilutbetaling, må dette behandles i en
+                                    egen revurderingsbehandling med vedtaksbrev til bruker.
+                                </StyledBeløpsgrenseAlert>
+                            )}
+
+                        {!behandlingErEndreMigreringsdato &&
+                            behandlingErMigreringMedManuellePosteringer && (
+                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
+                                    Det finnes manuelle posteringer tilknyttet tidligere behandling.
+                                    Hvis du velger å gå videre i behandlingen kreves det
+                                    to-trinnskontroll.
+                                </StyledBeløpsgrenseAlert>
+                            )}
                         {erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
