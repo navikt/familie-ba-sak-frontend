@@ -33,7 +33,7 @@ const erSøkersAktivitetslandGyldig = (
     felt: FeltState<string | undefined>,
     avhengigheter?: Avhengigheter
 ): FeltState<string | undefined> => {
-    const søkersAktivitet = avhengigheter?.annenForeldersAktivitet as Felt<KompetanseAktivitet>;
+    const søkersAktivitet = avhengigheter?.søkersAktivitet as Felt<KompetanseAktivitet>;
     if (søkersAktivitet?.verdi === SøkersAktivitet.INAKTIV) {
         return ok(felt);
     }
