@@ -8,12 +8,11 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type {
-    AnnenForelderAktivitet,
     EøsPeriodeStatus,
     IKompetanse,
     IRestKompetanse,
+    KompetanseAktivitet,
     KompetanseResultat,
-    SøkersAktivitet,
 } from '../../typer/eøsPerioder';
 import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
@@ -44,12 +43,12 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
     const { request } = useHttp();
 
     const initelFom = useFelt<string>({ verdi: kompetanse.fom });
-    const annenForeldersAktivitet = useFelt<AnnenForelderAktivitet | undefined>({
+    const annenForeldersAktivitet = useFelt<KompetanseAktivitet | undefined>({
         verdi: kompetanse.annenForeldersAktivitet,
         valideringsfunksjon: erAnnenForeldersAktivitetGyldig,
     });
 
-    const søkersAktivitet = useFelt<SøkersAktivitet | undefined>({
+    const søkersAktivitet = useFelt<KompetanseAktivitet | undefined>({
         verdi: kompetanse.søkersAktivitet,
         valideringsfunksjon: erSøkersAktivitetGyldig,
     });
