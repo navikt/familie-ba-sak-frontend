@@ -43,7 +43,7 @@ interface IProps {
 }
 
 const StyledAlert = styled(Alert)`
-    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 `;
 
 const StyledFamilieLandvelger = styled(FamilieLandvelger)`
@@ -55,7 +55,11 @@ const StyledFamilieSelect = styled(FamilieSelect)`
 `;
 
 const StyledFamilieReactSelect = styled(FamilieReactSelect)`
-    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+`;
+
+const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
+    margin-top: 1.5rem;
 `;
 
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
@@ -104,13 +108,19 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
 
-                <EøsPeriodeSkjema
+                <StyledEøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
+                {annenForelderOmfattetAvNorskLovgivning && (
+                    <StyledAlert variant="info" inline>
+                        Annen forelder er omfattet av norsk lovgivning etter praksisendring om
+                        selvstendig rett i perioden
+                    </StyledAlert>
+                )}
                 <StyledFamilieSelect
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
