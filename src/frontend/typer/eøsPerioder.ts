@@ -23,26 +23,6 @@ export enum SøkersAktivitet {
     INAKTIV = 'INAKTIV',
 }
 
-export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
-    ARBEIDER: 'Arbeider',
-    SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
-    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
-    UTSENDT_ARBEIDSTAKER_FRA_NORGE: 'Utsendt arbeidstaker fra Norge',
-    MOTTAR_UFØRETRYGD: 'Mottar uføretrygd',
-    MOTTAR_PENSJON: 'Mottar pensjon',
-    ARBEIDER_PÅ_NORSKREGISTRERT_SKIP: 'Arbeider på norskregistrert skip',
-    ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
-    ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
-    ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON: 'Arbeider ved utenlandsk utenriksstasjon',
-    MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar utbetaling fra NAV under opphold i utlandet',
-    MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar uføretrygd fra Norge under opphold i utlandet',
-    MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar pensjon fra Norge under opphold i utlandet',
-    INAKTIV: 'Inaktiv',
-};
-
 export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
     ARBEIDER: 'Arbeider',
     SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
@@ -77,16 +57,6 @@ export enum AnnenForelderAktivitet {
     IKKE_AKTUELT = 'IKKE_AKTUELT',
     UTSENDT_ARBEIDSTAKER = 'UTSENDT_ARBEIDSTAKER',
 }
-
-export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = {
-    I_ARBEID: 'I arbeid',
-    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
-    FORSIKRET_I_BOSTEDSLAND: 'Forsikret i bostedsland',
-    MOTTAR_PENSJON: 'Mottar pensjon',
-    INAKTIV: 'Inaktiv',
-    IKKE_AKTUELT: 'Ikke aktuelt',
-    UTSENDT_ARBEIDSTAKER: 'Utsendt arbeidstaker',
-};
 
 export enum KompetanseResultat {
     NORGE_ER_PRIMÆRLAND = 'NORGE_ER_PRIMÆRLAND',

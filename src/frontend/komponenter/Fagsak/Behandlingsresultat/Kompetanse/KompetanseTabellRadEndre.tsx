@@ -17,13 +17,11 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
-    annenForelderAktiviteter,
     EøsPeriodeStatus,
     kompetanseAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,
-    søkersAktiviteter,
 } from '../../../../typer/eøsPerioder';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
@@ -130,21 +128,17 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                 >
                     <option value={''}>Velg</option>
-                    {annenForelderOmfattetAvNorskLovgivning
-                        ? Object.values(AnnenForelderAktivitet).map(aktivitet => {
-                              return (
-                                  <option key={aktivitet} value={aktivitet}>
-                                      {annenForelderAktiviteter[aktivitet]}
-                                  </option>
-                              );
-                          })
-                        : Object.values(SøkersAktivitet).map(aktivitet => {
-                              return (
-                                  <option key={aktivitet} value={aktivitet}>
-                                      {søkersAktiviteter[aktivitet]}
-                                  </option>
-                              );
-                          })}
+                    {Object.values(
+                        annenForelderOmfattetAvNorskLovgivning
+                            ? AnnenForelderAktivitet
+                            : SøkersAktivitet
+                    ).map((aktivitet: KompetanseAktivitet) => {
+                        return (
+                            <option key={aktivitet} value={aktivitet}>
+                                {kompetanseAktiviteter[aktivitet]}
+                            </option>
+                        );
+                    })}
                 </StyledFamilieSelect>
                 <StyledFamilieSelect
                     className="unset-margin-bottom"
@@ -166,21 +160,17 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }}
                 >
                     <option value={''}>Velg</option>
-                    {annenForelderOmfattetAvNorskLovgivning
-                        ? Object.values(SøkersAktivitet).map(aktivitet => {
-                              return (
-                                  <option key={aktivitet} value={aktivitet}>
-                                      {søkersAktiviteter[aktivitet]}
-                                  </option>
-                              );
-                          })
-                        : Object.values(AnnenForelderAktivitet).map(aktivitet => {
-                              return (
-                                  <option key={aktivitet} value={aktivitet}>
-                                      {annenForelderAktiviteter[aktivitet]}
-                                  </option>
-                              );
-                          })}
+                    {Object.values(
+                        annenForelderOmfattetAvNorskLovgivning
+                            ? SøkersAktivitet
+                            : AnnenForelderAktivitet
+                    ).map((aktivitet: KompetanseAktivitet) => {
+                        return (
+                            <option key={aktivitet} value={aktivitet}>
+                                {kompetanseAktiviteter[aktivitet]}
+                            </option>
+                        );
+                    })}
                 </StyledFamilieSelect>
                 {skjema.felter.annenForeldersAktivitet.verdi ===
                     AnnenForelderAktivitet.IKKE_AKTUELT && (
