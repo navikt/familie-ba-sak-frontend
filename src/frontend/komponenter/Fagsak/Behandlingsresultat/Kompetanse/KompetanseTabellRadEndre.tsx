@@ -39,7 +39,7 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
-    annenForelderOmfattetAvNorskLovgivning?: boolean;
+    erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
 }
 
 const StyledAlert = styled(Alert)`
@@ -70,7 +70,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     sendInnSkjema,
     toggleForm,
     slettKompetanse,
-    annenForelderOmfattetAvNorskLovgivning,
+    erAnnenForelderOmfattetAvNorskLovgivning,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const lesevisning = vurderErLesevisning(true);
@@ -115,7 +115,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
-                {annenForelderOmfattetAvNorskLovgivning && (
+                {erAnnenForelderOmfattetAvNorskLovgivning && (
                     <StyledAlert variant="info" inline>
                         Annen forelder er omfattet av norsk lovgivning etter praksisendring om
                         selvstendig rett i perioden
@@ -139,7 +139,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 >
                     <option value={''}>Velg</option>
                     {Object.values(
-                        annenForelderOmfattetAvNorskLovgivning
+                        erAnnenForelderOmfattetAvNorskLovgivning
                             ? AnnenForelderAktivitet
                             : SøkersAktivitet
                     ).map((aktivitet: KompetanseAktivitet) => {
@@ -171,7 +171,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 >
                     <option value={''}>Velg</option>
                     {Object.values(
-                        annenForelderOmfattetAvNorskLovgivning
+                        erAnnenForelderOmfattetAvNorskLovgivning
                             ? SøkersAktivitet
                             : AnnenForelderAktivitet
                     ).map((aktivitet: KompetanseAktivitet) => {
