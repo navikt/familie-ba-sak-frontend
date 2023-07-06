@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Feiloppsummering } from 'nav-frontend-skjema';
-
 import { Back } from '@navikt/ds-icons';
-import { Alert, ErrorMessage, Heading } from '@navikt/ds-react';
+import { Alert, ErrorMessage, ErrorSummary, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -90,10 +88,13 @@ export const JournalpostSkjema: React.FC = () => {
                     <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <Feiloppsummering
-                        tittel={'For å gå videre må du rette opp følgende'}
-                        feil={hentFeilTilOppsummering()}
-                    />
+                    <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">
+                        {hentFeilTilOppsummering().map(item => (
+                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
+                                {item.feilmelding}
+                            </ErrorSummary.Item>
+                        ))}
+                    </ErrorSummary>
                 )}
             </StyledSectionDiv>
 

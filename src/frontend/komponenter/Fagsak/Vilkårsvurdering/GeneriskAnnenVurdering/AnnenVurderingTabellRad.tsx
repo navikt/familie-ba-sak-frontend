@@ -12,7 +12,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
-import { Resultat, uiResultat } from '../../../../typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 
@@ -99,7 +99,9 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                         width={20}
                         height={20}
                     />
-                    <BodyShort children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
+                    <BodyShort
+                        children={resultatVisningsnavn[annenVurdering.verdi.resultat.verdi]}
+                    />
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>

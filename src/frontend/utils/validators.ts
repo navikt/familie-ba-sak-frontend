@@ -5,7 +5,7 @@ import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType, ResultatBegrunnelse } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -156,8 +156,15 @@ export const erPeriodeGyldig = (
     }
 };
 
-export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+export const erResultatGyldig = (
+    felt: FeltState<Resultat>,
+    avhengigheter?: Avhengigheter
+): FeltState<Resultat> => {
+    return (avhengigheter?.vurderesEtter !== Regelverk.EØS_FORORDNINGEN &&
+        avhengigheter?.resultatBegrunnelse === ResultatBegrunnelse.IKKE_AKTUELT) ||
+        felt.verdi === Resultat.IKKE_VURDERT
+        ? feil(felt, 'Resultat er ikke satt')
+        : ok(felt);
 };
 
 export const erAvslagBegrunnelserGyldig = (

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ErrorColored, SuccessColored, WarningColored } from '@navikt/ds-icons';
+import { ErrorColored, SuccessColored, WarningColored, InformationColored } from '@navikt/ds-icons';
 
 interface IProps {
     status?: Status;
@@ -12,6 +12,7 @@ export enum Status {
     ADVARSEL,
     FEIL,
     OK,
+    INFO,
 }
 
 const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
@@ -21,9 +22,10 @@ const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
         case Status.FEIL:
             return <ErrorColored height={height} width={width} />;
         case Status.ADVARSEL:
-        default:
             return <WarningColored height={height} width={width} />;
+        default:
+        case Status.INFO:
+            return <InformationColored height={height} width={width} />;
     }
 };
-
 export default StatusIkon;

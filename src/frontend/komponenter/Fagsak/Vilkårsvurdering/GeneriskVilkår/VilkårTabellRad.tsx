@@ -12,7 +12,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Resultat, uiResultat } from '../../../../typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';
@@ -68,8 +68,11 @@ const VilkårTabellRad: React.FC<IProps> = ({
     const { vurderErLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
+    const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
+    const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
+
     const hentInitiellEkspandering = () =>
-        erLesevisning || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+        erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] =
@@ -115,11 +118,16 @@ const VilkårTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <VurderingCelle>
                     <VilkårResultatIkon
-                        resultat={vilkårResultat.verdi.resultat.verdi}
+                        resultat={vilkårResultatVerdi}
+                        resultatBegrunnelse={vilkårResultatbegrunnelse}
                         width={20}
                         height={20}
                     />
-                    <BodyShort>{uiResultat[vilkårResultat.verdi.resultat.verdi]}</BodyShort>
+                    <BodyShort>
+                        {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
+                            ? resultatVisningsnavn[vilkårResultatbegrunnelse]
+                            : resultatVisningsnavn[vilkårResultatVerdi]}
+                    </BodyShort>
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>
