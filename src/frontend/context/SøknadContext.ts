@@ -8,6 +8,7 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
@@ -123,7 +124,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             tilbakestillSøknad();
         }, [bruker.status]);
 
-        React.useEffect(() => {
+        useDeepEffect(() => {
             if (åpenBehandling.søknadsgrunnlag) {
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
@@ -148,7 +149,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
             }
-        }, [åpenBehandling]);
+        }, [åpenBehandling.søknadsgrunnlag]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
