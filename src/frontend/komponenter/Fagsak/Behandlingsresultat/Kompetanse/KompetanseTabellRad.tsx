@@ -92,6 +92,9 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     toggleForm={toggleForm}
                     slettKompetanse={slettKompetanse}
                     status={kompetanse.status}
+                    erAnnenForelderOmfattetAvNorskLovgivning={
+                        kompetanse.erAnnenForelderOmfattetAvNorskLovgivning
+                    }
                 />
             }
         >
