@@ -72,7 +72,7 @@ const Journalpost: React.FC = () => {
         <ExpansionCard
             id={skjema.felter.journalpostTittel.id}
             size="small"
-            aria-label="Ekspanderbart panel"
+            aria-label="journalpost"
         >
             <ExpansionCard.Header>
                 <ExpansionCard.Title>
