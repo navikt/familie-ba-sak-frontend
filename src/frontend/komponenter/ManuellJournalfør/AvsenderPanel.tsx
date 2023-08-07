@@ -79,8 +79,7 @@ export const AvsenderPanel: React.FC = () => {
                             settBrukerErAvsender(!brukerErAvsender);
                         }}
                     >
-                        {' '}
-                        {'Avsender er bruker'}
+                        Avsender er bruker
                     </Checkbox>
                 )}
                 <br />
