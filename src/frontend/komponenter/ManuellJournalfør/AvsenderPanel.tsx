@@ -88,7 +88,7 @@ export const AvsenderPanel: React.FC = () => {
                     erLesevisning={erLesevisning()}
                     label={'Navn'}
                     size={'medium'}
-                    placeholder={'navn'}
+                    placeholder={'Navn'}
                     disabled={brukerErAvsender}
                 />
 
