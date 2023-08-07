@@ -1,0 +1,67 @@
+import { feil, ok, useFelt } from '@navikt/familie-skjema';
+import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useFagsakContext } from '../context/fagsak/FagsakContext';
+import type { IForelderBarnRelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle } from '../typer/person';
+import type { IBarnMedOpplysninger } from '../typer/søknad';
+import { datoformat, formaterIsoDato } from './formatter';
+
+interface IProps {
+    avhengigheter?: Avhengigheter;
+    skalFeltetVises?: (avhengigheter: Avhengigheter) => boolean;
+}
+
+export const useBarnSøktForFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
+    const { bruker: brukerRessurs } = useFagsakContext();
+
+    const barnSøktFor = useFelt<IBarnMedOpplysninger[]>({
+        verdi: [],
+        valideringsfunksjon: felt => {
+            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
+                ? ok(felt)
+                : feil(felt, 'Du må velge barn');
+        },
+        avhengigheter: avhengigheter,
+        skalFeltetVises: skalFeltetVises,
+        nullstillVedAvhengighetEndring: false,
+    });
+
+    const hentBarnMedOpplysningerFraBruker = () => {
+        if (brukerRessurs.status === RessursStatus.SUKSESS)
+            return (
+                brukerRessurs.data.forelderBarnRelasjon
+                    .filter(
+                        (relasjon: IForelderBarnRelasjon) =>
+                            relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                    )
+                    .map(
+                        (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                            merket: false,
+                            ident: relasjon.personIdent,
+                            navn: relasjon.navn,
+                            fødselsdato: relasjon.fødselsdato,
+                            manueltRegistrert: false,
+                            erFolkeregistrert: true,
+                        })
+                    ) ?? []
+            );
+        else return [];
+    };
+
+    const nullstillBarnSøktFor = () => {
+        barnSøktFor.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
+    };
+
+    const hentBarnSøktForMulitiselectVerdier = () =>
+        barnSøktFor.verdi.map(
+            barn => `Barn født ${formaterIsoDato(barn.fødselsdato, datoformat.DATO)}.`
+        );
+
+    return {
+        barnSøktFor,
+        nullstillBarnSøktFor,
+        hentBarnSøktForMulitiselectVerdier,
+    };
+};

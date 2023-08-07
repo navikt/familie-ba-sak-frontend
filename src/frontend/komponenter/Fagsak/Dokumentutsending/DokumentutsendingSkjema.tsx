@@ -13,6 +13,7 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
+import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 
@@ -58,6 +59,14 @@ const DokumentutsendingSkjema: React.FC = () => {
         settVisfeilmeldinger,
     } = useDokumentutsending();
 
+    const årsakVerdi = skjema.felter.årsak.verdi;
+    const barnSøktForÅrsaker = [
+        DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
+    ];
+
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
@@ -102,6 +111,15 @@ const DokumentutsendingSkjema: React.FC = () => {
                             settVisFeilmeldinger={settVisfeilmeldinger}
                         />
                     )}
+
+                    {årsakVerdi !== undefined && barnSøktForÅrsaker.includes(årsakVerdi) && (
+                        <BarnSøktForSkjema
+                            barnSøktForFelt={skjema.felter.barnSøktFor}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            settVisFeilmeldinger={settVisfeilmeldinger}
+                        />
+                    )}
+
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>
 
