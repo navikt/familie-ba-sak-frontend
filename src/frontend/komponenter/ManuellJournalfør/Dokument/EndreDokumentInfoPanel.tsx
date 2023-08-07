@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
@@ -105,6 +106,12 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                         settDokumentTittel('');
                     }
                 }}
+                propSelectStyles={{
+                    container: (base, props) => ({
+                        ...base,
+                        zIndex: props.isFocused ? AZIndexPopover : 1,
+                    }),
+                }}
             />
             <br />
             <FamilieReactSelect
@@ -121,6 +128,12 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                     settLogiskeVedlegg(
                         options instanceof Array ? options.map(({ value }) => value) : []
                     );
+                }}
+                propSelectStyles={{
+                    container: (base, props) => ({
+                        ...base,
+                        zIndex: props.isFocused ? AZIndexPopover : 1,
+                    }),
                 }}
             />
         </>

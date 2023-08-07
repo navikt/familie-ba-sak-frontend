@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import styled from 'styled-components';
+
+import { ExpansionCard } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
-import { StyledEkspanderbartpanelBase } from '../StyledEkspanderbartpanelBase';
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
 
@@ -12,6 +14,11 @@ interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
     visFeilmeldinger: boolean;
 }
+
+const StyledExpansionCard = styled(ExpansionCard)`
+    margin-top: 1rem;
+    width: 100%;
+`;
 
 export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
     const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } =
@@ -31,25 +38,28 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFe
     }, [visFeilmeldinger]);
 
     return (
-        <StyledEkspanderbartpanelBase
-            visFeilmeldinger={visFeilmeldinger}
-            valgt={valgt}
-            tittel={
-                <DokumentInfoStripe
-                    valgt={valgt}
-                    journalpostId={journalpostId}
-                    dokument={dokument}
-                />
-            }
-            apen={åpen}
-            onClick={() => {
+        <StyledExpansionCard
+            open={åpen}
+            onToggle={() => {
                 settÅpen(!åpen);
                 if (!valgt && journalpostId && dokument.dokumentInfoId) {
                     velgOgHentDokumentData(dokument.dokumentInfoId);
                 }
             }}
+            size="small"
         >
-            <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
-        </StyledEkspanderbartpanelBase>
+            <ExpansionCard.Header>
+                <ExpansionCard.Title>
+                    <DokumentInfoStripe
+                        valgt={valgt}
+                        journalpostId={journalpostId}
+                        dokument={dokument}
+                    />
+                </ExpansionCard.Title>
+            </ExpansionCard.Header>
+            <ExpansionCard.Content>
+                <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
+            </ExpansionCard.Content>
+        </StyledExpansionCard>
     );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
-import { AZIndexFocus, ABlue500 } from '@navikt/ds-tokens/dist/tokens';
+import { ABlue500, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -115,10 +115,10 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             }}
             options={muligeOptions}
             propSelectStyles={{
-                container: provided => ({
+                container: (provided, props) => ({
                     ...provided,
                     maxWidth: '25rem',
-                    zIndex: AZIndexFocus.valueOf(),
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
                 }),
                 groupHeading: provided => ({
                     ...provided,
