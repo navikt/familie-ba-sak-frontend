@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import '@navikt/ds-css-internal';
 import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';

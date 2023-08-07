@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Button, Fieldset } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';

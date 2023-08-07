@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Calculator, Eu, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
