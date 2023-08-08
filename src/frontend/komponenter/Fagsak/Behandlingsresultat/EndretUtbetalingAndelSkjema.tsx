@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';

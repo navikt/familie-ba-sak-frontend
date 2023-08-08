@@ -36,6 +36,7 @@
     "@navikt/ds-tokens": "4.4.2",
     "@navikt/familie-backend": "10.0.3",
     "@navikt/familie-clipboard": "11.0.0",
+    "@navikt/familie-datovelger": "0.2.0",
     "@navikt/familie-endringslogg": "9.0.0",
     "@navikt/familie-form-elements": "12.0.0",
     "@navikt/familie-header": "11.0.0",

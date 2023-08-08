@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { Label, Radio } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieInput, FamilieRadioGruppe } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';

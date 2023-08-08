@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import { feil, useFelt, useSkjema, ok } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 

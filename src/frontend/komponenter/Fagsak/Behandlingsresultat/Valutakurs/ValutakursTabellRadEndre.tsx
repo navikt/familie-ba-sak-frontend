@@ -9,13 +9,10 @@ import {
     AFontSizeLarge,
     AFontWeightRegular,
 } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString, OptionType } from '@navikt/familie-form-elements';
-import {
-    FamilieDatovelger,
-    FamilieInput,
-    FamilieKnapp,
-    FamilieReactSelect,
-} from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import type { OptionType } from '@navikt/familie-form-elements';
+import { FamilieInput, FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
