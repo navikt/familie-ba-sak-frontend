@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
+import Modal from 'nav-frontend-modal';
+
 import { BodyShort, Button } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
@@ -99,6 +101,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
 
     const [modal, settModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
+
+    useEffect(() => {
+        Modal.setAppElement('#app');
+    }, []);
 
     const verifiserVersjon = () => {
         request<void, string>({

@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import Modal from 'nav-frontend-modal';
 import '@navikt/ds-css';
 
 import type { ISaksbehandler } from '@navikt/familie-typer';
@@ -10,8 +9,6 @@ import { AppProvider } from '../context/AppContext';
 import { useAmplitude } from '../utils/amplitude';
 import Container from './Container';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
-
-Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
 const App: React.FC = () => {
     const { loggSkjermstørrelse } = useAmplitude();

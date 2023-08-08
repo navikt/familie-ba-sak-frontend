@@ -28,7 +28,6 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
 
     return (
         <Modal
-            appElement={document.body}
             className={classNames(className, 'uimodal')}
             isOpen={visModal}
             onRequestClose={(): void => onClose && onClose()}
