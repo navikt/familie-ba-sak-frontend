@@ -60,3 +60,8 @@ spec:
       value: {{ VERSION }}
     - name: ENV
       value: production
+  redis:
+    - instance: sessions
+      access: readwrite
+    - instance: lookup
+      access: read

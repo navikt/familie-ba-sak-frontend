@@ -36,7 +36,7 @@
     "@navikt/ds-react": "4.4.2",
     "@navikt/ds-react-internal": "2.2.0",
     "@navikt/ds-tokens": "4.4.2",
-    "@navikt/familie-backend": "10.0.3",
+    "@navikt/familie-backend": "^10.0.7",
     "@navikt/familie-clipboard": "10.1.0",
     "@navikt/familie-endringslogg": "8.1.0",
     "@navikt/familie-form-elements": "10.1.0",
