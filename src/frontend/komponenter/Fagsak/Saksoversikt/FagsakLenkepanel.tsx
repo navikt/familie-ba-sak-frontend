@@ -2,10 +2,9 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-import { LenkepanelBase } from 'nav-frontend-lenkepanel';
 import Panel from 'nav-frontend-paneler';
 
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort, LinkPanel } from '@navikt/ds-react';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -94,13 +93,15 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
 
     return aktivBehandling ? (
         <>
-            <LenkepanelBase
+            <LinkPanel
                 title={genererHoverTekst(aktivBehandling)}
                 className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
             >
-                <Innholdstabell minimalFagsak={minimalFagsak} />
-            </LenkepanelBase>
+                <LinkPanel.Description>
+                    <Innholdstabell minimalFagsak={minimalFagsak} />
+                </LinkPanel.Description>
+            </LinkPanel>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     ) : (
