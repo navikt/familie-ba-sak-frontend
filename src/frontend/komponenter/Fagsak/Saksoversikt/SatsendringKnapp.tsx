@@ -8,8 +8,8 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSatsendringsknapp } from './useSatsendringsknapp';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;

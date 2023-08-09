@@ -6,8 +6,8 @@ import { ExternalLink } from '@navikt/ds-icons';
 import { Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
+import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;

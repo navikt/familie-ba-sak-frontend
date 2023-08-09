@@ -16,9 +16,6 @@ import {
 
 import 'nav-frontend-tabell-style';
 
-import useDokument from '../../../hooks/useDokument';
-import type { IPersonInfo } from '../../../typer/person';
-import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import { JournalpostDokument } from './JournalpostDokument';
 import {
     formaterFagsak,
@@ -28,6 +25,9 @@ import {
     hentSortState,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
+import useDokument from '../../../hooks/useDokument';
+import type { IPersonInfo } from '../../../typer/person';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const Container = styled.div`
     padding: 2rem;

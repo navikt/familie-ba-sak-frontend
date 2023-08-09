@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
-import { BehandlingResultat } from '../../typer/behandling';
-import { hentSisteIkkeHenlagteBehandling } from '../fagsak';
 import { mockVisningBehandling } from './behandling/behandling.mock';
 import { mockMinimalFagsak } from './minimalFagsak/minimalFagsak.mock';
+import { BehandlingResultat } from '../../typer/behandling';
+import { hentSisteIkkeHenlagteBehandling } from '../fagsak';
 
 describe('fagsak utils tester', () => {
     test('hent siste ikke-henlagte behandling', () => {

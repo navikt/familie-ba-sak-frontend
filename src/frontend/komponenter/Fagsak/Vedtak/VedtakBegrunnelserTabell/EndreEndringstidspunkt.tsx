@@ -5,10 +5,10 @@ import { Dropdown } from '@navikt/ds-react-internal';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../typer/behandling';
 
 const EndreEndringstidspunkt: React.FC<{
     åpenBehandling: IBehandling;

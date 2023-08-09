@@ -1,6 +1,5 @@
 import type { Periode } from '@navikt/familie-tidslinje';
 
-import type { IYtelsePeriode } from '../typer/beregning';
 import {
     erEtter,
     hentFørsteDagIYearMonth,
@@ -11,6 +10,7 @@ import {
     KalenderEnhet,
     trekkFra,
 } from './kalender';
+import type { IYtelsePeriode } from '../typer/beregning';
 
 export const splittYtelseVedEndringerPåAnnenYtelse = (
     opprinneligPeriode: Periode,
