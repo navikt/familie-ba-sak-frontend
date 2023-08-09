@@ -2,10 +2,10 @@ import React from 'react';
 
 import { BodyShort } from '@navikt/ds-react';
 
+import PersonUtbetaling from './PersonUtbetaling';
 import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
-import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
     vedtaksperiode?: Vedtaksperiode;

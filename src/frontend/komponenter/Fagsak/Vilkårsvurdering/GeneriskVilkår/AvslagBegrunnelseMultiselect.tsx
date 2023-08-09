@@ -6,6 +6,7 @@ import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -20,7 +21,6 @@ import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;

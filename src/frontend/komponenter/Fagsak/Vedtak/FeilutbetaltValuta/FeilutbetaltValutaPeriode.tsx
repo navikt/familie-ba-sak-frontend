@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
+import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
+import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
 import { useApp } from '../../../../context/AppContext';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { periodeToString } from '../../../../utils/kalender';
-import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
-import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
 
 interface IFeilutbetaltValutaPeriode {
     feilutbetaltValuta: IRestFeilutbetaltValuta;

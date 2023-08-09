@@ -4,6 +4,7 @@ import { Link, BodyShort, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
+import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import { FagsakType } from '../../../typer/fagsak';
@@ -17,7 +18,6 @@ import {
     millisekunderIEttÅr,
 } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
-import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
     bruker?: IPersonInfo;

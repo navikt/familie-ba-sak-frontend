@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 import { useApp } from '../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -14,7 +15,6 @@ import { partition } from '../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 const StyledHeading = styled(Heading)`
     display: flex;

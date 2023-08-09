@@ -6,6 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 import type { IBehandling } from '../../typer/behandling';
 import type {
     IAnnenVurdering,
@@ -16,7 +17,6 @@ import type {
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
-import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
     åpenBehandling: IBehandling;

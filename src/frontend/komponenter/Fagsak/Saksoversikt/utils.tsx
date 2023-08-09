@@ -7,6 +7,7 @@ import { ExternalLink, WarningColored } from '@navikt/ds-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
+import type { VisningBehandling } from './visningBehandling';
 import {
     behandlingsresultater,
     BehandlingStatus,
@@ -25,7 +26,6 @@ import {
     Behandlingsresultatstype,
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
-import type { VisningBehandling } from './visningBehandling';
 
 export enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',

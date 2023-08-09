@@ -7,6 +7,8 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
+import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
@@ -25,8 +27,6 @@ import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling: åpenBehandlingRessurs } = useBehandling();

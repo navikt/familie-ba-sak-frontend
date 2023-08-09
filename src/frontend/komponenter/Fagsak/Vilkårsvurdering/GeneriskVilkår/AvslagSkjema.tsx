@@ -7,11 +7,11 @@ import { BodyShort, Checkbox, Fieldset } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { VedtaksbegrunnelseTeksterProvider } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import { Dokumentvelger } from './Dokumentvelger';
 import KanSøkeFritekst from './KanSøkeFritekst';
+import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 
 const KanSøkeSkjema = () => {
     const { skjema } = useDokumentutsending();

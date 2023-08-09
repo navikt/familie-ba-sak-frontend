@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { behandlingsstatuser } from '../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import type { Saksoversiktsbehandling } from './utils';
 import {
     finnÅrsak,
@@ -12,6 +9,9 @@ import {
     lagLenkePåResultat,
     lagLenkePåType,
 } from './utils';
+import { behandlingsstatuser } from '../../../typer/behandling';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;

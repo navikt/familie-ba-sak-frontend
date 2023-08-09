@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 
-import { datoformat } from '../formatter';
 import type { DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
 import { antallDagerIMåned } from './typer';
 import { capString } from './utils';
+import { datoformat } from '../formatter';
 
 export const erIsoStringGyldig = (dato?: FamilieIsoDate): boolean => {
     if (!dato) return false;

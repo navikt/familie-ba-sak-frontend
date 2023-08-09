@@ -7,12 +7,12 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
+import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
-import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
-import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 
 interface IRefusjonEøs {
     behandlingId: number;
