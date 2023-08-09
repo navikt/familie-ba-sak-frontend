@@ -2,9 +2,7 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-import Panel from 'nav-frontend-paneler';
-
-import { Alert, BodyShort, LinkPanel } from '@navikt/ds-react';
+import { Alert, BodyShort, LinkPanel, Panel } from '@navikt/ds-react';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -106,7 +104,7 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
         </>
     ) : (
         <>
-            <Panel className={'fagsak-panel'}>
+            <Panel className={'fagsak-panel'} border>
                 <Innholdstabell minimalFagsak={minimalFagsak} />
             </Panel>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
