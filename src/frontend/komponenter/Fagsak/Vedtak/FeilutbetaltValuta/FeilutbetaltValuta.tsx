@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Table } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
 import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
@@ -37,20 +36,20 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const KopierTilNøsKnapp = styled(CopyToClipboard)`
+const KopierTilNøsKnapp = styled(CopyButton)`
     :not(:hover):not(:active) {
         color: ${ATextAction};
     }
 `;
 
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
-    feilutbetaltValutaListe,
-    settErUlagretNyFeilutbetaltValutaPeriode,
-    erLesevisning,
-    skjulFeilutbetaltValuta,
-    behandlingId,
-    fagsakId,
-}) => {
+                                                               feilutbetaltValutaListe,
+                                                               settErUlagretNyFeilutbetaltValutaPeriode,
+                                                               erLesevisning,
+                                                               skjulFeilutbetaltValuta,
+                                                               behandlingId,
+                                                               fagsakId,
+                                                           }) => {
     const { toggles } = useApp();
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         feilutbetaltValutaListe.length === 0
@@ -66,12 +65,12 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
 
     const totaltFeilutbetaltBeløp = toggles[ToggleNavn.feilutbetaltValutaPerMåned]
         ? summerBeløpForPerioder(
-              feilutbetaltValutaListe.map(it => ({
-                  fom: it.fom,
-                  tom: it.tom,
-                  beløp: it.feilutbetaltBeløp,
-              }))
-          )
+            feilutbetaltValutaListe.map(it => ({
+                fom: it.fom,
+                tom: it.tom,
+                beløp: it.feilutbetaltBeløp,
+            }))
+        )
         : feilutbetaltValutaListe.reduce((acc, val) => acc + val.feilutbetaltBeløp, 0);
 
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
@@ -135,9 +134,12 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
-                    Kopier tekst til NØS
-                </KopierTilNøsKnapp>
+                <KopierTilNøsKnapp
+                    copyText={tekstTilNØS}
+                    text="Kopier tekst til NØS"
+                    activeText="Kopiert!"
+                    size="small"
+                />
             </FlexRowDiv>
         </FlexColumnDiv>
     );
