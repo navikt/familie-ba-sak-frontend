@@ -1,5 +1,5 @@
-import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../simulering';
 import { mockSimuleringPeriode } from './simulering.mock';
+import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../simulering';
 
 describe('utils/simulering', () => {
     test('Første dag i året havnet innenfor rett år ved hentÅrISimuleringen', () => {

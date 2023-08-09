@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import type { IBehandling } from '../../typer/behandling';
-import { EøsPeriodeStatus, type IRestKompetanse } from '../../typer/eøsPerioder';
+import type { IRestKompetanse } from '../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import { sorterEøsPerioder } from '../Eøs/EøsContext';
 
 interface IProps {

@@ -10,8 +10,16 @@ import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    Adressebeskyttelsegradering,
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    hentDataFraRessurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
+import HelpText from './HelpText';
+import { ModalKnapperad } from './Modal/ModalKnapperad';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
@@ -19,8 +27,6 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-import HelpText from './HelpText';
-import { ModalKnapperad } from './Modal/ModalKnapperad';
 
 const StyledModal = styled(Modal)`
     min-width: 35rem;
@@ -40,6 +46,12 @@ const DrekLenkeContainer = styled.div`
     margin-bottom: 1.25rem;
 `;
 
+const StyledFieldset = styled(Fieldset)`
+    p.navds-error-message.navds-label {
+        max-width: 35rem;
+    }
+`;
+
 export interface IRegistrerBarnSkjema {
     ident: string;
     erFolkeregistrert: boolean;
@@ -54,11 +66,10 @@ interface IProps {
 
 const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
-    const { logg } = useBehandling();
-
+    const { logg, åpenBehandling: åpenBehandlingRessurs } = useBehandling();
+    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
-
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
 
     const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
@@ -133,6 +144,18 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
         nullstillRegistrerBarnSkjema();
     };
 
+    const harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse = (
+        adressebeskyttelsegradering: Adressebeskyttelsegradering,
+        antallBrevmottakere: number
+    ): boolean => {
+        return (
+            (adressebeskyttelsegradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                adressebeskyttelsegradering ===
+                    Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND) &&
+            antallBrevmottakere > 0
+        );
+    };
+
     const leggTilOnClick = () => {
         const erSkjemaOk = kanSendeSkjema();
         if (
@@ -176,20 +199,37 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                                 settSubmitRessurs(hentetPerson);
                                 if (hentetPerson.status === RessursStatus.SUKSESS) {
-                                    barnaMedOpplysninger.validerOgSettFelt([
-                                        ...barnaMedOpplysninger.verdi,
-                                        {
-                                            fødselsdato: hentetPerson.data.fødselsdato,
-                                            ident: hentetPerson.data.personIdent,
-                                            merket: true,
-                                            manueltRegistrert: true,
-                                            navn: hentetPerson.data.navn,
-                                            erFolkeregistrert: true,
-                                        },
-                                    ]);
-                                    onSuccess && onSuccess(hentetPerson.data);
+                                    if (
+                                        harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse(
+                                            ressurs.data.adressebeskyttelsegradering,
+                                            åpenBehandling?.brevmottakere.length ?? 0
+                                        )
+                                    ) {
+                                        settSubmitRessurs(
+                                            byggFeiletRessurs(
+                                                `Barnet du prøver å legge til har diskresjonskode: "${
+                                                    adressebeskyttelsestyper[
+                                                        ressurs.data.adressebeskyttelsegradering
+                                                    ] ?? 'ukjent'
+                                                }". Brevmottaker(e) er endret og må fjernes før du kan legge til barnet.`
+                                            )
+                                        );
+                                    } else {
+                                        barnaMedOpplysninger.validerOgSettFelt([
+                                            ...barnaMedOpplysninger.verdi,
+                                            {
+                                                fødselsdato: hentetPerson.data.fødselsdato,
+                                                ident: hentetPerson.data.personIdent,
+                                                merket: true,
+                                                manueltRegistrert: true,
+                                                navn: hentetPerson.data.navn,
+                                                erFolkeregistrert: true,
+                                            },
+                                        ]);
+                                        onSuccess && onSuccess(hentetPerson.data);
 
-                                    settVisModal(false);
+                                        settVisModal(false);
+                                    }
                                 }
                             });
                         } else {
@@ -258,7 +298,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             </BodyLong>
                         </StyledHelpText>
                     </StyledHeading>
-                    <Fieldset
+                    <StyledFieldset
                         error={
                             registrerBarnSkjema.visFeilmeldinger &&
                             (registrerBarnSkjema.submitRessurs.status === RessursStatus.FEILET ||
@@ -326,7 +366,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                 children={'Avbryt'}
                             />
                         </ModalKnapperad>
-                    </Fieldset>
+                    </StyledFieldset>
                 </Modal.Content>
             </StyledModal>
         </>

@@ -3,20 +3,9 @@ import React from 'react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
-import { byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../typer/behandling';
-import type {
-    AnnenForelderAktivitet,
-    EøsPeriodeStatus,
-    IKompetanse,
-    IRestKompetanse,
-    KompetanseResultat,
-    SøkersAktivitet,
-} from '../../typer/eøsPerioder';
-import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
-import { type IYearMonthPeriode, nyYearMonthPeriode } from '../../utils/kalender';
-import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
     erAnnenForeldersAktivitetGyldig,
     erAnnenForeldersAktivitetslandGyldig,
@@ -25,6 +14,18 @@ import {
     erSøkersAktivitetGyldig,
     erSøkersAktivitetslandGyldig,
 } from './valideringKompetanse';
+import type { IBehandling } from '../../typer/behandling';
+import type {
+    EøsPeriodeStatus,
+    IKompetanse,
+    IRestKompetanse,
+    KompetanseAktivitet,
+    KompetanseResultat,
+} from '../../typer/eøsPerioder';
+import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
+import type { IYearMonthPeriode } from '../../utils/kalender';
+import { nyYearMonthPeriode } from '../../utils/kalender';
+import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
     `kompetanse_${kompetanse.barnIdenter.map(barn => `${barn}-`)}_${kompetanse.fom}`;
@@ -42,12 +43,12 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
     const { request } = useHttp();
 
     const initelFom = useFelt<string>({ verdi: kompetanse.fom });
-    const annenForeldersAktivitet = useFelt<AnnenForelderAktivitet | undefined>({
+    const annenForeldersAktivitet = useFelt<KompetanseAktivitet | undefined>({
         verdi: kompetanse.annenForeldersAktivitet,
         valideringsfunksjon: erAnnenForeldersAktivitetGyldig,
     });
 
-    const søkersAktivitet = useFelt<SøkersAktivitet | undefined>({
+    const søkersAktivitet = useFelt<KompetanseAktivitet | undefined>({
         verdi: kompetanse.søkersAktivitet,
         valideringsfunksjon: erSøkersAktivitetGyldig,
     });

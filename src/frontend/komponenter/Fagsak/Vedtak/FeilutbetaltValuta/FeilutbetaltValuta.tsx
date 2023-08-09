@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Table } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
-import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
-import { periodeToString } from '../../../../utils/kalender';
 import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
+import { useApp } from '../../../../context/AppContext';
+import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
+import { ToggleNavn } from '../../../../typer/toggles';
+import { periodeToString } from '../../../../utils/kalender';
+import { summerBeløpForPerioder } from '../utils';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
@@ -34,7 +36,7 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const KopierTilNøsKnapp = styled(CopyToClipboard)`
+const KopierTilNøsKnapp = styled(CopyButton)`
     :not(:hover):not(:active) {
         color: ${ATextAction};
     }
@@ -48,6 +50,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     behandlingId,
     fagsakId,
 }) => {
+    const { toggles } = useApp();
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         feilutbetaltValutaListe.length === 0
     );
@@ -60,10 +63,16 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
         skjulFeilutbetaltValuta();
     }
 
-    const totaltFeilutbetaltBeløp = feilutbetaltValutaListe.reduce(
-        (acc, val) => acc + val.feilutbetaltBeløp,
-        0
-    );
+    const totaltFeilutbetaltBeløp = toggles[ToggleNavn.feilutbetaltValutaPerMåned]
+        ? summerBeløpForPerioder(
+              feilutbetaltValutaListe.map(it => ({
+                  fom: it.fom,
+                  tom: it.tom,
+                  beløp: it.feilutbetaltBeløp,
+              }))
+          )
+        : feilutbetaltValutaListe.reduce((acc, val) => acc + val.feilutbetaltBeløp, 0);
+
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
     \nBer om at feilutbetalingsbeløpet på grunn av valuta- og satsendringer trekkes i fremtidige utbetalinger.
     \nTotalt kr ${totaltFeilutbetaltBeløp}
@@ -73,7 +82,9 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                 `${periodeToString({
                     fom: feilutbetaltValuta.fom,
                     tom: feilutbetaltValuta.tom,
-                })} kr ${feilutbetaltValuta.feilutbetaltBeløp}`
+                })} ${toggles[ToggleNavn.feilutbetaltValutaPerMåned] ? 'kr/mnd' : 'kr'} ${
+                    feilutbetaltValuta.feilutbetaltBeløp
+                }`
         )
         .join('\n')}`;
 
@@ -89,6 +100,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell align="right" scope="col">
                             Feilutbetalt beløp
+                            {toggles[ToggleNavn.feilutbetaltValutaPerMåned] && ' per måned'}
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col" />
                     </Table.Row>
@@ -122,9 +134,12 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
-                    Kopier tekst til NØS
-                </KopierTilNøsKnapp>
+                <KopierTilNøsKnapp
+                    copyText={tekstTilNØS}
+                    text="Kopier tekst til NØS"
+                    activeText="Kopiert!"
+                    size="small"
+                />
             </FlexRowDiv>
         </FlexColumnDiv>
     );

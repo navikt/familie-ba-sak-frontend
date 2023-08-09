@@ -1,6 +1,5 @@
 import type { FeltState } from '@navikt/familie-skjema';
 
-import type { FamilieIsoDate, IPeriode } from '../utils/kalender';
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';
 import { PersonType } from './person';
@@ -9,6 +8,7 @@ import type {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from './vedtak';
+import type { FamilieIsoDate, IPeriode } from '../utils/kalender';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -16,10 +16,17 @@ export enum Resultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
 }
 
-export const uiResultat: Record<Resultat, string> = {
+export enum ResultatBegrunnelse {
+    IKKE_AKTUELT = 'IKKE_AKTUELT',
+}
+
+type ResultatUI = Resultat | ResultatBegrunnelse;
+
+export const resultatVisningsnavn: Record<ResultatUI, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
+    IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
 export const resultater: Record<Resultat, string> = {
@@ -79,6 +86,7 @@ export interface IVilkårResultat {
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
     utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
+    resultatBegrunnelse: ResultatBegrunnelse | null;
 }
 
 // Vilkårsvurdering typer for api
@@ -104,6 +112,7 @@ export interface IRestVilkårResultat {
     periodeFom?: FamilieIsoDate;
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
+    resultatBegrunnelse: ResultatBegrunnelse | null;
     erEksplisittAvslagPåSøknad?: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
@@ -239,6 +248,7 @@ export enum UtdypendeVilkårsvurderingDeltBosted {
 export enum UtdypendeVilkårsvurderingEøsSøkerBosattIRiket {
     OMFATTET_AV_NORSK_LOVGIVNING = 'OMFATTET_AV_NORSK_LOVGIVNING',
     OMFATTET_AV_NORSK_LOVGIVNING_UTLAND = 'OMFATTET_AV_NORSK_LOVGIVNING_UTLAND',
+    ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING = 'ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING',
 }
 
 export enum UtdypendeVilkårsvurderingEøsBarnBosattIRiket {

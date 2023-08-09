@@ -4,6 +4,8 @@ import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 
+export type KompetanseAktivitet = SøkersAktivitet | AnnenForelderAktivitet;
+
 export enum SøkersAktivitet {
     ARBEIDER = 'ARBEIDER',
     SELVSTENDIG_NÆRINGSDRIVENDE = 'SELVSTENDIG_NÆRINGSDRIVENDE',
@@ -21,7 +23,7 @@ export enum SøkersAktivitet {
     INAKTIV = 'INAKTIV',
 }
 
-export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
+export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
     ARBEIDER: 'Arbeider',
     SELVSTENDIG_NÆRINGSDRIVENDE: 'Selvstendig næringsdrivende',
     MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
@@ -39,6 +41,11 @@ export const søkersAktiviteter: Record<SøkersAktivitet, string> = {
     MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
         'Mottar pensjon fra Norge under opphold i utlandet',
     INAKTIV: 'Inaktiv',
+
+    I_ARBEID: 'I arbeid',
+    FORSIKRET_I_BOSTEDSLAND: 'Forsikret i bostedsland',
+    IKKE_AKTUELT: 'Ikke aktuelt',
+    UTSENDT_ARBEIDSTAKER: 'Utsendt arbeidstaker',
 };
 
 export enum AnnenForelderAktivitet {
@@ -50,16 +57,6 @@ export enum AnnenForelderAktivitet {
     IKKE_AKTUELT = 'IKKE_AKTUELT',
     UTSENDT_ARBEIDSTAKER = 'UTSENDT_ARBEIDSTAKER',
 }
-
-export const annenForelderAktiviteter: Record<AnnenForelderAktivitet, string> = {
-    I_ARBEID: 'I arbeid',
-    MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN: 'Mottar utbetaling som erstatter lønn',
-    FORSIKRET_I_BOSTEDSLAND: 'Forsikret i bostedsland',
-    MOTTAR_PENSJON: 'Mottar pensjon',
-    INAKTIV: 'Inaktiv',
-    IKKE_AKTUELT: 'Ikke aktuelt',
-    UTSENDT_ARBEIDSTAKER: 'Utsendt arbeidstaker',
-};
 
 export enum KompetanseResultat {
     NORGE_ER_PRIMÆRLAND = 'NORGE_ER_PRIMÆRLAND',
@@ -91,12 +88,13 @@ export interface IRestEøsPeriode extends IEøsPeriodeStatus {
 }
 
 export interface IRestKompetanse extends IRestEøsPeriode {
-    søkersAktivitet?: SøkersAktivitet;
+    søkersAktivitet?: KompetanseAktivitet;
     søkersAktivitetsland?: string;
-    annenForeldersAktivitet?: AnnenForelderAktivitet;
+    annenForeldersAktivitet?: KompetanseAktivitet;
     annenForeldersAktivitetsland?: string;
     barnetsBostedsland?: string;
     resultat?: KompetanseResultat;
+    erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
 }
 
 export interface IKompetanse extends IEøsPeriodeStatus {
@@ -105,9 +103,9 @@ export interface IKompetanse extends IEøsPeriodeStatus {
     initielFom: YearMonth;
     periode: IYearMonthPeriode;
     barnIdenter: OptionType[];
-    søkersAktivitet: SøkersAktivitet | undefined;
+    søkersAktivitet: KompetanseAktivitet | undefined;
     søkersAktivitetsland: string | undefined;
-    annenForeldersAktivitet: AnnenForelderAktivitet | undefined;
+    annenForeldersAktivitet: KompetanseAktivitet | undefined;
     annenForeldersAktivitetsland: string | undefined;
     barnetsBostedsland: string | undefined;
     resultat: KompetanseResultat | undefined;

@@ -2,20 +2,20 @@ import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
 
+import { PersonHeader, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
+import type { IPersonResultat } from '../../../../typer/vilkår';
 import {
     AnnenVurderingType,
     annenVurderingConfig,
     vilkårConfigEnsligMindreårig,
     VilkårType,
-    type IPersonResultat,
 } from '../../../../typer/vilkår';
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
-import { PersonHeader, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -38,7 +38,10 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
 
             <IndentertInnhold>
                 {personResultat.person.registerhistorikk ? (
-                    <Registeropplysninger opplysninger={personResultat.person.registerhistorikk} />
+                    <Registeropplysninger
+                        registerHistorikk={personResultat.person.registerhistorikk}
+                        fødselsdato={personResultat.person.fødselsdato}
+                    />
                 ) : (
                     <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                 )}

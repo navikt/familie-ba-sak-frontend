@@ -10,6 +10,13 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
+import KompetanseSkjema from './Kompetanse/KompetanseSkjema';
+import MigreringInfoboks from './MigreringInfoboks';
+import { Oppsummeringsboks } from './Oppsummeringsboks';
+import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
+import Valutakurser from './Valutakurs/Valutakurser';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -31,13 +38,6 @@ import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatte
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
-import KompetanseSkjema from './Kompetanse/KompetanseSkjema';
-import MigreringInfoboks from './MigreringInfoboks';
-import { Oppsummeringsboks } from './Oppsummeringsboks';
-import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
-import Valutakurser from './Valutakurs/Valutakurser';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;
@@ -110,6 +110,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         hentValutakurserMedFeil,
     } = useEøs();
 
+    const erLesevisning = vurderErLesevisning();
+
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
     }, [åpenBehandling]);
@@ -176,7 +178,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             className="behandlingsresultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
-                if (vurderErLesevisning()) {
+                if (erLesevisning) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
@@ -206,7 +208,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 tidslinjePersoner={tidslinjePersoner}
                 fagsakType={minimalFagsak?.fagsakType}
             />
-            {!vurderErLesevisning() && (
+            {!erLesevisning && (
                 <EndretUtbetalingAndel>
                     <Button
                         variant="tertiary"

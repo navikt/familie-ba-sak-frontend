@@ -12,6 +12,11 @@ import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import {
+    erMigreringsBehandling,
+    kanFjerneSmåbarnstilleggFraPeriode,
+    kanLeggeSmåbarnstilleggTilPeriode,
+} from './OppsummeringsboksUtils';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -36,11 +41,6 @@ import {
 } from '../../../utils/formatter';
 import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
-import {
-    erMigreringsBehandling,
-    kanFjerneSmåbarnstilleggFraPeriode,
-    kanLeggeSmåbarnstilleggTilPeriode,
-} from './OppsummeringsboksUtils';
 
 const TableHeaderAlignedRight = styled.th`
     text-align: right;
@@ -158,6 +158,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 }) => {
     const { request } = useHttp();
     const { settÅpenBehandling, åpenBehandling, vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();
 
@@ -340,7 +341,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
+                                disabled={justererSmåbarnstillegg || erLesevisning}
                                 onClick={() =>
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
@@ -356,7 +357,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 variant={'tertiary'}
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
-                                disabled={justererSmåbarnstillegg || vurderErLesevisning()}
+                                disabled={justererSmåbarnstillegg || erLesevisning}
                                 onClick={() =>
                                     leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }

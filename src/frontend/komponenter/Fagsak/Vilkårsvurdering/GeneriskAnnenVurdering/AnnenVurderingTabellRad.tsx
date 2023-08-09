@@ -8,13 +8,13 @@ import { BodyShort, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
+import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
-import { Resultat, uiResultat } from '../../../../typer/vilkår';
-import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
-import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
+import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -99,7 +99,9 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                         width={20}
                         height={20}
                     />
-                    <BodyShort children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
+                    <BodyShort
+                        children={resultatVisningsnavn[annenVurdering.verdi.resultat.verdi]}
+                    />
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>

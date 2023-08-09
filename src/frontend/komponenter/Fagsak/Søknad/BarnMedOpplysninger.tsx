@@ -45,30 +45,16 @@ const FjernBarnKnapp = styled(Button)`
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig } = useBehandling();
-
+    const erLesevisning = vurderErLesevisning();
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
     )}) | ${formaterIdent(barn.ident)} ${barnetHarLøpendeUtbetaling ? '(løpende)' : ''}`;
 
-    const oppdaterBarnMerket = (nyMerketStatus: boolean) => {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-            skjema.felter.barnaMedOpplysninger.verdi.map(
-                (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                    barnMedOpplysninger.ident === barn.ident
-                        ? {
-                              ...barnMedOpplysninger,
-                              merket: nyMerketStatus,
-                          }
-                        : barnMedOpplysninger
-            )
-        );
-    };
-
     return (
         <CheckboxOgSlettknapp>
-            {vurderErLesevisning() || gjelderInstitusjon || gjelderEnsligMindreårig ? (
+            {erLesevisning || gjelderInstitusjon || gjelderEnsligMindreårig ? (
                 barn.merket ? (
                     <BodyShort
                         className={classNames('skjemaelement', 'lese-felt')}
@@ -80,24 +66,13 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
                 ) : null
             ) : (
-                <StyledCheckbox
-                    value={
-                        <LabelContent>
-                            <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-                        </LabelContent>
-                    }
-                    checked={barn.merket}
-                    onChange={() => {
-                        const nyMerketStatus = !barn.merket;
-                        oppdaterBarnMerket(nyMerketStatus);
-                    }}
-                >
+                <StyledCheckbox value={barn.ident}>
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
                     </LabelContent>
                 </StyledCheckbox>
             )}
-            {barn.manueltRegistrert && !vurderErLesevisning() && (
+            {barn.manueltRegistrert && !erLesevisning && (
                 <FjernBarnKnapp
                     variant={'tertiary'}
                     id={`fjern__${barn.ident}`}

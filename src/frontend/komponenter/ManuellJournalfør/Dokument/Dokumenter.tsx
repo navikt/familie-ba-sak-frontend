@@ -3,8 +3,8 @@ import React from 'react';
 import { Alert, ErrorMessage } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
-import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import { DokumentVelger } from './DokumentVelger';
+import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 
 export const Dokumenter: React.FC = () => {
     const { skjema } = useManuellJournalfør();

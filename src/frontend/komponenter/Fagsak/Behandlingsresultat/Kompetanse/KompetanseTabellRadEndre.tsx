@@ -5,27 +5,23 @@ import styled from 'styled-components';
 import { Delete } from '@navikt/ds-icons';
 import { Fieldset } from '@navikt/ds-react';
 import { Alert, Button } from '@navikt/ds-react';
-import {
-    FamilieKnapp,
-    FamilieReactSelect,
-    FamilieSelect,
-    type OptionType,
-} from '@navikt/familie-form-elements';
-import { type ISkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { OptionType } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { IKompetanse, KompetanseAktivitet } from '../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
-    annenForelderAktiviteter,
     EøsPeriodeStatus,
-    type IKompetanse,
+    kompetanseAktiviteter,
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,
-    søkersAktiviteter,
 } from '../../../../typer/eøsPerioder';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
@@ -43,10 +39,11 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
+    erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
 }
 
 const StyledAlert = styled(Alert)`
-    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 `;
 
 const StyledFamilieLandvelger = styled(FamilieLandvelger)`
@@ -58,7 +55,11 @@ const StyledFamilieSelect = styled(FamilieSelect)`
 `;
 
 const StyledFamilieReactSelect = styled(FamilieReactSelect)`
-    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+`;
+
+const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
+    margin-top: 1.5rem;
 `;
 
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
@@ -69,6 +70,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     sendInnSkjema,
     toggleForm,
     slettKompetanse,
+    erAnnenForelderOmfattetAvNorskLovgivning,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const lesevisning = vurderErLesevisning(true);
@@ -106,13 +108,19 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
 
-                <EøsPeriodeSkjema
+                <StyledEøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
+                {erAnnenForelderOmfattetAvNorskLovgivning && (
+                    <StyledAlert variant="info" inline>
+                        Annen forelder er omfattet av norsk lovgivning etter praksisendring om
+                        selvstendig rett i perioden
+                    </StyledAlert>
+                )}
                 <StyledFamilieSelect
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
@@ -120,20 +128,24 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     value={skjema.felter.søkersAktivitet.verdi || ''}
                     lesevisningVerdi={
                         skjema.felter.søkersAktivitet.verdi
-                            ? søkersAktiviteter[skjema.felter.søkersAktivitet.verdi]
+                            ? kompetanseAktiviteter[skjema.felter.søkersAktivitet.verdi]
                             : 'Ikke utfylt'
                     }
                     onChange={event =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(
-                            event.target.value as SøkersAktivitet
+                            event.target.value as KompetanseAktivitet
                         )
                     }
                 >
                     <option value={''}>Velg</option>
-                    {Object.values(SøkersAktivitet).map(aktivitet => {
+                    {Object.values(
+                        erAnnenForelderOmfattetAvNorskLovgivning
+                            ? AnnenForelderAktivitet
+                            : SøkersAktivitet
+                    ).map((aktivitet: KompetanseAktivitet) => {
                         return (
                             <option key={aktivitet} value={aktivitet}>
-                                {søkersAktiviteter[aktivitet]}
+                                {kompetanseAktiviteter[aktivitet]}
                             </option>
                         );
                     })}
@@ -148,20 +160,24 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
                     lesevisningVerdi={
                         skjema.felter.annenForeldersAktivitet?.verdi
-                            ? annenForelderAktiviteter[skjema.felter.annenForeldersAktivitet?.verdi]
+                            ? kompetanseAktiviteter[skjema.felter.annenForeldersAktivitet?.verdi]
                             : 'Ikke utfylt'
                     }
                     onChange={event => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
-                            event.target.value as AnnenForelderAktivitet
+                            event.target.value as KompetanseAktivitet
                         );
                     }}
                 >
                     <option value={''}>Velg</option>
-                    {Object.values(AnnenForelderAktivitet).map(aktivitet => {
+                    {Object.values(
+                        erAnnenForelderOmfattetAvNorskLovgivning
+                            ? SøkersAktivitet
+                            : AnnenForelderAktivitet
+                    ).map((aktivitet: KompetanseAktivitet) => {
                         return (
                             <option key={aktivitet} value={aktivitet}>
-                                {annenForelderAktiviteter[aktivitet]}
+                                {kompetanseAktiviteter[aktivitet]}
                             </option>
                         );
                     })}

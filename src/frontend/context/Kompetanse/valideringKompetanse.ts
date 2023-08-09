@@ -1,29 +1,26 @@
-import type { Felt } from '@navikt/familie-skjema';
-import { type Avhengigheter, feil, type FeltState, ok } from '@navikt/familie-skjema';
+import type { Felt, Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok } from '@navikt/familie-skjema';
 
-import {
-    AnnenForelderAktivitet,
-    type KompetanseResultat,
-    SøkersAktivitet,
-} from '../../typer/eøsPerioder';
+import type { KompetanseAktivitet, KompetanseResultat } from '../../typer/eøsPerioder';
+import { AnnenForelderAktivitet, SøkersAktivitet } from '../../typer/eøsPerioder';
 import { isEmpty } from '../../utils/eøsValidators';
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 
 const erSøkersAktivitetGyldig = (
-    felt: FeltState<SøkersAktivitet | undefined>
-): FeltState<SøkersAktivitet | undefined> =>
+    felt: FeltState<KompetanseAktivitet | undefined>
+): FeltState<KompetanseAktivitet | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 const erAnnenForeldersAktivitetGyldig = (
-    felt: FeltState<AnnenForelderAktivitet | undefined>
-): FeltState<AnnenForelderAktivitet | undefined> =>
+    felt: FeltState<KompetanseAktivitet | undefined>
+): FeltState<KompetanseAktivitet | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, ikkeUtfyltFelt);
 const erAnnenForeldersAktivitetslandGyldig = (
     felt: FeltState<string | undefined>,
     avhengigheter?: Avhengigheter
 ): FeltState<string | undefined> => {
     const annenForeldersAktivitet =
-        avhengigheter?.annenForeldersAktivitet as Felt<AnnenForelderAktivitet>;
+        avhengigheter?.annenForeldersAktivitet as Felt<KompetanseAktivitet>;
     if (
         annenForeldersAktivitet?.verdi === AnnenForelderAktivitet.IKKE_AKTUELT ||
         annenForeldersAktivitet?.verdi === AnnenForelderAktivitet.INAKTIV
@@ -36,7 +33,7 @@ const erSøkersAktivitetslandGyldig = (
     felt: FeltState<string | undefined>,
     avhengigheter?: Avhengigheter
 ): FeltState<string | undefined> => {
-    const søkersAktivitet = avhengigheter?.annenForeldersAktivitet as Felt<SøkersAktivitet>;
+    const søkersAktivitet = avhengigheter?.søkersAktivitet as Felt<KompetanseAktivitet>;
     if (søkersAktivitet?.verdi === SøkersAktivitet.INAKTIV) {
         return ok(felt);
     }

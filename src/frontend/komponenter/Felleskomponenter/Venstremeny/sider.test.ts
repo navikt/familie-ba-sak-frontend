@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../typer/behandling';
-import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
 import {
     SideId,
     hentTrinnForBehandling,
@@ -12,6 +10,8 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
 } from './sider';
+import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../typer/behandling';
+import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {

@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { Button, Heading, Modal } from '@navikt/ds-react';
 
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import Brevskjema from './Brevskjema';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 
 interface IProps {
     onIModalClick: () => void;

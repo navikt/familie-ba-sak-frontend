@@ -3,21 +3,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Label } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieInput } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import { useApp } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
-import type { FamilieIsoDate } from '../../../../utils/kalender';
-import {
-    erIsoStringGyldig,
-    FamilieIsoTilFørsteDagIMåneden,
-    FamilieIsoTilSisteDagIMåneden,
-    serializeIso8601String,
-    sisteDagIInneværendeMåned,
-} from '../../../../utils/kalender';
+import { ToggleNavn } from '../../../../typer/toggles';
+import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
+import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
 
 interface IFeilutbetaltValutaSkjemaProps {
     skjema: ISkjema<IFeilutbetaltValutaSkjemaFelter, IBehandling>;
@@ -43,18 +39,10 @@ const StyledFamilieInput = styled(FamilieInput)`
     }
 `;
 
-const gjørOmDatoHvisGyldigInput = (
-    dato: string | undefined,
-    omgjøringsfunksjon: (dato: FamilieIsoDate) => FamilieIsoDate
-): string => {
-    if (dato === undefined) return '';
-    if (erIsoStringGyldig(dato)) return omgjøringsfunksjon(dato);
-    else return dato;
-};
-
 const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
     skjema,
 }) => {
+    const { toggles } = useApp();
     return (
         <>
             <FlexDatoInputWrapper>
@@ -67,7 +55,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                         value={skjema.felter.fom.verdi}
                         onChange={(dato?: ISODateString) => {
                             skjema.felter.fom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilFørsteDagIMåneden)
+                                tilFørsteDagIMånedenHvisGyldigInput(dato)
                             );
                         }}
                         limitations={{
@@ -81,7 +69,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                         value={skjema.felter.tom.verdi}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.tom?.validerOgSettFelt(
-                                gjørOmDatoHvisGyldigInput(dato, FamilieIsoTilSisteDagIMåneden)
+                                tilSisteDagIMånedenHvisGyldigInput(dato)
                             )
                         }
                         limitations={{
@@ -93,7 +81,11 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
             <StyledFamilieInput
                 {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label="Feilutbetalt beløp"
+                label={
+                    toggles[ToggleNavn.feilutbetaltValutaPerMåned]
+                        ? 'Feilutbetalt beløp per måned'
+                        : 'Feilutbetalt beløp'
+                }
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
                 onChange={changeEvent =>

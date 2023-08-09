@@ -2,24 +2,24 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Select } from 'nav-frontend-skjema';
 
-import { Button, Label } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { Fieldset, Button, Label } from '@navikt/ds-react';
+import { ATextDanger } from '@navikt/ds-tokens/dist/tokens';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
-import type { IOppgaveFelt } from './oppgavefelter';
 
 const StyledLabel = styled(Label)`
     margin-top: 0.5rem;
-    color: ${navFarger.redError};
+    color: ${ATextDanger};
 `;
 
 const DatoVelgerContainer = styled.div`
@@ -57,7 +57,7 @@ const FilterSkjema: React.FunctionComponent = () => {
     } = useOppgaver();
 
     return (
-        <SkjemaGruppe className="filterskjema" aria-label="oppgavebenken-filterskjema">
+        <Fieldset className="filterskjema" legend="Oppgavebenken filterskjema" hideLegend>
             <div className="filterskjema__filtre">
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
@@ -152,7 +152,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     children={'Tilbakestill filtrering'}
                 />
             </div>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

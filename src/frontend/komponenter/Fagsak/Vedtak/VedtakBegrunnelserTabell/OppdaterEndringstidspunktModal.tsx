@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Fieldset, Button, Heading, Modal } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -31,6 +29,10 @@ const Knapperad = styled.div`
     justify-content: flex-start;
 `;
 
+const StyledFieldset = styled(Fieldset)`
+    margin-top: 2rem;
+`;
+
 interface IProps {
     visModal: boolean;
     onAvbryt: () => void;
@@ -52,9 +54,11 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                 <Heading size="medium" level="2">
                     Oppdater endringstidspunkt
                 </Heading>
-                <SkjemaGruppe
-                    feil={hentFrontendFeilmelding(skjema.submitRessurs)}
-                    utenFeilPropagering={true}
+                <StyledFieldset
+                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                    errorPropagation={false}
+                    legend="Oppdater endringstidspunkt"
+                    hideLegend
                 >
                     <Feltmargin>
                         <FamilieDatovelgerWrapper
@@ -67,7 +71,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                             erLesesvisning={erLesevisning}
                         />
                     </Feltmargin>
-                </SkjemaGruppe>
+                </StyledFieldset>
                 <Knapperad>
                     {erLesevisning ? (
                         <Button variant="primary" key="Lukk">

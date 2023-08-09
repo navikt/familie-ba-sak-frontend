@@ -4,12 +4,10 @@ import styled, { css } from 'styled-components';
 
 import { Cancel, Warning } from '@navikt/ds-icons';
 import { Alert, BodyLong, Button, Heading, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
-import {
-    FamilieDatovelger,
-    FamilieTextarea,
-    type ISODateString,
-} from '@navikt/familie-form-elements';
+import { Dropdown } from '@navikt/ds-react';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
+import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';

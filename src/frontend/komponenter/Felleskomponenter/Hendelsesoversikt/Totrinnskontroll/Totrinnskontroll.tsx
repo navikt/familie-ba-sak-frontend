@@ -15,6 +15,8 @@ import {
 } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
+import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -23,8 +25,6 @@ import type { ITotrinnskontrollData } from '../../../../typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 import type { ITrinn } from '../../Venstremeny/sider';
 import { KontrollertStatus } from '../../Venstremeny/sider';
-import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
-import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
     åpenBehandling: IBehandling;

@@ -64,6 +64,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         aktivSettPåVent,
         åpenBehandling,
     } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
 
     const kanLeggeTilUtvidetVilkår =
         erMigreringsbehandling ||
@@ -82,7 +83,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
             (personMapEkspandert, personResultat) => ({
                 ...personMapEkspandert,
                 [personResultat.personIdent]:
-                    vurderErLesevisning() || personHarIkkevurdertVilkår(personResultat),
+                    erLesevisning || personHarIkkevurdertVilkår(personResultat),
             }),
             {}
         );
@@ -121,13 +122,13 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         <PersonHeader>
                             <PersonInformasjon person={personResultat.person} somOverskrift />
 
-                            {!vurderErLesevisning() &&
+                            {!erLesevisning &&
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
                                 kanLeggeTilUtvidetVilkår && (
                                     <VilkårDiv>
-                                        {!vurderErLesevisning() ? (
+                                        {!erLesevisning ? (
                                             <Button
                                                 variant={'tertiary'}
                                                 id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
@@ -175,7 +176,10 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 <>
                                     {personResultat.person.registerhistorikk ? (
                                         <Registeropplysninger
-                                            opplysninger={personResultat.person.registerhistorikk}
+                                            registerHistorikk={
+                                                personResultat.person.registerhistorikk
+                                            }
+                                            fødselsdato={personResultat.person.fødselsdato}
                                         />
                                     ) : (
                                         <Alert

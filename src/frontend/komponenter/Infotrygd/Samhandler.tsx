@@ -3,9 +3,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-
-import { Button, Heading } from '@navikt/ds-react';
+import { Fieldset, TextField, Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
@@ -25,9 +23,9 @@ const HentSakerFlex = styled.div`
 
 const HentSakerButton = styled(Button)`
     margin-left: 1rem;
-    margin-top: 1.9rem;
+    margin-top: 2rem;
     margin-bottom: auto;
-    height: 2.5rem;
+    height: 3rem;
 `;
 
 export const Samhandler: React.FC = () => {
@@ -50,17 +48,21 @@ export const Samhandler: React.FC = () => {
                 Søk samhandler
             </Heading>
             <HentSakerFlex>
-                <SkjemaGruppe feil={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}>
-                    <Input
+                <Fieldset
+                    error={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}
+                    legend="Søk samhandler"
+                    hideLegend
+                >
+                    <TextField
                         {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
                             samhandlerSkjema.visFeilmeldinger
                         )}
                         id={'hent-samhandler'}
                         label={'Skriv inn orgnr'}
-                        bredde={'XL'}
+                        size="medium"
                         placeholder={'orgnr'}
                     />
-                </SkjemaGruppe>
+                </Fieldset>
                 <HentSakerButton
                     variant={'secondary'}
                     loading={skjemaErLåst}

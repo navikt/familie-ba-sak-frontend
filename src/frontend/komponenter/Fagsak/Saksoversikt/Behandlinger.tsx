@@ -5,17 +5,17 @@ import styled from 'styled-components';
 
 import { BodyShort, Heading, Switch } from '@navikt/ds-react';
 
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { kalenderDiff } from '../../../utils/kalender';
 import { Behandling } from './Behandling';
 import type { Saksoversiktsbehandling } from './utils';
 import {
     hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
-    hentOpprettetTidspunkt,
+    hentTidspunktforSortering,
     skalRadVises,
 } from './utils';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { kalenderDiff } from '../../../utils/kalender';
 
 const SwitchHøyre = styled(Switch)`
     margin-right: 0.275rem;
@@ -87,8 +87,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             .filter(behandling => skalRadVises(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
                                 kalenderDiff(
-                                    new Date(hentOpprettetTidspunkt(b)),
-                                    new Date(hentOpprettetTidspunkt(a))
+                                    new Date(hentTidspunktforSortering(b)),
+                                    new Date(hentTidspunktforSortering(a))
                                 )
                             )
                             .map((behandling: Saksoversiktsbehandling) => (

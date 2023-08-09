@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-
-import { Alert, Heading, Label } from '@navikt/ds-react';
+import { Alert, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
@@ -16,7 +15,6 @@ import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../ty
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
-import BarnMedOpplysninger from './BarnMedOpplysninger';
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;
@@ -32,7 +30,7 @@ const BarnaWrapper = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledCheckboxGruppe = styled(CheckboxGruppe)`
+const StyledCheckboxGroup = styled(CheckboxGroup)`
     min-width: 0;
 `;
 
@@ -73,6 +71,17 @@ const Barna: React.FunctionComponent = () => {
               )
             : [];
 
+    const oppdaterBarnMedMerketStatus = (barnaSomErSjekketAv: string[]) => {
+        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+            skjema.felter.barnaMedOpplysninger.verdi.map(
+                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                    ...barnMedOpplysninger,
+                    merket: barnaSomErSjekketAv.includes(barnMedOpplysninger.ident),
+                })
+            )
+        );
+    };
+
     return (
         <BarnaWrapper className={'søknad__barna'}>
             <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
@@ -94,7 +103,7 @@ const Barna: React.FunctionComponent = () => {
             )}
 
             <br />
-            <StyledCheckboxGruppe
+            <StyledCheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
                     skjema.visFeilmeldinger
                 )}
@@ -105,7 +114,12 @@ const Barna: React.FunctionComponent = () => {
                         <Label>Barn det er søkt om</Label>
                     )
                 }
-                utenFeilPropagering={true}
+                value={skjema.felter.barnaMedOpplysninger.verdi
+                    .filter(
+                        (barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.merket
+                    )
+                    .map((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.ident)}
+                onChange={(merkedeBarn: string[]) => oppdaterBarnMedMerketStatus(merkedeBarn)}
             >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
@@ -124,7 +138,7 @@ const Barna: React.FunctionComponent = () => {
                 {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
                     <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
                 )}
-            </StyledCheckboxGruppe>
+            </StyledCheckboxGroup>
         </BarnaWrapper>
     );
 };

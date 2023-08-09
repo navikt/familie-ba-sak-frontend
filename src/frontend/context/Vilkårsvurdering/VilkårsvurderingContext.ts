@@ -6,6 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 import type { IBehandling } from '../../typer/behandling';
 import type {
     IAnnenVurdering,
@@ -16,7 +17,6 @@ import type {
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
-import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -76,6 +76,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
                         periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
                         resultat: redigerbartVilkår.verdi.resultat.verdi,
+                        resultatBegrunnelse: redigerbartVilkår.verdi.resultatBegrunnelse,
                         erEksplisittAvslagPåSøknad:
                             redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                         avslagBegrunnelser: redigerbartVilkår.verdi.avslagBegrunnelser.verdi,

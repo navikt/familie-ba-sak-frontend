@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
+import { DokumentPanel } from './Dokument/DokumentPanel';
+import { JournalpostSkjema } from './JournalpostSkjema';
 import {
     ManuellJournalførProvider,
     useManuellJournalfør,
 } from '../../context/ManuellJournalførContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import Personlinje from '../Fagsak/Personlinje/Personlinje';
-import { DokumentPanel } from './Dokument/DokumentPanel';
-import { JournalpostSkjema } from './JournalpostSkjema';
 
 const ToKolonnerDiv = styled.div(
     (props: { viserAlert?: boolean }) => `

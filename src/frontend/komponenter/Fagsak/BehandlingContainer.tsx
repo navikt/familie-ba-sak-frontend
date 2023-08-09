@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { AGray300 } from '@navikt/ds-tokens/dist/tokens';
 
-import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingRouter from './BehandlingRouter';
 import Høyremeny from './Høyremeny/Høyremeny';
+import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 
 const FlexContainer = styled.div`
     display: flex;

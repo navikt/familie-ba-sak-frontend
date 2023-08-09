@@ -1,11 +1,10 @@
 import React from 'react';
 
-import Lenke from 'nav-frontend-lenker';
-
-import { BodyShort, Tag } from '@navikt/ds-react';
+import { Link, BodyShort, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
+import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import { FagsakType } from '../../../typer/fagsak';
@@ -19,7 +18,6 @@ import {
     millisekunderIEttÅr,
 } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
-import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
     bruker?: IPersonInfo;
@@ -61,18 +59,18 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                                 variant={'info'}
                             />
                         )}
-                    <Lenke
+                    <Link
                         className={'visittkort__lenke'}
                         href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
                     >
                         <BodyShort>Saksoversikt</BodyShort>
-                    </Lenke>
-                    <Lenke
+                    </Link>
+                    <Link
                         className={'visittkort__lenke'}
                         href={`/fagsak/${minimalFagsak.id}/dokumenter`}
                     >
                         <BodyShort>Dokumenter</BodyShort>
-                    </Lenke>
+                    </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
                         <Behandlingsmeny bruker={bruker} minimalFagsak={minimalFagsak} />
                     )}

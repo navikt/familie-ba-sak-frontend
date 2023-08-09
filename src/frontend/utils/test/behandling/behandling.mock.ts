@@ -93,6 +93,7 @@ export const mockBehandling = ({
         valutakurser: [],
         feilutbetaltValuta: [],
         brevmottakere: [],
+        refusjonEøs: [],
     };
 };
 
@@ -111,6 +112,7 @@ export const mockVisningBehandling = ({
         type: type,
         resultat: resultat,
         opprettetTidspunkt,
+        aktivertTidspunkt: opprettetTidspunkt,
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
         status,

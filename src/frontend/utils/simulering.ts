@@ -1,4 +1,3 @@
-import type { ISimuleringPeriode } from '../typer/simulering';
 import {
     kalenderDato,
     leggTil,
@@ -7,6 +6,7 @@ import {
     KalenderEnhet,
     kalenderDiffMåned,
 } from './kalender';
+import type { ISimuleringPeriode } from '../typer/simulering';
 
 export const hentPeriodelisteMedTommePerioder = (
     perioder: ISimuleringPeriode[]

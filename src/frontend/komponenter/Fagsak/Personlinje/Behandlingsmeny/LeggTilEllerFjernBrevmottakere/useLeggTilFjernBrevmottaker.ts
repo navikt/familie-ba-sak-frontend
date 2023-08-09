@@ -1,16 +1,15 @@
+import { useEffect, useState } from 'react';
+
 import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
-import {
-    type Ressurs,
-    RessursStatus,
-    byggHenterRessurs,
-    hentDataFraRessurs,
-} from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus, byggHenterRessurs, hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { PersonType } from '../../../../../typer/person';
 import { AlertType, ToastTyper } from '../../../../Felleskomponenter/Toast/typer';
 
 export enum Mottaker {
@@ -48,12 +47,22 @@ export interface IRestBrevmottaker {
     landkode: string;
 }
 
+const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
+    if (mottaker === Mottaker.DØDSBO) {
+        return !land || land === 'NO' ? `${navn} v/dødsbo` : `Estate of ${navn}`;
+    }
+    return navn;
+};
+
 const useLeggTilFjernBrevmottaker = () => {
     const { settToast } = useApp();
     const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
+    const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
+
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
+    const søker = åpenBehandling?.personer.find(person => person.type === PersonType.SØKER);
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
@@ -144,11 +153,34 @@ const useLeggTilFjernBrevmottaker = () => {
     });
     const land = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt =>
-            felt.verdi !== ''
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const norgeErUlovligValgt =
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === 'NO';
+            if (norgeErUlovligValgt) {
+                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
+            }
+            return felt.verdi !== ''
                 ? ok(felt)
-                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.'),
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        },
+        avhengigheter: { mottaker },
     });
+
+    useEffect(() => {
+        const skalNavnVærePreutfylt =
+            mottaker.verdi === Mottaker.DØDSBO ||
+            mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+
+        if (skalNavnVærePreutfylt || skalNavnVærePreutfylt !== navnErPreutfylt) {
+            navn.validerOgSettFelt(
+                skalNavnVærePreutfylt && søker?.navn
+                    ? preutfyltNavnFixed(mottaker.verdi, land.verdi, søker.navn)
+                    : ''
+            );
+        }
+        settNavnErPreutfylt(skalNavnVærePreutfylt);
+    }, [mottaker.verdi, land.verdi]);
 
     const {
         skjema,
@@ -229,6 +261,7 @@ const useLeggTilFjernBrevmottaker = () => {
         lagreMottaker,
         valideringErOk,
         fjernMottaker,
+        navnErPreutfylt,
     };
 };
 

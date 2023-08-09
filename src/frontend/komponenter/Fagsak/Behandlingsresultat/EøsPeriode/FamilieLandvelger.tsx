@@ -9,11 +9,13 @@ import {
     ABorderStrong,
     AGray100,
     AGray300,
+    ASpacing2,
     ATextDanger,
 } from '@navikt/ds-tokens/dist/tokens';
 import { CountryFilter } from '@navikt/land-verktoy';
 import type { Country, Currency } from '@navikt/land-verktoy';
-import CountrySelect, { type CountrySelectProps } from '@navikt/landvelger';
+import type { CountrySelectProps } from '@navikt/landvelger';
+import CountrySelect from '@navikt/landvelger';
 
 const EØS_CURRENCY: Array<string> = [
     'DKK',
@@ -31,6 +33,8 @@ const EØS_CURRENCY: Array<string> = [
 ];
 
 const Landvelger = styled(CountrySelect)`
+    display: grid;
+    gap: ${ASpacing2};
     margin-bottom: ${props => (props.utenMargin ? '0rem' : '1rem')};
 
     p.navds-label--small {
@@ -188,6 +192,7 @@ const FamilieLandvelger: React.FC<IFamilieLandvelgerProps> = ({
             utenMargin={utenMargin}
             kanNullstilles={kanNullstilles}
             feil={feil}
+            size={size}
         />
     );
 };
@@ -243,6 +248,7 @@ const FamilieMultiLandvelger: React.FC<IFamilieMultiLandvelgerProps> = ({
             utenMargin={utenMargin}
             kanNullstilles={kanNullstilles}
             feil={feil}
+            size={size}
         />
     );
 };

@@ -4,20 +4,20 @@ import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { vilkårFeilmeldingId } from './VilkårTabell';
+import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Resultat, uiResultat } from '../../../../typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import { vilkårFeilmeldingId } from './VilkårTabell';
-import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -51,6 +51,13 @@ const FlexDiv = styled.div`
     }
 `;
 
+const StyledTooltip = styled(Tooltip)`
+    padding-top: 8px;
+    padding-bottom: 8px;
+    max-width: 500px;
+    text-align: left;
+`;
+
 const VilkårTabellRad: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
@@ -59,9 +66,13 @@ const VilkårTabellRad: React.FC<IProps> = ({
     settFokusPåKnapp,
 }) => {
     const { vurderErLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
+    const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
+    const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
 
     const hentInitiellEkspandering = () =>
-        vurderErLesevisning() || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+        erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] =
@@ -100,18 +111,23 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     settRedigerbartVilkår={settRedigerbartVilkår}
                     settEkspandertVilkår={settEkspandertVilkår}
                     settFokusPåKnapp={settFokusPåKnapp}
-                    lesevisning={vurderErLesevisning()}
+                    lesevisning={erLesevisning}
                 />
             }
         >
             <Table.DataCell>
                 <VurderingCelle>
                     <VilkårResultatIkon
-                        resultat={vilkårResultat.verdi.resultat.verdi}
+                        resultat={vilkårResultatVerdi}
+                        resultatBegrunnelse={vilkårResultatbegrunnelse}
                         width={20}
                         height={20}
                     />
-                    <BodyShort>{uiResultat[vilkårResultat.verdi.resultat.verdi]}</BodyShort>
+                    <BodyShort>
+                        {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
+                            ? resultatVisningsnavn[vilkårResultatbegrunnelse]
+                            : resultatVisningsnavn[vilkårResultatVerdi]}
+                    </BodyShort>
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>
@@ -120,7 +136,11 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
-                <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
+                {vilkårResultat.verdi.begrunnelse.verdi && (
+                    <StyledTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
+                        <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
+                    </StyledTooltip>
+                )}
             </Table.DataCell>
             <Table.DataCell>
                 {redigerbartVilkår.verdi.vurderesEtter ? (

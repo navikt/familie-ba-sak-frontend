@@ -40,7 +40,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
     visFeilmeldinger,
     lesevisning,
     maxWidth,
-    className,
+    className = '',
 }) => {
     const finnÅrTilbakeTil = (): number => {
         return new Date().getFullYear() - new Date(initielFom.verdi).getFullYear();

@@ -2,17 +2,20 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
+import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import { FagsakType } from '../typer/fagsak';
+import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { Målform } from '../typer/søknad';
@@ -24,8 +27,6 @@ import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling: åpenBehandlingRessurs } = useBehandling();
@@ -182,6 +183,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             ].includes(avhengigheter?.brevmal.verdi);
         },
         avhengigheter: { brevmal },
+        nullstillVedAvhengighetEndring: false,
     });
 
     const mottakerlandSed = useFelt<string[]>({
@@ -244,6 +246,22 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] =
         React.useState<boolean>(false);
 
+    const nullstillBarnBrevetGjelder = () => {
+        const barn = personer
+            .filter(person => person.type === PersonType.BARN)
+            .map(
+                (person: IGrunnlagPerson): IBarnMedOpplysninger => ({
+                    ident: person.personIdent,
+                    fødselsdato: person.fødselsdato,
+                    navn: person.navn,
+                    merket: false,
+                    manueltRegistrert: false,
+                    erFolkeregistrert: true,
+                })
+            );
+        skjema.felter.barnBrevetGjelder.validerOgSettFelt(barn);
+    };
+
     /**
      * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
      * Dette fordi at man kan ha gjort endring på målform
@@ -251,11 +269,13 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     useEffect(() => {
         skjema.felter.dokumenter.nullstill();
         nullstillDeltBosted();
+        nullstillBarnBrevetGjelder();
     }, [åpenBehandling]);
 
     useEffect(() => {
         nullstillDeltBosted();
         skjema.felter.mottakerlandSed.nullstill();
+        nullstillBarnBrevetGjelder();
     }, [skjema.felter.brevmal.verdi]);
 
     const mottakersMålform = (): Målform =>

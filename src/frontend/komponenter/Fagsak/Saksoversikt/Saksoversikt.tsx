@@ -2,12 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Lenke from 'nav-frontend-lenker';
-
 import { Home, Search } from '@navikt/ds-icons';
-import { Alert, Heading, Tabs } from '@navikt/ds-react';
+import { Link, Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import Behandlinger from './Behandlinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
+import { SatsendringKnapp } from './SatsendringKnapp';
+import { useSatsendringsknapp } from './useSatsendringsknapp';
+import Utbetalinger from './Utbetalinger';
+import type { VisningBehandling } from './visningBehandling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
@@ -32,12 +36,6 @@ import {
 } from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
-import Behandlinger from './Behandlinger';
-import FagsakLenkepanel from './FagsakLenkepanel';
-import { SatsendringKnapp } from './SatsendringKnapp';
-import { useSatsendringsknapp } from './useSatsendringsknapp';
-import Utbetalinger from './Utbetalinger';
-import type { VisningBehandling } from './visningBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -113,11 +111,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     const lenkeTilBehandlingsresultat = () => {
         return aktivBehandling ? (
-            <Lenke
+            <Link
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
             >
                 Se detaljer
-            </Lenke>
+            </Link>
         ) : null;
     };
 

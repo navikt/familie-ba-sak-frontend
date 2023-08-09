@@ -7,6 +7,12 @@ import { FileContent } from '@navikt/ds-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
+import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
+import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -23,14 +29,9 @@ import {
     hentStegNummer,
 } from '../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import { BrevmottakereAlert } from './BrevmottakereAlert';
-import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
-import Vedtaksmeny from './Vedtaksmeny';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -60,7 +61,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const personer = åpenBehandling?.personer ?? [];
     const brevmottakere = åpenBehandling?.brevmottakere ?? [];
-    const institusjon = hentDataFraRessurs(minimalFagsakRessurs)?.institusjon;
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const navigate = useNavigate();
 
@@ -75,12 +76,21 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
-    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(false);
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(
+        åpenBehandling.feilutbetaltValuta.length > 0
+    );
+    const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(
+        åpenBehandling.refusjonEøs.length > 0
+    );
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
+        React.useState(false);
+
+    const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] =
         React.useState(false);
 
     React.useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
+        settVisRefusjonEøs(åpenBehandling.refusjonEøs.length > 0);
     }, [åpenBehandling]);
 
     const hentVedtaksbrev = () => {
@@ -108,7 +118,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const sendTilBeslutter = () => {
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
-            erUlagretNyFeilutbetaltValutaPeriode
+            erUlagretNyFeilutbetaltValutaPeriode,
+            erUlagretNyRefusjonEøsPeriode
         );
     };
 
@@ -150,6 +161,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 åpenBehandling={åpenBehandling}
                 erBehandlingMedVedtaksbrevutsending={erBehandlingMedVedtaksbrevutsending}
                 visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
+                visRefusjonEøs={() => settVisRefusjonEøs(true)}
             />
 
             {erBehandlingMedVedtaksbrevutsending ? (
@@ -180,9 +192,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         )}
                         <BrevmottakereAlert
                             brevmottakere={brevmottakere}
-                            institusjon={institusjon}
+                            institusjon={minimalFagsak?.institusjon}
                             personer={personer}
                             åpenBehandling={åpenBehandling}
+                            fagsakType={minimalFagsak?.fagsakType}
                         />
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
@@ -209,6 +222,17 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                         skjulFeilutbetaltValuta={() =>
                                             settVisFeilutbetaltValuta(false)
                                         }
+                                    />
+                                )}
+                                {visRefusjonEøs && (
+                                    <RefusjonEøs
+                                        refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
+                                        behandlingId={åpenBehandling.behandlingId}
+                                        fagsakId={fagsakId}
+                                        settErUlagretNyRefusjonEøsPeriode={
+                                            settErUlagretNyRefusjonEøsPeriode
+                                        }
+                                        skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}
                             </>

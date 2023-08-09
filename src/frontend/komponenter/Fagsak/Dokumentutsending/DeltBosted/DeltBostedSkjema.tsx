@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-
+import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import BarnCheckbox from './BarnCheckbox';
 import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
-import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
@@ -18,7 +17,12 @@ interface IProps {
 }
 
 const DeltBostedSkjema = (props: IProps) => {
-    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger } = props;
+    const {
+        barnMedDeltBostedFelt,
+        avtalerOmDeltBostedPerBarnFelt,
+        visFeilmeldinger,
+        settVisFeilmeldinger,
+    } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -39,10 +43,56 @@ const DeltBostedSkjema = (props: IProps) => {
         }
     );
 
+    const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
+        barnMedDeltBostedFelt.validerOgSettFelt(
+            barnMedDeltBostedFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                ...barnMedOpplysninger,
+                merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
+            }))
+        );
+    };
+
+    const oppdaterAvtalerOmDeltBostedPerBarn = (barnaSomErMerket: string[]) => {
+        const barnHvorMerkingErFjernet = barnMedDeltBostedFelt.verdi
+            .filter(
+                (barn: IBarnMedOpplysninger) =>
+                    barn.merket && !barnaSomErMerket.includes(barn.ident)
+            )
+            .map((barn: IBarnMedOpplysninger) => barn.ident);
+        const barnHvorMerkingErLagtTil = barnMedDeltBostedFelt.verdi
+            .filter(
+                (barn: IBarnMedOpplysninger) =>
+                    !barn.merket && barnaSomErMerket.includes(barn.ident)
+            )
+            .map((barn: IBarnMedOpplysninger) => barn.ident);
+
+        barnHvorMerkingErFjernet.forEach((ident: string) =>
+            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                [ident]: [],
+            })
+        );
+
+        barnHvorMerkingErLagtTil.forEach((ident: string) =>
+            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                [ident]: [''],
+            })
+        );
+    };
+
     return (
-        <CheckboxGruppe
+        <CheckboxGroup
             {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={'Hvilke barn har delt bosted?'}
+            value={barnMedDeltBostedFelt.verdi
+                .filter((barn: IBarnMedOpplysninger) => barn.merket)
+                .map((barn: IBarnMedOpplysninger) => barn.ident)}
+            onChange={(barnaSomErMerket: string[]) => {
+                oppdaterAvtalerOmDeltBostedPerBarn(barnaSomErMerket);
+                settVisFeilmeldinger(false);
+                oppdaterBarnMedNyMerketStatus(barnaSomErMerket);
+            }}
         >
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                 <BarnCheckbox
@@ -61,7 +111,7 @@ const DeltBostedSkjema = (props: IProps) => {
                     });
                 }}
             />
-        </CheckboxGruppe>
+        </CheckboxGroup>
     );
 };
 

@@ -1,6 +1,5 @@
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 
-import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
@@ -10,6 +9,7 @@ import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { IVerge } from './institusjon-og-verge';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { IGrunnlagPerson } from './person';
+import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
 import type {
@@ -26,6 +26,7 @@ import type {
 } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
+import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 
 export interface IRestNyBehandling {
     kategori: BehandlingKategori | null;
@@ -174,8 +175,9 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
 };
 
 export enum BehandlingStatus {
-    OPPRETTET = 'OPPRETTET',
     UTREDES = 'UTREDES',
+    SATT_PÅ_VENT = 'SATT_PÅ_VENT',
+    SATT_PÅ_MASKINELL_VENT = 'SATT_PÅ_MASKINELL_VENT',
     FATTER_VEDTAK = 'FATTER_VEDTAK',
     IVERKSETTER_VEDTAK = 'IVERKSETTER_VEDTAK',
     AVSLUTTET = 'AVSLUTTET',
@@ -273,6 +275,7 @@ export interface IBehandling {
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
+    refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: IRestBrevmottaker[];
 }
 
@@ -388,13 +391,15 @@ export const behandlingsstatuser: Record<
     BehandlingStatus | Behandlingsstatus | KlageStatus,
     string
 > = {
-    OPPRETTET: 'Opprettet',
     UTREDES: 'Utredes',
+    SATT_PÅ_VENT: 'Satt på vent',
+    SATT_PÅ_MASKINELL_VENT: 'Satt på maskinell vent',
     FATTER_VEDTAK: 'Fatter vedtak',
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
 
     /** For klagebehandlinger: **/
+    OPPRETTET: 'Opprettet',
     VENTER: 'Venter',
     FERDIGSTILT: 'Ferdigstilt',
 };

@@ -1,13 +1,12 @@
 import React from 'react';
 
-import navFarger from 'nav-frontend-core';
-
 import { Alert } from '@navikt/ds-react';
-import { AZIndexFocus } from '@navikt/ds-tokens/dist/tokens';
+import { ABlue500, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -22,7 +21,6 @@ import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;
@@ -44,6 +42,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     regelverk,
 }) => {
     const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
@@ -108,18 +107,18 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={vurderErLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
-            erLesevisning={vurderErLesevisning()}
+            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+            erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);
             }}
             options={muligeOptions}
             propSelectStyles={{
-                container: provided => ({
+                container: (provided, props) => ({
                     ...provided,
                     maxWidth: '25rem',
-                    zIndex: AZIndexFocus.valueOf(),
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
                 }),
                 groupHeading: provided => ({
                     ...provided,
@@ -142,7 +141,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
                 multiValueRemove: provided => ({
                     ...provided,
                     ':hover': {
-                        backgroundColor: navFarger.navBla,
+                        backgroundColor: ABlue500,
                         color: 'white',
                         borderRadius: '0 .4rem .4rem 0',
                     },

@@ -3,6 +3,7 @@ import React from 'react';
 import { BodyShort, Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
+import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 import {
     kompetanseFeilmeldingId,
     useKompetansePeriodeSkjema,
@@ -12,7 +13,6 @@ import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
 import { KompetanseResultat } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
-import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 
 interface IProps {
     kompetanse: IRestKompetanse;
@@ -92,6 +92,9 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                     toggleForm={toggleForm}
                     slettKompetanse={slettKompetanse}
                     status={kompetanse.status}
+                    erAnnenForelderOmfattetAvNorskLovgivning={
+                        kompetanse.erAnnenForelderOmfattetAvNorskLovgivning
+                    }
                 />
             }
         >

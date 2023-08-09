@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
 
-import { useApp } from '../../../context/AppContext';
 import type { IToast } from './typer';
+import { useApp } from '../../../context/AppContext';
 
 const Container = styled.div`
     grid-column: 3;

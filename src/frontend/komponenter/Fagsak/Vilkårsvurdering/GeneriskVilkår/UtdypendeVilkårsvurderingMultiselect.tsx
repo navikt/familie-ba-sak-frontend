@@ -7,8 +7,11 @@ import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import { useApp } from '../../../../context/AppContext';
 import type { PersonType } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
+    Regelverk,
     UtdypendeVilkårsvurderingDeltBosted,
     UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
     UtdypendeVilkårsvurderingEøsBarnBosattIRiket,
@@ -38,9 +41,11 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
     [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES]:
         'Delt bosted: skal ikke deles',
     [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING]:
-        'Omfattet av norsk lovgivning',
+        'Søker omfattet av norsk lovgivning',
     [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND]:
-        'Omfattet av norsk lovgivning Utland',
+        'Søker omfattet av norsk lovgivning Utland',
+    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING]:
+        'Annen forelder omfattet av norsk lovgivning',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE]: 'Barn bor i Norge',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS]: 'Barn bor i EØS-land',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA]:
@@ -106,6 +111,8 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     personType,
     feilhåndtering,
 }) => {
+    const { toggles } = useApp();
+
     const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,
@@ -113,9 +120,13 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
     };
 
-    const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
-        utdypendeVilkårsvurderingAvhengigheter
-    );
+    const muligeUtdypendeVilkårsvurderinger = toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+        ? bestemMuligeUtdypendeVilkårsvurderinger(utdypendeVilkårsvurderingAvhengigheter)
+        : bestemMuligeUtdypendeVilkårsvurderinger(utdypendeVilkårsvurderingAvhengigheter).filter(
+              utdypendeVilkårsvurdering =>
+                  utdypendeVilkårsvurdering !==
+                  UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING
+          );
 
     useEffect(() => {
         fjernUmuligeAlternativerFraRedigerbartVilkår(
@@ -168,7 +179,11 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     return (
         <StyledFamilieReactSelect
             id="UtdypendeVilkarsvurderingMultiselect"
-            label="Utdypende vilkårsvurdering"
+            label={
+                redigerbartVilkår.verdi.vurderesEtter === Regelverk.NASJONALE_REGLER
+                    ? 'Utdypende vilkårsvurdering (valgfri)'
+                    : 'Utdypende vilkårsvurdering'
+            }
             value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}

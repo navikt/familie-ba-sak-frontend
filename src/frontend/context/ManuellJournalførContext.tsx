@@ -16,15 +16,13 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useApp } from './AppContext';
 import useDokument from '../hooks/useDokument';
 import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import {
-    behandlingstemaer,
-    type IBehandlingstema,
-    utredBehandlingstemaFraOppgave,
-} from '../typer/behandlingstema';
+import type { IBehandlingstema } from '../typer/behandlingstema';
+import { behandlingstemaer, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
 import type { Klagebehandlingstype } from '../typer/klage';
@@ -33,14 +31,14 @@ import type {
     IRestJournalføring,
 } from '../typer/manuell-journalføring';
 import { JournalpostKanal } from '../typer/manuell-journalføring';
-import { type IRestLukkOppgaveOgKnyttJournalpost, OppgavetypeFilter } from '../typer/oppgave';
+import type { IRestLukkOppgaveOgKnyttJournalpost } from '../typer/oppgave';
+import { OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
-import { useApp } from './AppContext';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;

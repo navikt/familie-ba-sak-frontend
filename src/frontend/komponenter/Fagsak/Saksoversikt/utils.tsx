@@ -7,6 +7,7 @@ import { ExternalLink, WarningColored } from '@navikt/ds-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
+import type { VisningBehandling } from './visningBehandling';
 import {
     behandlingsresultater,
     BehandlingStatus,
@@ -17,18 +18,14 @@ import {
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import {
-    type IKlagebehandling,
-    KlageinstansEventType,
-    klageinstansUtfallTilTekst,
-} from '../../../typer/klage';
+import type { IKlagebehandling } from '../../../typer/klage';
+import { KlageinstansEventType, klageinstansUtfallTilTekst } from '../../../typer/klage';
 import { Klagebehandlingstype } from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
     Behandlingsresultatstype,
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
-import type { VisningBehandling } from './visningBehandling';
 
 export enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
@@ -62,6 +59,17 @@ export const skalRadVises = (
 export const hentOpprettetTidspunkt = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
     switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
         case Saksoversiktbehandlingstype.BARNETRYGD:
+        case Saksoversiktbehandlingstype.TILBAKEBETALING:
+            return saksoversiktsbehandling.opprettetTidspunkt;
+        case Saksoversiktbehandlingstype.KLAGE:
+            return saksoversiktsbehandling.opprettet;
+    }
+};
+
+export const hentTidspunktforSortering = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
+    switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
+        case Saksoversiktbehandlingstype.BARNETRYGD:
+            return saksoversiktsbehandling.aktivertTidspunkt;
         case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return saksoversiktsbehandling.opprettetTidspunkt;
         case Saksoversiktbehandlingstype.KLAGE:

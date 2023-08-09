@@ -1,17 +1,6 @@
-import {
-    type Avhengigheter,
-    feil,
-    type FeltState,
-    ok,
-    type ValiderFelt,
-    Valideringsstatus,
-} from '@navikt/familie-skjema';
+import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
-import type { IGrunnlagPerson } from '../typer/person';
-import { PersonType } from '../typer/person';
-import type { VedtakBegrunnelse } from '../typer/vedtak';
-import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk, Resultat, VilkårType } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
@@ -28,6 +17,11 @@ import {
     valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
 import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
+import type { IGrunnlagPerson } from '../typer/person';
+import { PersonType } from '../typer/person';
+import type { VedtakBegrunnelse } from '../typer/vedtak';
+import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
+import { Regelverk, Resultat, VilkårType, ResultatBegrunnelse } from '../typer/vilkår';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -108,17 +102,15 @@ export const erPeriodeGyldig = (
             return feil(felt, 'Ugyldig t.o.m.');
         }
 
-        if (!erEksplisittAvslagPåSøknad) {
-            if (person && person.type === PersonType.BARN) {
-                if (finnesDatoFørFødselsdato(person, fom, tom)) {
-                    return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
-                }
-                if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
-                    return feil(
-                        felt,
-                        'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
-                    );
-                }
+        if (person && person.type === PersonType.BARN) {
+            if (finnesDatoFørFødselsdato(person, fom, tom)) {
+                return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
+            }
+            if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
+                return feil(
+                    felt,
+                    'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
+                );
             }
         }
 
@@ -164,8 +156,15 @@ export const erPeriodeGyldig = (
     }
 };
 
-export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+export const erResultatGyldig = (
+    felt: FeltState<Resultat>,
+    avhengigheter?: Avhengigheter
+): FeltState<Resultat> => {
+    return (avhengigheter?.vurderesEtter !== Regelverk.EØS_FORORDNINGEN &&
+        avhengigheter?.resultatBegrunnelse === ResultatBegrunnelse.IKKE_AKTUELT) ||
+        felt.verdi === Resultat.IKKE_VURDERT
+        ? feil(felt, 'Resultat er ikke satt')
+        : ok(felt);
 };
 
 export const erAvslagBegrunnelserGyldig = (
@@ -180,12 +179,6 @@ export const erAvslagBegrunnelserGyldig = (
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
-export const erUtfylt = (felt: FeltState<string>): FeltState<string> => {
-    if (felt.verdi === '') {
-        return feil(felt, ikkeUtfyltFelt);
-    }
-    return ok(felt);
-};
 
 export const lagInitiellFelt = <Value>(
     value: Value,
@@ -197,20 +190,6 @@ export const lagInitiellFelt = <Value>(
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         verdi: value,
     };
-};
-
-export const validerFelt = <Value, Context>(
-    nyVerdi: Value,
-    felt: FeltState<Value>,
-    context?: Context
-): FeltState<Value> => {
-    return felt.valider(
-        {
-            ...felt,
-            verdi: nyVerdi,
-        },
-        context ? context : {}
-    );
 };
 
 export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => {

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import type { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useHttp } from '@navikt/familie-http';
@@ -15,11 +14,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import type {
-    IInfotrygdsaker,
-    IInfotrygdsakerRequest,
-    IMigreringResponseDto,
-} from '../../typer/infotrygd';
+import type { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
 
@@ -78,49 +73,6 @@ export const useInfotrygdRequest = () => {
     return {
         hentInfotrygdsaker,
         infotrygdsakerRessurs,
-    };
-};
-
-export const useInfotrygdMigrering = () => {
-    const navigate = useNavigate();
-    const { request } = useHttp();
-    const [migrerInfotrygdSakRessurs, settMigrerInfotrygdSakRessurs] = useState<
-        Ressurs<IMigreringResponseDto>
-    >(byggTomRessurs());
-    const [visMigrertModal, settVisMigrertModal] = useState<boolean>(false);
-
-    const flyttBrukerTilBaSak = (ident: string) => {
-        settMigrerInfotrygdSakRessurs(byggHenterRessurs());
-        request<{ ident: string }, IMigreringResponseDto>({
-            method: 'POST',
-            data: { ident },
-            url: `familie-ba-sak/api/migrering`,
-        })
-            .then(ressurs => {
-                if (ressurs.status === RessursStatus.SUKSESS) {
-                    settVisMigrertModal(true);
-                }
-                settMigrerInfotrygdSakRessurs(ressurs);
-            })
-            .catch((_error: AxiosError) => {
-                settMigrerInfotrygdSakRessurs(
-                    byggFeiletRessurs('Ukjent feil ved flytting av bruker til BA-sak')
-                );
-            });
-    };
-
-    const gåTilSaksoversiktVedSuksess = (fagsakId?: number) => {
-        settVisMigrertModal(false);
-        if (fagsakId) {
-            navigate(`/fagsak/${fagsakId}/saksoversikt`);
-        }
-    };
-
-    return {
-        flyttBrukerTilBaSak,
-        migrerInfotrygdSakRessurs,
-        visMigrertModal,
-        gåTilSaksoversiktVedSuksess,
     };
 };
 

@@ -2,24 +2,30 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Calculator, ExpandFilled } from '@navikt/ds-icons';
+import { Calculator, Eu, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../typer/behandling';
-import { BehandlingKategori } from '../../../typer/behandlingstema';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
-import { useHentEndringstidspunkt } from './VedtakBegrunnelserTabell/useHentEndringstidspunkt';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import type { IBehandling } from '../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../typer/behandling';
+import { BehandlingKategori } from '../../../typer/behandlingstema';
+import { FagsakType } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
+import { vedtakHarFortsattUtbetaling } from '../../../utils/vedtakUtils';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     erBehandlingMedVedtaksbrevutsending: boolean;
     visFeilutbetaltValuta: () => void;
+    visRefusjonEøs: () => void;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -36,8 +42,16 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     erBehandlingMedVedtaksbrevutsending,
     visFeilutbetaltValuta,
+    visRefusjonEøs,
 }) => {
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { toggles } = useApp();
     const { vurderErLesevisning } = useBehandling();
+
+    const erLesevisning = vurderErLesevisning();
+
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const fagsakType = minimalFagsak?.fagsakType;
 
     const kanIkkeKorrigereVedtak =
         åpenBehandling.type === Behandlingstype.REVURDERING &&
@@ -62,13 +76,13 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {erBehandlingMedVedtaksbrevutsending && (
                         <>
                             <KorrigerEtterbetaling
-                                erLesevisning={vurderErLesevisning()}
+                                erLesevisning={erLesevisning}
                                 korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
                                 behandlingId={åpenBehandling.behandlingId}
                             />
                             {(!kanIkkeKorrigereVedtak || åpenBehandling.korrigertVedtak) && (
                                 <KorrigerVedtak
-                                    erLesevisning={vurderErLesevisning()}
+                                    erLesevisning={erLesevisning}
                                     korrigertVedtak={åpenBehandling.korrigertVedtak}
                                     behandlingId={åpenBehandling.behandlingId}
                                 />
@@ -86,6 +100,14 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
                                 <Calculator />
                                 Legg til feilutbetalt valuta og sats
+                            </Dropdown.Menu.List.Item>
+                        )}
+                    {toggles[ToggleNavn.støtterRefusjonEøs] &&
+                        fagsakType === FagsakType.NORMAL &&
+                        vedtakHarFortsattUtbetaling(åpenBehandling.resultat) && (
+                            <Dropdown.Menu.List.Item onClick={visRefusjonEøs}>
+                                <Eu />
+                                Legg til refusjon EØS
                             </Dropdown.Menu.List.Item>
                         )}
                 </Dropdown.Menu.List>

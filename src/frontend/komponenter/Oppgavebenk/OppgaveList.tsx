@@ -7,10 +7,10 @@ import styled from 'styled-components';
 import { Alert, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useOppgaver } from '../../context/OppgaverContext';
-import type { IOppgaveRad } from '../../context/OppgaverContextUtils';
 import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
+import { useOppgaver } from '../../context/OppgaverContext';
+import type { IOppgaveRad } from '../../context/OppgaverContextUtils';
 
 export const styleFraAccessorEllerId = (id: string) => {
     switch (id) {

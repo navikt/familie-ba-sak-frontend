@@ -12,29 +12,12 @@ import {
     FamilieSelect,
     FamilieTextarea,
 } from '@navikt/familie-form-elements';
-import { type FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useBrevModul } from '../../../../context/BrevModulContext';
-import useDokument from '../../../../hooks/useDokument';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
-import type { IGrunnlagPerson } from '../../../../typer/person';
-import { PersonType } from '../../../../typer/person';
-import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { målform } from '../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
-import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
-import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
-import Knapperekke from '../../Knapperekke';
-import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
 import BrevmottakerListe from './BrevmottakerListe';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
@@ -45,6 +28,21 @@ import {
     opplysningsdokumenter,
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useBrevModul } from '../../../../context/BrevModulContext';
+import useDokument from '../../../../hooks/useDokument';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import { målform } from '../../../../typer/søknad';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
+import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
+import Knapperekke from '../../Knapperekke';
+import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -193,7 +191,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
             />
             <Fieldset
                 error={
-                    hentFrontendFeilmelding(skjema.submitRessurs) ||
+                    (skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)) ||
                     hentFrontendFeilmelding(hentetDokument)
                 }
                 legend="Send brev"
@@ -281,10 +279,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     legend="Legg til kulepunkt"
                                     hideLegend
                                     id={fritekstSkjemaGruppeId}
-                                    error={
-                                        skjema.visFeilmeldinger &&
-                                        hentFrontendFeilmelding(skjema.submitRessurs)
-                                    }
                                 >
                                     {skjema.felter.fritekster.verdi.map(
                                         (fritekst: FeltState<IFritekstFelt>, index: number) => {
@@ -368,21 +362,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         behandlingsSteg={behandlingSteg}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
-                        alternativer={personer
-                            .filter(person => person.type === PersonType.BARN)
-                            .map(
-                                (person: IGrunnlagPerson): IBarnMedOpplysninger => ({
-                                    ident: person.personIdent,
-                                    fødselsdato: person.fødselsdato,
-                                    navn: person.navn,
-                                    merket:
-                                        skjema.felter.barnBrevetGjelder.verdi.find(
-                                            markertFelt => markertFelt.ident === person.personIdent
-                                        )?.merket ?? false,
-                                    manueltRegistrert: false,
-                                    erFolkeregistrert: true,
-                                })
-                            )}
                     />
                 )}
                 {skjema.felter.brevmal.verdi ===

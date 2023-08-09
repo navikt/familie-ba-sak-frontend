@@ -2,12 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { ABorderDanger, ABorderAction } from '@navikt/ds-tokens/dist/tokens';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
@@ -29,12 +28,12 @@ export const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil?: React.
         margin-top: 0.5rem;
     }
     .nav-datovelger__input {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        border-color: ${({ feil }) => (feil ? ABorderDanger : ABorderAction)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
     }
 
     .nav-datovelger__kalenderknapp {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        border-color: ${({ feil }) => (feil ? ABorderDanger : ABorderAction)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
     }
 

@@ -4,9 +4,13 @@ import React from 'react';
 import type { ISODateString } from 'nav-datovelger/lib/types';
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import {
+    ABorderDanger,
+    AGray600,
+    ABorderFocus,
+    ABorderAction,
+} from '@navikt/ds-tokens/dist/tokens';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 
 import { StyledErrorMessage } from '../../komponenter/Fagsak/Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
@@ -14,30 +18,30 @@ const StyledFamilieDatovelgerForSkjema = styled(FamilieDatovelger)<{
     feil: ReactNode | undefined;
 }>`
     .nav-datovelger__input {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navGra60)};
+        border-color: ${({ feil }) => (feil ? ABorderDanger : AGray600)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
 
         &:focus {
-            border-color: ${navFarger.navBlaDarken60};
-            box-shadow: 0 0 0 3px ${navFarger.navBlaDarken60};
+            border-color: ${ABorderFocus};
+            box-shadow: 0 0 0 3px ${ABorderFocus};
         }
 
         &:hover {
-            border-color: ${navFarger.navBla};
+            border-color: ${ABorderAction};
         }
     }
 
     .nav-datovelger__kalenderknapp {
-        border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navGra60)};
+        border-color: ${({ feil }) => (feil ? ABorderDanger : AGray600)};
         box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
 
         &:focus {
-            border-color: ${navFarger.navBlaDarken60};
-            box-shadow: 0 0 0 3px ${navFarger.navBlaDarken60};
+            border-color: ${ABorderFocus};
+            box-shadow: 0 0 0 3px ${ABorderFocus};
         }
 
         &:hover {
-            border-color: ${navFarger.navBla};
+            border-color: ${ABorderAction};
         }
     }
 

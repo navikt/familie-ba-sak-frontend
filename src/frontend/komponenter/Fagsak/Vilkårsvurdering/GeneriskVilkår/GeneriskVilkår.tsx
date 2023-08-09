@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Fieldset, Button, Heading } from '@navikt/ds-react';
 import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
+import VilkårTabell from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -21,8 +21,6 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../typer/vilkår';
-import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
-import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -51,6 +49,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     generiskVilkårKey,
 }) => {
     const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -90,7 +89,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseLeggTilKnapp = () => {
-        if (vurderErLesevisning()) {
+        if (erLesevisning) {
             return false;
         }
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
@@ -100,7 +99,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseFjernUtvidetBarnetrygdKnapp = () => {
-        if (vurderErLesevisning()) {
+        if (erLesevisning) {
             return false;
         }
         const utvidetVilkår = vilkårResultater.filter(
@@ -116,7 +115,11 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     return (
         <Container>
-            <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
+            <Fieldset
+                error={visFeilmeldingerForVilkår ? feilmelding : undefined}
+                legend={vilkårFraConfig.tittel}
+                hideLegend
+            >
                 <Heading size="medium" level="3">
                     {vilkårFraConfig.tittel}
                 </Heading>
@@ -152,7 +155,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                     />
                 )}
-            </SkjemaGruppe>
+            </Fieldset>
         </Container>
     );
 };

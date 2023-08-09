@@ -6,9 +6,9 @@ import { Delete } from '@navikt/ds-icons';
 import { Button, Checkbox } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import DeltBostedAvtaler from './DeltBostedAvtaler';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
-import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 const CheckboxOgSlettknapp = styled.div`
     display: flex;
@@ -44,7 +44,6 @@ const FjernBarnKnapp = styled(Button)`
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
@@ -52,7 +51,6 @@ interface IProps {
 
 const BarnCheckbox: React.FC<IProps> = ({
     barn,
-    settVisFeilmeldinger,
     barnMedDeltBostedFelt,
     avtalerOmDeltBostedPerBarnFelt,
     visFeilmeldinger,
@@ -62,44 +60,7 @@ const BarnCheckbox: React.FC<IProps> = ({
     return (
         <div>
             <CheckboxOgSlettknapp>
-                <StyledCheckbox
-                    value={
-                        <LabelContent>
-                            <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-                        </LabelContent>
-                    }
-                    checked={barn.merket}
-                    onChange={() => {
-                        const nyMerketStatus = !barnMedDeltBostedFelt.verdi.find(
-                            barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
-                        )?.merket;
-
-                        barnMedDeltBostedFelt.validerOgSettFelt(
-                            barnMedDeltBostedFelt.verdi.map(
-                                (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                                    barnMedOpplysninger.ident === barn.ident
-                                        ? {
-                                              ...barnMedOpplysninger,
-                                              merket: nyMerketStatus,
-                                          }
-                                        : barnMedOpplysninger
-                            )
-                        );
-                        settVisFeilmeldinger(false);
-
-                        if (nyMerketStatus) {
-                            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                                [barn.ident]: [''],
-                            });
-                        } else {
-                            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                                [barn.ident]: [],
-                            });
-                        }
-                    }}
-                >
+                <StyledCheckbox value={barn.ident}>
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
                     </LabelContent>

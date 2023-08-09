@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { Button, Heading, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import DokumentutsendingSkjema from './DokumentutsendingSkjema';
 import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
 import { fagsakHeaderHøydeRem } from '../../../typer/styling';
-import DokumentutsendingSkjema from './DokumentutsendingSkjema';
 
 const Container = styled.div`
     display: grid;
