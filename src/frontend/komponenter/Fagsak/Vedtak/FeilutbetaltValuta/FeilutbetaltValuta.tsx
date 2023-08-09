@@ -43,13 +43,13 @@ const KopierTilNøsKnapp = styled(CopyButton)`
 `;
 
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
-                                                               feilutbetaltValutaListe,
-                                                               settErUlagretNyFeilutbetaltValutaPeriode,
-                                                               erLesevisning,
-                                                               skjulFeilutbetaltValuta,
-                                                               behandlingId,
-                                                               fagsakId,
-                                                           }) => {
+    feilutbetaltValutaListe,
+    settErUlagretNyFeilutbetaltValutaPeriode,
+    erLesevisning,
+    skjulFeilutbetaltValuta,
+    behandlingId,
+    fagsakId,
+}) => {
     const { toggles } = useApp();
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         feilutbetaltValutaListe.length === 0
@@ -65,12 +65,12 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
 
     const totaltFeilutbetaltBeløp = toggles[ToggleNavn.feilutbetaltValutaPerMåned]
         ? summerBeløpForPerioder(
-            feilutbetaltValutaListe.map(it => ({
-                fom: it.fom,
-                tom: it.tom,
-                beløp: it.feilutbetaltBeløp,
-            }))
-        )
+              feilutbetaltValutaListe.map(it => ({
+                  fom: it.fom,
+                  tom: it.tom,
+                  beløp: it.feilutbetaltBeløp,
+              }))
+          )
         : feilutbetaltValutaListe.reduce((acc, val) => acc + val.feilutbetaltBeløp, 0);
 
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
