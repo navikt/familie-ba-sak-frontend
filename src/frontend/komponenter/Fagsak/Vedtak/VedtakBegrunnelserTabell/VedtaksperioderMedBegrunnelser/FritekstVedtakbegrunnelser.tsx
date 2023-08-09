@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete, ExternalLink } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Heading, Link, Tag, Label, HelpText } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -111,7 +111,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         onClick={leggTilFritekst}
                         id={`legg-til-fritekst`}
                         size={'small'}
-                        icon={<AddCircle />}
+                        icon={<PlusCircleIcon />}
                     >
                         {'Legg til fritekst'}
                     </Button>
@@ -133,7 +133,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
                         >
                             Se retningslinjer for klarspråk.
-                            <ExternalLink />
+                            <ExternalLinkIcon />
                         </Link>
                     </BodyLong>
                     <Heading level="3" size="xsmall">
@@ -197,7 +197,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                     id={`fjern_fritekst-${fritekstId}`}
                                     size={'small'}
                                     aria-label={'Fjern fritekst'}
-                                    icon={<Delete />}
+                                    icon={<TrashIcon />}
                                 >
                                     {'Fjern'}
                                 </SletteKnapp>
@@ -212,7 +212,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                     onClick={leggTilFritekst}
                     id={`legg-til-fritekst`}
                     size={'small'}
-                    icon={<AddCircle />}
+                    icon={<PlusCircleIcon />}
                 >
                     {'Legg til fritekst'}
                 </Button>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { DownFilled, LeftFilled, RightFilled } from '@navikt/ds-icons';
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
@@ -106,11 +106,11 @@ interface IProps {
 const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     switch (journalposttype) {
         case Journalposttype.I:
-            return <RightFilled title="Inngående" />;
+            return <ChevronRightIcon title="Inngående" />;
         case Journalposttype.U:
-            return <LeftFilled title="Utgående" />;
+            return <ChevronLeftIcon title="Utgående" />;
         case Journalposttype.N:
-            return <DownFilled title="Notat" />;
+            return <ChevronDownIcon title="Notat" />;
     }
 };
 

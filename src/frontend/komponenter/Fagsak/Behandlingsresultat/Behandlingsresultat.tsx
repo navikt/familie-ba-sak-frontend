@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Edit } from '@navikt/ds-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -45,7 +45,7 @@ const EndretUtbetalingAndel = styled.div`
     margin-bottom: 1rem;
 `;
 
-const StyledEditIkon = styled(Edit)`
+const StyledEditIkon = styled(PencilIcon)`
     margin-right: 0.5rem;
 `;
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -106,7 +106,7 @@ const KanSøkeFritekst = ({
                                 id={`fjern_fritekst-${fritekstId}`}
                                 size={'small'}
                                 aria-label={'Fjern fritekst'}
-                                icon={<Delete />}
+                                icon={<TrashIcon />}
                             >
                                 {'Fjern'}
                             </SletteKnapp>
@@ -121,7 +121,7 @@ const KanSøkeFritekst = ({
                     onClick={leggTilFritekst}
                     id={`legg-til-fritekst`}
                     size={'small'}
-                    icon={<AddCircle />}
+                    icon={<PlusCircleIcon />}
                 >
                     {'Legg til fritekst'}
                 </Button>

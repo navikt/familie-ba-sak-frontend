@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Fieldset, Button, Heading } from '@navikt/ds-react';
 import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -144,7 +144,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         disabled={vilkårSubmit === VilkårSubmit.POST}
                         variant="tertiary"
                         size="medium"
-                        icon={<AddCircle />}
+                        icon={<PlusCircleIcon />}
                     >
                         Legg til periode
                     </UtførKnapp>

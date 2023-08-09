@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Cancel, Office1Filled } from '@navikt/ds-icons';
+import { ArrowUndoIcon, Buldings3FillIcon } from '@navikt/aksel-icons';
 import {
     Alert,
     Button,
@@ -146,7 +146,7 @@ export const BrukerPanel: React.FC = () => {
                     <DeltagerInfo
                         ikon={
                             erBrukerPåInstitusjon ? (
-                                <Office1Filled color={ASurfaceAction} width={48} height={48} />
+                                <Buldings3FillIcon color={ASurfaceAction} width={48} height={48} />
                             ) : (
                                 <KontoSirkel filled={åpen} width={48} height={48} />
                             )
@@ -249,7 +249,7 @@ export const BrukerPanel: React.FC = () => {
                                         variant="tertiary"
                                         size="xsmall"
                                         onClick={nullstillFagsaktype}
-                                        icon={<Cancel />}
+                                        icon={<ArrowUndoIcon />}
                                     >
                                         Tilbakestill
                                     </Button>

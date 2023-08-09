@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { People } from '@navikt/ds-icons';
+import { PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -109,10 +109,10 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <FlexDiv>
-                    <People
+                    <PersonIcon
                         width={24}
                         height={24}
-                        aria-labelledby={'ManuellVurdering'}
+                        title={'ManuellVurdering'}
                         viewBox={'0 0 24 24'}
                     />
                     <div>

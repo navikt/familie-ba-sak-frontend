@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Refresh } from '@navikt/ds-icons';
+import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, ErrorMessage, ErrorSummary } from '@navikt/ds-react';
 import { ASpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
@@ -155,7 +155,11 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         size="xsmall"
                         erLesevisning={erLesevisning}
                         icon={
-                            <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />
+                            <ArrowsSquarepathIcon
+                                style={{ fontSize: '1.5rem' }}
+                                role="img"
+                                focusable="false"
+                            />
                         }
                     />
                 </HentetLabelOgKnappDiv>

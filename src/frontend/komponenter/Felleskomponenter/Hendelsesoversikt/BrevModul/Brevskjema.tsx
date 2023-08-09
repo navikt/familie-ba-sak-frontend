@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete, FileContent } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Tag } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import {
@@ -330,7 +330,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                             id={`fjern_fritekst-${fritekstId}`}
                                                             size={'small'}
                                                             aria-label={'Fjern fritekst'}
-                                                            icon={<Delete />}
+                                                            icon={<TrashIcon />}
                                                         >
                                                             {'Fjern'}
                                                         </StyledButton>
@@ -347,7 +347,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                         onClick={() => leggTilFritekst()}
                                         id={`legg-til-fritekst`}
                                         size={'small'}
-                                        icon={<AddCircle />}
+                                        icon={<PlusCircleIcon />}
                                     >
                                         {'Legg til kulepunkt'}
                                     </Button>
@@ -441,7 +441,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 });
                             }
                         }}
-                        icon={<FileContent />}
+                        icon={<FileTextIcon />}
                     >
                         {'Forhåndsvis'}
                     </Button>

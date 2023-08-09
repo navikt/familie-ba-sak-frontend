@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-import { ErrorColored, SuccessColored, WarningColored, InformationColored } from '@navikt/ds-icons';
+import {
+    CheckmarkCircleIcon,
+    ExclamationmarkTriangleIcon,
+    InformationSquareIcon,
+    XMarkOctagonIcon,
+} from '@navikt/aksel-icons';
 
 interface IProps {
     status?: Status;
@@ -18,14 +23,14 @@ export enum Status {
 const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
     switch (status) {
         case Status.OK:
-            return <SuccessColored height={height} width={width} />;
+            return <CheckmarkCircleIcon height={height} width={width} />;
         case Status.FEIL:
-            return <ErrorColored height={height} width={width} />;
+            return <XMarkOctagonIcon height={height} width={width} />;
         case Status.ADVARSEL:
-            return <WarningColored height={height} width={width} />;
+            return <ExclamationmarkTriangleIcon height={height} width={width} />;
         default:
         case Status.INFO:
-            return <InformationColored height={height} width={width} />;
+            return <InformationSquareIcon height={height} width={width} />;
     }
 };
 export default StatusIkon;

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
+import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -150,7 +150,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     </FlexDiv>
                 ) : (
                     <FlexDiv>
-                        <Settings width={24} height={24} viewBox={'0 0 24 24'} />
+                        <CogIcon width={24} height={24} viewBox={'0 0 24 24'} />
                         <div>Generell vurdering</div>
                     </FlexDiv>
                 )}
@@ -158,14 +158,14 @@ const VilkårTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <FlexDiv>
                     {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                        <AutomaticSystem
+                        <CogRotationIcon
                             width={24}
                             height={24}
                             aria-labelledby={'Automatisk Vurdering'}
                             viewBox={'0 0 24 24'}
                         />
                     ) : (
-                        <People
+                        <PersonIcon
                             width={24}
                             height={24}
                             aria-labelledby={'ManuellVurdering'}

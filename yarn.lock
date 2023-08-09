@@ -1946,7 +1946,7 @@
     hey-listen "^1.0.8"
     tslib "^2.3.1"
 
-"@navikt/aksel-icons@^4.9.1":
+"@navikt/aksel-icons@4.9.1", "@navikt/aksel-icons@^4.9.1":
   version "4.9.1"
   resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/4.9.1/19cf74f43c4c7c27bbfad01e0fa10b8848eb9c63#19cf74f43c4c7c27bbfad01e0fa10b8848eb9c63"
   integrity sha512-rsWHY6hdi/3XSuH/KZ9+VoS1f+s8d6ZOkz+pVLd+1E/qbiMlEPyI7xxTpghHWDKlOz0b2Z6yAtDYVeYbkEZm6w==
@@ -1955,11 +1955,6 @@
   version "4.9.1"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/4.9.1/46615afd8d560ab03c99d52bac049235165578ac#46615afd8d560ab03c99d52bac049235165578ac"
   integrity sha512-w16bf7djGCouqZ3NRxVD3Zd6kMU5rQBYazK3cfU9AaPGDGkp6YtXc6Wu2PbgWW9RRT6jIy02d0ZHyn4DePVCnA==
-
-"@navikt/ds-icons@2.2.0":
-  version "2.2.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.2.0/3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90#3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90"
-  integrity sha512-86vmaBIwdk8THOOYqHusiSKZ8e7imaog7EdHsJz+9CCt7uKE+as+c/aVCyz1LUJjjXhdt7ify4mq4MzPuHK9MQ==
 
 "@navikt/ds-react@4.9.1":
   version "4.9.1"

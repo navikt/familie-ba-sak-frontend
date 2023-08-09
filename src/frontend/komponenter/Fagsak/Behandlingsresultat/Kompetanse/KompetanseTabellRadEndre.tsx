@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Fieldset } from '@navikt/ds-react';
 import { Alert, Button } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
@@ -331,7 +331,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 size={'small'}
-                                icon={<Delete />}
+                                icon={<TrashIcon />}
                             >
                                 {'Fjern'}
                             </Button>

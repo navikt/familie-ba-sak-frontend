@@ -3,7 +3,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLink, WarningColored } from '@navikt/ds-icons';
+import { ExternalLinkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
@@ -137,7 +137,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[behandling.type].navn}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE:
@@ -148,7 +148,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[Klagebehandlingstype.KLAGE].navn}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon />
                 </Link>
             );
     }
@@ -208,7 +208,7 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{behandlingsresultater[behandling.resultat]}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE: {
@@ -219,13 +219,13 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon />
                 </Link>
             );
             return ankeHarEksistertPåBehandling(behandling) ? (
                 <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
                     <ResultatCelle>
-                        <WarningColored height={24} width={24} />
+                        <ExclamationmarkTriangleIcon height={24} width={24} />
                         <LenkeTilKlage />
                     </ResultatCelle>
                 </Tooltip>

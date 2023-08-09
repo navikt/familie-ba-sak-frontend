@@ -4,7 +4,7 @@ import { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
+import { ChevronUpIcon, ChevronDownIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
@@ -139,9 +139,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         onClick={() => toggleForm()}
                         icon={
                             åpenUtbetalingsAndel ? (
-                                <Collapse width="22" height="22" />
+                                <ChevronUpIcon width="22" height="22" />
                             ) : (
-                                <Expand width="22" height="22" />
+                                <ChevronDownIcon width="22" height="22" />
                             )
                         }
                         iconPosition="right"
