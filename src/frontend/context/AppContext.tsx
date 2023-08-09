@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import Modal from 'nav-frontend-modal';
-
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
