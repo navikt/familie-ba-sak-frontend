@@ -29,7 +29,7 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
             className={classNames(className, 'uimodal')}
             open={visModal}
             onClose={(): void => onClose && onClose()}
-            aria-label="ui-modal"
+            aria-label={`${tittel}-modal`}
             closeButton={lukkKnapp}
             {...style}
         >
