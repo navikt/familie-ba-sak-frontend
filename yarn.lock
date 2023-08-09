@@ -8225,16 +8225,6 @@ nav-frontend-knapper@^3.1.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-3.1.2.tgz#18f4ed49f778d8cc55d44a4086b54e7087b07af4"
   integrity sha512-IR+0lz1ir14FnLx6rZNA3DH6DUAUlN1MK/cwg7syDx1v0qh1wMHjv9GI85ciP0WW65W2zBo2fDjRMA7IlHB2wA==
 
-nav-frontend-lenkepanel-style@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenkepanel-style/-/nav-frontend-lenkepanel-style-2.0.1.tgz#0904a1c5620bd8e9402e39800196989b3fa81c71"
-  integrity sha512-1l7BTd5qncmGnk7jiD3IU5Ebcjgij5W6R0f7m3Mo1izNoENw4vBFWOYXwsZwpNAcuy4YmT/ss0f6TMBPaeIbiw==
-
-nav-frontend-lenkepanel@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenkepanel/-/nav-frontend-lenkepanel-2.0.1.tgz#6e5c519cafd95031ce81552aacf13726ab17f467"
-  integrity sha512-EMBtluGK9IUMYG5Y9bvgO8iccGqYS+3x/xNcxJQYupS3AF9gpUt7clE4PkRWTJ2Y9MxD3OPFe9nue7LVHyN0dg==
-
 nav-frontend-lenker-style@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-2.0.1.tgz#91a17adf67258639538f2496be7487c7ea216cd3"
@@ -8256,14 +8246,9 @@ nav-frontend-lukknapp@^2.0.1:
   integrity sha512-i6Nh0D0wwTJdS9/Ygge3czCiOczZQBSyi2M9wO4GH8Dbbl99SoqRNSbV9SSMHWPuAW2A57vmsFoUILEia/toGA==
 
 nav-frontend-paneler-style@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-paneler-style/-/nav-frontend-paneler-style-2.0.1.tgz#42193ae53c65142bb961970f7dee036e1b5bf46f"
-  integrity sha512-ggVdcEmaLJn4xNlnApcyVrK8Mz4SsG1iGYdEMgrvm/Nijwsk431tseizvXoUqdsg3+yhqSYvC55/Qix6w3npuQ==
-
-nav-frontend-paneler@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-paneler/-/nav-frontend-paneler-3.0.1.tgz#bf78fb8b7a83d07c11cb16ae23f650b6cc720c88"
-  integrity sha512-FFV7fanUkIZ8X7vUUFXkX32KcFqTAxQNOOxrM52RSTvQy6TOOoYSMAALxXSMnzEQM3H0yCbq7/ctZzkZd29a6g==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-paneler-style/-/nav-frontend-paneler-style-2.0.2.tgz#f36a1705103ca8603dca1c9fa2dae809eea00439"
+  integrity sha512-bb0Gc/XUPJqgEQKQd37Zj/xRq875zMmHhdn621xd2/BXVpO1f1Eu6V6IPhf4y0jqNlNrvDLDSh4DxHHHf/s9/A==
 
 nav-frontend-popover-style@^2.0.1:
   version "2.0.1"
