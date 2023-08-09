@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.6.0",
-    "@navikt/ds-css": "4.4.2",
+    "@navikt/ds-css": "4.9.1",
     "@navikt/ds-icons": "2.2.0",
-    "@navikt/ds-react": "4.4.2",
-    "@navikt/ds-tokens": "4.4.2",
+    "@navikt/ds-react": "4.9.1",
+    "@navikt/ds-tokens": "4.9.1",
     "@navikt/familie-backend": "10.0.3",
     "@navikt/familie-clipboard": "11.0.0",
     "@navikt/familie-datovelger": "0.2.0",
