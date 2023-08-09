@@ -12,11 +12,6 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
-import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
-import { VedtakBegrunnelseType } from '../typer/vedtak';
-import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
-import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
     kalenderDatoMedFallback,
@@ -26,6 +21,11 @@ import {
     leggTil,
     TIDENES_MORGEN,
 } from './kalender';
+import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
+import { VedtakBegrunnelseType } from '../typer/vedtak';
+import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
+import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],

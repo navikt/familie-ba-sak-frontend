@@ -16,6 +16,7 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useOpprettFagsak from './useOpprettFagsak';
 import { useApp } from '../../../context/AppContext';
 import type { IBaseFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
@@ -25,7 +26,6 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
-import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;

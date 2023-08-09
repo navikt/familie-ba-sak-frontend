@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
 
 interface IProps {
     behandling: IBehandling;

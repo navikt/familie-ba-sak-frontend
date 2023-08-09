@@ -6,12 +6,12 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
+import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
-import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
-import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 
 interface IRefusjonEøs {
     behandlingId: number;

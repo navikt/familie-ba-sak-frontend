@@ -8,6 +8,7 @@ import { Dropdown } from '@navikt/ds-react';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
@@ -16,7 +17,6 @@ import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typ
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import useHenleggBehandling from './useHenleggBehandling';
 
 interface IProps {
     fagsakId: number;

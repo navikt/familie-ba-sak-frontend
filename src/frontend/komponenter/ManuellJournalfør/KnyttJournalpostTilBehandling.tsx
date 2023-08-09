@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { Alert, BodyShort, Checkbox, Heading } from '@navikt/ds-react';
 
+import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import type { BehandlingÅrsak } from '../../typer/behandling';
 import {
@@ -16,7 +17,6 @@ import {
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
-import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;

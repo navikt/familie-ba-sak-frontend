@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { Dropdown } from '@navikt/ds-react';
 
+import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
-import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 
 interface IProps {
     åpenBehandling: IBehandling;

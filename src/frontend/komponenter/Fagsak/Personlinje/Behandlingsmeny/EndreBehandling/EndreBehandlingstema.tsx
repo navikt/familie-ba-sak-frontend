@@ -4,12 +4,12 @@ import { Button, Fieldset } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import useEndreBehandlingstema from './useEndreBehandlingstema';
 
 const EndreBehandlingstema: React.FC = () => {
     const [visModal, settVisModal] = useState(false);

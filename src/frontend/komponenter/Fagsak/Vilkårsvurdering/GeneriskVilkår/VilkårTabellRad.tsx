@@ -8,6 +8,8 @@ import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { vilkårFeilmeldingId } from './VilkårTabell';
+import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
@@ -16,8 +18,6 @@ import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import { vilkårFeilmeldingId } from './VilkårTabell';
-import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 
 interface IProps {
     person: IGrunnlagPerson;

@@ -6,9 +6,9 @@ import { Delete } from '@navikt/ds-icons';
 import { Button, Checkbox } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import DeltBostedAvtaler from './DeltBostedAvtaler';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
-import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 const CheckboxOgSlettknapp = styled.div`
     display: flex;

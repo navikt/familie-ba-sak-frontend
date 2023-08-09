@@ -6,12 +6,12 @@ import { Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { Behandlingstype } from '../../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../../typer/fagsak';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { Datofelt } from './Datofelt';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
+import { Behandlingstype } from '../../../../../typer/behandling';
+import type { IMinimalFagsak } from '../../../../../typer/fagsak';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;

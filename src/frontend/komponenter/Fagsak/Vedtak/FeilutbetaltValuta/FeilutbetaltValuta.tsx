@@ -6,13 +6,13 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
+import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import { useApp } from '../../../../context/AppContext';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
-import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
-import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
