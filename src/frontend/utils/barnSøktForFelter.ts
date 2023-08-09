@@ -2,11 +2,11 @@ import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { datoformat, formaterIsoDato } from './formatter';
 import { useFagsakContext } from '../context/fagsak/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
-import { datoformat, formaterIsoDato } from './formatter';
 
 interface IProps {
     avhengigheter?: Avhengigheter;

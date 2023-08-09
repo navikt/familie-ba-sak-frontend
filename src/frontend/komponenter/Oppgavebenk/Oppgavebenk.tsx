@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
-import { useAmplitude } from '../../utils/amplitude';
 import OppgaveHeader from './OppgaveHeader';
 import OppgaveList from './OppgaveList';
+import { useAmplitude } from '../../utils/amplitude';
 
 const Oppgavebenk: React.FunctionComponent = () => {
     const { loggSidevisning } = useAmplitude();

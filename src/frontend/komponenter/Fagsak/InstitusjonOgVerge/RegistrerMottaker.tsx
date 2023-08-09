@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import Institusjon from './Institusjon';
+import Verge from './Verge';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { FagsakType } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import Institusjon from './Institusjon';
-import Verge from './Verge';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;

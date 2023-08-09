@@ -3,10 +3,10 @@ import React from 'react';
 import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import BarnCheckbox from './BarnCheckbox';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
-import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
     barnSøktForFelt: Felt<IBarnMedOpplysninger[]>;

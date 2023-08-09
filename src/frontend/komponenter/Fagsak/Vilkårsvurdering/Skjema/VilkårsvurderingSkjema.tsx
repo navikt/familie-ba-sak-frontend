@@ -2,12 +2,12 @@ import React from 'react';
 
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
-import { FagsakType } from '../../../../typer/fagsak';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
+import { FagsakType } from '../../../../typer/fagsak';
 
 interface IProps {
     visFeilmeldinger: boolean;

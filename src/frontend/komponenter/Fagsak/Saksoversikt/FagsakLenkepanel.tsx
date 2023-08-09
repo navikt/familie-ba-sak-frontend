@@ -2,18 +2,15 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-import { LenkepanelBase } from 'nav-frontend-lenkepanel';
-import Panel from 'nav-frontend-paneler';
+import { Alert, BodyShort, LinkPanel, Panel } from '@navikt/ds-react';
 
-import { Alert, BodyShort } from '@navikt/ds-react';
-
+import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
-import type { VisningBehandling } from './visningBehandling';
 
 interface IFagsakTypeLabel {
     fagsakType: FagsakType;
@@ -94,18 +91,20 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
 
     return aktivBehandling ? (
         <>
-            <LenkepanelBase
+            <LinkPanel
                 title={genererHoverTekst(aktivBehandling)}
                 className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
             >
-                <Innholdstabell minimalFagsak={minimalFagsak} />
-            </LenkepanelBase>
+                <LinkPanel.Description>
+                    <Innholdstabell minimalFagsak={minimalFagsak} />
+                </LinkPanel.Description>
+            </LinkPanel>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     ) : (
         <>
-            <Panel className={'fagsak-panel'}>
+            <Panel className={'fagsak-panel'} border>
                 <Innholdstabell minimalFagsak={minimalFagsak} />
             </Panel>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>

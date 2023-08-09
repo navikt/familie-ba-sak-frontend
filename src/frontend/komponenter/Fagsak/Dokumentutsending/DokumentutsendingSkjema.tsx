@@ -7,15 +7,17 @@ import { Alert, Button, Fieldset, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
+import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
+import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { ToggleNavn } from '../../../typer/toggles';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
-import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
-import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 
 const Container = styled.div`
     padding: 2rem;
@@ -67,6 +69,8 @@ const DokumentutsendingSkjema: React.FC = () => {
         DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
     ];
 
+    const { toggles } = useApp();
+
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
@@ -87,17 +91,23 @@ const DokumentutsendingSkjema: React.FC = () => {
                     size={'medium'}
                 >
                     <option value="">Velg</option>
-                    {Object.values(DokumentÅrsak).map(årsak => {
-                        return (
-                            <option
-                                key={årsak}
-                                aria-selected={skjema.felter.årsak.verdi === årsak}
-                                value={årsak}
-                            >
-                                {dokumentÅrsak[årsak]}
-                            </option>
-                        );
-                    })}
+                    {Object.values(DokumentÅrsak)
+                        .filter(
+                            årsak =>
+                                !barnSøktForÅrsaker.includes(årsak) ||
+                                toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+                        )
+                        .map(årsak => {
+                            return (
+                                <option
+                                    key={årsak}
+                                    aria-selected={skjema.felter.årsak.verdi === årsak}
+                                    value={årsak}
+                                >
+                                    {dokumentÅrsak[årsak]}
+                                </option>
+                            );
+                        })}
                 </FamilieSelect>
 
                 <ÅrsakSkjema>

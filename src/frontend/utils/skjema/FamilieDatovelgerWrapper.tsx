@@ -10,7 +10,7 @@ import {
     ABorderFocus,
     ABorderAction,
 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 
 import { StyledErrorMessage } from '../../komponenter/Fagsak/Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 

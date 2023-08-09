@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 import { SamhandlerTabell } from './SamhandlerTabell';
 import { useSamhandlerRequest } from './useSamhandler';
+import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 
 const StyledDiv = styled.div`
     margin: 2rem 0;

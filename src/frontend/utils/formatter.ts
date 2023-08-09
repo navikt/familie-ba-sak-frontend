@@ -1,10 +1,10 @@
+import familieDayjs from './familieDayjs';
+import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 import { YtelseType } from '../typer/beregning';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
-import familieDayjs from './familieDayjs';
-import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
 export enum datoformat {
     MÅNED = 'MM.YY',

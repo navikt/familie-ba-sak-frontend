@@ -1,9 +1,9 @@
+import { erProd } from './miljø';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlerRolle, behandlingstyper } from '../typer/behandling';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
-import { erProd } from './miljø';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
     const rolleConfig = erProd()

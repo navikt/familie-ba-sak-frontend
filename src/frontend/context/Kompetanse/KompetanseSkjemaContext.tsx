@@ -6,6 +6,14 @@ import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import {
+    erAnnenForeldersAktivitetGyldig,
+    erAnnenForeldersAktivitetslandGyldig,
+    erBarnetsBostedslandGyldig,
+    erKompetanseResultatGyldig,
+    erSøkersAktivitetGyldig,
+    erSøkersAktivitetslandGyldig,
+} from './valideringKompetanse';
 import type { IBehandling } from '../../typer/behandling';
 import type {
     EøsPeriodeStatus,
@@ -18,14 +26,6 @@ import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
-import {
-    erAnnenForeldersAktivitetGyldig,
-    erAnnenForeldersAktivitetslandGyldig,
-    erBarnetsBostedslandGyldig,
-    erKompetanseResultatGyldig,
-    erSøkersAktivitetGyldig,
-    erSøkersAktivitetslandGyldig,
-} from './valideringKompetanse';
 
 export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
     `kompetanse_${kompetanse.barnIdenter.map(barn => `${barn}-`)}_${kompetanse.fom}`;

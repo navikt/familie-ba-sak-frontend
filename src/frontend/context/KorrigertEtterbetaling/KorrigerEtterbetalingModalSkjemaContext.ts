@@ -6,16 +6,16 @@ import { useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
+import {
+    erÅrsakForKorrigeringGyldig,
+    erEtterbetalingsbeløpGyldig,
+} from './ValideringKorrigertEtterbetaling';
 import { ToastTyper, AlertType } from '../../komponenter/Felleskomponenter/Toast/typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { IRestKorrigertEtterbetaling } from '../../typer/vedtak';
 import { KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
 import { useApp } from '../AppContext';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
-import {
-    erÅrsakForKorrigeringGyldig,
-    erEtterbetalingsbeløpGyldig,
-} from './ValideringKorrigertEtterbetaling';
 
 interface IKorrigerEtterbetalingSkjema {
     årsak: string;

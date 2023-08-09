@@ -18,6 +18,16 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
+import BarnBrevetGjelder from './BarnBrevetGjelder';
+import BrevmottakerListe from './BrevmottakerListe';
+import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
+import {
+    Brevmal,
+    brevmaler,
+    leggTilValuePåOption,
+    opplysningsdokumenter,
+    opplysningsdokumenterTilInstitusjon,
+} from './typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import useDokument from '../../../../hooks/useDokument';
@@ -33,16 +43,6 @@ import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltB
 import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import BarnBrevetGjelder from './BarnBrevetGjelder';
-import BrevmottakerListe from './BrevmottakerListe';
-import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
-import {
-    Brevmal,
-    brevmaler,
-    leggTilValuePåOption,
-    opplysningsdokumenter,
-    opplysningsdokumenterTilInstitusjon,
-} from './typer';
 
 interface IProps {
     onSubmitSuccess: () => void;

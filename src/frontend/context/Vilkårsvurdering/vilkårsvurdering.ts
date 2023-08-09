@@ -1,6 +1,7 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 import type { IGrunnlagPerson } from '../../typer/person';
 import { PersonTypeVisningsRangering } from '../../typer/person';
 import type {
@@ -26,7 +27,6 @@ import {
     ikkeValider,
     lagInitiellFelt,
 } from '../../utils/validators';
-import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: FeltState<IVilkårResultat>[]

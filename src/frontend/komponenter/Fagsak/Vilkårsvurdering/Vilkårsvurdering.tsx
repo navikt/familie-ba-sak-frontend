@@ -11,6 +11,11 @@ import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
+import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
+import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
+import { HentetLabel } from './Registeropplysninger/HentetLabel';
+import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -24,11 +29,6 @@ import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erProd } from '../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
-import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
-import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
-import { HentetLabel } from './Registeropplysninger/HentetLabel';
-import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;

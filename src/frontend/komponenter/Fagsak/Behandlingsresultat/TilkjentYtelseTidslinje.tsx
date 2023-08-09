@@ -6,15 +6,15 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import { Tidslinje } from '@navikt/familie-tidslinje';
 
+import TidslinjeEtikett from './TidslinjeEtikett';
+import TidslinjeNavigering from './TidslinjeNavigering';
+import Vinduvelger from './VinduVelger';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
 import type { FagsakType } from '../../../typer/fagsak';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { formaterIdent } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
-import TidslinjeEtikett from './TidslinjeEtikett';
-import TidslinjeNavigering from './TidslinjeNavigering';
-import Vinduvelger from './VinduVelger';
 
 const TidslinjeHeader = styled.div`
     display: flex;

@@ -17,6 +17,7 @@ import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { DeltagerInfo } from './DeltagerInfo';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
@@ -27,7 +28,6 @@ import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerRequest } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
-import { DeltagerInfo } from './DeltagerInfo';
 
 const FlexDiv = styled.div`
     display: flex;
