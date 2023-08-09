@@ -11,11 +11,11 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
-import type { IOppgaveFelt } from './oppgavefelter';
 
 const StyledLabel = styled(Label)`
     margin-top: 0.5rem;

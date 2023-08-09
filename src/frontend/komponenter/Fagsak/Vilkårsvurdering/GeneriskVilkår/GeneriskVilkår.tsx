@@ -9,6 +9,8 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
+import VilkårTabell from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -19,8 +21,6 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../typer/vilkår';
-import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
-import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;

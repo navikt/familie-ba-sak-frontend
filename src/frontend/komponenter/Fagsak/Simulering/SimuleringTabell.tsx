@@ -12,14 +12,14 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
+import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
+import { Årsvelger } from './Årsvelger';
 import { useApp } from '../../../context/AppContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
-import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
-import { Årsvelger } from './Årsvelger';
 
 const StyledTable = styled.table(
     (props: { bredde: number }) => `

@@ -1,9 +1,9 @@
+import type { BehandlingKategori } from './behandlingstema';
+import type { Målform } from './søknad';
 import type {
     Brevmal,
     Informasjonsbrev,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import type { BehandlingKategori } from './behandlingstema';
-import type { Målform } from './søknad';
 
 export interface IManueltBrevRequestPåBehandling {
     mottakerIdent: string;

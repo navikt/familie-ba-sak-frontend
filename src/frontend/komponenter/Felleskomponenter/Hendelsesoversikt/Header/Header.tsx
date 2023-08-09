@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype } from '../../../../typer/behandling';
-import { Tabs } from '../typer';
 import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
 import Meldingerknapp from './Meldingerknapp';
 import TotrinnskontrollKnapp from './TotrinnskontrollKnapp';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { Behandlingstype } from '../../../../typer/behandling';
+import { Tabs } from '../typer';
 
 interface IProps {
     aktivTab: Tabs;

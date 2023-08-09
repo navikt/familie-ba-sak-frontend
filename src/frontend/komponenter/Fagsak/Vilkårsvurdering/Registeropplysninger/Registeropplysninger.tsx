@@ -7,12 +7,12 @@ import SvgCalender from '@navikt/ds-icons/esm/Calender';
 import { Alert, Heading } from '@navikt/ds-react';
 import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
+import { HentetLabel } from './HentetLabel';
+import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { kalenderDato, tilVisning } from '../../../../utils/kalender';
-import { HentetLabel } from './HentetLabel';
-import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
 const Container = styled.div`
     width: 32rem;
