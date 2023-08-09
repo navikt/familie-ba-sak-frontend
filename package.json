@@ -145,7 +145,7 @@
     "copyfiles": "^2.2.0",
     "css-loader": "^5.1.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
-    "cypress": "^12.7.0",
+    "cypress": "^12.7.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-loader": "^4.0.2",
