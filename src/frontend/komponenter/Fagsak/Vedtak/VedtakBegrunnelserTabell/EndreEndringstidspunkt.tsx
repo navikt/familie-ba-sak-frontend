@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Calender } from '@navikt/ds-icons';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 

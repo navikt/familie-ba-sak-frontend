@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';

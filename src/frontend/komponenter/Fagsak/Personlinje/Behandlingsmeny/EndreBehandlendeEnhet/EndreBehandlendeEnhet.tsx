@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Button, Fieldset } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 

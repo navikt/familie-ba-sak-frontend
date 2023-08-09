@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { BodyShort, Button, Fieldset, Heading, Link, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 

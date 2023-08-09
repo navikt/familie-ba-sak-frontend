@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 

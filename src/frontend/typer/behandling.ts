@@ -1,4 +1,4 @@
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';

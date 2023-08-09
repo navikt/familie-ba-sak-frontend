@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';

@@ -1,4 +1,5 @@
-import type { ISODateString, OptionType } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import type { OptionType } from '@navikt/familie-form-elements';
 
 import type { FamilieIsoDate } from '../utils/kalender';
 
