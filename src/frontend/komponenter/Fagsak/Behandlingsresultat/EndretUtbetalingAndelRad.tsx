@@ -33,6 +33,11 @@ const PersonCelle = styled.div`
     }
 `;
 
+const StyledButton = styled(Button)`
+    width: 6rem;
+    justify-content: space-between;
+`;
+
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     endretUtbetalingAndel,
     åpenBehandling,
@@ -131,15 +136,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <Button
+                    <StyledButton
                         variant="tertiary"
                         size="xsmall"
                         onClick={() => toggleForm()}
                         icon={
                             åpenUtbetalingsAndel ? (
-                                <ChevronUpIcon width="22" height="22" />
+                                <ChevronUpIcon fontSize={'1.5rem'} />
                             ) : (
-                                <ChevronDownIcon width="22" height="22" />
+                                <ChevronDownIcon fontSize={'1.5rem'} />
                             )
                         }
                         iconPosition="right"
@@ -149,7 +154,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         ) : (
                             <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
                         )}
-                    </Button>
+                    </StyledButton>
                 </TdUtenUnderstrek>
             </tr>
             {åpenUtbetalingsAndel && (
