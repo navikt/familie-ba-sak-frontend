@@ -3,11 +3,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLinkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import {
     behandlingsresultater,
     BehandlingStatus,
@@ -19,8 +20,11 @@ import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IKlagebehandling } from '../../../typer/klage';
-import { KlageinstansEventType, klageinstansUtfallTilTekst } from '../../../typer/klage';
-import { Klagebehandlingstype } from '../../../typer/klage';
+import {
+    Klagebehandlingstype,
+    KlageinstansEventType,
+    klageinstansUtfallTilTekst,
+} from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
     Behandlingsresultatstype,
@@ -225,7 +229,7 @@ export const lagLenkePåResultat = (
             return ankeHarEksistertPåBehandling(behandling) ? (
                 <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
                     <ResultatCelle>
-                        <ExclamationmarkTriangleIcon height={24} width={24} />
+                        <StatusIkon status={Status.ADVARSEL} />
                         <LenkeTilKlage />
                     </ResultatCelle>
                 </Tooltip>
