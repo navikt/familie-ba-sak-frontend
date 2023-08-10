@@ -46,7 +46,7 @@ const EndretUtbetalingAndel = styled.div`
 `;
 
 const StyledEditIkon = styled(PencilIcon)`
-    margin-right: 0.5rem;
+    font-size: 1.5rem;
 `;
 
 const StyledAlert = styled(Alert)`
