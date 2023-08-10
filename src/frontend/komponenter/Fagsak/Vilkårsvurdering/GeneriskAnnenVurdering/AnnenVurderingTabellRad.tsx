@@ -94,11 +94,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
         >
             <Table.DataCell>
                 <VurderingCelle>
-                    <VilkårResultatIkon
-                        resultat={annenVurdering.verdi.resultat.verdi}
-                        width={20}
-                        height={20}
-                    />
+                    <VilkårResultatIkon resultat={annenVurdering.verdi.resultat.verdi} />
                     <BodyShort
                         children={resultatVisningsnavn[annenVurdering.verdi.resultat.verdi]}
                     />

@@ -101,8 +101,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     ? Status.OK
                                     : Status.ADVARSEL
                             }
-                            height={20}
-                            width={20}
                         />
                         {endretUtbetalingAndel.personIdent
                             ? lagPersonLabel(

@@ -1,16 +1,16 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
 import {
-    CheckmarkCircleIcon,
-    ExclamationmarkTriangleIcon,
-    InformationSquareIcon,
-    XMarkOctagonIcon,
+    CheckmarkCircleFillIcon,
+    ExclamationmarkTriangleFillIcon,
+    InformationSquareFillIcon,
+    XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 
 interface IProps {
     status?: Status;
-    height?: number;
-    width?: number;
 }
 
 export enum Status {
@@ -20,17 +20,41 @@ export enum Status {
     INFO,
 }
 
-const StatusIkon: React.FC<IProps> = ({ status, height = 24, width = 24 }) => {
+const OkIkon = styled(CheckmarkCircleFillIcon)`
+    color: var(--a-icon-success);
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const FeilIkon = styled(XMarkOctagonFillIcon)`
+    color: var(--a-icon-danger);
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const AdvarselIkon = styled(ExclamationmarkTriangleFillIcon)`
+    color: var(--a-icon-warning);
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const InfoIkon = styled(InformationSquareFillIcon)`
+    color: var(--a-icon-info);
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const StatusIkon: React.FC<IProps> = ({ status }) => {
     switch (status) {
         case Status.OK:
-            return <CheckmarkCircleIcon height={height} width={width} />;
+            return <OkIkon />;
         case Status.FEIL:
-            return <XMarkOctagonIcon height={height} width={width} />;
+            return <FeilIkon />;
         case Status.ADVARSEL:
-            return <ExclamationmarkTriangleIcon height={height} width={width} />;
-        default:
+            return <AdvarselIkon />;
         case Status.INFO:
-            return <InformationSquareIcon height={height} width={width} />;
+        default:
+            return <InfoIkon />;
     }
 };
 export default StatusIkon;

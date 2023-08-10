@@ -120,8 +120,6 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     <VilkårResultatIkon
                         resultat={vilkårResultatVerdi}
                         resultatBegrunnelse={vilkårResultatbegrunnelse}
-                        width={20}
-                        height={20}
                     />
                     <BodyShort>
                         {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
