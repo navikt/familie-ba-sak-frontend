@@ -76,7 +76,7 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
                 åpenBehandling.kategori === BehandlingKategori.EØS &&
-                togg[(Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING)].includes(
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
                     åpenBehandling.type
                 )
             );
