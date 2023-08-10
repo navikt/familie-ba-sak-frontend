@@ -10,7 +10,7 @@ import {
 } from '@navikt/aksel-icons';
 
 interface IProps {
-    status?: Status;
+    status: Status;
 }
 
 export enum Status {
@@ -53,7 +53,6 @@ const StatusIkon: React.FC<IProps> = ({ status }) => {
         case Status.ADVARSEL:
             return <AdvarselIkon />;
         case Status.INFO:
-        default:
             return <InfoIkon />;
     }
 };
