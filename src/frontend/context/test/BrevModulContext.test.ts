@@ -37,6 +37,7 @@ describe('BrevmodulContext', () => {
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.FORLENGET_SVARTIDSBREV,
+                    Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                     Brevmal.SVARTIDSBREV,
                 ].sort()
             );
