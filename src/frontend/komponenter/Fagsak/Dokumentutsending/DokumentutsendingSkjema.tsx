@@ -7,13 +7,16 @@ import { Alert, Button, Fieldset, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
+import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { ToggleNavn } from '../../../typer/toggles';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 
 const Container = styled.div`
@@ -58,6 +61,16 @@ const DokumentutsendingSkjema: React.FC = () => {
         settVisfeilmeldinger,
     } = useDokumentutsending();
 
+    const årsakVerdi = skjema.felter.årsak.verdi;
+    const barnSøktForÅrsaker = [
+        DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
+        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
+    ];
+
+    const { toggles } = useApp();
+
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
@@ -78,17 +91,23 @@ const DokumentutsendingSkjema: React.FC = () => {
                     size={'medium'}
                 >
                     <option value="">Velg</option>
-                    {Object.values(DokumentÅrsak).map(årsak => {
-                        return (
-                            <option
-                                key={årsak}
-                                aria-selected={skjema.felter.årsak.verdi === årsak}
-                                value={årsak}
-                            >
-                                {dokumentÅrsak[årsak]}
-                            </option>
-                        );
-                    })}
+                    {Object.values(DokumentÅrsak)
+                        .filter(
+                            årsak =>
+                                !barnSøktForÅrsaker.includes(årsak) ||
+                                toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+                        )
+                        .map(årsak => {
+                            return (
+                                <option
+                                    key={årsak}
+                                    aria-selected={skjema.felter.årsak.verdi === årsak}
+                                    value={årsak}
+                                >
+                                    {dokumentÅrsak[årsak]}
+                                </option>
+                            );
+                        })}
                 </FamilieSelect>
 
                 <ÅrsakSkjema>
@@ -102,6 +121,15 @@ const DokumentutsendingSkjema: React.FC = () => {
                             settVisFeilmeldinger={settVisfeilmeldinger}
                         />
                     )}
+
+                    {årsakVerdi !== undefined && barnSøktForÅrsaker.includes(årsakVerdi) && (
+                        <BarnSøktForSkjema
+                            barnSøktForFelt={skjema.felter.barnSøktFor}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            settVisFeilmeldinger={settVisfeilmeldinger}
+                        />
+                    )}
+
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>
 
