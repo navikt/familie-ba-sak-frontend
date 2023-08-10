@@ -6,15 +6,15 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
-import { useFagsakContext } from '../../context/fagsak/FagsakContext';
-import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import { useAmplitude } from '../../utils/amplitude';
 import BehandlingContainer from './BehandlingContainer';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
+import { useFagsakContext } from '../../context/fagsak/FagsakContext';
+import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import { useAmplitude } from '../../utils/amplitude';
 
 const HovedInnhold = styled.div`
     height: calc(100vh - 6rem);

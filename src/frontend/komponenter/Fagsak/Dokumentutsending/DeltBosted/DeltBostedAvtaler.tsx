@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import { ABorderDanger, ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';

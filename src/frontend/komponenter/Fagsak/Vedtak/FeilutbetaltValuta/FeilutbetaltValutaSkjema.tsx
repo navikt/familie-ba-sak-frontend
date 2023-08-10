@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Label } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
+import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieInput } from '@navikt/familie-form-elements';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';

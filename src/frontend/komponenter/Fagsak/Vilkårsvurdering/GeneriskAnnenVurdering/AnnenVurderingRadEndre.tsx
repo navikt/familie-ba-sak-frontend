@@ -9,6 +9,10 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import {
+    annenVurderingBegrunnelseFeilmeldingId,
+    annenVurderingResultatFeilmeldingId,
+} from './AnnenVurderingTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';
 import {
@@ -24,10 +28,6 @@ import type {
 } from '../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../typer/vilkår';
 import { Container } from '../GeneriskVilkår/VilkårTabellRadEndre';
-import {
-    annenVurderingBegrunnelseFeilmeldingId,
-    annenVurderingResultatFeilmeldingId,
-} from './AnnenVurderingTabell';
 
 interface IProps {
     person: IGrunnlagPerson;

@@ -8,6 +8,8 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingSteg } from '../typer/behandling';
@@ -17,8 +19,6 @@ import type { IPersonInfo } from '../typer/person';
 import { hentAlder } from '../utils/formatter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { identValidator } from '../utils/validators';
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [InstitusjonOgVergeProvider, useInstitusjonOgVerge] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {

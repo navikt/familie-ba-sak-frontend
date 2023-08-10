@@ -6,9 +6,9 @@ import { ExpansionCard } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
+import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;

@@ -7,10 +7,10 @@ import { BodyShort, Checkbox, ExpansionCard } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
+import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
 import { formaterIdent } from '../../utils/formatter';
-import { DeltagerInfo } from './DeltagerInfo';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-top: 1rem;

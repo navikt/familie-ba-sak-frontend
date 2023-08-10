@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Collapse, Expand } from '@navikt/ds-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 
+import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
@@ -15,7 +16,6 @@ import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel'
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
-import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;

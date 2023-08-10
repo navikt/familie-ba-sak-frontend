@@ -6,7 +6,6 @@ import { Delete } from '@navikt/ds-icons';
 import { Button, Checkbox } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import DeltBostedAvtaler from './DeltBostedAvtaler';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
 
@@ -44,17 +43,10 @@ const FjernBarnKnapp = styled(Button)`
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
-    visFeilmeldinger: boolean;
+    barnSøktForFelt: Felt<IBarnMedOpplysninger[]>;
 }
 
-const BarnCheckbox: React.FC<IProps> = ({
-    barn,
-    barnMedDeltBostedFelt,
-    avtalerOmDeltBostedPerBarnFelt,
-    visFeilmeldinger,
-}) => {
+const BarnCheckbox: React.FC<IProps> = ({ barn, barnSøktForFelt }) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
@@ -71,12 +63,12 @@ const BarnCheckbox: React.FC<IProps> = ({
                         id={`fjern__${barn.ident}`}
                         size={'small'}
                         onClick={() => {
-                            barnMedDeltBostedFelt.validerOgSettFelt([
-                                ...barnMedDeltBostedFelt.verdi.filter(
-                                    barnMedDeltBosted =>
-                                        barnMedDeltBosted.ident !== barn.ident ||
-                                        barnMedDeltBosted.navn !== barn.navn ||
-                                        barnMedDeltBosted.fødselsdato !== barn.fødselsdato
+                            barnSøktForFelt.validerOgSettFelt([
+                                ...barnSøktForFelt.verdi.filter(
+                                    barnSøktFor =>
+                                        barnSøktFor.ident !== barn.ident ||
+                                        barnSøktFor.navn !== barn.navn ||
+                                        barnSøktFor.fødselsdato !== barn.fødselsdato
                                 ),
                             ]);
                         }}
@@ -86,12 +78,6 @@ const BarnCheckbox: React.FC<IProps> = ({
                     </FjernBarnKnapp>
                 )}
             </CheckboxOgSlettknapp>
-
-            <DeltBostedAvtaler
-                barn={barn}
-                avtalerOmDeltBostedPerBarnFelt={avtalerOmDeltBostedPerBarnFelt}
-                visFeilmeldinger={visFeilmeldinger}
-            />
         </div>
     );
 };

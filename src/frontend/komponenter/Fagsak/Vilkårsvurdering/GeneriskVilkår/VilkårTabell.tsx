@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import VilkårTabellRad from './VilkårTabellRad';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import VilkårTabellRad from './VilkårTabellRad';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
