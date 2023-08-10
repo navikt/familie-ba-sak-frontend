@@ -3,17 +3,16 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Table } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
+import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import { useApp } from '../../../../context/AppContext';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
-import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
-import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
@@ -37,7 +36,7 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const KopierTilNøsKnapp = styled(CopyToClipboard)`
+const KopierTilNøsKnapp = styled(CopyButton)`
     :not(:hover):not(:active) {
         color: ${ATextAction};
     }
@@ -135,9 +134,12 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         Legg til ny periode
                     </Button>
                 )}
-                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
-                    Kopier tekst til NØS
-                </KopierTilNøsKnapp>
+                <KopierTilNøsKnapp
+                    copyText={tekstTilNØS}
+                    text="Kopier tekst til NØS"
+                    activeText="Kopiert!"
+                    size="small"
+                />
             </FlexRowDiv>
         </FlexColumnDiv>
     );

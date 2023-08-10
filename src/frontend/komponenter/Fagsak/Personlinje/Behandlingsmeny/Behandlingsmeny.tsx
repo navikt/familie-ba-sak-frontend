@@ -3,18 +3,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import '@navikt/ds-css-internal';
 import { ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../typer/fagsak';
-import { FagsakType } from '../../../../typer/fagsak';
-import type { IPersonInfo } from '../../../../typer/person';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
@@ -24,6 +17,12 @@ import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåB
 import LeggTilEllerFjernBrevmottakere from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
+import { FagsakType } from '../../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../../typer/fagsak';
+import type { IPersonInfo } from '../../../../typer/person';
 
 interface IProps {
     bruker?: IPersonInfo;

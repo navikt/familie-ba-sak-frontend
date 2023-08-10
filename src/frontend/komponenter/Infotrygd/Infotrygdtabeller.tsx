@@ -4,11 +4,11 @@ import styled from 'styled-components';
 
 import { Alert, Heading } from '@navikt/ds-react';
 
+import { Sakstabell } from './Sakstabell';
+import { Vedtakstabell } from './Vedtakstabell';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IInfotrygdSak } from '../../typer/infotrygd';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
-import { Sakstabell } from './Sakstabell';
-import { Vedtakstabell } from './Vedtakstabell';
 
 interface InfotrygdtabellerProps {
     ident?: string;

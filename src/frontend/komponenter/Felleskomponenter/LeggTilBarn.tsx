@@ -18,6 +18,8 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import HelpText from './HelpText';
+import { ModalKnapperad } from './Modal/ModalKnapperad';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
@@ -25,8 +27,6 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-import HelpText from './HelpText';
-import { ModalKnapperad } from './Modal/ModalKnapperad';
 
 const StyledModal = styled(Modal)`
     min-width: 35rem;

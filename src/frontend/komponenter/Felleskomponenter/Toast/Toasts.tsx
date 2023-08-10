@@ -2,8 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { useApp } from '../../../context/AppContext';
 import Toast from './Toast';
+import { useApp } from '../../../context/AppContext';
 
 const Container = styled.div`
     position: fixed;

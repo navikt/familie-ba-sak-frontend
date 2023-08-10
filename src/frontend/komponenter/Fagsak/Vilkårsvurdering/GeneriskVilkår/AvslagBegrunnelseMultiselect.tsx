@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
-import { AZIndexFocus, ABlue500 } from '@navikt/ds-tokens/dist/tokens';
+import { ABlue500, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -20,7 +21,6 @@ import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;
@@ -115,10 +115,10 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             }}
             options={muligeOptions}
             propSelectStyles={{
-                container: provided => ({
+                container: (provided, props) => ({
                     ...provided,
                     maxWidth: '25rem',
-                    zIndex: AZIndexFocus.valueOf(),
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
                 }),
                 groupHeading: provided => ({
                     ...provided,

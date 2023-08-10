@@ -16,6 +16,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useApp } from './AppContext';
 import useDokument from '../hooks/useDokument';
 import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
@@ -38,7 +39,6 @@ import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
-import { useApp } from './AppContext';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;

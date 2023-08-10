@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
+import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
 import {
     useValutakursSkjema,
     valutakursFeilmeldingId,
@@ -11,7 +12,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
 import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
-import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
 
 interface IProps {
     valutakurs: IRestValutakurs;

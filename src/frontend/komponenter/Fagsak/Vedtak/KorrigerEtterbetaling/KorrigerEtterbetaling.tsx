@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 import { Cancel, Notes } from '@navikt/ds-icons';
 import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';

@@ -1,7 +1,3 @@
-import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
-import { erBehandlingHenlagt } from '../typer/behandling';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { fagsakStatus } from '../typer/fagsak';
 import {
     erEtter,
     kalenderDatoFraDate,
@@ -9,6 +5,10 @@ import {
     kalenderDiff,
     TIDENES_ENDE,
 } from './kalender';
+import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import { erBehandlingHenlagt } from '../typer/behandling';
+import type { IMinimalFagsak } from '../typer/fagsak';
+import { fagsakStatus } from '../typer/fagsak';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
     minimalFagsak.behandlinger.length === 0

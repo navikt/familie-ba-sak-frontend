@@ -7,6 +7,12 @@ import { FileContent } from '@navikt/ds-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
+import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
+import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -26,12 +32,6 @@ import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
-import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
-import Vedtaksmeny from './Vedtaksmeny';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;

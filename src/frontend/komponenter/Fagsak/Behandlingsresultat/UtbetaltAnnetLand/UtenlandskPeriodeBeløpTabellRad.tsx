@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
+import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 import {
     useUtenlandskPeriodeBeløpSkjema,
     utenlandskPeriodeBeløpFeilmeldingId,
@@ -11,7 +12,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
-import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 
 interface IProps {
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;
