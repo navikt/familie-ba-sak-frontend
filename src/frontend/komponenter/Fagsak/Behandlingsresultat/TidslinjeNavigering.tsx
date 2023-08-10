@@ -43,7 +43,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 size="small"
                 disabled={!kanNavigereTilVenstre}
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
-                icon={<ChevronLeftIcon title={navigerTilVenstreTittel} />}
+                icon={<ChevronLeftIcon title={navigerTilVenstreTittel} fontSize={'1.8rem'} />}
             />
             {children && <FlexMedSentrering>{children}</FlexMedSentrering>}
             <Button
@@ -52,7 +52,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 size="small"
                 disabled={!kanNavigereTilHøyre}
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
-                icon={<ChevronRightIcon title={navigerTilHøyreTittel} />}
+                icon={<ChevronRightIcon title={navigerTilHøyreTittel} fontSize={'1.8rem'} />}
             />
         </StyledTidslinjenavigering>
     );
