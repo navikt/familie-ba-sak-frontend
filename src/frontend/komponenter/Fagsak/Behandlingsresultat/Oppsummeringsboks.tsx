@@ -3,9 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Xknapp } from 'nav-frontend-ikonknapper';
-
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -262,7 +260,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
                     {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
                 </div>
-                <Xknapp
+                <Button
+                    variant="tertiary"
+                    icon={<XMarkIcon />}
                     onClick={() => {
                         settAktivEtikett(undefined);
                     }}
