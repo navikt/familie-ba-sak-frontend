@@ -92,7 +92,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
-                                <CalculatorIcon />
+                                <CalculatorIcon fontSize={'1.4rem'} />
                                 Legg til feilutbetalt valuta og sats
                             </Dropdown.Menu.List.Item>
                         )}
@@ -100,7 +100,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         fagsakType === FagsakType.NORMAL &&
                         vedtakHarFortsattUtbetaling(åpenBehandling.resultat) && (
                             <Dropdown.Menu.List.Item onClick={visRefusjonEøs}>
-                                <StarsEuIcon />
+                                <StarsEuIcon fontSize={'1.4rem'} />
                                 Legg til refusjon EØS
                             </Dropdown.Menu.List.Item>
                         )}

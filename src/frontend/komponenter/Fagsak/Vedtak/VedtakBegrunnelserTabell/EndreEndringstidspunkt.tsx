@@ -47,7 +47,7 @@ const EndreEndringstidspunkt: React.FC<{
                     settVisModal(true);
                 }}
             >
-                <CalendarIcon />
+                <CalendarIcon fontSize={'1.4rem'} />
                 Oppdater endringstidspunkt
             </Dropdown.Menu.List.Item>
 

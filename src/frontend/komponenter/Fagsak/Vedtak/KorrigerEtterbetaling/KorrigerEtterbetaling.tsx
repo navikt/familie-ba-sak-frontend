@@ -105,7 +105,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                     settVisModal(true);
                 }}
             >
-                <DocPencilIcon />
+                <DocPencilIcon fontSize={'1.4rem'} />
                 {korrigertEtterbetaling ? (
                     <>Vis korrigert etterbetaling</>
                 ) : (

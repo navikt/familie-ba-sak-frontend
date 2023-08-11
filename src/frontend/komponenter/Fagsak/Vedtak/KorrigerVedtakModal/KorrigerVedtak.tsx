@@ -88,7 +88,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                     settVisModal(true);
                 }}
             >
-                <ExclamationmarkTriangleIcon />
+                <ExclamationmarkTriangleIcon fontSize={'1.4rem'} />
                 {korrigertVedtak ? <>Vis korrigert vedtak</> : <>Korriger vedtak</>}
             </Dropdown.Menu.List.Item>
             <Modal open={visModal} onClose={lukkModal}>
