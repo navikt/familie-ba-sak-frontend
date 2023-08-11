@@ -141,7 +141,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[behandling.type].navn}</span>
-                    <ExternalLinkIcon />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE:
@@ -152,7 +152,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[Klagebehandlingstype.KLAGE].navn}</span>
-                    <ExternalLinkIcon />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
     }
@@ -212,7 +212,7 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{behandlingsresultater[behandling.resultat]}</span>
-                    <ExternalLinkIcon />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE: {
@@ -223,7 +223,7 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
-                    <ExternalLinkIcon />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
             return ankeHarEksistertPåBehandling(behandling) ? (
