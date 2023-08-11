@@ -173,7 +173,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     {vilkårResultat.verdi.erAutomatiskVurdert ? (
                         <StyledCogRotationIcon title={'Automatisk Vurdering'} />
                     ) : (
-                        <StyledPersonIcon title={'ManuellVurdering'} />
+                        <StyledPersonIcon title={'Manuell vurdering'} />
                     )}
                     <div>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
