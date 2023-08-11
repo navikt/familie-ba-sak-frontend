@@ -133,7 +133,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
                         >
                             Se retningslinjer for klarspråk.
-                            <ExternalLinkIcon />
+                            <ExternalLinkIcon fontSize={'1.3rem'} />
                         </Link>
                     </BodyLong>
                     <Heading level="3" size="xsmall">
