@@ -357,7 +357,9 @@ const TilbakekrevingSkjema: React.FC<{
                                                                         Se retningslinjer for
                                                                         klarspråk:
                                                                     </span>
-                                                                    <ExternalLinkIcon />
+                                                                    <ExternalLinkIcon
+                                                                        fontSize={'1.3rem'}
+                                                                    />
                                                                 </Link>
                                                             </StyledHelpTextContainer>
                                                         </StyledHelpText>
