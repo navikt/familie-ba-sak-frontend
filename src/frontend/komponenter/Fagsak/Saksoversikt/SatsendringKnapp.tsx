@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -60,7 +60,7 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) 
                 behandlinger vil satsendringen legges til automatisk.
             </StyledAlert>
 
-            <StyledButton icon={<AddCircle />} onClick={oppdaterFagsakMedSatsendring}>
+            <StyledButton icon={<PlusCircleIcon />} onClick={oppdaterFagsakMedSatsendring}>
                 Gjennomfør satsendring
             </StyledButton>
 

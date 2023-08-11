@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Label, Radio } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import {
@@ -423,7 +423,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             loading={vilkårSubmit === VilkårSubmit.DELETE}
                             disabled={vilkårSubmit === VilkårSubmit.DELETE}
                             size={'medium'}
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
                         >
                             {'Fjern'}
                         </Button>

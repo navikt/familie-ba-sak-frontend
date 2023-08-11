@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-datovelger';
@@ -430,7 +430,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
                                 size={'small'}
                                 onClick={slettEndretUtbetaling}
-                                icon={<Delete />}
+                                icon={<TrashIcon />}
                             >
                                 {'Fjern periode'}
                             </Button>

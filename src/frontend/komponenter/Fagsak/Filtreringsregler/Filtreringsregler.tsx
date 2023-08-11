@@ -58,8 +58,6 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
                         <StyledLi key={filtreringsregel}>
                             <VilkårResultatIkon
                                 resultat={fødselshendelsefiltreringResultat.resultat}
-                                width={20}
-                                height={20}
                             />
                             <StyledBodyShort>
                                 {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, Label } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -171,7 +171,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                         loading={hentetDokument.status === RessursStatus.HENTER}
                         disabled={skjemaErLåst()}
                         onClick={hentForhåndsvisningPåFagsak}
-                        icon={<FileContent />}
+                        icon={<FileTextIcon />}
                     >
                         {'Forhåndsvis'}
                     </Button>

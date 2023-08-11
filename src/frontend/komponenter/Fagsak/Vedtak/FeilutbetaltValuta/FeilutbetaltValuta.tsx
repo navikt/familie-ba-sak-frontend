@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
@@ -128,7 +128,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                     <Button
                         variant="tertiary"
                         size="small"
-                        icon={<AddCircle />}
+                        icon={<PlusCircleIcon />}
                         onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
                     >
                         Legg til ny periode
