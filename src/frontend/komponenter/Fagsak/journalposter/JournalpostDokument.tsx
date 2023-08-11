@@ -62,7 +62,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
                     aria-label="Åpne dokument i ny fane"
                     title="Åpne dokument i ny fane"
                 >
-                    <ExternalLinkIcon />
+                    <ExternalLinkIcon fontSize={'1.3rem'} />
                 </StyledLink>
             </DokumentTittelMedLenkeWrapper>
 
