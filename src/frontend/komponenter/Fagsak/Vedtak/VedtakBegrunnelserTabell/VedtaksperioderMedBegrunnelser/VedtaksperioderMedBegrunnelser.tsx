@@ -36,6 +36,10 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
         åpenBehandling.status
     );
 
+    console.log(åpenBehandling);
+    console.log(åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser);
+    console.log(vedtaksperioderSomSkalvises);
+
     if (
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
         vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL

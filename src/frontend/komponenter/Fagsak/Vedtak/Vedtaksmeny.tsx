@@ -3,14 +3,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Calculator, Eu, ExpandFilled } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
-import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
+import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -57,9 +56,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
         åpenBehandling.type === Behandlingstype.REVURDERING &&
         [BehandlingÅrsak.KLAGE, BehandlingÅrsak.DØDSFALL_BRUKER].includes(åpenBehandling.årsak);
 
-    const { endringstidspunktRessurs } = useHentEndringstidspunkt(åpenBehandling.behandlingId);
-    const endringstidspunkt = hentDataFraRessurs(endringstidspunktRessurs);
-
     return (
         <Dropdown>
             <KnappHøyreHjørne
@@ -89,12 +85,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             )}
                         </>
                     )}
-                    {endringstidspunkt && (
-                        <EndreEndringstidspunkt
-                            åpenBehandling={åpenBehandling}
-                            endringstidspunkt={endringstidspunkt}
-                        />
-                    )}
+
+                    <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
