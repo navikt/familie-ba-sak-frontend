@@ -3,9 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Xknapp } from 'nav-frontend-ikonknapper';
-
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { AddCircle, Close, Delete } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -262,7 +260,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
                     {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
                 </div>
-                <Xknapp
+                <Button
+                    variant="tertiary"
+                    icon={<Close />}
                     onClick={() => {
                         settAktivEtikett(undefined);
                     }}
