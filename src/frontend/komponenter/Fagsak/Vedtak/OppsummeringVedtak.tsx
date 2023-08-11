@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -243,7 +243,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             loading={hentetDokument.status === RessursStatus.HENTER}
-                            icon={<FileContent aria-hidden />}
+                            icon={<FileTextIcon aria-hidden />}
                         >
                             Vis vedtaksbrev
                         </Button>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
@@ -66,7 +66,7 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
                 id={slettVilkårId}
                 onClick={() => settVisModal(true)}
                 size="small"
-                icon={<Delete title="Fjern vilkår" />}
+                icon={<TrashIcon title="Fjern vilkår" />}
             >
                 Fjern vilkår
             </UtførKnapp>

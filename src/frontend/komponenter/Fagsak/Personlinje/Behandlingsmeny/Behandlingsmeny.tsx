@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ExpandFilled } from '@navikt/ds-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
@@ -52,7 +52,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             <PosisjonertMenyknapp
                 variant="secondary"
                 size="small"
-                icon={<ExpandFilled />}
+                icon={<ChevronDownIcon />}
                 iconPosition={'right'}
                 forwardedAs={Dropdown.Toggle}
             >

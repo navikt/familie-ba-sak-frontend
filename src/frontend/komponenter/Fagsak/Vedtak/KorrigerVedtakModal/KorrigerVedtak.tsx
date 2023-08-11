@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled, { css } from 'styled-components';
 
-import { Cancel, Warning } from '@navikt/ds-icons';
+import { ArrowUndoIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-datovelger';
@@ -88,7 +88,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                     settVisModal(true);
                 }}
             >
-                <Warning />
+                <ExclamationmarkTriangleIcon fontSize={'1.4rem'} />
                 {korrigertVedtak ? <>Vis korrigert vedtak</> : <>Korriger vedtak</>}
             </Dropdown.Menu.List.Item>
             <Modal open={visModal} onClose={lukkModal}>
@@ -177,7 +177,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                                             disabled={
                                                 skjema.submitRessurs.status === RessursStatus.HENTER
                                             }
-                                            icon={<Cancel />}
+                                            icon={<ArrowUndoIcon />}
                                         >
                                             Fjern korrigering
                                         </AngreKnapp>

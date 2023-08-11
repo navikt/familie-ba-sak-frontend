@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
@@ -97,7 +97,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                             <LeggTilKnapp
                                 variant="tertiary"
                                 size="small"
-                                icon={<AddCircle />}
+                                icon={<PlusCircleIcon />}
                                 onClick={() => settVisSkjemaNårDetErÉnBrevmottaker(true)}
                             >
                                 Legg til ny mottaker

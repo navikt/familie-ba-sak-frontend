@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled, { css } from 'styled-components';
 
-import { Cancel, Notes } from '@navikt/ds-icons';
+import { ArrowUndoIcon, DocPencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
@@ -105,7 +105,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                     settVisModal(true);
                 }}
             >
-                <Notes />
+                <DocPencilIcon fontSize={'1.4rem'} />
                 {korrigertEtterbetaling ? (
                     <>Vis korrigert etterbetaling</>
                 ) : (
@@ -225,7 +225,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                             variant={'tertiary'}
                                             loading={angrerKorrigering}
                                             disabled={angrerKorrigering}
-                                            icon={<Cancel />}
+                                            icon={<ArrowUndoIcon />}
                                         >
                                             Angre korrigering
                                         </AngreKnapp>

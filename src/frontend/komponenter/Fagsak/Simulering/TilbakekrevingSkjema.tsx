@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLink, FileContent } from '@navikt/ds-icons';
+import { ExternalLinkIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
     Alert,
     BodyLong,
@@ -357,7 +357,9 @@ const TilbakekrevingSkjema: React.FC<{
                                                                         Se retningslinjer for
                                                                         klarspråk:
                                                                     </span>
-                                                                    <ExternalLink />
+                                                                    <ExternalLinkIcon
+                                                                        fontSize={'1.3rem'}
+                                                                    />
                                                                 </Link>
                                                             </StyledHelpTextContainer>
                                                         </StyledHelpText>
@@ -394,7 +396,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                     hentetDokument.status === RessursStatus.HENTER
                                                 }
                                                 size={'small'}
-                                                icon={<FileContent />}
+                                                icon={<FileTextIcon />}
                                             >
                                                 {'Forhåndsvis varsel'}
                                             </Button>
