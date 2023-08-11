@@ -336,7 +336,10 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                 }}
                             >
                                 Rekvirer D-nummer i DREK
-                                <ExternalLinkIcon aria-label="Rekvirer D-nummer i DREK" />
+                                <ExternalLinkIcon
+                                    title="Rekvirer D-nummer i DREK"
+                                    fontSize={'1.5rem'}
+                                />
                             </Link>
                         </DrekLenkeContainer>
                         {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
