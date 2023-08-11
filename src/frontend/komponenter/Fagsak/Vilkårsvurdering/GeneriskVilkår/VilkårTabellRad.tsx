@@ -58,6 +58,21 @@ const StyledTooltip = styled(Tooltip)`
     text-align: left;
 `;
 
+const StyledCogIcon = styled(CogIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const StyledCogRotationIcon = styled(CogRotationIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const StyledPersonIcon = styled(PersonIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
 const VilkårTabellRad: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
@@ -148,7 +163,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     </FlexDiv>
                 ) : (
                     <FlexDiv>
-                        <CogIcon width={24} height={24} viewBox={'0 0 24 24'} />
+                        <StyledCogIcon title={'Generell vurdering'} />
                         <div>Generell vurdering</div>
                     </FlexDiv>
                 )}
@@ -156,19 +171,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <FlexDiv>
                     {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                        <CogRotationIcon
-                            width={24}
-                            height={24}
-                            aria-labelledby={'Automatisk Vurdering'}
-                            viewBox={'0 0 24 24'}
-                        />
+                        <StyledCogRotationIcon title={'Automatisk Vurdering'} />
                     ) : (
-                        <PersonIcon
-                            width={24}
-                            height={24}
-                            aria-labelledby={'ManuellVurdering'}
-                            viewBox={'0 0 24 24'}
-                        />
+                        <StyledPersonIcon title={'ManuellVurdering'} />
                     )}
                     <div>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
