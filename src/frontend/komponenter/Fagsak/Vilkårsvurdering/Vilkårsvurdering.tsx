@@ -154,13 +154,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         variant="tertiary"
                         size="xsmall"
                         erLesevisning={erLesevisning}
-                        icon={
-                            <ArrowsSquarepathIcon
-                                style={{ fontSize: '1.5rem' }}
-                                role="img"
-                                focusable="false"
-                            />
-                        }
+                        icon={<ArrowsSquarepathIcon fontSize={'1.5rem'} focusable="false" />}
                     />
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
