@@ -46,6 +46,11 @@ const FlexDiv = styled.div`
     }
 `;
 
+const StyledPersonIcon = styled(PersonIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
 const AnnenVurderingTabellRad: React.FC<IProps> = ({
     person,
     annenVurderingConfig,
@@ -105,12 +110,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <FlexDiv>
-                    <PersonIcon
-                        width={24}
-                        height={24}
-                        title={'ManuellVurdering'}
-                        viewBox={'0 0 24 24'}
-                    />
+                    <StyledPersonIcon title={'Manuell vurdering'} />
                     <div>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
                         annenVurdering.verdi.erVurdert
