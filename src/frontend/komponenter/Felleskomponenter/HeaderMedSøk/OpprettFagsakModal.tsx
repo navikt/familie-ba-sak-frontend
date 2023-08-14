@@ -104,7 +104,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [bruker, settBruker] = useState(personInfo);
     const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
         useOpprettFagsak();
-    const { hentPerson, sjekkTilgang } = useApp();
+    const { hentPerson } = useApp();
     const { toggles } = useApp();
     const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
@@ -276,11 +276,10 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                             settSenderInn(true);
                             const personIdent = søkeresultat?.ident || personInfo?.personIdent;
 
-                            if (personIdent && (await sjekkTilgang(personIdent))) {
+                            if (personIdent) {
                                 opprettFagsak(
                                     {
                                         personIdent: personIdent,
-                                        aktørId: null,
                                         fagsakType: fagsakType,
                                         institusjon: valgtSamhandler
                                             ? {
