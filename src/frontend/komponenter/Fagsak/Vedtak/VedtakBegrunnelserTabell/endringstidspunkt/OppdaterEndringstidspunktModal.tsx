@@ -66,7 +66,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
         <StyledModal open={visModal} onClose={lukkModal}>
             <Modal.Content>
                 <Heading spacing size="medium" level="1">
-                    Oppdater Endringstidspunkt
+                    Oppdater endringstidspunkt
                 </Heading>
 
                 <StyledAlert inline variant={'info'}>
