@@ -10,7 +10,7 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
-import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/EndreEndringstidspunkt';
+import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -86,9 +86,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             )}
                         </>
                     )}
-                    {åpenBehandling.endringstidspunkt && (
-                        <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
-                    )}
+
+                    <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
