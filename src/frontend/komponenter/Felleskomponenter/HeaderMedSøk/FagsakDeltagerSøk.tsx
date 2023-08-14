@@ -16,13 +16,13 @@ import {
 } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import OpprettFagsakModal from './OpprettFagsakModal';
 import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
-import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');

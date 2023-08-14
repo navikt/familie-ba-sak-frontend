@@ -3,9 +3,11 @@ import { useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { Search } from '@navikt/ds-icons';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
+import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
+import { sider } from './Venstremeny/sider';
 import type { IBehandling } from '../../typer/behandling';
 import type { FagsakType } from '../../typer/fagsak';
 import type { IInstitusjon } from '../../typer/institusjon-og-verge';
@@ -14,8 +16,6 @@ import { hentSideHref } from '../../utils/miljø';
 import { LeggTilBrevmottakerModal } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModal';
 import type { IRestBrevmottaker } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 import { BehandlingKorrigertAlert } from '../Fagsak/Vedtak/OppsummeringVedtak';
-import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
-import { sider } from './Venstremeny/sider';
 
 interface Props {
     brevmottakere: IRestBrevmottaker[];
@@ -53,7 +53,7 @@ export const BrevmottakereAlert: React.FC<Props> = ({
                     <Button
                         variant={'tertiary'}
                         onClick={() => settVisManuelleMottakereModal(true)}
-                        icon={<Search />}
+                        icon={<MagnifyingGlassIcon />}
                         size={'xsmall'}
                     >
                         Se detaljer

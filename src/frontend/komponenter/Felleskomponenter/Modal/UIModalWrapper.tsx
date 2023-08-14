@@ -3,9 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import Modal from 'nav-frontend-modal';
-
-import { Heading } from '@navikt/ds-react';
+import { Heading, Modal } from '@navikt/ds-react';
 
 import type { IModal } from '../../../context/AppContext';
 import { useApp } from '../../../context/AppContext';
@@ -28,25 +26,28 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
 
     return (
         <Modal
-            appElement={document.body}
             className={classNames(className, 'uimodal')}
-            isOpen={visModal}
-            onRequestClose={(): void => onClose && onClose()}
-            contentLabel="ui-modal"
+            open={visModal}
+            onClose={(): void => onClose && onClose()}
+            aria-label={`${tittel}-modal`}
             closeButton={lukkKnapp}
             {...style}
         >
-            <div className="uimodal__content">
-                <Heading level="2" size="small">
-                    {tittel}
-                </Heading>
-                <div className="uimodal__content--inner-content">
-                    {innhold ? innhold() : children}
+            <Modal.Content>
+                <div className="uimodal__content">
+                    <Heading level="2" size="small">
+                        {tittel}
+                    </Heading>
+                    <div className="uimodal__content--inner-content">
+                        {innhold ? innhold() : children}
+                    </div>
+                    {actions && (
+                        <StyledButtons className="uimodal__content--actions">
+                            {actions}
+                        </StyledButtons>
+                    )}
                 </div>
-                {actions && (
-                    <StyledButtons className="uimodal__content--actions">{actions}</StyledButtons>
-                )}
-            </div>
+            </Modal.Content>
         </Modal>
     );
 };

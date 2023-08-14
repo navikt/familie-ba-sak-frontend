@@ -8,13 +8,14 @@ import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
-import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import useLeggTilFjernBrevmottaker, {
     Mottaker,
     mottakerVisningsnavn,
 } from './useLeggTilFjernBrevmottaker';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
+import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 
 const PostnummerOgStedContainer = styled.div`
     display: grid;
@@ -50,7 +51,11 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
     const erLesevisning = vurderErLesevisning();
     return (
         <>
-            <StyledFieldset legend="Skjema for å legge til eller fjerne brevmottaker" hideLegend>
+            <StyledFieldset
+                legend="Skjema for å legge til eller fjerne brevmottaker"
+                hideLegend
+                error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
+            >
                 <MottakerSelect
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning}

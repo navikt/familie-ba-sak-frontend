@@ -3,10 +3,16 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
+import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
+import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -26,12 +32,6 @@ import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
-import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
-import Vedtaksmeny from './Vedtaksmeny';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -243,7 +243,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             size={'medium'}
                             onClick={() => settVisDokumentModal(!visDokumentModal)}
                             loading={hentetDokument.status === RessursStatus.HENTER}
-                            icon={<FileContent aria-hidden />}
+                            icon={<FileTextIcon aria-hidden />}
                         >
                             Vis vedtaksbrev
                         </Button>

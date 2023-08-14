@@ -2,9 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, ExpansionCard, Heading } from '@navikt/ds-react';
+import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -52,6 +51,12 @@ const EndreJournalpost: React.FC = () => {
                     skjema.felter.journalpostTittel.nullstill();
                 }
             }}
+            propSelectStyles={{
+                container: (base, props) => ({
+                    ...base,
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
+                }),
+            }}
         />
     );
 };
@@ -64,24 +69,30 @@ const Journalpost: React.FC = () => {
             : undefined;
 
     return (
-        <Ekspanderbartpanel
+        <ExpansionCard
             id={skjema.felter.journalpostTittel.id}
-            tittel={
-                <Heading size={'small'} level={'2'}>
-                    {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
-                </Heading>
-            }
+            size="small"
+            aria-label="journalpost"
         >
-            <JournalpostMetadataDiv>
-                <BodyShort>
-                    Mottatt:{' '}
-                    {datoMottatt
-                        ? formaterIsoDato(datoMottatt, datoformat.DATO)
-                        : 'Ingen mottatt dato'}
-                </BodyShort>
-            </JournalpostMetadataDiv>
-            <EndreJournalpost />
-        </Ekspanderbartpanel>
+            <ExpansionCard.Header>
+                <ExpansionCard.Title>
+                    <Heading size={'small'} level={'2'}>
+                        {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
+                    </Heading>
+                </ExpansionCard.Title>
+            </ExpansionCard.Header>
+            <ExpansionCard.Content>
+                <JournalpostMetadataDiv>
+                    <BodyShort>
+                        Mottatt:{' '}
+                        {datoMottatt
+                            ? formaterIsoDato(datoMottatt, datoformat.DATO)
+                            : 'Ingen mottatt dato'}
+                    </BodyShort>
+                </JournalpostMetadataDiv>
+                <EndreJournalpost />
+            </ExpansionCard.Content>
+        </ExpansionCard>
     );
 };
 

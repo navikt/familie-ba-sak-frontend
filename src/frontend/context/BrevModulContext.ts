@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
-import type { ISODateString } from '@navikt/familie-form-elements';
+import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
+import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useFagsakContext } from './fagsak/FagsakContext';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
@@ -25,8 +27,6 @@ import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 import { erIsoStringGyldig } from '../utils/kalender';
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling: åpenBehandlingRessurs } = useBehandling();
@@ -161,6 +161,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                    Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                     Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
@@ -179,6 +180,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return [
                 Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                 Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
             ].includes(avhengigheter?.brevmal.verdi);
         },

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete, FileContent } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Tag } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import {
@@ -18,21 +18,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useBrevModul } from '../../../../context/BrevModulContext';
-import useDokument from '../../../../hooks/useDokument';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
-import { målform } from '../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
-import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
-import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
-import Knapperekke from '../../Knapperekke';
-import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import BarnBrevetGjelder from './BarnBrevetGjelder';
 import BrevmottakerListe from './BrevmottakerListe';
 import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
@@ -43,6 +28,23 @@ import {
     opplysningsdokumenter,
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
+import { useApp } from '../../../../context/AppContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useBrevModul } from '../../../../context/BrevModulContext';
+import useDokument from '../../../../hooks/useDokument';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import { målform } from '../../../../typer/søknad';
+import { ToggleNavn } from '../../../../typer/toggles';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
+import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
+import Knapperekke from '../../Knapperekke';
+import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -126,6 +128,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         fagsakType,
     } = useBrevModul();
 
+    const { toggles } = useApp();
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
     useEffect(() => {
@@ -140,7 +143,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const erLesevisning = vurderErLesevisning();
 
-    const brevMaler = hentMuligeBrevMaler();
+    const brevMaler = hentMuligeBrevMaler().filter(
+        brevmal =>
+            brevmal !==
+                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT ||
+            toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+    );
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetDokument.status === RessursStatus.HENTER;
@@ -330,7 +338,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                             id={`fjern_fritekst-${fritekstId}`}
                                                             size={'small'}
                                                             aria-label={'Fjern fritekst'}
-                                                            icon={<Delete />}
+                                                            icon={<TrashIcon />}
                                                         >
                                                             {'Fjern'}
                                                         </StyledButton>
@@ -347,7 +355,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                         onClick={() => leggTilFritekst()}
                                         id={`legg-til-fritekst`}
                                         size={'small'}
-                                        icon={<AddCircle />}
+                                        icon={<PlusCircleIcon />}
                                     >
                                         {'Legg til kulepunkt'}
                                     </Button>
@@ -441,7 +449,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                 });
                             }
                         }}
-                        icon={<FileContent />}
+                        icon={<FileTextIcon />}
                     >
                         {'Forhåndsvis'}
                     </Button>

@@ -6,6 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import useBehandlingApi from './useBehandlingApi';
+import useBehandlingssteg from './useBehandlingssteg';
+import { saksbehandlerHarKunLesevisning } from './util';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { ISide, ITrinn, SideId } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
@@ -31,9 +34,6 @@ import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
 import { useFagsakContext } from '../fagsak/FagsakContext';
-import useBehandlingApi from './useBehandlingApi';
-import useBehandlingssteg from './useBehandlingssteg';
-import { saksbehandlerHarKunLesevisning } from './util';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const { fagsakId } = useSakOgBehandlingParams();

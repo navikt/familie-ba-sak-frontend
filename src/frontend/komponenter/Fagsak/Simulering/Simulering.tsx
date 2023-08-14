@@ -7,6 +7,9 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import SimuleringPanel from './SimuleringPanel';
+import SimuleringTabell from './SimuleringTabell';
+import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
@@ -15,9 +18,6 @@ import { BehandlingSteg } from '../../../typer/behandling';
 import type { ITilbakekreving } from '../../../typer/simulering';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import SimuleringPanel from './SimuleringPanel';
-import SimuleringTabell from './SimuleringTabell';
-import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;

@@ -8,9 +8,9 @@ import { Input } from 'nav-frontend-skjema';
 import { Button, Fieldset, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import { useInfotrygdSkjema } from './useInfotrygd';
+import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 
 const InfotrygdContainer = styled.div`
     padding: 1rem;

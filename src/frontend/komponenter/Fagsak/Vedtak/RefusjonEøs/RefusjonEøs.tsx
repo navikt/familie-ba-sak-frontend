@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Table } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { Button, CopyButton, Heading, Table } from '@navikt/ds-react';
 import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
+import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
+import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
-import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
-import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 
 interface IRefusjonEøs {
     behandlingId: number;
@@ -35,7 +34,7 @@ const FlexRowDiv = styled.div`
     justify-content: space-between;
 `;
 
-const KopierTilNøsKnapp = styled(CopyToClipboard)`
+const KopierTilNøsKnapp = styled(CopyButton)`
     :not(:hover):not(:active) {
         color: ${ATextAction};
     }
@@ -118,15 +117,18 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
                     <Button
                         variant="tertiary"
                         size="small"
-                        icon={<AddCircle />}
+                        icon={<PlusCircleIcon />}
                         onClick={() => settØnskerÅLeggeTilNyPeriode(true)}
                     >
                         Legg til ny periode
                     </Button>
                 )}
-                <KopierTilNøsKnapp copyText={tekstTilNØS} popoverText="Kopiert!" size="small">
-                    Kopier tekst til NØS
-                </KopierTilNøsKnapp>
+                <KopierTilNøsKnapp
+                    copyText={tekstTilNØS}
+                    text="Kopier tekst til NØS"
+                    activeText="Kopiert!"
+                    size="small"
+                />
             </FlexRowDiv>
         </FlexColumnDiv>
     );

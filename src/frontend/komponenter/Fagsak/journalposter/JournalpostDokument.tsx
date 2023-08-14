@@ -2,12 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
+import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;
@@ -62,7 +62,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
                     aria-label="Åpne dokument i ny fane"
                     title="Åpne dokument i ny fane"
                 >
-                    <ExternalLink />
+                    <ExternalLinkIcon fontSize={'1.3rem'} />
                 </StyledLink>
             </DokumentTittelMedLenkeWrapper>
 

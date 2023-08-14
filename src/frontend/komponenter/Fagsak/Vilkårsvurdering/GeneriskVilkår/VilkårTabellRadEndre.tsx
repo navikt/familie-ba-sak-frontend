@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Label, Radio } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import {
@@ -19,6 +19,14 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import AvslagSkjema from './AvslagSkjema';
+import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
+import VelgPeriode from './VelgPeriode';
+import {
+    vilkårBegrunnelseFeilmeldingId,
+    vilkårFeilmeldingId,
+    vilkårResultatFeilmeldingId,
+} from './VilkårTabell';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
@@ -34,14 +42,6 @@ import { ToggleNavn } from '../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import AvslagSkjema from './AvslagSkjema';
-import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
-import VelgPeriode from './VelgPeriode';
-import {
-    vilkårBegrunnelseFeilmeldingId,
-    vilkårFeilmeldingId,
-    vilkårResultatFeilmeldingId,
-} from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -423,7 +423,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             loading={vilkårSubmit === VilkårSubmit.DELETE}
                             disabled={vilkårSubmit === VilkårSubmit.DELETE}
                             size={'medium'}
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
                         >
                             {'Fjern'}
                         </Button>

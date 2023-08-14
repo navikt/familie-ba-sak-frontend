@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { DownFilled, LeftFilled, RightFilled } from '@navikt/ds-icons';
+import { ArrowRightIcon, ArrowLeftIcon, ArrowDownIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
@@ -16,9 +16,6 @@ import {
 
 import 'nav-frontend-tabell-style';
 
-import useDokument from '../../../hooks/useDokument';
-import type { IPersonInfo } from '../../../typer/person';
-import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import { JournalpostDokument } from './JournalpostDokument';
 import {
     formaterFagsak,
@@ -28,6 +25,9 @@ import {
     hentSortState,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
+import useDokument from '../../../hooks/useDokument';
+import type { IPersonInfo } from '../../../typer/person';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const Container = styled.div`
     padding: 2rem;
@@ -106,11 +106,11 @@ interface IProps {
 const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     switch (journalposttype) {
         case Journalposttype.I:
-            return <RightFilled title="Inngående" />;
+            return <ArrowRightIcon title="Inngående" fontSize={'1.3rem'} />;
         case Journalposttype.U:
-            return <LeftFilled title="Utgående" />;
+            return <ArrowLeftIcon title="Utgående" fontSize={'1.3rem'} />;
         case Journalposttype.N:
-            return <DownFilled title="Notat" />;
+            return <ArrowDownIcon title="Notat" fontSize={'1.3rem'} />;
     }
 };
 

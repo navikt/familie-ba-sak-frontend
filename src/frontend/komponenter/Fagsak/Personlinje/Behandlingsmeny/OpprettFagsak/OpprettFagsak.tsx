@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IPersonInfo } from '../../../../../typer/person';

@@ -7,6 +7,7 @@ import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-
 import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../../context/ManuellJournalførContext';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -32,7 +33,6 @@ import {
 import { hentAlder } from '../../../../../utils/formatter';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
-import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 
 const StyledFamilieSelect = styled(FamilieSelect)`
     label {

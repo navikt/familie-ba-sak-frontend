@@ -4,13 +4,18 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Refresh } from '@navikt/ds-icons';
+import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, ErrorMessage, ErrorSummary } from '@navikt/ds-react';
 import { ASpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
+import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
+import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
+import { HentetLabel } from './Registeropplysninger/HentetLabel';
+import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -24,11 +29,6 @@ import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erProd } from '../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
-import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
-import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
-import { HentetLabel } from './Registeropplysninger/HentetLabel';
-import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -154,9 +154,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         variant="tertiary"
                         size="xsmall"
                         erLesevisning={erLesevisning}
-                        icon={
-                            <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />
-                        }
+                        icon={<ArrowsSquarepathIcon fontSize={'1.5rem'} focusable="false" />}
                     />
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (

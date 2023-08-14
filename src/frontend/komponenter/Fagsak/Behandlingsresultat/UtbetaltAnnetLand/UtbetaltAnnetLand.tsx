@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { Alert, Heading, Table } from '@navikt/ds-react';
 
+import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
 
 const UtenlandskPeriodeBeløperContainer = styled.div`
     margin-top: 5rem;

@@ -3,16 +3,16 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { BackFilled, NextFilled } from '@navikt/ds-icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import Link from './Link';
 import type { IUnderside } from './sider';
 import { erSidenAktiv } from './sider';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 
 const ToggleVisningVenstremeny = styled(Button)`
     position: fixed;
@@ -139,9 +139,9 @@ const Venstremeny: React.FunctionComponent = () => {
                     title={åpenVenstremeny ? 'Skjul venstremeny' : 'Vis venstremeny'}
                     icon={
                         åpenVenstremeny ? (
-                            <BackFilled aria-label="Vis venstremeny" />
+                            <ChevronLeftIcon aria-label="Vis venstremeny" />
                         ) : (
-                            <NextFilled aria-label="Skjul venstremeny" />
+                            <ChevronRightIcon aria-label="Skjul venstremeny" />
                         )
                     }
                 />

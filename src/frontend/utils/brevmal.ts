@@ -2,6 +2,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { erOrgNr } from './formatter';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
@@ -9,7 +10,6 @@ import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
-import { erOrgNr } from './formatter';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: Ressurs<IBehandling>,
@@ -68,6 +68,13 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
                 åpenBehandling.kategori === BehandlingKategori.EØS &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
+        case Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
                 [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
                     åpenBehandling.type
                 )

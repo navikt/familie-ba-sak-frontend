@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Fieldset, Button, Heading } from '@navikt/ds-react';
 import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
+import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
+import VilkårTabell from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
@@ -19,8 +21,6 @@ import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../typer/vilkår';
-import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
-import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -144,7 +144,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         disabled={vilkårSubmit === VilkårSubmit.POST}
                         variant="tertiary"
                         size="medium"
-                        icon={<AddCircle />}
+                        icon={<PlusCircleIcon />}
                     >
                         Legg til periode
                     </UtførKnapp>

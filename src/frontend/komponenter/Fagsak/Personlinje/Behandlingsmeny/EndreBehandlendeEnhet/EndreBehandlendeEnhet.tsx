@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import { Button, Fieldset } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
@@ -12,7 +13,6 @@ import type { IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
 import { behandendeEnheter } from '../../../../../typer/enhet';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
 const EndreBehandlendeEnhet: React.FC = () => {
     const {

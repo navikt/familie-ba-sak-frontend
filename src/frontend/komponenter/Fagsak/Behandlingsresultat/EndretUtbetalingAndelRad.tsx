@@ -4,9 +4,10 @@ import { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { Collapse, Expand } from '@navikt/ds-icons';
+import { ChevronUpIcon, ChevronDownIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
 
+import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
@@ -15,7 +16,6 @@ import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel'
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { yearMonthPeriodeToString } from '../../../utils/kalender';
-import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -31,6 +31,11 @@ const PersonCelle = styled.div`
     svg {
         margin-right: 1rem;
     }
+`;
+
+const StyledButton = styled(Button)`
+    width: 6rem;
+    justify-content: space-between;
 `;
 
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
@@ -101,8 +106,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     ? Status.OK
                                     : Status.ADVARSEL
                             }
-                            height={20}
-                            width={20}
                         />
                         {endretUtbetalingAndel.personIdent
                             ? lagPersonLabel(
@@ -133,15 +136,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         : ''}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <Button
+                    <StyledButton
                         variant="tertiary"
                         size="xsmall"
                         onClick={() => toggleForm()}
                         icon={
                             åpenUtbetalingsAndel ? (
-                                <Collapse width="22" height="22" />
+                                <ChevronUpIcon fontSize={'1.5rem'} />
                             ) : (
-                                <Expand width="22" height="22" />
+                                <ChevronDownIcon fontSize={'1.5rem'} />
                             )
                         }
                         iconPosition="right"
@@ -151,7 +154,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         ) : (
                             <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
                         )}
-                    </Button>
+                    </StyledButton>
                 </TdUtenUnderstrek>
             </tr>
             {åpenUtbetalingsAndel && (

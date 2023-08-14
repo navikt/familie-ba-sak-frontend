@@ -6,9 +6,9 @@ import styled from 'styled-components';
 
 import { Heading } from '@navikt/ds-react';
 
+import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;

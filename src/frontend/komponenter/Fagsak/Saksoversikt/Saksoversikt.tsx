@@ -2,10 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Home, Search } from '@navikt/ds-icons';
+import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Link, Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import Behandlinger from './Behandlinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
+import { SatsendringKnapp } from './SatsendringKnapp';
+import { useSatsendringsknapp } from './useSatsendringsknapp';
+import Utbetalinger from './Utbetalinger';
+import type { VisningBehandling } from './visningBehandling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
@@ -30,12 +36,6 @@ import {
 } from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
-import Behandlinger from './Behandlinger';
-import FagsakLenkepanel from './FagsakLenkepanel';
-import { SatsendringKnapp } from './SatsendringKnapp';
-import { useSatsendringsknapp } from './useSatsendringsknapp';
-import Utbetalinger from './Utbetalinger';
-import type { VisningBehandling } from './visningBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -195,8 +195,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             }}
         >
             <Tabs.List>
-                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<Home />} />
-                <Tabs.Tab value={infotrygdTab.key} label={infotrygdTab.label} icon={<Search />} />
+                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<HouseIcon />} />
+                <Tabs.Tab
+                    value={infotrygdTab.key}
+                    label={infotrygdTab.label}
+                    icon={<MagnifyingGlassIcon />}
+                />
             </Tabs.List>
             <Tabs.Panel value={basakTab.key}>
                 <SaksoversiktWrapper>

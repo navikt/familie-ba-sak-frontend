@@ -4,11 +4,11 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import type { VisningBehandling } from './Saksoversikt/visningBehandling';
 import type { IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useFagsakContext } from '../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import type { VisningBehandling } from './Saksoversikt/visningBehandling';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,

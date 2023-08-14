@@ -3,14 +3,14 @@ import React from 'react';
 import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
+import BegrunnelserMultiselect from './BegrunnelserMultiselect';
+import EkspanderbartVedtaksbegrunnelsePanel from './EkspanderbartVedtaksbegrunnelsePanel';
+import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
-import BegrunnelserMultiselect from './BegrunnelserMultiselect';
-import EkspanderbartVedtaksbegrunnelsePanel from './EkspanderbartVedtaksbegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 
 interface IProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;

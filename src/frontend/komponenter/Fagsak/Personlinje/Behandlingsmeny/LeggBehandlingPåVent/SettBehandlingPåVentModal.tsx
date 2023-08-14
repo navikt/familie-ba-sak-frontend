@@ -7,13 +7,13 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { hentAlleÅrsaker } from './settPåVentUtils';
 import type { IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import { hentAlleÅrsaker } from './settPåVentUtils';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;

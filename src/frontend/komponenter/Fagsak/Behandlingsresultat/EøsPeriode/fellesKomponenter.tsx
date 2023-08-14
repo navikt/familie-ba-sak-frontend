@@ -82,11 +82,7 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
             <Table.DataCell>
                 <EøsPeriodeVurdertCelle>
                     <div>
-                        <StatusIkon
-                            status={mapEøsPeriodeStatusTilStatus[props.status]}
-                            width={20}
-                            height={20}
-                        />
+                        <StatusIkon status={mapEøsPeriodeStatusTilStatus[props.status]} />
                     </div>
                     <BarnDiv>
                         {props.barnIdenter.map(barn => (

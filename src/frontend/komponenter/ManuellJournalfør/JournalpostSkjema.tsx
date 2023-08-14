@@ -3,25 +3,26 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Back } from '@navikt/ds-icons';
+import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import { Alert, ErrorMessage, ErrorSummary, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { FagsakType } from '../../typer/fagsak';
-import type { OppgavetypeFilter } from '../../typer/oppgave';
-import { oppgaveTypeFilter } from '../../typer/oppgave';
-import Knapperekke from '../Felleskomponenter/Knapperekke';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { FagsakType } from '../../typer/fagsak';
+import type { OppgavetypeFilter } from '../../typer/oppgave';
+import { oppgaveTypeFilter } from '../../typer/oppgave';
+import Knapperekke from '../Felleskomponenter/Knapperekke';
 
 const Container = styled.div`
     padding: 2rem;
-    overflow: auto;
+    overflow-y: scroll;
+\`;
 `;
 
 const StyledSectionDiv = styled.div`
@@ -105,7 +106,7 @@ export const JournalpostSkjema: React.FC = () => {
                     erLesevisning={false}
                     onClick={() => navigate(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    icon={erLesevisning() && <Back />}
+                    icon={erLesevisning() && <ChevronLeftIcon />}
                 >
                     {erLesevisning() ? 'Tilbake' : 'Avbryt'}
                 </FamilieKnapp>

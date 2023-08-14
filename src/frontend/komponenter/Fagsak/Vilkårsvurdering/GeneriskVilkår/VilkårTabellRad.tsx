@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
+import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { vilkårFeilmeldingId } from './VilkårTabell';
+import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
@@ -16,8 +18,6 @@ import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import { vilkårFeilmeldingId } from './VilkårTabell';
-import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -56,6 +56,21 @@ const StyledTooltip = styled(Tooltip)`
     padding-bottom: 8px;
     max-width: 500px;
     text-align: left;
+`;
+
+const StyledCogIcon = styled(CogIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const StyledCogRotationIcon = styled(CogRotationIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+`;
+
+const StyledPersonIcon = styled(PersonIcon)`
+    font-size: 1.5rem;
+    min-width: 1.5rem;
 `;
 
 const VilkårTabellRad: React.FC<IProps> = ({
@@ -120,8 +135,6 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     <VilkårResultatIkon
                         resultat={vilkårResultatVerdi}
                         resultatBegrunnelse={vilkårResultatbegrunnelse}
-                        width={20}
-                        height={20}
                     />
                     <BodyShort>
                         {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
@@ -150,7 +163,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     </FlexDiv>
                 ) : (
                     <FlexDiv>
-                        <Settings width={24} height={24} viewBox={'0 0 24 24'} />
+                        <StyledCogIcon title={'Generell vurdering'} />
                         <div>Generell vurdering</div>
                     </FlexDiv>
                 )}
@@ -158,19 +171,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <FlexDiv>
                     {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                        <AutomaticSystem
-                            width={24}
-                            height={24}
-                            aria-labelledby={'Automatisk Vurdering'}
-                            viewBox={'0 0 24 24'}
-                        />
+                        <StyledCogRotationIcon title={'Automatisk Vurdering'} />
                     ) : (
-                        <People
-                            width={24}
-                            height={24}
-                            aria-labelledby={'ManuellVurdering'}
-                            viewBox={'0 0 24 24'}
-                        />
+                        <StyledPersonIcon title={'Manuell vurdering'} />
                     )}
                     <div>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
