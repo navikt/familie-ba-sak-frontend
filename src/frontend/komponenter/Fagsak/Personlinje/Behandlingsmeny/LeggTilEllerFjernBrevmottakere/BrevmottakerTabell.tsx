@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Heading, Button } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
@@ -55,7 +55,7 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                         loading={false}
                         disabled={false}
                         size={'small'}
-                        icon={<Delete />}
+                        icon={<TrashIcon />}
                     >
                         {'Fjern'}
                     </Button>

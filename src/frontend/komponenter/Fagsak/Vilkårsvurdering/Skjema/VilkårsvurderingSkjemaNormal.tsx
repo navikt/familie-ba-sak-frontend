@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
-import { AddCircle, ExpandFilled, CollapseFilled } from '@navikt/ds-icons';
+import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -137,7 +137,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                                 }
                                                 size={'small'}
                                                 icon={
-                                                    <AddCircle title="Legg til vilkår utvidet barnetrygd" />
+                                                    <PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />
                                                 }
                                             >
                                                 {`Legg til vilkår utvidet barnetrygd`}
@@ -158,9 +158,9 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 }
                                 icon={
                                     personErEkspandert[personResultat.personIdent] ? (
-                                        <CollapseFilled aria-hidden />
+                                        <ChevronUpIcon aria-hidden />
                                     ) : (
-                                        <ExpandFilled aria-hidden />
+                                        <ChevronDownIcon aria-hidden />
                                     )
                                 }
                                 iconPosition="right"

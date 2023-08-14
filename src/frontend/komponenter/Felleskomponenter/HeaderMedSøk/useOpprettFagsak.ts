@@ -13,7 +13,6 @@ import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandl
 
 export interface IOpprettFagsakData {
     personIdent: string | null;
-    aktørId: string | null;
     fagsakType: FagsakType | null;
     institusjon: IInstitusjon | null;
 }

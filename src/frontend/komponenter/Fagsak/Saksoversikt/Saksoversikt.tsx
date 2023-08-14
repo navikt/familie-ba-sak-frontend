@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Home, Search } from '@navikt/ds-icons';
+import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Link, Alert, Heading, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -195,8 +195,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             }}
         >
             <Tabs.List>
-                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<Home />} />
-                <Tabs.Tab value={infotrygdTab.key} label={infotrygdTab.label} icon={<Search />} />
+                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<HouseIcon />} />
+                <Tabs.Tab
+                    value={infotrygdTab.key}
+                    label={infotrygdTab.label}
+                    icon={<MagnifyingGlassIcon />}
+                />
             </Tabs.List>
             <Tabs.Panel value={basakTab.key}>
                 <SaksoversiktWrapper>

@@ -4,7 +4,7 @@ import React, { forwardRef, useMemo, useRef, useState } from 'react';
 
 import cl from 'clsx';
 
-import { Helptext as HelpTextIcon, HelptextFilled } from '@navikt/ds-icons';
+import { QuestionmarkDiamondIcon, QuestionmarkDiamondFillIcon } from '@navikt/aksel-icons';
 import type { PopoverProps } from '@navikt/ds-react';
 import { Popover } from '@navikt/ds-react';
 
@@ -85,8 +85,8 @@ export const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
                     type="button"
                     aria-expanded={open}
                 >
-                    <HelpTextIcon className="navds-help-text__icon" title={title} />
-                    <HelptextFilled
+                    <QuestionmarkDiamondIcon className="navds-help-text__icon" title={title} />
+                    <QuestionmarkDiamondFillIcon
                         className="navds-help-text__icon navds-help-text__icon--filled"
                         title={title}
                     />

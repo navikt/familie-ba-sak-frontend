@@ -161,6 +161,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                    Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                     Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                 ].includes(avhengigheter?.brevmal.verdi)
             );
@@ -179,6 +180,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return [
                 Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                 Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
             ].includes(avhengigheter?.brevmal.verdi);
         },

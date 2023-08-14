@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Back } from '@navikt/ds-icons';
+import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import { Alert, ErrorMessage, ErrorSummary, Heading } from '@navikt/ds-react';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -106,7 +106,7 @@ export const JournalpostSkjema: React.FC = () => {
                     erLesevisning={false}
                     onClick={() => navigate(`/oppgaver`)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    icon={erLesevisning() && <Back />}
+                    icon={erLesevisning() && <ChevronLeftIcon />}
                 >
                     {erLesevisning() ? 'Tilbake' : 'Avbryt'}
                 </FamilieKnapp>

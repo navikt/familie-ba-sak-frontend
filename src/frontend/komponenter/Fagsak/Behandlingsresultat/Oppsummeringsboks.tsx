@@ -3,9 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Xknapp } from 'nav-frontend-ikonknapper';
-
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -262,7 +260,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
                     {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
                 </div>
-                <Xknapp
+                <Button
+                    variant="tertiary"
+                    icon={<XMarkIcon />}
                     onClick={() => {
                         settAktivEtikett(undefined);
                     }}
@@ -345,7 +345,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 onClick={() =>
                                     fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
                                 }
-                                icon={<Delete aria-hidden />}
+                                icon={<TrashIcon aria-hidden />}
                             >
                                 Fjern småbarnstillegg
                             </Button>
@@ -361,7 +361,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 onClick={() =>
                                     leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
                                 }
-                                icon={<AddCircle aria-hidden />}
+                                icon={<PlusCircleIcon aria-hidden />}
                             >
                                 Legg til småbarnstillegg
                             </Button>

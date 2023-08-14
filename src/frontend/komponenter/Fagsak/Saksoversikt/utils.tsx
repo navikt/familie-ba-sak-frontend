@@ -3,11 +3,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLink, WarningColored } from '@navikt/ds-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link, Tooltip } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import {
     behandlingsresultater,
     BehandlingStatus,
@@ -19,8 +20,11 @@ import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IKlagebehandling } from '../../../typer/klage';
-import { KlageinstansEventType, klageinstansUtfallTilTekst } from '../../../typer/klage';
-import { Klagebehandlingstype } from '../../../typer/klage';
+import {
+    Klagebehandlingstype,
+    KlageinstansEventType,
+    klageinstansUtfallTilTekst,
+} from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
     Behandlingsresultatstype,
@@ -137,7 +141,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[behandling.type].navn}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE:
@@ -148,7 +152,7 @@ export const lagLenkePåType = (
                     target="_blank"
                 >
                     <span>{behandlingstyper[Klagebehandlingstype.KLAGE].navn}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
     }
@@ -208,7 +212,7 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{behandlingsresultater[behandling.resultat]}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE: {
@@ -219,13 +223,13 @@ export const lagLenkePåResultat = (
                     target="_blank"
                 >
                     <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
-                    <ExternalLink />
+                    <ExternalLinkIcon fontSize={'1.5rem'} />
                 </Link>
             );
             return ankeHarEksistertPåBehandling(behandling) ? (
                 <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
                     <ResultatCelle>
-                        <WarningColored height={24} width={24} />
+                        <StatusIkon status={Status.ADVARSEL} />
                         <LenkeTilKlage />
                     </ResultatCelle>
                 </Tooltip>

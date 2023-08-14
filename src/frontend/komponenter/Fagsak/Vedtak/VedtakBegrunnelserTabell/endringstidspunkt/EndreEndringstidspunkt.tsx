@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Calender } from '@navikt/ds-icons';
+import { CalendarIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
 
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
@@ -19,7 +19,7 @@ const EndreEndringstidspunkt: React.FC<Props> = ({ åpenBehandling }) => {
                     settVisModal(true);
                 }}
             >
-                <Calender />
+                <CalendarIcon fontSize={'1.4rem'} />
                 Oppdater endringstidspunkt
             </Dropdown.Menu.List.Item>
 
