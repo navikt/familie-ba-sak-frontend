@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Select } from 'nav-frontend-skjema';
-
-import { Fieldset, Button, Label } from '@navikt/ds-react';
+import { Fieldset, Button, Label, Select } from '@navikt/ds-react';
 import { ATextDanger } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
@@ -88,7 +86,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                             case 'select':
                                 return (
                                     <Select
-                                        bredde={'l'}
+                                        size={'small'}
                                         label={oppgaveFelt.label}
                                         onChange={event =>
                                             settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)
@@ -96,7 +94,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         value={oppgaveFelt.filter.selectedValue}
                                         className="filterskjema__filtre--input"
-                                        feil={
+                                        error={
                                             oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
                                                 ? oppgaveFelt.feilmelding
                                                 : undefined
