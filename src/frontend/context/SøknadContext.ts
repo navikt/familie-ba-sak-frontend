@@ -10,6 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
+import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
