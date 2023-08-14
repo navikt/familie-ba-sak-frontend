@@ -80,7 +80,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                 ) : (
                     <ErrorMessage>
                         Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt
-                        brukerrstøtte.
+                        brukerstøtte.
                     </ErrorMessage>
                 )}
 
