@@ -149,7 +149,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
             }
-        }, [åpenBehandling.søknadsgrunnlag]);
+        }, [åpenBehandling.behandlingId, åpenBehandling.søknadsgrunnlag]);
 
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
