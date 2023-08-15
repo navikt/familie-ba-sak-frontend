@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import { ABorderDanger, ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-datovelger';
@@ -144,7 +144,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                             ),
                                         });
                                     }}
-                                    icon={<Delete />}
+                                    icon={<TrashIcon />}
                                 >
                                     {'Fjern'}
                                 </FjernAvtaleKnapp>
@@ -167,7 +167,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }
-                    icon={<AddCircle />}
+                    icon={<PlusCircleIcon />}
                 >
                     {'Legg til dato for avtale'}
                 </LeggTilAvtaleKnapp>

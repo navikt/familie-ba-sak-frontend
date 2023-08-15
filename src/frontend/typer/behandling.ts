@@ -268,7 +268,6 @@ export interface IBehandling {
     aktivSettPåVent?: ISettPåVent;
     migreringsdato?: string;
     søknadMottattDato?: string;
-    endringstidspunkt?: string;
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];

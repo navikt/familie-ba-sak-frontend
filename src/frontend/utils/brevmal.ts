@@ -72,6 +72,13 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
                     åpenBehandling.type
                 )
             );
+        case Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT:
+            return (
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
+                    åpenBehandling.type
+                )
+            );
         case Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED:
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&

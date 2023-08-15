@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { Search } from '@navikt/ds-icons';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
 import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
@@ -53,7 +53,7 @@ export const BrevmottakereAlert: React.FC<Props> = ({
                     <Button
                         variant={'tertiary'}
                         onClick={() => settVisManuelleMottakereModal(true)}
-                        icon={<Search />}
+                        icon={<MagnifyingGlassIcon />}
                         size={'xsmall'}
                     >
                         Se detaljer

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
@@ -102,7 +102,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                 {!erLesevisning && (
                     <Tooltip content="Fjern periode">
                         <Button
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
                             variant="tertiary"
                             size="small"
                             onClick={fjernPeriode}
