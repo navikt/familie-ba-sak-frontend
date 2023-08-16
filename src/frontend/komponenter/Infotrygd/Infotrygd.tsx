@@ -3,9 +3,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Input } from 'nav-frontend-skjema';
-
-import { Button, Fieldset, Heading } from '@navikt/ds-react';
+import { Button, Fieldset, Heading, TextField } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Infotrygdtabeller } from './Infotrygdtabeller';
@@ -28,7 +26,6 @@ const HentSakerButton = styled(Button)`
     margin-left: 1rem;
     margin-top: 30px;
     margin-bottom: auto;
-    height: 40px;
 `;
 
 export const Infotrygd: React.FC = () => {
@@ -56,17 +53,16 @@ export const Infotrygd: React.FC = () => {
                     legend="søk infotrygd på fødselsnummer eller d-nummer"
                     hideLegend
                 >
-                    <Input
+                    <TextField
                         {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
                         id={'hent-person'}
                         label={'Skriv inn fødselsnummer/D-nummer'}
-                        bredde={'XL'}
-                        placeholder={'fnr/dnr'}
+                        placeholder={'Fnr/dnr'}
                     />
                 </Fieldset>
                 <HentSakerButton
                     variant={'secondary'}
-                    size={'small'}
+                    size={'medium'}
                     spinner={skjemaErLåst}
                     disabled={skjemaErLåst}
                     onClick={onSubmitWrapper}
