@@ -2,9 +2,17 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
-
-import { BodyShort, Button, Detail, Heading, Label } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    Detail,
+    Fieldset,
+    Heading,
+    Label,
+    Radio,
+    RadioGroup,
+    Textarea,
+} from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -61,87 +69,88 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
         totrinnskontroll?.saksbehandler === innloggetSaksbehandler?.displayName ?? false;
 
     return (
-        <SkjemaGruppe
+        <Fieldset
             className="totrinnskontroll-skjemagruppe"
-            feil={hentFrontendFeilmelding(innsendtVedtak)}
-        >
-            <RadioGruppe
-                className="totrinnskontroll-radiogruppe"
-                description={
-                    egetVedtak ? (
-                        <SendtTilBeslutterContainer>
-                            <div>
-                                <Heading size={'medium'} level={'2'}>
-                                    Totrinnskontroll
-                                </Heading>
-                                <br />
-                                <BodyShort>
-                                    {formaterIsoDato(
-                                        opprettetTidspunkt,
-                                        datoformat.DATO_FORLENGET_MED_TID,
-                                        'UKJENT OPPRETTELSESTIDSPUNKT'
-                                    )}
-                                </BodyShort>
-                                <BodyShort>{saksbehandler}</BodyShort>
-                                <br />
-                                <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
-                            </div>
-                        </SendtTilBeslutterContainer>
-                    ) : (
-                        <>
-                            <BodyShort>
-                                Kontrollér opplysninger og faglige vurderinger som er gjort
-                            </BodyShort>
-
+            error={hentFrontendFeilmelding(innsendtVedtak)}
+            legend={
+                egetVedtak ? (
+                    <SendtTilBeslutterContainer>
+                        <div>
+                            <Heading size={'medium'} level={'2'}>
+                                Totrinnskontroll
+                            </Heading>
                             <br />
-                            <KontrollerteTrinnOverskrift>
-                                Kontrollerte trinn
-                            </KontrollerteTrinnOverskrift>
+                            <BodyShort>
+                                {formaterIsoDato(
+                                    opprettetTidspunkt,
+                                    datoformat.DATO_FORLENGET_MED_TID,
+                                    'UKJENT OPPRETTELSESTIDSPUNKT'
+                                )}
+                            </BodyShort>
+                            <BodyShort>{saksbehandler}</BodyShort>
+                            <br />
+                            <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
+                        </div>
+                    </SendtTilBeslutterContainer>
+                ) : (
+                    <>
+                        <BodyShort>
+                            Kontrollér opplysninger og faglige vurderinger som er gjort
+                        </BodyShort>
 
-                            {Object.entries(trinnPåBehandling).map(([_, trinn], index) => {
-                                return (
-                                    <TrinnStatus
-                                        kontrollertStatus={trinn.kontrollert}
-                                        navn={`${index + 1}. ${trinn.navn}`}
-                                    />
-                                );
-                            })}
-                        </>
-                    )
-                }
-            >
+                        <br />
+                        <KontrollerteTrinnOverskrift>
+                            Kontrollerte trinn
+                        </KontrollerteTrinnOverskrift>
+
+                        {Object.entries(trinnPåBehandling).map(([_, trinn], index) => {
+                            return (
+                                <TrinnStatus
+                                    kontrollertStatus={trinn.kontrollert}
+                                    navn={`${index + 1}. ${trinn.navn}`}
+                                />
+                            );
+                        })}
+                    </>
+                )
+            }
+        >
+            <RadioGroup value={beslutning} className="totrinnskontroll-radiogruppe" legend={''}>
                 <Radio
-                    label={'Godkjent'}
+                    value={TotrinnskontrollBeslutning.GODKJENT}
                     name={'totrinnskontroll'}
                     className="totrinnskontroll-radio"
-                    checked={beslutning === TotrinnskontrollBeslutning.GODKJENT}
                     onChange={() =>
                         beslutning === TotrinnskontrollBeslutning.GODKJENT
                             ? settBeslutning(TotrinnskontrollBeslutning.IKKE_VURDERT)
                             : settBeslutning(TotrinnskontrollBeslutning.GODKJENT)
                     }
                     disabled={senderInn || egetVedtak}
-                />
+                >
+                    Godkjent
+                </Radio>
                 <Radio
-                    label={'Vurdér på nytt'}
+                    value={TotrinnskontrollBeslutning.UNDERKJENT}
                     name={'totrinnskontroll'}
                     className="totrinnskontroll-radio"
-                    checked={beslutning === TotrinnskontrollBeslutning.UNDERKJENT}
                     onClick={() =>
                         beslutning === TotrinnskontrollBeslutning.UNDERKJENT
                             ? settBeslutning(TotrinnskontrollBeslutning.IKKE_VURDERT)
                             : settBeslutning(TotrinnskontrollBeslutning.UNDERKJENT)
                     }
                     disabled={senderInn}
-                />
-            </RadioGruppe>
+                >
+                    Vurdér på nytt
+                </Radio>
+            </RadioGroup>
             {beslutning === TotrinnskontrollBeslutning.UNDERKJENT && (
                 <div className={'totrinnskontroll-begrunnelse'}>
-                    <TextareaControlled
+                    <Textarea
+                        label={''}
                         defaultValue={begrunnelse}
                         value={begrunnelse}
                         placeholder={'Begrunnelse'}
-                        onBlur={event => settBegrunnelse(event.target.value)}
+                        onChange={event => settBegrunnelse(event.target.value)}
                     />
                 </div>
             )}
@@ -168,7 +177,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         : 'Godkjenn vedtaket'
                 }
             />
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 
@@ -197,7 +206,7 @@ const TrinnStatus: React.FC<{
             {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && (
                 <ØyeRød height={24} width={24} />
             )}
-            <span>{navn}</span>
+            <BodyShort>{navn}</BodyShort>
         </Trinn>
     );
 };
