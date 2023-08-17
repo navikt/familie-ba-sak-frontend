@@ -14,8 +14,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import 'nav-frontend-tabell-style';
-
 import { JournalpostDokument } from './JournalpostDokument';
 import {
     formaterFagsak,
