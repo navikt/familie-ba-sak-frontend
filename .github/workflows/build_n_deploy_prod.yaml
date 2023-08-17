@@ -3,7 +3,7 @@ name: Build&deploy to dev and prod
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 env:
   IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
