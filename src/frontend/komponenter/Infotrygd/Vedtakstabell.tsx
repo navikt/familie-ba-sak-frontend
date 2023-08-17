@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 
 import type { IInfotrygdSak, IInfotrygdStønad } from '../../typer/infotrygd';
 
@@ -56,47 +56,59 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
 
     return (
         <>
-            <table className="tabell">
-                <thead>
-                    <tr>
-                        <th>Saksblokk</th>
-                        <th>Iverksatt</th>
-                        <th>Virkfom</th>
-                        <th>Vedtakstype</th>
-                        <th>Status</th>
-                        <th>Tekstkode</th>
-                        <th>Ant barn</th>
-                        <th>Opphør iverksatt</th>
-                        <th>Opphør virkfom</th>
-                        <th>Opphørsgrunn</th>
-                        <th>Beløp</th>
-                        <th>Fom</th>
-                        <th>Tom</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <Table className="tabell">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Saksblokk</Table.HeaderCell>
+                        <Table.HeaderCell>Iverksatt</Table.HeaderCell>
+                        <Table.HeaderCell>Virkfom</Table.HeaderCell>
+                        <Table.HeaderCell>Vedtakstype</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
+                        <Table.HeaderCell>Tekstkode</Table.HeaderCell>
+                        <Table.HeaderCell>Ant barn</Table.HeaderCell>
+                        <Table.HeaderCell>Opphør iverksatt</Table.HeaderCell>
+                        <Table.HeaderCell>Opphør virkfom</Table.HeaderCell>
+                        <Table.HeaderCell>Opphørsgrunn</Table.HeaderCell>
+                        <Table.HeaderCell>Beløp</Table.HeaderCell>
+                        <Table.HeaderCell>Fom</Table.HeaderCell>
+                        <Table.HeaderCell>Tom</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {sakerMedVedtak.map((sak: IInfotrygdSak, index: number) => {
                         const stønad = sak.stønad;
                         return (
-                            <tr key={index}>
-                                <td>{(sak.saksblokk ?? '') + (sak.saksnr ?? '')}</td>
-                                <td>{seqYearMonthTilYearMonth(stønad?.iverksattFom)}</td>
-                                <td>{seqYearMonthTilYearMonth(stønad?.virkningFom)}</td>
-                                <td>{/* kommer når vi finner dataene i replikasettet */}</td>
-                                <td>{stønad?.status}</td>
-                                <td>{stønad?.tekstkode}</td>
-                                <td>{stønad ? antallBarn(stønad) : ''}</td>
-                                <td>{stønad?.opphørtIver}</td>
-                                <td>{stønad?.opphørtFom}</td>
-                                <td>{stønad?.opphørsgrunn}</td>
-                                <td>{stønad ? visBeløp(stønad) : ''}</td>
-                                <td>{stønad ? visDelytelseFom(stønad) : ''}</td>
-                                <td>{stønad ? visDelytelseTom(stønad) : ''}</td>
-                            </tr>
+                            <Table.Row key={index}>
+                                <Table.DataCell>
+                                    {(sak.saksblokk ?? '') + (sak.saksnr ?? '')}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {seqYearMonthTilYearMonth(stønad?.iverksattFom)}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {seqYearMonthTilYearMonth(stønad?.virkningFom)}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {/* kommer når vi finner dataene i replikasettet */}
+                                </Table.DataCell>
+                                <Table.DataCell>{stønad?.status}</Table.DataCell>
+                                <Table.DataCell>{stønad?.tekstkode}</Table.DataCell>
+                                <Table.DataCell>{stønad ? antallBarn(stønad) : ''}</Table.DataCell>
+                                <Table.DataCell>{stønad?.opphørtIver}</Table.DataCell>
+                                <Table.DataCell>{stønad?.opphørtFom}</Table.DataCell>
+                                <Table.DataCell>{stønad?.opphørsgrunn}</Table.DataCell>
+                                <Table.DataCell>{stønad ? visBeløp(stønad) : ''}</Table.DataCell>
+                                <Table.DataCell>
+                                    {stønad ? visDelytelseFom(stønad) : ''}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {stønad ? visDelytelseTom(stønad) : ''}
+                                </Table.DataCell>
+                            </Table.Row>
                         );
                     })}
-                </tbody>
-            </table>
+                </Table.Body>
+            </Table>
             {sakerMedVedtak.length === 0 ? (
                 <IngenVedtakTekst>Ingen vedtak.</IngenVedtakTekst>
             ) : undefined}
