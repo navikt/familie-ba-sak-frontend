@@ -1,10 +1,8 @@
-import 'nav-frontend-tabell-style';
-
 import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Heading } from '@navikt/ds-react';
+import { Heading, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
@@ -14,7 +12,7 @@ interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;
 }
 
-const EndredePerioder = styled.div`
+const EndredePerioderContainer = styled.div`
     margin-top: 6rem;
 `;
 
@@ -24,21 +22,21 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;
 
     return (
-        <EndredePerioder>
+        <EndredePerioderContainer>
             <Heading spacing size="medium" level="3">
                 Endrede utbetalingsperioder
             </Heading>
-            <table className="tabell">
-                <thead>
-                    <tr>
-                        <th>Person</th>
-                        <th>Periode</th>
-                        <th>Årsak</th>
-                        <th>Utbetales</th>
-                        <th />
-                    </tr>
-                </thead>
-                <tbody>
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell scope="col">Person</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Årsak</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Utbetales</Table.HeaderCell>
+                        <Table.HeaderCell scope="col" />
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
                         <EndretUtbetalingAndelProvider
                             endretUtbetalingAndel={endretUtbetalingAndel}
@@ -50,9 +48,9 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                             />
                         </EndretUtbetalingAndelProvider>
                     ))}
-                </tbody>
-            </table>
-        </EndredePerioder>
+                </Table.Body>
+            </Table>
+        </EndredePerioderContainer>
     );
 };
 

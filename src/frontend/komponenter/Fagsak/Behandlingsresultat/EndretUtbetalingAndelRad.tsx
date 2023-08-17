@@ -4,11 +4,9 @@ import { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import { ChevronUpIcon, ChevronDownIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
@@ -22,20 +20,11 @@ interface IEndretUtbetalingAndelRadProps {
     åpenBehandling: IBehandling;
 }
 
-const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
-    ${props => props.erÅpen && 'border-bottom: 0 !important;'}
-`;
-
 const PersonCelle = styled.div`
     display: flex;
     svg {
         margin-right: 1rem;
     }
-`;
-
-const StyledButton = styled(Button)`
-    width: 6rem;
-    justify-content: space-between;
 `;
 
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
@@ -45,8 +34,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
     );
-
-    const { vurderErLesevisning } = useBehandling();
 
     const { hentSkjemaData } = useEndretUtbetalingAndel();
 
@@ -97,8 +84,20 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 
     return (
         <>
-            <tr>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
+            <Table.ExpandableRow
+                togglePlacement="right"
+                open={åpenUtbetalingsAndel}
+                onOpenChange={() => toggleForm()}
+                content={
+                    <EndretUtbetalingAndelSkjema
+                        åpenBehandling={åpenBehandling}
+                        avbrytEndringAvUtbetalingsperiode={() => {
+                            settÅpenUtbetalingsAndel(false);
+                        }}
+                    />
+                }
+            >
+                <Table.DataCell>
                     <PersonCelle>
                         <StatusIkon
                             status={
@@ -107,68 +106,43 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     : Status.ADVARSEL
                             }
                         />
-                        {endretUtbetalingAndel.personIdent
-                            ? lagPersonLabel(
-                                  endretUtbetalingAndel.personIdent,
-                                  åpenBehandling.personer
-                              )
-                            : 'Ikke satt'}
+                        <BodyShort size={'small'}>
+                            {endretUtbetalingAndel.personIdent
+                                ? lagPersonLabel(
+                                      endretUtbetalingAndel.personIdent,
+                                      åpenBehandling.personer
+                                  )
+                                : 'Ikke satt'}
+                        </BodyShort>
                     </PersonCelle>
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {endretUtbetalingAndel.fom
-                        ? yearMonthPeriodeToString({
-                              fom: endretUtbetalingAndel.fom,
-                              tom: endretUtbetalingAndel.tom,
-                          })
-                        : ''}
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {typeof endretUtbetalingAndel.prosent === 'number' &&
-                    endretUtbetalingAndel.årsak
-                        ? fraProsentTilTekst(
-                              endretUtbetalingAndel.prosent,
-                              endretUtbetalingAndel.årsak
-                          )
-                        : ''}
-                </TdUtenUnderstrek>
-                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    <StyledButton
-                        variant="tertiary"
-                        size="xsmall"
-                        onClick={() => toggleForm()}
-                        icon={
-                            åpenUtbetalingsAndel ? (
-                                <ChevronUpIcon fontSize={'1.5rem'} />
-                            ) : (
-                                <ChevronDownIcon fontSize={'1.5rem'} />
-                            )
-                        }
-                        iconPosition="right"
-                    >
-                        {åpenUtbetalingsAndel ? (
-                            <BodyShort>Lukk</BodyShort>
-                        ) : (
-                            <BodyShort>{vurderErLesevisning() ? 'Se mer' : 'Endre'}</BodyShort>
-                        )}
-                    </StyledButton>
-                </TdUtenUnderstrek>
-            </tr>
-            {åpenUtbetalingsAndel && (
-                <tr>
-                    <td colSpan={5}>
-                        <EndretUtbetalingAndelSkjema
-                            åpenBehandling={åpenBehandling}
-                            avbrytEndringAvUtbetalingsperiode={() => {
-                                settÅpenUtbetalingsAndel(false);
-                            }}
-                        />
-                    </td>
-                </tr>
-            )}
+                </Table.DataCell>
+                <Table.DataCell>
+                    <BodyShort size={'small'}>
+                        {endretUtbetalingAndel.fom
+                            ? yearMonthPeriodeToString({
+                                  fom: endretUtbetalingAndel.fom,
+                                  tom: endretUtbetalingAndel.tom,
+                              })
+                            : ''}
+                    </BodyShort>
+                </Table.DataCell>
+                <Table.DataCell>
+                    <BodyShort size={'small'}>
+                        {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
+                    </BodyShort>
+                </Table.DataCell>
+                <Table.DataCell>
+                    <BodyShort size={'small'}>
+                        {typeof endretUtbetalingAndel.prosent === 'number' &&
+                        endretUtbetalingAndel.årsak
+                            ? fraProsentTilTekst(
+                                  endretUtbetalingAndel.prosent,
+                                  endretUtbetalingAndel.årsak
+                              )
+                            : ''}
+                    </BodyShort>
+                </Table.DataCell>
+            </Table.ExpandableRow>
         </>
     );
 };
