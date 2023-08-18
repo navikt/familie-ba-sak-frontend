@@ -32,14 +32,13 @@ const Container = styled.div`
 `;
 
 const HeaderTekst = styled(BodyShort)`
-    font-size: 1.25rem;
-    font-weight: 400;
+    font-size: var(--a-font-size-xlarge);
+    font-weight: var(--a-font-weight-regular);
 `;
 
 const BodyTekst = styled(BodyShort)`
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 0.6rem;
+    font-size: var(--a-font-size-heading-medium);
+    font-weight: var(--a-font-weight-bold);
 `;
 
 const BehandlingstemaContainer = styled.div`
@@ -54,11 +53,11 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
     return (
         <Container>
             <BehandlingstemaContainer>
-                <HeaderTekst>Behandlingstema</HeaderTekst>
+                <HeaderTekst spacing>Behandlingstema</HeaderTekst>
                 <BodyTekst>{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
             </BehandlingstemaContainer>
             <div>
-                <HeaderTekst>Status</HeaderTekst>
+                <HeaderTekst spacing>Status</HeaderTekst>
                 <BodyTekst>{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
             </div>
         </Container>
