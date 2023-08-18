@@ -35,7 +35,7 @@
     "@navikt/ds-icons": "2.2.0",
     "@navikt/ds-react": "4.12.1",
     "@navikt/ds-tokens": "4.12.1",
-    "@navikt/familie-backend": "10.0.3",
+    "@navikt/familie-backend": "10.0.7",
     "@navikt/familie-clipboard": "11.0.0",
     "@navikt/familie-datovelger": "0.2.0",
     "@navikt/familie-endringslogg": "9.0.0",

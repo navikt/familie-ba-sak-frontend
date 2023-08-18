@@ -56,7 +56,7 @@ curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicros
 
 
 # Bygg og deploy
-Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
+Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og main går til produksjon.
 
 # Henvendelser
 
