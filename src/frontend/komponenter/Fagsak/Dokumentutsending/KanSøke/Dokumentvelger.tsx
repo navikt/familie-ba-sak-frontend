@@ -1,44 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import styled from 'styled-components';
-
-import { Label } from 'nav-frontend-skjema';
-
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { Combobox } from '@navikt/ds-react/esm/form/combobox';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
-import type { ISelectOptionMedBrevtekst } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import {
-    leggTilValuePåOption,
-    opplysningsdokumenter,
-} from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { opplysningsdokumenter } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
-const LabelOgEtikett = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
 export const Dokumentvelger = () => {
     const { skjema } = useDokumentutsending();
+    const [value, setValue] = useState('');
 
     const dokumenter = skjema.felter.dokumenter;
-    const inputProps = dokumenter.hentNavInputProps(skjema.visFeilmeldinger);
+
+    const onToggleSelected = (option: string, isSelected: boolean) => {
+        if (isSelected) {
+            dokumenter.validerOgSettFelt([...dokumenter.verdi, option]);
+        } else {
+            dokumenter.validerOgSettFelt(dokumenter.verdi.filter(dokument => dokument !== option));
+        }
+    };
+
     return (
-        <FamilieReactSelect
-            {...inputProps}
-            label={
-                <LabelOgEtikett>
-                    <Label htmlFor={inputProps.id}>Velg dokumenter</Label>
-                </LabelOgEtikett>
-            }
-            creatable={false}
-            erLesevisning={false}
-            isMulti={true}
-            onChange={valgteOptions => {
-                dokumenter.onChange(
-                    valgteOptions === null ? [] : (valgteOptions as ISelectOptionMedBrevtekst[])
-                );
+        <Combobox
+            {...dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+            label="Velg dokumenter"
+            isMultiSelect
+            onToggleSelected={onToggleSelected}
+            selectedOptions={dokumenter.verdi}
+            options={opplysningsdokumenter.map(dokument => dokument.label)}
+            value={value}
+            onChange={event => {
+                if (event) {
+                    setValue(event.target.value);
+                }
             }}
-            options={opplysningsdokumenter.map(leggTilValuePåOption)}
         />
     );
 };
