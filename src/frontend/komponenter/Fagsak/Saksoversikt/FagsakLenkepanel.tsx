@@ -1,6 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames';
+import styled from 'styled-components';
 
 import { Alert, BodyShort, LinkPanel, Panel } from '@navikt/ds-react';
 
@@ -25,34 +26,41 @@ interface IInnholdstabell {
     behandling?: VisningBehandling;
 }
 
+const Container = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
+const HeaderTekst = styled(BodyShort)`
+    font-size: var(--a-font-size-xlarge);
+    font-weight: var(--a-font-weight-regular);
+`;
+
+const BodyTekst = styled(BodyShort)`
+    font-size: var(--a-font-size-heading-medium);
+    font-weight: var(--a-font-weight-bold);
+`;
+
+const BehandlingstemaContainer = styled.div`
+    margin-right: 5rem;
+`;
+
 const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
     const behandlingstema: IBehandlingstema | undefined =
         minimalFagsak.løpendeKategori &&
         minimalFagsak.løpendeUnderkategori &&
         tilBehandlingstema(minimalFagsak.løpendeKategori, minimalFagsak.løpendeUnderkategori);
     return (
-        <table className={'fagsak-panel__tabell'}>
-            <thead>
-                <tr>
-                    <th>
-                        <BodyShort>Behandlingstema</BodyShort>
-                    </th>
-                    <th>
-                        <BodyShort>Status</BodyShort>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <BodyShort>{behandlingstema ? behandlingstema.navn : '-'}</BodyShort>
-                    </td>
-                    <td>
-                        <BodyShort>{hentFagsakStatusVisning(minimalFagsak)}</BodyShort>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <Container>
+            <BehandlingstemaContainer>
+                <HeaderTekst spacing>Behandlingstema</HeaderTekst>
+                <BodyTekst>{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
+            </BehandlingstemaContainer>
+            <div>
+                <HeaderTekst spacing>Status</HeaderTekst>
+                <BodyTekst>{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
+            </div>
+        </Container>
     );
 };
 
