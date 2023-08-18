@@ -102,7 +102,6 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     </SendtTilBeslutterContainer>
                 ) : (
                     <>
-                        <br />
                         <KontrollerteTrinnOverskrift>
                             Kontrollerte trinn
                         </KontrollerteTrinnOverskrift>
