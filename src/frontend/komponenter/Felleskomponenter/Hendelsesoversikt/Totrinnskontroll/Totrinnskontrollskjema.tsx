@@ -74,30 +74,33 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
             error={hentFrontendFeilmelding(innsendtVedtak)}
             legend={
                 egetVedtak ? (
+                    <Heading size={'medium'} level={'2'}>
+                        Totrinnskontroll
+                    </Heading>
+                ) : (
+                    <BodyShort>
+                        Kontrollér opplysninger og faglige vurderinger som er gjort
+                    </BodyShort>
+                )
+            }
+        >
+            <RadioGroup value={beslutning} className="totrinnskontroll-radiogruppe" legend={''}>
+                {egetVedtak ? (
                     <SendtTilBeslutterContainer>
-                        <div>
-                            <Heading size={'medium'} level={'2'}>
-                                Totrinnskontroll
-                            </Heading>
-                            <br />
-                            <BodyShort>
-                                {formaterIsoDato(
-                                    opprettetTidspunkt,
-                                    datoformat.DATO_FORLENGET_MED_TID,
-                                    'UKJENT OPPRETTELSESTIDSPUNKT'
-                                )}
-                            </BodyShort>
-                            <BodyShort>{saksbehandler}</BodyShort>
-                            <br />
-                            <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
-                        </div>
+                        <br />
+                        <BodyShort>
+                            {formaterIsoDato(
+                                opprettetTidspunkt,
+                                datoformat.DATO_FORLENGET_MED_TID,
+                                'UKJENT OPPRETTELSESTIDSPUNKT'
+                            )}
+                        </BodyShort>
+                        <BodyShort>{saksbehandler}</BodyShort>
+                        <br />
+                        <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
                     </SendtTilBeslutterContainer>
                 ) : (
                     <>
-                        <BodyShort>
-                            Kontrollér opplysninger og faglige vurderinger som er gjort
-                        </BodyShort>
-
                         <br />
                         <KontrollerteTrinnOverskrift>
                             Kontrollerte trinn
@@ -111,11 +114,9 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                                 />
                             );
                         })}
+                        <br />
                     </>
-                )
-            }
-        >
-            <RadioGroup value={beslutning} className="totrinnskontroll-radiogruppe" legend={''}>
+                )}
                 <Radio
                     value={TotrinnskontrollBeslutning.GODKJENT}
                     name={'totrinnskontroll'}
