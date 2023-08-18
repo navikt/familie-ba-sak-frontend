@@ -97,7 +97,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         </BodyShort>
                         <BodyShort>{saksbehandler}</BodyShort>
                         <br />
-                        <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
+                        <Detail>Vedtaket er sendt til godkjenning</Detail>
                         <br />
                     </SendtTilBeslutterContainer>
                 ) : (
