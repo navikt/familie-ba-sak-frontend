@@ -1,7 +1,7 @@
 # familie-ba-sak-frontend
 ====================
 
-Frontend app for barnetrygd sak
+Frontend app for barnetrygd sak.
 
 # Kom i gang med utvikling
 
