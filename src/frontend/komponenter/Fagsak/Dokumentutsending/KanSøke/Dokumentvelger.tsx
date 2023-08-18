@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
@@ -13,7 +13,6 @@ const Container = styled.div`
 
 export const Dokumentvelger = () => {
     const { skjema } = useDokumentutsending();
-    const [value, setValue] = useState('');
 
     const dokumenter = skjema.felter.dokumenter;
 
@@ -25,21 +24,17 @@ export const Dokumentvelger = () => {
         }
     };
 
+    const { error } = dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger);
+
     return (
         <Container>
             <Combobox
-                {...dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 label="Velg dokumenter"
                 isMultiSelect
                 onToggleSelected={onToggleSelected}
                 selectedOptions={dokumenter.verdi}
                 options={opplysningsdokumenter.map(dokument => dokument.label)}
-                value={value}
-                onChange={event => {
-                    if (event) {
-                        setValue(event.target.value);
-                    }
-                }}
+                error={error}
             />
         </Container>
     );
