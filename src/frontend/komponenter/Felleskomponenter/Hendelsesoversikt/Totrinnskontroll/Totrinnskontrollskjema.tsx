@@ -43,6 +43,7 @@ const KontrollerteTrinnOverskrift = styled(Label)`
 
 const SendtTilBeslutterContainer = styled.div`
     display: flex;
+    flex-direction: column;
 `;
 
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
@@ -87,7 +88,6 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
             <RadioGroup value={beslutning} className="totrinnskontroll-radiogruppe" legend={''}>
                 {egetVedtak ? (
                     <SendtTilBeslutterContainer>
-                        <br />
                         <BodyShort>
                             {formaterIsoDato(
                                 opprettetTidspunkt,
@@ -98,6 +98,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         <BodyShort>{saksbehandler}</BodyShort>
                         <br />
                         <Detail size={'small'}>Vedtaket er sendt til godkjenning</Detail>
+                        <br />
                     </SendtTilBeslutterContainer>
                 ) : (
                     <>
