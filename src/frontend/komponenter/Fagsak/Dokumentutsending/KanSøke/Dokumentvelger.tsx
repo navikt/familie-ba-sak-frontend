@@ -15,6 +15,7 @@ export const Dokumentvelger = () => {
     const { skjema } = useDokumentutsending();
 
     const dokumenter = skjema.felter.dokumenter;
+    const { error } = dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger);
 
     const onToggleSelected = (option: string, isSelected: boolean) => {
         if (isSelected) {
@@ -23,8 +24,6 @@ export const Dokumentvelger = () => {
             dokumenter.validerOgSettFelt(dokumenter.verdi.filter(dokument => dokument !== option));
         }
     };
-
-    const { error } = dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger);
 
     return (
         <Container>
