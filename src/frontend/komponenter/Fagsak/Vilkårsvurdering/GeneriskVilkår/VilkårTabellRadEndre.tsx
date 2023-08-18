@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Label, Radio } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import {
     FamilieKnapp,
@@ -225,9 +223,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         );
 
     return (
-        <SkjemaGruppe
-            feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
-            utenFeilPropagering={true}
+        <Fieldset
+            legend={'Endre vilkår'}
+            hideLegend={true}
+            error={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
+            errorPropagation={false}
         >
             <Container
                 lesevisning={lesevisning}
@@ -430,7 +430,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     ) : null}
                 </Knapperad>
             </Container>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

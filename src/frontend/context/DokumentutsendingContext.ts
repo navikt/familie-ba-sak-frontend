@@ -12,7 +12,10 @@ import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Informasjonsbrev } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import {
+    Informasjonsbrev,
+    opplysningsdokumenter,
+} from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
@@ -93,10 +96,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const dokumenter = useFelt({
             verdi: [],
-            valideringsfunksjon: (
-                felt: FeltState<ISelectOptionMedBrevtekst[]>,
-                avhengigheter?: Avhengigheter
-            ) => {
+            valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
                 if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
                     return feil(felt, 'Du må velge minst ett dokument');
                 } else {
@@ -144,7 +144,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 årsak: DokumentÅrsak | undefined;
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
-                dokumenter: ISelectOptionMedBrevtekst[];
+                dokumenter: string[];
                 barnMedDeltBosted: IBarnMedOpplysninger[];
                 barnSøktFor: IBarnMedOpplysninger[];
                 avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
@@ -227,10 +227,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 );
 
                 const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
-                    if (!dokumentOption.brevtekst) {
+                    const dokument = opplysningsdokumenter.find(
+                        dokument => dokument.label === dokumentOption
+                    ) as ISelectOptionMedBrevtekst;
+                    if (!dokument.brevtekst) {
                         throw new Error('Dokumentoptionen mangler brevtekst');
                     }
-                    return dokumentOption.brevtekst[målform];
+                    return dokument.brevtekst[målform];
                 });
 
                 return {

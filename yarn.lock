@@ -1967,28 +1967,28 @@
     hey-listen "^1.0.8"
     tslib "^2.3.1"
 
-"@navikt/aksel-icons@4.9.1", "@navikt/aksel-icons@^4.9.1":
-  version "4.9.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/4.9.1/19cf74f43c4c7c27bbfad01e0fa10b8848eb9c63#19cf74f43c4c7c27bbfad01e0fa10b8848eb9c63"
-  integrity sha512-rsWHY6hdi/3XSuH/KZ9+VoS1f+s8d6ZOkz+pVLd+1E/qbiMlEPyI7xxTpghHWDKlOz0b2Z6yAtDYVeYbkEZm6w==
+"@navikt/aksel-icons@4.12.1", "@navikt/aksel-icons@^4.12.1":
+  version "4.12.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/4.12.1/1055d322e956e073b83dca8e8b3a6be62879e1f1#1055d322e956e073b83dca8e8b3a6be62879e1f1"
+  integrity sha512-OCCKfb3dtk2gUBKdzbJiMkM4PfYZZXL3tfNHKJLn8QDpt+x6zdsaJWwTPc/pyDrl/quVGN3oPBHZ+3+7r/YtVw==
 
-"@navikt/ds-css@4.9.1":
-  version "4.9.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/4.9.1/46615afd8d560ab03c99d52bac049235165578ac#46615afd8d560ab03c99d52bac049235165578ac"
-  integrity sha512-w16bf7djGCouqZ3NRxVD3Zd6kMU5rQBYazK3cfU9AaPGDGkp6YtXc6Wu2PbgWW9RRT6jIy02d0ZHyn4DePVCnA==
+"@navikt/ds-css@4.12.1":
+  version "4.12.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/4.12.1/e2fa643caca8d998149ef56965d74dc646038ed2#e2fa643caca8d998149ef56965d74dc646038ed2"
+  integrity sha512-yBYFFgC749qtrlJddfmylaNyVI2++U7ZDduQWW0YAd6sYNURt5p2GkWJwFL78PdD+Rlc4bSi573LKJSmpw0/iw==
 
 "@navikt/ds-icons@2.2.0":
   version "2.2.0"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.2.0/3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90#3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90"
   integrity sha512-86vmaBIwdk8THOOYqHusiSKZ8e7imaog7EdHsJz+9CCt7uKE+as+c/aVCyz1LUJjjXhdt7ify4mq4MzPuHK9MQ==
 
-"@navikt/ds-react@4.9.1":
-  version "4.9.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/4.9.1/5480b5bc303b3e203b2642f491b32bd8a226de8a#5480b5bc303b3e203b2642f491b32bd8a226de8a"
-  integrity sha512-ATYrefDygqhIMyoApAsDoAJ1H4zSXQW3c395UIyXh+ByLD1Y3jD7a2w04PHSpghv1VrM3TajxU/uhRNxvZ9TSw==
+"@navikt/ds-react@4.12.1":
+  version "4.12.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/4.12.1/75b4207b51213a3de620f9dd8b5b72095c741bbe#75b4207b51213a3de620f9dd8b5b72095c741bbe"
+  integrity sha512-fw3UcwLzq84fqFAgK0yZj6cADZy8uhHXK3mNnLJWXo8OxbVx3TEx5dR0Aa3mWASeTYFXdcp/n5Cj6Mu2ZnRlHw==
   dependencies:
     "@floating-ui/react" "0.24.1"
-    "@navikt/aksel-icons" "^4.9.1"
+    "@navikt/aksel-icons" "^4.12.1"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
@@ -1996,12 +1996,12 @@
     react-day-picker "8.3.4"
     react-modal "3.15.1"
 
-"@navikt/ds-tokens@4.9.1":
-  version "4.9.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/4.9.1/75b22dd979b63e1984ebae5390f225e94ed8b5c0#75b22dd979b63e1984ebae5390f225e94ed8b5c0"
-  integrity sha512-jI/pGdozz8P8q4krB65supoPyFkibrMxGv7+gm4FHgTVbqpIAmnwh0XvHd5h+ycNAxxvyctGP9ttZaOmuQxAjA==
+"@navikt/ds-tokens@4.12.1":
+  version "4.12.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/4.12.1/965d6d0f998cdbe8759d54c47788d67e24240af3#965d6d0f998cdbe8759d54c47788d67e24240af3"
+  integrity sha512-i6kt6D0Zy9/ECRdHw54VoK3bk3oAbY2TsbOiUC0NgBwOOSfR+D/zKCiBXMkbpkQNba8mHrC3RVfNp59pWteAUQ==
 
-"@navikt/familie-backend@^10.0.7":
+"@navikt/familie-backend@10.0.7":
   version "10.0.7"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/10.0.7/13895e10ffca5656b069985950d8224c9fd1e2db#13895e10ffca5656b069985950d8224c9fd1e2db"
   integrity sha512-XDII70qTkKrOq/Ap8qkqpIKEBVKahUcH7bdeG5Y1216FkEgBrtitViqRlyPl5HvCRJJZBumU/q+3smoBRxwdbA==
@@ -8210,20 +8210,10 @@ nav-frontend-paneler-style@^2.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-paneler-style/-/nav-frontend-paneler-style-2.0.2.tgz#f36a1705103ca8603dca1c9fa2dae809eea00439"
   integrity sha512-bb0Gc/XUPJqgEQKQd37Zj/xRq875zMmHhdn621xd2/BXVpO1f1Eu6V6IPhf4y0jqNlNrvDLDSh4DxHHHf/s9/A==
 
-nav-frontend-skjema-style@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-3.0.1.tgz#3717fc2d788165ea9de1d3b1ef3afbc739700378"
-  integrity sha512-RUJ1rfsDX1I6JChWyVPF70vTrVijISnOSjvH+8fA8HCNygZ16cG4FzO8SRzARqkJuzlND4zaqJkqNTENOLDBaQ==
-
 nav-frontend-skjema-style@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-3.0.3.tgz#ecb3ca762b7c04d603a3772f5dcf910c6715a7f5"
   integrity sha512-YCSQ+4M3tdg9wC1jgwABvi2CFQw5DD/I49LGuYGy1v8CPqZeuaoRIzbJr91kpdWxfyXaZM/eZdhTwPOsJlCkew==
-
-nav-frontend-skjema@^4.0.2:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-4.0.5.tgz#ad2b569e4aba0ff2eaed69ec3c5fc9c4459ae531"
-  integrity sha512-rY/PycRYqBSpUk9rnePAJ9fd+QRBC3vbE8e5d9YKmxKeF5Q73azbb3hoHWjm0CfpeEgRttRDfbIWRFH2SPwvCw==
 
 nav-frontend-skjema@^4.0.x:
   version "4.0.6"
