@@ -1,13 +1,18 @@
 import * as React from 'react';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Dropdown, Heading } from '@navikt/ds-react';
 import Clipboard from '@navikt/familie-clipboard';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { personTypeMap } from '../../../typer/person';
 import { hentAlder, formaterIdent } from '../../../utils/formatter';
 import DødsfallTag from '../DødsfallTag';
+import RegistrerDødsfallDato from '../RegistrerDødsfallDato/RegistrerDødsfallDato';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -15,9 +20,14 @@ interface IProps {
     width?: string;
 }
 
+const StyledDropdownMeny = styled(Dropdown.Menu)`
+    width: 20ch;
+`;
+
 const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskrift = false }) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
+    const { vurderErLesevisning } = useBehandling();
 
     return (
         <div className={'personinformasjon'}>
@@ -51,6 +61,26 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                                 &ensp;&ensp;
                             </Heading>
                             <DødsfallTag dødsfallDato={person.dødsfallDato} />
+                        </>
+                    )}
+                    {!person.dødsfallDato?.length && (
+                        <>
+                            <Dropdown>
+                                <Button
+                                    aria-label="Åpne valgmeny"
+                                    as={Dropdown.Toggle}
+                                    icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
+                                    variant="tertiary"
+                                />
+                                <StyledDropdownMeny placement={'right'}>
+                                    <Dropdown.Menu.List>
+                                        <RegistrerDødsfallDato
+                                            erLesevisning={vurderErLesevisning()}
+                                            person={person}
+                                        />
+                                    </Dropdown.Menu.List>
+                                </StyledDropdownMeny>
+                            </Dropdown>
                         </>
                     )}
                 </>
