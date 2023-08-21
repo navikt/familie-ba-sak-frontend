@@ -79,7 +79,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
             <Modal open={visModal} onClose={lukkModal}>
                 <StyledModalContent>
                     <Heading size="medium" level={'2'} spacing>
-                        Registrere Dødsfall
+                        Registrere dødsdato
                     </Heading>
                     <div>
                         <StyledFamilieDatovelger
