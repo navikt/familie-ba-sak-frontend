@@ -73,7 +73,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dødsfall/${behandlingId}`;
+    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandlingId}`;
 
     const registrerManuellDødsfall = () => {
         if (kanSendeSkjema()) {
@@ -85,9 +85,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
                     data: {
                         dødsfallDato: skjema.felter.dødsfallDato.verdi,
                         begrunnelse: skjema.felter.begrunnelse.verdi,
-                        personIdent: {
-                            ident: person.personIdent,
-                        },
+                        personIdent: person.personIdent,
                     },
                     url: korrigertVedtakURL,
                 },
