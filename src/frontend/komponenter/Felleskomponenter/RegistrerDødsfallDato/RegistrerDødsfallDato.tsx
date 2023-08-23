@@ -121,25 +121,19 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                     </div>
                     <Knapperad>
                         {!erLesevisning && (
-                            <>
-                                <div>
-                                    <KnappVenstre
-                                        onClick={registrerManuellDødsfall}
-                                        variant={valideringErOk() ? 'primary' : 'secondary'}
-                                        loading={
-                                            skjema.submitRessurs.status === RessursStatus.HENTER
-                                        }
-                                        disabled={
-                                            skjema.submitRessurs.status === RessursStatus.HENTER
-                                        }
-                                    >
-                                        Bekreft
-                                    </KnappVenstre>
-                                    <Button onClick={lukkModal} variant={'tertiary'}>
-                                        Avbryt
-                                    </Button>
-                                </div>
-                            </>
+                            <div>
+                                <KnappVenstre
+                                    onClick={registrerManuellDødsfall}
+                                    variant={valideringErOk() ? 'primary' : 'secondary'}
+                                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                >
+                                    Bekreft
+                                </KnappVenstre>
+                                <Button onClick={lukkModal} variant={'tertiary'}>
+                                    Avbryt
+                                </Button>
+                            </div>
                         )}
                         {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
                     </Knapperad>

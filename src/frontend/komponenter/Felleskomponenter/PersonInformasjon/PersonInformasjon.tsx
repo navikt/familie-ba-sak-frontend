@@ -64,24 +64,22 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                         </>
                     )}
                     {!person.dødsfallDato?.length && (
-                        <>
-                            <Dropdown>
-                                <Button
-                                    aria-label="Åpne valgmeny"
-                                    as={Dropdown.Toggle}
-                                    icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
-                                    variant="tertiary"
-                                />
-                                <StyledDropdownMeny placement={'right'}>
-                                    <Dropdown.Menu.List>
-                                        <RegistrerDødsfallDato
-                                            erLesevisning={vurderErLesevisning()}
-                                            person={person}
-                                        />
-                                    </Dropdown.Menu.List>
-                                </StyledDropdownMeny>
-                            </Dropdown>
-                        </>
+                        <Dropdown>
+                            <Button
+                                aria-label="Åpne valgmeny"
+                                as={Dropdown.Toggle}
+                                icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
+                                variant="tertiary"
+                            />
+                            <StyledDropdownMeny placement={'right'}>
+                                <Dropdown.Menu.List>
+                                    <RegistrerDødsfallDato
+                                        erLesevisning={vurderErLesevisning()}
+                                        person={person}
+                                    />
+                                </Dropdown.Menu.List>
+                            </StyledDropdownMeny>
+                        </Dropdown>
                     )}
                 </>
             )}
