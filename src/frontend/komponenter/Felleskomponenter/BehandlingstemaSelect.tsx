@@ -5,11 +5,7 @@ import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/sele
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
-import {
-    BehandlingKategori,
-    behandlingstemaer,
-    BehandlingUnderkategori,
-} from '../../typer/behandlingstema';
+import { BehandlingKategori, behandlingstemaer } from '../../typer/behandlingstema';
 import { FagsakType } from '../../typer/fagsak';
 
 interface EgneProps {
@@ -53,7 +49,7 @@ export const BehandlingstemaSelect = ({
                 </option>
             )}
             {Object.values(behandlingstemaer)
-                .filter(it => it.underkategori !== BehandlingUnderkategori.INSTITUSJON)
+                .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
                     it =>
                         it.kategori !== BehandlingKategori.EØS ||
