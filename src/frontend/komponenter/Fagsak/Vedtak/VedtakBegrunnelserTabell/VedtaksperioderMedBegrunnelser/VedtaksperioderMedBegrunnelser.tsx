@@ -22,6 +22,10 @@ const StyledHeading = styled(Heading)`
     margin-top: 1rem;
 `;
 
+const StyledAlert = styled(Alert)`
+    margin-bottom: 1rem;
+`;
+
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
     vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
@@ -38,14 +42,18 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
         vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
-        return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</Alert>;
+        return (
+            <StyledAlert variant="error">
+                Klarte ikke å hente inn begrunnelser for vedtak.
+            </StyledAlert>
+        );
     }
 
     if (
         vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FEILET ||
         vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
-        return <Alert variant="error">Klarte ikke å hente inn vedtaksperiodene.</Alert>;
+        return <StyledAlert variant="error">Klarte ikke å hente inn vedtaksperiodene.</StyledAlert>;
     }
 
     if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
