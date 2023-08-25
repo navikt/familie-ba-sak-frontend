@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
 import { Alert, Heading } from '@navikt/ds-react';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
@@ -23,18 +24,15 @@ const StyledHeading = styled(Heading)`
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
+    vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
+    vedtaksperioderMedBegrunnelserRessurs,
 }) => {
     const { toggles } = useApp();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
-
-    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
-        åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [],
-        åpenBehandling.status
-    );
 
     if (
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
@@ -42,6 +40,22 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     ) {
         return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</Alert>;
     }
+
+    if (
+        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FEILET ||
+        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+    ) {
+        return <Alert variant="error">Klarte ikke å hente inn vedtaksperiodene.</Alert>;
+    }
+
+    if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
+        return null;
+    }
+
+    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
+        vedtaksperioderMedBegrunnelserRessurs.data ?? [],
+        åpenBehandling.status
+    );
 
     const avslagOgResterende = toggles[ToggleNavn.organiserAvslag]
         ? partition(
