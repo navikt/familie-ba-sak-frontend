@@ -1,7 +1,6 @@
 import React from 'react';
 
 import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
-import { useApp } from '../../../../../context/AppContext';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { summer } from '../../../../../utils/formatter';
@@ -18,7 +17,6 @@ const EkspanderbartVedtaksbegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePa
     onClick,
     children,
 }) => {
-    const { toggles } = useApp();
     const periode = {
         fom: vedtaksperiodeMedBegrunnelser.fom,
         tom: vedtaksperiodeMedBegrunnelser.tom,
@@ -43,7 +41,7 @@ const EkspanderbartVedtaksbegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePa
                     )
                 )
             }
-            tittel={hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser, toggles)}
+            tittel={hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser)}
         />
     );
 };
