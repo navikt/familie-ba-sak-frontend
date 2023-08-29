@@ -1,7 +1,5 @@
 import { ytelsetype, YtelseType } from './beregning';
 import type { IGrunnlagPerson } from './person';
-import type { IToggles } from './toggles';
-import { ToggleNavn } from './toggles';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 import type { FamilieIsoDate } from '../utils/kalender';
 
@@ -79,8 +77,7 @@ export interface IUtbetalingsperiodeDetalj {
 }
 
 export const hentVedtaksperiodeTittel = (
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    toggles: IToggles
+    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
 ) => {
     const { type, utbetalingsperiodeDetaljer } = vedtaksperiodeMedBegrunnelser;
 
@@ -113,9 +110,9 @@ export const hentVedtaksperiodeTittel = (
         case Vedtaksperiodetype.ENDRET_UTBETALING:
             return 'Endret utbetalingsperiode';
         case Vedtaksperiodetype.OPPHØR:
-            return toggles[ToggleNavn.organiserAvslag] ? 'Ingen utbetaling' : 'Opphør';
+            return 'Ingen utbetaling';
         case Vedtaksperiodetype.AVSLAG:
-            return toggles[ToggleNavn.organiserAvslag] ? 'Ingen utbetaling' : 'Avslag';
+            return 'Ingen utbetaling';
         default:
             return '';
     }

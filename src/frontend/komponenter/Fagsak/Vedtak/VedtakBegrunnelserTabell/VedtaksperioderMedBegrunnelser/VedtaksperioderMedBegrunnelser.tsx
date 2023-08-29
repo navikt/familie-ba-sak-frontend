@@ -43,18 +43,13 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
         return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</Alert>;
     }
 
-    const avslagOgResterende = toggles[ToggleNavn.organiserAvslag]
-        ? partition(
-              vedtaksperiode =>
-                  vedtaksperiode.type === Vedtaksperiodetype.AVSLAG &&
-                  !vedtaksperiode.fom &&
-                  !vedtaksperiode.tom,
-              vedtaksperioderSomSkalvises
-          )
-        : partition(
-              vedtaksperiode => vedtaksperiode.type === Vedtaksperiodetype.AVSLAG,
-              vedtaksperioderSomSkalvises
-          );
+    const avslagOgResterende = partition(
+        vedtaksperiode =>
+            vedtaksperiode.type === Vedtaksperiodetype.AVSLAG &&
+            !vedtaksperiode.fom &&
+            !vedtaksperiode.tom,
+        vedtaksperioderSomSkalvises
+    );
 
     return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
