@@ -4,3 +4,5 @@
 *.yml
 *.md
 *.html
+frontend_development/*
+frontend_production/*
