@@ -37,8 +37,8 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
-    ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
+const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnelserPanel] =
+    constate(({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { request } = useHttp();
         const { settÅpenBehandling } = useBehandling();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
@@ -255,7 +255,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             standardBegrunnelserPut,
             genererteBrevbegrunnelser,
         };
-    }
-);
+    });
 
-export { VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser };
+export { VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnelserPanel };

@@ -2,8 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { PlusCircleIcon, TrashIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Fieldset, Heading, Link, Tag, Label, HelpText } from '@navikt/ds-react';
+import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { BodyLong, Button, Fieldset, Heading, HelpText, Label, Link, Tag } from '@navikt/ds-react';
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -13,7 +13,7 @@ import { målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
-import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const FritekstContainer = styled.div`
     padding: 1rem;
@@ -78,7 +78,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         onPanelClose,
         putVedtaksperiodeMedFritekster,
         vedtaksperiodeMedBegrunnelser,
-    } = useVedtaksperiodeMedBegrunnelser();
+    } = useVedtaksperiodeMedBegrunnelserPanel();
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
