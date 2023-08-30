@@ -8,7 +8,6 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
-import { useVedtaksperioder } from './useVedtaksperioder';
 import { saksbehandlerHarKunLesevisning } from './util';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { ISide, ITrinn, SideId } from '../../komponenter/Felleskomponenter/Venstremeny/sider';
@@ -65,8 +64,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         åpenBehandling,
         settÅpenBehandling
     );
-
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -267,7 +264,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         gjelderInstitusjon,
         samhandlerOrgnr,
         gjelderEnsligMindreårig,
-        vedtaksperioderMedBegrunnelserRessurs,
     };
 });
 

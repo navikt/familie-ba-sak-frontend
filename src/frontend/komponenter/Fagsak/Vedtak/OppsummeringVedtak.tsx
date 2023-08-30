@@ -50,12 +50,8 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const {
-        vurderErLesevisning,
-        sendTilBeslutterNesteOnClick,
-        behandlingsstegSubmitressurs,
-        vedtaksperioderMedBegrunnelserRessurs,
-    } = useBehandling();
+    const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandling();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
 
@@ -123,8 +119,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
             erUlagretNyFeilutbetaltValutaPeriode,
-            erUlagretNyRefusjonEøsPeriode,
-            vedtaksperioderMedBegrunnelserRessurs
+            erUlagretNyRefusjonEøsPeriode
         );
     };
 
@@ -213,9 +208,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <VedtaksbegrunnelseTeksterProvider>
                                     <VedtaksperioderMedBegrunnelser
                                         åpenBehandling={åpenBehandling}
-                                        vedtaksperioderMedBegrunnelserRessurs={
-                                            vedtaksperioderMedBegrunnelserRessurs
-                                        }
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {visFeilutbetaltValuta && (
