@@ -15,6 +15,7 @@ import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/Vedtakspe
 import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useVedtaksperioder } from '../../../context/behandlingContext/useVedtaksperioder';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
@@ -50,12 +51,10 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
-    const {
-        vurderErLesevisning,
-        sendTilBeslutterNesteOnClick,
-        behandlingsstegSubmitressurs,
-        vedtaksperioderMedBegrunnelserRessurs,
-    } = useBehandling();
+    const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandling();
+
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
 
