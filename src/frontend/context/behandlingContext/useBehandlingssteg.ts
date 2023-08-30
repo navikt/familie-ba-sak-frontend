@@ -3,18 +3,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../typer/behandling';
-import { BehandlingResultat, BehandlingÅrsak, Behandlingstype } from '../../typer/behandling';
+import { BehandlingResultat, Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
 import { useApp } from '../AppContext';
 
 const useBehandlingssteg = (
@@ -76,9 +77,9 @@ const useBehandlingssteg = (
             });
     };
 
-    const minstEnPeriodeharBegrunnelseEllerFritekst = (): boolean => {
-        const vedtaksperioderMedBegrunnelser =
-            behandling?.vedtak?.vedtaksperioderMedBegrunnelser ?? [];
+    const minstEnPeriodeharBegrunnelseEllerFritekst = (
+        vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[]
+    ): boolean => {
         return vedtaksperioderMedBegrunnelser.some(
             vedtaksperioderMedBegrunnelse =>
                 vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
@@ -86,8 +87,8 @@ const useBehandlingssteg = (
         );
     };
 
-    const kanSendeinnVedtak = () =>
-        minstEnPeriodeharBegrunnelseEllerFritekst() ||
+    const kanSendeinnVedtak = (vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[]) =>
+        minstEnPeriodeharBegrunnelseEllerFritekst(vedtaksperioderMedBegrunnelser) ||
         behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
@@ -96,7 +97,8 @@ const useBehandlingssteg = (
     const sendTilBeslutterNesteOnClick = (
         settVisModal: (visModal: boolean) => void,
         erUlagretNyFeilutbetaltValuta: boolean,
-        erUlagretNyRefusjonEøs: boolean
+        erUlagretNyRefusjonEøs: boolean,
+        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>
     ) => {
         if (erUlagretNyFeilutbetaltValuta) {
             settSubmitRessurs(
@@ -110,7 +112,14 @@ const useBehandlingssteg = (
                     'Det er lagt til en ny periode med refusjon EØS. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
                 )
             );
-        } else if (!kanSendeinnVedtak()) {
+        } else if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
+            settSubmitRessurs(
+                byggFeiletRessurs(
+                    'Det har skjedd en feil, og behandlingen ble ikke sendt til beslutter. ' +
+                        'Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
+                )
+            );
+        } else if (!kanSendeinnVedtak(vedtaksperioderMedBegrunnelserRessurs.data)) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
