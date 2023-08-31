@@ -13,6 +13,7 @@ import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
+import { VedtaksperioderProvider } from '../../context/behandlingContext/useVedtaksperioder';
 import { EøsProvider } from '../../context/Eøs/EøsContext';
 import { InstitusjonOgVergeProvider } from '../../context/InstitusjonOgVergeContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
@@ -93,7 +94,9 @@ const BehandlingRouter: React.FunctionComponent = () => {
                         path="/vedtak"
                         element={
                             <SimuleringProvider åpenBehandling={åpenBehandling.data}>
-                                <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
+                                <VedtaksperioderProvider>
+                                    <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
+                                </VedtaksperioderProvider>
                             </SimuleringProvider>
                         }
                     />

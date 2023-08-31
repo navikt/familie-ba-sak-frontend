@@ -16,6 +16,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { VedtakBegrunnelse } from '../../../../../typer/vedtak';
@@ -37,8 +38,8 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
-    ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
+const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnelserPanel] =
+    constate(({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { request } = useHttp();
         const { settÅpenBehandling } = useBehandling();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
@@ -50,6 +51,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] = useState<
             Ressurs<string[]>
         >(byggTomRessurs());
+        const { hentVedtaksperioder } = useVedtaksperioder();
 
         const maksAntallKulepunkter =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
@@ -158,10 +160,10 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelser.id}`,
                 data: { standardbegrunnelser },
-            }).then((behandling: Ressurs<IBehandling>) => {
+            }).then((behandling: Ressurs<IBehandling | IVedtaksperiodeMedBegrunnelser[]>) => {
                 if (behandling.status === RessursStatus.SUKSESS) {
-                    settÅpenBehandling(behandling);
                     settStandardBegrunnelserPut(byggTomRessurs());
+                    hentVedtaksperioder();
                 } else if (behandling.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settStandardBegrunnelserPut(byggFeiletRessurs(behandling.frontendFeilmelding));
                 } else {
@@ -255,7 +257,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             standardBegrunnelserPut,
             genererteBrevbegrunnelser,
         };
-    }
-);
+    });
 
-export { VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser };
+export { VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnelserPanel };
