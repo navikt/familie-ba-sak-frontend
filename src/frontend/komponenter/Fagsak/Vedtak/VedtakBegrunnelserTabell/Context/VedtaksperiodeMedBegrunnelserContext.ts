@@ -51,7 +51,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] = useState<
             Ressurs<string[]>
         >(byggTomRessurs());
-        const { hentVedtaksperioder } = useVedtaksperioder();
+        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
         const maksAntallKulepunkter =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
@@ -156,16 +156,25 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
 
         const oppdaterStandardbegrunnelser = (standardbegrunnelser: VedtakBegrunnelse[]) => {
             settStandardBegrunnelserPut(byggHenterRessurs());
-            request<{ standardbegrunnelser: VedtakBegrunnelse[] }, IBehandling>({
+            request<
+                { standardbegrunnelser: VedtakBegrunnelse[] },
+                IVedtaksperiodeMedBegrunnelser[]
+            >({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelser.id}`,
                 data: { standardbegrunnelser },
-            }).then((behandling: Ressurs<IBehandling | IVedtaksperiodeMedBegrunnelser[]>) => {
-                if (behandling.status === RessursStatus.SUKSESS) {
+            }).then(vedtaksperioderMedBegrunnelserRessurs => {
+                if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
                     settStandardBegrunnelserPut(byggTomRessurs());
-                    hentVedtaksperioder();
-                } else if (behandling.status === RessursStatus.FUNKSJONELL_FEIL) {
-                    settStandardBegrunnelserPut(byggFeiletRessurs(behandling.frontendFeilmelding));
+                    settVedtaksperioderMedBegrunnelserRessurs(
+                        vedtaksperioderMedBegrunnelserRessurs
+                    );
+                } else if (
+                    vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
+                    settStandardBegrunnelserPut(
+                        byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
+                    );
                 } else {
                     settStandardBegrunnelserPut(
                         byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser')

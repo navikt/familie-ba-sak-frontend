@@ -30,5 +30,8 @@ export const [VedtaksperioderProvider, useVedtaksperioder] = constate(() => {
     const [vedtaksperioderMedBegrunnelserRessurs, settVedtaksperioderMedBegrunnelserRessurs] =
         useState<Ressurs<IVedtaksperiodeMedBegrunnelser[]>>(byggTomRessurs());
 
-    return { vedtaksperioderMedBegrunnelserRessurs, hentVedtaksperioder };
+    return {
+        vedtaksperioderMedBegrunnelserRessurs,
+        settVedtaksperioderMedBegrunnelserRessurs,
+    };
 });
