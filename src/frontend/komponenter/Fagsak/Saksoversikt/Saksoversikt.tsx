@@ -66,10 +66,7 @@ const StyledAlert = styled(Alert)`
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { settÅpenBehandling } = useBehandling();
-    const { kanKjøreSatsendring } = useSatsendringsknapp({
-        fagsakStatus: minimalFagsak.status,
-        fagsakId: minimalFagsak.id,
-    });
+    const { kanKjøreSatsendring } = useSatsendringsknapp({ minimalFagsak });
 
     React.useEffect(() => {
         settÅpenBehandling(byggTomRessurs(), false);
@@ -207,7 +204,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
 
-                    {kanKjøreSatsendring && <SatsendringKnapp fagsakId={minimalFagsak.id} />}
+                    {kanKjøreSatsendring && <SatsendringKnapp minimalFagsak={minimalFagsak} />}
 
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
