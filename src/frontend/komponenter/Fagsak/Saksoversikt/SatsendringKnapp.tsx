@@ -10,6 +10,7 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useSatsendringsknapp } from './useSatsendringsknapp';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;
@@ -24,13 +25,13 @@ const StyledErrorMessage = styled(ErrorMessage)`
 `;
 
 interface IProps {
-    fagsakId: number;
+    minimalFagsak: IMinimalFagsak;
 }
 
-export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) => {
+export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { request } = useHttp();
     const { settKanKjøreSatsendringTilFalse } = useSatsendringsknapp({
-        fagsakId,
+        minimalFagsak,
     });
     const { oppdaterGjeldendeFagsak } = useFagsakContext();
     const [kjørSatsendringRessurs, settKjørSatsendringRessurs] = useState<Ressurs<void>>(
@@ -40,7 +41,7 @@ export const SatsendringKnapp: React.FunctionComponent<IProps> = ({ fagsakId }) 
     const oppdaterFagsakMedSatsendring = () => {
         request<undefined, undefined>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/satsendring/${fagsakId}/kjor-satsendring-synkront`,
+            url: `/familie-ba-sak/api/satsendring/${minimalFagsak.id}/kjor-satsendring-synkront`,
             påvirkerSystemLaster: true,
         }).then((kjørSatsendringRessurs: Ressurs<undefined>) => {
             settKjørSatsendringRessurs(kjørSatsendringRessurs);

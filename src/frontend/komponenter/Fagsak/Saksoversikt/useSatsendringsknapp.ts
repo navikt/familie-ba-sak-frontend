@@ -4,11 +4,14 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggSuksessRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakStatus } from '../../../typer/fagsak';
+
 interface IProps {
-    fagsakId: number;
+    minimalFagsak: IMinimalFagsak;
 }
 
-export const useSatsendringsknapp = ({ fagsakId }: IProps) => {
+export const useSatsendringsknapp = ({ minimalFagsak }: IProps) => {
     const { request } = useHttp();
 
     const [kanKjøreSatsendringRessurs, settKanKjøreSatsendringRessurs] = useState<Ressurs<boolean>>(
@@ -16,9 +19,11 @@ export const useSatsendringsknapp = ({ fagsakId }: IProps) => {
     );
 
     const oppdaterKanKjøreSatsendring = () => {
+        if (minimalFagsak.status !== FagsakStatus.LØPENDE) return false;
+
         request<undefined, boolean>({
             method: 'GET',
-            url: `/familie-ba-sak/api/satsendring/${fagsakId}/kan-kjore-satsendring`,
+            url: `/familie-ba-sak/api/satsendring/${minimalFagsak.id}/kan-kjore-satsendring`,
             påvirkerSystemLaster: true,
         }).then((ressurs: Ressurs<boolean>) => {
             settKanKjøreSatsendringRessurs(ressurs);
@@ -27,7 +32,7 @@ export const useSatsendringsknapp = ({ fagsakId }: IProps) => {
 
     useEffect(() => {
         oppdaterKanKjøreSatsendring();
-    }, [fagsakId]);
+    }, [minimalFagsak.id]);
 
     const settKanKjøreSatsendringTilFalse = () =>
         settKanKjøreSatsendringRessurs(byggSuksessRessurs(false));
