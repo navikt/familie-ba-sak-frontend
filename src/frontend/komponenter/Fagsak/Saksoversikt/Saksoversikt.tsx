@@ -67,6 +67,7 @@ const StyledAlert = styled(Alert)`
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { settÅpenBehandling } = useBehandling();
     const { kanKjøreSatsendring } = useSatsendringsknapp({
+        fagsakStatus: minimalFagsak.status,
         fagsakId: minimalFagsak.id,
     });
 
