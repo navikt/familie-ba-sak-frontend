@@ -11,7 +11,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
 
 interface IProps {
@@ -21,7 +21,6 @@ interface IProps {
 }
 
 export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IProps) {
-    const { settÅpenBehandling } = useBehandling();
     const { request } = useHttp();
     const [endringstidspunktRessurs, settEndringstidspunktRessurs] = useState(
         byggHenterRessurs<ISODateString | undefined>()
@@ -41,6 +40,8 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
         visModal
     );
 
+    const { hentVedtaksperioder } = useVedtaksperioder();
+
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {
             onSubmit(
@@ -56,7 +57,7 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         lukkModal();
-                        settÅpenBehandling(response);
+                        hentVedtaksperioder();
                         settEndringstidspunktRessurs(
                             byggSuksessRessurs(skjema.felter.endringstidspunkt.verdi)
                         );
