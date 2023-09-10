@@ -80,7 +80,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
             },
-            IBehandling
+            IVedtaksperiodeMedBegrunnelser[]
         >({
             felter: {
                 periode,
@@ -238,10 +238,10 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
                     },
                 }).then(vedtaksperioderMedBegrunnelserRessurs => {
                     if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                        settStandardBegrunnelserPut(byggTomRessurs());
                         settVedtaksperioderMedBegrunnelserRessurs(
                             vedtaksperioderMedBegrunnelserRessurs
                         );
+                        onPanelClose(false);
                     } else if (
                         vedtaksperioderMedBegrunnelserRessurs.status ===
                         RessursStatus.FUNKSJONELL_FEIL
