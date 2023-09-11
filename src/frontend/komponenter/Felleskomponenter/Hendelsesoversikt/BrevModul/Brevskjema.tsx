@@ -159,28 +159,8 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
-    const fritekstHjelpetekster: Record<Brevmal, string> = {
-        [Brevmal.INNHENTE_OPPLYSNINGER]: '',
-        [Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED]: '',
-        [Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON]: '',
-        [Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT]:
-            '',
-        [Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED]: '',
-        [Brevmal.VARSEL_OM_REVURDERING]: '',
-        [Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON]: '',
-        [Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14]: '',
-        [Brevmal.VARSEL_OM_REVURDERING_SAMBOER]: '',
-        [Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS]: '',
-        [Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT]:
-            'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.',
-        [Brevmal.HENLEGGE_TRUKKET_SØKNAD]: '',
-        [Brevmal.SVARTIDSBREV]: '',
-        [Brevmal.SVARTIDSBREV_INSTITUSJON]: '',
-        [Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS]: '',
-        [Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER]: '',
-        [Brevmal.FORLENGET_SVARTIDSBREV]: '',
-        [Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON]: '',
-    };
+    const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
+        'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
@@ -316,11 +296,14 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     {skjema.felter.fritekster.verdi.map(
                                         (fritekst: FeltState<IFritekstFelt>, index: number) => {
                                             const fritekstId = fritekst.verdi.id;
+                                            const valgtBrevmal = skjema.felter.brevmal
+                                                .verdi as Brevmal;
+
                                             const hjelpetekst =
-                                                index === 0
-                                                    ? fritekstHjelpetekster[
-                                                          skjema.felter.brevmal.verdi as Brevmal
-                                                      ]
+                                                index === 0 &&
+                                                valgtBrevmal ===
+                                                    Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT
+                                                    ? hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt
                                                     : '';
 
                                             return (
@@ -349,7 +332,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                     />
                                                     {!(
                                                         erBrevmalMedObligatoriskFritekst(
-                                                            skjema.felter.brevmal.verdi as Brevmal
+                                                            valgtBrevmal
                                                         ) && index === 0
                                                     ) && (
                                                         <StyledButton
