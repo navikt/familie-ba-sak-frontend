@@ -67,6 +67,7 @@ export const useVilkårBegrunnelser = ({
                     VedtakBegrunnelseType.EØS_OPPHØR,
                     VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                     VedtakBegrunnelseType.INSTITUSJON_OPPHØR,
+                    VedtakBegrunnelseType.ENDRET_UTBETALING,
                 ];
             case Vedtaksperiodetype.ENDRET_UTBETALING:
                 return [VedtakBegrunnelseType.ENDRET_UTBETALING];
