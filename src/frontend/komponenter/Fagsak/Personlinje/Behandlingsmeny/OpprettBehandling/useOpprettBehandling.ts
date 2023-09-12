@@ -286,7 +286,6 @@ const useOpprettBehandling = (
                     lukkModal();
                     nullstillSkjema();
 
-                    settÅpenBehandling(response);
                     const behandling: IBehandling | undefined = hentDataFraRessurs(response);
 
                     if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
@@ -300,6 +299,8 @@ const useOpprettBehandling = (
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
+
+                    settÅpenBehandling(response);
                 }
             }
         );
