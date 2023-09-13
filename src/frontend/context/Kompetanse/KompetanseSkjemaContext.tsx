@@ -120,6 +120,8 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
                             skjema.felter.annenForeldersAktivitetsland.verdi,
                         barnetsBostedsland: skjema.felter.barnetsBostedsland.verdi,
                         resultat: skjema.felter.resultat.verdi,
+                        erAnnenForelderOmfattetAvNorskLovgivning:
+                            kompetanse.erAnnenForelderOmfattetAvNorskLovgivning,
                     },
                     url: `/familie-ba-sak/api/kompetanse/${behandlingId}`,
                 },
