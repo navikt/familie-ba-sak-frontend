@@ -3,8 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Dropdown, Heading } from '@navikt/ds-react';
-import Clipboard from '@navikt/familie-clipboard';
+import { BodyShort, Button, CopyButton, Dropdown, Heading } from '@navikt/ds-react';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -24,9 +23,16 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
     width: 20ch;
 `;
 
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+`;
+
 const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskrift = false }) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
+    const formattertIdent = formaterIdent(person.personIdent);
     const { vurderErLesevisning } = useBehandling();
 
     return (
@@ -44,11 +50,12 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
-                    <Clipboard>
+                    <FlexBox>
                         <Heading level="2" size="medium" as="span">
-                            {formaterIdent(person.personIdent)}
+                            {formattertIdent}
                         </Heading>
-                    </Clipboard>
+                        <CopyButton size="small" copyText={formattertIdent} />
+                    </FlexBox>
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
@@ -97,9 +104,10 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                         {navnOgAlder}
                     </BodyShort>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
-                    <Clipboard>
-                        <BodyShort>{formaterIdent(person.personIdent)}</BodyShort>
-                    </Clipboard>
+                    <FlexBox>
+                        {formattertIdent}
+                        <CopyButton size="small" copyText={formattertIdent} />
+                    </FlexBox>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>
                 </>
