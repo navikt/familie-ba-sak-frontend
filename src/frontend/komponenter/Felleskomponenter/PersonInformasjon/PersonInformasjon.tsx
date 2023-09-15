@@ -105,7 +105,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     </BodyShort>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <FlexBox>
-                        {formattertIdent}
+                        <BodyShort>{formattertIdent}</BodyShort>
                         <CopyButton size="small" copyText={formattertIdent} />
                     </FlexBox>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
