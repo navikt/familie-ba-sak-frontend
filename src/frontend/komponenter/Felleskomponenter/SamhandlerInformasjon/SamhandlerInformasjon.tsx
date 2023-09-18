@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
-import Clipboard from '@navikt/familie-clipboard';
+import { BodyShort, CopyButton, Heading } from '@navikt/ds-react';
 
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
@@ -34,11 +33,18 @@ const FlexDiv = styled.div`
     }
 `;
 
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+`;
+
 const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
     samhandler,
     somOverskrift = false,
 }) => {
     const navn = samhandler.navn;
+    const formattertIdent = formaterIdent(samhandler.orgNummer);
     return (
         <FlexDiv>
             {somOverskrift && (
@@ -50,11 +56,12 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
-                    <Clipboard>
+                    <FlexBox>
                         <Heading level="2" size="medium" as="span">
-                            {formaterIdent(samhandler.orgNummer)}
+                            {formattertIdent}
                         </Heading>
-                    </Clipboard>
+                        <CopyButton size={'small'} copyText={formattertIdent} />
+                    </FlexBox>
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
                     </Heading>
@@ -75,9 +82,10 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                         {navn}
                     </BodyShort>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
-                    <Clipboard>
-                        <BodyShort>{formaterIdent(samhandler.orgNummer)}</BodyShort>
-                    </Clipboard>
+                    <FlexBox>
+                        <BodyShort>{formattertIdent}</BodyShort>
+                        <CopyButton size={'small'} copyText={formattertIdent} />
+                    </FlexBox>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <BodyShort>Institusjon</BodyShort>
                 </>
