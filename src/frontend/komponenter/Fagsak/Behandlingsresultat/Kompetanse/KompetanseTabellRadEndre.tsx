@@ -116,8 +116,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
                     <StyledAlert variant="info" inline>
-                        Annen forelder er omfattet av norsk lovgivning og har selvstendig rett i
-                        perioden
+                        Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett
+                        i perioden
                     </StyledAlert>
                 )}
                 <StyledFamilieSelect
