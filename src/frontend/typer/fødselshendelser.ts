@@ -19,6 +19,7 @@ export enum Filtreringsregel {
     LØPER_IKKE_BARNETRYGD_FOR_BARNET = 'LØPER_IKKE_BARNETRYGD_FOR_BARNET',
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT = 'FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT',
     MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO = 'MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO',
+    MOR_HAR_IKKE_OPPHØRT_BARNETRYGD = 'MOR_HAR_IKKE_OPPHØRT_BARNETRYGD',
 }
 
 export const filtreringsregler: Record<Filtreringsregel, string> = {
@@ -37,4 +38,5 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
         'Fagsaken har ikke blitt migrert fra infotrygd etter barn ble født',
     MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO:
         'Mor oppfyller ikke vilkår for utvidet barnetrygd',
+    MOR_HAR_IKKE_OPPHØRT_BARNETRYGD: 'Mor har ikke opphørt barnetrgyd',
 };
