@@ -54,7 +54,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                         <Heading level="2" size="medium" as="span">
                             {formattertIdent}
                         </Heading>
-                        <CopyButton size="small" copyText={formattertIdent} />
+                        <CopyButton size="small" copyText={person.personIdent} />
                     </FlexBox>
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
@@ -106,7 +106,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <FlexBox>
                         <BodyShort>{formattertIdent}</BodyShort>
-                        <CopyButton size="small" copyText={formattertIdent} />
+                        <CopyButton size="small" copyText={person.personIdent} />
                     </FlexBox>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>

@@ -44,7 +44,7 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
     somOverskrift = false,
 }) => {
     const navn = samhandler.navn;
-    const formattertIdent = formaterIdent(samhandler.orgNummer);
+    const formattertOrgNummer = formaterIdent(samhandler.orgNummer);
     return (
         <FlexDiv>
             {somOverskrift && (
@@ -58,9 +58,9 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                     </Heading>
                     <FlexBox>
                         <Heading level="2" size="medium" as="span">
-                            {formattertIdent}
+                            {formattertOrgNummer}
                         </Heading>
-                        <CopyButton size={'small'} copyText={formattertIdent} />
+                        <CopyButton size={'small'} copyText={samhandler.orgNummer} />
                     </FlexBox>
                     <Heading level="2" size="medium" as="span">
                         &ensp;|&ensp;
@@ -83,8 +83,8 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                     </BodyShort>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <FlexBox>
-                        <BodyShort>{formattertIdent}</BodyShort>
-                        <CopyButton size={'small'} copyText={formattertIdent} />
+                        <BodyShort>{formattertOrgNummer}</BodyShort>
+                        <CopyButton size={'small'} copyText={samhandler.orgNummer} />
                     </FlexBox>
                     <BodyShort>&ensp;|&ensp;</BodyShort>
                     <BodyShort>Institusjon</BodyShort>
