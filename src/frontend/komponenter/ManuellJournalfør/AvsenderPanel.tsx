@@ -25,8 +25,13 @@ const StyledExpansionContent = styled(ExpansionCard.Content)`
 `;
 
 export const AvsenderPanel: React.FC = () => {
-    const { skjema, erLesevisning, settAvsenderLikBruker, tilbakestillAvsender } =
-        useManuellJournalfør();
+    const {
+        skjema,
+        erLesevisning,
+        settAvsenderLikBruker,
+        tilbakestillAvsender,
+        erDigitaltInnsendtDokument,
+    } = useManuellJournalfør();
     const [åpen, settÅpen] = useState(false);
     const [brukerErAvsender, settBrukerErAvsender] = useState(false);
 
@@ -43,6 +48,8 @@ export const AvsenderPanel: React.FC = () => {
         skjema.felter.avsenderNavn.valideringsstatus,
         skjema.felter.avsenderIdent.valideringsstatus,
     ]);
+
+    const lesevisning = erLesevisning() || erDigitaltInnsendtDokument;
 
     return (
         <StyledExpansionCard
@@ -63,7 +70,7 @@ export const AvsenderPanel: React.FC = () => {
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
             <StyledExpansionContent>
-                {erLesevisning() ? (
+                {lesevisning ? (
                     brukerErAvsender ? (
                         <BodyShort
                             className={classNames('skjemaelement', 'lese-felt')}
@@ -85,7 +92,7 @@ export const AvsenderPanel: React.FC = () => {
                 <br />
                 <FamilieInput
                     {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={lesevisning}
                     label={'Navn'}
                     size={'medium'}
                     placeholder={'Navn'}
@@ -95,7 +102,7 @@ export const AvsenderPanel: React.FC = () => {
                 <br />
                 <FamilieInput
                     {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={lesevisning}
                     label={'Ident'}
                     size={'medium'}
                     placeholder={'Fnr/dnr/orgnr'}
