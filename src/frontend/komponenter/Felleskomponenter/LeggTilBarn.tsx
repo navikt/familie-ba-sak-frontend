@@ -19,7 +19,6 @@ import {
 } from '@navikt/familie-typer';
 
 import HelpText from './HelpText';
-import { ModalKnapperad } from './Modal/ModalKnapperad';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
@@ -27,10 +26,6 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import type { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-
-const StyledModal = styled(Modal)`
-    min-width: 35rem;
-`;
 
 const StyledHeading = styled(Heading)`
     display: flex;
@@ -272,107 +267,115 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 {'Legg til barn'}
             </Button>
 
-            <StyledModal open={visModal} onClose={onAvbryt}>
-                <Modal.Content>
-                    <StyledHeading level="2" size="medium" spacing>
-                        Legg til barn
-                        <StyledHelpText placement="top">
-                            <Heading level="3" size="xsmall">
-                                Nasjonale saker:
-                            </Heading>
-                            <BodyLong size="small" spacing>
-                                Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
-                                bruker først.
-                            </BodyLong>
-                            <BodyLong size="small" spacing>
-                                Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
-                                registrere barnet med fødselsdato og/eller navn. Det vil føre til et
-                                avslag, uten at vilkårene skal vurderes. Har du ikke navnet på
-                                barnet kan du skrive “ukjent”.
-                            </BodyLong>
-                            <Heading level="3" size="xsmall">
-                                EØS-saker:
-                            </Heading>
-                            <BodyLong size="small">
-                                Dersom Folkeregisteret ikke har registrerte barn tilknyttet denne
-                                søkeren kan du registrere D-nummer i DREK.
-                            </BodyLong>
-                        </StyledHelpText>
-                    </StyledHeading>
-                    <StyledFieldset
-                        error={
-                            registrerBarnSkjema.visFeilmeldinger &&
-                            (registrerBarnSkjema.submitRessurs.status === RessursStatus.FEILET ||
-                                registrerBarnSkjema.submitRessurs.status ===
-                                    RessursStatus.FUNKSJONELL_FEIL ||
-                                registrerBarnSkjema.submitRessurs.status ===
-                                    RessursStatus.IKKE_TILGANG)
-                                ? registrerBarnSkjema.submitRessurs.frontendFeilmelding
-                                : undefined
-                        }
-                        errorPropagation={false}
-                        legend={'Legg til barn'}
-                        hideLegend
-                    >
-                        <FamilieInput
-                            {...registrerBarnSkjema.felter.ident.hentNavInputProps(
-                                registrerBarnSkjema.visFeilmeldinger
-                            )}
-                            disabled={
-                                registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
-                                !registrerBarnSkjema.felter.erFolkeregistrert.verdi
+            {visModal && (
+                <Modal
+                    open={visModal}
+                    onClose={onAvbryt}
+                    width={'medium'}
+                    aria-label={'Legg til barn'}
+                >
+                    <Modal.Header>
+                        <StyledHeading level="2" size="medium" spacing>
+                            Legg til barn
+                            <StyledHelpText placement="top">
+                                <Heading level="3" size="xsmall">
+                                    Nasjonale saker:
+                                </Heading>
+                                <BodyLong size="small" spacing>
+                                    Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
+                                    bruker først.
+                                </BodyLong>
+                                <BodyLong size="small" spacing>
+                                    Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
+                                    registrere barnet med fødselsdato og/eller navn. Det vil føre
+                                    til et avslag, uten at vilkårene skal vurderes. Har du ikke
+                                    navnet på barnet kan du skrive “ukjent”.
+                                </BodyLong>
+                                <Heading level="3" size="xsmall">
+                                    EØS-saker:
+                                </Heading>
+                                <BodyLong size="small">
+                                    Dersom Folkeregisteret ikke har registrerte barn tilknyttet
+                                    denne søkeren kan du registrere D-nummer i DREK.
+                                </BodyLong>
+                            </StyledHelpText>
+                        </StyledHeading>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <StyledFieldset
+                            error={
+                                registrerBarnSkjema.visFeilmeldinger &&
+                                (registrerBarnSkjema.submitRessurs.status ===
+                                    RessursStatus.FEILET ||
+                                    registrerBarnSkjema.submitRessurs.status ===
+                                        RessursStatus.FUNKSJONELL_FEIL ||
+                                    registrerBarnSkjema.submitRessurs.status ===
+                                        RessursStatus.IKKE_TILGANG)
+                                    ? registrerBarnSkjema.submitRessurs.frontendFeilmelding
+                                    : undefined
                             }
-                            label={'Fødselsnummer / D-nummer'}
-                            placeholder={'11 siffer'}
-                            ref={fnrInputRef}
-                        />
-                        <DrekLenkeContainer>
-                            <Link
-                                href="#"
-                                target="_blank"
-                                onClick={(e: React.UIEvent) => {
-                                    e.preventDefault();
-                                    fnrInputNode?.focus();
-                                    window.open('/redirect/drek', '_new');
-                                }}
-                            >
-                                Rekvirer D-nummer i DREK
-                                <ExternalLinkIcon
-                                    title="Rekvirer D-nummer i DREK"
-                                    fontSize={'1.5rem'}
-                                />
-                            </Link>
-                        </DrekLenkeContainer>
-                        {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
-                            <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
-                        )}
-                        <ModalKnapperad>
-                            <Button
-                                variant={'primary'}
-                                key={'Legg til'}
-                                size={'medium'}
-                                onClick={leggTilOnClick}
-                                children={'Legg til'}
-                                loading={
-                                    registrerBarnSkjema.submitRessurs.status ===
-                                    RessursStatus.HENTER
-                                }
+                            errorPropagation={false}
+                            legend={'Legg til barn'}
+                            hideLegend
+                        >
+                            <FamilieInput
+                                {...registrerBarnSkjema.felter.ident.hentNavInputProps(
+                                    registrerBarnSkjema.visFeilmeldinger
+                                )}
                                 disabled={
-                                    registrerBarnSkjema.submitRessurs.status ===
-                                    RessursStatus.HENTER
+                                    registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
+                                    !registrerBarnSkjema.felter.erFolkeregistrert.verdi
                                 }
+                                label={'Fødselsnummer / D-nummer'}
+                                placeholder={'11 siffer'}
+                                ref={fnrInputRef}
                             />
-                            <Button
-                                variant={'tertiary'}
-                                key={'Avbryt'}
-                                size={'medium'}
-                                onClick={onAvbryt}
-                                children={'Avbryt'}
-                            />
-                        </ModalKnapperad>
-                    </StyledFieldset>
-                </Modal.Content>
-            </StyledModal>
+                            <DrekLenkeContainer>
+                                <Link
+                                    href="#"
+                                    target="_blank"
+                                    onClick={(e: React.UIEvent) => {
+                                        e.preventDefault();
+                                        fnrInputNode?.focus();
+                                        window.open('/redirect/drek', '_new');
+                                    }}
+                                >
+                                    Rekvirer D-nummer i DREK
+                                    <ExternalLinkIcon
+                                        title="Rekvirer D-nummer i DREK"
+                                        fontSize={'1.5rem'}
+                                    />
+                                </Link>
+                            </DrekLenkeContainer>
+                            {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
+                                <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
+                            )}
+                        </StyledFieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant={'primary'}
+                            key={'Legg til'}
+                            size={'medium'}
+                            onClick={leggTilOnClick}
+                            children={'Legg til'}
+                            loading={
+                                registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
+                            }
+                            disabled={
+                                registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
+                            }
+                        />
+                        <Button
+                            variant={'tertiary'}
+                            key={'Avbryt'}
+                            size={'medium'}
+                            onClick={onAvbryt}
+                            children={'Avbryt'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };
