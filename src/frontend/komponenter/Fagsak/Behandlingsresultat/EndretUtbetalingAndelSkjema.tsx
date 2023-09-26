@@ -12,11 +12,9 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import {
     IEndretUtbetalingAndelFullSats,
@@ -83,7 +81,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 }) => {
     const { request } = useHttp();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
-    const { toggles } = useApp();
     const erLesevisning = vurderErLesevisning();
 
     const {
@@ -152,16 +149,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 )
             ).getFullYear() - new Date().getFullYear()
         );
-    };
-
-    const endringsårsakSkalVises = (årsak: IEndretUtbetalingAndelÅrsak): boolean => {
-        if (årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER) {
-            return toggles[ToggleNavn.endreMottakerEndringsårsaker];
-        } else if (årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT) {
-            return toggles[ToggleNavn.eøsPraksisendringSeptember2023];
-        } else {
-            return true;
-        }
     };
 
     useEffect(() => {
@@ -259,7 +246,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }
                     >
                         <option value={undefined}>Velg årsak</option>
-                        {årsaker.filter(endringsårsakSkalVises).map(årsak => (
+                        {årsaker.map(årsak => (
                             <option value={årsak.valueOf()} key={årsak.valueOf()}>
                                 {årsakTekst[årsak]}
                             </option>
