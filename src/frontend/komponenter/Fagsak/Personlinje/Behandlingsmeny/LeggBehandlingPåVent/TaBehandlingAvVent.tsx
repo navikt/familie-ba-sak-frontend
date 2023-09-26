@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -18,7 +18,6 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
 import { datoformat, formaterIsoDato } from '../../../../../utils/formatter';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const StyledBodyShort = styled(BodyShort)`
     padding-bottom: 1rem;
@@ -65,23 +64,38 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
                 Fortsett behandling
             </Dropdown.Menu.List.Item>
 
-            <UIModalWrapper
-                modal={{
-                    tittel: (
-                        <Heading size={'small'} level={'2'}>
-                            Fortsett behandling
-                        </Heading>
-                    ),
-                    visModal: visModal,
-                    lukkKnapp: true,
-                    onClose: lukkModal,
-                    actions: [
-                        <Button
-                            key={'Nei'}
-                            variant="tertiary"
-                            onClick={lukkModal}
-                            children={'Nei'}
-                        />,
+            {visModal && (
+                <Modal
+                    header={{ heading: 'Fortsett behandling', size: 'small' }}
+                    open={visModal}
+                    onClose={lukkModal}
+                    portal
+                >
+                    <Modal.Body>
+                        <BodyShort>
+                            Behandlingen er satt på vent.
+                            {behandling?.aktivSettPåVent &&
+                                ` Årsak: ${
+                                    settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]
+                                }. `}
+                        </BodyShort>
+                        <StyledBodyShort>
+                            {`Frist: ${formaterIsoDato(
+                                behandling?.aktivSettPåVent?.frist,
+                                datoformat.DATO
+                            )}. `}
+                            Gå via meny for å endre årsak og frist på ventende behandling.
+                        </StyledBodyShort>
+
+                        <StyledBodyShort>Ønsker du å fortsette behandlingen?</StyledBodyShort>
+
+                        {submitRessurs.status === RessursStatus.FEILET && (
+                            <StyledAlert variant="error">
+                                {submitRessurs.frontendFeilmelding}
+                            </StyledAlert>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button
                             key={'Bekreft'}
                             variant="primary"
@@ -89,32 +103,16 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
                             onClick={deaktiverVentingPåBehandling}
                             children={'Ja, fortsett'}
                             loading={submitRessurs.status === RessursStatus.HENTER}
-                        />,
-                    ],
-                    style: {
-                        minHeight: '20rem !important',
-                    },
-                }}
-            >
-                <BodyShort>
-                    Behandlingen er satt på vent.
-                    {behandling?.aktivSettPåVent &&
-                        ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
-                </BodyShort>
-                <StyledBodyShort>
-                    {`Frist: ${formaterIsoDato(
-                        behandling?.aktivSettPåVent?.frist,
-                        datoformat.DATO
-                    )}. `}
-                    Gå via meny for å endre årsak og frist på ventende behandling.
-                </StyledBodyShort>
-
-                <StyledBodyShort>Ønsker du å fortsette behandlingen?</StyledBodyShort>
-
-                {submitRessurs.status === RessursStatus.FEILET && (
-                    <StyledAlert variant="error">{submitRessurs.frontendFeilmelding}</StyledAlert>
-                )}
-            </UIModalWrapper>
+                        />
+                        <Button
+                            key={'Nei'}
+                            variant="tertiary"
+                            onClick={lukkModal}
+                            children={'Nei'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };
