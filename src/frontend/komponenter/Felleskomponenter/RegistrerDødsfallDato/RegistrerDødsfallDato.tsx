@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled, { css } from 'styled-components';
 
-import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
@@ -13,17 +13,7 @@ import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/Registr
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { datoformatNorsk } from '../../../utils/formatter';
 
-const Knapperad = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-`;
-
-const KnappVenstre = styled(Button)`
-    margin-right: 1rem;
-`;
-
-const StyledModalContent = styled(Modal.Content)`
+const StyledModalContent = styled(Modal.Body)`
     width: 40rem;
 `;
 
@@ -76,69 +66,73 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
             >
                 Registrer Dødsfall
             </Dropdown.Menu.List.Item>
-            <Modal open={visModal} onClose={lukkModal}>
-                <StyledModalContent>
-                    <Heading size="medium" level={'2'} spacing>
-                        Registrere dødsdato
-                    </Heading>
-                    <div>
-                        <StyledFamilieDatovelger
-                            {...skjema.felter.dødsfallDato?.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
+            {visModal && (
+                <Modal
+                    open={visModal}
+                    onClose={lukkModal}
+                    header={{
+                        heading: 'Registrere dødsdato',
+                        size: 'medium',
+                    }}
+                    portal
+                >
+                    <StyledModalContent>
+                        <div>
+                            <StyledFamilieDatovelger
+                                {...skjema.felter.dødsfallDato?.hentNavBaseSkjemaProps(
+                                    skjema.visFeilmeldinger
+                                )}
+                                id={'registrer-døds-dato'}
+                                label={'Dødsdato'}
+                                erLesesvisning={erLesevisning}
+                                value={
+                                    skjema.felter.dødsfallDato?.verdi !== null
+                                        ? skjema.felter.dødsfallDato?.verdi
+                                        : undefined
+                                }
+                                placeholder={datoformatNorsk.DATO}
+                                onChange={(dato?: ISODateString) =>
+                                    skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
+                                }
+                            />
+                            <StyledFamilieTextarea
+                                {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
+                                    skjema.visFeilmeldinger
+                                )}
+                                id={'manuell-dødsdato-begrunnelse'}
+                                label={'Begrunnelse'}
+                                erLesevisning={erLesevisning}
+                                value={skjema.felter.begrunnelse.verdi}
+                                onChange={changeEvent =>
+                                    skjema.felter.begrunnelse.validerOgSettFelt(
+                                        changeEvent.target.value
+                                    )
+                                }
+                            />
+                            {restFeil && (
+                                <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
+                                    {restFeil}
+                                </Alert>
                             )}
-                            id={'registrer-døds-dato'}
-                            label={'Dødsdato'}
-                            erLesesvisning={erLesevisning}
-                            value={
-                                skjema.felter.dødsfallDato?.verdi !== null
-                                    ? skjema.felter.dødsfallDato?.verdi
-                                    : undefined
-                            }
-                            placeholder={datoformatNorsk.DATO}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
-                            }
-                        />
-                        <StyledFamilieTextarea
-                            {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            id={'manuell-dødsdato-begrunnelse'}
-                            label={'Begrunnelse'}
-                            erLesevisning={erLesevisning}
-                            value={skjema.felter.begrunnelse.verdi}
-                            onChange={changeEvent =>
-                                skjema.felter.begrunnelse.validerOgSettFelt(
-                                    changeEvent.target.value
-                                )
-                            }
-                        />
-                        {restFeil && (
-                            <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
-                                {restFeil}
-                            </Alert>
-                        )}
-                    </div>
-                    <Knapperad>
-                        {!erLesevisning && (
-                            <div>
-                                <KnappVenstre
-                                    onClick={registrerManuellDødsfall}
-                                    variant={valideringErOk() ? 'primary' : 'secondary'}
-                                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                >
-                                    Bekreft
-                                </KnappVenstre>
-                                <Button onClick={lukkModal} variant={'tertiary'}>
-                                    Avbryt
-                                </Button>
-                            </div>
-                        )}
-                        {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
-                    </Knapperad>
-                </StyledModalContent>
-            </Modal>
+                        </div>
+                    </StyledModalContent>
+                    {!erLesevisning && (
+                        <Modal.Footer>
+                            <Button
+                                onClick={registrerManuellDødsfall}
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            >
+                                Bekreft
+                            </Button>
+                            <Button onClick={lukkModal} variant={'tertiary'}>
+                                Avbryt
+                            </Button>
+                        </Modal.Footer>
+                    )}
+                </Modal>
+            )}
         </>
     );
 };
