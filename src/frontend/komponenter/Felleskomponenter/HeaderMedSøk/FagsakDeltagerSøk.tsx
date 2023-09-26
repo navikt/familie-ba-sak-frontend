@@ -137,10 +137,13 @@ const FagsakDeltagerSøk: React.FC = () => {
                     stil={'lys'}
                 />
             )}
-            <OpprettFagsakModal
-                søkeresultat={deltagerForOpprettFagsak}
-                lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
-            />
+            {deltagerForOpprettFagsak && (
+                <OpprettFagsakModal
+                    søkeresultat={deltagerForOpprettFagsak}
+                    lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
+                    visModal
+                />
+            )}
         </>
     );
 };

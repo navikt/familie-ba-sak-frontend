@@ -21,6 +21,7 @@ const OpprettFagsak: React.FC<IProps> = ({ personInfo }) => {
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <OpprettFagsakModal
+                    visModal={visModal}
                     personInfo={personInfo}
                     fagsakerPåBruker={fagsakerPåBruker}
                     lukkModal={() => {
