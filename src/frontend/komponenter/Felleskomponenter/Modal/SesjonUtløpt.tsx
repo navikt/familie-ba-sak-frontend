@@ -1,20 +1,18 @@
 import React from 'react';
 
-import { BodyShort } from '@navikt/ds-react';
-
-import UIModalWrapper from './UIModalWrapper';
+import { BodyShort, Modal } from '@navikt/ds-react';
 
 const UgyldigSesjon: React.FC = () => {
     return (
-        <UIModalWrapper
-            modal={{
-                tittel: 'Ugyldig sesjon',
-                lukkKnapp: false,
-                visModal: true,
-            }}
+        <Modal
+            open
+            header={{ heading: 'Ugyldig sesjon', size: 'small', closeButton: false }}
+            width={'small'}
         >
-            <BodyShort>Prøv å last siden på nytt</BodyShort>
-        </UIModalWrapper>
+            <Modal.Body>
+                <BodyShort>Prøv å last siden på nytt</BodyShort>
+            </Modal.Body>
+        </Modal>
     );
 };
 
