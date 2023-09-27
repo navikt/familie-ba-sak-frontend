@@ -17,12 +17,15 @@ const useAvslagBegrunnelseMultiselect = (
         return { avslagBegrunnelseTeksterForGjeldendeVilkår: [] };
     }
 
-    const begrunnelsestypeGyldigForBehandling =
-        regelverk === Regelverk.EØS_FORORDNINGEN
-            ? VedtakBegrunnelseType.EØS_AVSLAG
-            : gjelderInstitusjon
-            ? VedtakBegrunnelseType.INSTITUSJON_AVSLAG
-            : VedtakBegrunnelseType.AVSLAG;
+    let begrunnelsestypeGyldigForBehandling;
+
+    if (regelverk === Regelverk.EØS_FORORDNINGEN) {
+        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.EØS_AVSLAG;
+    } else if (gjelderInstitusjon) {
+        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.INSTITUSJON_AVSLAG;
+    } else {
+        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.AVSLAG;
+    }
 
     const avslagBegrunnelseTeksterForGjeldendeVilkår = vedtaksbegrunnelseTekster.data[
         begrunnelsestypeGyldigForBehandling
