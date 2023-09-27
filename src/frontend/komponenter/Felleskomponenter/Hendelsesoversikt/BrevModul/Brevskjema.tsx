@@ -145,9 +145,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const brevMaler = hentMuligeBrevMaler().filter(
         brevmal =>
-            brevmal !==
-                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT ||
-            toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+            ![
+                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
+                Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
+            ].includes(brevmal) || toggles[ToggleNavn.eøsPraksisendringSeptember2023]
     );
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
@@ -157,6 +158,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
+
+    const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
+        'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
+
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
     const behandlingSteg =
@@ -291,6 +296,15 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     {skjema.felter.fritekster.verdi.map(
                                         (fritekst: FeltState<IFritekstFelt>, index: number) => {
                                             const fritekstId = fritekst.verdi.id;
+                                            const valgtBrevmal = skjema.felter.brevmal
+                                                .verdi as Brevmal;
+
+                                            const hjelpetekst =
+                                                index === 0 &&
+                                                valgtBrevmal ===
+                                                    Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT
+                                                    ? hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt
+                                                    : '';
 
                                             return (
                                                 <StyledFamilieFritekstFelt
@@ -300,12 +314,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         erLesevisning={false}
                                                         key={`fritekst-${fritekstId}`}
                                                         id={`${fritekstId}`}
-                                                        label={`Kulepunkt ${fritekstId}`}
-                                                        hideLabel
+                                                        label={``}
                                                         size={'small'}
                                                         className={'fritekst-textarea'}
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekst}
+                                                        description={hjelpetekst}
                                                         onChange={event =>
                                                             onChangeFritekst(event, fritekstId)
                                                         }
@@ -318,7 +332,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                     />
                                                     {!(
                                                         erBrevmalMedObligatoriskFritekst(
-                                                            skjema.felter.brevmal.verdi as Brevmal
+                                                            valgtBrevmal
                                                         ) && index === 0
                                                     ) && (
                                                         <StyledButton

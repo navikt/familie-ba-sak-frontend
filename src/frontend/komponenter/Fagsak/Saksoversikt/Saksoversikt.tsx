@@ -8,8 +8,6 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
-import { SatsendringKnapp } from './SatsendringKnapp';
-import { useSatsendringsknapp } from './useSatsendringsknapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -66,9 +64,6 @@ const StyledAlert = styled(Alert)`
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { settÅpenBehandling } = useBehandling();
-    const { kanKjøreSatsendring } = useSatsendringsknapp({
-        fagsakId: minimalFagsak.id,
-    });
 
     React.useEffect(() => {
         settÅpenBehandling(byggTomRessurs(), false);
@@ -205,8 +200,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             <Tabs.Panel value={basakTab.key}>
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
-
-                    {kanKjøreSatsendring && <SatsendringKnapp fagsakId={minimalFagsak.id} />}
 
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (

@@ -182,6 +182,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                 Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
                 Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
+                Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
             ].includes(avhengigheter?.brevmal.verdi);
         },
         avhengigheter: { brevmal },
@@ -309,6 +310,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
             Brevmal.FORLENGET_SVARTIDSBREV,
             Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
+            Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
         ].includes(brevmal);
 
     /**

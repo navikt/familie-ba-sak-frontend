@@ -9,12 +9,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { personTypeMap } from '../../../../../typer/person';
-import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const Personvelger: React.FC = () => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const { skjema, åpenBehandling, id } = useVedtaksperiodeMedBegrunnelser();
+    const { skjema, åpenBehandling, id } = useVedtaksperiodeMedBegrunnelserPanel();
 
     const personIdenter = useFelt({
         verdi: [],

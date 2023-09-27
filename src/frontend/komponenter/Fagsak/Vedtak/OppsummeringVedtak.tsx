@@ -15,6 +15,7 @@ import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/Vedtakspe
 import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useVedtaksperioder } from '../../../context/behandlingContext/useVedtaksperioder';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
@@ -52,6 +53,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
 
@@ -119,7 +122,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
             erUlagretNyFeilutbetaltValutaPeriode,
-            erUlagretNyRefusjonEøsPeriode
+            erUlagretNyRefusjonEøsPeriode,
+            vedtaksperioderMedBegrunnelserRessurs
         );
     };
 
@@ -208,6 +212,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                 <VedtaksbegrunnelseTeksterProvider>
                                     <VedtaksperioderMedBegrunnelser
                                         åpenBehandling={åpenBehandling}
+                                        vedtaksperioderMedBegrunnelserRessurs={
+                                            vedtaksperioderMedBegrunnelserRessurs
+                                        }
                                     />
                                 </VedtaksbegrunnelseTeksterProvider>
                                 {visFeilutbetaltValuta && (
