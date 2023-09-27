@@ -15,23 +15,23 @@ env:
 
 jobs:
   eslint:
-    name: ⬣ ESLint
+    name: 🛠️ ESLint
     runs-on: ubuntu-latest
-    env:
-      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⎔ Setup node
+      - name: 🔧💻 Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: '18'
           cache: yarn
-          cache-dependency-path: ./package.json
-          node-version: 18
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: 📥 Install deps
-        run: yarn
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --frozen-lockfile
 
       - name: 🔬 Kjør sjekk med esLint
         run: yarn lint
@@ -39,21 +39,21 @@ jobs:
   lint:
     name: ✨ Prettier
     runs-on: ubuntu-latest
-    env:
-      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⎔ Setup node
+      - name: 🔧💻 Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: '18'
           cache: yarn
-          cache-dependency-path: ./package.json
-          node-version: 18
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: 📥 Install deps
-        run: yarn
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --frozen-lockfile
 
       - name: 🔬 Kjør sjekk med prettier
         run: yarn prettier-check
@@ -61,21 +61,21 @@ jobs:
   typecheck:
     name: ʦ TypeScript
     runs-on: ubuntu-latest
-    env:
-      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⎔ Setup node
+      - name: 🔧💻 Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: '18'
           cache: yarn
-          cache-dependency-path: ./package.json
-          node-version: 18
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: 📥 Install deps
-        run: yarn
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --frozen-lockfile
 
       - name: 🔎 Type check
         run: yarn typecheck
@@ -83,24 +83,23 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:
-      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔧💻 Setup node
+        uses: actions/setup-node@v3
         with:
+          node-version: '18'
           cache: yarn
-          cache-dependency-path: ./package.json
-          node-version: 18
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: 📥 Install deps
-        run: yarn --prefer-offline --frozen-lockfile
-
-      - name: Build
+      - name: 🧶📥 Yarn install
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --frozen-lockfile
+
+      - name: 🧶🏗️ Yarn build
         run: |
           yarn build
           yarn test
