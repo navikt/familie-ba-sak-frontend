@@ -42,6 +42,9 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
             open={åpen}
             onClose={onRequestClose}
             aria-label={'pdfvisning'}
+            header={{ heading: '', closeButton: true }}
+            width={'100rem'}
+            portal
         >
             <Dokument pdfdata={pdfdata} />
         </StyledModal>
