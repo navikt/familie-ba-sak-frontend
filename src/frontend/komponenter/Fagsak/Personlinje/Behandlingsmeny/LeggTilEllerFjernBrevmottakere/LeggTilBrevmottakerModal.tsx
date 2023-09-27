@@ -68,14 +68,11 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     return (
         <StyledModal
             open={visModal}
-            aria-label={heading}
             onClose={lukkModalOgSkjema}
-            shouldCloseOnOverlayClick={false}
+            header={{ heading: heading, size: 'medium' }}
+            portal
         >
-            <Modal.Content>
-                <Heading spacing level="2" size="medium" id="modal-heading">
-                    {heading}
-                </Heading>
+            <Modal.Body>
                 <StyledAlert variant="info">
                     Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken kanal.
                     Legg til mottaker dersom brev skal sendes til utenlandsk adresse, fullmektig,
@@ -108,7 +105,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         </div>
                     </>
                 )}
-            </Modal.Content>
+            </Modal.Body>
         </StyledModal>
     );
 };
