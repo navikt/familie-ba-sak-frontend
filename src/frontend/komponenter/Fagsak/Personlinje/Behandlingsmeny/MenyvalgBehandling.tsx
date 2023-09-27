@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
@@ -30,7 +29,6 @@ const MenyvalgBehandling = ({ minimalFagsak }: IProps) => {
 
     return (
         <>
-            <Dropdown.Menu.Divider />
             <HenleggBehandling fagsakId={minimalFagsak.id} behandling={åpenBehandling} />
             <EndreBehandlendeEnhet />
             {åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD &&

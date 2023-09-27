@@ -33,7 +33,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
 
     const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
 
-    const erPåBehandling = !!behandlingIdFraURL && !!åpenBehandling;
+    const skalViseMenyvalgForBehandling =
+        !!behandlingIdFraURL && !!åpenBehandling && !erBehandlingAvsluttet;
 
     return (
         <Dropdown>
@@ -49,7 +50,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             <StyletDropdownMenu>
                 <Dropdown.Menu.List>
                     <MenyvalgFagsak minimalFagsak={minimalFagsak} bruker={bruker} />
-                    {erPåBehandling && !erBehandlingAvsluttet && (
+                    {skalViseMenyvalgForBehandling && <Dropdown.Menu.Divider />}
+                    {skalViseMenyvalgForBehandling && (
                         <MenyvalgBehandling minimalFagsak={minimalFagsak} />
                     )}
                 </Dropdown.Menu.List>
