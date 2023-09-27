@@ -23,7 +23,6 @@ import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUti
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
-    gjelderInstitusjon: Boolean;
     vilkårType: VilkårType;
     regelverk: Regelverk | null;
     periode: IPeriode;
