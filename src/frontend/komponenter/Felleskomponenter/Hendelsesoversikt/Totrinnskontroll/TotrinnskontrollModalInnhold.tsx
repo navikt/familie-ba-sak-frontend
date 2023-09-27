@@ -13,7 +13,7 @@ interface IProps {
 const ModalInnholdContainer = styled.div`
     display: flex;
     align-items: center;
-    margin: 2rem 2rem 2rem 0;
+    margin-top: 1rem;
 `;
 
 const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutning }) => {

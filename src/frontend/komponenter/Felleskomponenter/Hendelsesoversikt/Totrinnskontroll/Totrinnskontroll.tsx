@@ -4,7 +4,7 @@ import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -33,15 +33,6 @@ interface IProps {
 const Container = styled.div`
     padding: 0.5rem 1.5rem;
     display: flex;
-`;
-
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: end;
 `;
 
 interface IModalVerdier {
@@ -156,17 +147,26 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 </Container>
             )}
 
-            <Modal
-                open={modalVerdi.skalVises}
-                onClose={() => settModalVerdi(initiellModalVerdi)}
-                shouldCloseOnOverlayClick={false}
-            >
-                <Modal.Content>
-                    <Heading size={'medium'} level={'2'}>
-                        Totrinnskontroll
-                    </Heading>
-                    <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
-                    <Knapperad>
+            {modalVerdi.skalVises && (
+                <Modal
+                    open={modalVerdi.skalVises}
+                    onClose={() => settModalVerdi(initiellModalVerdi)}
+                    header={{ heading: 'Totrinnskontroll', size: 'medium' }}
+                >
+                    <Modal.Body>
+                        <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            key={'saksoversikt'}
+                            variant={'secondary'}
+                            size={'medium'}
+                            onClick={() => {
+                                settModalVerdi(initiellModalVerdi);
+                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                            }}
+                            children={'Se saksoversikt'}
+                        />
                         <Button
                             key={'oppgavebenk'}
                             variant={'secondary'}
@@ -177,19 +177,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                             }}
                             children={'Se oppgavebenk'}
                         />
-                        <KnappHøyre
-                            key={'saksoversikt'}
-                            variant={'secondary'}
-                            size={'medium'}
-                            onClick={() => {
-                                settModalVerdi(initiellModalVerdi);
-                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
-                            }}
-                            children={'Se saksoversikt'}
-                        />
-                    </Knapperad>
-                </Modal.Content>
-            </Modal>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };
