@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import FagsakContainer from './Fagsak/FagsakContainer';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
-import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import TidslinjeVisualisering from './Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './Felleskomponenter/Toast/Toasts';
@@ -25,7 +24,6 @@ const Container: React.FC = () => {
 
     return (
         <Router>
-            <UIModalWrapper />
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}
