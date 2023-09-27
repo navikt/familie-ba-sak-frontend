@@ -38,7 +38,6 @@
     "@navikt/ds-react": "4.12.1",
     "@navikt/ds-tokens": "4.12.1",
     "@navikt/familie-backend": "10.0.7",
-    "@navikt/familie-clipboard": "11.0.0",
     "@navikt/familie-datovelger": "0.2.0",
     "@navikt/familie-endringslogg": "9.0.0",
     "@navikt/familie-form-elements": "12.0.0",
@@ -49,7 +48,7 @@
     "@navikt/familie-skjema": "7.0.3",
     "@navikt/familie-tidslinje": "6.0.0",
     "@navikt/familie-typer": "8.0.0",
-    "@navikt/familie-visittkort": "10.0.0",
+    "@navikt/familie-visittkort": "11.0.2",
     "@navikt/flagg-ikoner": "3.2.7",
     "@navikt/fnrvalidator": "^1.3.1",
     "@navikt/hoykontrast": "^3.1.0",
@@ -110,7 +109,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-react": "^7.22.15",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^29.4.0",

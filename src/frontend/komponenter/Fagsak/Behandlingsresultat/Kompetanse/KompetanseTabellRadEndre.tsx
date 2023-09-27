@@ -3,8 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Fieldset } from '@navikt/ds-react';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Fieldset } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -117,8 +116,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
                     <StyledAlert variant="info" inline>
-                        Annen forelder er omfattet av norsk lovgivning etter praksisendring om
-                        selvstendig rett i perioden
+                        Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett
+                        i perioden
                     </StyledAlert>
                 )}
                 <StyledFamilieSelect
@@ -142,13 +141,18 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         erAnnenForelderOmfattetAvNorskLovgivning
                             ? AnnenForelderAktivitet
                             : SøkersAktivitet
-                    ).map((aktivitet: KompetanseAktivitet) => {
-                        return (
-                            <option key={aktivitet} value={aktivitet}>
-                                {kompetanseAktiviteter[aktivitet]}
-                            </option>
-                        );
-                    })}
+                    )
+                        .filter(
+                            (aktivitet: KompetanseAktivitet) =>
+                                aktivitet !== AnnenForelderAktivitet.IKKE_AKTUELT
+                        )
+                        .map((aktivitet: KompetanseAktivitet) => {
+                            return (
+                                <option key={aktivitet} value={aktivitet}>
+                                    {kompetanseAktiviteter[aktivitet]}
+                                </option>
+                            );
+                        })}
                 </StyledFamilieSelect>
                 <StyledFamilieSelect
                     className="unset-margin-bottom"

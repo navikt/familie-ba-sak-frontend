@@ -64,6 +64,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
+    const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<
+        boolean | undefined
+    >(undefined);
     const [institusjonsfagsaker, settInstitusjonsfagsaker] = useState<Ressurs<IMinimalFagsak[]>>(
         byggTomRessurs<IMinimalFagsak[]>()
     );
@@ -288,6 +291,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 settDataForManuellJournalføring(hentetDataForManuellJournalføring);
 
                 if (hentetDataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+                    settErDigialtInnsendtDokument(
+                        hentetDataForManuellJournalføring.data.journalpost.kanal ===
+                            JournalpostKanal.NAV_NO
+                    );
                     const førsteDokument =
                         hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
                             () => true
@@ -297,12 +304,15 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         hentetDataForManuellJournalføring.data.journalpost.journalpostId,
                         førsteDokument?.dokumentInfoId
                     );
+                } else {
+                    settErDigialtInnsendtDokument(undefined);
                 }
             })
             .catch((_error: AxiosError) => {
                 settDataForManuellJournalføring(
                     byggFeiletRessurs('Ukjent feil ved henting av oppgave')
                 );
+                settErDigialtInnsendtDokument(undefined);
             });
     };
 
@@ -614,6 +624,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         institusjonsfagsaker,
         settMinimalFagsakTilNormalFagsakForPerson,
         settMinimalFagsakTilInstitusjonsfagsak,
+        erDigitaltInnsendtDokument,
     };
 });
 
