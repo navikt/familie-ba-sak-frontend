@@ -2,16 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {
-    Alert,
-    BodyShort,
-    Button,
-    ErrorMessage,
-    Fieldset,
-    Heading,
-    Label,
-    Modal,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, Fieldset, Label, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './UseEndringstidspunkt';
@@ -22,20 +13,6 @@ import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDat
 
 const Feltmargin = styled.div`
     margin: 1.5rem 0 2rem;
-`;
-
-const StyledModal = styled(Modal)`
-    width: 35rem;
-    overflow: visible;
-`;
-
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: flex-end;
 `;
 
 const StyledAlert = styled(Alert)`
@@ -63,12 +40,14 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
         useEndringstidspunkt({ behandlingId, visModal, lukkModal });
 
     return (
-        <StyledModal open={visModal} onClose={lukkModal}>
-            <Modal.Content>
-                <Heading spacing size="medium" level="1">
-                    Oppdater endringstidspunkt
-                </Heading>
-
+        <Modal
+            open={visModal}
+            onClose={lukkModal}
+            width={'35rem'}
+            header={{ heading: 'Oppdater endringstidspunkt', size: 'medium' }}
+            portal
+        >
+            <Modal.Body>
                 <StyledAlert inline variant={'info'}>
                     Dersom du ønsker å vise perioder som er filtrert bort i vedtaksbildet, kan du
                     oppdatere endringstidspunktet tilbake i tid.
@@ -102,32 +81,31 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                         />
                     </Feltmargin>
                 </StyledFieldset>
-
-                <Knapperad>
-                    {erLesevisning ? (
-                        <Button variant="primary" key="Lukk">
-                            Lukk
-                        </Button>
-                    ) : (
-                        <>
-                            <Button
-                                variant={'tertiary'}
-                                key={'Avbryt'}
-                                onClick={lukkModal}
-                                children={'Avbryt'}
-                            />
-                            <KnappHøyre
-                                variant={'primary'}
-                                key={'Oppdater'}
-                                onClick={oppdaterEndringstidspunkt}
-                                children={'Oppdater'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            />
-                        </>
-                    )}
-                </Knapperad>
-            </Modal.Content>
-        </StyledModal>
+            </Modal.Body>
+            <Modal.Footer>
+                {erLesevisning ? (
+                    <Button variant="primary" key="Lukk">
+                        Lukk
+                    </Button>
+                ) : (
+                    <>
+                        <Button
+                            variant={'primary'}
+                            key={'Oppdater'}
+                            onClick={oppdaterEndringstidspunkt}
+                            children={'Oppdater'}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        />
+                        <Button
+                            variant={'tertiary'}
+                            key={'Avbryt'}
+                            onClick={lukkModal}
+                            children={'Avbryt'}
+                        />
+                    </>
+                )}
+            </Modal.Footer>
+        </Modal>
     );
 };

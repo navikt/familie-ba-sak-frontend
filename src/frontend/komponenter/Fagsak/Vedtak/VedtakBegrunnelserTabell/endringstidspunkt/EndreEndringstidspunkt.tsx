@@ -23,11 +23,13 @@ const EndreEndringstidspunkt: React.FC<Props> = ({ åpenBehandling }) => {
                 Oppdater endringstidspunkt
             </Dropdown.Menu.List.Item>
 
-            <OppdaterEndringstidspunktModal
-                visModal={visModal}
-                lukkModal={() => settVisModal(false)}
-                behandlingId={åpenBehandling.behandlingId}
-            />
+            {visModal && (
+                <OppdaterEndringstidspunktModal
+                    visModal={visModal}
+                    lukkModal={() => settVisModal(false)}
+                    behandlingId={åpenBehandling.behandlingId}
+                />
+            )}
         </>
     );
 };
