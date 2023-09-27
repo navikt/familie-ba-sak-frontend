@@ -23,6 +23,7 @@ import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUti
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
+    gjelderInstitusjon: Boolean;
     vilkårType: VilkårType;
     regelverk: Regelverk | null;
     periode: IPeriode;
@@ -41,14 +42,15 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
     regelverk,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
         vilkårType,
-        regelverk
+        regelverk,
+        gjelderInstitusjon
     );
 
     const valgteBegrunnelser = begrunnelser
