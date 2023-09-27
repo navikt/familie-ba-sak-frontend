@@ -4,3 +4,8 @@
 *.yml
 *.md
 *.html
+frontend_development/*
+frontend_production/*
+.eslintrc
+.prettierrc
+node_dist/*
