@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, Fieldset } from '@navikt/ds-react';
+import { BodyShort, Button, Fieldset, Modal } from '@navikt/ds-react';
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -13,7 +13,6 @@ import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
@@ -44,67 +43,71 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
     const årsaker = hentAlleÅrsaker();
 
     return (
-        <UIModalWrapper
-            modal={{
-                tittel: erBehandlingAlleredePåVent
+        <Modal
+            open={visModal}
+            onClose={onAvbryt}
+            width={'small'}
+            header={{
+                heading: erBehandlingAlleredePåVent
                     ? 'Endre ventende behandling'
                     : 'Sett behandling på vent',
-                visModal: visModal,
-                lukkKnapp: true,
-                onClose: onAvbryt,
-                actions: [
-                    <Button
-                        variant={'tertiary'}
-                        key={'Avbryt'}
-                        size="medium"
-                        onClick={onAvbryt}
-                        children={'Avbryt'}
-                    />,
-                    <Button
-                        variant={'primary'}
-                        key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                        size={'medium'}
-                        onClick={settBehandlingPåVent}
-                        children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    />,
-                ],
+                size: 'small',
             }}
+            portal
         >
-            <Fieldset
-                error={hentFrontendFeilmelding(skjema.submitRessurs)}
-                errorPropagation={false}
-                legend="Sett behandling på vent"
-                hideLegend
-            >
-                {erBehandlingAlleredePåVent && (
-                    <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>
-                )}
+            <Modal.Body>
+                <Fieldset
+                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                    errorPropagation={false}
+                    legend="Sett behandling på vent"
+                    hideLegend
+                >
+                    {erBehandlingAlleredePåVent && (
+                        <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>
+                    )}
 
-                <Feltmargin>
-                    <FamilieDatovelgerWrapper
-                        {...skjema.felter.frist.hentNavInputProps(skjema.visFeilmeldinger)}
-                        value={skjema.felter.frist.verdi}
-                        label={'Frist'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                    />
-                </Feltmargin>
-                <Feltmargin>
-                    <FamilieSelect
-                        {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
-                        label={'Årsak'}
-                        placeholder={'Årsak'}
-                    >
-                        <option value={undefined}>Velg årsak</option>
-                        {årsaker.map(årsak => (
-                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                                {settPåVentÅrsaker[årsak]}
-                            </option>
-                        ))}
-                    </FamilieSelect>
-                </Feltmargin>
-            </Fieldset>
-        </UIModalWrapper>
+                    <Feltmargin>
+                        <FamilieDatovelgerWrapper
+                            {...skjema.felter.frist.hentNavInputProps(skjema.visFeilmeldinger)}
+                            value={skjema.felter.frist.verdi}
+                            label={'Frist'}
+                            placeholder={'DD.MM.ÅÅÅÅ'}
+                        />
+                    </Feltmargin>
+                    <Feltmargin>
+                        <FamilieSelect
+                            {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
+                            label={'Årsak'}
+                            placeholder={'Årsak'}
+                        >
+                            <option value={undefined}>Velg årsak</option>
+                            {årsaker.map(årsak => (
+                                <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                    {settPåVentÅrsaker[årsak]}
+                                </option>
+                            ))}
+                        </FamilieSelect>
+                    </Feltmargin>
+                </Fieldset>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    variant={'primary'}
+                    key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
+                    size={'medium'}
+                    onClick={settBehandlingPåVent}
+                    children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
+                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                />
+                <Button
+                    variant={'tertiary'}
+                    key={'Avbryt'}
+                    size="medium"
+                    onClick={onAvbryt}
+                    children={'Avbryt'}
+                />
+            </Modal.Footer>
+        </Modal>
     );
 };
