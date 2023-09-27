@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 import { ArrowUndoIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { Alert, BodyLong, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
@@ -14,22 +14,8 @@ import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedt
 import type { IRestKorrigertVedtak } from '../../../../typer/vedtak';
 import { datoformatNorsk } from '../../../../utils/formatter';
 
-const Knapperad = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-`;
-
-const KnappVenstre = styled(Button)`
-    margin-right: 1rem;
-`;
-
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0rem;
-`;
-
-const StyledModalContent = styled(Modal.Content)`
-    width: 40rem;
 `;
 
 const baseSkjemaelementStyle = css`
@@ -91,12 +77,15 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                 <ExclamationmarkTriangleIcon fontSize={'1.4rem'} />
                 {korrigertVedtak ? <>Vis korrigert vedtak</> : <>Korriger vedtak</>}
             </Dropdown.Menu.List.Item>
-            <Modal open={visModal} onClose={lukkModal}>
-                <StyledModalContent>
-                    <Heading size="medium" level={'2'} spacing>
-                        Korriger vedtak
-                    </Heading>
-                    <div>
+            {visModal && (
+                <Modal
+                    open={visModal}
+                    onClose={lukkModal}
+                    header={{ heading: 'Korriger vedtak', size: 'medium' }}
+                    width={'40rem'}
+                    portal
+                >
+                    <Modal.Body>
                         <BodyLong>
                             Dersom det har blitt gjort feil tidligere vedtak, kan denne teksten
                             legges til i vedtaksbrevet:
@@ -144,51 +133,43 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                                 {restFeil}
                             </Alert>
                         )}
-                    </div>
-                    <Knapperad>
+                    </Modal.Body>
+                    <Modal.Footer>
                         {!erLesevisning && (
                             <>
-                                <div>
-                                    <KnappVenstre
-                                        onClick={lagreKorrigertVedtak}
-                                        variant={valideringErOk() ? 'primary' : 'secondary'}
+                                <Button
+                                    onClick={lagreKorrigertVedtak}
+                                    variant={valideringErOk() ? 'primary' : 'secondary'}
+                                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                >
+                                    {korrigertVedtak ? 'Oppdater' : 'Legg til'}
+                                </Button>
+                                <Button onClick={lukkModal} variant={'tertiary'}>
+                                    Avbryt
+                                </Button>
+                                {visAngreKnapp && (
+                                    <AngreKnapp
+                                        size={'small'}
+                                        onClick={angreKorrigering}
+                                        variant={'tertiary'}
                                         loading={
                                             skjema.submitRessurs.status === RessursStatus.HENTER
                                         }
                                         disabled={
                                             skjema.submitRessurs.status === RessursStatus.HENTER
                                         }
+                                        icon={<ArrowUndoIcon />}
                                     >
-                                        {korrigertVedtak ? 'Oppdater' : 'Legg til'}
-                                    </KnappVenstre>
-                                    <Button onClick={lukkModal} variant={'tertiary'}>
-                                        Avbryt
-                                    </Button>
-                                </div>
-                                <div>
-                                    {visAngreKnapp && (
-                                        <AngreKnapp
-                                            size={'small'}
-                                            onClick={angreKorrigering}
-                                            variant={'tertiary'}
-                                            loading={
-                                                skjema.submitRessurs.status === RessursStatus.HENTER
-                                            }
-                                            disabled={
-                                                skjema.submitRessurs.status === RessursStatus.HENTER
-                                            }
-                                            icon={<ArrowUndoIcon />}
-                                        >
-                                            Fjern korrigering
-                                        </AngreKnapp>
-                                    )}
-                                </div>
+                                        Fjern korrigering
+                                    </AngreKnapp>
+                                )}
                             </>
                         )}
                         {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
-                    </Knapperad>
-                </StyledModalContent>
-            </Modal>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };
