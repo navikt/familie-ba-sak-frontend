@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
+import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
 import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -12,7 +12,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VilkårType } from '../../../../typer/vilkår';
-import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const UtførKnapp = styled(Button)`
     margin-top: ${ASpacing5};
@@ -60,6 +59,12 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
         }
     };
 
+    const onCloseModal = () => {
+        settVisFrontendFeilmelding(false);
+        settFeilmelding(undefined);
+        settVisModal(false);
+    };
+
     return (
         <>
             <UtførKnapp
@@ -72,40 +77,42 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
             </UtførKnapp>
 
             {visModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Fjern vilkåret utvidet barnetrygd',
-                        visModal: visModal,
-                        lukkKnapp: false,
-                        actions: [
-                            <Button
-                                variant="tertiary"
-                                key={'avbryt'}
-                                onClick={() => {
-                                    settVisFrontendFeilmelding(false);
-                                    settFeilmelding(undefined);
-                                    settVisModal(false);
-                                }}
-                                size="small"
-                            >
-                                Avbryt
-                            </Button>,
-                            <Button
-                                disabled={disabled}
-                                key={'bekreft'}
-                                onClick={() => fjernVilkårUtvidet()}
-                                size="small"
-                            >
-                                Bekreft
-                            </Button>,
-                        ],
+                <Modal
+                    open={visModal}
+                    onClose={onCloseModal}
+                    header={{
+                        heading: 'Fjern vilkåret utvidet barnetrygd',
+                        size: 'small',
+                        closeButton: false,
                     }}
+                    width={'35rem'}
+                    portal
                 >
-                    Er du sikker?
-                    {visFrontendFeilmelding && (
-                        <ErrorMessage size="small">{feilmelding}</ErrorMessage>
-                    )}
-                </UIModalWrapper>
+                    <Modal.Body>
+                        Er du sikker?
+                        {visFrontendFeilmelding && (
+                            <ErrorMessage size="small">{feilmelding}</ErrorMessage>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            disabled={disabled}
+                            key={'bekreft'}
+                            onClick={() => fjernVilkårUtvidet()}
+                            size="small"
+                        >
+                            Bekreft
+                        </Button>
+                        <Button
+                            variant="tertiary"
+                            key={'avbryt'}
+                            onClick={onCloseModal}
+                            size="small"
+                        >
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             )}
         </>
     );
