@@ -210,7 +210,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 size: 'medium',
             }}
             portal
-            width={'medium'}
+            width={'35rem'}
         >
             <Modal.Body>
                 <StyledBodyShort>
