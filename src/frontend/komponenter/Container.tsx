@@ -21,11 +21,11 @@ import { Oppgaver } from '../context/OppgaverContext';
 import { TidslinjeProvider } from '../context/TidslinjeContext';
 
 const Container: React.FC = () => {
-    const { autentisert, systemetLaster, innloggetSaksbehandler, modal } = useApp();
+    const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal } = useApp();
 
     return (
         <Router>
-            {modal.visModal && <AppInfoModal modal={modal} />}
+            {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}

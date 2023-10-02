@@ -91,7 +91,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
     const [appVersjon, settAppVersjon] = useState('');
 
-    const [modal, settModal] = React.useState<IModal>(initalState);
+    const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
 
     const verifiserVersjon = () => {
@@ -101,7 +101,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         }).then((versjon: Ressurs<string>) => {
             if (versjon.status === RessursStatus.SUKSESS) {
                 if (appVersjon !== '' && appVersjon !== versjon.data) {
-                    settModal({
+                    settAppInfoModal({
                         tittel: 'Løsningen er utdatert',
                         innhold: () => {
                             return (
@@ -163,7 +163,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     }, []);
 
     const lukkModal = () => {
-        settModal(initalState);
+        settAppInfoModal(initalState);
     };
 
     const hentPerson = async (brukerIdent: string): Promise<Ressurs<IPersonInfo>> => {
@@ -175,7 +175,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             },
         }).then((ressurs: Ressurs<IPersonInfo>) => {
             if ('data' in ressurs && ressurs.data.harTilgang === false) {
-                settModal(
+                settAppInfoModal(
                     tilgangModal(
                         {
                             saksbehandlerHarTilgang: false,
@@ -200,7 +200,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             påvirkerSystemLaster: visSystemetLaster,
         }).then((ressurs: Ressurs<IRestTilgang>) => {
             if (ressurs.status === RessursStatus.SUKSESS) {
-                settModal(tilgangModal(ressurs.data, lukkModal));
+                settAppInfoModal(tilgangModal(ressurs.data, lukkModal));
                 return ressurs.data.saksbehandlerHarTilgang;
             } else {
                 return false;
@@ -243,7 +243,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         innloggetSaksbehandler,
         harInnloggetSaksbehandlerSkrivetilgang,
         harInnloggetSaksbehandlerSuperbrukerTilgang,
-        modal,
+        appInfoModal,
         settToast: (toastId: ToastTyper, toast: IToast) =>
             settToasts({
                 ...toasts,
