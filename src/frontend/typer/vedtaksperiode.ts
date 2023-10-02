@@ -82,9 +82,9 @@ export const hentVedtaksperiodeTittel = (
     const { type, utbetalingsperiodeDetaljer } = vedtaksperiodeMedBegrunnelser;
 
     const ytelseTyperUtenEndring =
-        utbetalingsperiodeDetaljer
-            .filter(utbetalingsperiodeDetalj => !utbetalingsperiodeDetalj.erPåvirketAvEndring)
-            .map(utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType) ?? [];
+        utbetalingsperiodeDetaljer.map(
+            utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType
+        ) ?? [];
 
     if (
         (type === Vedtaksperiodetype.UTBETALING ||

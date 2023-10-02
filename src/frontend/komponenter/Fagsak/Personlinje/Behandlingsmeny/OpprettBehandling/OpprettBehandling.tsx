@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-import { Button, Fieldset, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { Alert, Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Datofelt } from './Datofelt';
@@ -9,11 +10,23 @@ import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
+import {
+    erFør,
+    iDag,
+    kalenderDatoMedFallback,
+    KalenderEnhet,
+    TIDENES_ENDE,
+    trekkFra,
+} from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1.5rem;
+`;
 
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visOpprettNyBehandlingModal, settVisOpprettNyBehandlingModal] = useState(false);
@@ -40,6 +53,16 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
         nullstillSkjemaStatus();
         settVisOpprettNyBehandlingModal(false);
     };
+
+    const søknadMottattDato = kalenderDatoMedFallback(
+        opprettBehandlingSkjema.felter.søknadMottattDato.verdi,
+        TIDENES_ENDE
+    );
+
+    const søknadMottattDatoErMerEnn360DagerSiden = erFør(
+        søknadMottattDato,
+        trekkFra(iDag(), 360, KalenderEnhet.DAG)
+    );
 
     return (
         <>
@@ -101,6 +124,12 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 />
                             )}
                         </Fieldset>
+                        {søknadMottattDatoErMerEnn360DagerSiden && (
+                            <StyledAlert variant={'warning'}>
+                                Er mottatt dato riktig? <br />
+                                Det er mer enn 360 dager siden denne datoen.
+                            </StyledAlert>
+                        )}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button

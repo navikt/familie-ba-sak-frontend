@@ -11,7 +11,6 @@ export enum ToggleNavn {
     kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
 
     // Release
-    endreMottakerEndringsårsaker = 'familie-ba-sak.behandling.endringsperiode.endre-mottaker-aarsaker.utgivelse',
     kanBehandleKlage = 'familie-ba-sak.klage',
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
     manuellPostering = 'familie-ba-sak.manuell-postering',

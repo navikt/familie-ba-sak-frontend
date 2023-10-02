@@ -21,19 +21,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: npm
+          node-version: '18'
+          cache: yarn
           registry-url: "https://npm.pkg.github.com"
       - uses: ./.github/yarn-cache
       - name: Yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
-      - name: Build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
+      - name: Yarn build
         run: |
           yarn build
           yarn test

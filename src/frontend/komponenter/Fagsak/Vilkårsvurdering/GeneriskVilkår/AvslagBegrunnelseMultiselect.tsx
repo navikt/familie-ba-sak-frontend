@@ -41,14 +41,15 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
     regelverk,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
         vilkårType,
-        regelverk
+        regelverk,
+        gjelderInstitusjon
     );
 
     const valgteBegrunnelser = begrunnelser
