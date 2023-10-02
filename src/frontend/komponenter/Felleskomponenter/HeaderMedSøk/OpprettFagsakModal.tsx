@@ -44,11 +44,6 @@ const StyledFagsakOptionsDiv = styled.div`
     min-width: 20rem;
 `;
 
-const StyledModalContent = styled(Modal.Body)`
-    padding: 2.5rem;
-    width: 40rem;
-`;
-
 const StyledReadMore = styled(ReadMore)`
     margin-top: 2rem;
 `;
@@ -215,8 +210,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 size: 'medium',
             }}
             portal
+            width={'medium'}
         >
-            <StyledModalContent>
+            <Modal.Body>
                 <StyledBodyShort>
                     {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
@@ -250,7 +246,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 )}
 
                 {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
-            </StyledModalContent>
+            </Modal.Body>
             <Modal.Footer>
                 <Button
                     key={'Bekreft'}
