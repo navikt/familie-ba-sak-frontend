@@ -1,4 +1,3 @@
-import type { CSSProperties, ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
@@ -29,17 +28,13 @@ export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
 
 export interface IModal {
     actions?: JSX.Element[] | JSX.Element;
-    className?: string;
     innhold?: () => React.ReactNode;
-    lukkKnapp: boolean;
     onClose?: () => void;
-    style?: CSSProperties;
-    tittel: ReactNode;
+    tittel: string;
     visModal: boolean;
 }
 
 const initalState: IModal = {
-    lukkKnapp: true,
     tittel: '',
     visModal: false,
 };
@@ -56,7 +51,6 @@ interface AuthProviderExports {
 
 const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     tittel: 'Diskresjonskode',
-    lukkKnapp: true,
     visModal: !data.saksbehandlerHarTilgang,
     onClose: () => lukkModal(),
     innhold: () => {
@@ -120,17 +114,9 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                                 </div>
                             );
                         },
-                        lukkKnapp: true,
                         visModal: true,
                         onClose: () => lukkModal(),
                         actions: [
-                            <Button
-                                key={'avbryt'}
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => lukkModal()}
-                                children={'Avbryt'}
-                            />,
                             <Button
                                 key={'oppdater'}
                                 variant="primary"
@@ -139,6 +125,13 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                                     window.location.reload();
                                 }}
                                 children={'Ok, oppdater'}
+                            />,
+                            <Button
+                                key={'avbryt'}
+                                variant="tertiary"
+                                size="small"
+                                onClick={() => lukkModal()}
+                                children={'Avbryt'}
                             />,
                         ],
                     });
@@ -168,13 +161,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             }
         });
     }, []);
-
-    const åpneModal = () => {
-        settModal({
-            ...modal,
-            visModal: true,
-        });
-    };
 
     const lukkModal = () => {
         settModal(initalState);
@@ -257,9 +243,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         innloggetSaksbehandler,
         harInnloggetSaksbehandlerSkrivetilgang,
         harInnloggetSaksbehandlerSuperbrukerTilgang,
-        lukkModal,
         modal,
-        settModal,
         settToast: (toastId: ToastTyper, toast: IToast) =>
             settToasts({
                 ...toasts,
@@ -270,7 +254,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         systemetLaster,
         toasts,
         toggles,
-        åpneModal,
         hentPerson,
     };
 });
