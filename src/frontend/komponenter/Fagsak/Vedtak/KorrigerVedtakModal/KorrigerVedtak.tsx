@@ -82,7 +82,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                     open={visModal}
                     onClose={lukkModal}
                     header={{ heading: 'Korriger vedtak', size: 'medium' }}
-                    width={'40rem'}
+                    width={'35rem'}
                     portal
                 >
                     <Modal.Body>
