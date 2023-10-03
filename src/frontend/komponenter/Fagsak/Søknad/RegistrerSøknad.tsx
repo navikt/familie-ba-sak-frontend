@@ -94,6 +94,7 @@ const RegistrerSøknad: React.FC = () => {
                         size: 'small',
                         closeButton: false,
                     }}
+                    width={'35rem'}
                 >
                     <Modal.Body>
                         <FjernVilkårAdvarsel>
