@@ -12,7 +12,7 @@ import IkkeTilgang from '../ikoner/IkkeTilgang';
 import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
-import { Adressebeskyttelsegradering, adressebeskyttelsestyper } from '../typer/person';
+import { adressebeskyttelsestyper } from '../typer/person';
 import type { IToggles } from '../typer/toggles';
 import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
@@ -145,15 +145,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     useEffect(() => verifiserVersjon(), []);
 
     useEffect(() => {
-        settAppInfoModal(
-            tilgangModal(
-                {
-                    saksbehandlerHarTilgang: false,
-                    adressebeskyttelsegradering: Adressebeskyttelsegradering.FORTROLIG,
-                },
-                lukkModal
-            )
-        );
         request<string[], IToggles>({
             method: 'POST',
             url: '/familie-ba-sak/api/feature',
