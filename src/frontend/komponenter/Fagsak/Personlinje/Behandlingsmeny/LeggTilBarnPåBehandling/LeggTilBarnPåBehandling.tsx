@@ -6,7 +6,7 @@ import { Alert, Button, HelpText, Fieldset, Modal, Heading } from '@navikt/ds-re
 import { Dropdown } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
@@ -46,8 +46,7 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
         felter: {
             ident: useFelt<string>({
                 verdi: '',
-                valideringsfunksjon:
-                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
+                valideringsfunksjon: identValidator,
             }),
         },
         skjemanavn: 'Legg til barn',
