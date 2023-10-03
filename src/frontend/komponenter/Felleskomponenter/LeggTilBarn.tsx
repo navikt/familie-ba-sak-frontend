@@ -38,13 +38,6 @@ const StyledHelpText = styled(HelpText)`
 
 const DrekLenkeContainer = styled.div`
     margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    p.navds-error-message.navds-label {
-        max-width: 35rem;
-    }
 `;
 
 export interface IRegistrerBarnSkjema {
@@ -102,8 +95,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
         felter: {
             ident: useFelt<string>({
                 verdi: '',
-                valideringsfunksjon:
-                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
+                valideringsfunksjon: identValidator,
                 skalFeltetVises: (avhengigheter: Avhengigheter) => {
                     // Bruker logikk i skjema for å disable validering på feltet, men det er fortsatt synlig for bruker.
                     const { erFolkeregistrert } = avhengigheter;
@@ -271,7 +263,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 <Modal
                     open={visModal}
                     onClose={onAvbryt}
-                    width={'medium'}
+                    width={'35rem'}
                     aria-label={'Legg til barn'}
                 >
                     <Modal.Header>
@@ -302,7 +294,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                         </StyledHeading>
                     </Modal.Header>
                     <Modal.Body>
-                        <StyledFieldset
+                        <Fieldset
                             error={
                                 registrerBarnSkjema.visFeilmeldinger &&
                                 (registrerBarnSkjema.submitRessurs.status ===
@@ -350,7 +342,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
                                 <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
                             )}
-                        </StyledFieldset>
+                        </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
