@@ -10,9 +10,6 @@ import BrevmottakerTabell from './BrevmottakerTabell';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 
-const StyledModal = styled(Modal)`
-    width: 35rem;
-`;
 const StyledAlert = styled(Alert)`
     margin: 1rem 0 2.5rem;
 `;
@@ -66,10 +63,11 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     };
 
     return (
-        <StyledModal
+        <Modal
             open={visModal}
             onClose={lukkModalOgSkjema}
             header={{ heading: heading, size: 'medium' }}
+            width={'35rem'}
             portal
         >
             <Modal.Body>
@@ -106,6 +104,6 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                     </>
                 )}
             </Modal.Body>
-        </StyledModal>
+        </Modal>
     );
 };
