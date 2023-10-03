@@ -88,7 +88,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
                             Gå via meny for å endre årsak og frist på ventende behandling.
                         </StyledBodyShort>
 
-                        <StyledBodyShort>Ønsker du å fortsette behandlingen?</StyledBodyShort>
+                        <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
 
                         {submitRessurs.status === RessursStatus.FEILET && (
                             <StyledAlert variant="error">
