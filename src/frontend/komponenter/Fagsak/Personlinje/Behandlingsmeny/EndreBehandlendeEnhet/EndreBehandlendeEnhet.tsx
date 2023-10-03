@@ -62,7 +62,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
                 <Modal
                     open={visModal}
                     onClose={lukkBehandlendeEnhetModal}
-                    width={'small'}
+                    width={'35rem'}
                     header={{
                         heading: 'Endre enhet for denne behandlingen',
                         size: 'small',
