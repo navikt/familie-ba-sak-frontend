@@ -2004,12 +2004,12 @@
     redis "^4.6.7"
     snyk "^1.1142.0"
 
-"@navikt/familie-datovelger@0.2.0":
-  version "0.2.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-datovelger/0.2.0/c4cf1dc4a479a449d1bfae0bebcdd7a2d8cf5c41#c4cf1dc4a479a449d1bfae0bebcdd7a2d8cf5c41"
-  integrity sha512-cIdNf5t7G9dAElLs8+f0MzpQzFd2TsfCgm+GR2muQ3a6f8XxWSpRUIH3QLDlksAxQWaI29UoVQ7or7eSs5V7oA==
+"@navikt/familie-datovelger@0.3.0":
+  version "0.3.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-datovelger/0.3.0/5f2bd3910ddb45ccb5b0e36d64c9168a01e4d0be#5f2bd3910ddb45ccb5b0e36d64c9168a01e4d0be"
+  integrity sha512-nCVOEsYe2V0qReW3aOGA+rsPIsB9Fu/hmgw2vqF09jgNq/MejwROXW+sVruzAb06oYsBHfwRD9shInCQMJqCFA==
   dependencies:
-    "@navikt/familie-form-elements" "^12.0.0"
+    "@navikt/familie-form-elements" "^13.0.0"
     "@types/classnames" "^2.3.1"
     classnames "^2.3.2"
     dayjs "^1.11.3"
@@ -2023,31 +2023,31 @@
     nav-frontend-typografi-style "^2.0.1"
     react-select "^5.7.0"
 
-"@navikt/familie-endringslogg@9.0.0":
-  version "9.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/9.0.0/03ad3e83b12555248e2af987ea3f24a707ec1cd9#03ad3e83b12555248e2af987ea3f24a707ec1cd9"
-  integrity sha512-ZZjlzZYXTfeG45pHtdYTbcbm8mee2B2xW2XL23VtSM/R4yq6r3aFnxOrUJwd0v6zl72EtBAYfV8CDll29Wq61Q==
+"@navikt/familie-endringslogg@10.0.0":
+  version "10.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/10.0.0/a85a44073c816ec36daaaa8d20c44ab8dff0ccaa#a85a44073c816ec36daaaa8d20c44ab8dff0ccaa"
+  integrity sha512-uCyWfVXfEYGscmarSxa5PSMzQsEWdff9Ky3mRkR6cmEYjkJi6gMFS/i5wpkY3NmlEJtq/83bJVcfj8HpuIseJQ==
   dependencies:
-    "@portabletext/react" "^1.0.6"
+    "@portabletext/react" "^3.0.7"
     classnames "^2.3.2"
-    react-transition-group "^4.4.2"
+    react-transition-group "^4.4.5"
 
-"@navikt/familie-form-elements@12.0.0", "@navikt/familie-form-elements@^12.0.0":
-  version "12.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/12.0.0/a333e46e08a5bff4d30c92f1ce990a2b58fe1cb7#a333e46e08a5bff4d30c92f1ce990a2b58fe1cb7"
-  integrity sha512-6k8XoBzgAEfOIaACVDSyWvYEYgXqOskUc1VvY41o8zpDKqgbQ636fw0H1kFaVN2Qq+yKjZUxTRIH5ryhSlcgSA==
+"@navikt/familie-form-elements@13.0.0", "@navikt/familie-form-elements@^13.0.0":
+  version "13.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/13.0.0/c3ec85621cb87c35cece49ce4a0d59d17ab0ad7c#c3ec85621cb87c35cece49ce4a0d59d17ab0ad7c"
+  integrity sha512-C7Co3jFGad7TdS7P2QM1l58rb4T82lE31Gx6gOC7MXRaBKTDnd9MJCf8AXazUyjmxUASmWepdSoGo/bgZjtJdA==
   dependencies:
     "@types/classnames" "^2.3.1"
     classnames "^2.3.2"
     react-select "^5.7.0"
 
-"@navikt/familie-header@11.0.0":
-  version "11.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/11.0.0/a01d72e68447f761f27794f98a52fc5440af1802#a01d72e68447f761f27794f98a52fc5440af1802"
-  integrity sha512-OQxncqXR0fRtDhqre0+ek2b7Lp/3xr+ne8AoXW8q00K2YOiZKerHEtVuEf3M4s52CJdz1iQnvb6D30oPrLOpdQ==
+"@navikt/familie-header@12.0.0":
+  version "12.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/12.0.0/4f96471ee373b3b2a21794abff348ae41e0755e9#4f96471ee373b3b2a21794abff348ae41e0755e9"
+  integrity sha512-nP5qsKQFZCEILVrvQHV2pd0Nlkgi2bCUfSMqReZ05ZwUe5N4eMu8Gx4PfGs2lmLb73vBIzgUOlx3WfpupCZ+tw==
   dependencies:
-    "@navikt/familie-ikoner" "^7.0.0"
-    "@navikt/familie-typer" "^8.0.0"
+    "@navikt/familie-ikoner" "^7.0.1"
+    "@navikt/familie-typer" "^8.0.1"
     "@navikt/familie-validering" "^5.0.2"
 
 "@navikt/familie-http@6.0.0", "@navikt/familie-http@^6.0.0":
@@ -2059,7 +2059,7 @@
     "@sentry/core" "^7.5.0"
     constate "^3.3.2"
 
-"@navikt/familie-ikoner@7.0.0", "@navikt/familie-ikoner@^7.0.0":
+"@navikt/familie-ikoner@7.0.0":
   version "7.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/7.0.0/8629366b465243d28ae1a9c199153529b5583817#8629366b465243d28ae1a9c199153529b5583817"
   integrity sha512-SowUSxLMw7jhGWgyOM9u//orOUcGb1VXYPwDj+8dumuTQqyxWcF/Q0Y+txVI6uCMmFOlUYTRoCGNP7J2/B7C1g==
@@ -2114,10 +2114,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/5.0.2/b890a334ca5f5aa5aeba6873f3fb00aff30be759#b890a334ca5f5aa5aeba6873f3fb00aff30be759"
   integrity sha512-S8C3egFMHC97auVFOlWMmG2Z84X1mwtVAvmp3ACEpFFRtzKQ2CD25ZJV7Sqf3IqHZLLAzGEaYCeMtYIAPwp3ag==
 
-"@navikt/familie-visittkort@11.0.2":
-  version "11.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/11.0.2/87876bff6515e6e7cdcd6ef265921bfc288596a2#87876bff6515e6e7cdcd6ef265921bfc288596a2"
-  integrity sha512-UwFYLGXMTVBBN6vP389VIQc+qZp3ugQFeaqHVzv7n8Lz9BjY5hiq78GCtZnWvCdRa5TNoQJ+BitiIrMvGFPGUQ==
+"@navikt/familie-visittkort@12.0.0":
+  version "12.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/12.0.0/2fbf0c4ef0e9fcdde0c0021af58c7e689cf5bc3a#2fbf0c4ef0e9fcdde0c0021af58c7e689cf5bc3a"
+  integrity sha512-f8PBgdgVJSELAQnQw0OOrVjhhcxi5NTU3qqJIlyNwlziyqEZUVM+QmDaYkTEQU9FduJDamBoqvKQUzW4B7V/uw==
   dependencies:
     "@navikt/familie-ikoner" "^7.0.1"
     "@navikt/familie-typer" "^8.0.1"
@@ -2197,25 +2197,25 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@portabletext/react@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-1.0.6.tgz#508ede0b165a3705db6907a94ff67c791d9ab432"
-  integrity sha512-j6BprLiwFz3zr1Lo6BxM2sQ1b3g1JIjGwePeuxqSfbBiEYbGXn2izEckMJ02hSa1f7+RCEUJ+Bojvtzz6BBUaw==
+"@portabletext/react@^3.0.7":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-3.0.9.tgz#c9a20c99a7925cea4e76079dcdee397999448034"
+  integrity sha512-BAIhClkMs5IwDkCd2F7xF5/fsvFm39kpdZmGnLfCpZudb5zDY8JNa6eeyRO50rL+VwozXb8qJEBkVBTp3CGcEw==
   dependencies:
-    "@portabletext/toolkit" "^1.0.5"
-    "@portabletext/types" "^1.0.3"
+    "@portabletext/toolkit" "^2.0.9"
+    "@portabletext/types" "^2.0.7"
 
-"@portabletext/toolkit@^1.0.5":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-1.0.6.tgz#783910483c4fbacdb6df7808b90d96e7e24985e3"
-  integrity sha512-u48kRSOyxbOmy0J//bLg1odTcL5dvPDmobSbiTgR11J/k9eIKCdWRiJtddpEyId/aWGP2bkX4ol2RMPCmAPCIg==
+"@portabletext/toolkit@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-2.0.9.tgz#530ca788a8db8a5feb7f3eb84c149c43a4501d9a"
+  integrity sha512-6/P/fsCGLFhztVGJRwIMePmwGbOH1Uvoim04XPh38pcC+wWT3KJ97Hn1HPWmuxd9kGdxyySQpThfYZbSmroGpg==
   dependencies:
-    "@portabletext/types" "^1.0.3"
+    "@portabletext/types" "^2.0.7"
 
-"@portabletext/types@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-1.0.3.tgz#b23f832ae5331c1d864195a95eba34abf340597e"
-  integrity sha512-SDDsdury2SaTI2D5Ea6o+Y39SSZMYHRMWJHxkxYl3yzFP0n/0EknOhoXcoaV+bxGr2dTTqZi2TOEj+uWYuavSw==
+"@portabletext/types@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-2.0.7.tgz#e4c97bcebd15901d72a218ebb6595ddea7cdfead"
+  integrity sha512-kWjS2lguGKHYDsHeK83cXonuYQCIP4mfNwnTjCdDpIPf7CQ4eTuKjYKxJ2w2aksbsh1DwSk1h+xZ64ADiNdTGg==
 
 "@radix-ui/primitive@1.0.0":
   version "1.0.0"
@@ -9366,10 +9366,20 @@ react-toast-notifications@^2.5.1:
     "@emotion/core" "^10.0.14"
     react-transition-group "^4.4.1"
 
-react-transition-group@^4.3.0, react-transition-group@^4.4.1, react-transition-group@^4.4.2:
+react-transition-group@^4.3.0, react-transition-group@^4.4.1:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
   integrity sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    dom-helpers "^5.0.1"
+    loose-envify "^1.4.0"
+    prop-types "^15.6.2"
+
+react-transition-group@^4.4.5:
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.5.tgz#e53d4e3f3344da8521489fbef8f2581d42becdd1"
+  integrity sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==
   dependencies:
     "@babel/runtime" "^7.5.5"
     dom-helpers "^5.0.1"
