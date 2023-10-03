@@ -39,7 +39,7 @@ const EndreBehandlingstema: React.FC = () => {
                     open={visModal}
                     onClose={lukkEndreBehandlingModal}
                     header={{ heading: 'Endre behandlingstema', size: 'small' }}
-                    width={'small'}
+                    width={'35rem'}
                     portal
                 >
                     <Modal.Body>
