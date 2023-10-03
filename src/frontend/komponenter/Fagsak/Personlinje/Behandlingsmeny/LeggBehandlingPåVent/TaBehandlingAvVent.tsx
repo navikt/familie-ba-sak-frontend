@@ -69,6 +69,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
                     header={{ heading: 'Fortsett behandling', size: 'small' }}
                     open={visModal}
                     onClose={lukkModal}
+                    width={'35rem'}
                     portal
                 >
                     <Modal.Body>
