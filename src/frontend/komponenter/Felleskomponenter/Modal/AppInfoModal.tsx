@@ -13,6 +13,7 @@ const AppInfoModal = ({ modal }: IProps) => {
             open={modal.visModal}
             onClose={modal.onClose}
             header={{ heading: modal.tittel, size: 'small' }}
+            width={'medium'}
             portal
         >
             <Modal.Body>{modal.innhold && modal.innhold()}</Modal.Body>

@@ -3,17 +3,16 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { BodyShort, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../ikoner/IkkeTilgang';
-import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
-import { adressebeskyttelsestyper } from '../typer/person';
+import { Adressebeskyttelsegradering, adressebeskyttelsestyper } from '../typer/person';
 import type { IToggles } from '../typer/toggles';
 import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
@@ -105,13 +104,10 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                         tittel: 'Løsningen er utdatert',
                         innhold: () => {
                             return (
-                                <div className={'utdatert-losning'}>
-                                    <InformasjonSirkel />
-                                    <BodyShort>
-                                        Det finnes en oppdatert versjon av løsningen. Det anbefales
-                                        at du oppdaterer med en gang.
-                                    </BodyShort>
-                                </div>
+                                <Alert variant={'info'} inline>
+                                    Det finnes en oppdatert versjon av løsningen. Det anbefales at
+                                    du oppdaterer med en gang.
+                                </Alert>
                             );
                         },
                         visModal: true,
@@ -149,6 +145,15 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     useEffect(() => verifiserVersjon(), []);
 
     useEffect(() => {
+        settAppInfoModal(
+            tilgangModal(
+                {
+                    saksbehandlerHarTilgang: false,
+                    adressebeskyttelsegradering: Adressebeskyttelsegradering.FORTROLIG,
+                },
+                lukkModal
+            )
+        );
         request<string[], IToggles>({
             method: 'POST',
             url: '/familie-ba-sak/api/feature',
