@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Alert, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
@@ -13,20 +13,8 @@ import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/Registr
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { datoformatNorsk } from '../../../utils/formatter';
 
-const StyledModalContent = styled(Modal.Body)`
-    width: 40rem;
-`;
-
-const baseSkjemaelementStyle = css`
-    margin-bottom: 1.5rem;
-`;
-
 const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    ${baseSkjemaelementStyle}
-`;
-
-const StyledFamilieTextarea = styled(FamilieTextarea)`
-    ${baseSkjemaelementStyle}
+    margin-bottom: 1.5rem;
 `;
 
 interface IRegistrerDødsfallDato {
@@ -74,9 +62,10 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                         heading: 'Registrere dødsdato',
                         size: 'medium',
                     }}
+                    width={'35rem'}
                     portal
                 >
-                    <StyledModalContent>
+                    <Modal.Body>
                         <div>
                             <StyledFamilieDatovelger
                                 {...skjema.felter.dødsfallDato?.hentNavBaseSkjemaProps(
@@ -95,7 +84,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                                     skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
                                 }
                             />
-                            <StyledFamilieTextarea
+                            <FamilieTextarea
                                 {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
                                     skjema.visFeilmeldinger
                                 )}
@@ -115,7 +104,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                                 </Alert>
                             )}
                         </div>
-                    </StyledModalContent>
+                    </Modal.Body>
                     {!erLesevisning && (
                         <Modal.Footer>
                             <Button
