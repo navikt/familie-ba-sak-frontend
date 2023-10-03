@@ -46,7 +46,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
         <Modal
             open={visModal}
             onClose={onAvbryt}
-            width={'small'}
+            width={'35rem'}
             header={{
                 heading: erBehandlingAlleredePåVent
                     ? 'Endre ventende behandling'
@@ -74,20 +74,18 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                             placeholder={'DD.MM.ÅÅÅÅ'}
                         />
                     </Feltmargin>
-                    <Feltmargin>
-                        <FamilieSelect
-                            {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
-                            label={'Årsak'}
-                            placeholder={'Årsak'}
-                        >
-                            <option value={undefined}>Velg årsak</option>
-                            {årsaker.map(årsak => (
-                                <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                                    {settPåVentÅrsaker[årsak]}
-                                </option>
-                            ))}
-                        </FamilieSelect>
-                    </Feltmargin>
+                    <FamilieSelect
+                        {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
+                        label={'Årsak'}
+                        placeholder={'Årsak'}
+                    >
+                        <option value={undefined}>Velg årsak</option>
+                        {årsaker.map(årsak => (
+                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                {settPåVentÅrsaker[årsak]}
+                            </option>
+                        ))}
+                    </FamilieSelect>
                 </Fieldset>
             </Modal.Body>
             <Modal.Footer>
