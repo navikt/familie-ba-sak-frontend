@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Fieldset, TextField } from '@navikt/ds-react';
 import {
     ABorderDefault,
     AFontLineHeightLarge,
@@ -11,12 +11,7 @@ import {
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { OptionType } from '@navikt/familie-form-elements';
-import {
-    FamilieInput,
-    FamilieKnapp,
-    FamilieReactSelect,
-    FamilieSelect,
-} from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -84,7 +79,7 @@ const StyledFieldset = styled(Fieldset)`
     margin-top: 1.5rem;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     width: 8rem;
 `;
 
@@ -186,9 +181,9 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     size={'medium'}
                 >
                     <UtbetaltBeløpRad>
-                        <StyledFamilieInput
+                        <StyledTextField
                             label={'Beløp per barn'}
-                            erLesevisning={lesevisning}
+                            readOnly={lesevisning}
                             value={skjema.felter.beløp?.verdi}
                             onChange={event =>
                                 skjema.felter.beløp?.validerOgSettFelt(event.target.value)

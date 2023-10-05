@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Link, Heading, Button, Fieldset } from '@navikt/ds-react';
+import { Alert, Link, Heading, Button, Fieldset, TextField } from '@navikt/ds-react';
 import {
     AFontLineHeightLarge,
     AFontSizeLarge,
@@ -12,7 +12,7 @@ import {
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieInput, FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -62,7 +62,7 @@ const StyledFamilieDatovelger = styled(FamilieDatovelger)`
     }
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     width: 8rem;
 `;
 
@@ -202,9 +202,9 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             kanNullstilles
                             dempetEtikett={!lesevisning}
                         />
-                        <StyledFamilieInput
+                        <StyledTextField
                             label={'Valutakurs'}
-                            erLesevisning={lesevisning}
+                            readOnly={lesevisning}
                             value={skjema.felter.kurs?.verdi}
                             onChange={event =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)

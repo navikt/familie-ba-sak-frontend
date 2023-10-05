@@ -3,9 +3,9 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 import { ArrowUndoIcon, DocPencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Modal, TextField } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -40,11 +40,9 @@ const StyledFamilieSelect = styled(FamilieSelect)`
     ${baseSkjemaelementStyle}
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     ${baseSkjemaelementStyle};
-    :not(&.lesevisning) {
-        width: 7.5rem;
-    }
+    width: 7.5rem;
 `;
 
 const StyledFamilieTextarea = styled(FamilieTextarea)`
@@ -145,7 +143,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                     </option>
                                 ))}
                             </StyledFamilieSelect>
-                            <StyledFamilieInput
+                            <StyledTextField
                                 label={'Nytt beløp'}
                                 id={'korrigering-belop'}
                                 type={'number'}
@@ -159,8 +157,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                         ? skjema.felter.beløp.feilmelding?.toString()
                                         : ''
                                 }
-                                erLesevisning={erLesevisning}
-                                className={erLesevisning ? 'lesevisning' : ''}
+                                readOnly={erLesevisning}
                             />
                             <StyledFamilieTextarea
                                 label={'Begrunnelse (valgfri)'}

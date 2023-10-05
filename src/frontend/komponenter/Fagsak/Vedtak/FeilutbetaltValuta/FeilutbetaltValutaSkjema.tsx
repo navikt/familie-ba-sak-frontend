@@ -2,10 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Label } from '@navikt/ds-react';
+import { Label, TextField } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
-import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
@@ -29,7 +28,7 @@ const FlexRowDiv = styled.div`
     display: flex;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     width: 7.5rem;
     .navds-label {
         width: 18rem;
@@ -78,7 +77,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                     />
                 </FlexRowDiv>
             </FlexDatoInputWrapper>
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
                 label={

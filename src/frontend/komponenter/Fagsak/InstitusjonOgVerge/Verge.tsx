@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Heading } from '@navikt/ds-react';
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { Heading, TextField } from '@navikt/ds-react';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 
@@ -21,7 +21,7 @@ const StyledKnapp = styled(FamilieKnapp)`
     height: 1rem;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     margin-top: 1.8rem;
 `;
 
@@ -33,9 +33,9 @@ const Verge: React.FunctionComponent<IProps> = ({ erLesevisning }) => {
         <StyledDiv className={'mottaker__verge'}>
             <Heading size={'medium'} children={'Opplysninger om verge'} />
             <br />
-            <FamilieInput
+            <TextField
                 {...skjema.felter.fødselsnummer.hentNavInputProps(true)}
-                erLesevisning={erLesevisning}
+                readOnly={erLesevisning}
                 id={'hent-verge-person'}
                 label={'Fødselsnummer'}
             />
@@ -52,34 +52,30 @@ const Verge: React.FunctionComponent<IProps> = ({ erLesevisning }) => {
                 variant="secondary"
                 erLesevisning={false}
             />
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.navn.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={true}
+                readOnly={true}
                 id={'verge-navn'}
                 label={'Vergens navn'}
-                tekstLesevisning={''}
             />
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.adresse.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={true}
+                readOnly={true}
                 id={'verge-adresse'}
                 label={'Adresse'}
-                tekstLesevisning={''}
             />
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.postnummer.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={true}
+                readOnly={true}
                 id={'verge-postnummer'}
                 label={'Postnummer'}
                 size={'small'}
-                tekstLesevisning={''}
             />
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.sted.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={true}
+                readOnly={true}
                 id={'verge-sted'}
                 label={'Sted'}
-                tekstLesevisning={''}
             />
         </StyledDiv>
     );
