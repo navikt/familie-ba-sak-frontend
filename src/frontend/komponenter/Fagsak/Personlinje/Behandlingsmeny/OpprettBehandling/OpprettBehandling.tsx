@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { Alert, Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Datofelt } from './Datofelt';
@@ -25,24 +24,12 @@ interface IProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const Knapperad = styled.div`
-    margin-top: 2.5rem;
-`;
-
-const StyledModal = styled(Modal)`
-    width: 35rem;
-`;
-
 const StyledAlert = styled(Alert)`
     margin-top: 1.5rem;
 `;
 
-const KnappVenstre = styled(Button)`
-    margin-right: 1rem;
-`;
-
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
-    const [visModal, settVisModal] = useState(false);
+    const [visOpprettNyBehandlingModal, settVisOpprettNyBehandlingModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
 
@@ -55,16 +42,16 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
         valideringErOk,
     } = useOpprettBehandling(
         minimalFagsak.id,
-        () => settVisModal(false),
+        () => settVisOpprettNyBehandlingModal(false),
         () => {
-            settVisModal(false);
+            settVisOpprettNyBehandlingModal(false);
             settVisBekreftelseTilbakekrevingModal(true);
         }
     );
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
-        settVisModal(false);
+        settVisOpprettNyBehandlingModal(false);
     };
 
     const søknadMottattDato = kalenderDatoMedFallback(
@@ -79,69 +66,73 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
 
     return (
         <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
+            <Dropdown.Menu.List.Item onClick={() => settVisOpprettNyBehandlingModal(true)}>
                 Opprett behandling
             </Dropdown.Menu.List.Item>
-            <StyledModal
-                open={visModal}
-                onClose={lukkOpprettBehandlingModal}
-                aria-label="Opprett ny behandling"
-            >
-                <Modal.Content>
-                    <Fieldset
-                        error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
-                        legend={
-                            <Heading size="medium" level="2">
-                                Opprett ny behandling
-                            </Heading>
-                        }
-                    >
-                        <OpprettBehandlingValg
-                            skjema={opprettBehandlingSkjema}
-                            minimalFagsak={minimalFagsak}
-                            bruker={bruker}
-                        />
-                        {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
-                            Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                            opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+            {visOpprettNyBehandlingModal && (
+                <Modal
+                    open
+                    onClose={lukkOpprettBehandlingModal}
+                    width={'35rem'}
+                    portal={true}
+                    header={{
+                        heading: 'Opprett ny behandling',
+                        size: 'medium',
+                    }}
+                >
+                    <Modal.Body>
+                        <Fieldset
+                            error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
+                            legend={'Opprett ny behandling'}
+                            hideLegend
+                        >
+                            <OpprettBehandlingValg
+                                skjema={opprettBehandlingSkjema}
+                                minimalFagsak={minimalFagsak}
+                                bruker={bruker}
+                            />
+                            {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
+                                Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                                opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                                    <Datofelt
+                                        skjemafelt={opprettBehandlingSkjema.felter.migreringsdato}
+                                        visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                        etikett={'Ny migreringsdato'}
+                                        begrensninger={{
+                                            maxDate: maksdatoForMigrering.toISOString(),
+                                        }}
+                                    />
+                                )}
+                            {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
                                 <Datofelt
-                                    skjemafelt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    skjemafelt={opprettBehandlingSkjema.felter.søknadMottattDato}
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                    etikett={'Ny migreringsdato'}
+                                    etikett={'Mottatt dato'}
                                     begrensninger={{
-                                        maxDate: maksdatoForMigrering.toISOString(),
+                                        maxDate: new Date().toISOString(),
                                     }}
                                 />
                             )}
-                        {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                            <Datofelt
-                                skjemafelt={opprettBehandlingSkjema.felter.søknadMottattDato}
-                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                etikett={'Mottatt dato'}
-                                begrensninger={{
-                                    maxDate: new Date().toISOString(),
-                                }}
-                            />
+                            {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
+                                <Datofelt
+                                    skjemafelt={opprettBehandlingSkjema.felter.kravMottattDato}
+                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                    etikett={'Krav mottatt'}
+                                    begrensninger={{
+                                        maxDate: new Date().toISOString(),
+                                    }}
+                                />
+                            )}
+                        </Fieldset>
+                        {søknadMottattDatoErMerEnn360DagerSiden && (
+                            <StyledAlert variant={'warning'}>
+                                Er mottatt dato riktig? <br />
+                                Det er mer enn 360 dager siden denne datoen.
+                            </StyledAlert>
                         )}
-                        {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
-                            <Datofelt
-                                skjemafelt={opprettBehandlingSkjema.felter.kravMottattDato}
-                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                etikett={'Krav mottatt'}
-                                begrensninger={{
-                                    maxDate: new Date().toISOString(),
-                                }}
-                            />
-                        )}
-                    </Fieldset>
-                    {søknadMottattDatoErMerEnn360DagerSiden && (
-                        <StyledAlert variant={'warning'}>
-                            Er mottatt dato riktig? <br />
-                            Det er mer enn 360 dager siden denne datoen.
-                        </StyledAlert>
-                    )}
-                    <Knapperad>
-                        <KnappVenstre
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
                             key={'bekreft'}
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                             onClick={() =>
@@ -166,21 +157,25 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                             onClick={lukkOpprettBehandlingModal}
                             children={'Avbryt'}
                         />
-                    </Knapperad>
-                </Modal.Content>
-            </StyledModal>
-            <StyledModal
-                open={visBekreftelseTilbakekrevingModal}
-                onClose={() => settVisBekreftelseTilbakekrevingModal(false)}
-                aria-label="Tilbakekrevingsbehandling opprettes"
-            >
-                <Modal.Content>
-                    <Heading size="medium" level="2" spacing>
-                        Tilbakekrevingsbehandling opprettes
-                    </Heading>
-                    Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30 sekunder)
-                    før den blir tilgjengelig i saksoversikten og oppgavebenken.
-                    <Knapperad>
+                    </Modal.Footer>
+                </Modal>
+            )}
+            {visBekreftelseTilbakekrevingModal && (
+                <Modal
+                    open
+                    onClose={() => settVisBekreftelseTilbakekrevingModal(false)}
+                    width={'35rem'}
+                    portal={true}
+                    header={{
+                        heading: 'Tilbakekrevingsbehandling opprettes',
+                        size: 'medium',
+                    }}
+                >
+                    <Modal.Body>
+                        Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30
+                        sekunder) før den blir tilgjengelig i saksoversikten og oppgavebenken.
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button
                             key={'oppgavebenk'}
                             variant="primary"
@@ -190,9 +185,9 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                             }}
                             children={'Lukk'}
                         />
-                    </Knapperad>
-                </Modal.Content>
-            </StyledModal>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };

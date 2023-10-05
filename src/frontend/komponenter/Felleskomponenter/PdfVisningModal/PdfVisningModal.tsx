@@ -10,7 +10,6 @@ interface IPdfVisningModalProps {
     onRequestClose: () => void;
     onRequestOpen?: () => void;
     pdfdata: Ressurs<string>;
-    åpen: boolean;
 }
 
 const StyledModal = styled(Modal)`
@@ -28,20 +27,22 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     onRequestClose,
     onRequestOpen,
     pdfdata,
-    åpen,
 }) => {
     useEffect(() => {
-        if (åpen && onRequestOpen) {
+        if (onRequestOpen) {
             onRequestOpen();
         }
-    }, [åpen]);
+    }, []);
 
     return (
         <StyledModal
             className={'pdfvisning-modal'}
-            open={åpen}
+            open
             onClose={onRequestClose}
             aria-label={'pdfvisning'}
+            header={{ heading: '', closeButton: true }}
+            width={'100rem'}
+            portal
         >
             <Dokument pdfdata={pdfdata} />
         </StyledModal>

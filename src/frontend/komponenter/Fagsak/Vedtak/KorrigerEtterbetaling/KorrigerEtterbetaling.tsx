@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 import { ArrowUndoIcon, DocPencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { FamilieInput, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -18,18 +18,8 @@ interface IKorrigerEtterbetaling {
     erLesevisning: boolean;
 }
 
-const Knapperad = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-`;
-
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0rem;
-`;
-
-const KnappVenstre = styled(Button)`
-    margin-right: 1rem;
 `;
 
 const baseSkjemaelementStyle = css`
@@ -49,18 +39,6 @@ const StyledFamilieInput = styled(FamilieInput)`
 
 const StyledFamilieTextarea = styled(FamilieTextarea)`
     ${baseSkjemaelementStyle}
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-bottom: 2.5rem;
-`;
-
-const StyledModalContent = styled(Modal.Content)`
-    width: 35rem;
-`;
-
-const StyledModalHeader = styled(Heading)`
-    margin-bottom: 2rem;
 `;
 
 const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
@@ -112,131 +90,130 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                     <>Korriger etterbetaling</>
                 )}
             </Dropdown.Menu.List.Item>
-            <Modal open={visModal} onClose={lukkModal}>
-                <StyledModalContent>
-                    <StyledModalHeader size="medium" level={'2'}>
-                        Korriger etterbetaling
-                    </StyledModalHeader>
-                    <StyledFieldset error={false} legend="Korriger etterbetaling" hideLegend>
-                        <div>
-                            <StyledFamilieSelect
-                                label={'Årsak'}
-                                id={'korrigering-aarsak'}
-                                value={skjema.felter.årsak.verdi}
-                                lesevisningVerdi={
-                                    skjema.felter.årsak.verdi === ''
-                                        ? 'Ingen årsak valgt.'
-                                        : hentLabelForÅrsak(skjema.felter.årsak.verdi)
-                                }
-                                onChange={option =>
-                                    skjema.felter.årsak.validerOgSettFelt(option.target.value)
-                                }
-                                error={
-                                    skjema.felter.årsak.valideringsstatus ===
-                                        Valideringsstatus.FEIL && skjema.visFeilmeldinger
-                                        ? skjema.felter.årsak.feilmelding?.toString()
-                                        : ''
-                                }
-                                erLesevisning={erLesevisning}
-                            >
-                                {årsaker.map(årsak => (
-                                    <option value={årsak.value} key={årsak.value}>
-                                        {årsak.label}
-                                    </option>
-                                ))}
-                            </StyledFamilieSelect>
-                            <StyledFamilieInput
-                                label={'Nytt beløp'}
-                                id={'korrigering-belop'}
-                                type={'number'}
-                                value={skjema.felter.beløp.verdi}
-                                onChange={changeEvent =>
-                                    skjema.felter.beløp.validerOgSettFelt(changeEvent.target.value)
-                                }
-                                error={
-                                    skjema.felter.beløp.valideringsstatus ===
-                                        Valideringsstatus.FEIL && skjema.visFeilmeldinger
-                                        ? skjema.felter.beløp.feilmelding?.toString()
-                                        : ''
-                                }
-                                erLesevisning={erLesevisning}
-                                className={erLesevisning ? 'lesevisning' : ''}
-                            />
-                            <StyledFamilieTextarea
-                                label={'Begrunnelse (valgfri)'}
-                                id={'korrigering-begrunnelse'}
-                                value={skjema.felter.begrunnelse.verdi}
-                                onChange={changeEvent =>
-                                    skjema.felter.begrunnelse.validerOgSettFelt(
-                                        changeEvent.target.value
-                                    )
-                                }
-                                maxLength={erLesevisning ? 0 : 1000}
-                                erLesevisning={erLesevisning}
-                            />
-                        </div>
-                        {!erLesevisning && (
-                            <>
-                                <Alert
-                                    variant="info"
-                                    style={restFeil ? { marginBottom: '1.5rem' } : {}}
-                                    inline
+            {visModal && (
+                <Modal
+                    open
+                    onClose={lukkModal}
+                    header={{ heading: 'Korriger etterbetaling', size: 'medium' }}
+                    width={'35rem'}
+                    portal
+                >
+                    <Modal.Body>
+                        <Fieldset error={false} legend="Korriger etterbetaling" hideLegend>
+                            <div>
+                                <StyledFamilieSelect
+                                    label={'Årsak'}
+                                    id={'korrigering-aarsak'}
+                                    value={skjema.felter.årsak.verdi}
+                                    lesevisningVerdi={
+                                        skjema.felter.årsak.verdi === ''
+                                            ? 'Ingen årsak valgt.'
+                                            : hentLabelForÅrsak(skjema.felter.årsak.verdi)
+                                    }
+                                    onChange={option =>
+                                        skjema.felter.årsak.validerOgSettFelt(option.target.value)
+                                    }
+                                    error={
+                                        skjema.felter.årsak.valideringsstatus ===
+                                            Valideringsstatus.FEIL && skjema.visFeilmeldinger
+                                            ? skjema.felter.årsak.feilmelding?.toString()
+                                            : ''
+                                    }
+                                    erLesevisning={erLesevisning}
                                 >
-                                    Husk å sende korrigeringsmelding til NØS
-                                </Alert>
-                                {restFeil && (
+                                    {årsaker.map(årsak => (
+                                        <option value={årsak.value} key={årsak.value}>
+                                            {årsak.label}
+                                        </option>
+                                    ))}
+                                </StyledFamilieSelect>
+                                <StyledFamilieInput
+                                    label={'Nytt beløp'}
+                                    id={'korrigering-belop'}
+                                    type={'number'}
+                                    value={skjema.felter.beløp.verdi}
+                                    onChange={changeEvent =>
+                                        skjema.felter.beløp.validerOgSettFelt(
+                                            changeEvent.target.value
+                                        )
+                                    }
+                                    error={
+                                        skjema.felter.beløp.valideringsstatus ===
+                                            Valideringsstatus.FEIL && skjema.visFeilmeldinger
+                                            ? skjema.felter.beløp.feilmelding?.toString()
+                                            : ''
+                                    }
+                                    erLesevisning={erLesevisning}
+                                    className={erLesevisning ? 'lesevisning' : ''}
+                                />
+                                <StyledFamilieTextarea
+                                    label={'Begrunnelse (valgfri)'}
+                                    id={'korrigering-begrunnelse'}
+                                    value={skjema.felter.begrunnelse.verdi}
+                                    onChange={changeEvent =>
+                                        skjema.felter.begrunnelse.validerOgSettFelt(
+                                            changeEvent.target.value
+                                        )
+                                    }
+                                    maxLength={erLesevisning ? 0 : 1000}
+                                    erLesevisning={erLesevisning}
+                                />
+                            </div>
+                            {!erLesevisning && (
+                                <>
                                     <Alert
-                                        variant="error"
-                                        style={{ marginBottom: '1.5rem' }}
+                                        variant="info"
+                                        style={restFeil ? { marginBottom: '1.5rem' } : {}}
                                         inline
                                     >
-                                        {restFeil}
+                                        Husk å sende korrigeringsmelding til NØS
                                     </Alert>
+                                    {restFeil && (
+                                        <Alert
+                                            variant="error"
+                                            style={{ marginBottom: '1.5rem' }}
+                                            inline
+                                        >
+                                            {restFeil}
+                                        </Alert>
+                                    )}
+                                </>
+                            )}
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {!erLesevisning && (
+                            <>
+                                <Button
+                                    onClick={lagreKorrigering}
+                                    variant={valideringErOk() ? 'primary' : 'secondary'}
+                                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                >
+                                    {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
+                                </Button>
+                                <Button onClick={lukkModal} variant={'tertiary'}>
+                                    Avbryt
+                                </Button>
+                                {visAngreKorrigering && (
+                                    <AngreKnapp
+                                        id={'angre-korrigering'}
+                                        size={'small'}
+                                        onClick={angreKorrigering}
+                                        variant={'tertiary'}
+                                        loading={angrerKorrigering}
+                                        disabled={angrerKorrigering}
+                                        icon={<ArrowUndoIcon />}
+                                    >
+                                        Angre korrigering
+                                    </AngreKnapp>
                                 )}
                             </>
                         )}
-                    </StyledFieldset>
-                    <Knapperad>
-                        {!erLesevisning && (
-                            <>
-                                <div>
-                                    <KnappVenstre
-                                        onClick={lagreKorrigering}
-                                        variant={valideringErOk() ? 'primary' : 'secondary'}
-                                        loading={
-                                            skjema.submitRessurs.status === RessursStatus.HENTER
-                                        }
-                                        disabled={
-                                            skjema.submitRessurs.status === RessursStatus.HENTER
-                                        }
-                                    >
-                                        {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
-                                    </KnappVenstre>
-                                    <Button onClick={lukkModal} variant={'tertiary'}>
-                                        Avbryt
-                                    </Button>
-                                </div>
-                                <div>
-                                    {visAngreKorrigering && (
-                                        <AngreKnapp
-                                            id={'angre-korrigering'}
-                                            size={'small'}
-                                            onClick={angreKorrigering}
-                                            variant={'tertiary'}
-                                            loading={angrerKorrigering}
-                                            disabled={angrerKorrigering}
-                                            icon={<ArrowUndoIcon />}
-                                        >
-                                            Angre korrigering
-                                        </AngreKnapp>
-                                    )}
-                                </div>
-                            </>
-                        )}
                         {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
-                    </Knapperad>
-                </StyledModalContent>
-            </Modal>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };

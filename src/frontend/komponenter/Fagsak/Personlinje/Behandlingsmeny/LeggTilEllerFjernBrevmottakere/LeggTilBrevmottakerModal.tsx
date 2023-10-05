@@ -10,9 +10,6 @@ import BrevmottakerTabell from './BrevmottakerTabell';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 
-const StyledModal = styled(Modal)`
-    width: 35rem;
-`;
 const StyledAlert = styled(Alert)`
     margin: 1rem 0 2.5rem;
 `;
@@ -27,7 +24,6 @@ const LukkKnapp = styled(Button)`
 `;
 
 interface Props {
-    visModal: boolean;
     lukkModal: () => void;
     åpenBehandling: IBehandling;
 }
@@ -44,11 +40,7 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal: React.FC<Props> = ({
-    visModal,
-    lukkModal,
-    åpenBehandling,
-}: Props) => {
+export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, åpenBehandling }: Props) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
@@ -66,16 +58,14 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
     };
 
     return (
-        <StyledModal
-            open={visModal}
-            aria-label={heading}
+        <Modal
+            open
             onClose={lukkModalOgSkjema}
-            shouldCloseOnOverlayClick={false}
+            header={{ heading: heading, size: 'medium' }}
+            width={'35rem'}
+            portal
         >
-            <Modal.Content>
-                <Heading spacing level="2" size="medium" id="modal-heading">
-                    {heading}
-                </Heading>
+            <Modal.Body>
                 <StyledAlert variant="info">
                     Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken kanal.
                     Legg til mottaker dersom brev skal sendes til utenlandsk adresse, fullmektig,
@@ -108,7 +98,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                         </div>
                     </>
                 )}
-            </Modal.Content>
-        </StyledModal>
+            </Modal.Body>
+        </Modal>
     );
 };

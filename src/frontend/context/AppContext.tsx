@@ -1,16 +1,14 @@
-import type { CSSProperties, ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../ikoner/IkkeTilgang';
-import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
@@ -29,17 +27,13 @@ export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
 
 export interface IModal {
     actions?: JSX.Element[] | JSX.Element;
-    className?: string;
     innhold?: () => React.ReactNode;
-    lukkKnapp: boolean;
     onClose?: () => void;
-    style?: CSSProperties;
-    tittel: ReactNode;
+    tittel: string;
     visModal: boolean;
 }
 
 const initalState: IModal = {
-    lukkKnapp: true,
     tittel: '',
     visModal: false,
 };
@@ -56,7 +50,6 @@ interface AuthProviderExports {
 
 const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     tittel: 'Diskresjonskode',
-    lukkKnapp: true,
     visModal: !data.saksbehandlerHarTilgang,
     onClose: () => lukkModal(),
     innhold: () => {
@@ -97,12 +90,8 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
     const [appVersjon, settAppVersjon] = useState('');
 
-    const [modal, settModal] = React.useState<IModal>(initalState);
+    const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
-
-    useEffect(() => {
-        Modal.setAppElement('#app');
-    }, []);
 
     const verifiserVersjon = () => {
         request<void, string>({
@@ -111,30 +100,19 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         }).then((versjon: Ressurs<string>) => {
             if (versjon.status === RessursStatus.SUKSESS) {
                 if (appVersjon !== '' && appVersjon !== versjon.data) {
-                    settModal({
+                    settAppInfoModal({
                         tittel: 'Løsningen er utdatert',
                         innhold: () => {
                             return (
-                                <div className={'utdatert-losning'}>
-                                    <InformasjonSirkel />
-                                    <BodyShort>
-                                        Det finnes en oppdatert versjon av løsningen. Det anbefales
-                                        at du oppdaterer med en gang.
-                                    </BodyShort>
-                                </div>
+                                <Alert variant={'info'} inline>
+                                    Det finnes en oppdatert versjon av løsningen. Det anbefales at
+                                    du oppdaterer med en gang.
+                                </Alert>
                             );
                         },
-                        lukkKnapp: true,
                         visModal: true,
                         onClose: () => lukkModal(),
                         actions: [
-                            <Button
-                                key={'avbryt'}
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => lukkModal()}
-                                children={'Avbryt'}
-                            />,
                             <Button
                                 key={'oppdater'}
                                 variant="primary"
@@ -143,6 +121,13 @@ const [AppContentProvider, useApp] = createUseContext(() => {
                                     window.location.reload();
                                 }}
                                 children={'Ok, oppdater'}
+                            />,
+                            <Button
+                                key={'avbryt'}
+                                variant="tertiary"
+                                size="small"
+                                onClick={() => lukkModal()}
+                                children={'Avbryt'}
                             />,
                         ],
                     });
@@ -173,15 +158,8 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         });
     }, []);
 
-    const åpneModal = () => {
-        settModal({
-            ...modal,
-            visModal: true,
-        });
-    };
-
     const lukkModal = () => {
-        settModal(initalState);
+        settAppInfoModal(initalState);
     };
 
     const hentPerson = async (brukerIdent: string): Promise<Ressurs<IPersonInfo>> => {
@@ -193,7 +171,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             },
         }).then((ressurs: Ressurs<IPersonInfo>) => {
             if ('data' in ressurs && ressurs.data.harTilgang === false) {
-                settModal(
+                settAppInfoModal(
                     tilgangModal(
                         {
                             saksbehandlerHarTilgang: false,
@@ -218,7 +196,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             påvirkerSystemLaster: visSystemetLaster,
         }).then((ressurs: Ressurs<IRestTilgang>) => {
             if (ressurs.status === RessursStatus.SUKSESS) {
-                settModal(tilgangModal(ressurs.data, lukkModal));
+                settAppInfoModal(tilgangModal(ressurs.data, lukkModal));
                 return ressurs.data.saksbehandlerHarTilgang;
             } else {
                 return false;
@@ -261,9 +239,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         innloggetSaksbehandler,
         harInnloggetSaksbehandlerSkrivetilgang,
         harInnloggetSaksbehandlerSuperbrukerTilgang,
-        lukkModal,
-        modal,
-        settModal,
+        appInfoModal,
         settToast: (toastId: ToastTyper, toast: IToast) =>
             settToasts({
                 ...toasts,
@@ -274,7 +250,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         systemetLaster,
         toasts,
         toggles,
-        åpneModal,
         hentPerson,
     };
 });

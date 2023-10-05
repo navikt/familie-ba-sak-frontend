@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Fieldset } from '@navikt/ds-react';
+import { Button, Fieldset, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -9,7 +9,6 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const EndreBehandlingstema: React.FC = () => {
     const [visModal, settVisModal] = useState(false);
@@ -35,17 +34,29 @@ const EndreBehandlingstema: React.FC = () => {
             >
                 Endre behandlingstema
             </Dropdown.Menu.List.Item>
-
-            <UIModalWrapper
-                modal={{
-                    actions: [
-                        <Button
-                            key={'avbryt'}
-                            variant="secondary"
-                            size="small"
-                            onClick={lukkEndreBehandlingModal}
-                            children={'Avbryt'}
-                        />,
+            {visModal && (
+                <Modal
+                    open
+                    onClose={lukkEndreBehandlingModal}
+                    header={{ heading: 'Endre behandlingstema', size: 'small' }}
+                    width={'35rem'}
+                    portal
+                >
+                    <Modal.Body>
+                        <Fieldset
+                            error={hentFrontendFeilmelding(ressurs)}
+                            legend="Endre behandlingstema"
+                            hideLegend
+                        >
+                            <BehandlingstemaSelect
+                                behandlingstema={skjema.felter.behandlingstema}
+                                fagsakType={minimalFagsak?.fagsakType}
+                                erLesevisning={vurderErLesevisning()}
+                                label="Behandlingstema"
+                            />
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button
                             key={'bekreft'}
                             variant="primary"
@@ -57,27 +68,17 @@ const EndreBehandlingstema: React.FC = () => {
                             }}
                             children={'Bekreft'}
                             loading={ressurs.status === RessursStatus.HENTER}
-                        />,
-                    ],
-                    onClose: lukkEndreBehandlingModal,
-                    lukkKnapp: true,
-                    tittel: 'Endre behandlingstema',
-                    visModal,
-                }}
-            >
-                <Fieldset
-                    error={hentFrontendFeilmelding(ressurs)}
-                    legend="Endre behandlingstema"
-                    hideLegend
-                >
-                    <BehandlingstemaSelect
-                        behandlingstema={skjema.felter.behandlingstema}
-                        fagsakType={minimalFagsak?.fagsakType}
-                        erLesevisning={vurderErLesevisning()}
-                        label="Behandlingstema"
-                    />
-                </Fieldset>
-            </UIModalWrapper>
+                        />
+                        <Button
+                            key={'avbryt'}
+                            variant="secondary"
+                            size="small"
+                            onClick={lukkEndreBehandlingModal}
+                            children={'Avbryt'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };

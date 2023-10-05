@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-    BodyShort,
-    Button,
-    ErrorMessage,
-    Heading,
-    Modal,
-    ReadMore,
-    Select,
-} from '@navikt/ds-react';
+import { BodyShort, Button, ErrorMessage, Modal, ReadMore, Select } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -44,20 +36,11 @@ const StyledButton = styled(Button)`
     margin-left: 1rem;
 `;
 
-const StyledHeading = styled(Heading)`
-    margin-bottom: 1.5rem;
-`;
-
 const StyledFagsakOptionsDiv = styled.div`
     margin-top: 2rem;
     margin-bottom: 2rem;
     width: fit-content;
     min-width: 20rem;
-`;
-
-const StyledModalContent = styled(Modal.Content)`
-    padding: 2.5rem;
-    width: 40rem;
 `;
 
 const StyledReadMore = styled(ReadMore)`
@@ -83,18 +66,6 @@ const fagsakTypeOptions = [
     },
 ];
 
-const KnappHøyre = styled(Button)`
-    float: right;
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    width: 100%;
-    position: relative;
-    display: inline-block;
-    margin-top: 2.5rem;
-`;
-
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
     søkeresultat,
@@ -106,7 +77,6 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
         useOpprettFagsak();
     const { hentPerson } = useApp();
     const { toggles } = useApp();
-    const visModal = !!søkeresultat || !!personInfo;
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
         fagsak => fagsak.fagsakType === FagsakType.NORMAL
@@ -228,13 +198,19 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
         </>
     );
     return (
-        <Modal open={visModal} onClose={onClose} shouldCloseOnOverlayClick={false}>
-            <StyledModalContent>
-                <StyledHeading size={'medium'} level={'2'}>
-                    {harNormalFagsak
-                        ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-                        : 'Opprett fagsak'}
-                </StyledHeading>
+        <Modal
+            open
+            onClose={onClose}
+            header={{
+                heading: harNormalFagsak
+                    ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+                    : 'Opprett fagsak',
+                size: 'medium',
+            }}
+            portal
+            width={'35rem'}
+        >
+            <Modal.Body>
                 <StyledBodyShort>
                     {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
                         Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
@@ -268,43 +244,43 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 )}
 
                 {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
-                <Knapperad>
-                    <KnappHøyre
-                        key={'Bekreft'}
-                        variant={'primary'}
-                        onClick={async () => {
-                            settSenderInn(true);
-                            const personIdent = søkeresultat?.ident || personInfo?.personIdent;
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    key={'Bekreft'}
+                    variant={'primary'}
+                    onClick={async () => {
+                        settSenderInn(true);
+                        const personIdent = søkeresultat?.ident || personInfo?.personIdent;
 
-                            if (personIdent) {
-                                opprettFagsak(
-                                    {
-                                        personIdent: personIdent,
-                                        fagsakType: fagsakType,
-                                        institusjon: valgtSamhandler
-                                            ? {
-                                                  orgNummer: valgtSamhandler.orgNummer,
-                                                  tssEksternId: valgtSamhandler.tssEksternId,
-                                              }
-                                            : null,
-                                    },
-                                    onClose
-                                );
-                            } else {
-                                settSenderInn(false);
-                            }
-                            settVisFeilmelding(true);
-                        }}
-                        disabled={senderInn}
-                        loading={senderInn}
-                    >
-                        Opprett fagsak
-                    </KnappHøyre>
-                    <KnappHøyre key={'avbryt'} variant={'tertiary'} onClick={onClose}>
-                        Avbryt
-                    </KnappHøyre>
-                </Knapperad>
-            </StyledModalContent>
+                        if (personIdent) {
+                            opprettFagsak(
+                                {
+                                    personIdent: personIdent,
+                                    fagsakType: fagsakType,
+                                    institusjon: valgtSamhandler
+                                        ? {
+                                              orgNummer: valgtSamhandler.orgNummer,
+                                              tssEksternId: valgtSamhandler.tssEksternId,
+                                          }
+                                        : null,
+                                },
+                                onClose
+                            );
+                        } else {
+                            settSenderInn(false);
+                        }
+                        settVisFeilmelding(true);
+                    }}
+                    disabled={senderInn}
+                    loading={senderInn}
+                >
+                    Opprett fagsak
+                </Button>
+                <Button key={'avbryt'} variant={'tertiary'} onClick={onClose}>
+                    Avbryt
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 };

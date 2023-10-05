@@ -170,19 +170,20 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
             {erBehandlingMedVedtaksbrevutsending ? (
                 <>
-                    <PdfVisningModal
-                        onRequestOpen={() => {
-                            if (hentetDokument.status !== RessursStatus.HENTER) {
-                                hentVedtaksbrev();
-                            }
-                        }}
-                        åpen={visDokumentModal}
-                        onRequestClose={() => {
-                            settVisDokumentModal(false);
-                            nullstillDokument();
-                        }}
-                        pdfdata={hentetDokument}
-                    />
+                    {visDokumentModal && (
+                        <PdfVisningModal
+                            onRequestOpen={() => {
+                                if (hentetDokument.status !== RessursStatus.HENTER) {
+                                    hentVedtaksbrev();
+                                }
+                            }}
+                            onRequestClose={() => {
+                                settVisDokumentModal(false);
+                                nullstillDokument();
+                            }}
+                            pdfdata={hentetDokument}
+                        />
+                    )}
                     <div>
                         {åpenBehandling.korrigertEtterbetaling && (
                             <BehandlingKorrigertAlert variant="info">
@@ -256,10 +257,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         </Button>
                     </div>
 
-                    <BehandlingSendtTilTotrinnskontrollModal
-                        visModal={visModal}
-                        settVisModal={settVisModal}
-                    />
+                    {visModal && (
+                        <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />
+                    )}
                 </>
             ) : erMigreringFraInfotrygd ? (
                 <Alert variant="info">
