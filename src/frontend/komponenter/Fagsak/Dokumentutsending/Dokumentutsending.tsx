@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import DokumentutsendingSkjema from './DokumentutsendingSkjema';
@@ -17,16 +17,6 @@ const Container = styled.div`
     height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
 `;
 
-const KnappHøyre = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const Knapperad = styled.div`
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-`;
-
 const Dokumentutsending: React.FC = () => {
     const navigate = useNavigate();
 
@@ -35,22 +25,15 @@ const Dokumentutsending: React.FC = () => {
 
     return (
         <Container>
-            <Modal open={visInnsendtBrevModal} onClose={() => settVisInnsendtBrevModal(false)}>
-                <Modal.Content>
-                    <Heading size="medium" level={'2'}>
-                        Brevet er sendt
-                    </Heading>
-                    <Knapperad>
+            {visInnsendtBrevModal && (
+                <Modal
+                    open
+                    onClose={() => settVisInnsendtBrevModal(false)}
+                    header={{ heading: 'Brevet er sendt', size: 'medium' }}
+                    portal
+                >
+                    <Modal.Footer>
                         <Button
-                            variant={'secondary'}
-                            key={'til oppgavebenken'}
-                            size={'medium'}
-                            onClick={() => {
-                                navigate('/oppgaver');
-                            }}
-                            children={'Se oppgavebenk'}
-                        />
-                        <KnappHøyre
                             variant={'secondary'}
                             key={'til saksoversikt'}
                             size={'medium'}
@@ -60,9 +43,18 @@ const Dokumentutsending: React.FC = () => {
                             }}
                             children={'Se saksoversikt'}
                         />
-                    </Knapperad>
-                </Modal.Content>
-            </Modal>
+                        <Button
+                            variant={'secondary'}
+                            key={'til oppgavebenken'}
+                            size={'medium'}
+                            onClick={() => {
+                                navigate('/oppgaver');
+                            }}
+                            children={'Se oppgavebenk'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
             <DokumentutsendingSkjema />
 
             <iframe

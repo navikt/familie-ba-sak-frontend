@@ -46,13 +46,14 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ behandling }) => {
                     : 'Sett behandling på vent'}
             </Dropdown.Menu.List.Item>
 
-            <SettBehandlingPåVentModal
-                visModal={visModal}
-                onAvbryt={() => settVisModal(false)}
-                settBehandlingPåVent={settBehandlingPåVent}
-                skjema={skjema}
-                erBehandlingAlleredePåVent={erBehandlingAlleredePåVent}
-            />
+            {visModal && (
+                <SettBehandlingPåVentModal
+                    onAvbryt={() => settVisModal(false)}
+                    settBehandlingPåVent={settBehandlingPåVent}
+                    skjema={skjema}
+                    erBehandlingAlleredePåVent={erBehandlingAlleredePåVent}
+                />
+            )}
         </>
     );
 };

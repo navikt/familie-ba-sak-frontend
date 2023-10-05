@@ -61,11 +61,12 @@ export const BrevmottakereAlert: React.FC<Props> = ({
                 </BehandlingKorrigertAlert>
             )}
 
-            <LeggTilBrevmottakerModal
-                åpenBehandling={åpenBehandling}
-                visModal={visManuelleMottakereModal}
-                lukkModal={() => settVisManuelleMottakereModal(false)}
-            />
+            {visManuelleMottakereModal && (
+                <LeggTilBrevmottakerModal
+                    åpenBehandling={åpenBehandling}
+                    lukkModal={() => settVisManuelleMottakereModal(false)}
+                />
+            )}
         </>
     );
 };

@@ -192,11 +192,12 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     return (
         <div>
-            <PdfVisningModal
-                åpen={visForhåndsvisningModal}
-                onRequestClose={() => settForhåndsviningModal(false)}
-                pdfdata={hentetDokument}
-            />
+            {visForhåndsvisningModal && (
+                <PdfVisningModal
+                    onRequestClose={() => settForhåndsviningModal(false)}
+                    pdfdata={hentetDokument}
+                />
+            )}
             <Fieldset
                 error={
                     (skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)) ||

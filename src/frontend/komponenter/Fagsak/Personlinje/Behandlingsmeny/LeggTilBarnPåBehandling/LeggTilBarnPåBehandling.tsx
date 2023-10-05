@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, HelpText, Fieldset } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Fieldset, Modal, Heading } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
@@ -21,7 +21,6 @@ import type { IPersonInfo, IRestTilgang } from '../../../../../typer/person';
 import { adressebeskyttelsestyper } from '../../../../../typer/person';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { identValidator } from '../../../../../utils/validators';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const LeggTilBarnLegend = styled.div`
     margin-top: 1rem;
@@ -47,8 +46,7 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
         felter: {
             ident: useFelt<string>({
                 verdi: '',
-                valideringsfunksjon:
-                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
+                valideringsfunksjon: identValidator,
             }),
         },
         skjemanavn: 'Legg til barn',
@@ -118,29 +116,39 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
                 Legg til barn
             </Dropdown.Menu.List.Item>
-            <UIModalWrapper
-                modal={{
-                    tittel: (
-                        <LeggTilBarnLegend>
-                            Legg til barn
-                            <HelpText style={{ marginLeft: '0.5rem' }}>
-                                Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn
-                                som ikke lenger ligger på behandlingen fordi vi tidligere har
-                                avslått eller opphørt.
-                            </HelpText>
-                        </LeggTilBarnLegend>
-                    ),
-                    visModal: visModal,
-                    lukkKnapp: true,
-                    onClose: onAvbryt,
-                    actions: [
-                        <Button
-                            key={'Avbryt'}
-                            variant="tertiary"
-                            size="small"
-                            onClick={onAvbryt}
-                            children={'Avbryt'}
-                        />,
+            {visModal && (
+                <Modal open onClose={onAvbryt} aria-label={'Legg til barn'} width={'35rem'} portal>
+                    <Modal.Header>
+                        <Heading level="2" size="small">
+                            <LeggTilBarnLegend>
+                                Legg til barn
+                                <HelpText style={{ marginLeft: '0.5rem' }}>
+                                    Her kan du, ved klage eller ettersendt dokumentasjon, legge til
+                                    barn som ikke lenger ligger på behandlingen fordi vi tidligere
+                                    har avslått eller opphørt.
+                                </HelpText>
+                            </LeggTilBarnLegend>
+                        </Heading>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Fieldset
+                            error={hentFrontendFeilmelding(skjema.submitRessurs)}
+                            errorPropagation={false}
+                            legend="Legg til barn på behandling"
+                            hideLegend
+                        >
+                            <FamilieInput
+                                {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
+                                label={'Fødselsnummer'}
+                                placeholder={'11 siffer'}
+                            />
+                            <Alert variant="info" inline={true}>
+                                Du er i ferd med å legge til et barn på behandlingen. Handlingen kan
+                                ikke reverseres uten å henlegge.
+                            </Alert>
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button
                             key={'Legg til'}
                             variant="primary"
@@ -149,30 +157,17 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
                             children={'Legg til'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        />,
-                    ],
-                    style: {
-                        minHeight: '20rem !important',
-                    },
-                }}
-            >
-                <Fieldset
-                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
-                    errorPropagation={false}
-                    legend="Legg til barn på behandling"
-                    hideLegend
-                >
-                    <FamilieInput
-                        {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
-                        label={'Fødselsnummer'}
-                        placeholder={'11 siffer'}
-                    />
-                    <Alert variant="info" inline={true}>
-                        Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke
-                        reverseres uten å henlegge.
-                    </Alert>
-                </Fieldset>
-            </UIModalWrapper>
+                        />
+                        <Button
+                            key={'Avbryt'}
+                            variant="tertiary"
+                            size="small"
+                            onClick={onAvbryt}
+                            children={'Avbryt'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
         </>
     );
 };

@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 
 import FagsakContainer from './Fagsak/FagsakContainer';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
+import AppInfoModal from './Felleskomponenter/Modal/AppInfoModal';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
-import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import TidslinjeVisualisering from './Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './Felleskomponenter/Toast/Toasts';
@@ -21,11 +21,11 @@ import { Oppgaver } from '../context/OppgaverContext';
 import { TidslinjeProvider } from '../context/TidslinjeContext';
 
 const Container: React.FC = () => {
-    const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
+    const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal } = useApp();
 
     return (
         <Router>
-            <UIModalWrapper />
+            {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}
