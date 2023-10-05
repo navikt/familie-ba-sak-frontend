@@ -35,11 +35,13 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
                 {menyinnslag}
             </Dropdown.Menu.List.Item>
 
-            <LeggTilBrevmottakerModal
-                åpenBehandling={åpenBehandling}
-                visModal={visModal}
-                lukkModal={() => settVisModal(false)}
-            />
+            {visModal && (
+                <LeggTilBrevmottakerModal
+                    åpenBehandling={åpenBehandling}
+                    visModal={visModal}
+                    lukkModal={() => settVisModal(false)}
+                />
+            )}
         </>
     );
 };

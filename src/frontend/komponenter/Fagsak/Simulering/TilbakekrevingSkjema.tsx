@@ -176,11 +176,13 @@ const TilbakekrevingSkjema: React.FC<{
 
     return (
         <>
-            <PdfVisningModal
-                åpen={visDokumentModal}
-                onRequestClose={() => settVisDokumentModal(false)}
-                pdfdata={hentetDokument}
-            />
+            {visDokumentModal && (
+                <PdfVisningModal
+                    åpen={visDokumentModal}
+                    onRequestClose={() => settVisDokumentModal(false)}
+                    pdfdata={hentetDokument}
+                />
+            )}
 
             <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
                 <HeadingMedEkstraLuft level="2" size="medium">
