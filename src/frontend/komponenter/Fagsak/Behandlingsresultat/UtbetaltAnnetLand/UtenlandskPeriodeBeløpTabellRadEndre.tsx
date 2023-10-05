@@ -80,7 +80,7 @@ const StyledFieldset = styled(Fieldset)`
 `;
 
 const StyledTextField = styled(TextField)`
-    width: 8rem;
+    width: 9rem;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
