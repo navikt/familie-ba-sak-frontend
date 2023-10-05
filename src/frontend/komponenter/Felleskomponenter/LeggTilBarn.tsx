@@ -4,8 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { BodyLong, Heading, Button, Fieldset, Modal, Link } from '@navikt/ds-react';
-import { FamilieInput } from '@navikt/familie-form-elements';
+import { BodyLong, Heading, Button, Fieldset, Modal, Link, TextField } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
@@ -305,7 +304,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                             legend={'Legg til barn'}
                             hideLegend
                         >
-                            <FamilieInput
+                            <TextField
                                 {...registrerBarnSkjema.felter.ident.hentNavInputProps(
                                     registrerBarnSkjema.visFeilmeldinger
                                 )}
