@@ -10,7 +10,7 @@ interface IProps {
 const AppInfoModal = ({ modal }: IProps) => {
     return (
         <Modal
-            open={modal.visModal}
+            open
             onClose={modal.onClose}
             header={{ heading: modal.tittel, size: 'small' }}
             width={'medium'}

@@ -71,7 +71,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
             </Dropdown.Menu.List.Item>
             {visOpprettNyBehandlingModal && (
                 <Modal
-                    open={visOpprettNyBehandlingModal}
+                    open
                     onClose={lukkOpprettBehandlingModal}
                     width={'35rem'}
                     portal={true}
@@ -162,7 +162,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
             )}
             {visBekreftelseTilbakekrevingModal && (
                 <Modal
-                    open={visBekreftelseTilbakekrevingModal}
+                    open
                     onClose={() => settVisBekreftelseTilbakekrevingModal(false)}
                     width={'35rem'}
                     portal={true}

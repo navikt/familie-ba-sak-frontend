@@ -117,13 +117,7 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
                 Legg til barn
             </Dropdown.Menu.List.Item>
             {visModal && (
-                <Modal
-                    open={visModal}
-                    onClose={onAvbryt}
-                    aria-label={'Legg til barn'}
-                    width={'35rem'}
-                    portal
-                >
+                <Modal open onClose={onAvbryt} aria-label={'Legg til barn'} width={'35rem'} portal>
                     <Modal.Header>
                         <Heading level="2" size="small">
                             <LeggTilBarnLegend>

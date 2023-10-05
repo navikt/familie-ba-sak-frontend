@@ -60,7 +60,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={lukkBehandlendeEnhetModal}
                     width={'35rem'}
                     header={{

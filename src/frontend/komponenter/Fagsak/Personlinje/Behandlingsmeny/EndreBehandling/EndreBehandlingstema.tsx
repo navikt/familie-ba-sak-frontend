@@ -36,7 +36,7 @@ const EndreBehandlingstema: React.FC = () => {
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={lukkEndreBehandlingModal}
                     header={{ heading: 'Endre behandlingstema', size: 'small' }}
                     width={'35rem'}

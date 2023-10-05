@@ -94,7 +94,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     width={'35rem'}
                     onClose={() => {
                         nullstillSkjema();
@@ -207,7 +207,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
 
             {visVeivalgModal && (
                 <Modal
-                    open={visVeivalgModal}
+                    open
                     width={'35rem'}
                     header={{
                         heading: 'Behandling henlagt',
@@ -249,7 +249,6 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
             )}
             {visDokumentModal && (
                 <PdfVisningModal
-                    åpen={visDokumentModal}
                     onRequestClose={() => settVisDokumentModal(false)}
                     pdfdata={hentetDokument}
                 />

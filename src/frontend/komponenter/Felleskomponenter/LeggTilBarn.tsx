@@ -260,12 +260,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
             </Button>
 
             {visModal && (
-                <Modal
-                    open={visModal}
-                    onClose={onAvbryt}
-                    width={'35rem'}
-                    aria-label={'Legg til barn'}
-                >
+                <Modal open onClose={onAvbryt} width={'35rem'} aria-label={'Legg til barn'}>
                     <Modal.Header>
                         <StyledHeading level="2" size="medium" spacing>
                             Legg til barn

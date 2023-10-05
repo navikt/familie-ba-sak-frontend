@@ -141,7 +141,6 @@ const FagsakDeltagerSøk: React.FC = () => {
                 <OpprettFagsakModal
                     søkeresultat={deltagerForOpprettFagsak}
                     lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
-                    visModal
                 />
             )}
         </>

@@ -23,7 +23,6 @@ const StyledBodyShort = styled(BodyShort)`
 `;
 
 interface IProps {
-    visModal: boolean;
     onAvbryt: () => void;
     settBehandlingPåVent: () => void;
     skjema: ISkjema<
@@ -34,7 +33,6 @@ interface IProps {
 }
 
 export const SettBehandlingPåVentModal: React.FC<IProps> = ({
-    visModal,
     onAvbryt,
     settBehandlingPåVent,
     skjema,
@@ -44,7 +42,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
 
     return (
         <Modal
-            open={visModal}
+            open
             onClose={onAvbryt}
             width={'35rem'}
             header={{

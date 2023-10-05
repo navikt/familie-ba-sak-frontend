@@ -24,7 +24,6 @@ const LukkKnapp = styled(Button)`
 `;
 
 interface Props {
-    visModal: boolean;
     lukkModal: () => void;
     åpenBehandling: IBehandling;
 }
@@ -41,11 +40,7 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal: React.FC<Props> = ({
-    visModal,
-    lukkModal,
-    åpenBehandling,
-}: Props) => {
+export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, åpenBehandling }: Props) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
@@ -64,7 +59,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
 
     return (
         <Modal
-            open={visModal}
+            open
             onClose={lukkModalOgSkjema}
             header={{ heading: heading, size: 'medium' }}
             width={'35rem'}

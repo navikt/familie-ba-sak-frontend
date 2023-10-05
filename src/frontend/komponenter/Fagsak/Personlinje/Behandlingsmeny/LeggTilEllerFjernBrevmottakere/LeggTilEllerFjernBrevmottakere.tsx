@@ -38,7 +38,6 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
             {visModal && (
                 <LeggTilBrevmottakerModal
                     åpenBehandling={åpenBehandling}
-                    visModal={visModal}
                     lukkModal={() => settVisModal(false)}
                 />
             )}

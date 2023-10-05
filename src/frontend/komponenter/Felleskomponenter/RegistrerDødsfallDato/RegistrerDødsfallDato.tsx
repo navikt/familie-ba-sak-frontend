@@ -56,7 +56,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={lukkModal}
                     header={{
                         heading: 'Registrere dødsdato',

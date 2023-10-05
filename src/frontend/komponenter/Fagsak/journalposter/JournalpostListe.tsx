@@ -277,7 +277,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 </StyledTable>
                 {visDokumentModal && (
                     <PdfVisningModal
-                        åpen={visDokumentModal}
                         onRequestClose={() => settVisDokumentModal(false)}
                         pdfdata={hentetDokument}
                     />

@@ -87,7 +87,7 @@ const RegistrerSøknad: React.FC = () => {
 
             {visBekreftModal && (
                 <Modal
-                    open={visBekreftModal}
+                    open
                     onClose={() => settVisBekreftModal(false)}
                     header={{
                         heading: 'Er du sikker på at du vil gå videre?',

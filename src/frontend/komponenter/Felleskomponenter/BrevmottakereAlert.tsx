@@ -64,7 +64,6 @@ export const BrevmottakereAlert: React.FC<Props> = ({
             {visManuelleMottakereModal && (
                 <LeggTilBrevmottakerModal
                     åpenBehandling={åpenBehandling}
-                    visModal={visManuelleMottakereModal}
                     lukkModal={() => settVisManuelleMottakereModal(false)}
                 />
             )}

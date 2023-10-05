@@ -7,12 +7,10 @@ import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 
 interface Props {
-    visModal: boolean;
     settVisModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Props> = ({
-    visModal,
     settVisModal,
 }) => {
     const navigate = useNavigate();
@@ -20,7 +18,7 @@ export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Pr
 
     return (
         <Modal
-            open={visModal}
+            open
             onClose={() => settVisModal(false)}
             header={{ heading: 'Totrinnskontroll', size: 'medium' }}
         >

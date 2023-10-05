@@ -149,7 +149,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
 
             {modalVerdi.skalVises && (
                 <Modal
-                    open={modalVerdi.skalVises}
+                    open
                     onClose={() => settModalVerdi(initiellModalVerdi)}
                     header={{ heading: 'Totrinnskontroll', size: 'medium' }}
                 >

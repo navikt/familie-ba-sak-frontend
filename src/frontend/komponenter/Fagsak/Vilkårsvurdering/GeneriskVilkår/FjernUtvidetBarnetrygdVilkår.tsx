@@ -78,7 +78,7 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
 
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={onCloseModal}
                     header={{
                         heading: 'Fjern vilkåret utvidet barnetrygd',

@@ -178,7 +178,6 @@ const TilbakekrevingSkjema: React.FC<{
         <>
             {visDokumentModal && (
                 <PdfVisningModal
-                    åpen={visDokumentModal}
                     onRequestClose={() => settVisDokumentModal(false)}
                     pdfdata={hentetDokument}
                 />

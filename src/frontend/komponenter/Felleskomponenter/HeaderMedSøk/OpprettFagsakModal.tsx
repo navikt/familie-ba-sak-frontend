@@ -21,7 +21,6 @@ import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandl
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;
-    visModal: boolean;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
     fagsakerPåBruker?: IBaseFagsak[];
@@ -69,7 +68,6 @@ const fagsakTypeOptions = [
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     lukkModal,
-    visModal,
     søkeresultat,
     personInfo,
     fagsakerPåBruker,
@@ -201,7 +199,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     );
     return (
         <Modal
-            open={visModal}
+            open
             onClose={onClose}
             header={{
                 heading: harNormalFagsak

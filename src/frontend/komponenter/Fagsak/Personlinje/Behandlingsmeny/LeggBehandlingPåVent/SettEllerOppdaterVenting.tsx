@@ -48,7 +48,6 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ behandling }) => {
 
             {visModal && (
                 <SettBehandlingPåVentModal
-                    visModal={visModal}
                     onAvbryt={() => settVisModal(false)}
                     settBehandlingPåVent={settBehandlingPåVent}
                     skjema={skjema}

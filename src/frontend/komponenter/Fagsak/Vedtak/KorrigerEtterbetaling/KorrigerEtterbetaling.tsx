@@ -92,7 +92,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={lukkModal}
                     header={{ heading: 'Korriger etterbetaling', size: 'medium' }}
                     width={'35rem'}

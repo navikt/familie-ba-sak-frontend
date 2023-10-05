@@ -199,7 +199,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         <div>
             {visForhåndsvisningModal && (
                 <PdfVisningModal
-                    åpen={visForhåndsvisningModal}
                     onRequestClose={() => settForhåndsviningModal(false)}
                     pdfdata={hentetDokument}
                 />

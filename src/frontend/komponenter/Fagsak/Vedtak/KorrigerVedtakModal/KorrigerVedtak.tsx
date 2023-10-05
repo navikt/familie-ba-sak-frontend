@@ -79,7 +79,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
             </Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal
-                    open={visModal}
+                    open
                     onClose={lukkModal}
                     header={{ heading: 'Korriger vedtak', size: 'medium' }}
                     width={'35rem'}

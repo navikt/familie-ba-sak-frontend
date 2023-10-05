@@ -177,7 +177,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                                     hentVedtaksbrev();
                                 }
                             }}
-                            åpen={visDokumentModal}
                             onRequestClose={() => {
                                 settVisDokumentModal(false);
                                 nullstillDokument();
@@ -259,10 +258,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                     </div>
 
                     {visModal && (
-                        <BehandlingSendtTilTotrinnskontrollModal
-                            visModal={visModal}
-                            settVisModal={settVisModal}
-                        />
+                        <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />
                     )}
                 </>
             ) : erMigreringFraInfotrygd ? (

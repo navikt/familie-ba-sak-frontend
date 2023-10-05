@@ -26,7 +26,7 @@ const Brev = ({ onIModalClick }: IProps) => {
             />
             {visInnsendtBrevModal && (
                 <Modal
-                    open={visInnsendtBrevModal}
+                    open
                     onClose={() => {
                         settVisInnsendtBrevModal(false);
                         onIModalClick();

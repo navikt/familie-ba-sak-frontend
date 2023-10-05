@@ -27,7 +27,7 @@ const Dokumentutsending: React.FC = () => {
         <Container>
             {visInnsendtBrevModal && (
                 <Modal
-                    open={visInnsendtBrevModal}
+                    open
                     onClose={() => settVisInnsendtBrevModal(false)}
                     header={{ heading: 'Brevet er sendt', size: 'medium' }}
                     portal
