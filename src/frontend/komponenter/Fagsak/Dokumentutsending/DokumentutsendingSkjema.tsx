@@ -62,11 +62,10 @@ const DokumentutsendingSkjema: React.FC = () => {
     } = useDokumentutsending();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
+
+    //TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
     const barnSøktForÅrsaker = [
         DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
-        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
-        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
-        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
     ];
 
     const { toggles } = useApp();
@@ -92,10 +91,11 @@ const DokumentutsendingSkjema: React.FC = () => {
                 >
                     <option value="">Velg</option>
                     {Object.values(DokumentÅrsak)
+                        //TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
                         .filter(
                             årsak =>
                                 !barnSøktForÅrsaker.includes(årsak) ||
-                                toggles[ToggleNavn.eøsPraksisendringSeptember2023]
+                                toggles[ToggleNavn.selvstendigRettInfobrev]
                         )
                         .map(årsak => {
                             return (

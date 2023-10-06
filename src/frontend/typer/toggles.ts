@@ -18,6 +18,7 @@ export enum ToggleNavn {
     feilutbetaltValutaPerMåned = 'familie-ba-sak.feilutbetalt-valuta-pr-mnd',
     organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
     eøsPraksisendringSeptember2023 = 'familie-ba-sak.behandling.eos-annen-forelder-omfattet-av-norsk-lovgivning',
+    selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
 }
 
 export const alleTogglerAv = (): IToggles => {
