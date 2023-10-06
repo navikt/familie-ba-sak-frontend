@@ -62,7 +62,7 @@ const MånedÅrVelger: React.FC<Props> = ({
     }, [value]);
 
     return (
-        <div style={lesevisning ? { minWidth: '140px' } : {}}>
+        <div>
             <Knapperad>
                 <StyledMånedVelger
                     måned={måned}
