@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Institusjon from './Institusjon';
+import { SamhandlerTabell } from './SamhandlerTabell';
+import { useSamhandlerRequest } from './useSamhandler';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 import { BehandlingSteg } from '../../../typer/behandling';
@@ -20,9 +21,15 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerInstitusjon: React.FC = () => {
-    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } = useInstitusjonOgVerge();
+    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
+        useInstitusjonOgVerge();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
+
+    if (skjema.felter.institusjon.verdi && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+        hentOgSettSamhandler(skjema.felter.institusjon.verdi.orgNummer);
+    }
 
     return (
         <>
@@ -35,7 +42,13 @@ const RegistrerInstitusjon: React.FC = () => {
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
-                    <Institusjon />
+                    {samhandlerRessurs.status === RessursStatus.SUKSESS && (
+                        <SamhandlerTabell samhandler={samhandlerRessurs.data} />
+                    )}
+                    {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        samhandlerRessurs.status === RessursStatus.FEILET) && (
+                        <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
+                    )}
                     {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>
             )}
