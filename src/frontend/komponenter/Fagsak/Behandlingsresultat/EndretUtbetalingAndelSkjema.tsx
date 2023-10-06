@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset } from '@navikt/ds-react';
+import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset, Select } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -51,12 +51,12 @@ const StyledFieldset = styled(Fieldset)`
     max-width: 30rem;
 `;
 
-const StyledPersonvelger = styled(FamilieSelect)`
+const StyledSelectPersonvelger = styled(Select)`
     max-width: 20rem;
     z-index: 1000;
 `;
 
-const StyledSatsvelger = styled(FamilieSelect)`
+const StyledSelectSatsvelger = styled(Select)`
     max-width: 10rem;
 `;
 
@@ -167,7 +167,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 hideLegend
             >
                 <Feltmargin>
-                    <StyledPersonvelger
+                    <StyledSelectPersonvelger
                         {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={<Label>Velg hvem det gjelder</Label>}
                         value={skjema.felter.person.verdi ?? ''}
@@ -175,7 +175,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         onChange={(event): void => {
                             skjema.felter.person.validerOgSettFelt(event.target.value);
                         }}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                     >
                         <option value={undefined}>Velg person</option>
                         {åpenBehandling.personer
@@ -192,7 +192,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     {lagPersonLabel(person.personIdent, åpenBehandling.personer)}
                                 </option>
                             ))}
-                    </StyledPersonvelger>
+                    </StyledSelectPersonvelger>
                 </Feltmargin>
 
                 <Feltmargin>
@@ -200,7 +200,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     <Feltmargin>
                         <MånedÅrVelger
                             {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                            label={<BodyShort>F.o.m</BodyShort>}
+                            label={'F.o.m'}
                             value={skjema.felter.fom.verdi}
                             antallÅrFrem={finnÅrFremTilStønadTom()}
                             antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
@@ -216,7 +216,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     </Feltmargin>
                     <MånedÅrVelger
                         {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<BodyShort>T.o.m (valgfri)</BodyShort>}
+                        label={'T.o.m (valgfri)'}
                         value={skjema.felter.tom.verdi}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
@@ -232,20 +232,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Feltmargin>
-                    <FamilieSelect
+                    <Select
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         value={skjema.felter.årsak.verdi ?? ''}
-                        label={<Label>Årsak</Label>}
+                        label={'Årsak'}
                         placeholder={'Velg årsak'}
                         onChange={(event): void => {
                             skjema.felter.årsak.validerOgSettFelt(
                                 event.target.value as IEndretUtbetalingAndelÅrsak
                             );
                         }}
-                        erLesevisning={erLesevisning}
-                        lesevisningVerdi={
-                            skjema.felter.årsak.verdi ? årsakTekst[skjema.felter.årsak.verdi] : ''
-                        }
+                        readOnly={erLesevisning}
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (
@@ -253,7 +250,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 {årsakTekst[årsak]}
                             </option>
                         ))}
-                    </FamilieSelect>
+                    </Select>
                 </Feltmargin>
 
                 <Feltmargin>
@@ -342,7 +339,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 )}
                 {skjema.felter.fullSats.erSynlig && (
                     <Feltmargin>
-                        <StyledSatsvelger
+                        <StyledSelectSatsvelger
                             {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
                                 skjema.visFeilmeldinger
                             )}
@@ -372,7 +369,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     }
                                 </option>
                             ))}
-                        </StyledSatsvelger>
+                        </StyledSelectSatsvelger>
                     </Feltmargin>
                 )}
 

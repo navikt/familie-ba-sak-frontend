@@ -3,8 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Label } from '@navikt/ds-react';
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { Alert, Button, Fieldset, Heading, Label, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
@@ -81,7 +80,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                 legend="Send informasjonsbrev"
                 hideLegend
             >
-                <FamilieSelect
+                <Select
                     {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={'Velg årsak'}
                     value={skjema.felter.årsak.verdi || ''}
@@ -108,7 +107,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                                 </option>
                             );
                         })}
-                </FamilieSelect>
+                </Select>
 
                 <ÅrsakSkjema>
                     {skjema.felter.årsak.verdi === DokumentÅrsak.DELT_BOSTED && (

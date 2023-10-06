@@ -2,9 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Button, Fieldset, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, Select, TextField } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -36,7 +35,7 @@ const StyledFieldset = styled(Fieldset)`
     }
 `;
 
-const MottakerSelect = styled(FamilieSelect)`
+const MottakerSelect = styled(Select)`
     max-width: 19rem;
 `;
 
@@ -58,7 +57,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
             >
                 <MottakerSelect
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
+                    readOnly={erLesevisning}
                     label="Mottaker"
                     onChange={(event): void => {
                         skjema.felter.mottaker.validerOgSettFelt(event.target.value as Mottaker);

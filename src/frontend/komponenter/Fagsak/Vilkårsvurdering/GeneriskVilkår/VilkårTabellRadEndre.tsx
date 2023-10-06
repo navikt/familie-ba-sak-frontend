@@ -4,14 +4,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, Select } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
-import {
-    FamilieKnapp,
-    FamilieRadioGruppe,
-    FamilieSelect,
-    FamilieTextarea,
-} from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -234,13 +229,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 vilkårResultat={vilkårResultat.verdi.resultat.verdi}
             >
                 {visRegelverkValg() && (
-                    <FamilieSelect
-                        erLesevisning={lesevisning}
-                        lesevisningVerdi={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst
-                                : 'Generell vurdering'
-                        }
+                    <Select
+                        readOnly={lesevisning}
                         value={
                             redigerbartVilkår.verdi.vurderesEtter
                                 ? redigerbartVilkår.verdi.vurderesEtter
@@ -275,7 +265,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 );
                             }
                         )}
-                    </FamilieSelect>
+                    </Select>
                 )}
                 <StyledFamilieRadioGruppe
                     erLesevisning={lesevisning}

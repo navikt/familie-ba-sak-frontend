@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { ErrorMessage, Label } from '@navikt/ds-react';
+import { ErrorMessage } from '@navikt/ds-react';
 
 import MånedVelger from './MånedVelger';
 import Årvelger from './ÅrVelger';
@@ -12,22 +12,16 @@ interface Props {
     id: string;
     feil?: ReactNode | undefined;
     value: string | undefined;
-    className?: string;
-    label?: ReactNode;
+    label: string;
     onEndret: (årMåned?: string) => void;
     antallÅrTilbake: number;
     antallÅrFrem: number;
     lesevisning?: boolean;
-    disabled?: boolean;
 }
 
 const Knapperad = styled.div`
     display: flex;
     flex-direction: row;
-`;
-
-const DatolabelStyle = styled(Label)`
-    margin-bottom: 0.5em;
 `;
 
 const StyledMånedVelger = styled(MånedVelger)`
@@ -40,16 +34,13 @@ const StyledErrorMessage = styled(ErrorMessage)`
 `;
 
 const MånedÅrVelger: React.FC<Props> = ({
-    id,
     feil,
     value,
-    className,
     label,
     onEndret,
     antallÅrTilbake = 10,
     antallÅrFrem = 4,
     lesevisning = false,
-    disabled = false,
 }) => {
     const årFraVerdi = () => (value ? parseInt(value.split('-')[0], 10) : undefined);
     const månedFraVerdi = () => (value ? value.split('-')[1] : undefined);
@@ -71,14 +62,13 @@ const MånedÅrVelger: React.FC<Props> = ({
     }, [value]);
 
     return (
-        <div className={className} style={lesevisning ? { minWidth: '140px' } : {}}>
-            {label && <DatolabelStyle htmlFor={id}>{label}</DatolabelStyle>}
+        <div style={lesevisning ? { minWidth: '180px' } : {}}>
             <Knapperad>
                 <StyledMånedVelger
                     måned={måned}
                     settMåned={settMåned}
                     lesevisning={lesevisning}
-                    disabled={disabled}
+                    label={label}
                     feil={!!feil && !måned}
                 />
                 <Årvelger
@@ -87,7 +77,6 @@ const MånedÅrVelger: React.FC<Props> = ({
                     antallÅrTilbake={antallÅrTilbake}
                     antallÅrFrem={antallÅrFrem}
                     lesevisning={lesevisning}
-                    disabled={disabled}
                     feil={!!feil && !år}
                 />
             </Knapperad>

@@ -9,10 +9,11 @@ import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const FlexDiv = styled.div`
-    width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '28rem')};
+    width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '31rem')};
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
+    gap: 1rem;
 
     div {
         z-index: 0;

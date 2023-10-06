@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Select } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -49,7 +49,7 @@ const StyledFamilieLandvelger = styled(FamilieLandvelger)`
     margin-top: 1.5rem;
 `;
 
-const StyledFamilieSelect = styled(FamilieSelect)`
+const StyledSelect = styled(Select)`
     margin-top: 1.5rem;
 `;
 
@@ -120,16 +120,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         i perioden
                     </StyledAlert>
                 )}
-                <StyledFamilieSelect
+                <StyledSelect
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                    readOnly={lesevisning}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
-                    lesevisningVerdi={
-                        skjema.felter.søkersAktivitet.verdi
-                            ? kompetanseAktiviteter[skjema.felter.søkersAktivitet.verdi]
-                            : 'Ikke utfylt'
-                    }
                     onChange={event =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
@@ -153,20 +148,15 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 </option>
                             );
                         })}
-                </StyledFamilieSelect>
-                <StyledFamilieSelect
+                </StyledSelect>
+                <StyledSelect
                     className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
                         skjema.visFeilmeldinger
                     )}
-                    erLesevisning={lesevisning}
+                    readOnly={lesevisning}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    lesevisningVerdi={
-                        skjema.felter.annenForeldersAktivitet?.verdi
-                            ? kompetanseAktiviteter[skjema.felter.annenForeldersAktivitet?.verdi]
-                            : 'Ikke utfylt'
-                    }
                     onChange={event => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
@@ -185,7 +175,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             </option>
                         );
                     })}
-                </StyledFamilieSelect>
+                </StyledSelect>
                 {skjema.felter.annenForeldersAktivitet.verdi ===
                     AnnenForelderAktivitet.IKKE_AKTUELT && (
                     <StyledAlert variant="info" size="small" inline>
@@ -255,16 +245,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             : ''
                     }
                 />
-                <FamilieSelect
+                <Select
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                    readOnly={lesevisning}
                     label={'Kompetanse'}
                     value={skjema.felter.resultat.verdi || ''}
-                    lesevisningVerdi={
-                        skjema.felter.resultat.verdi
-                            ? kompetanseResultater[skjema.felter.resultat.verdi]
-                            : 'Ikke utfylt'
-                    }
                     onChange={event => {
                         skjema.felter.resultat.validerOgSettFelt(
                             event.target.value as KompetanseResultat
@@ -290,7 +275,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     >
                         {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
                     </option>
-                </FamilieSelect>
+                </Select>
                 {toPrimærland && (
                     <Alert
                         variant={'warning'}

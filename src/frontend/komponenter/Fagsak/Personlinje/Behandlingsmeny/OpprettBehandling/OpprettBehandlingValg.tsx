@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Select } from '@navikt/ds-react';
 import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
-import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
@@ -34,7 +34,7 @@ import { hentAlder } from '../../../../../utils/formatter';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
-const StyledFamilieSelect = styled(FamilieSelect)`
+const StyledSelect = styled(Select)`
     label {
         margin-top: 2rem;
     }
@@ -168,9 +168,9 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     return (
         <>
-            <FamilieSelect
+            <Select
                 {...behandlingstype.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning}
+                readOnly={erLesevisning}
                 name={'Behandling'}
                 label={'Velg type behandling'}
                 onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
@@ -238,12 +238,12 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         Migrering fra infotrygd
                     </option>
                 )}
-            </FamilieSelect>
+            </Select>
 
             {behandlingsårsak.erSynlig && (
-                <StyledFamilieSelect
+                <StyledSelect
                     {...behandlingsårsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
+                    readOnly={erLesevisning}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
                     onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
@@ -269,7 +269,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                             </option>
                         );
                     })}
-                </StyledFamilieSelect>
+                </StyledSelect>
             )}
 
             {erHelmanuellMigrering &&
@@ -310,8 +310,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     fagsakType={minimalFagsak?.fagsakType}
                     erLesevisning={erLesevisning}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    name="Behandlingstema"
-                    label="Velg behandlingstema"
                 />
             )}
         </>

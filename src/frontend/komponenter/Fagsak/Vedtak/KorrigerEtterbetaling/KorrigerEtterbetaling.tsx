@@ -3,9 +3,9 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 import { ArrowUndoIcon, DocPencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Modal, Select, TextField } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -26,7 +26,7 @@ const baseSkjemaelementStyle = css`
     margin-bottom: 1.5rem;
 `;
 
-const StyledFamilieSelect = styled(FamilieSelect)`
+const StyledSelect = styled(Select)`
     ${baseSkjemaelementStyle}
 `;
 
@@ -71,9 +71,6 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
         settVisModal(false);
     };
 
-    const hentLabelForÅrsak = (årsakValue: string) =>
-        årsaker.find(årsak => årsak.value === årsakValue)?.label;
-
     return (
         <>
             <Dropdown.Menu.List.Item
@@ -99,15 +96,11 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                     <Modal.Body>
                         <Fieldset error={false} legend="Korriger etterbetaling" hideLegend>
                             <div>
-                                <StyledFamilieSelect
+                                <StyledSelect
                                     label={'Årsak'}
                                     id={'korrigering-aarsak'}
                                     value={skjema.felter.årsak.verdi}
-                                    lesevisningVerdi={
-                                        skjema.felter.årsak.verdi === ''
-                                            ? 'Ingen årsak valgt.'
-                                            : hentLabelForÅrsak(skjema.felter.årsak.verdi)
-                                    }
+                                    readOnly={erLesevisning}
                                     onChange={option =>
                                         skjema.felter.årsak.validerOgSettFelt(option.target.value)
                                     }
@@ -117,14 +110,13 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                             ? skjema.felter.årsak.feilmelding?.toString()
                                             : ''
                                     }
-                                    erLesevisning={erLesevisning}
                                 >
                                     {årsaker.map(årsak => (
                                         <option value={årsak.value} key={årsak.value}>
                                             {årsak.label}
                                         </option>
                                     ))}
-                                </StyledFamilieSelect>
+                                </StyledSelect>
                                 <StyledTextField
                                     label={'Nytt beløp'}
                                     id={'korrigering-belop'}
