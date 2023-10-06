@@ -5,12 +5,11 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Institusjon from './Institusjon';
-import Verge from './Verge';
+import { SamhandlerTabell } from './SamhandlerTabell';
+import { useSamhandlerRequest } from './useSamhandler';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
 import { BehandlingSteg } from '../../../typer/behandling';
-import { FagsakType } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
@@ -21,27 +20,34 @@ const StyledAlert = styled(Alert)`
     margin: 2rem;
 `;
 
-const RegistrerMottaker: React.FC = () => {
-    const { fagsakType, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
+const RegistrerInstitusjon: React.FC = () => {
+    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
         useInstitusjonOgVerge();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
+
+    if (skjema.felter.institusjon.verdi && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+        hentOgSettSamhandler(skjema.felter.institusjon.verdi.orgNummer);
+    }
 
     return (
         <>
             {!fagsakFeilmelding && (
                 <StyledSkjemasteg
                     className={'mottaker'}
-                    tittel={'Registrer mottaker'}
+                    tittel={'Registrer institusjon'}
                     nesteOnClick={onSubmitMottaker}
                     nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
                     steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
                 >
-                    {fagsakType === FagsakType.INSTITUSJON ? (
-                        <Institusjon />
-                    ) : (
-                        <Verge erLesevisning={erLesevisning} />
+                    {samhandlerRessurs.status === RessursStatus.SUKSESS && (
+                        <SamhandlerTabell samhandler={samhandlerRessurs.data} />
+                    )}
+                    {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        samhandlerRessurs.status === RessursStatus.FEILET) && (
+                        <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
                     )}
                     {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
                 </StyledSkjemasteg>
@@ -51,4 +57,4 @@ const RegistrerMottaker: React.FC = () => {
     );
 };
 
-export default RegistrerMottaker;
+export default RegistrerInstitusjon;

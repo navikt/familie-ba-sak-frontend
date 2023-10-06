@@ -2,8 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, ErrorMessage, Modal, ReadMore, Select } from '@navikt/ds-react';
-import { FamilieInput } from '@navikt/familie-form-elements';
+import {
+    BodyShort,
+    Button,
+    ErrorMessage,
+    Modal,
+    ReadMore,
+    Select,
+    TextField,
+} from '@navikt/ds-react';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -153,11 +160,10 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                 />
                 {fagsakType === FagsakType.INSTITUSJON && (
                     <StyledDiv>
-                        <FamilieInput
+                        <TextField
                             {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
                                 samhandlerSkjema.visFeilmeldinger
                             )}
-                            erLesevisning={false}
                             id={'hent-samhandler'}
                             label={'Organisasjonsnummer'}
                             onChange={event =>

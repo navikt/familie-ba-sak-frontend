@@ -2,11 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Label, Radio } from '@navikt/ds-react';
+import { Label, Radio, TextField } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieDatovelger } from '@navikt/familie-datovelger';
-import { FamilieInput, FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';
@@ -40,7 +40,7 @@ const FlexRowDiv = styled.div`
     display: flex;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     width: 11rem;
     .navds-label {
         width: 18rem;
@@ -142,7 +142,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                     />
                 </FlexRowDiv>
             </FlexDatoInputWrapper>
-            <StyledFamilieInput
+            <StyledTextField
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
                 label="Refusjonsbeløp (kr/mnd)"
@@ -153,7 +153,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 onChange={changeEvent =>
                     skjema.felter.refusjonsbeløp.validerOgSettFelt(changeEvent.target.value)
                 }
-                erLesevisning={erLesevisning}
+                readOnly={erLesevisning}
             />
         </>
     );

@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, HelpText, Fieldset, Modal, Heading } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Fieldset, Modal, Heading, TextField } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -137,7 +136,7 @@ const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
                             legend="Legg til barn på behandling"
                             hideLegend
                         >
-                            <FamilieInput
+                            <TextField
                                 {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
                                 label={'Fødselsnummer'}
                                 placeholder={'11 siffer'}

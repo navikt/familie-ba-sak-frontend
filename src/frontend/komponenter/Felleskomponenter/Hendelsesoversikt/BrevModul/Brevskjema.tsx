@@ -4,14 +4,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, FileTextIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Tag } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Tag, TextField } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
-import {
-    FamilieInput,
-    FamilieReactSelect,
-    FamilieSelect,
-    FamilieTextarea,
-} from '@navikt/familie-form-elements';
+import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -96,7 +91,7 @@ const FritekstWrapper = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledFamilieInput = styled(FamilieInput)`
+const StyledTextField = styled(TextField)`
     width: fit-content;
 `;
 
@@ -409,7 +404,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         Brevmal.FORLENGET_SVARTIDSBREV,
                         Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
                     ].includes(skjema.felter.brevmal.verdi) && (
-                        <StyledFamilieInput
+                        <StyledTextField
                             {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(
                                 skjema.visFeilmeldinger
                             )}

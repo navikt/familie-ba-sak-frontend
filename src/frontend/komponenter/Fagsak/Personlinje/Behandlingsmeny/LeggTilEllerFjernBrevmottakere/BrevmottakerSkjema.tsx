@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Button, Fieldset } from '@navikt/ds-react';
+import { Button, Fieldset, TextField } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieInput, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -71,44 +71,44 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                         </option>
                     ))}
                 </MottakerSelect>
-                <FamilieInput
+                <TextField
                     {...skjema.felter.navn.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning || navnErPreutfylt}
+                    readOnly={erLesevisning || navnErPreutfylt}
                     label={'Navn'}
                     onChange={(event): void => {
                         skjema.felter.navn.validerOgSettFelt(event.target.value);
                     }}
                 />
-                <FamilieInput
+                <TextField
                     {...skjema.felter.adresselinje1.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
+                    readOnly={erLesevisning}
                     label={'Adresselinje 1'}
                     onChange={(event): void => {
                         skjema.felter.adresselinje1.validerOgSettFelt(event.target.value);
                     }}
                 />
-                <FamilieInput
+                <TextField
                     {...skjema.felter.adresselinje2.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
+                    readOnly={erLesevisning}
                     label={'Adresselinje 2 (valgfri)'}
                     onChange={(event): void => {
                         skjema.felter.adresselinje2.validerOgSettFelt(event.target.value);
                     }}
                 />
                 <PostnummerOgStedContainer>
-                    <FamilieInput
+                    <TextField
                         {...skjema.felter.postnummer.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                         label={'Postnummer'}
                         onChange={(event): void => {
                             skjema.felter.postnummer.validerOgSettFelt(event.target.value);
                         }}
                     />
-                    <FamilieInput
+                    <TextField
                         {...skjema.felter.poststed.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                         label={'Poststed'}
                         onChange={(event): void => {
                             skjema.felter.poststed.validerOgSettFelt(event.target.value);

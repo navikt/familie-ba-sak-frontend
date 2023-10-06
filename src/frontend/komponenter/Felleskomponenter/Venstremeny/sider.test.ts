@@ -25,7 +25,7 @@ describe('sider.ts', () => {
                 ],
             });
             expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
-                SideId.REGISTRERE_MOTTAKER
+                SideId.REGISTRER_INSTITUSJON
             );
         });
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
@@ -57,7 +57,7 @@ describe('sider.ts', () => {
                     side =>
                         side !== SideId.FILTRERING_FØDSELSHENDELSER &&
                         side !== SideId.REGISTRERE_SØKNAD &&
-                        side !== SideId.REGISTRERE_MOTTAKER
+                        side !== SideId.REGISTRER_INSTITUSJON
                 )
             );
         });
@@ -66,7 +66,7 @@ describe('sider.ts', () => {
     describe('Sjekk ved endring av sider', () => {
         test('Oppdater siderForBehandling-tester ved nye/fjernede sider', () => {
             const sider = [
-                SideId.REGISTRERE_MOTTAKER,
+                SideId.REGISTRER_INSTITUSJON,
                 SideId.REGISTRERE_SØKNAD,
                 SideId.FILTRERING_FØDSELSHENDELSER,
                 SideId.VILKÅRSVURDERING,
