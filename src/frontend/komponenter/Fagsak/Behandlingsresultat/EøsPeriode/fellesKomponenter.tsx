@@ -18,14 +18,12 @@ import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/f
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 
 interface IEøsPeriodeSkjemaContainerProps {
-    maxWidth?: number;
     lesevisning: boolean;
     status: EøsPeriodeStatus;
 }
 
 export const EøsPeriodeSkjemaContainer = styled.div`
-    max-width: ${(props: IEøsPeriodeSkjemaContainerProps) =>
-        props.maxWidth ? `${props.maxWidth}rem` : '33rem'};
+    max-width: 33rem;
     border-left: 0.125rem solid
         ${(props: IEøsPeriodeSkjemaContainerProps) => {
             if (props.lesevisning) return ABorderDefault;

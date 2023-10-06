@@ -138,7 +138,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             legend={'Valutakurs skjema'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
+            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
@@ -156,7 +156,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
-                    maxWidth={32}
                 />
                 <StyledFieldset
                     className={lesevisning ? 'lesevisning' : ''}
