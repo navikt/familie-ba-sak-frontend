@@ -19,7 +19,7 @@ const StyledAlert = styled(Alert)`
     margin: 2rem;
 `;
 
-const RegistrerMottaker: React.FC = () => {
+const RegistrerInstitusjon: React.FC = () => {
     const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } = useInstitusjonOgVerge();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
@@ -29,7 +29,7 @@ const RegistrerMottaker: React.FC = () => {
             {!fagsakFeilmelding && (
                 <StyledSkjemasteg
                     className={'mottaker'}
-                    tittel={'Registrer mottaker'}
+                    tittel={'Registrer institusjon'}
                     nesteOnClick={onSubmitMottaker}
                     nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
@@ -44,4 +44,4 @@ const RegistrerMottaker: React.FC = () => {
     );
 };
 
-export default RegistrerMottaker;
+export default RegistrerInstitusjon;

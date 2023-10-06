@@ -7,7 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
-import RegistrerMottaker from './InstitusjonOgVerge/RegistrerMottaker';
+import RegistrerInstitusjon from './InstitusjonOgVerge/RegistrerInstitusjon';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
@@ -45,10 +45,10 @@ const BehandlingRouter: React.FunctionComponent = () => {
             return (
                 <Routes>
                     <Route
-                        path="/registrer-mottaker"
+                        path="/registrer-institusjon"
                         element={
                             <InstitusjonOgVergeProvider åpenBehandling={åpenBehandling.data}>
-                                <RegistrerMottaker />
+                                <RegistrerInstitusjon />
                             </InstitusjonOgVergeProvider>
                         }
                     />

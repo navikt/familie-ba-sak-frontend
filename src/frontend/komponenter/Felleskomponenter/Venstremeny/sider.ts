@@ -37,7 +37,7 @@ export enum KontrollertStatus {
 }
 
 export enum SideId {
-    REGISTRERE_MOTTAKER = 'REGISTRERE_MOTTAKER',
+    REGISTRERE_MOTTAKER = 'REGISTRER_INSTITUSJON',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
@@ -47,9 +47,9 @@ export enum SideId {
 }
 
 export const sider: Record<SideId, ISide> = {
-    REGISTRERE_MOTTAKER: {
-        href: 'registrer-mottaker',
-        navn: 'Registrer mottaker',
+    REGISTRER_INSTITUSJON: {
+        href: 'registrer-institusjon',
+        navn: 'Registrer institusjon',
         steg: BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE,
         visSide: (åpenBehandling: IBehandling) => {
             return (
