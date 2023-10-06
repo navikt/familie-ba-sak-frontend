@@ -52,7 +52,6 @@ const StyledFieldset = styled(Fieldset)`
 `;
 
 const StyledSelectPersonvelger = styled(Select)`
-    max-width: 20rem;
     z-index: 1000;
 `;
 
