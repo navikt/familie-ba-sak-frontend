@@ -34,19 +34,6 @@ import { hentAlder } from '../../../../../utils/formatter';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
-const StyledSelect = styled(Select)`
-    label {
-        margin-top: 2rem;
-    }
-    margin-bottom: 1rem;
-`;
-
-const StyledBehandlingstemaSelect = styled(BehandlingstemaSelect)`
-    label {
-        margin-top: 2rem;
-    }
-`;
-
 const StyledFamilieReactSelect = styled(FamilieReactSelect)`
     label {
         margin-top: 2rem;
@@ -241,7 +228,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             </Select>
 
             {behandlingsårsak.erSynlig && (
-                <StyledSelect
+                <Select
                     {...behandlingsårsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     readOnly={erLesevisning}
                     name={'Behandlingsårsak'}
@@ -269,7 +256,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                             </option>
                         );
                     })}
-                </StyledSelect>
+                </Select>
             )}
 
             {erHelmanuellMigrering &&
@@ -305,7 +292,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 )}
 
             {behandlingstema.erSynlig && (
-                <StyledBehandlingstemaSelect
+                <BehandlingstemaSelect
                     behandlingstema={behandlingstema}
                     fagsakType={minimalFagsak?.fagsakType}
                     erLesevisning={erLesevisning}
