@@ -353,6 +353,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     : undefined
                             }
                             placeholder={'Velg sats'}
+                            readOnly={erLesevisning}
                             onChange={(event): void => {
                                 skjema.felter.fullSats.validerOgSettFelt(
                                     optionTilsats(event.target.value)
