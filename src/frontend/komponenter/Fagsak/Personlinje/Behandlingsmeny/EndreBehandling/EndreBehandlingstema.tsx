@@ -52,7 +52,6 @@ const EndreBehandlingstema: React.FC = () => {
                                 behandlingstema={skjema.felter.behandlingstema}
                                 fagsakType={minimalFagsak?.fagsakType}
                                 erLesevisning={vurderErLesevisning()}
-                                label="Behandlingstema"
                             />
                         </Fieldset>
                     </Modal.Body>

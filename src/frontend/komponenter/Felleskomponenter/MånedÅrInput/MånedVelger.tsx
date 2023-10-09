@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { Select } from '@navikt/ds-react';
 
 interface MånedProps {
     måned: string | undefined;
     settMåned: (måned: string | undefined) => void;
     lesevisning?: boolean;
-    disabled?: boolean;
     className?: string;
     feil?: boolean;
+    label: string;
 }
 
 const månedValg = [
@@ -30,23 +30,20 @@ const MånedVelger: React.FC<MånedProps> = ({
     måned,
     settMåned,
     lesevisning = false,
-    disabled = false,
     className,
     feil = false,
+    label,
 }) => {
     return (
-        <FamilieSelect
-            erLesevisning={lesevisning}
-            lesevisningVerdi={måned ? månedValg.find(mnd => mnd.mndNr === måned)?.verdi : ''}
+        <Select
+            readOnly={lesevisning}
             value={måned ?? ''}
-            label={'Måned'}
-            hideLabel
+            label={label}
             className={className}
             onChange={event => {
                 event.persist();
                 settMåned(event.target.value !== '' ? event.target.value : undefined);
             }}
-            disabled={disabled}
             error={feil}
         >
             <option value="">Måned</option>
@@ -55,7 +52,7 @@ const MånedVelger: React.FC<MånedProps> = ({
                     {mnd.verdi}
                 </option>
             ))}
-        </FamilieSelect>
+        </Select>
     );
 };
 

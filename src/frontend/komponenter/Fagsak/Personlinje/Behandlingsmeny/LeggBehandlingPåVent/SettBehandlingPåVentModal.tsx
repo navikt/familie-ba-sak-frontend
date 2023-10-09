@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Button, Fieldset, Modal } from '@navikt/ds-react';
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { BodyShort, Button, Fieldset, Modal, Select } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -72,10 +71,9 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                             placeholder={'DD.MM.ÅÅÅÅ'}
                         />
                     </Feltmargin>
-                    <FamilieSelect
+                    <Select
                         {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Årsak'}
-                        placeholder={'Årsak'}
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (
@@ -83,7 +81,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                                 {settPåVentÅrsaker[årsak]}
                             </option>
                         ))}
-                    </FamilieSelect>
+                    </Select>
                 </Fieldset>
             </Modal.Body>
             <Modal.Footer>

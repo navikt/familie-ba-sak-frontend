@@ -9,7 +9,7 @@ import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const FlexDiv = styled.div`
-    width: ${(props: { maxWidth?: number }) => (props.maxWidth ? `${props.maxWidth}rem` : '28rem')};
+    width: 32rem;
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
@@ -29,7 +29,6 @@ interface IProps {
     initielFom: Felt<string>;
     visFeilmeldinger: boolean;
     lesevisning: boolean;
-    maxWidth?: number;
     className?: string;
 }
 
@@ -39,7 +38,6 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
     initielFom,
     visFeilmeldinger,
     lesevisning,
-    maxWidth,
     className = '',
 }) => {
     const finnÅrTilbakeTil = (): number => {
@@ -54,7 +52,7 @@ const EøsPeriodeSkjema: React.FC<IProps> = ({
             legend="Periode"
             size="medium"
         >
-            <FlexDiv maxWidth={maxWidth}>
+            <FlexDiv>
                 <MånedÅrVelger
                     lesevisning={lesevisning}
                     id={`periode_fom`}

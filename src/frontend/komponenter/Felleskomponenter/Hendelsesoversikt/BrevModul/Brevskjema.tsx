@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, FileTextIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Tag, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Select, Tag, TextField } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieReactSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -50,7 +50,7 @@ const StyledList = styled.ul`
     margin: 0;
 `;
 
-const StyledFamilieSelect = styled(FamilieSelect)`
+const StyledSelect = styled(Select)`
     margin-bottom: 1rem;
 
     .navds-label {
@@ -213,7 +213,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     brevmottakere={brevmottakere}
                     fagsakType={fagsakType}
                 />
-                <StyledFamilieSelect
+                <StyledSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={
                         <LabelOgEtikett>
@@ -248,7 +248,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                             </option>
                         );
                     })}
-                </StyledFamilieSelect>
+                </StyledSelect>
 
                 {skjema.felter.dokumenter.erSynlig && (
                     <FamilieReactSelect

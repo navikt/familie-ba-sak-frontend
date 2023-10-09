@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { BodyShort, Button, Fieldset, Link, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Fieldset, Link, Modal, Select } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useHenleggBehandling from './useHenleggBehandling';
@@ -113,7 +113,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                             legend={'Henlegg behandling'}
                             hideLegend
                         >
-                            <FamilieSelect
+                            <Select
                                 {...skjema.felter.årsak.hentNavBaseSkjemaProps(
                                     skjema.visFeilmeldinger
                                 )}
@@ -149,7 +149,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                                             </option>
                                         );
                                     })}
-                            </FamilieSelect>
+                            </Select>
 
                             <FamilieTextarea
                                 {...skjema.felter.begrunnelse.hentNavInputProps(

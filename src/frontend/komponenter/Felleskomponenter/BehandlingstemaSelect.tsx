@@ -1,42 +1,37 @@
 import React from 'react';
 
-import { FamilieSelect } from '@navikt/familie-form-elements';
-import type { IFamilieSelectProps } from '@navikt/familie-form-elements/src/select/FamilieSelect';
+import { Select } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { Behandlingstema, IBehandlingstema } from '../../typer/behandlingstema';
 import { BehandlingKategori, behandlingstemaer } from '../../typer/behandlingstema';
 import { FagsakType } from '../../typer/fagsak';
 
-interface EgneProps {
+interface Props {
     behandlingstema: Felt<IBehandlingstema | undefined>;
-    fagsakType?: FagsakType;
+    fagsakType: FagsakType | undefined;
+    erLesevisning: boolean;
     visFeilmeldinger?: boolean;
-    erLesevisning?: boolean;
 }
-
-type Props = EgneProps & Omit<IFamilieSelectProps, 'children'>;
 
 export const BehandlingstemaSelect = ({
     behandlingstema,
     fagsakType,
+    erLesevisning,
     visFeilmeldinger = false,
-    erLesevisning = false,
-    ...familieSelectProps
 }: Props) => {
     const { verdi } = behandlingstema;
     return (
-        <FamilieSelect
-            {...familieSelectProps}
+        <Select
             {...behandlingstema.hentNavInputProps(visFeilmeldinger)}
             value={verdi !== undefined ? verdi.id : ''}
+            label={'Velg behandlingstema'}
             onChange={evt => {
                 behandlingstema.validerOgSettFelt(
                     behandlingstemaer[evt.target.value as Behandlingstema]
                 );
             }}
-            erLesevisning={erLesevisning}
-            lesevisningVerdi={verdi !== undefined ? verdi.navn : ''}
+            readOnly={erLesevisning}
         >
             {verdi === undefined && (
                 <option
@@ -66,6 +61,6 @@ export const BehandlingstemaSelect = ({
                         </option>
                     );
                 })}
-        </FamilieSelect>
+        </Select>
     );
 };

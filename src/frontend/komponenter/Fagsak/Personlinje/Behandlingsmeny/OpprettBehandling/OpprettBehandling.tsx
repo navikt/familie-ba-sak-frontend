@@ -28,6 +28,12 @@ const StyledAlert = styled(Alert)`
     margin-top: 1.5rem;
 `;
 
+const StyledFieldset = styled(Fieldset)`
+    && > div:not(:last-child):not(:empty) {
+        margin-bottom: 1rem;
+    }
+`;
+
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visOpprettNyBehandlingModal, settVisOpprettNyBehandlingModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
@@ -81,7 +87,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                     }}
                 >
                     <Modal.Body>
-                        <Fieldset
+                        <StyledFieldset
                             error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
                             legend={'Opprett ny behandling'}
                             hideLegend
@@ -123,7 +129,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     }}
                                 />
                             )}
-                        </Fieldset>
+                        </StyledFieldset>
                         {søknadMottattDatoErMerEnn360DagerSiden && (
                             <StyledAlert variant={'warning'}>
                                 Er mottatt dato riktig? <br />

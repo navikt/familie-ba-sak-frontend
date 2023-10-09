@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, TextField } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
 import {
     ABorderDefault,
     AFontLineHeightLarge,
@@ -11,7 +11,7 @@ import {
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp, FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -147,7 +147,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer maxWidth={34} lesevisning={lesevisning} status={status}>
+            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
                 <UtbetaltBeløpInfo variant="info" inline>
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna
@@ -171,7 +171,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
-                    maxWidth={32}
                 />
                 <StyledFieldset
                     className={lesevisning ? 'lesevisning' : ''}
@@ -206,21 +205,14 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             }}
                             utenMargin
                         />
-                        <FamilieSelect
+                        <Select
                             label={'Intervall'}
-                            erLesevisning={lesevisning}
+                            readOnly={lesevisning}
                             value={skjema.felter.intervall?.verdi || undefined}
                             onChange={event =>
                                 skjema.felter.intervall?.validerOgSettFelt(
                                     event.target.value as UtenlandskPeriodeBeløpIntervall
                                 )
-                            }
-                            lesevisningVerdi={
-                                skjema.felter.intervall?.verdi
-                                    ? utenlandskPeriodeBeløpIntervaller[
-                                          skjema.felter.intervall.verdi
-                                      ]
-                                    : ''
                             }
                             size={'medium'}
                         >
@@ -234,7 +226,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                     </option>
                                 );
                             })}
-                        </FamilieSelect>
+                        </Select>
                     </UtbetaltBeløpRad>
                 </StyledFieldset>
 
