@@ -9,7 +9,7 @@ import type { IYearMonthPeriode } from '../../../../utils/kalender';
 import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const FlexDiv = styled.div`
-    width: 31rem;
+    width: 32rem;
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
