@@ -6,12 +6,17 @@ import React from 'react';
 import axe from '@axe-core/react';
 import { init } from '@sentry/browser';
 import { Integrations } from '@sentry/tracing';
+import { setDefaultOptions } from 'date-fns';
+import { nb } from 'date-fns/locale';
 import ReactDOM from 'react-dom';
 
 import App from './komponenter/App';
 
 // eslint-disable-next-line
 const packageConfig = require('../../package.json');
+
+// Setter default locale til norsk bokmål for date-fns
+setDefaultOptions({ locale: nb });
 
 const environment = window.location.hostname;
 

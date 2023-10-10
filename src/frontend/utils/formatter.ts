@@ -1,5 +1,4 @@
 import { format, isBefore, isValid } from 'date-fns';
-import { nb } from 'date-fns/locale';
 
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 import { YtelseType } from '../typer/beregning';
@@ -39,7 +38,7 @@ export const formaterIsoDato = (
         return defaultString ?? '';
     }
     const dato = new Date(datoString);
-    return isValid(dato) ? format(dato, tilFormat, { locale: nb }) : datoString;
+    return isValid(dato) ? format(dato, tilFormat) : datoString;
 };
 
 export const hentAlder = (fødselsdato: string): number => {
