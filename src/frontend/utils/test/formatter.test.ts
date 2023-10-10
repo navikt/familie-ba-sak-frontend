@@ -1,7 +1,8 @@
+import { format } from 'date-fns';
+
 import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
 import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
-import familieDayjs from '../familieDayjs';
 import {
     datoformat,
     formaterIdent,
@@ -58,7 +59,7 @@ describe('hentAlder', () => {
 });
 
 describe('formaterIsoDato', () => {
-    const dato = familieDayjs('2020-12-01T14:02');
+    const dato = new Date('2020-12-01T14:02');
     const datoString = dato.toISOString();
 
     test('Skal returnere dato på format MM.YY', () => {
@@ -75,7 +76,7 @@ describe('formaterIsoDato', () => {
     });
     test('Skal returnere dato på format LLL', () => {
         expect(formaterIsoDato(datoString, datoformat.DATO_FORLENGET_MED_TID)).toEqual(
-            `1. desember 2020 kl. ${dato.format('HH:mm')}`
+            `1. desember 2020 kl. ${format(dato, 'HH:mm')}`
         );
     });
     test('Skal returnere dato på format YYYY-MM', () => {
@@ -86,11 +87,11 @@ describe('formaterIsoDato', () => {
     });
     test('Skal returnere dato på format DD.MM.YY HH:mm', () => {
         expect(formaterIsoDato(datoString, datoformat.DATO_TID)).toEqual(
-            `01.12.20 ${dato.format('HH:mm')}`
+            `01.12.20 ${format(dato, 'HH:mm')}`
         );
     });
     test('Skal returnere dato på format HH:mm', () => {
-        expect(formaterIsoDato(datoString, datoformat.TID)).toEqual(dato.format('HH:mm'));
+        expect(formaterIsoDato(datoString, datoformat.TID)).toEqual(format(dato, 'HH:mm'));
     });
     test('Skal returnere dato på format MMMM YYYY', () => {
         expect(formaterIsoDato(datoString, datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');

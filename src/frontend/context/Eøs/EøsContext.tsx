@@ -1,10 +1,10 @@
 import constate from 'constate';
+import { isBefore, isSameMonth } from 'date-fns';
 
 import { Status } from '../../ikoner/StatusIkon';
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestEøsPeriode } from '../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../typer/person';
-import familieDayjs from '../../utils/familieDayjs';
 import { sorterFødselsdato } from '../../utils/formatter';
 import { useKompetanse } from '../Kompetanse/KompetanseContext';
 import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
@@ -53,11 +53,14 @@ export const sorterEøsPerioder = (
     if (periodeA.tom === undefined && !beggePerioderLøpende) return -1;
     if (periodeB.tom === undefined && !beggePerioderLøpende) return 1;
 
-    const fomErSammeMåned = familieDayjs(periodeA.fom).isSame(periodeB.fom, 'month');
+    const datoA = new Date(periodeA.fom);
+    const datoB = new Date(periodeB.fom);
+
+    const fomErSammeMåned = isSameMonth(datoA, datoB);
     if (fomErSammeMåned) {
         return sorterPåBarnsFødselsdato(periodeA.barnIdenter, periodeB.barnIdenter, personer);
     } else {
-        return familieDayjs(periodeA.fom).isBefore(periodeB.fom) ? 1 : -1;
+        return isBefore(datoA, datoB) ? 1 : -1;
     }
 };
 

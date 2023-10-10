@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { addDays, differenceInMonths } from 'date-fns';
 
 import type { FamilieIsoDate } from '../../../utils/kalender';
 import {
@@ -37,7 +37,8 @@ export const summerBeløpForPerioder = (periodeListe: PeriodeMedBeløp[]): numbe
 };
 
 export const antallMånederIPeriode = (periode: PeriodeMedBeløp): number => {
-    const fomMåned = dayjs(periode.fom);
-    const førsteDagMånedenEtterTomdato = dayjs(periode.tom).add(1, 'day');
-    return førsteDagMånedenEtterTomdato.diff(fomMåned, 'months');
+    const fomMåned = new Date(periode.fom);
+    const førsteDagMånedenEtterTomdato = addDays(new Date(periode.tom), 1);
+
+    return differenceInMonths(førsteDagMånedenEtterTomdato, fomMåned);
 };
