@@ -13,6 +13,7 @@ export enum datoformat {
     DATO_FORLENGET = 'PPP',
     DATO_FORLENGET_MED_TID = 'PPPp',
     ISO_MÅNED = 'yyyy-MM',
+    ISO_DAG = 'yyyy-MM-dd',
     DATO_TID = 'dd.MM.yy HH:mm',
     DATO_TID_SEKUNDER = 'dd.MM.yy HH:mm:ss',
     MÅNED_ÅR_NAVN = 'MMMM yyyy',
