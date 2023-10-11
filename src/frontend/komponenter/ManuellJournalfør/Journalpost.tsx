@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
-import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import { Datoformat, formaterIsoDato } from '../../utils/formatter';
 
 export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
     return {
@@ -86,7 +86,7 @@ const Journalpost: React.FC = () => {
                     <BodyShort>
                         Mottatt:{' '}
                         {datoMottatt
-                            ? formaterIsoDato(datoMottatt, datoformat.DATO)
+                            ? formaterIsoDato(datoMottatt, Datoformat.DATO)
                             : 'Ingen mottatt dato'}
                     </BodyShort>
                 </JournalpostMetadataDiv>

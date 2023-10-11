@@ -12,7 +12,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
 import type { IRestKorrigertVedtak } from '../../../../typer/vedtak';
-import { datoformatNorsk } from '../../../../utils/formatter';
+import { DatoformatNorsk } from '../../../../utils/formatter';
 
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0rem;
@@ -108,7 +108,7 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                                     ? skjema.felter.vedtaksdato?.verdi
                                     : undefined
                             }
-                            placeholder={datoformatNorsk.DATO}
+                            placeholder={DatoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) =>
                                 skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
                             }

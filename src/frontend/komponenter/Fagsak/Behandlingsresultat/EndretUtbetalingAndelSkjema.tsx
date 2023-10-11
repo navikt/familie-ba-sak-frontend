@@ -27,7 +27,7 @@ import {
     årsaker,
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
-import { datoformatNorsk, lagPersonLabel } from '../../../utils/formatter';
+import { DatoformatNorsk, lagPersonLabel } from '../../../utils/formatter';
 import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
@@ -299,7 +299,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 : undefined
                         }
                         label={<Label>Søknadstidspunkt</Label>}
-                        placeholder={datoformatNorsk.DATO}
+                        placeholder={DatoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) =>
                             skjema.felter.søknadstidspunkt.validerOgSettFelt(dato)
                         }
@@ -323,7 +323,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     : undefined
                             }
                             label={<Label>Avtale om delt bosted</Label>}
-                            placeholder={datoformatNorsk.DATO}
+                            placeholder={DatoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) =>
                                 skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(dato)
                             }

@@ -10,7 +10,7 @@ import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { datoformatNorsk } from '../../../../utils/formatter';
+import { DatoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
 
 interface IProps {
@@ -94,7 +94,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                 erLesesvisning={false}
                                 id={`${barn.fødselsdato}_${avtaleDato}`}
                                 label={'Dato for avtale om delt bosted'}
-                                placeholder={datoformatNorsk.DATO}
+                                placeholder={DatoformatNorsk.DATO}
                                 limitations={{
                                     minDate: barn.fødselsdato,
                                 }}

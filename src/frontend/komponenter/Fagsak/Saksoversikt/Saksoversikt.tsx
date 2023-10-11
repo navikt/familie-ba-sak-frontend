@@ -1,9 +1,10 @@
 import React from 'react';
 
+import { addMonths, format } from 'date-fns';
 import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Link, Alert, Heading, Tabs } from '@navikt/ds-react';
+import { Alert, Heading, Link, Tabs } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
@@ -22,16 +23,8 @@ import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import {
-    førsteDagIInneværendeMåned,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    KalenderEnhet,
-    leggTil,
-    periodeOverlapperMedValgtDato,
-    serializeIso8601String,
-} from '../../../utils/kalender';
+import { Datoformat } from '../../../utils/formatter';
+import { kalenderDiff, periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 
@@ -95,13 +88,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
 
-    const nesteMåned = leggTil(førsteDagIInneværendeMåned(), 1, KalenderEnhet.MÅNED);
+    const nesteMåned = addMonths(new Date(), 1);
+
     const utbetalingsperiodeNesteMåned = gjeldendeUtbetalingsperioder.find(periode =>
-        periodeOverlapperMedValgtDato(
-            periode.periodeFom,
-            periode.periodeTom,
-            kalenderDatoTilDate(nesteMåned)
-        )
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned)
     );
 
     const lenkeTilBehandlingsresultat = () => {
@@ -130,9 +120,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <StyledAlert className={'saksoversikt__alert'} variant="info">
                                 <FlexSpaceBetween>
-                                    {`Utbetalingen endres fra og med ${formaterIsoDato(
-                                        serializeIso8601String(nesteMåned),
-                                        datoformat.MÅNED_ÅR_NAVN
+                                    {`Utbetalingen endres fra og med ${format(
+                                        nesteMåned,
+                                        Datoformat.MÅNED_ÅR_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
@@ -145,10 +135,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             return (
                 <StyledAlert className={'saksoversikt__alert'} variant="info">
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${formaterIsoDato(
-                            serializeIso8601String(nesteMåned),
-                            datoformat.MÅNED_ÅR_NAVN
-                        )}`}
+                        {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </StyledAlert>

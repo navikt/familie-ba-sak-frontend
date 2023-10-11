@@ -7,7 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './UseEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { datoformat, formaterIsoDato } from '../../../../../utils/formatter';
+import { Datoformat, formaterIsoDato } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
 
@@ -55,7 +55,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
 
                 <Label size="small">Endringstidspunkt</Label>
                 {endringstidspunktRessurs.status === RessursStatus.SUKSESS ? (
-                    <BodyShort>{formaterIsoDato(endringstidspunkt, datoformat.DATO)}</BodyShort>
+                    <BodyShort>{formaterIsoDato(endringstidspunkt, Datoformat.DATO)}</BodyShort>
                 ) : (
                     <ErrorMessage>
                         Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt

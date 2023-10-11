@@ -9,7 +9,7 @@ import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-ty
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../typer/logg';
-import { formaterIsoDato, datoformat } from '../../../utils/formatter';
+import { formaterIsoDato, Datoformat } from '../../../utils/formatter';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
@@ -68,7 +68,7 @@ const Høyremeny: React.FunctionComponent = () => {
                                         id: loggElement.id.toString(),
                                         dato: formaterIsoDato(
                                             loggElement.opprettetTidspunkt,
-                                            datoformat.DATO_TID
+                                            Datoformat.DATO_TID
                                         ),
                                         utførtAv: loggElement.opprettetAv,
                                         rolle: loggElement.rolle,
