@@ -4,7 +4,7 @@ import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
 import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
 import {
-    datoformat,
+    Datoformat,
     formaterIdent,
     formaterIsoDato,
     formaterTekstStorForbokstav,
@@ -63,29 +63,29 @@ describe('formaterIsoDato', () => {
     const datoString = dato.toISOString();
 
     test('Skal returnere dato på format DD.MM.YYYY', () => {
-        expect(formaterIsoDato(datoString, datoformat.DATO)).toEqual('01.12.2020');
+        expect(formaterIsoDato(datoString, Datoformat.DATO)).toEqual('01.12.2020');
     });
     test('Skal returnere dato på format DD.MM.YY', () => {
-        expect(formaterIsoDato(datoString, datoformat.DATO_FORKORTTET)).toEqual('01.12.20');
+        expect(formaterIsoDato(datoString, Datoformat.DATO_FORKORTTET)).toEqual('01.12.20');
     });
     test('Skal returnere dato på format PPP', () => {
-        expect(formaterIsoDato(datoString, datoformat.DATO_FORLENGET)).toEqual('1. desember 2020');
+        expect(formaterIsoDato(datoString, Datoformat.DATO_FORLENGET)).toEqual('1. desember 2020');
     });
     test('Skal returnere dato på format PPPp', () => {
-        expect(formaterIsoDato(datoString, datoformat.DATO_FORLENGET_MED_TID)).toEqual(
+        expect(formaterIsoDato(datoString, Datoformat.DATO_FORLENGET_MED_TID)).toEqual(
             `1. desember 2020 kl. ${format(dato, 'HH:mm')}`
         );
     });
     test('Skal returnere dato på format YYYY-MM', () => {
-        expect(formaterIsoDato(datoString, datoformat.ISO_MÅNED)).toEqual('2020-12');
+        expect(formaterIsoDato(datoString, Datoformat.ISO_MÅNED)).toEqual('2020-12');
     });
     test('Skal returnere dato på format DD.MM.YY HH:mm', () => {
-        expect(formaterIsoDato(datoString, datoformat.DATO_TID)).toEqual(
+        expect(formaterIsoDato(datoString, Datoformat.DATO_TID)).toEqual(
             `01.12.20 ${format(dato, 'HH:mm')}`
         );
     });
     test('Skal returnere dato på format MMMM YYYY', () => {
-        expect(formaterIsoDato(datoString, datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');
+        expect(formaterIsoDato(datoString, Datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');
     });
 
     test('Skal gi riktig rekkefølge på utbetalinger', () => {

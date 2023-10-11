@@ -11,7 +11,7 @@ import { FagsakType } from '../../../typer/fagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import {
-    datoformat,
+    Datoformat,
     formaterIdent,
     formaterIsoDato,
     hentAlder,
@@ -54,7 +54,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                                 size="small"
                                 children={`Migrert ${formaterIsoDato(
                                     minimalFagsak?.migreringsdato,
-                                    datoformat.DATO
+                                    Datoformat.DATO
                                 )}`}
                                 variant={'info'}
                             />

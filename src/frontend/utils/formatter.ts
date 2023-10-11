@@ -7,7 +7,7 @@ import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
 
-export enum datoformat {
+export enum Datoformat {
     DATO = 'dd.MM.yyyy',
     DATO_FORKORTTET = 'dd.MM.yy',
     DATO_FORLENGET = 'PPP',
@@ -21,7 +21,7 @@ export enum datoformat {
     MÅNED_NAVN = 'MMM',
 }
 
-export enum datoformatNorsk {
+export enum DatoformatNorsk {
     DATO = 'ddmmåå',
 }
 
@@ -29,7 +29,7 @@ export const millisekunderIEttÅr = 3.15576e10;
 
 export const formaterIsoDato = (
     datoString: string | undefined,
-    tilFormat: datoformat,
+    tilFormat: Datoformat,
     defaultString?: string
 ): string => {
     if (!datoString) {

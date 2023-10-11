@@ -3,7 +3,7 @@ import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { datoformat, formaterIsoDato } from './formatter';
+import { Datoformat, formaterIsoDato } from './formatter';
 import { erIsoStringGyldig } from './kalender';
 import { useFagsakContext } from '../context/fagsak/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
@@ -82,10 +82,10 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
             avtaletidspunktDeltBosted =>
                 `Barn født ${formaterIsoDato(
                     barn.fødselsdato,
-                    datoformat.DATO
+                    Datoformat.DATO
                 )}. Avtalen gjelder fra ${formaterIsoDato(
                     avtaletidspunktDeltBosted,
-                    datoformat.DATO_FORLENGET
+                    Datoformat.DATO_FORLENGET
                 )}.`
         );
     };

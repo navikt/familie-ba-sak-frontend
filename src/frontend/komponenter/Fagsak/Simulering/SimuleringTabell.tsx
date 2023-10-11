@@ -17,7 +17,7 @@ import { Årsvelger } from './Årsvelger';
 import { useApp } from '../../../context/AppContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
@@ -172,7 +172,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 <Label>
                     Simuleringsresultat for{' '}
                     {perioder.length === 1
-                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`
+                        ? `${formaterIsoDato(perioder[0].fom, Datoformat.MÅNED_ÅR_NAVN)}`
                         : `perioden ${tilOgFraDatoForSimulering}`}
                 </Label>
             </SimuleringTabellOverskrift>
@@ -229,7 +229,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 <HøyrestiltTh>
                                     <Label>
                                         {kapitaliserTekst(
-                                            formaterIsoDato(periode.fom, datoformat.MÅNED_NAVN)
+                                            formaterIsoDato(periode.fom, Datoformat.MÅNED_NAVN)
                                         )}
                                     </Label>
                                 </HøyrestiltTh>

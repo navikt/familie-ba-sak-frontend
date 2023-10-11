@@ -23,7 +23,7 @@ import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { datoformat } from '../../../utils/formatter';
+import { Datoformat } from '../../../utils/formatter';
 import { kalenderDiff, periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
@@ -122,7 +122,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${format(
                                         nesteMåned,
-                                        datoformat.MÅNED_ÅR_NAVN
+                                        Datoformat.MÅNED_ÅR_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
@@ -135,7 +135,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             return (
                 <StyledAlert className={'saksoversikt__alert'} variant="info">
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${format(nesteMåned, datoformat.MÅNED_ÅR_NAVN)}`}
+                        {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </StyledAlert>

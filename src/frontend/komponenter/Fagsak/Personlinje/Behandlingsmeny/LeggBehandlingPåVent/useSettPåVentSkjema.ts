@@ -6,7 +6,7 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { hentAlleÅrsaker, validerSettPåVentFrist } from './settPåVentUtils';
 import type { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
-import { datoformat } from '../../../../../utils/formatter';
+import { Datoformat } from '../../../../../utils/formatter';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
@@ -14,7 +14,7 @@ const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, modalVises: boolean) => {
     const standardfrist = format(
         addDays(new Date(), STANDARD_ANTALL_DAGER_FRIST),
-        datoformat.ISO_DAG
+        Datoformat.ISO_DAG
     );
 
     const årsaker = hentAlleÅrsaker();
