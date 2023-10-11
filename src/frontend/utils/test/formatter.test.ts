@@ -1,4 +1,5 @@
-import { format } from 'date-fns';
+import { format, setDefaultOptions } from 'date-fns';
+import { nb } from 'date-fns/locale';
 
 import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
@@ -15,6 +16,10 @@ import {
 import { iDag, KalenderEnhet, leggTil, serializeIso8601String, trekkFra } from '../kalender';
 
 describe('formaterIdent', () => {
+    beforeAll(() => {
+        // Setter default locale til norsk bokmål for date-fns
+        setDefaultOptions({ locale: nb });
+    });
     test('Skal formatere ident', () => {
         expect(formaterIdent('12345678910')).toBe('123456 78910');
     });
