@@ -49,9 +49,8 @@ export const sorterEøsPerioder = (
     periodeB: IRestEøsPeriode,
     personer: IGrunnlagPerson[]
 ) => {
-    const beggePerioderLøpende = (periodeA.tom === periodeB.tom) === undefined;
-    if (periodeA.tom === undefined && !beggePerioderLøpende) return -1;
-    if (periodeB.tom === undefined && !beggePerioderLøpende) return 1;
+    if (periodeA.tom === undefined && periodeB.tom !== undefined) return -1;
+    if (periodeB.tom === undefined && periodeA.tom !== undefined) return 1;
 
     const datoA = new Date(periodeA.fom);
     const datoB = new Date(periodeB.fom);
