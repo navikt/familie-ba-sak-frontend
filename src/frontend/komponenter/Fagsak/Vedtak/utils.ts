@@ -1,4 +1,4 @@
-import { addDays, differenceInMonths } from 'date-fns';
+import { addDays, differenceInCalendarMonths } from 'date-fns';
 
 import type { FamilieIsoDate } from '../../../utils/kalender';
 import {
@@ -40,5 +40,5 @@ export const antallMånederIPeriode = (periode: PeriodeMedBeløp): number => {
     const fomMåned = new Date(periode.fom);
     const førsteDagMånedenEtterTomdato = addDays(new Date(periode.tom), 1);
 
-    return differenceInMonths(førsteDagMånedenEtterTomdato, fomMåned);
+    return differenceInCalendarMonths(førsteDagMånedenEtterTomdato, fomMåned);
 };
