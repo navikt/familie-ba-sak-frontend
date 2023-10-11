@@ -15,9 +15,7 @@ describe('Skal teste parsing av datoer', () => {
     });
 
     test('Parse ugyldig måned på grunn av feil tallverdi', () => {
-        expect(() => kalenderDato('2020-13-12')).toThrowError(
-            "Måned fra dato '2020-13-12' er '13' og er sannsynligvis feil"
-        );
+        expect(() => kalenderDato('2020-13-12')).toThrowError("Dato '2020-13-12' er ugyldig");
     });
 
     test('Parse ugyldig dag på grunn av feil format', () => {
@@ -25,9 +23,7 @@ describe('Skal teste parsing av datoer', () => {
     });
 
     test('Parse ugyldig dag på grunn av feil tallverdi', () => {
-        expect(() => kalenderDato('2020-02-30')).toThrowError(
-            "Dag fra dato '2020-02-30' er '30' og er sannsynligvis feil"
-        );
+        expect(() => kalenderDato('2020-02-30')).toThrowError("Dato '2020-02-30' er ugyldig");
     });
 
     test('Serialiser tilbake til ISO string', () => {
