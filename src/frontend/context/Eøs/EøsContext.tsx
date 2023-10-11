@@ -5,7 +5,7 @@ import { Status } from '../../ikoner/StatusIkon';
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestEøsPeriode } from '../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../typer/person';
-import { sorterFødselsdato } from '../../utils/formatter';
+import { sorterPåDato } from '../../utils/formatter';
 import { useKompetanse } from '../Kompetanse/KompetanseContext';
 import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
 import { useValutakurs } from '../Valutakurs/ValutakursContext';
@@ -35,13 +35,13 @@ const sorterPåBarnsFødselsdato = (
     const barnIPeriodeA: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeA, personer);
     const barnIPeriodeB: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeB, personer);
     const yngsteBarnPeriodeA = barnIPeriodeA.sort((personA, personB) =>
-        sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
+        sorterPåDato(personA.fødselsdato, personB.fødselsdato)
     )[0];
     const yngsteBarnPeriodeB = barnIPeriodeB.sort((personA, personB) =>
-        sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
+        sorterPåDato(personA.fødselsdato, personB.fødselsdato)
     )[0];
 
-    return sorterFødselsdato(yngsteBarnPeriodeA.fødselsdato, yngsteBarnPeriodeB.fødselsdato);
+    return sorterPåDato(yngsteBarnPeriodeA.fødselsdato, yngsteBarnPeriodeB.fødselsdato);
 };
 
 export const sorterEøsPerioder = (

@@ -108,9 +108,9 @@ export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
     )}) | ${formaterIdent(barn.ident)}`;
 };
 
-export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) => {
-    const datoA = new Date(fødselsDatoA);
-    const datoB = new Date(fødselsDatoB);
+export const sorterPåDato = (datoStringA: string, datoStringB: string) => {
+    const datoA = new Date(datoStringA);
+    const datoB = new Date(datoStringB);
 
     return isBefore(datoA, datoB) ? 1 : -1;
 };
@@ -121,7 +121,7 @@ export const sorterPersonTypeOgFødselsdato = (
 ) => {
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
-    else return sorterFødselsdato(personA.fødselsdato, personB.fødselsdato);
+    else return sorterPåDato(personA.fødselsdato, personB.fødselsdato);
 };
 
 export const sorterUtbetaling = (
@@ -133,7 +133,7 @@ export const sorterUtbetaling = (
     else if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.SMÅBARNSTILLEGG) return -1;
     else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.SMÅBARNSTILLEGG) return 1;
     else
-        return sorterFødselsdato(
+        return sorterPåDato(
             utbetalingsperiodeDetaljA.person.fødselsdato,
             utbetalingsperiodeDetaljB.person.fødselsdato
         );
