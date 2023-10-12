@@ -1,7 +1,6 @@
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
-import familieDayjs from './familieDayjs';
 import type { IPeriode } from './kalender';
 import {
     erEtter,
@@ -121,7 +120,7 @@ export const erPeriodeGyldig = (
         const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
         const fomDatoErLikDødsfallDato = fom === person?.dødsfallDato;
 
-        const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
+        const idag = kalenderDatoMedFallback(new Date().toISOString(), TIDENES_ENDE);
         if (fom && valgtDatoErNesteMånedEllerSenere(fomKalenderDato, idag)) {
             return feil(
                 felt,

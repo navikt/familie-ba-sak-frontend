@@ -2,7 +2,6 @@ import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { datoformat, formaterIsoDato } from './formatter';
 import { useFagsakContext } from '../context/fagsak/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
@@ -54,14 +53,8 @@ export const useBarnSøktForFelter = ({ avhengigheter, skalFeltetVises }: IProps
         barnSøktFor.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
     };
 
-    const hentBarnSøktForMulitiselectVerdier = () =>
-        barnSøktFor.verdi.map(
-            barn => `Barn født ${formaterIsoDato(barn.fødselsdato, datoformat.DATO)}.`
-        );
-
     return {
         barnSøktFor,
         nullstillBarnSøktFor,
-        hentBarnSøktForMulitiselectVerdier,
     };
 };

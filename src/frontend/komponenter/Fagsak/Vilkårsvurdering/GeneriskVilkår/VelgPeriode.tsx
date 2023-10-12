@@ -12,7 +12,7 @@ import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, ResultatBegrunnelse } from '../../../../typer/vilkår';
-import { datoformatNorsk } from '../../../../utils/formatter';
+import { DatoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
 
 interface IProps {
@@ -99,7 +99,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 ? 'F.o.m (valgfri)'
                                 : 'F.o.m'
                         }
-                        placeholder={datoformatNorsk.DATO}
+                        placeholder={DatoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
@@ -125,7 +125,7 @@ const VelgPeriode: React.FC<IProps> = ({
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-tom`}
                         label={'T.o.m (valgfri)'}
-                        placeholder={datoformatNorsk.DATO}
+                        placeholder={DatoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,

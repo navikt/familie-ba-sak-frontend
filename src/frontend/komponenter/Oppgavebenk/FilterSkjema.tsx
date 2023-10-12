@@ -13,7 +13,7 @@ import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
-import { datoformatNorsk } from '../../utils/formatter';
+import { DatoformatNorsk } from '../../utils/formatter';
 
 const StyledLabel = styled(Label)`
     margin-top: 0.5rem;
@@ -73,7 +73,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                                     dato ? dato : ''
                                                 );
                                             }}
-                                            placeholder={datoformatNorsk.DATO}
+                                            placeholder={DatoformatNorsk.DATO}
                                             value={oppgaveFelt.filter.selectedValue}
                                             className="filterskjema__filtre--input"
                                         />

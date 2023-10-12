@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Tag } from '@navikt/ds-react';
 
-import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import { Datoformat, formaterIsoDato } from '../../utils/formatter';
 
 interface IDødsfallTagProps {
     dødsfallDato: string;
 }
 
 const DødsfallTag: React.FC<IDødsfallTagProps> = ({ dødsfallDato }) => {
-    const formatertDato = formaterIsoDato(dødsfallDato, datoformat.DATO);
+    const formatertDato = formaterIsoDato(dødsfallDato, Datoformat.DATO);
     return <Tag variant="neutral-filled">{`Død ${formatertDato}`}</Tag>;
 };
 

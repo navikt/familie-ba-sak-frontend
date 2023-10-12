@@ -1,23 +1,22 @@
 import { useEffect } from 'react';
 
+import { addDays, format } from 'date-fns';
+
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { hentAlleÅrsaker, validerSettPåVentFrist } from './settPåVentUtils';
 import type { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import { Datoformat } from '../../../../../utils/formatter';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
-import {
-    iDag,
-    KalenderEnhet,
-    leggTil,
-    serializeIso8601String,
-} from '../../../../../utils/kalender';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
 export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, modalVises: boolean) => {
-    const standardfrist = serializeIso8601String(
-        leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
+    const standardfrist = format(
+        addDays(new Date(), STANDARD_ANTALL_DAGER_FRIST),
+        Datoformat.ISO_DAG
     );
+
     const årsaker = hentAlleÅrsaker();
 
     const settPåVentSkjema = useSkjema<
