@@ -19,6 +19,7 @@ import {
     trekkFra,
 } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -100,13 +101,11 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                             {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
                                 Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
                                 opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
-                                    <Datofelt
-                                        skjemafelt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    <Datovelger
+                                        felt={opprettBehandlingSkjema.felter.migreringsdato}
                                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                        etikett={'Ny migreringsdato'}
-                                        begrensninger={{
-                                            maxDate: maksdatoForMigrering.toISOString(),
-                                        }}
+                                        label={'Ny migreringsdato'}
+                                        maksDatoAvgrensning={maksdatoForMigrering}
                                     />
                                 )}
                             {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (

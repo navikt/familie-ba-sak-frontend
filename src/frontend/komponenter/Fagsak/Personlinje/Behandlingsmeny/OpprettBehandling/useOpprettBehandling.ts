@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { format, isValid } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
@@ -17,6 +18,7 @@ import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
+import { Datoformat } from '../../../../../utils/formatter';
 import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
@@ -27,7 +29,7 @@ export interface IOpprettBehandlingSkjemaBase {
 }
 
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
-    migreringsdato: FamilieIsoDate;
+    migreringsdato: Date | undefined;
     søknadMottattDato: FamilieIsoDate;
     kravMottattDato: FamilieIsoDate;
     valgteBarn: ISelectOption[];
@@ -103,12 +105,10 @@ const useOpprettBehandling = (
         },
     });
 
-    const migreringsdato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoMindreEllerLikMaksdato(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Du må velge 01.01.23 eller tidligere som migreringsdato'),
+    const migreringsdato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
+            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -179,10 +179,6 @@ const useOpprettBehandling = (
 
     const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
         return Date.parse(dato.toString()) > new Date().getTime();
-    };
-
-    const erDatoMindreEllerLikMaksdato = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) <= MAKSDATO_FOR_MIGRERING.getTime();
     };
 
     const valgteBarn = useFelt({
@@ -270,7 +266,10 @@ const useOpprettBehandling = (
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
-                    nyMigreringsdato: erMigreringFraInfoTrygd ? migreringsdato.verdi : undefined,
+                    nyMigreringsdato:
+                        erMigreringFraInfoTrygd && migreringsdato.verdi
+                            ? format(migreringsdato.verdi, Datoformat.ISO_DAG)
+                            : undefined,
                     søknadMottattDato: søknadMottattDato.verdi ?? undefined,
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
