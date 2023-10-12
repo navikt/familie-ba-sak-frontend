@@ -16,6 +16,7 @@ interface IProps {
     minDatoAvgrensning?: Date;
     maksDatoAvgrensning?: Date;
     avgrensDatoFremITid?: boolean;
+    datoMåFyllesUt?: boolean;
 }
 
 enum Feilmelding {
@@ -31,6 +32,7 @@ const Datovelger = ({
     minDatoAvgrensning,
     maksDatoAvgrensning,
     avgrensDatoFremITid = false,
+    datoMåFyllesUt = true,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>(undefined);
 
@@ -55,7 +57,10 @@ const Datovelger = ({
         fromDate: minDatoAvgrensning ?? tidenesMorgen(),
         toDate: hentToDate(),
         onValidate: val => {
-            if (val.isBefore) {
+            if (val.isEmpty && !datoMåFyllesUt) {
+                felt.nullstill();
+                setError(undefined);
+            } else if (val.isBefore) {
                 nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
             } else if (val.isAfter) {
                 nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);

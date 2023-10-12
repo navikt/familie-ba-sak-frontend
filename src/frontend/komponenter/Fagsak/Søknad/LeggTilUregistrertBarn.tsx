@@ -3,12 +3,12 @@ import React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { BodyShort, Checkbox, Label, TextField } from '@navikt/ds-react';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
+import { BodyShort, Checkbox, CheckboxGroup, Heading, TextField } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo } from '../../../typer/person';
+import Datovelger from '../../Felleskomponenter/Datovelger';
 import type { IRegistrerBarnSkjema } from '../../Felleskomponenter/LeggTilBarn';
 
 interface IProps {
@@ -36,10 +36,10 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                     />
                 )
             ) : (
-                <Checkbox
-                    id={registrerBarnSkjema.felter.erFolkeregistrert.id}
-                    value={'Barnet er ikke folkeregistrert / har ikke fødselsnummer'}
-                    checked={!registrerBarnSkjema.felter.erFolkeregistrert.verdi}
+                <CheckboxGroup
+                    legend={''}
+                    hideLegend
+                    value={[registrerBarnSkjema.felter.erFolkeregistrert.verdi]}
                     onChange={() => {
                         registrerBarnSkjema.felter.erFolkeregistrert.validerOgSettFelt(
                             !registrerBarnSkjema.felter.erFolkeregistrert.verdi
@@ -47,25 +47,24 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                         registrerBarnSkjema.felter.ident.nullstill();
                     }}
                 >
-                    {'Barnet er ikke folkeregistrert / har ikke fødselsnummer'}
-                </Checkbox>
+                    <Checkbox id={registrerBarnSkjema.felter.erFolkeregistrert.id} value={false}>
+                        {'Barnet er ikke folkeregistrert / har ikke fødselsnummer'}
+                    </Checkbox>{' '}
+                </CheckboxGroup>
             )}
 
             {registrerBarnSkjema.felter.uregistrertBarnFødselsdato.erSynlig &&
                 registrerBarnSkjema.felter.uregistrertBarnNavn.erSynlig && (
                     <UregistrertBarnInputs>
-                        <Label>Tilgjengelige opplysninger om barnet</Label>
+                        <Heading size={'small'}>Tilgjengelige opplysninger om barnet</Heading>
                         <br />
-
-                        <FamilieDatovelger
-                            {...registrerBarnSkjema.felter.uregistrertBarnFødselsdato.hentNavInputProps(
-                                registrerBarnSkjema.visFeilmeldinger
-                            )}
-                            value={registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi}
+                        <Datovelger
+                            felt={registrerBarnSkjema.felter.uregistrertBarnFødselsdato}
                             label={'Fødselsdato (valgfri)'}
-                            placeholder={'DD.MM.ÅÅÅÅ'}
+                            visFeilmeldinger={registrerBarnSkjema.visFeilmeldinger}
+                            datoMåFyllesUt={false}
+                            avgrensDatoFremITid
                         />
-
                         <br />
                         <TextField
                             {...registrerBarnSkjema.felter.uregistrertBarnNavn.hentNavInputProps(
