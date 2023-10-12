@@ -11,7 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
-import { datoformatNorsk } from '../../../utils/formatter';
+import { DatoformatNorsk } from '../../../utils/formatter';
 
 const StyledFamilieDatovelger = styled(FamilieDatovelger)`
     margin-bottom: 1.5rem;
@@ -79,7 +79,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                                         ? skjema.felter.dødsfallDato?.verdi
                                         : undefined
                                 }
-                                placeholder={datoformatNorsk.DATO}
+                                placeholder={DatoformatNorsk.DATO}
                                 onChange={(dato?: ISODateString) =>
                                     skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
                                 }

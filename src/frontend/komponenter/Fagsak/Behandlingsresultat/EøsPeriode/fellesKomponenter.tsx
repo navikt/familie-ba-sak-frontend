@@ -14,7 +14,7 @@ import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsCont
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
-import { datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
+import { Datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../utils/kalender';
 
 interface IEøsPeriodeSkjemaContainerProps {
@@ -62,8 +62,8 @@ const BarnDiv = styled.div`
 `;
 
 const formatterPeriode = (periode: IYearMonthPeriode): string => {
-    return `${formaterIsoDato(periode.fom, datoformat.MÅNED_ÅR_KORTNAVN)} - ${
-        periode.tom ? formaterIsoDato(periode.tom, datoformat.MÅNED_ÅR_KORTNAVN) : ''
+    return `${formaterIsoDato(periode.fom, Datoformat.MÅNED_ÅR_KORTNAVN)} - ${
+        periode.tom ? formaterIsoDato(periode.tom, Datoformat.MÅNED_ÅR_KORTNAVN) : ''
     }`;
 };
 

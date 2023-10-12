@@ -25,7 +25,7 @@ import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
 import { ToggleNavn } from '../../../typer/toggles';
 import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
 import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erProd } from '../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -121,7 +121,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         size={'small'}
                         children={`Saken ble migrert fra Infotrygd: ${formaterIsoDato(
                             åpenBehandling?.migreringsdato,
-                            datoformat.DATO
+                            Datoformat.DATO
                         )}`}
                     />
                 )}
@@ -132,7 +132,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                             registeropplysningerHentetTidpsunkt
                                 ? `Registeropplysninger hentet ${formaterIsoDato(
                                       registeropplysningerHentetTidpsunkt,
-                                      datoformat.DATO_TID_SEKUNDER
+                                      Datoformat.DATO_TID_SEKUNDER
                                   )} fra Folkeregisteret`
                                 : 'Kunne ikke hente innhentingstidspunkt for registeropplysninger'
                         }
@@ -178,7 +178,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                                 <BodyShort>
                                     {`${uregistrertBarn.navn} - ${formaterIsoDato(
                                         uregistrertBarn.fødselsdato,
-                                        datoformat.DATO
+                                        Datoformat.DATO
                                     )}`}
                                 </BodyShort>
                             </li>

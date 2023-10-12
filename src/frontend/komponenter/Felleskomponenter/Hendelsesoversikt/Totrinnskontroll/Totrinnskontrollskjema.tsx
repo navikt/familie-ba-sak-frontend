@@ -23,7 +23,7 @@ import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../ikoner/ØyeRød';
 import type { IBehandling } from '../../../../typer/behandling';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
-import { formaterIsoDato, datoformat } from '../../../../utils/formatter';
+import { formaterIsoDato, Datoformat } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { KontrollertStatus } from '../../Venstremeny/sider';
 
@@ -91,7 +91,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         <BodyShort>
                             {formaterIsoDato(
                                 opprettetTidspunkt,
-                                datoformat.DATO_FORLENGET_MED_TID,
+                                Datoformat.DATO_FORLENGET_MED_TID,
                                 'UKJENT OPPRETTELSESTIDSPUNKT'
                             )}
                         </BodyShort>

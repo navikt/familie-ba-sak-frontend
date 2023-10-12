@@ -22,7 +22,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IValutakurs } from '../../../../typer/eøsPerioder';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
-import { datoformatNorsk } from '../../../../utils/formatter';
+import { DatoformatNorsk } from '../../../../utils/formatter';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
 import { StyledFamilieValutavelger } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
@@ -176,7 +176,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                     ? skjema.felter.valutakursdato?.verdi
                                     : undefined
                             }
-                            placeholder={datoformatNorsk.DATO}
+                            placeholder={DatoformatNorsk.DATO}
                             erLesesvisning={lesevisning}
                             onChange={(dato?: ISODateString) =>
                                 skjema.felter.valutakursdato?.validerOgSettFelt(dato)
