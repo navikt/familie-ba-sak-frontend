@@ -9,19 +9,25 @@ import type {
     Resultat,
     UtdypendeVilkårsvurdering,
 } from '../../typer/vilkår';
-import { VilkårType } from '../../typer/vilkår';
+import { ResultatBegrunnelse, VilkårType } from '../../typer/vilkår';
 import type { IPeriode } from '../../utils/kalender';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
     avhengigheter?: Avhengigheter
 ): FeltState<IVilkårResultat> => {
+    const harSøkerLovligOpphold = nyttVilkårResultat.verdi.resultatBegrunnelse
+        ? nyttVilkårResultat.verdi.resultatBegrunnelse
+        : nyttVilkårResultat.verdi.resultat.verdi;
+
     const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
         {
             ...avhengigheter,
             erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad,
             er18ÅrsVilkår: nyttVilkårResultat.verdi.vilkårType === VilkårType.UNDER_18_ÅR,
+            erResultatBegrunnelseIkkeAktuelt:
+                ResultatBegrunnelse.IKKE_AKTUELT === harSøkerLovligOpphold,
         }
     );
 

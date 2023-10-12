@@ -94,6 +94,8 @@ export const erPeriodeGyldig = (
     const erEksplisittAvslagPåSøknad: boolean | undefined =
         avhengigheter?.erEksplisittAvslagPåSøknad;
     const er18ÅrsVilkår: boolean | undefined = avhengigheter?.er18ÅrsVilkår;
+    const erResultatBegrunnelseIkkeAktuelt: boolean | undefined =
+        avhengigheter?.erResultatBegrunnelseIkkeAktuelt;
 
     if (fom) {
         if (!erIsoStringGyldig(fom)) {
@@ -146,7 +148,7 @@ export const erPeriodeGyldig = (
             ? ok(felt)
             : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
     } else {
-        if (erEksplisittAvslagPåSøknad) {
+        if (erEksplisittAvslagPåSøknad || erResultatBegrunnelseIkkeAktuelt) {
             return !tom
                 ? ok(felt)
                 : feil(felt, 'F.o.m. må settes eller t.o.m. må fjernes før du kan gå videre');

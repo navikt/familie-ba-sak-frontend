@@ -11,7 +11,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
-import { Resultat } from '../../../../typer/vilkår';
+import { Resultat, ResultatBegrunnelse } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
 
@@ -52,6 +52,12 @@ const VelgPeriode: React.FC<IProps> = ({
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
+    const harSøkerLovligOpphold = redigerbartVilkår.verdi.resultatBegrunnelse
+        ? redigerbartVilkår.verdi.resultatBegrunnelse
+        : redigerbartVilkår.verdi.resultat.verdi;
+    const erResultatBegrunnelseIkkeAktuelt: boolean =
+        ResultatBegrunnelse.IKKE_AKTUELT === harSøkerLovligOpphold;
+
     return (
         <MarginFieldset
             errorId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
@@ -87,8 +93,9 @@ const VelgPeriode: React.FC<IProps> = ({
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
                         label={
-                            redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                            (redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                                redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad) ||
+                            erResultatBegrunnelseIkkeAktuelt
                                 ? 'F.o.m (valgfri)'
                                 : 'F.o.m'
                         }
