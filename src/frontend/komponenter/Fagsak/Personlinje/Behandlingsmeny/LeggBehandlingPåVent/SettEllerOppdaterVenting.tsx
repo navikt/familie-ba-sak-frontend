@@ -7,6 +7,7 @@ import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { formatterDateTilIsoString } from '../../../../../utils/dato';
 
 interface IProps {
     behandling: IBehandling;
@@ -27,7 +28,10 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ behandling }) => {
             onSubmit(
                 {
                     method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
-                    data: { frist: skjema.felter.frist.verdi, årsak: skjema.felter.årsak.verdi },
+                    data: {
+                        frist: formatterDateTilIsoString(skjema.felter.frist.verdi),
+                        årsak: skjema.felter.årsak.verdi,
+                    },
                     url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
                 },
                 (ressurs: Ressurs<IBehandling>) => {
