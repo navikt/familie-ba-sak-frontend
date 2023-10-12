@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { format, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
@@ -18,7 +18,7 @@ import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { Datoformat } from '../../../../../utils/formatter';
+import { formatterDateTilIsoString } from '../../../../../utils/dato';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -200,9 +200,7 @@ const useOpprettBehandling = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: {
-                    kravMottattDato: kravMottattDato.verdi
-                        ? format(kravMottattDato.verdi, Datoformat.ISO_DAG)
-                        : '',
+                    kravMottattDato: formatterDateTilIsoString(kravMottattDato.verdi),
                 },
                 påvirkerSystemLaster: true,
             },
@@ -234,10 +232,10 @@ const useOpprettBehandling = (
                     navIdent: innloggetSaksbehandler?.navIdent,
                     nyMigreringsdato:
                         erMigreringFraInfoTrygd && migreringsdato.verdi
-                            ? format(migreringsdato.verdi, Datoformat.ISO_DAG)
+                            ? formatterDateTilIsoString(migreringsdato.verdi)
                             : undefined,
                     søknadMottattDato: søknadMottattDato.verdi
-                        ? format(søknadMottattDato.verdi, Datoformat.ISO_DAG)
+                        ? formatterDateTilIsoString(søknadMottattDato.verdi)
                         : undefined,
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)

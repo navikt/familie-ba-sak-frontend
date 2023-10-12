@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
-import { format, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
 
 import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -24,8 +24,8 @@ import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
 } from '../utils/brevmal';
+import { formatterDateTilIsoString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { Datoformat } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 
@@ -356,9 +356,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-                datoAvtale: skjema.felter.datoAvtale.verdi
-                    ? format(skjema.felter.datoAvtale.verdi, Datoformat.ISO_DAG)
-                    : '',
+                datoAvtale: formatterDateTilIsoString(skjema.felter.datoAvtale.verdi),
                 behandlingKategori,
                 antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),
