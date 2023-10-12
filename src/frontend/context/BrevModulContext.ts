@@ -127,11 +127,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const datoAvtale = useFelt<Date | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<Date | undefined>) => {
-            return felt.verdi && isValid(felt.verdi)
+        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
+            felt.verdi && isValid(felt.verdi)
                 ? ok(felt)
-                : feil(felt, 'Du må velge en gyldig dato.');
-        },
+                : feil(felt, 'Du må velge en gyldig dato.'),
         skalFeltetVises: avhengigheter => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
