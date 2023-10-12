@@ -15,6 +15,7 @@ interface IProps {
     visFeilmeldinger: boolean;
     minDatoAvgrensning?: Date;
     maksDatoAvgrensning?: Date;
+    avgrensDatoFremITid?: boolean;
 }
 
 enum Feilmelding {
@@ -29,15 +30,30 @@ const Datovelger = ({
     visFeilmeldinger,
     minDatoAvgrensning,
     maksDatoAvgrensning,
+    avgrensDatoFremITid = false,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>(undefined);
+
+    const hentToDate = () => {
+        if (maksDatoAvgrensning) return maksDatoAvgrensning;
+        if (avgrensDatoFremITid) return new Date();
+        return tidenesEnde();
+    };
+
+    const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
+        if (error !== feilmelding) {
+            setError(feilmelding);
+            felt.nullstill();
+        }
+    };
+
     const { datepickerProps, inputProps } = useDatepicker({
         defaultSelected: felt.verdi,
         onDateChange: (dato?: Date) => {
             felt.validerOgSettFelt(dato);
         },
         fromDate: minDatoAvgrensning ?? tidenesMorgen(),
-        toDate: maksDatoAvgrensning ?? tidenesEnde(),
+        toDate: hentToDate(),
         onValidate: val => {
             if (val.isBefore) {
                 nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
@@ -51,21 +67,21 @@ const Datovelger = ({
         },
     });
 
+    const feilmeldingForDatoEtterMaksDato = () => {
+        if (avgrensDatoFremITid) {
+            return 'Du kan ikke sette en dato som er frem i tid';
+        }
+        return `Du må velge en dato som er tidligere enn eller lik ${
+            maksDatoAvgrensning ? format(maksDatoAvgrensning, Datoformat.DATO) : ''
+        }`;
+    };
+
     const feilmeldinger: Record<Feilmelding, string> = {
         UGYDLIG_DATO: 'Du må velge en gyldig dato',
         FØR_MIN_DATO: `Du må velge en dato som er senere enn eller lik ${
             minDatoAvgrensning ? format(minDatoAvgrensning, Datoformat.DATO) : ''
         }`,
-        ETTER_MAKS_DATO: `Du må velge en dato som er tidligere enn eller lik ${
-            maksDatoAvgrensning ? format(maksDatoAvgrensning, Datoformat.DATO) : ''
-        }`,
-    };
-
-    const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
-        if (error !== feilmelding) {
-            setError(feilmelding);
-            felt.nullstill();
-        }
+        ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
     };
 
     return (
