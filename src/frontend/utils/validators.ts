@@ -79,7 +79,6 @@ const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: string, tom?: 
     const fødselsdato = kalenderDato(person.fødselsdato);
     const fomDato = kalenderDato(fom);
     const tomDato = tom ? kalenderDato(tom) : undefined;
-
     return erFør(fomDato, fødselsdato) || (tomDato ? erFør(tomDato, fødselsdato) : false);
 };
 
