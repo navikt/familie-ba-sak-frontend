@@ -21,6 +21,7 @@ import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
+import { Datoformat, formaterIsoDato } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 
@@ -121,17 +122,16 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
         });
 
-        const { barnSøktFor, nullstillBarnSøktFor, hentBarnSøktForMulitiselectVerdier } =
-            useBarnSøktForFelter({
-                avhengigheter: { årsakFelt: årsak },
-                skalFeltetVises: avhengigheter =>
-                    [
-                        DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
-                        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
-                        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
-                        DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
-                    ].includes(avhengigheter.årsakFelt.verdi),
-            });
+        const { barnSøktFor, nullstillBarnSøktFor } = useBarnSøktForFelter({
+            avhengigheter: { årsakFelt: årsak },
+            skalFeltetVises: avhengigheter =>
+                [
+                    DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
+                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
+                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
+                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
+                ].includes(avhengigheter.årsakFelt.verdi),
+        });
 
         const {
             skjema,
@@ -209,7 +209,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
                 return {
                     mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: barnIBrev.flatMap(hentBarnSøktForMulitiselectVerdier),
+                    multiselectVerdier: barnIBrev.map(
+                        barn => `Barn født ${formaterIsoDato(barn.fødselsdato, Datoformat.DATO)}.`
+                    ),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
