@@ -21,6 +21,9 @@ const Container = styled.div`
 
 const UregistrertBarnInputs = styled.div`
     margin: 1rem 0 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 `;
 
 const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
@@ -57,7 +60,6 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                 registrerBarnSkjema.felter.uregistrertBarnNavn.erSynlig && (
                     <UregistrertBarnInputs>
                         <Heading size={'small'}>Tilgjengelige opplysninger om barnet</Heading>
-                        <br />
                         <Datovelger
                             felt={registrerBarnSkjema.felter.uregistrertBarnFødselsdato}
                             label={'Fødselsdato (valgfri)'}
@@ -65,7 +67,6 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                             datoMåFyllesUt={false}
                             avgrensDatoFremITid
                         />
-                        <br />
                         <TextField
                             {...registrerBarnSkjema.felter.uregistrertBarnNavn.hentNavInputProps(
                                 registrerBarnSkjema.visFeilmeldinger
