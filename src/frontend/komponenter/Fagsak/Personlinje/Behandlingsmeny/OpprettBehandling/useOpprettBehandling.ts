@@ -19,8 +19,6 @@ import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { Datoformat } from '../../../../../utils/formatter';
-import type { FamilieIsoDate } from '../../../../../utils/kalender';
-import { erIsoStringGyldig } from '../../../../../utils/kalender';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -31,7 +29,7 @@ export interface IOpprettBehandlingSkjemaBase {
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     migreringsdato: Date | undefined;
     søknadMottattDato: Date | undefined;
-    kravMottattDato: FamilieIsoDate;
+    kravMottattDato: Date | undefined;
     valgteBarn: ISelectOption[];
 }
 
@@ -136,34 +134,14 @@ const useOpprettBehandling = (
         },
     });
 
-    const kravMottattDato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
-            const erGyldigIsoString = erIsoStringGyldig(felt.verdi);
-            const erIFremtiden = erDatoFremITid(felt.verdi);
-
-            if (!erGyldigIsoString) {
-                return feil(
-                    felt,
-                    'Mottatt dato for klagen må registreres ved manuell opprettelse av klagebehandling'
-                );
-            }
-
-            if (erIFremtiden) {
-                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
-            }
-
-            return ok(felt);
-        },
-
+    const kravMottattDato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
+            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter =>
             avhengigheter.behandlingstype.verdi === Klagebehandlingstype.KLAGE,
     });
-
-    const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) > new Date().getTime();
-    };
 
     const valgteBarn = useFelt({
         verdi: [],
@@ -217,11 +195,15 @@ const useOpprettBehandling = (
     };
 
     const opprettKlagebehandling = () => {
-        onSubmit<{ kravMottattDato: FamilieIsoDate }>(
+        onSubmit<{ kravMottattDato: string }>(
             {
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
-                data: { kravMottattDato: kravMottattDato.verdi },
+                data: {
+                    kravMottattDato: kravMottattDato.verdi
+                        ? format(kravMottattDato.verdi, Datoformat.ISO_DAG)
+                        : '',
+                },
                 påvirkerSystemLaster: true,
             },
             response => {

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { Alert, Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { Datofelt } from './Datofelt';
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
@@ -107,13 +106,11 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                 />
                             )}
                             {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
-                                <Datofelt
-                                    skjemafelt={opprettBehandlingSkjema.felter.kravMottattDato}
+                                <Datovelger
+                                    felt={opprettBehandlingSkjema.felter.kravMottattDato}
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                    etikett={'Krav mottatt'}
-                                    begrensninger={{
-                                        maxDate: new Date().toISOString(),
-                                    }}
+                                    label={'Krav mottatt'}
+                                    avgrensDatoFremITid
                                 />
                             )}
                         </StyledFieldset>
