@@ -12,7 +12,7 @@ import { Datoformat } from '../../utils/formatter';
 interface IProps {
     felt: Felt<Date | undefined>;
     label: string;
-    skjemaSkalViseFeilmelding: boolean;
+    visFeilmeldinger: boolean;
     minDatoAvgrensning?: Date;
     maksDatoAvgrensning?: Date;
 }
@@ -26,7 +26,7 @@ enum Feilmelding {
 const Datovelger = ({
     felt,
     label,
-    skjemaSkalViseFeilmelding,
+    visFeilmeldinger,
     minDatoAvgrensning,
     maksDatoAvgrensning,
 }: IProps) => {
@@ -74,9 +74,9 @@ const Datovelger = ({
                 label={label}
                 {...inputProps}
                 error={
-                    error && skjemaSkalViseFeilmelding
+                    error && visFeilmeldinger
                         ? feilmeldinger[error]
-                        : felt.hentNavBaseSkjemaProps(skjemaSkalViseFeilmelding).error
+                        : felt.hentNavBaseSkjemaProps(visFeilmeldinger).error
                 }
             />
         </DatePicker>

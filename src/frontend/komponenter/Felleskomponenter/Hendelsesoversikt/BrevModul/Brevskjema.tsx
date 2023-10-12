@@ -395,7 +395,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     <Datovelger
                         felt={skjema.felter.datoAvtale}
                         label={'Samboer fra'}
-                        skjemaSkalViseFeilmelding={skjema.visFeilmeldinger}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
                     />
                 )}
                 {skjema.felter.brevmal.verdi &&
