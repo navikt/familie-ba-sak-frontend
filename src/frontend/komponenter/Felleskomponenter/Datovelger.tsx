@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { tidenesEnde, tidenesMorgen } from '../../utils/dato';
+import { dagensDato, tidenesEnde, tidenesMorgen } from '../../utils/dato';
 import { Datoformat } from '../../utils/formatter';
 
 interface IProps {
@@ -36,7 +36,7 @@ const Datovelger = ({
 
     const hentToDate = () => {
         if (maksDatoAvgrensning) return maksDatoAvgrensning;
-        if (avgrensDatoFremITid) return new Date();
+        if (avgrensDatoFremITid) return dagensDato();
         return tidenesEnde();
     };
 
