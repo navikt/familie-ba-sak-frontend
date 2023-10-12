@@ -39,6 +39,7 @@ export interface IRestNyBehandling {
     navIdent?: string;
     barnasIdenter?: string[];
     nyMigreringsdato?: string;
+    søknadMottattDato?: string;
     fagsakId: number;
 }
 

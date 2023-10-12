@@ -30,7 +30,7 @@ export interface IOpprettBehandlingSkjemaBase {
 
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     migreringsdato: Date | undefined;
-    søknadMottattDato: FamilieIsoDate;
+    søknadMottattDato: Date | undefined;
     kravMottattDato: FamilieIsoDate;
     valgteBarn: ISelectOption[];
 }
@@ -120,26 +120,10 @@ const useOpprettBehandling = (
         },
     });
 
-    const søknadMottattDato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
-            const erGyldigIsoString = felt.verdi && erIsoStringGyldig(felt.verdi);
-            const erIFremtiden = felt.verdi && erDatoFremITid(felt.verdi);
-
-            if (!erGyldigIsoString) {
-                return feil(
-                    felt,
-                    'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
-                );
-            }
-
-            if (erIFremtiden) {
-                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
-            }
-
-            return ok(felt);
-        },
-
+    const søknadMottattDato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
+            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -270,7 +254,9 @@ const useOpprettBehandling = (
                         erMigreringFraInfoTrygd && migreringsdato.verdi
                             ? format(migreringsdato.verdi, Datoformat.ISO_DAG)
                             : undefined,
-                    søknadMottattDato: søknadMottattDato.verdi ?? undefined,
+                    søknadMottattDato: søknadMottattDato.verdi
+                        ? format(søknadMottattDato.verdi, Datoformat.ISO_DAG)
+                        : undefined,
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,

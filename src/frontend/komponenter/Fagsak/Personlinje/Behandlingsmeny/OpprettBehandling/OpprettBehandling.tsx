@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { isBefore, startOfDay, subDays } from 'date-fns';
 import styled from 'styled-components';
 
 import { Alert, Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
@@ -10,14 +11,6 @@ import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
-import {
-    erFør,
-    iDag,
-    kalenderDatoMedFallback,
-    KalenderEnhet,
-    TIDENES_ENDE,
-    trekkFra,
-} from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
@@ -61,15 +54,12 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
         settVisOpprettNyBehandlingModal(false);
     };
 
-    const søknadMottattDato = kalenderDatoMedFallback(
-        opprettBehandlingSkjema.felter.søknadMottattDato.verdi,
-        TIDENES_ENDE
-    );
-
-    const søknadMottattDatoErMerEnn360DagerSiden = erFør(
-        søknadMottattDato,
-        trekkFra(iDag(), 360, KalenderEnhet.DAG)
-    );
+    const søknadMottattDatoErMerEnn360DagerSiden =
+        opprettBehandlingSkjema.felter.søknadMottattDato.verdi &&
+        isBefore(
+            opprettBehandlingSkjema.felter.søknadMottattDato.verdi,
+            subDays(startOfDay(new Date()), 360)
+        );
 
     return (
         <>
@@ -109,13 +99,11 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     />
                                 )}
                             {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                                <Datofelt
-                                    skjemafelt={opprettBehandlingSkjema.felter.søknadMottattDato}
+                                <Datovelger
+                                    felt={opprettBehandlingSkjema.felter.søknadMottattDato}
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                    etikett={'Mottatt dato'}
-                                    begrensninger={{
-                                        maxDate: new Date().toISOString(),
-                                    }}
+                                    label={'Mottatt dato'}
+                                    avgrensDatoFremITid
                                 />
                             )}
                             {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
