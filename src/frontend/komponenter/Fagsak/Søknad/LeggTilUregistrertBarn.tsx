@@ -65,7 +65,7 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                             label={'Fødselsdato (valgfri)'}
                             visFeilmeldinger={registrerBarnSkjema.visFeilmeldinger}
                             datoMåFyllesUt={false}
-                            avgrensDatoFremITid
+                            kanKunVelgeFortid
                         />
                         <TextField
                             {...registrerBarnSkjema.felter.uregistrertBarnNavn.hentNavInputProps(

@@ -64,7 +64,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                             felt={skjema.felter.frist}
                             label={'Frist'}
                             visFeilmeldinger={skjema.visFeilmeldinger}
-                            avgrensDatoTilbakeITid
+                            kanKunVelgeFremtid
                         />
                     </Feltmargin>
                     <Select

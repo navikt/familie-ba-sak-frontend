@@ -103,7 +103,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     felt={opprettBehandlingSkjema.felter.søknadMottattDato}
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                                     label={'Mottatt dato'}
-                                    avgrensDatoFremITid
+                                    kanKunVelgeFortid
                                 />
                             )}
                             {opprettBehandlingSkjema.felter.kravMottattDato?.erSynlig && (
@@ -111,7 +111,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                                     felt={opprettBehandlingSkjema.felter.kravMottattDato}
                                     visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                                     label={'Krav mottatt'}
-                                    avgrensDatoFremITid
+                                    kanKunVelgeFortid
                                 />
                             )}
                         </StyledFieldset>
