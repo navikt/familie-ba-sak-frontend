@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 
-import { addDays, isValid } from 'date-fns';
+import { addDays } from 'date-fns';
 
-import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { hentAlleÅrsaker } from './settPåVentUtils';
 import type { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
-import { dagensDato } from '../../../../../utils/dato';
+import { dagensDato, validerGyldigDato } from '../../../../../utils/dato';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
@@ -27,11 +26,7 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
         felter: {
             frist: useFelt<Date | undefined>({
                 verdi: settPåVentFrist ?? standardfrist,
-                valideringsfunksjon: (felt: FeltState<Date | undefined>) => {
-                    return felt.verdi && isValid(felt.verdi)
-                        ? ok(felt)
-                        : feil(felt, 'Du må sette en gyldig frist');
-                },
+                valideringsfunksjon: validerGyldigDato,
             }),
             årsak: useFelt<SettPåVentÅrsak | undefined>({
                 verdi: settPåVent?.årsak ?? undefined,

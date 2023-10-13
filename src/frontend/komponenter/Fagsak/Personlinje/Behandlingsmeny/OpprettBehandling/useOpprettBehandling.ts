@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-import { isValid } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import type { ISelectOption } from '@navikt/familie-form-elements';
@@ -21,6 +20,7 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrev
 import {
     formatterDateTilIsoString,
     formatterDateTilIsoStringEllerUndefined,
+    validerGyldigDato,
 } from '../../../../../utils/dato';
 
 export interface IOpprettBehandlingSkjemaBase {
@@ -108,8 +108,7 @@ const useOpprettBehandling = (
 
     const migreringsdato = useFelt<Date | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
-            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -123,8 +122,7 @@ const useOpprettBehandling = (
 
     const søknadMottattDato = useFelt<Date | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
-            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -139,8 +137,7 @@ const useOpprettBehandling = (
 
     const kravMottattDato = useFelt<Date | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
-            felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato'),
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter =>
             avhengigheter.behandlingstype.verdi === Klagebehandlingstype.KLAGE,

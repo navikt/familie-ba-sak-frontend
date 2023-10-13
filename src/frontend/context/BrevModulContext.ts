@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
-import { isValid } from 'date-fns';
 
 import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -24,7 +23,7 @@ import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
 } from '../utils/brevmal';
-import { formatterDateTilIsoStringEllerUndefined } from '../utils/dato';
+import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
@@ -127,10 +126,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const datoAvtale = useFelt<Date | undefined>({
         verdi: undefined,
-        valideringsfunksjon: (felt: FeltState<Date | undefined>) =>
-            felt.verdi && isValid(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Du må velge en gyldig dato.'),
+        valideringsfunksjon: validerGyldigDato,
         skalFeltetVises: avhengigheter => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
