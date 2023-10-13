@@ -44,8 +44,6 @@ const Datovelger = ({
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>(undefined);
 
-    console.log(felt.verdi);
-
     const hentToDate = () => {
         if (maksDatoAvgrensning) return maksDatoAvgrensning;
         if (kanKunVelgeFortid) return dagensDato();
