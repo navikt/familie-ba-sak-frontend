@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { format } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { dagensDato, tidenesEnde, tidenesMorgen } from '../../utils/dato';
+import { dagensDato } from '../../utils/dato';
 import { Datoformat } from '../../utils/formatter';
 
 interface IProps {
@@ -26,6 +26,10 @@ enum Feilmelding {
     ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
 }
 
+const tidligsteRelevanteDato = () => startOfDay(new Date(1900, 0));
+
+const senesteRelevanteDato = () => startOfDay(new Date(2500, 0));
+
 const Datovelger = ({
     felt,
     label,
@@ -41,13 +45,13 @@ const Datovelger = ({
     const hentToDate = () => {
         if (maksDatoAvgrensning) return maksDatoAvgrensning;
         if (avgrensDatoFremITid) return dagensDato();
-        return tidenesEnde();
+        return senesteRelevanteDato();
     };
 
     const hentFromDate = () => {
         if (minDatoAvgrensning) return minDatoAvgrensning;
         if (avgrensDatoTilbakeITid) return dagensDato();
-        return tidenesMorgen();
+        return tidligsteRelevanteDato();
     };
 
     const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
