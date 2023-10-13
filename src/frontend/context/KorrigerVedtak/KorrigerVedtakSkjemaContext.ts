@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import { ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../typer/vedtak';
-import { isEmpty } from '../../utils/eøsValidators';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../utils/dato';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
@@ -16,9 +16,6 @@ interface IProps {
     korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-const erVedtaksdatoGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Dato for vedtaket med feil er påkrevd');
-
 export const useKorrigerVedtakSkjemaContext = ({
     behandlingId,
     korrigertVedtak,
@@ -26,6 +23,10 @@ export const useKorrigerVedtakSkjemaContext = ({
 }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
+
+    const opprinneligVedtaksdato = korrigertVedtak?.vedtaksdato
+        ? new Date(korrigertVedtak?.vedtaksdato)
+        : undefined;
 
     const {
         skjema,
@@ -38,15 +39,15 @@ export const useKorrigerVedtakSkjemaContext = ({
         validerAlleSynligeFelter,
     } = useSkjema<
         {
-            vedtaksdato: string | undefined;
+            vedtaksdato: Date | undefined;
             begrunnelse: string;
         },
         IBehandling
     >({
         felter: {
-            vedtaksdato: useFelt<string | undefined>({
-                verdi: korrigertVedtak?.vedtaksdato,
-                valideringsfunksjon: erVedtaksdatoGyldig,
+            vedtaksdato: useFelt<Date | undefined>({
+                verdi: opprinneligVedtaksdato,
+                valideringsfunksjon: validerGyldigDato,
             }),
             begrunnelse: useFelt<string>({
                 verdi: korrigertVedtak?.begrunnelse || '',
@@ -81,11 +82,11 @@ export const useKorrigerVedtakSkjemaContext = ({
         if (kanSendeSkjema()) {
             settVisfeilmeldinger(false);
             settSubmitRessurs(byggHenterRessurs());
-            onSubmit(
+            onSubmit<IRestKorrigertVedtak>(
                 {
                     method: 'POST',
                     data: {
-                        vedtaksdato: skjema.felter.vedtaksdato.verdi,
+                        vedtaksdato: formatterDateTilIsoString(skjema.felter.vedtaksdato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
                     url: korrigertVedtakURL,

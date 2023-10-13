@@ -5,24 +5,22 @@ import styled, { css } from 'styled-components';
 import { ArrowUndoIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
 import type { IRestKorrigertVedtak } from '../../../../typer/vedtak';
-import { DatoformatNorsk } from '../../../../utils/formatter';
+import Datovelger from '../../../Felleskomponenter/Datovelger';
 
 const AngreKnapp = styled(Button)`
-    margin: 0.5rem 0rem;
+    margin: 0.5rem 0;
 `;
 
 const baseSkjemaelementStyle = css`
     margin-bottom: 1.5rem;
 `;
 
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
+const FeltMargin = styled.div`
     ${baseSkjemaelementStyle}
 `;
 
@@ -96,23 +94,14 @@ const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
                                 vurdert saken din på nytt.
                             </li>
                         </ul>
-                        <StyledFamilieDatovelger
-                            {...skjema.felter.vedtaksdato?.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            id={'korriger-vedtak-dato'}
-                            label={'Vedtaksdato'}
-                            erLesesvisning={erLesevisning}
-                            value={
-                                skjema.felter.vedtaksdato?.verdi !== null
-                                    ? skjema.felter.vedtaksdato?.verdi
-                                    : undefined
-                            }
-                            placeholder={DatoformatNorsk.DATO}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
-                            }
-                        />
+                        <FeltMargin>
+                            <Datovelger
+                                label={'Vedtaksdato'}
+                                readOnly={erLesevisning}
+                                felt={skjema.felter.vedtaksdato}
+                                visFeilmeldinger={skjema.visFeilmeldinger}
+                            />
+                        </FeltMargin>
                         <StyledFamilieTextarea
                             {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
                                 skjema.visFeilmeldinger

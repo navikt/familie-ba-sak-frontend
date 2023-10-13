@@ -1,5 +1,6 @@
 import type { Vedtaksperiodetype } from './vedtaksperiode';
 import type { VilkårType } from './vilkår';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
@@ -89,6 +90,6 @@ export enum KorrigertEtterbetalingÅrsak {
 }
 
 export interface IRestKorrigertVedtak {
-    vedtaksdato: string;
-    begrunnelse: string | undefined;
+    vedtaksdato: IsoDatoString;
+    begrunnelse?: string;
 }
