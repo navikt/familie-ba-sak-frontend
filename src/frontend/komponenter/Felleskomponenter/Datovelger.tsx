@@ -113,6 +113,7 @@ const Datovelger = ({
         <DatePicker dropdownCaption {...datepickerProps}>
             <DatePicker.Input
                 label={label}
+                placeholder={'DD.MM.ÅÅÅÅ'}
                 {...inputProps}
                 error={
                     error && visFeilmeldinger
