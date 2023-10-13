@@ -5,6 +5,8 @@ import { feil, ok } from '@navikt/familie-skjema';
 
 import { Datoformat } from './formatter';
 
+export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
+
 export const dagensDato = () => startOfToday();
 
 export const formatterDateTilIsoString = (dato?: Date): string =>

@@ -27,6 +27,7 @@ import type {
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestNyBehandling {
     kategori: BehandlingKategori | null;
@@ -38,8 +39,8 @@ export interface IRestNyBehandling {
     skalBehandlesAutomatisk?: boolean;
     navIdent?: string;
     barnasIdenter?: string[];
-    nyMigreringsdato?: string;
-    søknadMottattDato?: string;
+    nyMigreringsdato?: IsoDatoString;
+    søknadMottattDato?: IsoDatoString;
     fagsakId: number;
 }
 

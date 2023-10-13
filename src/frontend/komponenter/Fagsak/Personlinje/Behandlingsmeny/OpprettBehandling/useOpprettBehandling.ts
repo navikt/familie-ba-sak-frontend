@@ -17,6 +17,7 @@ import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
+import type { IsoDatoString } from '../../../../../utils/dato';
 import {
     formatterDateTilIsoString,
     formatterDateTilIsoStringEllerUndefined,
@@ -195,7 +196,7 @@ const useOpprettBehandling = (
     };
 
     const opprettKlagebehandling = () => {
-        onSubmit<{ kravMottattDato: string }>(
+        onSubmit<{ kravMottattDato: IsoDatoString }>(
             {
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
