@@ -18,7 +18,10 @@ import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { formatterDateTilIsoString } from '../../../../../utils/dato';
+import {
+    formatterDateTilIsoString,
+    formatterDateTilIsoStringEllerUndefined,
+} from '../../../../../utils/dato';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -232,11 +235,11 @@ const useOpprettBehandling = (
                     navIdent: innloggetSaksbehandler?.navIdent,
                     nyMigreringsdato:
                         erMigreringFraInfoTrygd && migreringsdato.verdi
-                            ? formatterDateTilIsoString(migreringsdato.verdi)
+                            ? formatterDateTilIsoStringEllerUndefined(migreringsdato.verdi)
                             : undefined,
-                    søknadMottattDato: søknadMottattDato.verdi
-                        ? formatterDateTilIsoString(søknadMottattDato.verdi)
-                        : undefined,
+                    søknadMottattDato: formatterDateTilIsoStringEllerUndefined(
+                        søknadMottattDato.verdi
+                    ),
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,
