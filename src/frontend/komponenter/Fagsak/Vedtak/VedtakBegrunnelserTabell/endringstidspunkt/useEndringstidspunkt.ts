@@ -13,6 +13,7 @@ import {
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { formatterDateTilIsoStringEllerUndefined } from '../../../../../utils/dato';
 
 interface IProps {
     visModal: boolean;
@@ -33,7 +34,11 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
             påvirkerSystemLaster: true,
         });
 
-    const endringstidspunkt = hentDataFraRessurs(endringstidspunktRessurs);
+    const endringstidspunktFraRessurs = hentDataFraRessurs(endringstidspunktRessurs);
+
+    const endringstidspunkt = endringstidspunktFraRessurs
+        ? new Date(endringstidspunktFraRessurs)
+        : undefined;
 
     const { skjema, kanSendeSkjema, onSubmit } = useOppdaterEndringstidspunktSkjema(
         endringstidspunkt,
@@ -59,7 +64,11 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
                         lukkModal();
                         hentVedtaksperioder();
                         settEndringstidspunktRessurs(
-                            byggSuksessRessurs(skjema.felter.endringstidspunkt.verdi)
+                            byggSuksessRessurs(
+                                formatterDateTilIsoStringEllerUndefined(
+                                    skjema.felter.endringstidspunkt.verdi
+                                )
+                            )
                         );
                     }
                 }

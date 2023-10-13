@@ -1,41 +1,30 @@
 import { useEffect } from 'react';
 
-import type { ISODateString } from '@navikt/familie-datovelger';
-import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { addDays } from 'date-fns';
+
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import type { IBehandling } from '../../../../../typer/behandling';
-import type { FamilieIsoDate } from '../../../../../utils/kalender';
-import {
-    erFør,
-    erIsoStringGyldig,
-    iDag,
-    kalenderDato,
-    KalenderEnhet,
-    leggTil,
-    serializeIso8601String,
-} from '../../../../../utils/kalender';
+import { dagensDato, validerGyldigDato } from '../../../../../utils/dato';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
 export const useOppdaterEndringstidspunktSkjema = (
-    endringstidspunkt: ISODateString | undefined,
+    endringstidspunkt: Date | undefined,
     modalVises: boolean
 ) => {
-    const standardfrist = serializeIso8601String(
-        leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
-    );
+    const standardfrist = addDays(dagensDato(), STANDARD_ANTALL_DAGER_FRIST);
 
     const oppdaterEndringstidspunktSkjema = useSkjema<
         {
-            endringstidspunkt: FamilieIsoDate | undefined;
+            endringstidspunkt: Date | undefined;
         },
         IBehandling
     >({
         felter: {
-            endringstidspunkt: useFelt<FamilieIsoDate | undefined>({
+            endringstidspunkt: useFelt<Date | undefined>({
                 verdi: endringstidspunkt,
-                valideringsfunksjon: validerEndringstidspunkt,
+                valideringsfunksjon: validerGyldigDato,
             }),
         },
         skjemanavn: 'Oppdater første endringstidspunkt',
@@ -59,16 +48,4 @@ export const useOppdaterEndringstidspunktSkjema = (
     }, [modalVises]);
 
     return oppdaterEndringstidspunktSkjema;
-};
-
-const validerEndringstidspunkt = (
-    felt: FeltState<FamilieIsoDate | undefined>
-): FeltState<FamilieIsoDate | undefined> => {
-    if (felt.verdi && erIsoStringGyldig(felt.verdi)) {
-        return felt.verdi && erFør(kalenderDato(felt.verdi), iDag())
-            ? ok(felt)
-            : feil(felt, 'Endringstidspunkt kan ikke settes frem i tid.');
-    } else {
-        return feil(felt, 'Endringstidspunkt er ikke i gyldig dato-format.');
-    }
 };
