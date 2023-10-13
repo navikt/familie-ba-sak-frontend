@@ -70,6 +70,7 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                                 label={'Dødsdato'}
                                 visFeilmeldinger={skjema.visFeilmeldinger}
                                 readOnly={erLesevisning}
+                                kanKunVelgeFortid
                             />
                         </Feltmargin>
                         <FamilieTextarea
