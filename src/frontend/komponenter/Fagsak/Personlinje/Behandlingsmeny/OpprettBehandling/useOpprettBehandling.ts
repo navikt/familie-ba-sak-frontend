@@ -233,10 +233,9 @@ const useOpprettBehandling = (
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
-                    nyMigreringsdato:
-                        erMigreringFraInfoTrygd && migreringsdato.verdi
-                            ? formatterDateTilIsoStringEllerUndefined(migreringsdato.verdi)
-                            : undefined,
+                    nyMigreringsdato: erMigreringFraInfoTrygd
+                        ? formatterDateTilIsoStringEllerUndefined(migreringsdato.verdi)
+                        : undefined,
                     søknadMottattDato: formatterDateTilIsoStringEllerUndefined(
                         søknadMottattDato.verdi
                     ),
