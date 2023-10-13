@@ -1,5 +1,3 @@
-import type { ISODateString } from '@navikt/familie-datovelger';
-
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
@@ -407,7 +405,7 @@ export const behandlingsstatuser: Record<
 };
 
 export interface ISettPåVent {
-    frist: ISODateString;
+    frist: IsoDatoString;
     årsak: SettPåVentÅrsak;
 }
 
