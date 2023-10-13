@@ -6,7 +6,9 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
+import type { IManuellDødsfall } from '../../typer/dødsfall';
 import type { IGrunnlagPerson } from '../../typer/person';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../utils/dato';
 import { isEmpty } from '../../utils/eøsValidators';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
@@ -14,10 +16,6 @@ interface IProps {
     onSuccess: () => void;
     person: IGrunnlagPerson;
 }
-
-const erDødsfallDatoFyltUt = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Dato for dødsfall er påkrevd.');
-
 const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
     !isEmpty(felt.verdi)
         ? ok(felt)
@@ -38,15 +36,15 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
         validerAlleSynligeFelter,
     } = useSkjema<
         {
-            dødsfallDato: string | undefined;
+            dødsfallDato: Date | undefined;
             begrunnelse: string;
         },
         IBehandling
     >({
         felter: {
-            dødsfallDato: useFelt<string | undefined>({
-                verdi: '',
-                valideringsfunksjon: erDødsfallDatoFyltUt,
+            dødsfallDato: useFelt<Date | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: validerGyldigDato,
             }),
             begrunnelse: useFelt<string>({
                 verdi: '',
@@ -79,11 +77,11 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
         if (kanSendeSkjema()) {
             settVisfeilmeldinger(false);
             settSubmitRessurs(byggHenterRessurs());
-            onSubmit(
+            onSubmit<IManuellDødsfall>(
                 {
                     method: 'POST',
                     data: {
-                        dødsfallDato: skjema.felter.dødsfallDato.verdi,
+                        dødsfallDato: formatterDateTilIsoString(skjema.felter.dødsfallDato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                         personIdent: person.personIdent,
                     },

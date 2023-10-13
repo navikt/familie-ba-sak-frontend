@@ -4,17 +4,15 @@ import styled from 'styled-components';
 
 import { Alert, Button, Modal } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
-import { DatoformatNorsk } from '../../../utils/formatter';
+import Datovelger from '../Datovelger';
 
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    margin-bottom: 1.5rem;
+const Feltmargin = styled.div`
+    margin-bottom: 2rem;
 `;
 
 interface IRegistrerDødsfallDato {
@@ -66,44 +64,33 @@ const RegistrerDødsfallDato: React.FC<IRegistrerDødsfallDato> = ({ person, erL
                     portal
                 >
                     <Modal.Body>
-                        <div>
-                            <StyledFamilieDatovelger
-                                {...skjema.felter.dødsfallDato?.hentNavBaseSkjemaProps(
-                                    skjema.visFeilmeldinger
-                                )}
-                                id={'registrer-døds-dato'}
+                        <Feltmargin>
+                            <Datovelger
+                                felt={skjema.felter.dødsfallDato}
                                 label={'Dødsdato'}
-                                erLesesvisning={erLesevisning}
-                                value={
-                                    skjema.felter.dødsfallDato?.verdi !== null
-                                        ? skjema.felter.dødsfallDato?.verdi
-                                        : undefined
-                                }
-                                placeholder={DatoformatNorsk.DATO}
-                                onChange={(dato?: ISODateString) =>
-                                    skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
-                                }
+                                visFeilmeldinger={skjema.visFeilmeldinger}
+                                readOnly={erLesevisning}
                             />
-                            <FamilieTextarea
-                                {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
-                                    skjema.visFeilmeldinger
-                                )}
-                                id={'manuell-dødsdato-begrunnelse'}
-                                label={'Begrunnelse'}
-                                erLesevisning={erLesevisning}
-                                value={skjema.felter.begrunnelse.verdi}
-                                onChange={changeEvent =>
-                                    skjema.felter.begrunnelse.validerOgSettFelt(
-                                        changeEvent.target.value
-                                    )
-                                }
-                            />
-                            {restFeil && (
-                                <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
-                                    {restFeil}
-                                </Alert>
+                        </Feltmargin>
+                        <FamilieTextarea
+                            {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
+                                skjema.visFeilmeldinger
                             )}
-                        </div>
+                            id={'manuell-dødsdato-begrunnelse'}
+                            label={'Begrunnelse'}
+                            erLesevisning={erLesevisning}
+                            value={skjema.felter.begrunnelse.verdi}
+                            onChange={changeEvent =>
+                                skjema.felter.begrunnelse.validerOgSettFelt(
+                                    changeEvent.target.value
+                                )
+                            }
+                        />
+                        {restFeil && (
+                            <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
+                                {restFeil}
+                            </Alert>
+                        )}
                     </Modal.Body>
                     {!erLesevisning && (
                         <Modal.Footer>
