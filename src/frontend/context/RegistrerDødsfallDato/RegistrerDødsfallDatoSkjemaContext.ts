@@ -11,7 +11,7 @@ import { isEmpty } from '../../utils/eøsValidators';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
-    onSuccess: () => void;
+    lukkModal: () => void;
     person: IGrunnlagPerson;
 }
 
@@ -23,7 +23,7 @@ const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
         ? ok(felt)
         : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
-export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IProps) => {
+export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IProps) => {
     const { åpenBehandling, settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
@@ -92,7 +92,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settRestFeil(undefined);
-                        onSuccess();
+                        lukkModal();
                         nullstillSkjema();
                         settÅpenBehandling(response);
                     }
@@ -117,9 +117,6 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, onSuccess }: IP
         skjema,
         valideringErOk,
         registrerManuellDødsfall,
-        nullstillSkjema,
         restFeil,
-        settVisfeilmeldinger,
-        settRestFeil,
     };
 };

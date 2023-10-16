@@ -23,30 +23,16 @@ interface IProps {
 }
 
 const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProps) => {
-    const {
-        skjema,
-        valideringErOk,
-        registrerManuellDødsfall,
-        nullstillSkjema,
-        settVisfeilmeldinger,
-        settRestFeil,
-        restFeil,
-    } = useRegistrerDødsfallDatoSkjemaContext({
-        onSuccess: lukkModal,
-        person,
-    });
-
-    const lukkModalOgNullstillSkjema = () => {
-        nullstillSkjema();
-        settVisfeilmeldinger(false);
-        settRestFeil(undefined);
-        lukkModal();
-    };
+    const { skjema, valideringErOk, registrerManuellDødsfall, restFeil } =
+        useRegistrerDødsfallDatoSkjemaContext({
+            lukkModal,
+            person,
+        });
 
     return (
         <Modal
             open
-            onClose={lukkModalOgNullstillSkjema}
+            onClose={lukkModal}
             header={{
                 heading: 'Registrere dødsdato',
                 size: 'medium',
@@ -102,7 +88,7 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                     >
                         Bekreft
                     </Button>
-                    <Button onClick={lukkModalOgNullstillSkjema} variant={'tertiary'}>
+                    <Button onClick={lukkModal} variant={'tertiary'}>
                         Avbryt
                     </Button>
                 </Modal.Footer>
