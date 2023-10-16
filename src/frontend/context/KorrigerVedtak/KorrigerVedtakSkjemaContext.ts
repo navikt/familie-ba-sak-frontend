@@ -11,7 +11,7 @@ import { isEmpty } from '../../utils/eøsValidators';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
-    onSuccess: () => void;
+    lukkModal: () => void;
     behandlingId: number;
     korrigertVedtak?: IRestKorrigertVedtak;
 }
@@ -22,7 +22,7 @@ const erVedtaksdatoGyldig = (felt: FeltState<string | undefined>): FeltState<str
 export const useKorrigerVedtakSkjemaContext = ({
     behandlingId,
     korrigertVedtak,
-    onSuccess,
+    lukkModal,
 }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
@@ -93,7 +93,7 @@ export const useKorrigerVedtakSkjemaContext = ({
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settRestFeil(undefined);
-                        onSuccess();
+                        lukkModal();
                         nullstillSkjema();
                         settÅpenBehandling(response);
                     }
@@ -123,7 +123,7 @@ export const useKorrigerVedtakSkjemaContext = ({
             (response: Ressurs<IBehandling>) => {
                 if (response.status === RessursStatus.SUKSESS) {
                     settRestFeil(undefined);
-                    onSuccess();
+                    lukkModal();
                     nullstillSkjema();
                     settÅpenBehandling(response);
                 }
