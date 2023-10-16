@@ -3,12 +3,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Button, Fieldset, Modal, Select } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentAlleÅrsaker } from './settPåVentUtils';
-import type { IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import { useSettPåVentSkjema } from './useSettPåVentSkjema';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling, ISettPåVent } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
+import { formatterDateTilIsoString } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
@@ -21,24 +24,42 @@ const StyledBodyShort = styled(BodyShort)`
 `;
 
 interface IProps {
-    onAvbryt: () => void;
-    settBehandlingPåVent: () => void;
-    skjema: ISkjema<{ frist: Date | undefined; årsak: SettPåVentÅrsak | undefined }, IBehandling>;
-    erBehandlingAlleredePåVent: boolean;
+    lukkModal: () => void;
+    behandling: IBehandling;
 }
 
-export const SettBehandlingPåVentModal: React.FC<IProps> = ({
-    onAvbryt,
-    settBehandlingPåVent,
-    skjema,
-    erBehandlingAlleredePåVent,
-}) => {
+export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal, behandling }) => {
     const årsaker = hentAlleÅrsaker();
+    const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(behandling.aktivSettPåVent);
+    const { settÅpenBehandling } = useBehandling();
+
+    const { årsak, frist } = skjema.felter;
+
+    const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
+
+    const settBehandlingPåVent = () => {
+        if (kanSendeSkjema() && årsak.verdi && frist.verdi) {
+            onSubmit<ISettPåVent>(
+                {
+                    method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
+                    data: {
+                        frist: formatterDateTilIsoString(frist.verdi),
+                        årsak: årsak.verdi,
+                    },
+                    url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
+                },
+                (ressurs: Ressurs<IBehandling>) => {
+                    settÅpenBehandling(ressurs);
+                    lukkModal();
+                }
+            );
+        }
+    };
 
     return (
         <Modal
             open
-            onClose={onAvbryt}
+            onClose={lukkModal}
             width={'35rem'}
             header={{
                 heading: erBehandlingAlleredePåVent
@@ -94,7 +115,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                     variant={'tertiary'}
                     key={'Avbryt'}
                     size="medium"
-                    onClick={onAvbryt}
+                    onClick={lukkModal}
                     children={'Avbryt'}
                 />
             </Modal.Footer>
