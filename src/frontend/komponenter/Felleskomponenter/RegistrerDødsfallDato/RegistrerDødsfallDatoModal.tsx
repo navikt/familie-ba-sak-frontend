@@ -44,6 +44,7 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                         label={'Dødsdato'}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         readOnly={erLesevisning}
+                        kanKunVelgeFortid
                     />
                     <FamilieTextarea
                         {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
