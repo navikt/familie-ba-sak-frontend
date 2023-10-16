@@ -1,20 +1,12 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
-import { Alert, Button, Modal } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
+import { Button, Fieldset, Modal } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
-import { DatoformatNorsk } from '../../../utils/formatter';
-
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    margin-bottom: 1.5rem;
-`;
+import Datovelger from '../Datovelger';
 
 interface IProps {
     lukkModal: () => void;
@@ -41,23 +33,17 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
             portal
         >
             <Modal.Body>
-                <div>
-                    <StyledFamilieDatovelger
-                        {...skjema.felter.dødsfallDato?.hentNavBaseSkjemaProps(
-                            skjema.visFeilmeldinger
-                        )}
-                        id={'registrer-døds-dato'}
+                <Fieldset
+                    legend="Registrer dødsfall"
+                    hideLegend
+                    error={skjema.visFeilmeldinger && restFeil}
+                    errorPropagation={false}
+                >
+                    <Datovelger
+                        felt={skjema.felter.dødsfallDato}
                         label={'Dødsdato'}
-                        erLesesvisning={erLesevisning}
-                        value={
-                            skjema.felter.dødsfallDato?.verdi !== null
-                                ? skjema.felter.dødsfallDato?.verdi
-                                : undefined
-                        }
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.dødsfallDato?.validerOgSettFelt(dato)
-                        }
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        readOnly={erLesevisning}
                     />
                     <FamilieTextarea
                         {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
@@ -71,12 +57,7 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                             skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
                         }
                     />
-                    {restFeil && (
-                        <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
-                            {restFeil}
-                        </Alert>
-                    )}
-                </div>
+                </Fieldset>
             </Modal.Body>
             {!erLesevisning && (
                 <Modal.Footer>
