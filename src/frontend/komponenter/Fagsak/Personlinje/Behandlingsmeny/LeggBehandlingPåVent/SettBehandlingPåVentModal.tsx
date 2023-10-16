@@ -9,9 +9,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { hentAlleÅrsaker } from './settPåVentUtils';
 import type { IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
-import type { FamilieIsoDate } from '../../../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
+import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
@@ -24,10 +23,7 @@ const StyledBodyShort = styled(BodyShort)`
 interface IProps {
     onAvbryt: () => void;
     settBehandlingPåVent: () => void;
-    skjema: ISkjema<
-        { frist: FamilieIsoDate | undefined; årsak: SettPåVentÅrsak | undefined },
-        IBehandling
-    >;
+    skjema: ISkjema<{ frist: Date | undefined; årsak: SettPåVentÅrsak | undefined }, IBehandling>;
     erBehandlingAlleredePåVent: boolean;
 }
 
@@ -64,11 +60,11 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                     )}
 
                     <Feltmargin>
-                        <FamilieDatovelgerWrapper
-                            {...skjema.felter.frist.hentNavInputProps(skjema.visFeilmeldinger)}
-                            value={skjema.felter.frist.verdi}
+                        <Datovelger
+                            felt={skjema.felter.frist}
                             label={'Frist'}
-                            placeholder={'DD.MM.ÅÅÅÅ'}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            kanKunVelgeFremtid
                         />
                     </Feltmargin>
                     <Select

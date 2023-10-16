@@ -23,10 +23,10 @@ import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
 } from '../utils/brevmal';
+import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
-import { erIsoStringGyldig } from '../utils/kalender';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling: åpenBehandlingRessurs } = useBehandling();
@@ -124,12 +124,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
-    const datoAvtale = useFelt<ISODateString | undefined>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<string | undefined>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Du må velge en gyldig dato.'),
+    const datoAvtale = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
         skalFeltetVises: avhengigheter => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
@@ -225,7 +222,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             barnMedDeltBosted: IBarnMedOpplysninger[];
             barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
-            datoAvtale: ISODateString | undefined;
+            datoAvtale: Date | undefined;
             antallUkerSvarfrist: number | '';
             mottakerlandSed: string[];
         },
@@ -355,7 +352,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-                datoAvtale: skjema.felter.datoAvtale.verdi,
+                datoAvtale: formatterDateTilIsoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
                 behandlingKategori,
                 antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),

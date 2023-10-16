@@ -4,13 +4,14 @@ import type {
     Brevmal,
     Informasjonsbrev,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IManueltBrevRequestPåBehandling {
     mottakerIdent: string;
     multiselectVerdier: string[];
     barnIBrev: string[];
     brevmal: Brevmal;
-    datoAvtale?: string;
+    datoAvtale?: IsoDatoString;
     barnasFødselsdager?: string[];
     behandlingKategori?: BehandlingKategori | undefined;
     antallUkerSvarfrist?: number;

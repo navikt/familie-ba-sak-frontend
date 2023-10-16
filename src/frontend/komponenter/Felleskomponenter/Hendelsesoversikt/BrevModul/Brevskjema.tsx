@@ -34,10 +34,10 @@ import { målform } from '../../../../typer/søknad';
 import { ToggleNavn } from '../../../../typer/toggles';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { FamilieDatovelgerWrapper } from '../../../../utils/skjema/FamilieDatovelgerWrapper';
 import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
+import Datovelger from '../../Datovelger';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 
@@ -392,11 +392,10 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     />
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
-                    <FamilieDatovelgerWrapper
-                        {...skjema.felter.datoAvtale.hentNavInputProps(skjema.visFeilmeldinger)}
+                    <Datovelger
+                        felt={skjema.felter.datoAvtale}
                         label={'Samboer fra'}
-                        value={skjema.felter.datoAvtale.verdi}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
                     />
                 )}
                 {skjema.felter.brevmal.verdi &&

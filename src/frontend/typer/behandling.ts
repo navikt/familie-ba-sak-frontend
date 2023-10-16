@@ -1,5 +1,3 @@
-import type { ISODateString } from '@navikt/familie-datovelger';
-
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
@@ -27,6 +25,7 @@ import type {
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestNyBehandling {
     kategori: BehandlingKategori | null;
@@ -38,7 +37,8 @@ export interface IRestNyBehandling {
     skalBehandlesAutomatisk?: boolean;
     navIdent?: string;
     barnasIdenter?: string[];
-    nyMigreringsdato?: string;
+    nyMigreringsdato?: IsoDatoString;
+    søknadMottattDato?: IsoDatoString;
     fagsakId: number;
 }
 
@@ -405,7 +405,7 @@ export const behandlingsstatuser: Record<
 };
 
 export interface ISettPåVent {
-    frist: ISODateString;
+    frist: IsoDatoString;
     årsak: SettPåVentÅrsak;
 }
 

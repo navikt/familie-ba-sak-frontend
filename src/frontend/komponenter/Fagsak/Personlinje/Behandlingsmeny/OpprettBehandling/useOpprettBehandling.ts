@@ -17,8 +17,12 @@ import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import type { FamilieIsoDate } from '../../../../../utils/kalender';
-import { erIsoStringGyldig } from '../../../../../utils/kalender';
+import type { IsoDatoString } from '../../../../../utils/dato';
+import {
+    formatterDateTilIsoString,
+    formatterDateTilIsoStringEllerUndefined,
+    validerGyldigDato,
+} from '../../../../../utils/dato';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -27,9 +31,9 @@ export interface IOpprettBehandlingSkjemaBase {
 }
 
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
-    migreringsdato: FamilieIsoDate;
-    søknadMottattDato: FamilieIsoDate;
-    kravMottattDato: FamilieIsoDate;
+    migreringsdato: Date | undefined;
+    søknadMottattDato: Date | undefined;
+    kravMottattDato: Date | undefined;
     valgteBarn: ISelectOption[];
 }
 
@@ -103,12 +107,9 @@ const useOpprettBehandling = (
         },
     });
 
-    const migreringsdato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) =>
-            felt.verdi && erIsoStringGyldig(felt.verdi) && erDatoMindreEllerLikMaksdato(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Du må velge 01.01.23 eller tidligere som migreringsdato'),
+    const migreringsdato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -120,26 +121,9 @@ const useOpprettBehandling = (
         },
     });
 
-    const søknadMottattDato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
-            const erGyldigIsoString = felt.verdi && erIsoStringGyldig(felt.verdi);
-            const erIFremtiden = felt.verdi && erDatoFremITid(felt.verdi);
-
-            if (!erGyldigIsoString) {
-                return feil(
-                    felt,
-                    'Mottatt dato for søknaden må registreres ved manuell opprettelse av behandling'
-                );
-            }
-
-            if (erIFremtiden) {
-                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
-            }
-
-            return ok(felt);
-        },
-
+    const søknadMottattDato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -152,38 +136,13 @@ const useOpprettBehandling = (
         },
     });
 
-    const kravMottattDato = useFelt<FamilieIsoDate>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<FamilieIsoDate>) => {
-            const erGyldigIsoString = erIsoStringGyldig(felt.verdi);
-            const erIFremtiden = erDatoFremITid(felt.verdi);
-
-            if (!erGyldigIsoString) {
-                return feil(
-                    felt,
-                    'Mottatt dato for klagen må registreres ved manuell opprettelse av klagebehandling'
-                );
-            }
-
-            if (erIFremtiden) {
-                return feil(felt, 'Du kan ikke sette en dato som er frem i tid.');
-            }
-
-            return ok(felt);
-        },
-
+    const kravMottattDato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter =>
             avhengigheter.behandlingstype.verdi === Klagebehandlingstype.KLAGE,
     });
-
-    const erDatoFremITid = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) > new Date().getTime();
-    };
-
-    const erDatoMindreEllerLikMaksdato = (dato: FamilieIsoDate): boolean => {
-        return Date.parse(dato.toString()) <= MAKSDATO_FOR_MIGRERING.getTime();
-    };
 
     const valgteBarn = useFelt({
         verdi: [],
@@ -237,11 +196,13 @@ const useOpprettBehandling = (
     };
 
     const opprettKlagebehandling = () => {
-        onSubmit<{ kravMottattDato: FamilieIsoDate }>(
+        onSubmit<{ kravMottattDato: IsoDatoString }>(
             {
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
-                data: { kravMottattDato: kravMottattDato.verdi },
+                data: {
+                    kravMottattDato: formatterDateTilIsoString(kravMottattDato.verdi),
+                },
                 påvirkerSystemLaster: true,
             },
             response => {
@@ -270,8 +231,12 @@ const useOpprettBehandling = (
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
-                    nyMigreringsdato: erMigreringFraInfoTrygd ? migreringsdato.verdi : undefined,
-                    søknadMottattDato: søknadMottattDato.verdi ?? undefined,
+                    nyMigreringsdato: erMigreringFraInfoTrygd
+                        ? formatterDateTilIsoStringEllerUndefined(migreringsdato.verdi)
+                        : undefined,
+                    søknadMottattDato: formatterDateTilIsoStringEllerUndefined(
+                        søknadMottattDato.verdi
+                    ),
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,

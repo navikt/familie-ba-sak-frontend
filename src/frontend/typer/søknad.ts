@@ -1,4 +1,5 @@
 import type { BehandlingUnderkategori } from './behandlingstema';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestRegistrerSøknad {
     søknad: ISøknadDTO;
@@ -18,7 +19,7 @@ export interface ISøkerMedOpplysninger {
 }
 
 export interface IBarnMedOpplysningerBackend {
-    fødselsdato?: string;
+    fødselsdato?: IsoDatoString;
     ident: string;
     inkludertISøknaden: boolean;
     manueltRegistrert: boolean;
@@ -27,7 +28,7 @@ export interface IBarnMedOpplysningerBackend {
 }
 
 export interface IBarnMedOpplysninger {
-    fødselsdato?: string;
+    fødselsdato?: IsoDatoString;
     ident: string;
     merket: boolean;
     manueltRegistrert: boolean;
