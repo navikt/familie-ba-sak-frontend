@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../typer/vedtak';
-import { isEmpty } from '../../utils/eøsValidators';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../utils/dato';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
@@ -15,9 +15,6 @@ interface IProps {
     behandlingId: number;
     korrigertVedtak?: IRestKorrigertVedtak;
 }
-
-const erVedtaksdatoGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
-    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Dato for vedtaket med feil er påkrevd');
 
 export const useKorrigerVedtakSkjemaContext = ({
     behandlingId,
@@ -35,18 +32,17 @@ export const useKorrigerVedtakSkjemaContext = ({
         onSubmit,
         nullstillSkjema,
         settSubmitRessurs,
-        validerAlleSynligeFelter,
     } = useSkjema<
         {
-            vedtaksdato: string | undefined;
+            vedtaksdato: Date | undefined;
             begrunnelse: string;
         },
         IBehandling
     >({
         felter: {
-            vedtaksdato: useFelt<string | undefined>({
-                verdi: korrigertVedtak?.vedtaksdato,
-                valideringsfunksjon: erVedtaksdatoGyldig,
+            vedtaksdato: useFelt<Date | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: validerGyldigDato,
             }),
             begrunnelse: useFelt<string>({
                 verdi: korrigertVedtak?.begrunnelse || '',
@@ -57,23 +53,11 @@ export const useKorrigerVedtakSkjemaContext = ({
     });
 
     useEffect(() => {
-        nullstillSkjema();
-    }, [korrigertVedtak?.vedtaksdato, korrigertVedtak?.begrunnelse]);
-
-    const valideringsstatuser = [
-        skjema.felter.vedtaksdato.valideringsstatus,
-        skjema.felter.begrunnelse.valideringsstatus,
-    ];
-
-    useEffect(() => {
-        if (
-            valideringsstatuser.some(
-                valideringsstatus => valideringsstatus === Valideringsstatus.IKKE_VALIDERT
-            )
-        ) {
-            validerAlleSynligeFelter();
-        }
-    }, [valideringsstatuser]);
+        const opprinneligVedtaksdato = korrigertVedtak
+            ? new Date(korrigertVedtak.vedtaksdato)
+            : undefined;
+        skjema.felter.vedtaksdato.validerOgSettFelt(opprinneligVedtaksdato);
+    }, []);
 
     const korrigertVedtakURL = `/familie-ba-sak/api/korrigertvedtak/behandling/${behandlingId}`;
 
@@ -81,11 +65,11 @@ export const useKorrigerVedtakSkjemaContext = ({
         if (kanSendeSkjema()) {
             settVisfeilmeldinger(false);
             settSubmitRessurs(byggHenterRessurs());
-            onSubmit(
+            onSubmit<IRestKorrigertVedtak>(
                 {
                     method: 'POST',
                     data: {
-                        vedtaksdato: skjema.felter.vedtaksdato.verdi,
+                        vedtaksdato: formatterDateTilIsoString(skjema.felter.vedtaksdato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
                     url: korrigertVedtakURL,
@@ -138,10 +122,7 @@ export const useKorrigerVedtakSkjemaContext = ({
         skjema,
         valideringErOk,
         lagreKorrigertVedtak,
-        nullstillSkjema,
         restFeil,
         angreKorrigering,
-        settVisfeilmeldinger,
-        settRestFeil,
     };
 };

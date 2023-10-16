@@ -1,32 +1,18 @@
 import * as React from 'react';
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
-import type { ISODateString } from '@navikt/familie-datovelger';
+import { BodyLong, Button, Fieldset, Modal } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
 import type { IRestKorrigertVedtak } from '../../../../typer/vedtak';
-import { DatoformatNorsk } from '../../../../utils/formatter';
+import Datovelger from '../../../Felleskomponenter/Datovelger';
 
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0;
-`;
-
-const baseSkjemaelementStyle = css`
-    margin-bottom: 1.5rem;
-`;
-
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    ${baseSkjemaelementStyle}
-`;
-
-const StyledFamilieTextarea = styled(FamilieTextarea)`
-    ${baseSkjemaelementStyle}
 `;
 
 interface IProps {
@@ -70,37 +56,33 @@ const KorrigerVedtakModal = ({
                         saken din på nytt.
                     </li>
                 </ul>
-                <StyledFamilieDatovelger
-                    {...skjema.felter.vedtaksdato?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    id={'korriger-vedtak-dato'}
-                    label={'Vedtaksdato'}
-                    erLesesvisning={erLesevisning}
-                    value={
-                        skjema.felter.vedtaksdato?.verdi !== null
-                            ? skjema.felter.vedtaksdato?.verdi
-                            : undefined
-                    }
-                    placeholder={DatoformatNorsk.DATO}
-                    onChange={(dato?: ISODateString) =>
-                        skjema.felter.vedtaksdato?.validerOgSettFelt(dato)
-                    }
-                />
-                <StyledFamilieTextarea
-                    {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    id={'korriger-vedtak-begrunnelse'}
-                    label={'Begrunnelse (valgfri)'}
-                    description={'Begrunn hva som er gjort feil i tidligere vedtak'}
-                    erLesevisning={erLesevisning}
-                    value={skjema.felter.begrunnelse.verdi}
-                    onChange={changeEvent =>
-                        skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
-                    }
-                />
-                {restFeil && (
-                    <Alert variant="error" style={{ marginBottom: '1.5rem' }} inline>
-                        {restFeil}
-                    </Alert>
-                )}
+                <Fieldset
+                    legend="Korriger vedtak"
+                    hideLegend
+                    errorPropagation={false}
+                    error={skjema.visFeilmeldinger && restFeil}
+                >
+                    <Datovelger
+                        felt={skjema.felter.vedtaksdato}
+                        label={'Vedtaksdato'}
+                        readOnly={erLesevisning}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        kanKunVelgeFortid
+                    />
+                    <FamilieTextarea
+                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        id={'korriger-vedtak-begrunnelse'}
+                        label={'Begrunnelse (valgfri)'}
+                        description={'Begrunn hva som er gjort feil i tidligere vedtak'}
+                        erLesevisning={erLesevisning}
+                        value={skjema.felter.begrunnelse.verdi}
+                        onChange={changeEvent =>
+                            skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
+                        }
+                    />
+                </Fieldset>
             </Modal.Body>
             <Modal.Footer>
                 {!erLesevisning && (
