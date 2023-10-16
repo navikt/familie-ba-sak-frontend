@@ -25,7 +25,7 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
     >({
         felter: {
             frist: useFelt<Date | undefined>({
-                verdi: settPåVentFrist ?? standardfrist,
+                verdi: undefined,
                 valideringsfunksjon: validerGyldigDato,
             }),
             årsak: useFelt<SettPåVentÅrsak | undefined>({
@@ -52,7 +52,7 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
         } else {
             fyllInnStandardverdier();
         }
-    }, [modalVises]);
+    }, []);
 
     return settPåVentSkjema;
 };
