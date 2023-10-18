@@ -7,9 +7,10 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './UseEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { Datoformat, formaterIsoDato } from '../../../../../utils/formatter';
+import { formatterDate } from '../../../../../utils/dato';
+import { Datoformat } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDatovelgerWrapper';
+import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
 const Feltmargin = styled.div`
     margin: 1.5rem 0 2rem;
@@ -25,23 +26,18 @@ const StyledFieldset = styled(Fieldset)`
 `;
 
 interface IProps {
-    visModal: boolean;
     lukkModal: () => void;
     behandlingId: number;
 }
 
-export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
-    visModal,
-    lukkModal,
-    behandlingId,
-}) => {
+export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, behandlingId }) => {
     const erLesevisning = useBehandling().vurderErLesevisning();
     const { endringstidspunktRessurs, endringstidspunkt, skjema, oppdaterEndringstidspunkt } =
-        useEndringstidspunkt({ behandlingId, visModal, lukkModal });
+        useEndringstidspunkt({ behandlingId, lukkModal });
 
     return (
         <Modal
-            open={visModal}
+            open
             onClose={lukkModal}
             width={'35rem'}
             header={{ heading: 'Oppdater endringstidspunkt', size: 'medium' }}
@@ -53,9 +49,15 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                     oppdatere endringstidspunktet tilbake i tid.
                 </StyledAlert>
 
-                <Label size="small">Endringstidspunkt</Label>
+                <Label size="medium">Endringstidspunkt</Label>
                 {endringstidspunktRessurs.status === RessursStatus.SUKSESS ? (
-                    <BodyShort>{formaterIsoDato(endringstidspunkt, Datoformat.DATO)}</BodyShort>
+                    <BodyShort>
+                        {formatterDate({
+                            dato: endringstidspunkt,
+                            datoformat: Datoformat.DATO,
+                            defaultString: 'Ingen dato satt',
+                        })}
+                    </BodyShort>
                 ) : (
                     <ErrorMessage>
                         Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt
@@ -70,14 +72,12 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({
                     hideLegend
                 >
                     <Feltmargin>
-                        <FamilieDatovelgerWrapper
-                            {...skjema.felter.endringstidspunkt.hentNavInputProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            value={skjema.felter.endringstidspunkt.verdi}
+                        <Datovelger
+                            felt={skjema.felter.endringstidspunkt}
                             label={'Nytt endringstidspunkt'}
-                            placeholder={'DD.MM.ÅÅÅÅ'}
-                            erLesesvisning={erLesevisning}
+                            readOnly={erLesevisning}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            kanKunVelgeFortid
                         />
                     </Feltmargin>
                 </StyledFieldset>

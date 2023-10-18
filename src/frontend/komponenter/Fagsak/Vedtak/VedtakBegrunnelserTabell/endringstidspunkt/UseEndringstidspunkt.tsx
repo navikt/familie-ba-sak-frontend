@@ -13,14 +13,18 @@ import {
 import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
+import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
+import {
+    formatterDateTilIsoString,
+    formatterDateTilIsoStringEllerUndefined,
+} from '../../../../../utils/dato';
 
 interface IProps {
-    visModal: boolean;
     lukkModal: () => void;
     behandlingId: number;
 }
 
-export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IProps) {
+export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
     const { request } = useHttp();
     const [endringstidspunktRessurs, settEndringstidspunktRessurs] = useState(
         byggHenterRessurs<ISODateString | undefined>()
@@ -33,22 +37,26 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
             påvirkerSystemLaster: true,
         });
 
-    const endringstidspunkt = hentDataFraRessurs(endringstidspunktRessurs);
+    const endringstidspunktFraRessurs = hentDataFraRessurs(endringstidspunktRessurs);
 
-    const { skjema, kanSendeSkjema, onSubmit } = useOppdaterEndringstidspunktSkjema(
-        endringstidspunkt,
-        visModal
-    );
+    const endringstidspunkt = endringstidspunktFraRessurs
+        ? new Date(endringstidspunktFraRessurs)
+        : undefined;
+
+    const { skjema, kanSendeSkjema, onSubmit } =
+        useOppdaterEndringstidspunktSkjema(endringstidspunkt);
 
     const { hentVedtaksperioder } = useVedtaksperioder();
 
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {
-            onSubmit(
+            onSubmit<IRestOverstyrtEndringstidspunkt>(
                 {
                     method: 'PUT',
                     data: {
-                        overstyrtEndringstidspunkt: skjema.felter.endringstidspunkt.verdi,
+                        overstyrtEndringstidspunkt: formatterDateTilIsoString(
+                            skjema.felter.endringstidspunkt.verdi
+                        ),
                         behandlingId,
                     },
                     url: `/familie-ba-sak/api/vedtaksperioder/endringstidspunkt`,
@@ -59,7 +67,11 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
                         lukkModal();
                         hentVedtaksperioder();
                         settEndringstidspunktRessurs(
-                            byggSuksessRessurs(skjema.felter.endringstidspunkt.verdi)
+                            byggSuksessRessurs(
+                                formatterDateTilIsoStringEllerUndefined(
+                                    skjema.felter.endringstidspunkt.verdi
+                                )
+                            )
                         );
                     }
                 }
