@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { useHttp } from '@navikt/familie-http';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggHenterRessurs,
@@ -10,13 +11,13 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
 import {
     formatterDateTilIsoString,
     formatterDateTilIsoStringEllerUndefined,
+    validerGyldigDato,
 } from '../../../../../utils/dato';
 
 interface IProps {
@@ -34,7 +35,6 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
         request<void, ISODateString>({
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${behandlingId}/endringstidspunkt`,
-            påvirkerSystemLaster: true,
         });
 
     const endringstidspunktFraRessurs = hentDataFraRessurs(endringstidspunktRessurs);
@@ -43,8 +43,20 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
         ? new Date(endringstidspunktFraRessurs)
         : undefined;
 
-    const { skjema, kanSendeSkjema, onSubmit } =
-        useOppdaterEndringstidspunktSkjema(endringstidspunkt);
+    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
+        {
+            endringstidspunkt: Date | undefined;
+        },
+        IBehandling
+    >({
+        felter: {
+            endringstidspunkt: useFelt<Date | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: validerGyldigDato,
+            }),
+        },
+        skjemanavn: 'Oppdater første endringstidspunkt',
+    });
 
     const { hentVedtaksperioder } = useVedtaksperioder();
 

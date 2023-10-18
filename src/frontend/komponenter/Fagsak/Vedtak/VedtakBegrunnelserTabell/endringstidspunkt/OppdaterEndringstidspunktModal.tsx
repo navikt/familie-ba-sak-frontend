@@ -2,7 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, ErrorMessage, Fieldset, Label, Modal } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    ErrorMessage,
+    Fieldset,
+    Label,
+    Loader,
+    Modal,
+} from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './UseEndringstidspunkt';
@@ -12,17 +21,13 @@ import { Datoformat } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger';
 
-const Feltmargin = styled.div`
-    margin: 1.5rem 0 2rem;
-`;
-
 const StyledAlert = styled(Alert)`
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 `;
 
 const StyledFieldset = styled(Fieldset)`
-    margin-top: 3rem;
+    margin-top: 2rem;
 `;
 
 interface IProps {
@@ -50,7 +55,12 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                 </StyledAlert>
 
                 <Label size="medium">Endringstidspunkt</Label>
-                {endringstidspunktRessurs.status === RessursStatus.SUKSESS ? (
+                {endringstidspunktRessurs.status === RessursStatus.HENTER && (
+                    <div>
+                        <Loader />
+                    </div>
+                )}
+                {endringstidspunktRessurs.status === RessursStatus.SUKSESS && (
                     <BodyShort>
                         {formatterDate({
                             dato: endringstidspunkt,
@@ -58,7 +68,10 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                             defaultString: 'Ingen dato satt',
                         })}
                     </BodyShort>
-                ) : (
+                )}
+                {(endringstidspunktRessurs.status === RessursStatus.FEILET ||
+                    endringstidspunktRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    endringstidspunktRessurs.status === RessursStatus.IKKE_TILGANG) && (
                     <ErrorMessage>
                         Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt
                         brukerstøtte.
@@ -71,15 +84,13 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                     legend="Nytt endringstidspunkt"
                     hideLegend
                 >
-                    <Feltmargin>
-                        <Datovelger
-                            felt={skjema.felter.endringstidspunkt}
-                            label={'Nytt endringstidspunkt'}
-                            readOnly={erLesevisning}
-                            visFeilmeldinger={skjema.visFeilmeldinger}
-                            kanKunVelgeFortid
-                        />
-                    </Feltmargin>
+                    <Datovelger
+                        felt={skjema.felter.endringstidspunkt}
+                        label={'Nytt endringstidspunkt'}
+                        readOnly={erLesevisning}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        kanKunVelgeFortid
+                    />
                 </StyledFieldset>
             </Modal.Body>
             <Modal.Footer>
