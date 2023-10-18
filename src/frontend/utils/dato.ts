@@ -19,7 +19,7 @@ export const formatterDate = ({ dato, datoformat, defaultString }: FormatterProp
 };
 
 export const formatterDateTilIsoString = (dato?: Date): string =>
-    dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : '';
+    formatterDate({ dato: dato, datoformat: Datoformat.ISO_DAG, defaultString: '' });
 
 export const formatterDateTilIsoStringEllerUndefined = (dato?: Date): string | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
