@@ -14,7 +14,7 @@ import {
 } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useEndringstidspunkt } from './UseEndringstidspunkt';
+import { useEndringstidspunkt } from './useEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { formatterDate } from '../../../../../utils/dato';
 import { Datoformat } from '../../../../../utils/formatter';
