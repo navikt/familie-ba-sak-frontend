@@ -35,6 +35,8 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
     const formattertIdent = formaterIdent(person.personIdent);
     const { vurderErLesevisning } = useBehandling();
 
+    const erLesevisning = vurderErLesevisning();
+
     return (
         <div className={'personinformasjon'}>
             {somOverskrift && (
@@ -70,7 +72,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                             <DødsfallTag dødsfallDato={person.dødsfallDato} />
                         </>
                     )}
-                    {!person.dødsfallDato?.length && (
+                    {!person.dødsfallDato?.length && !erLesevisning && (
                         <Dropdown>
                             <Button
                                 aria-label="Åpne valgmeny"
@@ -81,7 +83,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                             <StyledDropdownMeny placement={'right'}>
                                 <Dropdown.Menu.List>
                                     <RegistrerDødsfallDato
-                                        erLesevisning={vurderErLesevisning()}
+                                        erLesevisning={erLesevisning}
                                         person={person}
                                     />
                                 </Dropdown.Menu.List>
