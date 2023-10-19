@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { addDays, format, startOfDay, subDays } from 'date-fns';
 
@@ -63,7 +63,7 @@ const Datovelger = ({
         }
     };
 
-    const { datepickerProps, inputProps } = useDatepicker({
+    const { datepickerProps, inputProps, setSelected } = useDatepicker({
         defaultSelected: felt.verdi,
         onDateChange: (dato?: Date) => {
             felt.validerOgSettFelt(dato);
@@ -85,6 +85,10 @@ const Datovelger = ({
             }
         },
     });
+
+    useEffect(() => {
+        setSelected(felt.verdi);
+    }, [felt.verdi]);
 
     const feilmeldingForDatoFørMinDato = () => {
         if (kanKunVelgeFremtid) {
