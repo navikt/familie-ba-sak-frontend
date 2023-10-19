@@ -14,22 +14,92 @@ env:
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
-  build:
-    name: Build
+  eslint:
+    name: 🛠️ ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔧💻 Setup node
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: yarn
           registry-url: "https://npm.pkg.github.com"
-      - uses: ./.github/yarn-cache
-      - name: Yarn install
+
+      - name: 🧶📥 Yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
-      - name: Yarn build
+
+      - name: 🔬 Kjør sjekk med esLint
+        run: yarn lint
+
+  lint:
+    name: ✨ Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔧💻 Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: yarn
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --prefer-offline --frozen-lockfile
+
+      - name: 🔬 Kjør sjekk med prettier
+        run: yarn prettier-check
+
+  typecheck:
+    name: ʦ TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔧💻 Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: yarn
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --prefer-offline --frozen-lockfile
+
+      - name: 🔎 Type check
+        run: yarn typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔧💻 Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: yarn
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: 🧶📥 Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --prefer-offline --frozen-lockfile
+
+      - name: 🧶🏗️ Yarn build
         run: |
           yarn build
           yarn test

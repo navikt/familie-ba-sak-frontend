@@ -18,9 +18,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: npm
+          cache: yarn
           registry-url: "https://npm.pkg.github.com"
-      - uses: ./.github/yarn-cache
       - name: Yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
