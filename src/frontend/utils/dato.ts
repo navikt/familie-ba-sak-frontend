@@ -14,8 +14,8 @@ interface FormatterProps {
     datoformat: Datoformat;
     defaultString?: string;
 }
-export const formatterDate = ({ dato, datoformat, defaultString }: FormatterProps): string => {
-    return dato && isValid(dato) ? format(dato, datoformat) : defaultString ?? '';
+export const formatterDate = ({ dato, datoformat, defaultString = '' }: FormatterProps): string => {
+    return dato && isValid(dato) ? format(dato, datoformat) : defaultString;
 };
 
 export const formatterDateTilIsoString = (dato?: Date): string =>
