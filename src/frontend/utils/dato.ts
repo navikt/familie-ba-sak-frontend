@@ -9,8 +9,17 @@ export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 
 export const dagensDato = () => startOfToday();
 
+interface FormatterProps {
+    dato?: Date;
+    datoformat: Datoformat;
+    defaultString?: string;
+}
+export const formatterDate = ({ dato, datoformat, defaultString = '' }: FormatterProps): string => {
+    return dato && isValid(dato) ? format(dato, datoformat) : defaultString;
+};
+
 export const formatterDateTilIsoString = (dato?: Date): string =>
-    dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : '';
+    formatterDate({ dato: dato, datoformat: Datoformat.ISO_DAG, defaultString: '' });
 
 export const formatterDateTilIsoStringEllerUndefined = (dato?: Date): string | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;

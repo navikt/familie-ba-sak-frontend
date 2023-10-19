@@ -25,7 +25,6 @@ const EndreEndringstidspunkt: React.FC<Props> = ({ åpenBehandling }) => {
 
             {visModal && (
                 <OppdaterEndringstidspunktModal
-                    visModal={visModal}
                     lukkModal={() => settVisModal(false)}
                     behandlingId={åpenBehandling.behandlingId}
                 />

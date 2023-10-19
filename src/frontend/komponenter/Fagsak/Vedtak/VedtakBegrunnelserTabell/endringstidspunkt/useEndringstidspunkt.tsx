@@ -2,25 +2,21 @@ import { useEffect, useState } from 'react';
 
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { useHttp } from '@navikt/familie-http';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggHenterRessurs,
-    byggSuksessRessurs,
-    hentDataFraRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggHenterRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useOppdaterEndringstidspunktSkjema } from './useOppdaterEndringstidspunktSkjema';
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
+import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../../../../utils/dato';
 
 interface IProps {
-    visModal: boolean;
     lukkModal: () => void;
     behandlingId: number;
 }
 
-export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IProps) {
+export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
     const { request } = useHttp();
     const [endringstidspunktRessurs, settEndringstidspunktRessurs] = useState(
         byggHenterRessurs<ISODateString | undefined>()
@@ -30,25 +26,40 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
         request<void, ISODateString>({
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${behandlingId}/endringstidspunkt`,
-            påvirkerSystemLaster: true,
         });
 
-    const endringstidspunkt = hentDataFraRessurs(endringstidspunktRessurs);
+    const endringstidspunktFraRessurs = hentDataFraRessurs(endringstidspunktRessurs);
 
-    const { skjema, kanSendeSkjema, onSubmit } = useOppdaterEndringstidspunktSkjema(
-        endringstidspunkt,
-        visModal
-    );
+    const endringstidspunkt = endringstidspunktFraRessurs
+        ? new Date(endringstidspunktFraRessurs)
+        : undefined;
+
+    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
+        {
+            endringstidspunkt: Date | undefined;
+        },
+        IBehandling
+    >({
+        felter: {
+            endringstidspunkt: useFelt<Date | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: validerGyldigDato,
+            }),
+        },
+        skjemanavn: 'Oppdater første endringstidspunkt',
+    });
 
     const { hentVedtaksperioder } = useVedtaksperioder();
 
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {
-            onSubmit(
+            onSubmit<IRestOverstyrtEndringstidspunkt>(
                 {
                     method: 'PUT',
                     data: {
-                        overstyrtEndringstidspunkt: skjema.felter.endringstidspunkt.verdi,
+                        overstyrtEndringstidspunkt: formatterDateTilIsoString(
+                            skjema.felter.endringstidspunkt.verdi
+                        ),
                         behandlingId,
                     },
                     url: `/familie-ba-sak/api/vedtaksperioder/endringstidspunkt`,
@@ -58,9 +69,6 @@ export function useEndringstidspunkt({ behandlingId, visModal, lukkModal }: IPro
                     if (response.status === RessursStatus.SUKSESS) {
                         lukkModal();
                         hentVedtaksperioder();
-                        settEndringstidspunktRessurs(
-                            byggSuksessRessurs(skjema.felter.endringstidspunkt.verdi)
-                        );
                     }
                 }
             );

@@ -18,6 +18,7 @@ interface IProps {
     kanKunVelgeFortid?: boolean;
     kanKunVelgeFremtid?: boolean;
     datoMåFyllesUt?: boolean;
+    readOnly?: boolean;
 }
 
 enum Feilmelding {
@@ -39,6 +40,7 @@ const Datovelger = ({
     kanKunVelgeFortid = false,
     kanKunVelgeFremtid = false,
     datoMåFyllesUt = true,
+    readOnly = false,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>(undefined);
 
@@ -112,9 +114,10 @@ const Datovelger = ({
     return (
         <DatePicker dropdownCaption {...datepickerProps}>
             <DatePicker.Input
+                {...inputProps}
                 label={label}
                 placeholder={'DD.MM.ÅÅÅÅ'}
-                {...inputProps}
+                readOnly={readOnly}
                 error={
                     error && visFeilmeldinger
                         ? feilmeldinger[error]

@@ -1,6 +1,7 @@
 import { ytelsetype, YtelseType } from './beregning';
 import type { IGrunnlagPerson } from './person';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
+import type { IsoDatoString } from '../utils/dato';
 import type { FamilieIsoDate } from '../utils/kalender';
 
 export interface IVedtaksperiodeMedBegrunnelser {
@@ -74,6 +75,11 @@ export interface IUtbetalingsperiodeDetalj {
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
     erPåvirketAvEndring: boolean;
+}
+
+export interface IRestOverstyrtEndringstidspunkt {
+    overstyrtEndringstidspunkt: IsoDatoString;
+    behandlingId: number;
 }
 
 export const hentVedtaksperiodeTittel = (
