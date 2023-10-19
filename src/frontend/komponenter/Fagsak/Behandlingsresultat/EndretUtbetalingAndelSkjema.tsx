@@ -81,18 +81,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    const {
-        endretUtbetalingAndel,
-        skjema,
-        kanSendeSkjema,
-        onSubmit,
-        nullstillSkjema,
-        hentSkjemaData,
-    } = useEndretUtbetalingAndel();
-
-    useEffect(() => {
-        nullstillSkjema();
-    }, [endretUtbetalingAndel]);
+    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, hentSkjemaData } =
+        useEndretUtbetalingAndel();
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
         if (kanSendeSkjema()) {

@@ -34,7 +34,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     : endretUtbetalingAndel.prosent > 0,
         });
 
-        const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
+        const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
             {
                 person: string | undefined;
                 fom: FamilieIsoDate | undefined;
@@ -162,7 +162,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             skjema,
             kanSendeSkjema,
             onSubmit,
-            nullstillSkjema,
             hentSkjemaData,
         };
     }
