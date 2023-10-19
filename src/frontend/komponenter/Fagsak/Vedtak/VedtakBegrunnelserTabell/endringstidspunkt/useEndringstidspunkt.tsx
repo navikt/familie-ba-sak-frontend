@@ -4,21 +4,12 @@ import type { ISODateString } from '@navikt/familie-datovelger';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggHenterRessurs,
-    byggSuksessRessurs,
-    hentDataFraRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggHenterRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
-import {
-    formatterDateTilIsoString,
-    formatterDateTilIsoStringEllerUndefined,
-    validerGyldigDato,
-} from '../../../../../utils/dato';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../../../../utils/dato';
 
 interface IProps {
     lukkModal: () => void;
@@ -78,13 +69,6 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
                     if (response.status === RessursStatus.SUKSESS) {
                         lukkModal();
                         hentVedtaksperioder();
-                        settEndringstidspunktRessurs(
-                            byggSuksessRessurs(
-                                formatterDateTilIsoStringEllerUndefined(
-                                    skjema.felter.endringstidspunkt.verdi
-                                )
-                            )
-                        );
                     }
                 }
             );
