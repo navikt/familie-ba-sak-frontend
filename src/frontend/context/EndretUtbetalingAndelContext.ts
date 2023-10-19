@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import createUseContext from 'constate';
 
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -6,6 +8,7 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
+import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import type { FamilieIsoDate } from '../utils/kalender';
 import { erIsoStringGyldig } from '../utils/kalender';
 
@@ -38,7 +41,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 tom: FamilieIsoDate | undefined;
                 periodeSkalUtbetalesTilSøker: boolean | undefined;
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
-                søknadstidspunkt: FamilieIsoDate | undefined;
+                søknadstidspunkt: Date | undefined;
                 avtaletidspunktDeltBosted: FamilieIsoDate | undefined;
                 fullSats: boolean | undefined;
                 begrunnelse: string | undefined;
@@ -63,12 +66,9 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 }),
                 periodeSkalUtbetalesTilSøker: periodeSkalUtbetalesTilSøkerFelt,
                 årsak: årsakFelt,
-                søknadstidspunkt: useFelt<FamilieIsoDate | undefined>({
-                    verdi: endretUtbetalingAndel.søknadstidspunkt,
-                    valideringsfunksjon: felt =>
-                        erIsoStringGyldig(felt.verdi)
-                            ? ok(felt)
-                            : feil(felt, 'Du må velge et søknadstidspunkt.'),
+                søknadstidspunkt: useFelt<Date | undefined>({
+                    verdi: undefined,
+                    valideringsfunksjon: validerGyldigDato,
                 }),
                 avtaletidspunktDeltBosted: useFelt<FamilieIsoDate | undefined>({
                     verdi: endretUtbetalingAndel.avtaletidspunktDeltBosted,
@@ -114,6 +114,14 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             skjemanavn: 'Endre utbetalingsperiode',
         });
 
+        useEffect(() => {
+            skjema.felter.søknadstidspunkt.validerOgSettFelt(
+                endretUtbetalingAndel.søknadstidspunkt
+                    ? new Date(endretUtbetalingAndel.søknadstidspunkt)
+                    : undefined
+            );
+        }, [endretUtbetalingAndel]);
+
         const hentProsentForEndretUtbetaling = () => {
             return (
                 (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
@@ -139,7 +147,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 tom: tom && tom.verdi,
                 årsak: årsak && årsak.verdi,
                 begrunnelse: begrunnelse.verdi,
-                søknadstidspunkt: søknadstidspunkt.verdi,
+                søknadstidspunkt: formatterDateTilIsoStringEllerUndefined(søknadstidspunkt.verdi),
                 avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
                 erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
             };
