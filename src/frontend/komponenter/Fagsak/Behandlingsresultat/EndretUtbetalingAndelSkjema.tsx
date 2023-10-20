@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset, Select } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -27,15 +26,12 @@ import {
     årsaker,
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
-import { DatoformatNorsk, lagPersonLabel } from '../../../utils/formatter';
+import { lagPersonLabel } from '../../../utils/formatter';
 import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import Datovelger from '../../Felleskomponenter/Datovelger';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
-import {
-    StyledFamilieDatovelger,
-    StyledErrorMessage,
-} from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const KnapperekkeVenstre = styled.div`
     display: flex;
@@ -85,21 +81,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    const {
-        endretUtbetalingAndel,
-        skjema,
-        kanSendeSkjema,
-        onSubmit,
-        nullstillSkjema,
-        hentSkjemaData,
-    } = useEndretUtbetalingAndel();
-
-    useEffect(() => {
-        nullstillSkjema();
-        skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
-            endretUtbetalingAndel.avtaletidspunktDeltBosted
-        );
-    }, [endretUtbetalingAndel]);
+    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, hentSkjemaData } =
+        useEndretUtbetalingAndel();
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
         if (kanSendeSkjema()) {
@@ -288,53 +271,23 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Feltmargin>
-                    <StyledFamilieDatovelger
-                        {...skjema.felter.søknadstidspunkt.hentNavBaseSkjemaProps(
-                            skjema.visFeilmeldinger
-                        )}
-                        feil={skjema.visFeilmeldinger && skjema.felter.søknadstidspunkt.feilmelding}
-                        value={
-                            skjema.felter.søknadstidspunkt.verdi !== null
-                                ? skjema.felter.søknadstidspunkt.verdi
-                                : undefined
-                        }
-                        label={<Label>Søknadstidspunkt</Label>}
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.søknadstidspunkt.validerOgSettFelt(dato)
-                        }
-                        erLesesvisning={erLesevisning}
+                    <Datovelger
+                        felt={skjema.felter.søknadstidspunkt}
+                        label={'Søknadstidspunkt'}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        readOnly={erLesevisning}
+                        kanKunVelgeFortid
                     />
                 </Feltmargin>
 
                 {skjema.felter.avtaletidspunktDeltBosted.erSynlig && (
                     <Feltmargin>
-                        <StyledFamilieDatovelger
-                            {...skjema.felter.avtaletidspunktDeltBosted.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            feil={
-                                !!skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
-                                skjema.visFeilmeldinger
-                            }
-                            value={
-                                skjema.felter.avtaletidspunktDeltBosted.verdi !== null
-                                    ? skjema.felter.avtaletidspunktDeltBosted.verdi
-                                    : undefined
-                            }
-                            label={<Label>Avtale om delt bosted</Label>}
-                            placeholder={DatoformatNorsk.DATO}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(dato)
-                            }
-                            erLesesvisning={erLesevisning}
+                        <Datovelger
+                            felt={skjema.felter.avtaletidspunktDeltBosted}
+                            label={'Avtale om delt bosted'}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            readOnly={erLesevisning}
                         />
-                        {skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
-                            skjema.visFeilmeldinger && (
-                                <StyledErrorMessage>
-                                    {skjema.felter.avtaletidspunktDeltBosted.feilmelding}
-                                </StyledErrorMessage>
-                            )}
                     </Feltmargin>
                 )}
                 {skjema.felter.fullSats.erSynlig && (

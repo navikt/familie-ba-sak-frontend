@@ -1,7 +1,7 @@
 import type { ISODateString } from '@navikt/familie-datovelger';
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { FamilieIsoDate } from '../utils/kalender';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestEndretUtbetalingAndel {
     id?: number;
@@ -10,8 +10,8 @@ export interface IRestEndretUtbetalingAndel {
     fom?: ISODateString;
     tom?: ISODateString;
     begrunnelse?: string;
-    søknadstidspunkt?: FamilieIsoDate;
-    avtaletidspunktDeltBosted?: FamilieIsoDate;
+    søknadstidspunkt?: IsoDatoString;
+    avtaletidspunktDeltBosted?: IsoDatoString;
     årsak?: IEndretUtbetalingAndelÅrsak;
     erTilknyttetAndeler?: boolean;
 }
@@ -59,11 +59,7 @@ export const satsTilOption = (fullSats: boolean): SatsOption => ({
 });
 
 export const optionTilsats = (satsLabel: string): boolean => {
-    if (satsLabel === IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()) {
-        return true;
-    } else {
-        return false;
-    }
+    return satsLabel === IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf();
 };
 
 export const satser: IEndretUtbetalingAndelFullSats[] = Object.keys(
