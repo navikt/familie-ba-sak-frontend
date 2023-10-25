@@ -1,21 +1,21 @@
-import type { FamilieIsoDate } from '../utils/kalender';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestFeilutbetaltValuta {
     id: number;
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: IsoDatoString;
+    tom: IsoDatoString;
     feilutbetaltBeløp: number;
     erPerMåned?: boolean;
 }
 
 export interface IRestNyFeilutbetaltValutaPeriode {
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: IsoDatoString;
+    tom: IsoDatoString;
     feilutbetaltBeløp: number;
 }
 
 export interface IFeilutbetaltValutaSkjemaFelter {
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: Date | undefined;
+    tom: Date | undefined;
     feilutbetaltBeløp: string;
 }

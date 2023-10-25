@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -12,18 +14,7 @@ import type {
     IRestFeilutbetaltValuta,
 } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
-import type { FamilieIsoDate } from '../../../../utils/kalender';
-import {
-    erIsoStringGyldig,
-    kalenderDato,
-    sisteDagIInneværendeMåned,
-} from '../../../../utils/kalender';
-import {
-    erFør,
-    kalenderDatoMedFallback,
-    TIDENES_ENDE,
-    TIDENES_MORGEN,
-} from '../../../../utils/kalender';
+import { formatterDateTilIsoString, validerGyldigDato } from '../../../../utils/dato';
 import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
@@ -31,49 +22,6 @@ interface IProps {
     feilutbetaltValuta?: IRestFeilutbetaltValuta;
     settFeilmelding: (feilmelding: string) => void;
 }
-
-const datoErFremITid = (dato: FamilieIsoDate): boolean => {
-    const nå = sisteDagIInneværendeMåned();
-
-    return erFør(nå, kalenderDato(dato));
-};
-
-const validerFom = (felt: FeltState<FamilieIsoDate>) => {
-    const fom = felt.verdi;
-
-    if (fom === '') return feil(felt, 'Du må velge en f.o.m-dato');
-    if (!erIsoStringGyldig(fom)) {
-        return feil(felt, 'Du må velge en gyldig f.o.m-dato');
-    }
-    if (datoErFremITid(fom)) {
-        return feil(felt, 'F.o.m kan ikke være senere enn inneværende måned');
-    }
-    return ok(felt);
-};
-
-const validerTom = (felt: FeltState<FamilieIsoDate>, fom: FamilieIsoDate) => {
-    const tom = felt.verdi;
-
-    if (tom === '') return feil(felt, 'Du må velge en t.o.m-dato');
-    if (!erIsoStringGyldig(tom)) {
-        return feil(felt, 'Du må velge en gyldig t.o.m-dato');
-    }
-    if (datoErFremITid(tom)) {
-        return feil(felt, 'T.o.m. kan ikke være senere enn inneværende måned');
-    }
-
-    if (erIsoStringGyldig(fom)) {
-        const fomKalenderDato = kalenderDatoMedFallback(fom, TIDENES_MORGEN);
-        const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
-        const fomDatoErFørTomDato = erFør(fomKalenderDato, tomKalenderDato);
-
-        if (!fomDatoErFørTomDato) {
-            return feil(felt, 'T.o.m. må være senere enn f.o.m');
-        }
-    }
-
-    return ok(felt);
-};
 
 const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
     if (felt.verdi === '') {
@@ -88,9 +36,9 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
     const { settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
 
-    const fomFelt = useFelt<FamilieIsoDate>({
-        verdi: feilutbetaltValuta?.fom ?? '',
-        valideringsfunksjon: validerFom,
+    const fomFelt = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
     });
 
     const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema, valideringErOk } = useSkjema<
@@ -99,13 +47,12 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
     >({
         felter: {
             fom: fomFelt,
-            tom: useFelt<FamilieIsoDate>({
-                verdi: feilutbetaltValuta?.tom ?? '',
+            tom: useFelt<Date | undefined>({
+                verdi: undefined,
                 avhengigheter: {
                     fom: fomFelt,
                 },
-                valideringsfunksjon: (felt, avhengigheter) =>
-                    validerTom(felt, avhengigheter?.fom.verdi as FamilieIsoDate),
+                valideringsfunksjon: validerGyldigDato,
             }),
             feilutbetaltBeløp: useFelt<string>({
                 verdi: feilutbetaltValuta?.feilutbetaltBeløp.toString() ?? '',
@@ -115,6 +62,13 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjemanavn: 'Feilutbetalt valuta',
     });
 
+    useEffect(() => {
+        if (feilutbetaltValuta !== undefined) {
+            skjema.felter.fom.validerOgSettFelt(new Date(feilutbetaltValuta.fom));
+            skjema.felter.tom.validerOgSettFelt(new Date(feilutbetaltValuta.tom));
+        }
+    }, [feilutbetaltValuta]);
+
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
             onSubmit<IRestNyFeilutbetaltValutaPeriode>(
@@ -122,8 +76,8 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                     method: 'POST',
                     url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}`,
                     data: {
-                        fom: skjema.felter.fom?.verdi,
-                        tom: skjema.felter.tom?.verdi,
+                        fom: formatterDateTilIsoString(skjema.felter.fom?.verdi),
+                        tom: formatterDateTilIsoString(skjema.felter.tom?.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                         erPerMåned: toggles[ToggleNavn.feilutbetaltValutaPerMåned],
                     },
@@ -149,8 +103,8 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                     data: {
                         ...feilutbetaltValuta,
                         id: feilutbetaltValuta.id,
-                        fom: skjema.felter.fom.verdi,
-                        tom: skjema.felter.tom.verdi,
+                        fom: formatterDateTilIsoString(skjema.felter.fom.verdi),
+                        tom: formatterDateTilIsoString(skjema.felter.tom.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                         erPerMåned: toggles[ToggleNavn.feilutbetaltValutaPerMåned],
                     },

@@ -3,16 +3,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Label, TextField } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
-import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
+import Månedvelger, { DagIMåneden } from '../../../Felleskomponenter/Datovelger/Månedvelger';
 
 interface IFeilutbetaltValutaSkjemaProps {
     skjema: ISkjema<IFeilutbetaltValutaSkjemaFelter, IBehandling>;
@@ -47,33 +44,20 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
             <FlexDatoInputWrapper>
                 <Label size="small">Angi periode med feilutbetalt valuta</Label>
                 <FlexRowDiv style={{ gap: '2rem' }}>
-                    <FamilieDatovelger
-                        {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
-                        label="F.o.m"
-                        value={skjema.felter.fom.verdi}
-                        onChange={(dato?: ISODateString) => {
-                            skjema.felter.fom?.validerOgSettFelt(
-                                tilFørsteDagIMånedenHvisGyldigInput(dato)
-                            );
-                        }}
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
+                    <Månedvelger
+                        felt={skjema.felter.fom}
+                        label={'F.o.m'}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        dagIMåneden={DagIMåneden.FØRSTE_DAG}
+                        kanKunVelgeFortid
                     />
-                    <FamilieDatovelger
-                        {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id="fom-dato"
-                        label="T.o.m"
-                        value={skjema.felter.tom.verdi}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.tom?.validerOgSettFelt(
-                                tilSisteDagIMånedenHvisGyldigInput(dato)
-                            )
-                        }
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
+                    <Månedvelger
+                        felt={skjema.felter.tom}
+                        label={'T.o.m'}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        dagIMåneden={DagIMåneden.SISTE_DAG}
+                        tilhørendeFomFelt={skjema.felter.fom}
+                        kanKunVelgeFortid
                     />
                 </FlexRowDiv>
             </FlexDatoInputWrapper>

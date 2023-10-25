@@ -39,7 +39,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
+    const { skjema, oppdaterEksisterendePeriode, fjernPeriode, valideringErOk } =
         useFeilutbetaltValuta({
             behandlingId: behandlingId,
             feilutbetaltValuta,
@@ -47,11 +47,10 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         });
 
     useEffect(() => {
-        nullstillOgLukkSkjema();
+        lukkSkjema();
     }, [feilutbetaltValuta]);
 
-    const nullstillOgLukkSkjema = () => {
-        nullstillSkjema();
+    const lukkSkjema = () => {
         settErRadEkspandert(false);
     };
 
@@ -59,7 +58,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         if (erLesevisning) return;
 
         if (erRadEkspandert) {
-            nullstillOgLukkSkjema();
+            lukkSkjema();
         } else {
             settErRadEkspandert(true);
         }
@@ -80,7 +79,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                         >
                             Lagre periode
                         </Button>
-                        <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
+                        <Button size="small" variant="tertiary" onClick={lukkSkjema}>
                             Avbryt
                         </Button>
                     </FlexRowDiv>
