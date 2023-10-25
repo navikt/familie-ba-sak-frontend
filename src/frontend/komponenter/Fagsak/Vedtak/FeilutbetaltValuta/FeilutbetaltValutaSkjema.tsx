@@ -7,16 +7,12 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type {
-    IFeilutbetaltValutaSkjemaFelter,
-    IRestFeilutbetaltValuta,
-} from '../../../../typer/eøs-feilutbetalt-valuta';
+import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
 import { ToggleNavn } from '../../../../typer/toggles';
 import Månedvelger, { DagIMåneden } from '../../../Felleskomponenter/Datovelger/Månedvelger';
 
 interface IFeilutbetaltValutaSkjemaProps {
     skjema: ISkjema<IFeilutbetaltValutaSkjemaFelter, IBehandling>;
-    feilutbetaltValuta?: IRestFeilutbetaltValuta;
 }
 
 const FlexDatoInputWrapper = styled.div`
@@ -41,10 +37,8 @@ const StyledTextField = styled(TextField)`
 
 const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
     skjema,
-    feilutbetaltValuta,
 }) => {
     const { toggles } = useApp();
-    console.log(feilutbetaltValuta);
     return (
         <>
             <FlexDatoInputWrapper>
