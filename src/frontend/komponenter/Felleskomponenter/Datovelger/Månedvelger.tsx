@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { endOfMonth, isAfter, isSameDay, isValid, startOfDay, startOfMonth } from 'date-fns';
+import { endOfMonth, isAfter, isSameDay, startOfDay, startOfMonth } from 'date-fns';
 
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
@@ -65,7 +65,7 @@ const Månedvelger = ({
         }
     };
 
-    const { monthpickerProps, inputProps, selectedMonth, setSelected } = useMonthpicker({
+    const { monthpickerProps, inputProps, selectedMonth } = useMonthpicker({
         defaultSelected: felt.verdi,
         onMonthChange: (dato?: Date) => {
             if (dato === undefined) felt.nullstill();
@@ -91,12 +91,6 @@ const Månedvelger = ({
             }
         },
     });
-
-    useEffect(() => {
-        if (selectedMonth === undefined && isValid(felt.verdi)) {
-            setSelected(felt.verdi);
-        }
-    }, [felt.verdi]);
 
     useEffect(() => {
         if (

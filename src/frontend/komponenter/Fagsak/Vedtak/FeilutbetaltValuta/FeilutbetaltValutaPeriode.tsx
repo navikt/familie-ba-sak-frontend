@@ -39,12 +39,17 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, oppdaterEksisterendePeriode, fjernPeriode, valideringErOk } =
-        useFeilutbetaltValuta({
-            behandlingId: behandlingId,
-            feilutbetaltValuta,
-            settFeilmelding: settFeilmelding,
-        });
+    const {
+        skjema,
+        oppdaterEksisterendePeriode,
+        fjernPeriode,
+        valideringErOk,
+        tilbakestillSkjemafelterTilDefault,
+    } = useFeilutbetaltValuta({
+        behandlingId: behandlingId,
+        feilutbetaltValuta,
+        settFeilmelding: settFeilmelding,
+    });
 
     useEffect(() => {
         lukkSkjema();
@@ -52,6 +57,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
 
     const lukkSkjema = () => {
         settErRadEkspandert(false);
+        tilbakestillSkjemafelterTilDefault();
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
@@ -70,7 +76,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    <FeilutbetaltValutaSkjema skjema={skjema} />
+                    {erRadEkspandert && <FeilutbetaltValutaSkjema skjema={skjema} />}
                     <FlexRowDiv>
                         <Button
                             size="small"

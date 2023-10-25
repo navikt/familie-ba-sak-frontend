@@ -63,11 +63,16 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
     });
 
     useEffect(() => {
+        tilbakestillSkjemafelterTilDefault();
+    }, [feilutbetaltValuta]);
+
+    const tilbakestillSkjemafelterTilDefault = () => {
         if (feilutbetaltValuta !== undefined) {
             skjema.felter.fom.validerOgSettFelt(new Date(feilutbetaltValuta.fom));
             skjema.felter.tom.validerOgSettFelt(new Date(feilutbetaltValuta.tom));
         }
-    }, [feilutbetaltValuta]);
+        skjema.felter.feilutbetaltBeløp.nullstill();
+    };
 
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
@@ -145,6 +150,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         fjernPeriode,
         nullstillSkjema,
         valideringErOk,
+        tilbakestillSkjemafelterTilDefault,
     };
 };
 
