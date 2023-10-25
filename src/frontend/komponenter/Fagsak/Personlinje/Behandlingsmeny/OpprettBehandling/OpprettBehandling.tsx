@@ -12,7 +12,7 @@ import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { dagensDato } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Datovelger from '../../../../Felleskomponenter/Datovelger';
+import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;

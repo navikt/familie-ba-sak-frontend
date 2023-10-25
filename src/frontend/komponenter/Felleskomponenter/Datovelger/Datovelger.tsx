@@ -6,8 +6,8 @@ import { addDays, format, startOfDay, subDays } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { dagensDato } from '../../utils/dato';
-import { Datoformat } from '../../utils/formatter';
+import { dagensDato } from '../../../utils/dato';
+import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     felt: Felt<Date | undefined>;
