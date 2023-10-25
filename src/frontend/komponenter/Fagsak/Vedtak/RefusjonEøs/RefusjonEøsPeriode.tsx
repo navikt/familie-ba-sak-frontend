@@ -41,6 +41,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
         fjernPeriode,
         valideringErOk,
         validerAlleSynligeFelter,
+        tilbakestillSkjemafelterTilDefault,
     } = useRefusjonEøs({
         behandlingId,
         refusjonEøs,
@@ -53,6 +54,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
 
     const lukkSkjema = () => {
         settErRadEkspandert(false);
+        tilbakestillSkjemafelterTilDefault();
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
@@ -70,7 +72,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    <RefusjonEøsSkjema skjema={skjema} />
+                    {erRadEkspandert && <RefusjonEøsSkjema skjema={skjema} />}
                     {!erLesevisning && (
                         <FlexRowDiv>
                             <Button

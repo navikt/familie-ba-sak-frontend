@@ -48,39 +48,40 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             felt.verdi !== undefined ? ok(felt) : feil(felt, 'Du må oppgi om refusjon er avklart'),
     });
 
-    const {
-        skjema,
-        kanSendeSkjema,
-        onSubmit,
-        nullstillSkjema,
-        valideringErOk,
-        validerAlleSynligeFelter,
-    } = useSkjema<IRefusjonEøsSkjemaFelter, IBehandling>({
-        felter: {
-            fom: fomFelt,
-            tom: useFelt<Date | undefined>({
-                verdi: undefined,
-                avhengigheter: {
-                    fom: fomFelt,
-                },
-                valideringsfunksjon: validerGyldigDato,
-            }),
-            refusjonsbeløp: useFelt<string>({
-                verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
-                valideringsfunksjon: validerFeilutbetaltBeløp,
-            }),
-            land,
-            refusjonAvklart,
-        },
-        skjemanavn: 'Refusjon EØS',
-    });
+    const { skjema, kanSendeSkjema, onSubmit, valideringErOk, validerAlleSynligeFelter } =
+        useSkjema<IRefusjonEøsSkjemaFelter, IBehandling>({
+            felter: {
+                fom: fomFelt,
+                tom: useFelt<Date | undefined>({
+                    verdi: undefined,
+                    avhengigheter: {
+                        fom: fomFelt,
+                    },
+                    valideringsfunksjon: validerGyldigDato,
+                }),
+                refusjonsbeløp: useFelt<string>({
+                    verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
+                    valideringsfunksjon: validerFeilutbetaltBeløp,
+                }),
+                land,
+                refusjonAvklart,
+            },
+            skjemanavn: 'Refusjon EØS',
+        });
 
     useEffect(() => {
+        tilbakestillSkjemafelterTilDefault();
+    }, [refusjonEøs]);
+
+    const tilbakestillSkjemafelterTilDefault = () => {
         if (refusjonEøs !== undefined) {
             skjema.felter.fom.validerOgSettFelt(new Date(refusjonEøs.fom));
             skjema.felter.tom.validerOgSettFelt(new Date(refusjonEøs.tom));
         }
-    }, [refusjonEøs]);
+        skjema.felter.refusjonsbeløp.nullstill();
+        skjema.felter.land.nullstill();
+        skjema.felter.refusjonAvklart.nullstill();
+    };
 
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
@@ -158,9 +159,9 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
         lagreNyPeriode,
         oppdaterEksisterendePeriode,
         fjernPeriode,
-        nullstillSkjema,
         valideringErOk,
         validerAlleSynligeFelter,
+        tilbakestillSkjemafelterTilDefault,
     };
 };
 
