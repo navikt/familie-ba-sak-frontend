@@ -29,13 +29,12 @@ const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({
 }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useRefusjonEøs({
+    const { skjema, lagreNyPeriode, valideringErOk } = useRefusjonEøs({
         behandlingId,
         settFeilmelding: settFeilmelding,
     });
 
     const avbrytLeggTilNy = () => {
-        nullstillSkjema();
         lukkNyPeriode();
     };
 
