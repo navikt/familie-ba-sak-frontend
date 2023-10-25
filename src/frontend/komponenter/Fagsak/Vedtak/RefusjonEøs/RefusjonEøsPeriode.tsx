@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -48,10 +48,6 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
         settFeilmelding: settFeilmelding,
     });
 
-    useEffect(() => {
-        tilbakestillOgLukkSkjema();
-    }, [refusjonEøs]);
-
     const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
         tilbakestillSkjemafelterTilDefault();
@@ -66,6 +62,10 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
         }
     };
 
+    const lagrePeriodeOgLukkPanel = () => {
+        oppdaterEksisterendePeriode().then(() => settErRadEkspandert(false));
+    };
+
     return (
         <Table.ExpandableRow
             open={erRadEkspandert}
@@ -77,7 +77,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                         <FlexRowDiv>
                             <Button
                                 size="small"
-                                onClick={oppdaterEksisterendePeriode}
+                                onClick={lagrePeriodeOgLukkPanel}
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
                             >
                                 Lagre periode

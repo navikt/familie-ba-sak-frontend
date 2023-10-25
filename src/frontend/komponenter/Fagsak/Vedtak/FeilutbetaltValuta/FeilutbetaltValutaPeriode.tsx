@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -51,10 +51,6 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         settFeilmelding: settFeilmelding,
     });
 
-    useEffect(() => {
-        tilbakestillOgLukkSkjema();
-    }, [feilutbetaltValuta]);
-
     const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
         tilbakestillSkjemafelterTilDefault();
@@ -70,6 +66,10 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         }
     };
 
+    const lagrePeriodeOgLukkPanel = () => {
+        oppdaterEksisterendePeriode().then(() => settErRadEkspandert(false));
+    };
+
     return (
         <Table.ExpandableRow
             open={erLesevisning ? false : erRadEkspandert}
@@ -80,7 +80,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                     <FlexRowDiv>
                         <Button
                             size="small"
-                            onClick={oppdaterEksisterendePeriode}
+                            onClick={lagrePeriodeOgLukkPanel}
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                         >
                             Lagre periode
