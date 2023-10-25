@@ -38,7 +38,6 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
     const {
         skjema,
         oppdaterEksisterendePeriode,
-        nullstillSkjema,
         fjernPeriode,
         valideringErOk,
         validerAlleSynligeFelter,
@@ -49,17 +48,16 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
     });
 
     useEffect(() => {
-        nullstillOgLukkSkjema();
+        lukkSkjema();
     }, [refusjonEøs]);
 
-    const nullstillOgLukkSkjema = () => {
-        nullstillSkjema();
+    const lukkSkjema = () => {
         settErRadEkspandert(false);
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
         if (erRadEkspandert) {
-            nullstillOgLukkSkjema();
+            lukkSkjema();
         } else {
             validerAlleSynligeFelter();
             settErRadEkspandert(true);
@@ -82,7 +80,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                             >
                                 Lagre periode
                             </Button>
-                            <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
+                            <Button size="small" variant="tertiary" onClick={lukkSkjema}>
                                 Avbryt
                             </Button>
                         </FlexRowDiv>
