@@ -52,10 +52,10 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     });
 
     useEffect(() => {
-        lukkSkjema();
+        tilbakestillOgLukkSkjema();
     }, [feilutbetaltValuta]);
 
-    const lukkSkjema = () => {
+    const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
         tilbakestillSkjemafelterTilDefault();
     };
@@ -64,7 +64,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         if (erLesevisning) return;
 
         if (erRadEkspandert) {
-            lukkSkjema();
+            tilbakestillOgLukkSkjema();
         } else {
             settErRadEkspandert(true);
         }
@@ -85,7 +85,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                         >
                             Lagre periode
                         </Button>
-                        <Button size="small" variant="tertiary" onClick={lukkSkjema}>
+                        <Button size="small" variant="tertiary" onClick={tilbakestillOgLukkSkjema}>
                             Avbryt
                         </Button>
                     </FlexRowDiv>

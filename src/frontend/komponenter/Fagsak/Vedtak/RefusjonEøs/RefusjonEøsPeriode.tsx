@@ -49,17 +49,17 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
     });
 
     useEffect(() => {
-        lukkSkjema();
+        tilbakestillOgLukkSkjema();
     }, [refusjonEøs]);
 
-    const lukkSkjema = () => {
+    const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
         tilbakestillSkjemafelterTilDefault();
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
         if (erRadEkspandert) {
-            lukkSkjema();
+            tilbakestillOgLukkSkjema();
         } else {
             validerAlleSynligeFelter();
             settErRadEkspandert(true);
@@ -82,7 +82,11 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                             >
                                 Lagre periode
                             </Button>
-                            <Button size="small" variant="tertiary" onClick={lukkSkjema}>
+                            <Button
+                                size="small"
+                                variant="tertiary"
+                                onClick={tilbakestillOgLukkSkjema}
+                            >
                                 Avbryt
                             </Button>
                         </FlexRowDiv>
