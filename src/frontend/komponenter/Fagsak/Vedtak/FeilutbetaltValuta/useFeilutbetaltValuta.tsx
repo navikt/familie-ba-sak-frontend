@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -62,10 +62,6 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjemanavn: 'Feilutbetalt valuta',
     });
 
-    useEffect(() => {
-        tilbakestillSkjemafelterTilDefault();
-    }, []);
-
     const tilbakestillSkjemafelterTilDefault = () => {
         if (feilutbetaltValuta !== undefined) {
             skjema.felter.fom.validerOgSettFelt(new Date(feilutbetaltValuta.fom));
@@ -74,7 +70,8 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjema.felter.feilutbetaltBeløp.nullstill();
     };
 
-    const [forrigeFeilutbetaltValuta, settForrigeFeilutbetaltValuta] = useState(feilutbetaltValuta);
+    const [forrigeFeilutbetaltValuta, settForrigeFeilutbetaltValuta] =
+        useState<IRestFeilutbetaltValuta>();
 
     if (forrigeFeilutbetaltValuta !== feilutbetaltValuta) {
         settForrigeFeilutbetaltValuta(feilutbetaltValuta);

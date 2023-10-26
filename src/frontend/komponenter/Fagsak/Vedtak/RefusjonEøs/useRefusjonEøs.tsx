@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -69,10 +69,6 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             skjemanavn: 'Refusjon EØS',
         });
 
-    useEffect(() => {
-        tilbakestillSkjemafelterTilDefault();
-    }, []);
-
     const tilbakestillSkjemafelterTilDefault = () => {
         if (refusjonEøs !== undefined) {
             skjema.felter.fom.validerOgSettFelt(new Date(refusjonEøs.fom));
@@ -83,7 +79,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
         skjema.felter.refusjonAvklart.nullstill();
     };
 
-    const [forrigeRefusjonEøs, settForrigeRefusjonEøs] = useState(refusjonEøs);
+    const [forrigeRefusjonEøs, settForrigeRefusjonEøs] = useState<IRestRefusjonEøs>();
 
     if (forrigeRefusjonEøs !== refusjonEøs) {
         settForrigeRefusjonEøs(refusjonEøs);
