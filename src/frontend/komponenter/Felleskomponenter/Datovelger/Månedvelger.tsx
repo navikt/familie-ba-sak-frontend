@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { endOfMonth, isAfter, isSameDay, startOfDay, startOfMonth } from 'date-fns';
 
@@ -46,6 +46,9 @@ const Månedvelger = ({
     tilhørendeFomFelt,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>();
+    const [forrigeTilhørendeFomVerdi, settforrigeTilhørendeFomVerdi] = useState(
+        tilhørendeFomFelt?.verdi
+    );
 
     const hentFromDate = () => {
         if (tilhørendeFomFelt?.verdi !== undefined) return tilhørendeFomFelt.verdi;
@@ -94,7 +97,7 @@ const Månedvelger = ({
         },
     });
 
-    useEffect(() => {
+    const validerDatoErGyldigIKombinasjonMedTilhøredeFom = () => {
         if (
             tilhørendeFomFelt?.verdi &&
             selectedMonth &&
@@ -105,7 +108,12 @@ const Månedvelger = ({
             setError(undefined);
             felt.validerOgSettFelt(selectedMonth);
         }
-    }, [tilhørendeFomFelt?.verdi]);
+    };
+
+    if (forrigeTilhørendeFomVerdi !== tilhørendeFomFelt?.verdi) {
+        settforrigeTilhørendeFomVerdi(tilhørendeFomFelt?.verdi);
+        validerDatoErGyldigIKombinasjonMedTilhøredeFom();
+    }
 
     const feilmeldingForDatoFørMinDato = () => {
         const tidligsteFraDato = hentFromDate();
