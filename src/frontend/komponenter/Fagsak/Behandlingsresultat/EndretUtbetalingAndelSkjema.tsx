@@ -70,19 +70,25 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
 
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
-    avbrytEndringAvUtbetalingsperiode: () => void;
+    lukkSkjema: () => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
-    avbrytEndringAvUtbetalingsperiode,
+    lukkSkjema,
 }) => {
     const { request } = useHttp();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, hentSkjemaData } =
-        useEndretUtbetalingAndel();
+    const {
+        endretUtbetalingAndel,
+        skjema,
+        kanSendeSkjema,
+        onSubmit,
+        hentSkjemaData,
+        tilbakestillFelterTilDefault,
+    } = useEndretUtbetalingAndel();
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
         if (kanSendeSkjema()) {
@@ -350,16 +356,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             <StyledFerdigKnapp
                                 size="small"
                                 variant="secondary"
-                                onClick={() =>
-                                    oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)
-                                }
+                                onClick={() => oppdaterEndretUtbetaling(lukkSkjema)}
                             >
                                 Bekreft
                             </StyledFerdigKnapp>
                             <Button
                                 variant="tertiary"
                                 size="small"
-                                onClick={avbrytEndringAvUtbetalingsperiode}
+                                onClick={() => {
+                                    tilbakestillFelterTilDefault();
+                                    lukkSkjema();
+                                }}
                             >
                                 Avbryt
                             </Button>
