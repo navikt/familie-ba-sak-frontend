@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { addDays, format, subDays } from 'date-fns';
+import { addDays, format, isValid, subDays } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
@@ -78,7 +78,9 @@ const Datovelger = ({
     });
 
     useEffect(() => {
-        setSelected(felt.verdi);
+        if (isValid(felt.verdi)) {
+            setSelected(felt.verdi);
+        }
     }, [felt.verdi]);
 
     const feilmeldingForDatoFørMinDato = () => {
