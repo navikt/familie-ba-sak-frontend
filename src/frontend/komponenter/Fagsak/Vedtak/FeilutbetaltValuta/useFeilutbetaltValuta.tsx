@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -64,7 +64,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
 
     useEffect(() => {
         tilbakestillSkjemafelterTilDefault();
-    }, [feilutbetaltValuta]);
+    }, []);
 
     const tilbakestillSkjemafelterTilDefault = () => {
         if (feilutbetaltValuta !== undefined) {
@@ -73,6 +73,13 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         }
         skjema.felter.feilutbetaltBeløp.nullstill();
     };
+
+    const [forrigeFeilutbetaltValuta, settForrigeFeilutbetaltValuta] = useState(feilutbetaltValuta);
+
+    if (forrigeFeilutbetaltValuta !== feilutbetaltValuta) {
+        settForrigeFeilutbetaltValuta(feilutbetaltValuta);
+        tilbakestillSkjemafelterTilDefault();
+    }
 
     const lagreNyPeriode = (lukkNyPeriode: () => void) => {
         if (kanSendeSkjema()) {
