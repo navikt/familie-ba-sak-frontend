@@ -89,12 +89,14 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                 open={åpenUtbetalingsAndel}
                 onOpenChange={() => toggleForm()}
                 content={
-                    <EndretUtbetalingAndelSkjema
-                        åpenBehandling={åpenBehandling}
-                        avbrytEndringAvUtbetalingsperiode={() => {
-                            settÅpenUtbetalingsAndel(false);
-                        }}
-                    />
+                    åpenUtbetalingsAndel && (
+                        <EndretUtbetalingAndelSkjema
+                            åpenBehandling={åpenBehandling}
+                            lukkSkjema={() => {
+                                settÅpenUtbetalingsAndel(false);
+                            }}
+                        />
+                    )
                 }
             >
                 <Table.DataCell>

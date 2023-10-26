@@ -133,6 +133,17 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             settDatofelterTilDefaultverdier();
         }
 
+        const tilbakestillFelterTilDefault = () => {
+            skjema.felter.person.nullstill();
+            skjema.felter.fom.nullstill();
+            skjema.felter.tom.nullstill();
+            skjema.felter.årsak.nullstill();
+            skjema.felter.begrunnelse.nullstill();
+            skjema.felter.fullSats.nullstill();
+            skjema.felter.periodeSkalUtbetalesTilSøker.nullstill();
+            settDatofelterTilDefaultverdier();
+        };
+
         const hentProsentForEndretUtbetaling = () => {
             return (
                 (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
@@ -172,6 +183,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             kanSendeSkjema,
             onSubmit,
             hentSkjemaData,
+            tilbakestillFelterTilDefault,
         };
     }
 );
