@@ -1,10 +1,27 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
+
+const StyledDiv = styled.div`
+    color: var(--a-gray-800);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const StyledSpan = styled.span`
+    padding: 0 1rem 0 1rem;
+`;
+
+const StyledPagination = styled(Pagination)`
+    padding-left: 1rem;
+`;
 
 const antallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
 
@@ -14,21 +31,21 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
     const { pageIndex } = state;
 
     return oppgaver.status === RessursStatus.SUKSESS && pageIndex >= 0 ? (
-        <div className={'navigator'}>
+        <StyledDiv>
             |
-            <span className={'navigator--felt'}>
+            <StyledSpan>
                 Viser {pageIndex * oppgaveSideLimit + 1} -{' '}
                 {pageIndex * oppgaveSideLimit + page.length} av {oppgaver.data.oppgaver.length}{' '}
                 oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
-            </span>
+            </StyledSpan>
             |
-            <Pagination
+            <StyledPagination
                 size="small"
                 page={pageIndex + 1}
                 count={antallSider(oppgaver.data.oppgaver)}
                 onPageChange={(side: number) => gotoPage(side - 1)}
             />
-        </div>
+        </StyledDiv>
     ) : null;
 };
 

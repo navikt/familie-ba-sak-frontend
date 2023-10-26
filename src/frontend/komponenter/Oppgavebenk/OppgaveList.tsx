@@ -51,6 +51,13 @@ const StyledAlert = styled(Alert)`
     margin-top: 1rem;
 `;
 
+const StyledDiv = styled.div`
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, tableInstance } = useOppgaver();
 
@@ -58,14 +65,14 @@ const OppgaveList: React.FunctionComponent = () => {
 
     return (
         <div className={'oppgavelist'}>
-            <div className={'oppgavelist__header'}>
+            <StyledDiv>
                 <Heading size={'medium'} level={'2'}>
                     Oppgaveliste
                 </Heading>
                 <OppgavelisteNavigator />
-            </div>
+            </StyledDiv>
             <div>
-                <div className={'oppgavelist'}>
+                <div>
                     <table className="tabell" {...getTableProps()}>
                         <thead>
                             {headerGroups.map(headerGroup => (
