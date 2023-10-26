@@ -68,7 +68,10 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    {erRadEkspandert && <RefusjonEøsSkjema skjema={skjema} />}
+                    <RefusjonEøsSkjema
+                        skjema={skjema}
+                        key={erRadEkspandert ? 'ekspandert' : 'lukket'}
+                    />
                     {!erLesevisning && (
                         <FlexRowDiv>
                             <Button

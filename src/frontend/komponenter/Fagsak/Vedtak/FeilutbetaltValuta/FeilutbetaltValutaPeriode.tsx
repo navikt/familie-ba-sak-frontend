@@ -72,7 +72,10 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    {erRadEkspandert && <FeilutbetaltValutaSkjema skjema={skjema} />}
+                    <FeilutbetaltValutaSkjema
+                        skjema={skjema}
+                        key={erRadEkspandert ? 'ekspandert' : 'lukket'}
+                    />
                     <FlexRowDiv>
                         <Button
                             size="small"
