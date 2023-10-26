@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { addDays, format, startOfDay, subDays } from 'date-fns';
+import { addDays, format, subDays } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -20,16 +21,6 @@ interface IProps {
     datoMåFyllesUt?: boolean;
     readOnly?: boolean;
 }
-
-enum Feilmelding {
-    UGYDLIG_DATO = 'UGYDLIG_DATO',
-    FØR_MIN_DATO = 'FØR_MIN_DATO',
-    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
-}
-
-const tidligsteRelevanteDato = () => startOfDay(new Date(1900, 0));
-
-const senesteRelevanteDato = () => startOfDay(new Date(2500, 0));
 
 const Datovelger = ({
     felt,

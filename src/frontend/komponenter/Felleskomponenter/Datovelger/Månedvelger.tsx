@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { endOfMonth, isAfter, isSameDay, startOfDay, startOfMonth } from 'date-fns';
+import { endOfMonth, isAfter, isSameDay, startOfMonth } from 'date-fns';
 
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato, formatterDate } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -20,20 +21,10 @@ interface IProps {
     tilhørendeFomFelt?: Felt<Date | undefined>;
 }
 
-enum Feilmelding {
-    UGYDLIG_DATO = 'UGYDLIG_DATO',
-    FØR_MIN_DATO = 'FØR_MIN_DATO',
-    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
-}
-
 export enum DagIMåneden {
     FØRSTE_DAG = 'FØRSTE_DAG',
     SISTE_DAG = 'SISTE_DAG',
 }
-
-const tidligsteRelevanteDato = () => startOfDay(new Date(1900, 0));
-
-const senesteRelevanteDato = () => startOfDay(new Date(2500, 0));
 
 const Månedvelger = ({
     felt,
