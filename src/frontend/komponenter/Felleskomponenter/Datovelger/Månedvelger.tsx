@@ -124,7 +124,7 @@ const Månedvelger = ({
         })}`;
     };
 
-    const feilmeldingForDatoFørMaksDato = () => {
+    const feilmeldingForDatoEtterMaksDato = () => {
         if (kanKunVelgeFortid) {
             return 'Du kan ikke sette en måned som er frem i tid';
         }
@@ -138,7 +138,7 @@ const Månedvelger = ({
     const feilmeldinger: Record<Feilmelding, string> = {
         UGYDLIG_DATO: 'Du må velge en gyldig måned',
         FØR_MIN_DATO: feilmeldingForDatoFørMinDato(),
-        ETTER_MAKS_DATO: feilmeldingForDatoFørMaksDato(),
+        ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
     };
 
     return (
