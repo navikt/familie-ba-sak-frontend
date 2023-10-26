@@ -34,7 +34,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     : endretUtbetalingAndel.prosent > 0,
         });
 
-        const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
+        const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
             {
                 person: string | undefined;
                 fom: FamilieIsoDate | undefined;
@@ -134,13 +134,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         }
 
         const tilbakestillFelterTilDefault = () => {
-            skjema.felter.person.nullstill();
-            skjema.felter.fom.nullstill();
-            skjema.felter.tom.nullstill();
-            skjema.felter.årsak.nullstill();
-            skjema.felter.begrunnelse.nullstill();
-            skjema.felter.fullSats.nullstill();
-            skjema.felter.periodeSkalUtbetalesTilSøker.nullstill();
+            nullstillSkjema();
             settDatofelterTilDefaultverdier();
         };
 
