@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 import createUseContext from 'constate';
 
@@ -19,7 +19,7 @@ interface IProps {
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(
     ({ endretUtbetalingAndel }: IProps) => {
         const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
-            verdi: endretUtbetalingAndel.årsak ? endretUtbetalingAndel.årsak : undefined,
+            verdi: endretUtbetalingAndel.årsak,
             valideringsfunksjon: felt =>
                 felt.verdi && Object.values(IEndretUtbetalingAndelÅrsak).includes(felt.verdi)
                     ? ok(felt)
@@ -75,6 +75,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     avhengigheter: {
                         årsak: årsakFelt,
                     },
+                    nullstillVedAvhengighetEndring: false,
                     skalFeltetVises: (avhengigheter: Avhengigheter) =>
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
                     valideringsfunksjon: validerGyldigDato,
@@ -111,7 +112,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             skjemanavn: 'Endre utbetalingsperiode',
         });
 
-        useEffect(() => {
+        const settDatofelterTilDefaultverdier = () => {
             skjema.felter.søknadstidspunkt.validerOgSettFelt(
                 endretUtbetalingAndel.søknadstidspunkt
                     ? new Date(endretUtbetalingAndel.søknadstidspunkt)
@@ -122,7 +123,15 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     ? new Date(endretUtbetalingAndel.avtaletidspunktDeltBosted)
                     : undefined
             );
-        }, [endretUtbetalingAndel]);
+        };
+
+        const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] =
+            useState<IRestEndretUtbetalingAndel>();
+
+        if (endretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
+            settForrigeEndretUtbetalingAndel(endretUtbetalingAndel);
+            settDatofelterTilDefaultverdier();
+        }
 
         const hentProsentForEndretUtbetaling = () => {
             return (

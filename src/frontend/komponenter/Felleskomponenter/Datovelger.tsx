@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { addDays, format, isValid, startOfDay, subDays } from 'date-fns';
+import { addDays, format, startOfDay, subDays } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
@@ -62,8 +62,7 @@ const Datovelger = ({
             felt.nullstill();
         }
     };
-
-    const { datepickerProps, inputProps, setSelected } = useDatepicker({
+    const { datepickerProps, inputProps } = useDatepicker({
         defaultSelected: felt.verdi,
         onDateChange: (dato?: Date) => {
             felt.validerOgSettFelt(dato);
@@ -85,12 +84,6 @@ const Datovelger = ({
             }
         },
     });
-
-    useEffect(() => {
-        if (isValid(felt.verdi)) {
-            setSelected(felt.verdi);
-        }
-    }, [felt.verdi]);
 
     const feilmeldingForDatoFørMinDato = () => {
         if (kanKunVelgeFremtid) {
