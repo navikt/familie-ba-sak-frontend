@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { endOfMonth, isAfter, isSameDay, startOfMonth } from 'date-fns';
+import { endOfMonth, isBefore, isSameDay, startOfMonth } from 'date-fns';
 
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
@@ -65,14 +65,16 @@ const Månedvelger = ({
         else return dato;
     };
 
+    const oppdaterFeltMedValgtDato = (dato?: Date) => {
+        if (dato === undefined) felt.nullstill();
+        else {
+            felt.validerOgSettFelt(formatterTilRiktigDagIMåneden(dato));
+        }
+    };
+
     const { monthpickerProps, inputProps, selectedMonth } = useMonthpicker({
         defaultSelected: felt.verdi,
-        onMonthChange: (dato?: Date) => {
-            if (dato === undefined) felt.nullstill();
-            else {
-                felt.validerOgSettFelt(formatterTilRiktigDagIMåneden(dato));
-            }
-        },
+        onMonthChange: oppdaterFeltMedValgtDato,
         fromDate: hentFromDate(),
         toDate: hentToDate(),
         onValidate: val => {
@@ -88,22 +90,19 @@ const Månedvelger = ({
         },
     });
 
-    const validerDatoErGyldigIKombinasjonMedTilhøredeFom = () => {
-        if (
-            tilhørendeFomFelt?.verdi &&
-            selectedMonth &&
-            isAfter(tilhørendeFomFelt.verdi, formatterTilRiktigDagIMåneden(selectedMonth))
-        ) {
-            nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
-        } else {
-            setError(undefined);
-            felt.validerOgSettFelt(selectedMonth);
-        }
-    };
+    const valgtDatoErFørTilhørendeFom = () =>
+        tilhørendeFomFelt?.verdi &&
+        selectedMonth &&
+        isBefore(formatterTilRiktigDagIMåneden(selectedMonth), tilhørendeFomFelt.verdi);
 
     if (forrigeTilhørendeFomVerdi !== tilhørendeFomFelt?.verdi) {
         settforrigeTilhørendeFomVerdi(tilhørendeFomFelt?.verdi);
-        validerDatoErGyldigIKombinasjonMedTilhøredeFom();
+        if (valgtDatoErFørTilhørendeFom()) {
+            nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
+        } else {
+            setError(undefined);
+            oppdaterFeltMedValgtDato(selectedMonth);
+        }
     }
 
     const feilmeldingForDatoFørMinDato = () => {
