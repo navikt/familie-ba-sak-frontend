@@ -66,10 +66,6 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         }
     };
 
-    const lagrePeriodeOgLukkPanel = () => {
-        oppdaterEksisterendePeriode().then(() => settErRadEkspandert(false));
-    };
-
     return (
         <Table.ExpandableRow
             open={erLesevisning ? false : erRadEkspandert}
@@ -80,7 +76,9 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                     <FlexRowDiv>
                         <Button
                             size="small"
-                            onClick={lagrePeriodeOgLukkPanel}
+                            onClick={() =>
+                                oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
+                            }
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                         >
                             Lagre periode

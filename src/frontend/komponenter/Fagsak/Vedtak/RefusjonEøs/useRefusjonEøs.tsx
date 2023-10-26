@@ -116,7 +116,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
         }
     };
 
-    const oppdaterEksisterendePeriode = async () => {
+    const oppdaterEksisterendePeriode = async (lukkPeriode: () => void) => {
         if (kanSendeSkjema() && refusjonEøs) {
             onSubmit<IRestRefusjonEøs>(
                 {
@@ -135,6 +135,7 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
+                        lukkPeriode();
                     } else {
                         settFeilmelding('Klarte ikke å lagre endringer');
                     }

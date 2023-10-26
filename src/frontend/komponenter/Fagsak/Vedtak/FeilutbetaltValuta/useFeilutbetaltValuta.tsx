@@ -106,7 +106,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         }
     };
 
-    const oppdaterEksisterendePeriode = async () => {
+    const oppdaterEksisterendePeriode = async (lukkPeriode: () => void) => {
         if (kanSendeSkjema() && feilutbetaltValuta) {
             onSubmit<IRestFeilutbetaltValuta>(
                 {
@@ -124,6 +124,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                 (behandling: Ressurs<IBehandling>) => {
                     if (behandling.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(behandling);
+                        lukkPeriode();
                     } else {
                         settFeilmelding('Klarte ikke å lagre endringer');
                     }

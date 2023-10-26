@@ -62,10 +62,6 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
         }
     };
 
-    const lagrePeriodeOgLukkPanel = () => {
-        oppdaterEksisterendePeriode().then(() => settErRadEkspandert(false));
-    };
-
     return (
         <Table.ExpandableRow
             open={erRadEkspandert}
@@ -77,7 +73,9 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                         <FlexRowDiv>
                             <Button
                                 size="small"
-                                onClick={lagrePeriodeOgLukkPanel}
+                                onClick={() =>
+                                    oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
+                                }
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
                             >
                                 Lagre periode
