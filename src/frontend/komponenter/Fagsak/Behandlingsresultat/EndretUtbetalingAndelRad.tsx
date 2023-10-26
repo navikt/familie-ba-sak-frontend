@@ -94,7 +94,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         lukkSkjema={() => {
                             settÅpenUtbetalingsAndel(false);
                         }}
-                        key={åpenUtbetalingsAndel ? 'åpent' : 'lukket'}
+                        key={åpenUtbetalingsAndel ? 'åpen' : 'lukket'}
                     />
                 }
             >
