@@ -65,16 +65,18 @@ const Månedvelger = ({
         }
     };
 
+    const formatterTilRiktigDagIMåneden = (dato: Date): Date => {
+        if (dagIMåneden === DagIMåneden.FØRSTE_DAG) return startOfMonth(dato);
+        else if (dagIMåneden === DagIMåneden.SISTE_DAG) return endOfMonth(dato);
+        else return dato;
+    };
+
     const { monthpickerProps, inputProps, selectedMonth } = useMonthpicker({
         defaultSelected: felt.verdi,
         onMonthChange: (dato?: Date) => {
             if (dato === undefined) felt.nullstill();
             else {
-                if (dagIMåneden === DagIMåneden.FØRSTE_DAG) {
-                    felt.validerOgSettFelt(startOfMonth(dato));
-                } else if (dagIMåneden === DagIMåneden.SISTE_DAG) {
-                    felt.validerOgSettFelt(endOfMonth(dato));
-                } else felt.validerOgSettFelt(dato);
+                felt.validerOgSettFelt(formatterTilRiktigDagIMåneden(dato));
             }
         },
         fromDate: hentFromDate(),
@@ -96,7 +98,7 @@ const Månedvelger = ({
         if (
             tilhørendeFomFelt?.verdi &&
             selectedMonth &&
-            isAfter(tilhørendeFomFelt.verdi, selectedMonth)
+            isAfter(tilhørendeFomFelt.verdi, formatterTilRiktigDagIMåneden(selectedMonth))
         ) {
             nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
         } else {
