@@ -13,20 +13,23 @@ import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
 
-const DatoVelgerContainer = styled.div`
-    max-width: 12.5rem;
-`;
-
-// Denne stylingen skal fjernes på sikt (minus marginer)
 const StyledButton = styled(Button)`
     margin-top: 0.5rem;
     margin-right: 1.5rem;
-    padding: calc(0.25rem - 1px) 1.5rem calc(0.25rem - 1px) 1.5rem;
-    font-weight: bolder;
-    min-height: 2rem;
-    .navds-button__inner {
-        font-weight: 600;
-        letter-spacing: 0.0625em;
+`;
+
+const StyledFieldset = styled(Fieldset)`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+`;
+
+const FilterRad = styled.div`
+    display: flex;
+    margin-top: 1rem;
+
+    & > * {
+        padding-right: 1.5rem;
     }
 `;
 
@@ -42,29 +45,26 @@ const FilterSkjema: React.FunctionComponent = () => {
     } = useOppgaver();
 
     return (
-        <Fieldset className="filterskjema" legend="Oppgavebenken filterskjema" hideLegend>
-            <div className="filterskjema__filtre">
+        <StyledFieldset legend="Oppgavebenken filterskjema" hideLegend>
+            <FilterRad>
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
                     .map((oppgaveFelt: IOppgaveFelt) => {
                         switch (oppgaveFelt.filter?.type) {
                             case 'dato':
                                 return (
-                                    <DatoVelgerContainer key={oppgaveFelt.nøkkel}>
-                                        <FilterSkjemaDatovelger
-                                            key={oppgaveFelt.nøkkel}
-                                            label={oppgaveFelt.label}
-                                            onDateChange={(dato: ISODateString) => {
-                                                settVerdiPåOppgaveFelt(oppgaveFelt, dato);
-                                            }}
-                                            value={oppgaveFelt.filter.selectedValue}
-                                            visFeilmeldinger={
-                                                oppgaveFelt.valideringsstatus ===
-                                                Valideringsstatus.FEIL
-                                            }
-                                            feilmelding={oppgaveFelt.feilmelding}
-                                        />
-                                    </DatoVelgerContainer>
+                                    <FilterSkjemaDatovelger
+                                        key={oppgaveFelt.nøkkel}
+                                        label={oppgaveFelt.label}
+                                        onDateChange={(dato: ISODateString) => {
+                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato);
+                                        }}
+                                        value={oppgaveFelt.filter.selectedValue}
+                                        visFeilmeldinger={
+                                            oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
+                                        }
+                                        feilmelding={oppgaveFelt.feilmelding}
+                                    />
                                 );
                             case 'select':
                                 return (
@@ -75,7 +75,6 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         }
                                         key={oppgaveFelt.nøkkel}
                                         value={oppgaveFelt.filter.selectedValue}
-                                        className="filterskjema__filtre--input"
                                         error={
                                             oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
                                                 ? oppgaveFelt.feilmelding
@@ -114,7 +113,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                 return null;
                         }
                     })}
-            </div>
+            </FilterRad>
 
             <div className="filterskjema__actions">
                 <StyledButton
@@ -132,7 +131,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     children={'Tilbakestill filtrering'}
                 />
             </div>
-        </Fieldset>
+        </StyledFieldset>
     );
 };
 

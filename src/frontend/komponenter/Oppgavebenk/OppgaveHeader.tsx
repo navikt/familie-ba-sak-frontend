@@ -1,20 +1,26 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { Heading } from '@navikt/ds-react';
 
 import FilterSkjema from './FilterSkjema';
 
+const FlexDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`;
+
 const OppgaveHeader: React.FunctionComponent = () => {
     return (
-        <div className={'oppgave-header'}>
-            <div>
-                <Heading size={'medium'} level={'2'} className={'oppgave-header__tittel'}>
-                    Oppgavebenken
-                </Heading>
+        <FlexDiv>
+            <Heading size={'medium'} level={'2'}>
+                Oppgavebenken
+            </Heading>
 
-                <FilterSkjema />
-            </div>
-        </div>
+            <FilterSkjema />
+        </FlexDiv>
     );
 };
 
