@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 
-import { isValid, parseISO, startOfDay } from 'date-fns';
+import { isValid, parseISO } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import type { IsoDatoString } from '../../utils/dato';
 import { formatterDate } from '../../utils/dato';
 import { Datoformat } from '../../utils/formatter';
+import {
+    senesteRelevanteDato,
+    tidligsteRelevanteDato,
+} from '../Felleskomponenter/Datovelger/utils';
 
 interface IProps {
     value: string | undefined;
@@ -16,10 +20,6 @@ interface IProps {
     visFeilmeldinger: boolean;
     feilmelding: string | undefined;
 }
-
-const tidligsteRelevanteDato = () => startOfDay(new Date(1900, 0));
-
-const senesteRelevanteDato = () => startOfDay(new Date(2500, 0));
 
 const FilterSkjemaDatovelger = ({
     value,
@@ -36,8 +36,8 @@ const FilterSkjemaDatovelger = ({
 
     const { datepickerProps, inputProps, selectedDay } = useDatepicker({
         defaultSelected: formatterDefaultSelected(),
-        fromDate: tidligsteRelevanteDato(),
-        toDate: senesteRelevanteDato(),
+        fromDate: tidligsteRelevanteDato,
+        toDate: senesteRelevanteDato,
     });
 
     useEffect(() => {
