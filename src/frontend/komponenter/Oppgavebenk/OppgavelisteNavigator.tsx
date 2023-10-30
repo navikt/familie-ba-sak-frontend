@@ -3,13 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Pagination } from '@navikt/ds-react';
+import { AGray800 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 
 const StyledDiv = styled.div`
-    color: var(--a-gray-800);
+    color: ${AGray800};
     display: flex;
     align-items: center;
     justify-content: space-between;
