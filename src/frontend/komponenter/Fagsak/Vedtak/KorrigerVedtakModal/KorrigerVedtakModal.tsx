@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
 import type { IRestKorrigertVedtak } from '../../../../typer/vedtak';
-import Datovelger from '../../../Felleskomponenter/Datovelger';
+import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 
 const AngreKnapp = styled(Button)`
     margin: 0.5rem 0;

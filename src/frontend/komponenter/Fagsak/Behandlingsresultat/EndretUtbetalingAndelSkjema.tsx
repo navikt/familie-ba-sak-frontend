@@ -29,7 +29,7 @@ import {
 import { lagPersonLabel } from '../../../utils/formatter';
 import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import Datovelger from '../../Felleskomponenter/Datovelger';
+import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 

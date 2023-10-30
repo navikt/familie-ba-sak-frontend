@@ -4,8 +4,6 @@ import styled from 'styled-components';
 
 import { Label, Radio, TextField } from '@navikt/ds-react';
 import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
-import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -15,9 +13,8 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../utils/commons';
-import { serializeIso8601String, sisteDagIInneværendeMåned } from '../../../../utils/kalender';
+import Månedvelger, { DagIMåneden } from '../../../Felleskomponenter/Datovelger/Månedvelger';
 import { FamilieLandvelger } from '../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
-import { tilFørsteDagIMånedenHvisGyldigInput, tilSisteDagIMånedenHvisGyldigInput } from '../utils';
 
 interface IRefusjonEøsSkjemaProps {
     skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
@@ -110,35 +107,22 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
             <FlexDatoInputWrapper>
                 <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
                 <FlexRowDiv style={{ gap: '2rem' }}>
-                    <FamilieDatovelger
-                        {...skjema.felter.fom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id={`fom-dato-${inputUuid}`}
-                        label="F.o.m"
-                        value={skjema.felter.fom.verdi}
-                        onChange={(dato?: ISODateString) => {
-                            skjema.felter.fom.validerOgSettFelt(
-                                tilFørsteDagIMånedenHvisGyldigInput(dato)
-                            );
-                        }}
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
-                        erLesesvisning={erLesevisning}
+                    <Månedvelger
+                        felt={skjema.felter.fom}
+                        label={'F.o.m'}
+                        readOnly={erLesevisning}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        dagIMåneden={DagIMåneden.FØRSTE_DAG}
+                        kanKunVelgeFortid
                     />
-                    <FamilieDatovelger
-                        {...skjema.felter.tom?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        id={`fom-dato-${inputUuid}`}
-                        label="T.o.m"
-                        value={skjema.felter.tom.verdi}
-                        onChange={(dato?: ISODateString) =>
-                            skjema.felter.tom.validerOgSettFelt(
-                                tilSisteDagIMånedenHvisGyldigInput(dato)
-                            )
-                        }
-                        limitations={{
-                            maxDate: serializeIso8601String(sisteDagIInneværendeMåned()),
-                        }}
-                        erLesesvisning={erLesevisning}
+                    <Månedvelger
+                        felt={skjema.felter.tom}
+                        label={'T.o.m'}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        readOnly={erLesevisning}
+                        dagIMåneden={DagIMåneden.SISTE_DAG}
+                        tilhørendeFomFelt={skjema.felter.fom}
+                        kanKunVelgeFortid
                     />
                 </FlexRowDiv>
             </FlexDatoInputWrapper>

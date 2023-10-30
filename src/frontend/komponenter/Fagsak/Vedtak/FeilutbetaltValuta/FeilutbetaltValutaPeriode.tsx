@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -39,27 +39,28 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, oppdaterEksisterendePeriode, nullstillSkjema, fjernPeriode, valideringErOk } =
-        useFeilutbetaltValuta({
-            behandlingId: behandlingId,
-            feilutbetaltValuta,
-            settFeilmelding: settFeilmelding,
-        });
+    const {
+        skjema,
+        oppdaterEksisterendePeriode,
+        fjernPeriode,
+        valideringErOk,
+        tilbakestillSkjemafelterTilDefault,
+    } = useFeilutbetaltValuta({
+        behandlingId,
+        feilutbetaltValuta,
+        settFeilmelding,
+    });
 
-    useEffect(() => {
-        nullstillOgLukkSkjema();
-    }, [feilutbetaltValuta]);
-
-    const nullstillOgLukkSkjema = () => {
-        nullstillSkjema();
+    const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
+        tilbakestillSkjemafelterTilDefault();
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
         if (erLesevisning) return;
 
         if (erRadEkspandert) {
-            nullstillOgLukkSkjema();
+            tilbakestillOgLukkSkjema();
         } else {
             settErRadEkspandert(true);
         }
@@ -71,16 +72,23 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    <FeilutbetaltValutaSkjema skjema={skjema} />
+                    <FeilutbetaltValutaSkjema
+                        skjema={skjema}
+                        key={`${feilutbetaltValuta.id}-$${
+                            erRadEkspandert ? 'ekspandert' : 'lukket'
+                        }`}
+                    />
                     <FlexRowDiv>
                         <Button
                             size="small"
-                            onClick={oppdaterEksisterendePeriode}
+                            onClick={() =>
+                                oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
+                            }
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                         >
                             Lagre periode
                         </Button>
-                        <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
+                        <Button size="small" variant="tertiary" onClick={tilbakestillOgLukkSkjema}>
                             Avbryt
                         </Button>
                     </FlexRowDiv>

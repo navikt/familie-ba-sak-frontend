@@ -13,7 +13,7 @@ import type { IBehandling, ISettPåVent } from '../../../../../typer/behandling'
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { formatterDateTilIsoString } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Datovelger from '../../../../Felleskomponenter/Datovelger';
+import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;

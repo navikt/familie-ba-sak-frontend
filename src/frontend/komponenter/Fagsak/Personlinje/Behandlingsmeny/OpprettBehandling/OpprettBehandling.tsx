@@ -12,7 +12,7 @@ import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { dagensDato } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Datovelger from '../../../../Felleskomponenter/Datovelger';
+import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -56,10 +56,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
 
     const søknadMottattDatoErMerEnn360DagerSiden =
         opprettBehandlingSkjema.felter.søknadMottattDato.verdi &&
-        isBefore(
-            opprettBehandlingSkjema.felter.søknadMottattDato.verdi,
-            subDays(dagensDato(), 360)
-        );
+        isBefore(opprettBehandlingSkjema.felter.søknadMottattDato.verdi, subDays(dagensDato, 360));
 
     return (
         <>

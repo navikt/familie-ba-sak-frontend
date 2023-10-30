@@ -6,7 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
-import Datovelger from '../Datovelger';
+import Datovelger from '../Datovelger/Datovelger';
 
 interface IProps {
     lukkModal: () => void;
