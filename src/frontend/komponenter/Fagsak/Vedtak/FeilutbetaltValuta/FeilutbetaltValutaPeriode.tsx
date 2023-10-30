@@ -46,9 +46,9 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
         valideringErOk,
         tilbakestillSkjemafelterTilDefault,
     } = useFeilutbetaltValuta({
-        behandlingId: behandlingId,
+        behandlingId,
         feilutbetaltValuta,
-        settFeilmelding: settFeilmelding,
+        settFeilmelding,
     });
 
     const tilbakestillOgLukkSkjema = () => {

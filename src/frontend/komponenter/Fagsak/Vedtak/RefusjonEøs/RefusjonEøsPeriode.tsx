@@ -45,7 +45,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
     } = useRefusjonEøs({
         behandlingId,
         refusjonEøs,
-        settFeilmelding: settFeilmelding,
+        settFeilmelding,
     });
 
     const tilbakestillOgLukkSkjema = () => {
