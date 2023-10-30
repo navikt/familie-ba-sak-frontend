@@ -2,44 +2,34 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Button, Label, Select } from '@navikt/ds-react';
-import { ATextDanger } from '@navikt/ds-tokens/dist/tokens';
+import { Fieldset, Button, Select } from '@navikt/ds-react';
 import type { ISODateString } from '@navikt/familie-datovelger';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import FilterSkjemaDatovelger from './FilterSkjemaDatovelger';
 import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
-import { DatoformatNorsk } from '../../utils/formatter';
 
-const StyledLabel = styled(Label)`
-    margin-top: 0.5rem;
-    color: ${ATextDanger};
-`;
-
-const DatoVelgerContainer = styled.div`
-    max-width: 12.5rem;
-`;
-
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    .nav-datovelger {
-        padding-top: 0.5rem;
-    }
-`;
-
-// Denne stylingen skal fjernes på sikt (minus marginer)
 const StyledButton = styled(Button)`
     margin-top: 0.5rem;
     margin-right: 1.5rem;
-    padding: calc(0.25rem - 1px) 1.5rem calc(0.25rem - 1px) 1.5rem;
-    font-weight: bolder;
-    min-height: 2rem;
-    .navds-button__inner {
-        font-weight: 600;
-        letter-spacing: 0.0625em;
+`;
+
+const StyledFieldset = styled(Fieldset)`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+`;
+
+const FilterRad = styled.div`
+    display: flex;
+    margin-top: 1rem;
+
+    & > * {
+        padding-right: 1.5rem;
     }
 `;
 
@@ -55,45 +45,36 @@ const FilterSkjema: React.FunctionComponent = () => {
     } = useOppgaver();
 
     return (
-        <Fieldset className="filterskjema" legend="Oppgavebenken filterskjema" hideLegend>
-            <div className="filterskjema__filtre">
+        <StyledFieldset legend="Oppgavebenken filterskjema" hideLegend>
+            <FilterRad>
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
                     .map((oppgaveFelt: IOppgaveFelt) => {
                         switch (oppgaveFelt.filter?.type) {
                             case 'dato':
                                 return (
-                                    <DatoVelgerContainer key={oppgaveFelt.nøkkel}>
-                                        <StyledFamilieDatovelger
-                                            id={oppgaveFelt.nøkkel}
-                                            label={oppgaveFelt.label}
-                                            onChange={(dato?: ISODateString) => {
-                                                settVerdiPåOppgaveFelt(
-                                                    oppgaveFelt,
-                                                    dato ? dato : ''
-                                                );
-                                            }}
-                                            placeholder={DatoformatNorsk.DATO}
-                                            value={oppgaveFelt.filter.selectedValue}
-                                            className="filterskjema__filtre--input"
-                                        />
-                                        {oppgaveFelt.valideringsstatus ===
-                                            Valideringsstatus.FEIL && (
-                                            <StyledLabel>{oppgaveFelt.feilmelding}</StyledLabel>
-                                        )}
-                                    </DatoVelgerContainer>
+                                    <FilterSkjemaDatovelger
+                                        key={oppgaveFelt.nøkkel}
+                                        label={oppgaveFelt.label}
+                                        onDateChange={(dato: ISODateString) => {
+                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato);
+                                        }}
+                                        value={oppgaveFelt.filter.selectedValue}
+                                        visFeilmeldinger={
+                                            oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
+                                        }
+                                        feilmelding={oppgaveFelt.feilmelding}
+                                    />
                                 );
                             case 'select':
                                 return (
                                     <Select
-                                        size={'small'}
                                         label={oppgaveFelt.label}
                                         onChange={event =>
                                             settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)
                                         }
                                         key={oppgaveFelt.nøkkel}
                                         value={oppgaveFelt.filter.selectedValue}
-                                        className="filterskjema__filtre--input"
                                         error={
                                             oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
                                                 ? oppgaveFelt.feilmelding
@@ -132,7 +113,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                 return null;
                         }
                     })}
-            </div>
+            </FilterRad>
 
             <div className="filterskjema__actions">
                 <StyledButton
@@ -150,7 +131,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     children={'Tilbakestill filtrering'}
                 />
             </div>
-        </Fieldset>
+        </StyledFieldset>
     );
 };
 
