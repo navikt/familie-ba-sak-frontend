@@ -14,7 +14,6 @@ export enum ToggleNavn {
     kanBehandleKlage = 'familie-ba-sak.klage',
 
     støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
-    manuellPostering = 'familie-ba-sak.manuell-postering',
     støtterRefusjonEøs = 'familie-ba-sak.behandling.refusjon-eos',
     organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
