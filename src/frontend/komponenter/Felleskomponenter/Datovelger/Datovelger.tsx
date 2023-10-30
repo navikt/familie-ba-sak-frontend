@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { addDays, format, startOfDay, subDays } from 'date-fns';
+import { addDays, format, subDays } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { dagensDato } from '../../utils/dato';
-import { Datoformat } from '../../utils/formatter';
+import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { dagensDato } from '../../../utils/dato';
+import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     felt: Felt<Date | undefined>;
@@ -20,16 +21,6 @@ interface IProps {
     datoMåFyllesUt?: boolean;
     readOnly?: boolean;
 }
-
-enum Feilmelding {
-    UGYDLIG_DATO = 'UGYDLIG_DATO',
-    FØR_MIN_DATO = 'FØR_MIN_DATO',
-    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
-}
-
-const tidligsteRelevanteDato = () => startOfDay(new Date(1900, 0));
-
-const senesteRelevanteDato = () => startOfDay(new Date(2500, 0));
 
 const Datovelger = ({
     felt,
@@ -46,14 +37,14 @@ const Datovelger = ({
 
     const hentToDate = () => {
         if (maksDatoAvgrensning) return maksDatoAvgrensning;
-        if (kanKunVelgeFortid) return dagensDato();
-        return senesteRelevanteDato();
+        if (kanKunVelgeFortid) return dagensDato;
+        return senesteRelevanteDato;
     };
 
     const hentFromDate = () => {
         if (minDatoAvgrensning) return minDatoAvgrensning;
-        if (kanKunVelgeFremtid) return dagensDato();
-        return tidligsteRelevanteDato();
+        if (kanKunVelgeFremtid) return dagensDato;
+        return tidligsteRelevanteDato;
     };
 
     const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
@@ -78,7 +69,7 @@ const Datovelger = ({
             } else if (val.isAfter) {
                 nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);
             } else if (!val.isValidDate) {
-                nullstillOgSettFeilmelding(Feilmelding.UGYDLIG_DATO);
+                nullstillOgSettFeilmelding(Feilmelding.UGYLDIG_DATO);
             } else {
                 setError(undefined);
             }
@@ -105,7 +96,7 @@ const Datovelger = ({
     };
 
     const feilmeldinger: Record<Feilmelding, string> = {
-        UGYDLIG_DATO: 'Du må velge en gyldig dato',
+        UGYLDIG_DATO: 'Du må velge en gyldig dato',
         FØR_MIN_DATO: feilmeldingForDatoFørMinDato(),
         ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
     };

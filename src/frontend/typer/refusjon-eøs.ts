@@ -1,24 +1,24 @@
-import type { FamilieIsoDate } from '../utils/kalender';
+import type { IsoDatoString } from '../utils/dato';
 export interface IRestRefusjonEøs {
     id: number;
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: IsoDatoString;
+    tom: IsoDatoString;
     refusjonsbeløp: number;
     land: string;
     refusjonAvklart: boolean;
 }
 
 export interface IRestNyRefusjonEøs {
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: IsoDatoString;
+    tom: IsoDatoString;
     refusjonsbeløp: number;
     land: string;
     refusjonAvklart: boolean;
 }
 
 export interface IRefusjonEøsSkjemaFelter {
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: Date | undefined;
+    tom: Date | undefined;
     refusjonsbeløp: string;
     land: string;
     refusjonAvklart: boolean | undefined;

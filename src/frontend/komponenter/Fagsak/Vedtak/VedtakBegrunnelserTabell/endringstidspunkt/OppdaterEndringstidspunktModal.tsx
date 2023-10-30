@@ -19,7 +19,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { formatterDate } from '../../../../../utils/dato';
 import { Datoformat } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Datovelger from '../../../../Felleskomponenter/Datovelger';
+import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;

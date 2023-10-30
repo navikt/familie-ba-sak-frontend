@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -38,28 +38,24 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
     const {
         skjema,
         oppdaterEksisterendePeriode,
-        nullstillSkjema,
         fjernPeriode,
         valideringErOk,
         validerAlleSynligeFelter,
+        tilbakestillSkjemafelterTilDefault,
     } = useRefusjonEøs({
         behandlingId,
         refusjonEøs,
-        settFeilmelding: settFeilmelding,
+        settFeilmelding,
     });
 
-    useEffect(() => {
-        nullstillOgLukkSkjema();
-    }, [refusjonEøs]);
-
-    const nullstillOgLukkSkjema = () => {
-        nullstillSkjema();
+    const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
+        tilbakestillSkjemafelterTilDefault();
     };
 
     const håndterLukkingOgÅpningAvPanel = () => {
         if (erRadEkspandert) {
-            nullstillOgLukkSkjema();
+            tilbakestillOgLukkSkjema();
         } else {
             validerAlleSynligeFelter();
             settErRadEkspandert(true);
@@ -72,17 +68,26 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
             onOpenChange={håndterLukkingOgÅpningAvPanel}
             content={
                 <FlexColumnDiv>
-                    <RefusjonEøsSkjema skjema={skjema} />
+                    <RefusjonEøsSkjema
+                        skjema={skjema}
+                        key={`${refusjonEøs.id}-$${erRadEkspandert ? 'ekspandert' : 'lukket'}`}
+                    />
                     {!erLesevisning && (
                         <FlexRowDiv>
                             <Button
                                 size="small"
-                                onClick={oppdaterEksisterendePeriode}
+                                onClick={() =>
+                                    oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
+                                }
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
                             >
                                 Lagre periode
                             </Button>
-                            <Button size="small" variant="tertiary" onClick={nullstillOgLukkSkjema}>
+                            <Button
+                                size="small"
+                                variant="tertiary"
+                                onClick={tilbakestillOgLukkSkjema}
+                            >
                                 Avbryt
                             </Button>
                         </FlexRowDiv>
