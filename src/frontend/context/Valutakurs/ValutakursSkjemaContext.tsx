@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+
+import { isBefore } from 'date-fns';
 
 import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -10,6 +12,11 @@ import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
 import {
+    formatterDateTilIsoString,
+    formatterDateTilIsoStringEllerUndefined,
+    validerGyldigDato,
+} from '../../utils/dato';
+import {
     erBarnGyldig,
     erEøsPeriodeGyldig,
     erValutakodeGyldig,
@@ -18,7 +25,6 @@ import {
     tellAntallDesimaler,
 } from '../../utils/eøsValidators';
 import type { IYearMonthPeriode } from '../../utils/kalender';
-import { erIsoStringGyldig, sammenlignDatoer } from '../../utils/kalender';
 import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
@@ -26,16 +32,6 @@ import {
     konverterSkjemaverdiTilDesimal,
 } from '../Eøs/EøsContext';
 
-const erValutakursDatoGyldig = (
-    felt: FeltState<string | undefined>
-): FeltState<string | undefined> => {
-    if (isEmpty(felt.verdi)) {
-        return feil(felt, 'Valutakursdato er påkrevd, men mangler input');
-    } else if (!erIsoStringGyldig(felt.verdi)) {
-        return feil(felt, 'Ugyldig format på valutakursdato');
-    }
-    return ok(felt);
-};
 const erValutakursGyldig = (
     felt: FeltState<string | undefined>,
     skalValideres: boolean
@@ -85,15 +81,15 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         valideringsfunksjon: erValutakodeGyldig,
     });
 
-    const valutakursdato = useFelt<string | undefined>({
-        verdi: valutakurs.valutakursdato,
-        valideringsfunksjon: erValutakursDatoGyldig,
+    const valutakursdato = useFelt<Date | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: validerGyldigDato,
     });
 
     const erManuellInputAvKurs: boolean =
         valutakode?.verdi === 'ISK' &&
         !!valutakursdato?.verdi &&
-        sammenlignDatoer(valutakursdato.verdi, new Date(2018, 1, 1, 0, 0, 0)) < 0;
+        isBefore(new Date(valutakursdato.verdi), new Date(2018, 1, 1, 0, 0, 0));
 
     const kurs = useFelt<string | undefined>({
         avhengigheter: {
@@ -137,20 +133,60 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         skjemanavn: valutakursFeilmeldingId(valutakurs),
     });
 
+    const [tidligereValutakurs, settTidligereValutakurs] = useState<IRestValutakurs>();
+
+    const settDatofelterTilDefault = () => {
+        const nyValutakursdato = valutakurs.valutakursdato
+            ? new Date(valutakurs.valutakursdato)
+            : undefined;
+        skjema.felter.valutakursdato.validerOgSettFelt(nyValutakursdato);
+    };
+
+    const tilbakestillFelterTilDefault = () => {
+        skjema.felter.periodeId.nullstill();
+        skjema.felter.id.nullstill();
+        skjema.felter.status.nullstill();
+        skjema.felter.initielFom.nullstill();
+        skjema.felter.barnIdenter.nullstill();
+        skjema.felter.periode.nullstill();
+        skjema.felter.valutakode.nullstill();
+        skjema.felter.kurs.nullstill();
+        settDatofelterTilDefault();
+    };
+
+    if (valutakurs !== tidligereValutakurs) {
+        settTidligereValutakurs(valutakurs);
+        tilbakestillFelterTilDefault();
+    }
+
+    if (
+        formatterDateTilIsoString(skjema.felter.valutakursdato.verdi) !== valutakurs.valutakursdato
+    ) {
+        skjema.felter.kurs?.validerOgSettFelt('');
+    }
+
+    if (valutakurs.valutakode !== skjema.felter.valutakode.verdi) {
+        skjema.felter.kurs?.validerOgSettFelt('');
+        skjema.felter.valutakursdato?.nullstill();
+        skjema.felter.valutakode?.validerOgSettFelt(valutakurs.valutakode);
+    }
+
     const sendInnSkjema = () => {
         if (kanSendeSkjema()) {
             settSubmitRessurs(byggTomRessurs());
             settVisfeilmeldinger(false);
-            onSubmit(
+            onSubmit<Omit<IRestValutakurs, 'status'>>(
                 {
                     method: 'PUT',
                     data: {
                         id: valutakurs.id,
-                        fom: skjema.felter.periode.verdi.fom,
+                        fom: skjema.felter.periode.verdi.fom ?? '',
                         tom: skjema.felter.periode.verdi.tom,
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         valutakode: skjema.felter.valutakode?.verdi,
-                        valutakursdato: skjema.felter.valutakursdato?.verdi,
+                        valutakursdato: formatterDateTilIsoStringEllerUndefined(
+                            skjema.felter.valutakursdato?.verdi
+                        ),
                         kurs: konverterSkjemaverdiTilDesimal(skjema.felter.kurs?.verdi),
                     },
                     url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}`,
@@ -198,16 +234,11 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
             skjema.felter.periode?.verdi.fom !== valutakurs.fom ||
             erTomEndret ||
             skjema.felter.valutakode?.verdi !== valutakurs.valutakode ||
-            skjema.felter.valutakursdato?.verdi !== valutakurs.valutakursdato ||
+            formatterDateTilIsoStringEllerUndefined(skjema.felter.valutakursdato?.verdi) !==
+                valutakurs.valutakursdato ||
             skjema.felter.kurs?.verdi !== konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs)
         );
     };
-
-    useEffect(() => {
-        if (valutakursdato.verdi !== valutakurs.valutakursdato) {
-            skjema.felter.kurs?.validerOgSettFelt('');
-        }
-    }, [valutakursdato.verdi]);
 
     return {
         erValutakursEkspandert,
@@ -217,7 +248,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         kanSendeSkjema,
         sendInnSkjema,
         erValutakursSkjemaEndret,
-        nullstillSkjema,
+        tilbakestillFelterTilDefault,
         slettValutakurs,
         sletterValutakurs,
         erManuellInputAvKurs,

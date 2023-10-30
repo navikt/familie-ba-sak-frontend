@@ -35,7 +35,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
         skjema,
         valideringErOk,
         sendInnSkjema,
-        nullstillSkjema,
+        tilbakestillFelterTilDefault,
         kanSendeSkjema,
         erValutakursSkjemaEndret,
         slettValutakurs,
@@ -49,7 +49,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     React.useEffect(() => {
         if (valutakurs.valutakode !== skjema.felter.valutakode?.verdi) {
             skjema.felter.kurs?.validerOgSettFelt('');
-            skjema.felter.valutakursdato?.validerOgSettFelt('');
+            skjema.felter.valutakursdato?.nullstill();
             skjema.felter.valutakode?.validerOgSettFelt(valutakurs.valutakode);
         }
     }, [valutakurs]);
@@ -65,7 +65,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
             alert('Valutakurs har endringer som ikke er lagret!');
         } else {
             settErValutakursEkspandert(!erValutakursEkspandert);
-            nullstillSkjema();
+            tilbakestillFelterTilDefault();
         }
     };
 

@@ -4,13 +4,6 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Link, Heading, Button, Fieldset, TextField } from '@navikt/ds-react';
-import {
-    AFontLineHeightLarge,
-    AFontSizeLarge,
-    AFontWeightRegular,
-} from '@navikt/ds-tokens/dist/tokens';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
-import type { ISODateString } from '@navikt/familie-datovelger';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -22,7 +15,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IValutakurs } from '../../../../typer/eøsPerioder';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
-import { DatoformatNorsk } from '../../../../utils/formatter';
+import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
 import { StyledFamilieValutavelger } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
@@ -30,36 +23,11 @@ import { StyledFamilieValutavelger } from '../UtbetaltAnnetLand/UtenlandskPeriod
 const ValutakursRad = styled.div`
     width: 32rem;
     display: flex;
-    justify-content: space-between;
+    gap: 1rem;
 `;
 
 const StyledISKAlert = styled(Alert)`
     margin-top: 2rem;
-`;
-
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    .nav-datovelger {
-        margin-top: 9px;
-    }
-    .nav-datovelger__input {
-        min-height: 48px;
-        font-size: ${AFontSizeLarge};
-        font-weight: ${AFontWeightRegular};
-        letter-spacing: 0;
-        line-height: ${AFontLineHeightLarge};
-    }
-
-    .nav-datovelger__inputContainer {
-        width: 9rem;
-    }
-
-    label {
-        font-size: ${AFontSizeLarge};
-        letter-spacing: 0;
-        font-weight: bold;
-        margin: 0;
-        line-height: ${AFontLineHeightLarge};
-    }
 `;
 
 const StyledTextField = styled(TextField)`
@@ -164,23 +132,11 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     legend={'Registrer valutakursdato'}
                 >
                     <ValutakursRad>
-                        <StyledFamilieDatovelger
-                            {...skjema.felter.valutakursdato?.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            limitations={{ weekendsNotSelectable: true }}
-                            id={`valutakurs_${skjema.felter.periodeId}`}
+                        <Datovelger
+                            felt={skjema.felter.valutakursdato}
                             label={'Valutakursdato'}
-                            value={
-                                skjema.felter.valutakursdato?.verdi !== null
-                                    ? skjema.felter.valutakursdato?.verdi
-                                    : undefined
-                            }
-                            placeholder={DatoformatNorsk.DATO}
-                            erLesesvisning={lesevisning}
-                            onChange={(dato?: ISODateString) =>
-                                skjema.felter.valutakursdato?.validerOgSettFelt(dato)
-                            }
+                            visFeilmeldinger={false}
+                            readOnly={lesevisning}
                         />
                         <StyledFamilieValutavelger
                             erLesevisning={true}
