@@ -13,7 +13,6 @@ export enum ToggleNavn {
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
 
-    støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
     støtterRefusjonEøs = 'familie-ba-sak.behandling.refusjon-eos',
     organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',

@@ -18,12 +18,10 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { DeltagerInfo } from './DeltagerInfo';
-import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { FagsakType, fagsakStatus } from '../../typer/fagsak';
+import { fagsakStatus, FagsakType } from '../../typer/fagsak';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
-import { ToggleNavn } from '../../typer/toggles';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
@@ -75,7 +73,6 @@ export const BrukerPanel: React.FC = () => {
         settMinimalFagsakTilNormalFagsakForPerson,
         kanKnyttesTilInstitusjonsfagsak,
     } = useManuellJournalfør();
-    const { toggles } = useApp();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
@@ -209,11 +206,11 @@ export const BrukerPanel: React.FC = () => {
                                 >
                                     <option value={FagsakType.NORMAL}>Velg</option>
                                     <option value={FagsakType.INSTITUSJON}>Institusjon</option>
-                                    {toggles[ToggleNavn.støtterEnsligMindreårig] && (
+                                    {
                                         <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
                                             Enslig mindreårig
                                         </option>
-                                    )}
+                                    }
                                 </StyledSelect>
                                 {erBrukerPåInstitusjon && (
                                     <StyledSelect
