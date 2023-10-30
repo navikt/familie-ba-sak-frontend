@@ -83,7 +83,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 
                     <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
-                        åpenBehandling.kategori === BehandlingKategori.EØS && (
+                        åpenBehandling.kategori === BehandlingKategori.EØS &&
+                        !erLesevisning && (
                             <Dropdown.Menu.List.Item onClick={visFeilutbetaltValuta}>
                                 <CalculatorIcon fontSize={'1.4rem'} />
                                 Legg til feilutbetalt valuta og sats
