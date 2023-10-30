@@ -137,6 +137,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             label={'Valutakursdato'}
                             visFeilmeldinger={false}
                             readOnly={lesevisning}
+                            disableWeekends
+                            kanKunVelgeFortid
                         />
                         <StyledFamilieValutavelger
                             erLesevisning={true}

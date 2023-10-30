@@ -6,7 +6,7 @@ import { endOfMonth, isBefore, isSameDay, startOfMonth } from 'date-fns';
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { GenerellFeilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato, formatterDate } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -36,7 +36,7 @@ const Månedvelger = ({
     kanKunVelgeFortid = false,
     tilhørendeFomFelt,
 }: IProps) => {
-    const [error, setError] = useState<Feilmelding | undefined>();
+    const [error, setError] = useState<GenerellFeilmelding | undefined>();
     const [forrigeTilhørendeFomVerdi, settforrigeTilhørendeFomVerdi] = useState(
         tilhørendeFomFelt?.verdi
     );
@@ -52,7 +52,7 @@ const Månedvelger = ({
         return senesteRelevanteDato;
     };
 
-    const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
+    const nullstillOgSettFeilmelding = (feilmelding: GenerellFeilmelding) => {
         if (error !== feilmelding) {
             setError(feilmelding);
             felt.nullstill();
@@ -79,11 +79,11 @@ const Månedvelger = ({
         toDate: hentToDate(),
         onValidate: val => {
             if (val.isBefore) {
-                nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
+                nullstillOgSettFeilmelding(GenerellFeilmelding.FØR_MIN_DATO);
             } else if (val.isAfter) {
-                nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);
+                nullstillOgSettFeilmelding(GenerellFeilmelding.ETTER_MAKS_DATO);
             } else if (!val.isValidMonth) {
-                nullstillOgSettFeilmelding(Feilmelding.UGYLDIG_DATO);
+                nullstillOgSettFeilmelding(GenerellFeilmelding.UGYLDIG_DATO);
             } else {
                 setError(undefined);
             }
@@ -98,7 +98,7 @@ const Månedvelger = ({
     if (forrigeTilhørendeFomVerdi !== tilhørendeFomFelt?.verdi) {
         settforrigeTilhørendeFomVerdi(tilhørendeFomFelt?.verdi);
         if (valgtDatoErFørTilhørendeFom()) {
-            nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
+            nullstillOgSettFeilmelding(GenerellFeilmelding.FØR_MIN_DATO);
         } else {
             setError(undefined);
             oppdaterFeltMedValgtDato(selectedMonth);
@@ -135,7 +135,7 @@ const Månedvelger = ({
         })}`;
     };
 
-    const feilmeldinger: Record<Feilmelding, string> = {
+    const feilmeldinger: Record<GenerellFeilmelding, string> = {
         UGYLDIG_DATO: 'Du må velge en gyldig måned',
         FØR_MIN_DATO: feilmeldingForDatoFørMinDato(),
         ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
