@@ -222,6 +222,28 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         });
     };
 
+    const erValutakursdatoerLike = () => {
+        const skjemafeltErTomt = skjema.felter.valutakursdato.verdi === undefined;
+        const nyValutakursdatoErTom = valutakurs.valutakursdato == null;
+
+        return (
+            (skjemafeltErTomt && nyValutakursdatoErTom) ||
+            formatterDateTilIsoStringEllerUndefined(skjema.felter.valutakursdato?.verdi) ===
+                valutakurs.valutakursdato
+        );
+    };
+
+    const erValutakurserLike = () => {
+        const skjemaFeltErTomt =
+            skjema.felter.kurs.verdi === undefined || skjema.felter.kurs.verdi === '';
+        const nyValutakursErTom = valutakurs.kurs == null || valutakurs.kurs === '';
+
+        return (
+            (skjemaFeltErTomt && nyValutakursErTom) ||
+            skjema.felter.kurs.verdi === konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs)
+        );
+    };
+
     const erValutakursSkjemaEndret = () => {
         const barnFjernetISkjema = valutakurs.barnIdenter.filter(
             barn => !skjema.felter.barnIdenter.verdi.some(ident => ident.value === barn)
@@ -234,9 +256,8 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
             skjema.felter.periode?.verdi.fom !== valutakurs.fom ||
             erTomEndret ||
             skjema.felter.valutakode?.verdi !== valutakurs.valutakode ||
-            formatterDateTilIsoStringEllerUndefined(skjema.felter.valutakursdato?.verdi) !==
-                valutakurs.valutakursdato ||
-            skjema.felter.kurs?.verdi !== konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs)
+            !erValutakursdatoerLike() ||
+            !erValutakurserLike()
         );
     };
 
