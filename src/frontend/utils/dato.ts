@@ -7,7 +7,7 @@ import { Datoformat } from './formatter';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 
-export const dagensDato = () => startOfToday();
+export const dagensDato = startOfToday();
 
 interface FormatterProps {
     dato?: Date;

@@ -43,13 +43,13 @@ const Månedvelger = ({
 
     const hentFromDate = () => {
         if (tilhørendeFomFelt?.verdi !== undefined) return tilhørendeFomFelt.verdi;
-        if (kanKunVelgeFremtid) return dagensDato();
-        return tidligsteRelevanteDato();
+        if (kanKunVelgeFremtid) return dagensDato;
+        return tidligsteRelevanteDato;
     };
 
     const hentToDate = () => {
-        if (kanKunVelgeFortid) return dagensDato();
-        return senesteRelevanteDato();
+        if (kanKunVelgeFortid) return dagensDato;
+        return senesteRelevanteDato;
     };
 
     const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
@@ -108,7 +108,7 @@ const Månedvelger = ({
     const feilmeldingForDatoFørMinDato = () => {
         const tidligsteFraDato = hentFromDate();
 
-        if (isSameDay(tidligsteFraDato, dagensDato())) {
+        if (isSameDay(tidligsteFraDato, dagensDato)) {
             return 'Du kan ikke sette en måned som er tilbake i tid';
         }
         if (tilhørendeFomFelt?.verdi && isSameDay(tidligsteFraDato, tilhørendeFomFelt?.verdi)) {

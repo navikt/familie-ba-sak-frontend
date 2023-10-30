@@ -56,10 +56,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
 
     const søknadMottattDatoErMerEnn360DagerSiden =
         opprettBehandlingSkjema.felter.søknadMottattDato.verdi &&
-        isBefore(
-            opprettBehandlingSkjema.felter.søknadMottattDato.verdi,
-            subDays(dagensDato(), 360)
-        );
+        isBefore(opprettBehandlingSkjema.felter.søknadMottattDato.verdi, subDays(dagensDato, 360));
 
     return (
         <>

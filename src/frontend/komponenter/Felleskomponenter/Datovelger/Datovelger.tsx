@@ -37,14 +37,14 @@ const Datovelger = ({
 
     const hentToDate = () => {
         if (maksDatoAvgrensning) return maksDatoAvgrensning;
-        if (kanKunVelgeFortid) return dagensDato();
-        return senesteRelevanteDato();
+        if (kanKunVelgeFortid) return dagensDato;
+        return senesteRelevanteDato;
     };
 
     const hentFromDate = () => {
         if (minDatoAvgrensning) return minDatoAvgrensning;
-        if (kanKunVelgeFremtid) return dagensDato();
-        return tidligsteRelevanteDato();
+        if (kanKunVelgeFremtid) return dagensDato;
+        return tidligsteRelevanteDato;
     };
 
     const nullstillOgSettFeilmelding = (feilmelding: Feilmelding) => {
