@@ -74,7 +74,9 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                 <FlexColumnDiv>
                     <FeilutbetaltValutaSkjema
                         skjema={skjema}
-                        key={erRadEkspandert ? 'ekspandert' : 'lukket'}
+                        key={`${feilutbetaltValuta.id}-$${
+                            erRadEkspandert ? 'ekspandert' : 'lukket'
+                        }`}
                     />
                     <FlexRowDiv>
                         <Button

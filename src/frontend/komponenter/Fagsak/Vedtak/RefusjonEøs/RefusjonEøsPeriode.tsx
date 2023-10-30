@@ -70,7 +70,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                 <FlexColumnDiv>
                     <RefusjonEøsSkjema
                         skjema={skjema}
-                        key={erRadEkspandert ? 'ekspandert' : 'lukket'}
+                        key={`${refusjonEøs.id}-$${erRadEkspandert ? 'ekspandert' : 'lukket'}`}
                     />
                     {!erLesevisning && (
                         <FlexRowDiv>
