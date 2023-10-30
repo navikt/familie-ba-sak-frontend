@@ -69,7 +69,7 @@ const Datovelger = ({
             } else if (val.isAfter) {
                 nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);
             } else if (!val.isValidDate) {
-                nullstillOgSettFeilmelding(Feilmelding.UGYDLIG_DATO);
+                nullstillOgSettFeilmelding(Feilmelding.UGYLDIG_DATO);
             } else {
                 setError(undefined);
             }
@@ -96,7 +96,7 @@ const Datovelger = ({
     };
 
     const feilmeldinger: Record<Feilmelding, string> = {
-        UGYDLIG_DATO: 'Du må velge en gyldig dato',
+        UGYLDIG_DATO: 'Du må velge en gyldig dato',
         FØR_MIN_DATO: feilmeldingForDatoFørMinDato(),
         ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
     };
