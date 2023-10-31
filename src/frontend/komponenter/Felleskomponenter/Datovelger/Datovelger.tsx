@@ -6,7 +6,7 @@ import { addDays, format, subDays } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { GenerellFeilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -23,11 +23,12 @@ interface IProps {
     disableWeekends?: boolean;
 }
 
-enum DatovelgerFeilmelding {
+export enum Feilmelding {
+    UGYLDIG_DATO = 'UGYLDIG_DATO',
+    FØR_MIN_DATO = 'FØR_MIN_DATO',
+    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
     HELG_ER_UGYLDIG = 'HELG_ER_UGYLDIG',
 }
-
-type Feilmelding = GenerellFeilmelding | DatovelgerFeilmelding;
 
 const Datovelger = ({
     felt,
@@ -74,13 +75,13 @@ const Datovelger = ({
                 felt.nullstill();
                 setError(undefined);
             } else if (val.isBefore) {
-                nullstillOgSettFeilmelding(GenerellFeilmelding.FØR_MIN_DATO);
+                nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
             } else if (val.isAfter) {
-                nullstillOgSettFeilmelding(GenerellFeilmelding.ETTER_MAKS_DATO);
+                nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);
             } else if (disableWeekends && val.isWeekend) {
-                nullstillOgSettFeilmelding(DatovelgerFeilmelding.HELG_ER_UGYLDIG);
+                nullstillOgSettFeilmelding(Feilmelding.HELG_ER_UGYLDIG);
             } else if (!val.isValidDate) {
-                nullstillOgSettFeilmelding(GenerellFeilmelding.UGYLDIG_DATO);
+                nullstillOgSettFeilmelding(Feilmelding.UGYLDIG_DATO);
             } else {
                 setError(undefined);
             }
