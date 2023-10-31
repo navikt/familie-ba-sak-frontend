@@ -8,9 +8,7 @@ import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
 import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
-import { useApp } from '../../../../context/AppContext';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { periodeToString } from '../../../../utils/kalender';
 import { summerBeløpForPerioder } from '../utils';
 
@@ -50,7 +48,6 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     behandlingId,
     fagsakId,
 }) => {
-    const { toggles } = useApp();
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
         feilutbetaltValutaListe.length === 0
     );
@@ -63,15 +60,13 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
         skjulFeilutbetaltValuta();
     }
 
-    const totaltFeilutbetaltBeløp = toggles[ToggleNavn.feilutbetaltValutaPerMåned]
-        ? summerBeløpForPerioder(
-              feilutbetaltValutaListe.map(it => ({
-                  fom: it.fom,
-                  tom: it.tom,
-                  beløp: it.feilutbetaltBeløp,
-              }))
-          )
-        : feilutbetaltValutaListe.reduce((acc, val) => acc + val.feilutbetaltBeløp, 0);
+    const totaltFeilutbetaltBeløp = summerBeløpForPerioder(
+        feilutbetaltValutaListe.map(it => ({
+            fom: it.fom,
+            tom: it.tom,
+            beløp: it.feilutbetaltBeløp,
+        }))
+    );
 
     const tekstTilNØS = `Viser til følgende vedtak \nhttps://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak
     \nBer om at feilutbetalingsbeløpet på grunn av valuta- og satsendringer trekkes i fremtidige utbetalinger.
@@ -82,9 +77,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                 `${periodeToString({
                     fom: feilutbetaltValuta.fom,
                     tom: feilutbetaltValuta.tom,
-                })} ${toggles[ToggleNavn.feilutbetaltValutaPerMåned] ? 'kr/mnd' : 'kr'} ${
-                    feilutbetaltValuta.feilutbetaltBeløp
-                }`
+                })} ${'kr/mnd'} ${feilutbetaltValuta.feilutbetaltBeløp}`
         )
         .join('\n')}`;
 
@@ -100,7 +93,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell align="right" scope="col">
                             Feilutbetalt beløp
-                            {toggles[ToggleNavn.feilutbetaltValutaPerMåned] && ' per måned'}
+                            {' per måned'}
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col" />
                     </Table.Row>

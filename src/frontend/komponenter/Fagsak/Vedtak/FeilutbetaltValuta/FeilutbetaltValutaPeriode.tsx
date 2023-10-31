@@ -3,13 +3,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
+import { Alert, Button, Table, Tooltip } from '@navikt/ds-react';
 
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
-import { useApp } from '../../../../context/AppContext';
 import type { IRestFeilutbetaltValuta } from '../../../../typer/eøs-feilutbetalt-valuta';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { periodeToString } from '../../../../utils/kalender';
 
 interface IFeilutbetaltValutaPeriode {
@@ -35,7 +33,6 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     erLesevisning,
     behandlingId,
 }) => {
-    const { toggles } = useApp();
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
@@ -103,8 +100,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                 })}
             </Table.DataCell>
             <Table.DataCell align="right">
-                {feilutbetaltValuta.feilutbetaltBeløp}{' '}
-                {toggles[ToggleNavn.feilutbetaltValutaPerMåned] ? 'kr/mnd' : 'kr'}
+                {feilutbetaltValuta.feilutbetaltBeløp} {'kr/mnd'}
             </Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
