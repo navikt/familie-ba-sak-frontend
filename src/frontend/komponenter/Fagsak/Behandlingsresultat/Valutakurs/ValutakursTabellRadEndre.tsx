@@ -161,12 +161,11 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         />
                         <StyledTextField
                             label={'Valutakurs'}
-                            readOnly={lesevisning}
+                            readOnly={lesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
                             onChange={event =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
-                            disabled={!erManuellInputAvKurs}
                         />
                     </ValutakursRad>
                     {erManuellInputAvKurs && (
