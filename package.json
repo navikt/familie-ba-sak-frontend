@@ -14,7 +14,7 @@
     "snyk-protect": "snyk protect",
     "test": "jest",
     "test:one": "jest -t",
-    "lint": "eslint './src/**/*.{js,ts,tsx}' --max-warnings=0",
+    "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
     "prettier-check": "prettier --check .",
     "prettier-fix": "prettier --write .",

@@ -20,6 +20,7 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import {
@@ -30,6 +31,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import { PersonType } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
@@ -92,6 +94,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
+    const { toggles } = useApp();
 
     const { åpenBehandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
         useBehandling();
@@ -307,7 +310,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     >
                         Nei
                     </Radio>
-                    {redigerbartVilkår.verdi.vilkårType === VilkårType.LOVLIG_OPPHOLD &&
+                    {toggles[ToggleNavn.eøsPraksisendringSeptember2023] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.LOVLIG_OPPHOLD &&
                         redigerbartVilkår.verdi.vurderesEtter === Regelverk.EØS_FORORDNINGEN && (
                             <Radio
                                 value={ResultatBegrunnelse.IKKE_AKTUELT}

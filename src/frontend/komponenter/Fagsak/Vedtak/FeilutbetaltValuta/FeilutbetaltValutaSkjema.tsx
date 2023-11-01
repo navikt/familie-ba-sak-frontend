@@ -5,8 +5,10 @@ import styled from 'styled-components';
 import { Label, TextField } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import { useApp } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../typer/eøs-feilutbetalt-valuta';
+import { ToggleNavn } from '../../../../typer/toggles';
 import Månedvelger, { DagIMåneden } from '../../../Felleskomponenter/Datovelger/Månedvelger';
 
 interface IFeilutbetaltValutaSkjemaProps {
@@ -36,6 +38,7 @@ const StyledTextField = styled(TextField)`
 const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
     skjema,
 }) => {
+    const { toggles } = useApp();
     return (
         <>
             <FlexDatoInputWrapper>
@@ -61,7 +64,11 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
             <StyledTextField
                 {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label={'Feilutbetalt beløp per måned'}
+                label={
+                    toggles[ToggleNavn.feilutbetaltValutaPerMåned]
+                        ? 'Feilutbetalt beløp per måned'
+                        : 'Feilutbetalt beløp'
+                }
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
                 onChange={changeEvent =>

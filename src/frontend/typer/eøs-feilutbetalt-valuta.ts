@@ -5,6 +5,7 @@ export interface IRestFeilutbetaltValuta {
     fom: IsoDatoString;
     tom: IsoDatoString;
     feilutbetaltBeløp: number;
+    erPerMåned?: boolean;
 }
 
 export interface IRestNyFeilutbetaltValutaPeriode {
