@@ -21,6 +21,7 @@ import type { IBaseFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
+import { ToggleNavn } from '../../../typer/toggles';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
 import { SamhandlerTabell } from '../../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/InstitusjonOgVerge/useSamhandler';
@@ -82,6 +83,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
         useOpprettFagsak();
     const { hentPerson } = useApp();
+    const { toggles } = useApp();
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
         fagsak => fagsak.fagsakType === FagsakType.NORMAL
@@ -142,6 +144,12 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                     }}
                     children={fagsakTypeOptions
                         .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
+                        .filter(
+                            valg =>
+                                (valg.value === FagsakType.BARN_ENSLIG_MINDREÅRIG &&
+                                    toggles[ToggleNavn.støtterEnsligMindreårig]) ||
+                                valg.value !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                        )
                         .map(option => (
                             <option key={option.value} value={option.value}>
                                 {option.label}

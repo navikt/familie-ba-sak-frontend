@@ -14,7 +14,9 @@ import {
 
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
+import { useApp } from '../../../context/AppContext';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import { ToggleNavn } from '../../../typer/toggles';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
@@ -128,6 +130,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
     const erMerEnn12MånederISimulering = perioder.length > 12;
+    const { toggles } = useApp();
+    const erManuelPosteringTogglePå = toggles[ToggleNavn.manuellPostering];
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
@@ -157,7 +161,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     return (
         <>
-            {erManuellPosteringSamtidigSomResultatIkkeErNull && (
+            {erManuelPosteringTogglePå && erManuellPosteringSamtidigSomResultatIkkeErNull && (
                 <StyledAlert variant={'warning'}>
                     Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
                     sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
@@ -173,7 +177,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 </Label>
             </SimuleringTabellOverskrift>
 
-            {finnesManuellePosteringer && (
+            {erManuelPosteringTogglePå && finnesManuellePosteringer && (
                 <StyledSwitch
                     checked={visManuellePosteringer}
                     onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
@@ -294,7 +298,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             </React.Fragment>
                         ))}
                     </tr>
-                    {visManuellePosteringer && (
+                    {erManuelPosteringTogglePå && visManuellePosteringer && (
                         <ManuellPosteringRad>
                             <td>Manuell postering</td>
                             {perioderSomSkalVisesITabellen.map(periode => (
