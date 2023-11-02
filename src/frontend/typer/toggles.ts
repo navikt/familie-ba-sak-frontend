@@ -6,18 +6,12 @@ export enum ToggleNavn {
     // Operasjonelle
     kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
-    skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
     kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
 
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
-    støtterEnsligMindreårig = 'familie-ba-sak.behandling.enslig-mindreaarig',
-    manuellPostering = 'familie-ba-sak.manuell-postering',
-    støtterRefusjonEøs = 'familie-ba-sak.behandling.refusjon-eos',
-    feilutbetaltValutaPerMåned = 'familie-ba-sak.feilutbetalt-valuta-pr-mnd',
-    organiserAvslag = 'familie-ba-sak-frontend.vedtaksperiode-organisering',
-    eøsPraksisendringSeptember2023 = 'familie-ba-sak.behandling.eos-annen-forelder-omfattet-av-norsk-lovgivning',
+
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
 }
 

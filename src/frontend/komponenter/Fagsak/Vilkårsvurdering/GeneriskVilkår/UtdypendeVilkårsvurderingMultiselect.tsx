@@ -7,9 +7,8 @@ import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { useApp } from '../../../../context/AppContext';
 import type { PersonType } from '../../../../typer/person';
-import { ToggleNavn } from '../../../../typer/toggles';
+import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
 import {
     Regelverk,
     UtdypendeVilkårsvurderingDeltBosted,
@@ -19,7 +18,6 @@ import {
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
 } from '../../../../typer/vilkår';
-import type { UtdypendeVilkårsvurdering, IVilkårResultat } from '../../../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
 import {
     bestemMuligeUtdypendeVilkårsvurderinger,
@@ -111,8 +109,6 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     personType,
     feilhåndtering,
 }) => {
-    const { toggles } = useApp();
-
     const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,
@@ -120,13 +116,9 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
     };
 
-    const muligeUtdypendeVilkårsvurderinger = toggles[ToggleNavn.eøsPraksisendringSeptember2023]
-        ? bestemMuligeUtdypendeVilkårsvurderinger(utdypendeVilkårsvurderingAvhengigheter)
-        : bestemMuligeUtdypendeVilkårsvurderinger(utdypendeVilkårsvurderingAvhengigheter).filter(
-              utdypendeVilkårsvurdering =>
-                  utdypendeVilkårsvurdering !==
-                  UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING
-          );
+    const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
+        utdypendeVilkårsvurderingAvhengigheter
+    );
 
     useEffect(() => {
         fjernUmuligeAlternativerFraRedigerbartVilkår(
