@@ -221,27 +221,14 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         });
     };
 
-    const erValutakursdatoerLike = () => {
-        const skjemafeltErTomt = skjema.felter.valutakursdato.verdi === undefined;
-        const nyValutakursdatoErTom = valutakurs.valutakursdato == null;
+    const erValutakursdatoerLike = () =>
+        (!valutakursdato.verdi && !valutakurs.valutakursdato) ||
+        formatterDateTilIsoStringEllerUndefined(valutakursdato?.verdi) ===
+            valutakurs.valutakursdato;
 
-        return (
-            (skjemafeltErTomt && nyValutakursdatoErTom) ||
-            formatterDateTilIsoStringEllerUndefined(skjema.felter.valutakursdato?.verdi) ===
-                valutakurs.valutakursdato
-        );
-    };
-
-    const erValutakurserLike = () => {
-        const skjemaFeltErTomt =
-            skjema.felter.kurs.verdi === undefined || skjema.felter.kurs.verdi === '';
-        const nyValutakursErTom = valutakurs.kurs == null || valutakurs.kurs === '';
-
-        return (
-            (skjemaFeltErTomt && nyValutakursErTom) ||
-            skjema.felter.kurs.verdi === konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs)
-        );
-    };
+    const erValutakurserLike = () =>
+        (!kurs.verdi && !valutakurs.kurs) ||
+        kurs.verdi === konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs);
 
     const erValutakursSkjemaEndret = () => {
         const barnFjernetISkjema = valutakurs.barnIdenter.filter(
