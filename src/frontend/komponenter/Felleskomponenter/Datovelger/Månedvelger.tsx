@@ -6,7 +6,7 @@ import { endOfMonth, isBefore, isSameDay, startOfMonth } from 'date-fns';
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato, formatterDate } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -24,6 +24,12 @@ interface IProps {
 export enum DagIMåneden {
     FØRSTE_DAG = 'FØRSTE_DAG',
     SISTE_DAG = 'SISTE_DAG',
+}
+
+export enum Feilmelding {
+    UGYLDIG_DATO = 'UGYLDIG_DATO',
+    FØR_MIN_DATO = 'FØR_MIN_DATO',
+    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
 }
 
 const Månedvelger = ({

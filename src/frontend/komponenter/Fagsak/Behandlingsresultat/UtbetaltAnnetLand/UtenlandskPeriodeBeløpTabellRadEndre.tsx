@@ -33,10 +33,11 @@ const UtbetaltBeløpRad = styled.div`
     width: 32rem;
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
 `;
 
 export const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEtikett?: boolean }>`
-    width: 13rem;
+    gap: 0;
 
     label {
         font-size: ${AFontSizeLarge};
@@ -47,7 +48,7 @@ export const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEti
     }
 
     div.c-countrySelect__select {
-        margin-top: 9px;
+        margin-top: 8px;
 
         .c-countrySelect__select__control {
             border: 1px solid ${ABorderDefault};
