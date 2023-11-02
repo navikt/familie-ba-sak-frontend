@@ -18,7 +18,7 @@ interface IProps {
     feilmelding: string | undefined;
 }
 
-const FilterSkjemaDatovelger = ({
+const DatovelgerForGammelSkjemaløsning = ({
     value,
     onDateChange,
     label,
@@ -59,4 +59,4 @@ const FilterSkjemaDatovelger = ({
     );
 };
 
-export default FilterSkjemaDatovelger;
+export default DatovelgerForGammelSkjemaløsning;
