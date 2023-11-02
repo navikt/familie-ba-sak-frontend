@@ -7,9 +7,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
-import { useApp } from '../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../typer/behandling';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
@@ -35,7 +33,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
     vedtaksperioderMedBegrunnelserRessurs,
 }) => {
-    const { toggles } = useApp();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     if (
@@ -82,11 +79,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
             />
             <VedtaksperiodeListe
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
-                overskrift={
-                    toggles[ToggleNavn.organiserAvslag]
-                        ? 'Generelle avslagsbegrunnelser'
-                        : 'Begrunnelser for avslag i vedtaksbrev'
-                }
+                overskrift={'Generelle avslagsbegrunnelser'}
                 åpenBehandling={åpenBehandling}
             />
         </>

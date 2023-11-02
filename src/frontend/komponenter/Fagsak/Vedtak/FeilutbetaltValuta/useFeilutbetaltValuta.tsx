@@ -5,15 +5,13 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type {
     IFeilutbetaltValutaSkjemaFelter,
-    IRestNyFeilutbetaltValutaPeriode,
     IRestFeilutbetaltValuta,
+    IRestNyFeilutbetaltValutaPeriode,
 } from '../../../../typer/eøs-feilutbetalt-valuta';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { formatterDateTilIsoString, validerGyldigDato } from '../../../../utils/dato';
 import { erPositivtHeltall } from '../../../../utils/validators';
 
@@ -34,7 +32,6 @@ const validerFeilutbetaltBeløp = (felt: FeltState<string>) => {
 
 const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandlingId }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
-    const { toggles } = useApp();
 
     const fomFelt = useFelt<Date | undefined>({
         verdi: undefined,
@@ -88,7 +85,6 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                         fom: formatterDateTilIsoString(skjema.felter.fom?.verdi),
                         tom: formatterDateTilIsoString(skjema.felter.tom?.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
-                        erPerMåned: toggles[ToggleNavn.feilutbetaltValutaPerMåned],
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
@@ -115,7 +111,6 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                         fom: formatterDateTilIsoString(skjema.felter.fom.verdi),
                         tom: formatterDateTilIsoString(skjema.felter.tom.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
-                        erPerMåned: toggles[ToggleNavn.feilutbetaltValutaPerMåned],
                     },
                 },
                 (behandling: Ressurs<IBehandling>) => {
