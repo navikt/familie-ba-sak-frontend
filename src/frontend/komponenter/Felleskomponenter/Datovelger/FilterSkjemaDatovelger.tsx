@@ -5,13 +5,10 @@ import { isValid, parseISO } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
-import type { IsoDatoString } from '../../utils/dato';
-import { formatterDate } from '../../utils/dato';
-import { Datoformat } from '../../utils/formatter';
-import {
-    senesteRelevanteDato,
-    tidligsteRelevanteDato,
-} from '../Felleskomponenter/Datovelger/utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { formatterDate } from '../../../utils/dato';
+import type { IsoDatoString } from '../../../utils/dato';
+import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     value: string | undefined;
