@@ -7,7 +7,6 @@ export enum ToggleNavn {
     kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
-    kanAutomatiskSetteVilkår = 'familie-ba-sak.kan-automatisk-sette-vilkaar',
 
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',

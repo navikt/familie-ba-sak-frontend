@@ -6,7 +6,7 @@ import { addDays, format, subDays } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { Feilmelding, senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
 import { dagensDato } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -20,6 +20,14 @@ interface IProps {
     kanKunVelgeFremtid?: boolean;
     datoMåFyllesUt?: boolean;
     readOnly?: boolean;
+    disableWeekends?: boolean;
+}
+
+export enum Feilmelding {
+    UGYLDIG_DATO = 'UGYLDIG_DATO',
+    FØR_MIN_DATO = 'FØR_MIN_DATO',
+    ETTER_MAKS_DATO = 'ETTER_MAKS_DATO',
+    HELG_ER_UGYLDIG = 'HELG_ER_UGYLDIG',
 }
 
 const Datovelger = ({
@@ -32,6 +40,7 @@ const Datovelger = ({
     kanKunVelgeFremtid = false,
     datoMåFyllesUt = true,
     readOnly = false,
+    disableWeekends = false,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>(undefined);
 
@@ -60,6 +69,7 @@ const Datovelger = ({
         },
         fromDate: hentFromDate(),
         toDate: hentToDate(),
+        disableWeekends: disableWeekends,
         onValidate: val => {
             if (val.isEmpty && !datoMåFyllesUt) {
                 felt.nullstill();
@@ -68,6 +78,8 @@ const Datovelger = ({
                 nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
             } else if (val.isAfter) {
                 nullstillOgSettFeilmelding(Feilmelding.ETTER_MAKS_DATO);
+            } else if (disableWeekends && val.isWeekend) {
+                nullstillOgSettFeilmelding(Feilmelding.HELG_ER_UGYLDIG);
             } else if (!val.isValidDate) {
                 nullstillOgSettFeilmelding(Feilmelding.UGYLDIG_DATO);
             } else {
@@ -99,6 +111,7 @@ const Datovelger = ({
         UGYLDIG_DATO: 'Du må velge en gyldig dato',
         FØR_MIN_DATO: feilmeldingForDatoFørMinDato(),
         ETTER_MAKS_DATO: feilmeldingForDatoEtterMaksDato(),
+        HELG_ER_UGYLDIG: 'Du må velge en dato som er en ukedag',
     };
 
     return (

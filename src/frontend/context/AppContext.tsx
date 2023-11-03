@@ -147,7 +147,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     useEffect(() => {
         request<string[], IToggles>({
             method: 'POST',
-            url: '/familie-ba-sak/api/feature',
+            url: '/familie-ba-sak/api/feature/er-toggler-enabled',
             data: Object.values(ToggleNavn),
         }).then((response: Ressurs<IToggles>) => {
             if (response.status === RessursStatus.SUKSESS) {
