@@ -16,13 +16,11 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
 import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
 import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -50,7 +48,6 @@ interface IProps {
 
 const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { toggles } = useApp();
 
     const {
         erVilkårsvurderingenGyldig,
@@ -162,7 +159,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
             </>
 
-            {toggles[ToggleNavn.kanAutomatiskSetteVilkår] && !erProd() && (
+            {!erProd() && (
                 <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
             )}
 
