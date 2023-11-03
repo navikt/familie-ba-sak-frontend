@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -12,7 +11,6 @@ import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
-import { DatoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
@@ -107,14 +105,10 @@ const VelgPeriode: React.FC<IProps> = ({
                     />
                 )}
                 {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
-                    <FamilieDatovelger
-                        erLesesvisning={erLesevisning}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-tom`}
+                    <DatovelgerForGammelSkjemaløsning
                         label={'T.o.m (valgfri)'}
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
+                        value={redigerbartVilkår.verdi.periode.verdi.tom}
+                        onDateChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
@@ -129,7 +123,8 @@ const VelgPeriode: React.FC<IProps> = ({
                                 },
                             });
                         }}
-                        value={redigerbartVilkår.verdi.periode.verdi.tom}
+                        visFeilmeldinger={false}
+                        readOnly={erLesevisning}
                     />
                 )}
             </FlexDiv>
