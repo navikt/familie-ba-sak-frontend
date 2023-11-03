@@ -1,7 +1,7 @@
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
-import type { IPeriode } from './kalender';
+import type { IPeriode } from './dato';
 import {
     erEtter,
     erFør,

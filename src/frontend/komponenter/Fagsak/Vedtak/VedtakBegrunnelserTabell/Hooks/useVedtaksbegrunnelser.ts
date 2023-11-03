@@ -16,7 +16,7 @@ import type {
 } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
-import type { IPeriode } from '../../../../../utils/kalender';
+import type { IPeriode } from '../../../../../utils/dato';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 
 export const useVilkårBegrunnelser = ({

@@ -22,7 +22,7 @@ import {
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
 } from '../../typer/vilkår';
-import type { IPeriode } from '../kalender';
+import type { IPeriode } from '../dato';
 import { nyPeriode } from '../kalender';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
 import {

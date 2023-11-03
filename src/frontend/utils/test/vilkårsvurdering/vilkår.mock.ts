@@ -10,7 +10,7 @@ import type {
     UtdypendeVilkårsvurdering,
 } from '../../../typer/vilkår';
 import { Regelverk, Resultat, VilkårType } from '../../../typer/vilkår';
-import type { IPeriode } from '../../kalender';
+import type { IPeriode } from '../../dato';
 import { erIkkeGenereltVilkår } from '../../vilkår';
 
 interface IMockVilkårResultat {

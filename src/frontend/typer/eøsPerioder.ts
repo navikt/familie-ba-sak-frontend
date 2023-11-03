@@ -1,7 +1,7 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IsoDatoString } from '../utils/dato';
-import type { IPeriode, IYearMonthPeriode, YearMonth } from '../utils/kalender';
+import type { IPeriode, IsoDatoString } from '../utils/dato';
+import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 

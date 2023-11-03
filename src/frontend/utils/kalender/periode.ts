@@ -1,4 +1,6 @@
-import type { FamilieIsoDate, IPeriode, IYearMonthPeriode, YearMonth } from '.';
+import type { IPeriode } from '../dato';
+
+import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
 import {
     erEtter,
     erFør,
