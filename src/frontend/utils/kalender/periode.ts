@@ -64,10 +64,6 @@ export const periodeDiff = (første: IPeriode, andre: IPeriode) => {
     );
 };
 
-export const lagPeriodeId = (periode: IPeriode) => {
-    return periodeToString(periode);
-};
-
 export const yearMonthPeriodeToString = (periode: IYearMonthPeriode) => {
     return `${yearMonthTilVisning(
         periode.fom ? yearMonthTilKalenderMåned(periode.fom) : undefined
