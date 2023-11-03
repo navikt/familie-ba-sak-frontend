@@ -75,58 +75,54 @@ const VelgPeriode: React.FC<IProps> = ({
             )}
 
             <FlexDiv>
-                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
-                    <DatovelgerForGammelSkjemaløsning
-                        label={
-                            redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
-                                ? 'F.o.m (valgfri)'
-                                : 'F.o.m'
-                        }
-                        value={redigerbartVilkår.verdi.periode.verdi.fom}
-                        onDateChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            dato,
-                                            redigerbartVilkår.verdi.periode.verdi.tom
-                                        ),
-                                    },
+                <DatovelgerForGammelSkjemaløsning
+                    label={
+                        redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                        redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                            ? 'F.o.m (valgfri)'
+                            : 'F.o.m'
+                    }
+                    value={redigerbartVilkår.verdi.periode.verdi.fom}
+                    onDateChange={(dato?: ISODateString) => {
+                        validerOgSettRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                periode: {
+                                    ...redigerbartVilkår.verdi.periode,
+                                    verdi: nyPeriode(
+                                        dato,
+                                        redigerbartVilkår.verdi.periode.verdi.tom
+                                    ),
                                 },
-                            });
-                        }}
-                        visFeilmeldinger={false}
-                        readOnly={erLesevisning}
-                        kanKunVelgeFortid
-                    />
-                )}
-                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
-                    <DatovelgerForGammelSkjemaløsning
-                        label={'T.o.m (valgfri)'}
-                        value={redigerbartVilkår.verdi.periode.verdi.tom}
-                        onDateChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            redigerbartVilkår.verdi.periode.verdi.fom,
-                                            dato
-                                        ),
-                                    },
+                            },
+                        });
+                    }}
+                    visFeilmeldinger={false}
+                    readOnly={erLesevisning}
+                    kanKunVelgeFortid
+                />
+                <DatovelgerForGammelSkjemaløsning
+                    label={'T.o.m (valgfri)'}
+                    value={redigerbartVilkår.verdi.periode.verdi.tom}
+                    onDateChange={(dato?: ISODateString) => {
+                        validerOgSettRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                periode: {
+                                    ...redigerbartVilkår.verdi.periode,
+                                    verdi: nyPeriode(
+                                        redigerbartVilkår.verdi.periode.verdi.fom,
+                                        dato
+                                    ),
                                 },
-                            });
-                        }}
-                        visFeilmeldinger={false}
-                        readOnly={erLesevisning}
-                    />
-                )}
+                            },
+                        });
+                    }}
+                    visFeilmeldinger={false}
+                    readOnly={erLesevisning}
+                />
             </FlexDiv>
         </MarginFieldset>
     );
