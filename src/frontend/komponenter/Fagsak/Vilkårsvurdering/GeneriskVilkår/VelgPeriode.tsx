@@ -14,6 +14,7 @@ import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
 import { DatoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
+import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
@@ -77,23 +78,15 @@ const VelgPeriode: React.FC<IProps> = ({
 
             <FlexDiv>
                 {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
-                    <FamilieDatovelger
-                        allowInvalidDateSelection={false}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
-                        erLesesvisning={erLesevisning}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-fom`}
+                    <DatovelgerForGammelSkjemaløsning
                         label={
                             redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                             redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
                                 ? 'F.o.m (valgfri)'
                                 : 'F.o.m'
                         }
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
+                        value={redigerbartVilkår.verdi.periode.verdi.fom}
+                        onDateChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
@@ -108,7 +101,9 @@ const VelgPeriode: React.FC<IProps> = ({
                                 },
                             });
                         }}
-                        value={redigerbartVilkår.verdi.periode.verdi.fom}
+                        visFeilmeldinger={false}
+                        readOnly={erLesevisning}
+                        kanKunVelgeFortid
                     />
                 )}
                 {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
