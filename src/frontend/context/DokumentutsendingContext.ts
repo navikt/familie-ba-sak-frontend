@@ -8,6 +8,7 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
@@ -17,8 +18,10 @@ import {
     opplysningsdokumenter,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
+import { Distribusjonskanal } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
+import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import { Datoformat, formaterIsoDato } from '../utils/formatter';
@@ -59,7 +62,14 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-        const { hentForhåndsvisning, hentetDokument } = useDokument();
+        const {
+            hentForhåndsvisning,
+            hentetDokument,
+            distribusjonskanal,
+            hentDistribusjonskanal,
+            nullstillDistribusjonskanal,
+        } = useDokument();
+        const { toggles } = useApp();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
             IManueltBrevRequestPåFagsak | undefined
@@ -182,6 +192,17 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         useEffect(() => {
             nullstillSkjemaUtenomÅrsak();
         }, [årsak.verdi, bruker.status]);
+
+        useEffect(() => {
+            if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
+                return;
+            }
+            if (bruker.status === RessursStatus.SUKSESS) {
+                hentDistribusjonskanal(bruker.data.personIdent);
+            } else {
+                nullstillDistribusjonskanal();
+            }
+        }, [bruker.status]);
 
         const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
@@ -313,7 +334,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const skjemaErLåst = () =>
             skjema.submitRessurs.status === RessursStatus.HENTER ||
-            hentetDokument.status === RessursStatus.HENTER;
+            hentetDokument.status === RessursStatus.HENTER ||
+            (toggles[ToggleNavn.verifiserDokdistKanal] && brukerHarUkjentAddresse);
+
+        const brukerHarUkjentAddresse =
+            distribusjonskanal.status !== RessursStatus.SUKSESS ||
+            distribusjonskanal.data in
+                [Distribusjonskanal.INGEN_DISTRIBUSJON, Distribusjonskanal.UKJENT];
 
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
@@ -362,6 +389,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             visInnsendtBrevModal,
             skjema,
             nullstillSkjema,
+            distribusjonskanal,
         };
     }
 );

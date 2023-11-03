@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { AxiosError } from 'axios';
 
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -10,9 +11,9 @@ import {
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 
 import type { FamilieAxiosRequestConfig } from '../context/AppContext';
+import type { Distribusjonskanal } from '../typer/dokument';
 
 const useDokument = () => {
     const { request } = useHttp();
@@ -21,8 +22,16 @@ const useDokument = () => {
 
     const [hentetDokument, settHentetDokument] = React.useState<Ressurs<string>>(byggTomRessurs());
 
+    const [distribusjonskanal, settDistribusjonskanal] = React.useState<
+        Ressurs<Distribusjonskanal>
+    >(byggTomRessurs());
+
     const nullstillDokument = () => {
         settHentetDokument(byggTomRessurs);
+    };
+
+    const nullstillDistribusjonskanal = () => {
+        settDistribusjonskanal(byggTomRessurs());
     };
 
     const base64ToArrayBuffer = (base64: string) => {
@@ -36,6 +45,34 @@ const useDokument = () => {
         return bytes;
     };
 
+    const hentDistribusjonskanal = (mottakerIdent: string) => {
+        nullstillDistribusjonskanal();
+        request<string, Distribusjonskanal>({
+            method: 'POST',
+            data: mottakerIdent,
+            url: `/familie-ba-sak/api/dokument/distribusjonskanal/${mottakerIdent}`,
+        })
+            .then((response: Ressurs<Distribusjonskanal>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settDistribusjonskanal(byggDataRessurs(response.data));
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    settDistribusjonskanal(response);
+                } else {
+                    settDistribusjonskanal(
+                        byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.')
+                    );
+                }
+            })
+            .catch((_error: AxiosError) => {
+                settDistribusjonskanal(
+                    byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.')
+                );
+            });
+    };
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetDokument(byggHenterRessurs());
         request<D, string>(familieAxiosRequestConfig)
@@ -73,6 +110,9 @@ const useDokument = () => {
         settHentetDokument,
         visDokumentModal,
         settVisDokumentModal,
+        distribusjonskanal,
+        hentDistribusjonskanal,
+        nullstillDistribusjonskanal,
     };
 };
 
