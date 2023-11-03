@@ -60,6 +60,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         visForhåndsvisningBeskjed,
         settVisfeilmeldinger,
         distribusjonskanal,
+        brukerHarUkjentAddresse,
     } = useDokumentutsending();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
@@ -198,7 +199,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                         size="medium"
                         variant="primary"
                         loading={senderBrev()}
-                        disabled={skjemaErLåst()}
+                        disabled={skjemaErLåst() || brukerHarUkjentAddresse()}
                         onClick={sendBrevPåFagsak}
                     >
                         Send brev

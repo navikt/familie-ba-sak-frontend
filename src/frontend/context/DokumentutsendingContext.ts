@@ -334,13 +334,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const skjemaErLåst = () =>
             skjema.submitRessurs.status === RessursStatus.HENTER ||
-            hentetDokument.status === RessursStatus.HENTER ||
-            (toggles[ToggleNavn.verifiserDokdistKanal] && brukerHarUkjentAddresse);
+            hentetDokument.status === RessursStatus.HENTER;
 
-        const brukerHarUkjentAddresse =
-            distribusjonskanal.status !== RessursStatus.SUKSESS ||
-            distribusjonskanal.data in
-                [Distribusjonskanal.INGEN_DISTRIBUSJON, Distribusjonskanal.UKJENT];
+        const brukerHarUkjentAddresse = () =>
+            toggles[ToggleNavn.verifiserDokdistKanal] &&
+            (distribusjonskanal.status !== RessursStatus.SUKSESS ||
+                distribusjonskanal.data === Distribusjonskanal.UKJENT ||
+                distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
 
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
@@ -390,6 +390,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema,
             nullstillSkjema,
             distribusjonskanal,
+            brukerHarUkjentAddresse,
         };
     }
 );
