@@ -10031,14 +10031,6 @@ slice-ansi@^5.0.0:
     ansi-styles "^6.0.0"
     is-fullwidth-code-point "^4.0.0"
 
-snyk@^1.1122.0:
-  version "1.1122.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.1122.0.tgz#dc71c8f2842cc801a71cb068de5ae1f711e0aa2b"
-  integrity sha512-/hpzJAHZskxt0YPgjR7EsZPDOXHCbA14aHyv5vmJTfZQndTAkWhXBw1Nx/PGHMNsCa0BXrL4ruSVd6/bfaxpdg==
-  dependencies:
-    "@sentry/node" "^7.36.0"
-    global-agent "^3.0.0"
-
 snyk@^1.1142.0:
   version "1.1200.0"
   resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.1200.0.tgz#6fbaeb9610ae999b89a84d1e152608f88d11f5e2"
