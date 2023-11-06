@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
-import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
@@ -23,6 +22,7 @@ import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
 } from '../utils/brevmal';
+import type { IsoDatoString } from '../utils/dato';
 import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
@@ -221,7 +221,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster: FeltState<IFritekstFelt>[];
             barnMedDeltBosted: IBarnMedOpplysninger[];
             barnBrevetGjelder: IBarnMedOpplysninger[];
-            avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
+            avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
             datoAvtale: Date | undefined;
             antallUkerSvarfrist: number | '';
             mottakerlandSed: string[];

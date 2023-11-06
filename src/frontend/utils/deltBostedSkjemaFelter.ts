@@ -1,8 +1,8 @@
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import type { IsoDatoString } from './dato';
 import { Datoformat, formaterIsoDato } from './formatter';
 import { erIsoStringGyldig } from './kalender';
 import { useFagsakContext } from '../context/fagsak/FagsakContext';
@@ -30,7 +30,7 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
         nullstillVedAvhengighetEndring: false,
     });
 
-    const avtalerOmDeltBostedPerBarn = useFelt<Record<string, ISODateString[]>>({
+    const avtalerOmDeltBostedPerBarn = useFelt<Record<string, IsoDatoString[]>>({
         verdi: {},
         valideringsfunksjon: (felt, avhengigheter) => {
             const barnMedDeltBosted = avhengigheter?.verdi ?? [];

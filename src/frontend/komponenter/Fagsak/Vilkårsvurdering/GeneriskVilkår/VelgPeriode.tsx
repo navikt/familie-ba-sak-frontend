@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -11,6 +10,7 @@ import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
+import type { IsoDatoString } from '../../../../utils/dato';
 import { nyPeriode } from '../../../../utils/kalender';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
@@ -83,7 +83,7 @@ const VelgPeriode: React.FC<IProps> = ({
                             : 'F.o.m'
                     }
                     value={redigerbartVilkår.verdi.periode.verdi.fom}
-                    onDateChange={(dato?: ISODateString) => {
+                    onDateChange={(dato?: IsoDatoString) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {
@@ -105,7 +105,7 @@ const VelgPeriode: React.FC<IProps> = ({
                 <DatovelgerForGammelSkjemaløsning
                     label={'T.o.m (valgfri)'}
                     value={redigerbartVilkår.verdi.periode.verdi.tom}
-                    onDateChange={(dato?: ISODateString) => {
+                    onDateChange={(dato?: IsoDatoString) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {
