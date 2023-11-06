@@ -9,11 +9,6 @@ export const kalenderMåned = (dato: FamilieIsoDate): MånedÅr => {
     };
 };
 
-export const sisteDatoIMnd = (måned: number, år: number): Date => {
-    // Måneden i Date objektet er 0-indeksert
-    return new Date(år, måned + 1, 0);
-};
-
 export const sisteDagIMåned = (dagMånedÅr: DagMånedÅr): DagMånedÅr => ({
     ...dagMånedÅr,
     dag: antallDagerIMåned({ år: dagMånedÅr.år, måned: dagMånedÅr.måned }),

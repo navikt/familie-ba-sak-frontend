@@ -8,7 +8,7 @@ import type {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from './vedtak';
-import type { FamilieIsoDate, IPeriode } from '../utils/kalender';
+import type { IPeriode, IsoDatoString } from '../utils/dato';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -109,8 +109,8 @@ export interface IRestVilkårResultat {
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
-    periodeFom?: FamilieIsoDate;
-    periodeTom?: FamilieIsoDate;
+    periodeFom?: IsoDatoString;
+    periodeTom?: IsoDatoString;
     resultat: Resultat;
     resultatBegrunnelse: ResultatBegrunnelse | null;
     erEksplisittAvslagPåSøknad?: boolean;

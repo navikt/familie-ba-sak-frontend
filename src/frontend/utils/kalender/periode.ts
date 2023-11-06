@@ -1,4 +1,6 @@
-import type { FamilieIsoDate, IPeriode, IYearMonthPeriode, YearMonth } from '.';
+import type { IPeriode } from '../dato';
+
+import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
 import {
     erEtter,
     erFør,
@@ -60,10 +62,6 @@ export const periodeDiff = (første: IPeriode, andre: IPeriode) => {
         kalenderDatoTilDate(kalenderDatoMedFallback(første.fom, TIDENES_ENDE)),
         kalenderDatoTilDate(kalenderDatoMedFallback(andre.fom, TIDENES_ENDE))
     );
-};
-
-export const lagPeriodeId = (periode: IPeriode) => {
-    return periodeToString(periode);
 };
 
 export const yearMonthPeriodeToString = (periode: IYearMonthPeriode) => {

@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import { FamilieDatovelger } from '@navikt/familie-datovelger';
 import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -12,8 +11,8 @@ import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
-import { DatoformatNorsk } from '../../../../utils/formatter';
 import { nyPeriode } from '../../../../utils/kalender';
+import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
@@ -76,67 +75,54 @@ const VelgPeriode: React.FC<IProps> = ({
             )}
 
             <FlexDiv>
-                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
-                    <FamilieDatovelger
-                        allowInvalidDateSelection={false}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
-                        erLesesvisning={erLesevisning}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-fom`}
-                        label={
-                            redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
-                                ? 'F.o.m (valgfri)'
-                                : 'F.o.m'
-                        }
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            dato,
-                                            redigerbartVilkår.verdi.periode.verdi.tom
-                                        ),
-                                    },
+                <DatovelgerForGammelSkjemaløsning
+                    label={
+                        redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                        redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                            ? 'F.o.m (valgfri)'
+                            : 'F.o.m'
+                    }
+                    value={redigerbartVilkår.verdi.periode.verdi.fom}
+                    onDateChange={(dato?: ISODateString) => {
+                        validerOgSettRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                periode: {
+                                    ...redigerbartVilkår.verdi.periode,
+                                    verdi: nyPeriode(
+                                        dato,
+                                        redigerbartVilkår.verdi.periode.verdi.tom
+                                    ),
                                 },
-                            });
-                        }}
-                        value={redigerbartVilkår.verdi.periode.verdi.fom}
-                    />
-                )}
-                {(!erLesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
-                    <FamilieDatovelger
-                        erLesesvisning={erLesevisning}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-tom`}
-                        label={'T.o.m (valgfri)'}
-                        placeholder={DatoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            redigerbartVilkår.verdi.periode.verdi.fom,
-                                            dato
-                                        ),
-                                    },
+                            },
+                        });
+                    }}
+                    visFeilmeldinger={false}
+                    readOnly={erLesevisning}
+                    kanKunVelgeFortid
+                />
+                <DatovelgerForGammelSkjemaløsning
+                    label={'T.o.m (valgfri)'}
+                    value={redigerbartVilkår.verdi.periode.verdi.tom}
+                    onDateChange={(dato?: ISODateString) => {
+                        validerOgSettRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                periode: {
+                                    ...redigerbartVilkår.verdi.periode,
+                                    verdi: nyPeriode(
+                                        redigerbartVilkår.verdi.periode.verdi.fom,
+                                        dato
+                                    ),
                                 },
-                            });
-                        }}
-                        value={redigerbartVilkår.verdi.periode.verdi.tom}
-                    />
-                )}
+                            },
+                        });
+                    }}
+                    visFeilmeldinger={false}
+                    readOnly={erLesevisning}
+                />
             </FlexDiv>
         </MarginFieldset>
     );

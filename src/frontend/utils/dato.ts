@@ -7,6 +7,12 @@ import { Datoformat } from './formatter';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 
+export interface IPeriode {
+    // Format YYYY-MM-DD (ISO)
+    fom?: IsoDatoString;
+    tom?: IsoDatoString;
+}
+
 export const dagensDato = startOfToday();
 
 interface FormatterProps {

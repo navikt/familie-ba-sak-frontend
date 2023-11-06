@@ -10,7 +10,7 @@ import type {
     UtdypendeVilkårsvurdering,
 } from '../../typer/vilkår';
 import { VilkårType } from '../../typer/vilkår';
-import type { IPeriode } from '../../utils/kalender';
+import type { IPeriode } from '../../utils/dato';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,

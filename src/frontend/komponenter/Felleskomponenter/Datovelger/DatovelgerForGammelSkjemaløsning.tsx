@@ -5,28 +5,29 @@ import { isValid, parseISO } from 'date-fns';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
-import type { IsoDatoString } from '../../utils/dato';
-import { formatterDate } from '../../utils/dato';
-import { Datoformat } from '../../utils/formatter';
-import {
-    senesteRelevanteDato,
-    tidligsteRelevanteDato,
-} from '../Felleskomponenter/Datovelger/utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
+import { dagensDato, formatterDate } from '../../../utils/dato';
+import type { IsoDatoString } from '../../../utils/dato';
+import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     value: string | undefined;
     onDateChange: (dato: IsoDatoString) => void;
     label: string;
     visFeilmeldinger: boolean;
-    feilmelding: string | undefined;
+    feilmelding?: string;
+    readOnly?: boolean;
+    kanKunVelgeFortid?: boolean;
 }
 
-const FilterSkjemaDatovelger = ({
+const DatovelgerForGammelSkjemaløsning = ({
     value,
     onDateChange,
     label,
     visFeilmeldinger,
-    feilmelding,
+    feilmelding = undefined,
+    readOnly = false,
+    kanKunVelgeFortid = false,
 }: IProps) => {
     const formatterDefaultSelected = () => {
         if (value === undefined) return undefined;
@@ -37,7 +38,7 @@ const FilterSkjemaDatovelger = ({
     const { datepickerProps, inputProps, selectedDay } = useDatepicker({
         defaultSelected: formatterDefaultSelected(),
         fromDate: tidligsteRelevanteDato,
-        toDate: senesteRelevanteDato,
+        toDate: kanKunVelgeFortid ? dagensDato : senesteRelevanteDato,
     });
 
     useEffect(() => {
@@ -56,10 +57,11 @@ const FilterSkjemaDatovelger = ({
                 {...inputProps}
                 label={label}
                 placeholder={'DD.MM.ÅÅÅÅ'}
+                readOnly={readOnly}
                 error={visFeilmeldinger && feilmelding}
             />
         </DatePicker>
     );
 };
 
-export default FilterSkjemaDatovelger;
+export default DatovelgerForGammelSkjemaløsning;

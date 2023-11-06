@@ -117,6 +117,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
             content={
                 <VilkårTabellRadEndre
+                    key={`${vilkårResultat.verdi.id}-${ekspandertVilkår ? 'ekspandert' : 'lukket'}`}
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultat={vilkårResultat}

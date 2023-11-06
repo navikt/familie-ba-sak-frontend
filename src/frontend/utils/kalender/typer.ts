@@ -17,12 +17,6 @@ export enum KalenderEnhet {
     ÅR,
 }
 
-export interface IPeriode {
-    // Format YYYY-MM-DD (ISO)
-    fom?: FamilieIsoDate;
-    tom?: FamilieIsoDate;
-}
-
 export interface IYearMonthPeriode {
     // Format YYYY-MM
     fom?: YearMonth;

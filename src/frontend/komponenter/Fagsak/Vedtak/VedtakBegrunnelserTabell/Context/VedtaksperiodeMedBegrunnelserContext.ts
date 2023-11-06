@@ -24,12 +24,12 @@ import type {
     IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
+import type { IPeriode } from '../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekster,
     lagInitiellFritekst,
 } from '../../../../../utils/fritekstfelter';
-import type { IPeriode } from '../../../../../utils/kalender';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {

@@ -7,11 +7,11 @@ import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import FilterSkjemaDatovelger from './FilterSkjemaDatovelger';
 import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
+import DatovelgerForGammelSkjemaløsning from '../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 const StyledButton = styled(Button)`
     margin-top: 0.5rem;
@@ -53,7 +53,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                         switch (oppgaveFelt.filter?.type) {
                             case 'dato':
                                 return (
-                                    <FilterSkjemaDatovelger
+                                    <DatovelgerForGammelSkjemaløsning
                                         key={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
                                         onDateChange={(dato: ISODateString) => {
