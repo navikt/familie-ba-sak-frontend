@@ -18,6 +18,7 @@ interface IProps {
     feilmelding?: string;
     readOnly?: boolean;
     kanKunVelgeFortid?: boolean;
+    minDatoAvgrensning?: Date;
 }
 
 const DatovelgerForGammelSkjemaløsning = ({
@@ -25,6 +26,7 @@ const DatovelgerForGammelSkjemaløsning = ({
     onDateChange,
     label,
     visFeilmeldinger,
+    minDatoAvgrensning,
     feilmelding = undefined,
     readOnly = false,
     kanKunVelgeFortid = false,
@@ -37,7 +39,7 @@ const DatovelgerForGammelSkjemaløsning = ({
 
     const { datepickerProps, inputProps, selectedDay } = useDatepicker({
         defaultSelected: formatterDefaultSelected(),
-        fromDate: tidligsteRelevanteDato,
+        fromDate: minDatoAvgrensning ? minDatoAvgrensning : tidligsteRelevanteDato,
         toDate: kanKunVelgeFortid ? dagensDato : senesteRelevanteDato,
     });
 
