@@ -45,12 +45,12 @@ const useDokument = () => {
         return bytes;
     };
 
-    const hentDistribusjonskanal = (mottakerIdent: string) => {
+    const hentDistribusjonskanal = (personIdent: string) => {
         nullstillDistribusjonskanal();
-        request<string, Distribusjonskanal>({
+        request<{ ident: string }, Distribusjonskanal>({
             method: 'POST',
-            data: mottakerIdent,
-            url: `/familie-ba-sak/api/dokument/distribusjonskanal/${mottakerIdent}`,
+            data: { ident: personIdent },
+            url: `/familie-ba-sak/api/dokument/distribusjonskanal`,
         })
             .then((response: Ressurs<Distribusjonskanal>) => {
                 if (response.status === RessursStatus.SUKSESS) {
