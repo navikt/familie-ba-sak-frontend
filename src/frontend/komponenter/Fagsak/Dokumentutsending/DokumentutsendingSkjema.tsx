@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -61,6 +61,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         settVisfeilmeldinger,
         distribusjonskanal,
         brukerHarUkjentAddresse,
+        hentBrukersDistribusjonskanal,
     } = useDokumentutsending();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
@@ -73,6 +74,10 @@ const DokumentutsendingSkjema: React.FC = () => {
     ];
 
     const { toggles } = useApp();
+
+    useEffect(() => {
+        hentBrukersDistribusjonskanal();
+    }, []);
 
     const distribusjonskanalInfo = () => {
         switch (distribusjonskanal.status) {

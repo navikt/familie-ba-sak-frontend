@@ -193,17 +193,6 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillSkjemaUtenomÅrsak();
         }, [årsak.verdi, bruker.status]);
 
-        useEffect(() => {
-            if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
-                return;
-            }
-            if (bruker.status === RessursStatus.SUKSESS) {
-                hentDistribusjonskanal(bruker.data.personIdent);
-            } else {
-                nullstillDistribusjonskanal();
-            }
-        }, [bruker.status]);
-
         const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
                 const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
@@ -344,6 +333,17 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
+        const hentBrukersDistribusjonskanal = () => {
+            if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
+                return;
+            }
+            if (bruker.status === RessursStatus.SUKSESS) {
+                hentDistribusjonskanal(bruker.data.personIdent);
+            } else {
+                nullstillDistribusjonskanal();
+            }
+        };
+
         const hentForhåndsvisningPåFagsak = () => {
             const skjemaData = hentSkjemaData();
             settSistBrukteDataVedForhåndsvisning(skjemaData);
@@ -391,6 +391,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillSkjema,
             distribusjonskanal,
             brukerHarUkjentAddresse,
+            hentBrukersDistribusjonskanal,
         };
     }
 );
