@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Fieldset, Button, Select } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -11,6 +10,7 @@ import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
+import type { IsoDatoString } from '../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 const StyledButton = styled(Button)`
@@ -56,7 +56,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                     <DatovelgerForGammelSkjemaløsning
                                         key={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
-                                        onDateChange={(dato: ISODateString) => {
+                                        onDateChange={(dato: IsoDatoString) => {
                                             settVerdiPåOppgaveFelt(oppgaveFelt, dato);
                                         }}
                                         value={oppgaveFelt.filter.selectedValue}

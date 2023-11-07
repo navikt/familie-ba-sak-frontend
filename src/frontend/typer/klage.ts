@@ -1,14 +1,14 @@
-import type { ISODateString } from 'nav-datovelger/lib/types';
+import type { IsoDatoString } from '../utils/dato';
 
 export interface IKlagebehandling {
     id: string;
     fagsakId: string;
     status: KlageStatus;
-    opprettet: ISODateString;
-    mottattDato: ISODateString;
+    opprettet: IsoDatoString;
+    mottattDato: IsoDatoString;
     resultat?: KlageResultat;
     årsak?: KlageÅrsak;
-    vedtaksdato?: ISODateString;
+    vedtaksdato?: IsoDatoString;
     klageinstansResultat: KlageinstansResultat[];
 }
 
@@ -49,7 +49,7 @@ export enum KlageinstansEventType {
 interface KlageinstansResultat {
     type: KlageinstansEventType;
     utfall?: KlageinstansUtfall;
-    mottattEllerAvsluttetTidspunkt: ISODateString;
+    mottattEllerAvsluttetTidspunkt: IsoDatoString;
     journalpostReferanser: string[];
 }
 
