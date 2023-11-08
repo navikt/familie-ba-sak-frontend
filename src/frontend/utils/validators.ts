@@ -1,16 +1,16 @@
+import { addYears, isAfter, isBefore, isSameDay } from 'date-fns';
+
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
 import type { IPeriode } from './dato';
+import { parseIsoString } from './dato';
 import {
     erEtter,
     erFør,
     erIsoStringGyldig,
-    erSamme,
     kalenderDato,
     kalenderDatoMedFallback,
-    KalenderEnhet,
-    leggTil,
     TIDENES_ENDE,
     TIDENES_MORGEN,
     valgtDatoErNesteMånedEllerSenere,
@@ -62,24 +62,24 @@ export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdatoPluss18 = leggTil(kalenderDato(person.fødselsdato), 18, KalenderEnhet.ÅR);
-    const fomDato = kalenderDato(fom);
-    const tomDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
+    const fødselsdatoPluss18 = addYears(parseIsoString(person.fødselsdato), 18);
+    const fomDato = parseIsoString(fom);
+    const tomDato = tom ? parseIsoString(tom) : undefined;
     return (
-        erSamme(fomDato, fødselsdatoPluss18) ||
-        erEtter(fomDato, fødselsdatoPluss18) ||
+        isSameDay(fomDato, fødselsdatoPluss18) ||
+        isAfter(fomDato, fødselsdatoPluss18) ||
         (tomDato
-            ? erSamme(tomDato, fødselsdatoPluss18) || erEtter(tomDato, fødselsdatoPluss18)
+            ? isSameDay(tomDato, fødselsdatoPluss18) || isAfter(tomDato, fødselsdatoPluss18)
             : false)
     );
 };
 
 const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdato = kalenderDato(person.fødselsdato);
-    const fomDato = kalenderDato(fom);
-    const tomDato = tom ? kalenderDato(tom) : undefined;
+    const fødselsdato = parseIsoString(person.fødselsdato);
+    const fomDato = parseIsoString(fom);
+    const tomDato = tom ? parseIsoString(tom) : undefined;
 
-    return erFør(fomDato, fødselsdato) || (tomDato ? erFør(tomDato, fødselsdato) : false);
+    return isBefore(fomDato, fødselsdato) || (tomDato ? isBefore(tomDato, fødselsdato) : false);
 };
 
 export const erPeriodeGyldig = (
