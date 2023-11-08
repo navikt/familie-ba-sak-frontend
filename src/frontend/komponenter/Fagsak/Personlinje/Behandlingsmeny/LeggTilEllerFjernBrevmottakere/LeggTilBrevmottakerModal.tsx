@@ -7,8 +7,8 @@ import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
+import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../../typer/behandling';
 
 const StyledAlert = styled(Alert)`
     margin: 1rem 0 2.5rem;
@@ -25,7 +25,7 @@ const LukkKnapp = styled(Button)`
 
 interface Props {
     lukkModal: () => void;
-    åpenBehandling: IBehandling;
+    brevmottakere: IRestBrevmottaker[];
 }
 
 const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
@@ -40,17 +40,17 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, åpenBehandling }: Props) => {
+export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, brevmottakere }: Props) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    const heading = utledHeading(åpenBehandling.brevmottakere.length, erLesevisning);
+    const heading = utledHeading(brevmottakere.length, erLesevisning);
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
 
     const erSkjemaSynlig =
-        (åpenBehandling.brevmottakere.length === 0 && !erLesevisning) ||
-        (åpenBehandling.brevmottakere.length === 1 && visSkjemaNårDetErÉnBrevmottaker);
+        (brevmottakere.length === 0 && !erLesevisning) ||
+        (brevmottakere.length === 1 && visSkjemaNårDetErÉnBrevmottaker);
 
     const lukkModalOgSkjema = () => {
         lukkModal();
@@ -71,19 +71,19 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, åpenBeha
                     Legg til mottaker dersom brev skal sendes til utenlandsk adresse, fullmektig,
                     verge eller dødsbo.
                 </StyledAlert>
-                {åpenBehandling.brevmottakere.map(mottaker => (
+                {brevmottakere.map(mottaker => (
                     <BrevmottakerTabell mottaker={mottaker} key={`mottaker-${mottaker.id}`} />
                 ))}
                 {erSkjemaSynlig ? (
                     <>
-                        {åpenBehandling.brevmottakere.length === 1 && (
+                        {brevmottakere.length === 1 && (
                             <StyledHeading size="medium">Ny mottaker</StyledHeading>
                         )}
                         <BrevmottakerSkjema lukkModal={lukkModalOgSkjema} />
                     </>
                 ) : (
                     <>
-                        {åpenBehandling.brevmottakere.length === 1 && !erLesevisning && (
+                        {brevmottakere.length === 1 && !erLesevisning && (
                             <LeggTilKnapp
                                 variant="tertiary"
                                 size="small"

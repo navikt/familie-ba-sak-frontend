@@ -11,6 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
+import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import {
     Informasjonsbrev,
@@ -59,6 +60,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
+        const [manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere] = useState<
+            IRestBrevmottaker[]
+        >([]);
         const { hentForhåndsvisning, hentetDokument } = useDokument();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
@@ -216,6 +220,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: brevmal,
+                    manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -245,6 +250,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
+                    manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -263,18 +269,21 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
+                            manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                         });
                     case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
+                            manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
+                            manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
@@ -283,6 +292,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                            manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
                         });
 
                     case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:

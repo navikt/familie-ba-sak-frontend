@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
+import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../../typer/behandling';
 
 interface IProps {
-    åpenBehandling: IBehandling;
+    brevmottakere: IRestBrevmottaker[];
 }
 
 const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
@@ -22,12 +22,12 @@ const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) => {
+const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ brevmottakere }) => {
     const [visModal, settVisModal] = useState(false);
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    const menyinnslag = utledMenyinnslag(åpenBehandling.brevmottakere.length, erLesevisning);
+    const menyinnslag = utledMenyinnslag(brevmottakere.length, erLesevisning);
 
     return (
         <>
@@ -37,7 +37,7 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
 
             {visModal && (
                 <LeggTilBrevmottakerModal
-                    åpenBehandling={åpenBehandling}
+                    brevmottakere={brevmottakere}
                     lukkModal={() => settVisModal(false)}
                 />
             )}
