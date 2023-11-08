@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Label, Select } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
@@ -16,6 +16,7 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
+import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 
@@ -47,7 +48,11 @@ const SendBrevKnapp = styled(Button)`
     margin-right: 1rem;
 `;
 
-const DokumentutsendingSkjema: React.FC = () => {
+interface IProps {
+    bruker: IPersonInfo;
+}
+
+const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
     const {
         hentForhåndsvisningPåFagsak,
         hentetDokument,
@@ -61,7 +66,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         settVisfeilmeldinger,
         distribusjonskanal,
         brukerHarUkjentAddresse,
-        hentBrukersDistribusjonskanal,
+        hentDistribusjonskanal,
     } = useDokumentutsending();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
@@ -76,7 +81,10 @@ const DokumentutsendingSkjema: React.FC = () => {
     const { toggles } = useApp();
 
     useEffect(() => {
-        hentBrukersDistribusjonskanal();
+        if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
+            return;
+        }
+        hentDistribusjonskanal(bruker.personIdent);
     }, []);
 
     const distribusjonskanalInfo = () => {
@@ -108,6 +116,16 @@ const DokumentutsendingSkjema: React.FC = () => {
                         variant={'error'}
                         children={distribusjonskanal.frontendFeilmelding}
                     />
+                );
+            case RessursStatus.IKKE_HENTET:
+            case RessursStatus.HENTER:
+                if (distribusjonskanal.status === RessursStatus.IKKE_HENTET) {
+                    hentDistribusjonskanal(bruker.personIdent);
+                }
+                return (
+                    <StyledAlert variant={'info'}>
+                        <Loader title="Laster" />
+                    </StyledAlert>
                 );
             default:
                 return (

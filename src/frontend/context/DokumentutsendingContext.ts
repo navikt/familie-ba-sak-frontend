@@ -62,13 +62,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-        const {
-            hentForhåndsvisning,
-            hentetDokument,
-            distribusjonskanal,
-            hentDistribusjonskanal,
-            nullstillDistribusjonskanal,
-        } = useDokument();
+        const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
+            useDokument();
         const { toggles } = useApp();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
@@ -333,17 +328,6 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
-        const hentBrukersDistribusjonskanal = () => {
-            if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
-                return;
-            }
-            if (bruker.status === RessursStatus.SUKSESS) {
-                hentDistribusjonskanal(bruker.data.personIdent);
-            } else {
-                nullstillDistribusjonskanal();
-            }
-        };
-
         const hentForhåndsvisningPåFagsak = () => {
             const skjemaData = hentSkjemaData();
             settSistBrukteDataVedForhåndsvisning(skjemaData);
@@ -391,7 +375,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillSkjema,
             distribusjonskanal,
             brukerHarUkjentAddresse,
-            hentBrukersDistribusjonskanal,
+            hentDistribusjonskanal,
         };
     }
 );

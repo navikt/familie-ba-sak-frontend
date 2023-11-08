@@ -30,10 +30,6 @@ const useDokument = () => {
         settHentetDokument(byggTomRessurs);
     };
 
-    const nullstillDistribusjonskanal = () => {
-        settDistribusjonskanal(byggTomRessurs());
-    };
-
     const base64ToArrayBuffer = (base64: string) => {
         const binaryString = window.atob(base64);
         const binaryLen = binaryString.length;
@@ -46,14 +42,14 @@ const useDokument = () => {
     };
 
     const hentDistribusjonskanal = (personIdent: string) => {
-        nullstillDistribusjonskanal();
+        settDistribusjonskanal(byggHenterRessurs());
         request<{ ident: string }, Distribusjonskanal>({
             method: 'POST',
             data: { ident: personIdent },
             url: `/familie-ba-sak/api/dokument/distribusjonskanal`,
         })
             .then((response: Ressurs<Distribusjonskanal>) => {
-                settDistribusjonskanal(response.data);
+                settDistribusjonskanal(response);
             })
             .catch((_error: AxiosError) => {
                 settDistribusjonskanal(
@@ -100,7 +96,6 @@ const useDokument = () => {
         settVisDokumentModal,
         distribusjonskanal,
         hentDistribusjonskanal,
-        nullstillDistribusjonskanal,
     };
 };
 
