@@ -101,7 +101,7 @@ export const erPeriodeGyldig = (
 
         const fomDatoErFørTomDato = !tom || isBefore(fom, tom);
         const fomDatoErLikDødsfallDato =
-            !!person?.dødsfallDato && isSameDay(fom, parseIsoString(person?.dødsfallDato));
+            !!person?.dødsfallDato && isSameDay(fom, parseIsoString(person.dødsfallDato));
 
         if (erNesteMånedEllerSenere(fom)) {
             return feil(
