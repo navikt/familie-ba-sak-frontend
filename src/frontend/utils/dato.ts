@@ -32,10 +32,10 @@ export const formatterDate = ({
     return dato && isValid(dato) ? format(dato, datoformat) : defaultString;
 };
 
-export const formatterDateTilIsoString = (dato?: Date): string =>
+export const formatterDateTilIsoString = (dato?: Date): IsoDatoString =>
     formatterDate({ dato: dato, datoformat: Datoformat.ISO_DAG, defaultString: '' });
 
-export const formatterDateTilIsoStringEllerUndefined = (dato?: Date): string | undefined =>
+export const formatterDateTilIsoStringEllerUndefined = (dato?: Date): IsoDatoString | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
 
 interface FormatterIsoStringProps {
