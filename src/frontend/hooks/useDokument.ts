@@ -53,19 +53,7 @@ const useDokument = () => {
             url: `/familie-ba-sak/api/dokument/distribusjonskanal`,
         })
             .then((response: Ressurs<Distribusjonskanal>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settDistribusjonskanal(byggDataRessurs(response.data));
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settDistribusjonskanal(response);
-                } else {
-                    settDistribusjonskanal(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.')
-                    );
-                }
+                settDistribusjonskanal(response.data);
             })
             .catch((_error: AxiosError) => {
                 settDistribusjonskanal(
