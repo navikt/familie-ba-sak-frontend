@@ -1,4 +1,4 @@
-import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid } from 'date-fns';
+import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid, parseISO } from 'date-fns';
 
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
@@ -78,8 +78,8 @@ export const erPeriodeGyldig = (
     const er18ÅrsVilkår: boolean | undefined = avhengigheter?.er18ÅrsVilkår;
 
     if (felt.verdi.fom) {
-        const fom = parseIsoString(felt.verdi.fom);
-        const tom = felt.verdi.tom ? parseIsoString(felt.verdi.tom) : undefined;
+        const fom = parseISO(felt.verdi.fom);
+        const tom = felt.verdi.tom ? parseISO(felt.verdi.tom) : undefined;
 
         if (!isValid(fom)) {
             return feil(felt, 'Ugyldig f.o.m.');
