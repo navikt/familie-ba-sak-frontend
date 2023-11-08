@@ -15,6 +15,8 @@ export interface IPeriode {
 
 export const dagensDato = startOfToday();
 
+export const tidenesMorgen = new Date(1000, 1, 1);
+
 export const tidenesEnde = new Date(3000, 1, 1);
 
 interface FormatterDateProps {
