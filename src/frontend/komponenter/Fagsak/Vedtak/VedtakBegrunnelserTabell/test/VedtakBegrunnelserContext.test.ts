@@ -1,13 +1,9 @@
+import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
+
 import { BehandlingStatus } from '../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import {
-    førsteDagIInneværendeMåned,
-    KalenderEnhet,
-    leggTil,
-    serializeIso8601String,
-    sisteDagIInneværendeMåned,
-} from '../../../../../utils/kalender';
+import { dagensDato, formatterDateTilIsoString } from '../../../../../utils/dato';
 import {
     mockOpphørsperiode,
     mockUtbetalingsperiode,
@@ -37,21 +33,13 @@ describe('VedtakBegrunnelserContext', () => {
 
         describe('Test filtrering av perioder frem i tid', () => {
             test(`Test at perioder med fom-dato før 2 mnd frem i tid returneres`, () => {
-                const enMndFremITidFom = leggTil(
-                    førsteDagIInneværendeMåned(),
-                    1,
-                    KalenderEnhet.MÅNED
-                );
-                const enMndFremITidTom = leggTil(
-                    sisteDagIInneværendeMåned(),
-                    1,
-                    KalenderEnhet.MÅNED
-                );
+                const enMndFremITidFom = addMonths(startOfMonth(dagensDato), 1);
+                const enMndFremITidTom = addMonths(endOfMonth(dagensDato), 1);
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            fom: serializeIso8601String(enMndFremITidFom),
-                            tom: serializeIso8601String(enMndFremITidTom),
+                            fom: formatterDateTilIsoString(enMndFremITidFom),
+                            tom: formatterDateTilIsoString(enMndFremITidTom),
                         }),
                     ],
                     BehandlingStatus.UTREDES
@@ -59,22 +47,14 @@ describe('VedtakBegrunnelserContext', () => {
                 expect(perioder.length).toBe(1);
             });
             test(`Test at perioder med fom-dato fra og med 2 mnd frem i tid ikke returneres`, () => {
-                const toMndFremITidFom = leggTil(
-                    førsteDagIInneværendeMåned(),
-                    2,
-                    KalenderEnhet.MÅNED
-                );
-                const toMndFremITidTom = leggTil(
-                    sisteDagIInneværendeMåned(),
-                    2,
-                    KalenderEnhet.MÅNED
-                );
+                const toMndFremITidFom = addMonths(startOfMonth(dagensDato), 2);
+                const toMndFremITidTom = addMonths(endOfMonth(dagensDato), 2);
 
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            fom: serializeIso8601String(toMndFremITidFom),
-                            tom: serializeIso8601String(toMndFremITidTom),
+                            fom: formatterDateTilIsoString(toMndFremITidFom),
+                            tom: formatterDateTilIsoString(toMndFremITidTom),
                         }),
                     ],
                     BehandlingStatus.UTREDES
