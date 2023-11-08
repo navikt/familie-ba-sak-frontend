@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import { isAfter } from 'date-fns';
 import styled from 'styled-components';
 
 import { Alert, BodyShort, Label, Switch } from '@navikt/ds-react';
@@ -15,8 +16,9 @@ import {
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import { parseIsoString } from '../../../utils/dato';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { erEtter, kalenderDato, periodeToString } from '../../../utils/kalender';
+import { kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
 const StyledTable = styled.table(
@@ -131,7 +133,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
-        erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
+        isAfter(parseIsoString(periode.fom), parseIsoString(fomDatoNestePeriode));
 
     const perioderSomSkalVisesITabellen = perioder.filter(
         periode =>

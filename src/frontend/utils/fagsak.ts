@@ -1,10 +1,7 @@
-import {
-    erEtter,
-    kalenderDatoFraDate,
-    kalenderDatoMedFallback,
-    kalenderDiff,
-    TIDENES_ENDE,
-} from './kalender';
+import { isAfter } from 'date-fns';
+
+import { dagensDato, parseIsoStringMedFallback, tidenesEnde } from './dato';
+import { kalenderDiff } from './kalender';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
@@ -52,9 +49,12 @@ export const hentSisteIkkeHenlagteBehandling = (
 export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
     minimalFagsak.gjeldendeUtbetalingsperioder
         .filter(utbetalingsperiode =>
-            erEtter(
-                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
-                kalenderDatoFraDate(new Date())
+            isAfter(
+                parseIsoStringMedFallback({
+                    isoDatoString: utbetalingsperiode.periodeTom,
+                    fallbackDate: tidenesEnde,
+                }),
+                dagensDato
             )
         )
         .reduce((acc, utbetalingsperiode) => {
