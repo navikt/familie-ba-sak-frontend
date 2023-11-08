@@ -10,8 +10,8 @@ export enum ToggleNavn {
 
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
-
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
+    manuellMottakerInfobrev = 'familie-ba-sak.manuell-mottaker-infobrev',
 }
 
 export const alleTogglerAv = (): IToggles => {
