@@ -15,6 +15,8 @@ export interface IPeriode {
 
 export const dagensDato = startOfToday();
 
+export const tidenesEnde = new Date(3000, 1, 1);
+
 interface FormatterDateProps {
     dato?: Date;
     datoformat: Datoformat;
@@ -58,6 +60,14 @@ export const parseIsoString = (isoDatoString: IsoDatoString): Date => {
 
     return dato;
 };
+
+interface ParserProps {
+    isoDatoString: IsoDatoString | undefined;
+    fallbackDate: Date;
+}
+
+export const parseIsoStringMedFallback = ({ isoDatoString, fallbackDate }: ParserProps) =>
+    isoDatoString ? parseIsoString(isoDatoString) : fallbackDate;
 
 export const validerGyldigDato = (felt: FeltState<Date | undefined>) =>
     felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato');
