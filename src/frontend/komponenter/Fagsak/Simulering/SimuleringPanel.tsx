@@ -13,7 +13,7 @@ import {
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { formatterIsoDatoString, parseIsoString } from '../../../utils/dato';
-import { Datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, formaterBeløp } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -83,7 +83,10 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
             return 'Totalt';
         }
         if (utbetaltePerioder.length === 1) {
-            return `Total for ${formaterIsoDato(perioder[0].fom, Datoformat.MÅNED_ÅR_NAVN)}`;
+            return `Total for ${formatterIsoDatoString({
+                isoDatoString: perioder[0].fom,
+                tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+            })}`;
         }
         return `Totalt for perioden ${formatterIsoDatoString({
             isoDatoString: fom,
@@ -146,10 +149,10 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <StyledTd>
                                 <BodyShort>
                                     {kapitaliserTekst(
-                                        formaterIsoDato(
-                                            fomDatoNestePeriode,
-                                            Datoformat.MÅNED_ÅR_NAVN
-                                        )
+                                        formatterIsoDatoString({
+                                            isoDatoString: fomDatoNestePeriode,
+                                            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+                                        })
                                     )}
                                 </BodyShort>
                             </StyledTd>
