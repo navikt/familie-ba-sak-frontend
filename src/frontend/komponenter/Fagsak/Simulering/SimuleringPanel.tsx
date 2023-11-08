@@ -1,19 +1,19 @@
 import * as React from 'react';
 
+import { isBefore } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Label, Panel } from '@navikt/ds-react';
 import {
     ABorderDefault,
     AGreen700,
-    ATextDefault,
     ATextDanger,
+    ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import { formatterIsoDatoString, parseIsoString } from '../../../utils/dato';
 import { Datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, erFør } from '../../../utils/kalender';
-import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -74,7 +74,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         : undefined;
 
     const erFørNestePeriode = (periode: ISimuleringPeriode) =>
-        !fomDatoNestePeriode || erFør(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
+        !fomDatoNestePeriode ||
+        isBefore(parseIsoString(periode.fom), parseIsoString(fomDatoNestePeriode));
 
     const panelTittel = (): string => {
         const utbetaltePerioder = perioder.filter(periode => erFørNestePeriode(periode));
@@ -84,9 +85,13 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         if (utbetaltePerioder.length === 1) {
             return `Total for ${formaterIsoDato(perioder[0].fom, Datoformat.MÅNED_ÅR_NAVN)}`;
         }
-        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${
-            tomSisteUtbetaling ? tilVisning(kalenderDato(tomSisteUtbetaling)) : ''
-        }`;
+        return `Totalt for perioden ${formatterIsoDatoString({
+            isoDatoString: fom,
+            tilFormat: Datoformat.DATO,
+        })} - ${formatterIsoDatoString({
+            isoDatoString: tomSisteUtbetaling,
+            tilFormat: Datoformat.DATO,
+        })}`;
     };
 
     return (

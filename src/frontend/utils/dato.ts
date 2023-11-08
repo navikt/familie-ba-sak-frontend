@@ -1,4 +1,4 @@
-import { format, isValid, startOfToday } from 'date-fns';
+import { format, isValid, parseISO, startOfToday } from 'date-fns';
 
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok } from '@navikt/familie-skjema';
@@ -15,12 +15,16 @@ export interface IPeriode {
 
 export const dagensDato = startOfToday();
 
-interface FormatterProps {
+interface FormatterDateProps {
     dato?: Date;
     datoformat: Datoformat;
     defaultString?: string;
 }
-export const formatterDate = ({ dato, datoformat, defaultString = '' }: FormatterProps): string => {
+export const formatterDate = ({
+    dato,
+    datoformat,
+    defaultString = '',
+}: FormatterDateProps): string => {
     return dato && isValid(dato) ? format(dato, datoformat) : defaultString;
 };
 
@@ -29,6 +33,31 @@ export const formatterDateTilIsoString = (dato?: Date): string =>
 
 export const formatterDateTilIsoStringEllerUndefined = (dato?: Date): string | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
+
+interface FormatterIsoStringProps {
+    isoDatoString: IsoDatoString | undefined;
+    tilFormat: Datoformat;
+    defaultString?: string;
+}
+
+export const formatterIsoDatoString = ({
+    isoDatoString,
+    tilFormat,
+    defaultString = '',
+}: FormatterIsoStringProps): string => {
+    const dato = isoDatoString ? new Date(isoDatoString) : undefined;
+    return formatterDate({ dato: dato, datoformat: tilFormat, defaultString: defaultString });
+};
+
+export const parseIsoString = (isoDatoString: IsoDatoString): Date => {
+    const dato = parseISO(isoDatoString);
+
+    if (!isValid(dato)) {
+        throw new Error(`Dato '${isoDatoString}' er ugyldig`);
+    }
+
+    return dato;
+};
 
 export const validerGyldigDato = (felt: FeltState<Date | undefined>) =>
     felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato');

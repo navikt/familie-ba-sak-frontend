@@ -1,15 +1,8 @@
+import { addDays, endOfMonth, isAfter, isBefore, startOfMonth, subDays } from 'date-fns';
+
 import type { Periode } from '@navikt/familie-tidslinje';
 
-import {
-    erEtter,
-    hentFørsteDagIYearMonth,
-    erFør,
-    hentSisteDagIYearMonth,
-    kalenderDatoTilDate,
-    leggTil,
-    KalenderEnhet,
-    trekkFra,
-} from './kalender';
+import { parseIsoString } from './dato';
 import type { IYtelsePeriode } from '../typer/beregning';
 
 export const splittYtelseVedEndringerPåAnnenYtelse = (
@@ -21,48 +14,35 @@ export const splittYtelseVedEndringerPåAnnenYtelse = (
         (acc, periodeSomSplitterOpp) => {
             const sisteElement: Periode = acc[acc.length - 1];
 
-            const småFom = periodeSomSplitterOpp.stønadFom;
-            const småTom = periodeSomSplitterOpp.stønadTom;
+            const småFom = parseIsoString(periodeSomSplitterOpp.stønadFom);
+            const småTom = parseIsoString(periodeSomSplitterOpp.stønadTom);
+
+            const periodeSomSkalSplittesFom = parseIsoString(periodeSomSkalSplittesOpp.stønadFom);
+            const periodeSomSkalSplittesTom = parseIsoString(periodeSomSkalSplittesOpp.stønadTom);
 
             const småFomErInnafor =
-                erEtter(
-                    hentFørsteDagIYearMonth(småFom),
-                    hentFørsteDagIYearMonth(periodeSomSkalSplittesOpp.stønadFom)
-                ) &&
-                erFør(
-                    hentFørsteDagIYearMonth(småFom),
-                    hentSisteDagIYearMonth(periodeSomSkalSplittesOpp.stønadTom)
-                );
+                isAfter(startOfMonth(småFom), startOfMonth(periodeSomSkalSplittesFom)) &&
+                isBefore(startOfMonth(småFom), endOfMonth(periodeSomSkalSplittesTom));
 
             const småTomErInnafor =
-                erEtter(
-                    hentSisteDagIYearMonth(småTom),
-                    hentFørsteDagIYearMonth(periodeSomSkalSplittesOpp.stønadFom)
-                ) &&
-                erFør(
-                    hentSisteDagIYearMonth(småTom),
-                    hentSisteDagIYearMonth(periodeSomSkalSplittesOpp.stønadTom)
-                );
+                isAfter(endOfMonth(småTom), startOfMonth(periodeSomSkalSplittesFom)) &&
+                isBefore(endOfMonth(småTom), endOfMonth(periodeSomSkalSplittesTom));
 
             if (småFomErInnafor && småTomErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: kalenderDatoTilDate(
-                        trekkFra(hentFørsteDagIYearMonth(småFom), 1, KalenderEnhet.DAG)
-                    ),
+                    tom: subDays(startOfMonth(småFom), 1),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: kalenderDatoTilDate(hentFørsteDagIYearMonth(småFom)),
-                    tom: kalenderDatoTilDate(hentSisteDagIYearMonth(småTom)),
+                    fom: startOfMonth(småFom),
+                    tom: endOfMonth(småTom),
                 };
 
                 const tredjePeriode: Periode = {
                     ...sisteElement,
-                    fom: kalenderDatoTilDate(
-                        leggTil(hentSisteDagIYearMonth(småTom), 1, KalenderEnhet.DAG)
-                    ),
+                    fom: addDays(endOfMonth(småTom), 1),
                 };
                 return [
                     ...acc.splice(0, acc.length - 1),
@@ -73,27 +53,23 @@ export const splittYtelseVedEndringerPåAnnenYtelse = (
             } else if (småFomErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: kalenderDatoTilDate(
-                        trekkFra(hentFørsteDagIYearMonth(småFom), 1, KalenderEnhet.DAG)
-                    ),
+                    tom: subDays(startOfMonth(småFom), 1),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: kalenderDatoTilDate(hentFørsteDagIYearMonth(småFom)),
+                    fom: startOfMonth(småFom),
                 };
                 return [...acc.splice(0, acc.length - 1), førstePeriode, andrePeriode];
             } else if (småTomErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: kalenderDatoTilDate(hentSisteDagIYearMonth(småTom)),
+                    tom: endOfMonth(småTom),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: kalenderDatoTilDate(
-                        leggTil(hentSisteDagIYearMonth(småTom), 1, KalenderEnhet.DAG)
-                    ),
+                    fom: addDays(endOfMonth(småTom), 1),
                 };
                 return [...acc.splice(0, acc.length - 1), førstePeriode, andrePeriode];
             } else {

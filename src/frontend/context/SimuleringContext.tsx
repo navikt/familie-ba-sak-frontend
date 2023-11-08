@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import constate from 'constate';
+import { isAfter, isBefore } from 'date-fns';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter } from '@navikt/familie-skjema';
@@ -14,13 +15,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
-import {
-    erFør,
-    kalenderDato,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    TIDENES_MORGEN,
-} from '../utils/kalender';
+import { parseIsoString } from '../utils/dato';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -86,7 +81,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
     const simPerioderFørMars2023 =
         simResultat?.perioder.filter(periode =>
-            erFør(kalenderDato(periode.fom), kalenderDato(mars2023))
+            isBefore(parseIsoString(periode.fom), parseIsoString(mars2023))
         ) || [];
     const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(
         periode => periode.resultat || 0
@@ -238,14 +233,9 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     ): ISimuleringPeriode {
         if (
             periode.resultat === 0 &&
-            kalenderDiff(
-                kalenderDatoTilDate(
-                    periode.forfallsdato ? kalenderDato(periode.forfallsdato) : TIDENES_MORGEN
-                ),
-                kalenderDatoTilDate(
-                    tidSimuleringHentet ? kalenderDato(tidSimuleringHentet) : TIDENES_MORGEN
-                )
-            ) > 0
+            periode.forfallsdato &&
+            tidSimuleringHentet &&
+            isAfter(parseIsoString(periode.forfallsdato), parseIsoString(tidSimuleringHentet))
         ) {
             return {
                 ...periode,
