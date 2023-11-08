@@ -1,31 +1,24 @@
-import { isAfter } from 'date-fns';
+import { addMonths, differenceInCalendarMonths, isAfter } from 'date-fns';
 
-import { parseIsoString } from './dato';
-import {
-    kalenderDato,
-    leggTil,
-    serializeIso8601String,
-    KalenderEnhet,
-    kalenderDiffMåned,
-} from './kalender';
+import { formatterDateTilIsoString, parseIsoString } from './dato';
+import { kalenderDato } from './kalender';
 import type { ISimuleringPeriode } from '../typer/simulering';
 
 export const hentPeriodelisteMedTommePerioder = (
     perioder: ISimuleringPeriode[]
 ): ISimuleringPeriode[] => {
     const fomDatoerISimulering = hentSorterteFomdatoer(perioder);
-    const førstePeriodeFom = kalenderDato(fomDatoerISimulering[0]);
+    const førstePeriodeFom = fomDatoerISimulering[0];
     const antallMånederISimulering = hentAntallMånederISimuleringen(fomDatoerISimulering);
 
     const periodelisteMedTommePerioder = [...perioder];
 
     for (let i = 0; i < antallMånederISimulering; i++) {
-        const aktuellPeriodeFomDato = leggTil(førstePeriodeFom, i, KalenderEnhet.MÅNED);
-        const aktuelPeriodeFom = serializeIso8601String(aktuellPeriodeFomDato);
+        const aktuelPeriodeFom = addMonths(førstePeriodeFom, i);
 
         if (!fomDatoerISimulering.includes(aktuelPeriodeFom)) {
             periodelisteMedTommePerioder.push({
-                fom: aktuelPeriodeFom,
+                fom: formatterDateTilIsoString(aktuelPeriodeFom),
                 tom: '',
             });
         }
@@ -40,14 +33,12 @@ export const hentPeriodelisteMedTommePerioder = (
 export const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
     [...new Set(perioder.map(periode => kalenderDato(periode.fom).år))].sort();
 
-const hentSorterteFomdatoer = (perioder: ISimuleringPeriode[]): string[] =>
-    perioder
-        .map(periode => periode.fom)
-        .sort((a, b) => (isAfter(parseIsoString(a), parseIsoString(b)) ? 1 : -1));
+const hentSorterteFomdatoer = (perioder: ISimuleringPeriode[]): Date[] =>
+    perioder.map(periode => parseIsoString(periode.fom)).sort((a, b) => (isAfter(a, b) ? 1 : -1));
 
-const hentAntallMånederISimuleringen = (fomListe: string[]): number => {
-    const førstePeriodeFom = kalenderDato(fomListe[0]);
-    const sistePeriodeFom = kalenderDato(fomListe[fomListe.length - 1]);
+const hentAntallMånederISimuleringen = (fomListe: Date[]): number => {
+    const førstePeriodeFom = fomListe[0];
+    const sistePeriodeFom = fomListe[fomListe.length - 1];
 
-    return kalenderDiffMåned(førstePeriodeFom, sistePeriodeFom) + 1;
+    return differenceInCalendarMonths(førstePeriodeFom, sistePeriodeFom) + 1;
 };
