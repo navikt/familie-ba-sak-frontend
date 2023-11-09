@@ -7,6 +7,7 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
@@ -16,8 +17,10 @@ import {
     opplysningsdokumenter,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
+import { Distribusjonskanal } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
+import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import type { IsoDatoString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
@@ -59,7 +62,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-        const { hentForhåndsvisning, hentetDokument } = useDokument();
+        const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
+            useDokument();
+        const { toggles } = useApp();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
             IManueltBrevRequestPåFagsak | undefined
@@ -315,6 +320,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
+        const brukerHarUkjentAddresse = () =>
+            toggles[ToggleNavn.verifiserDokdistKanal] &&
+            (distribusjonskanal.status !== RessursStatus.SUKSESS ||
+                distribusjonskanal.data === Distribusjonskanal.UKJENT ||
+                distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
+
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
         const hentForhåndsvisningPåFagsak = () => {
@@ -362,6 +373,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             visInnsendtBrevModal,
             skjema,
             nullstillSkjema,
+            distribusjonskanal,
+            brukerHarUkjentAddresse,
+            hentDistribusjonskanal,
         };
     }
 );

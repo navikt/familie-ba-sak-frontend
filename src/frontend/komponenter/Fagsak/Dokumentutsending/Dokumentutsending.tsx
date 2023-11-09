@@ -8,6 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import DokumentutsendingSkjema from './DokumentutsendingSkjema';
 import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
+import type { IPersonInfo } from '../../../typer/person';
 import { fagsakHeaderHøydeRem } from '../../../typer/styling';
 
 const Container = styled.div`
@@ -17,7 +18,11 @@ const Container = styled.div`
     height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
 `;
 
-const Dokumentutsending: React.FC = () => {
+interface IProps {
+    bruker: IPersonInfo;
+}
+
+const Dokumentutsending: React.FC<IProps> = ({ bruker }) => {
     const navigate = useNavigate();
 
     const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =
@@ -55,7 +60,7 @@ const Dokumentutsending: React.FC = () => {
                     </Modal.Footer>
                 </Modal>
             )}
-            <DokumentutsendingSkjema />
+            <DokumentutsendingSkjema bruker={bruker} />
 
             <iframe
                 title={'dokument'}
