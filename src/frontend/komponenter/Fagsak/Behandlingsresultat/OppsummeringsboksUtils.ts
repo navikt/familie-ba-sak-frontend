@@ -18,7 +18,7 @@ export const kanFjerneSmåbarnstilleggFraPeriode = (
 };
 
 const sjekkOmTilOgMed3ÅrIPeriode = (fødselsdato: string, periode: Date): boolean => {
-    const antallMndForskjell = differenceInCalendarMonths(parseIsoString(fødselsdato), periode);
+    const antallMndForskjell = differenceInCalendarMonths(periode, parseIsoString(fødselsdato));
 
     return antallMndForskjell <= 36;
 };
