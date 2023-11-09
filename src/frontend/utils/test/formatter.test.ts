@@ -8,7 +8,7 @@ import { nb } from 'date-fns/locale';
 import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
 import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
-import { dagensDato, formatterDateTilIsoString } from '../dato';
+import { dagensDato, dateTilIsoString } from '../dato';
 import {
     Datoformat,
     formaterIdent,
@@ -53,8 +53,8 @@ describe('formaterIdent', () => {
 describe('hentAlder', () => {
     test('Skal hente riktig alder før og etter fødselsdato', () => {
         const toÅrSiden = subYears(dagensDato, 2);
-        expect(hentAlder(formatterDateTilIsoString(subDays(toÅrSiden, 1)))).toBe(2);
-        expect(hentAlder(formatterDateTilIsoString(addDays(toÅrSiden, 1)))).toBe(1);
+        expect(hentAlder(dateTilIsoString(subDays(toÅrSiden, 1)))).toBe(2);
+        expect(hentAlder(dateTilIsoString(addDays(toÅrSiden, 1)))).toBe(1);
     });
 });
 

@@ -8,7 +8,7 @@ import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { IManuellDødsfall } from '../../typer/dødsfall';
 import type { IGrunnlagPerson } from '../../typer/person';
-import { formatterDateTilIsoString, validerGyldigDato } from '../../utils/dato';
+import { dateTilIsoString, validerGyldigDato } from '../../utils/dato';
 import { isEmpty } from '../../utils/eøsValidators';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
@@ -82,7 +82,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IP
                 {
                     method: 'POST',
                     data: {
-                        dødsfallDato: formatterDateTilIsoString(skjema.felter.dødsfallDato.verdi),
+                        dødsfallDato: dateTilIsoString(skjema.felter.dødsfallDato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                         personIdent: person.personIdent,
                     },

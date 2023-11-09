@@ -1,7 +1,7 @@
 import { isAfter, isBefore, isSameDay } from 'date-fns';
 
 import type { IPeriode, IsoDatoString } from '../dato';
-import { parseIsoString, parseIsoStringMedFallback, tidenesEnde } from '../dato';
+import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../dato';
 
 import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
 import {
@@ -34,8 +34,8 @@ export const periodeOverlapperMedValgtDato = (
     periodeTom: IsoDatoString | undefined,
     valgtDato: Date
 ) => {
-    const periodeFomDate = parseIsoString(periodeFom);
-    const periodeTomDate = parseIsoStringMedFallback({
+    const periodeFomDate = isoStringTilDate(periodeFom);
+    const periodeTomDate = isoStringTilDateMedFallback({
         isoDatoString: periodeTom,
         fallbackDate: tidenesEnde,
     });

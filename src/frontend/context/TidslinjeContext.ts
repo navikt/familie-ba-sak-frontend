@@ -9,7 +9,7 @@ import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/b
 import { YtelseType } from '../typer/beregning';
 import { FagsakType } from '../typer/fagsak';
 import type { IGrunnlagPerson } from '../typer/person';
-import { dagensDato, parseIsoString } from '../utils/dato';
+import { dagensDato, isoStringTilDate } from '../utils/dato';
 import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import { splittYtelseVedEndringerPåAnnenYtelse } from '../utils/tidslinje';
 
@@ -122,10 +122,10 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                   (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
                       return personMedAndelerTilkjentYtelse.ytelsePerioder.reduce(
                           (acc: Periode[], ytelsePeriode: IYtelsePeriode) => {
-                              const fom = startOfMonth(parseIsoString(ytelsePeriode.stønadFom));
+                              const fom = startOfMonth(isoStringTilDate(ytelsePeriode.stønadFom));
                               const periode: Periode = {
                                   fom,
-                                  tom: endOfMonth(parseIsoString(ytelsePeriode.stønadTom)),
+                                  tom: endOfMonth(isoStringTilDate(ytelsePeriode.stønadTom)),
                                   id: `${
                                       personMedAndelerTilkjentYtelse.personIdent
                                   }_${fom.getMonth()}_${fom.getDay()}`,

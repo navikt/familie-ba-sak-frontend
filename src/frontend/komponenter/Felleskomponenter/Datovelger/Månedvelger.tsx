@@ -7,7 +7,7 @@ import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato, formatterDate } from '../../../utils/dato';
+import { dagensDato, formaterDate } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
@@ -118,15 +118,15 @@ const Månedvelger = ({
             return 'Du kan ikke sette en måned som er tilbake i tid';
         }
         if (tilhørendeFomFelt?.verdi && isSameDay(tidligsteFraDato, tilhørendeFomFelt?.verdi)) {
-            return `Du må velge en måned som er ${formatterDate({
-                dato: tilhørendeFomFelt.verdi,
-                datoformat: Datoformat.MÅNED_ÅR_NAVN,
+            return `Du må velge en måned som er ${formaterDate({
+                date: tilhørendeFomFelt.verdi,
+                tilFormat: Datoformat.MÅNED_ÅR_NAVN,
             })} eller senere`;
         }
 
-        return `Du må velge en måned som er senere enn ${formatterDate({
-            dato: tidligsteFraDato,
-            datoformat: Datoformat.MÅNED_ÅR_NAVN,
+        return `Du må velge en måned som er senere enn ${formaterDate({
+            date: tidligsteFraDato,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
         })}`;
     };
 
@@ -135,9 +135,9 @@ const Månedvelger = ({
             return 'Du kan ikke sette en måned som er frem i tid';
         }
         const senesteDato = hentToDate();
-        return `Du må velge en måned som er tidligere enn ${formatterDate({
-            dato: senesteDato,
-            datoformat: Datoformat.MÅNED_ÅR_NAVN,
+        return `Du må velge en måned som er tidligere enn ${formaterDate({
+            date: senesteDato,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
         })}`;
     };
 

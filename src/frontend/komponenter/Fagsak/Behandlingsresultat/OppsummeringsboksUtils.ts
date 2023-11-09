@@ -7,7 +7,7 @@ import type { IBehandling } from '../../../typer/behandling';
 import { Behandlingstype } from '../../../typer/behandling';
 import { YtelseType } from '../../../typer/beregning';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
-import { parseIsoString } from '../../../utils/dato';
+import { isoStringTilDate } from '../../../utils/dato';
 
 export const kanFjerneSmåbarnstilleggFraPeriode = (
     utbetalingsperiode: Utbetalingsperiode
@@ -18,7 +18,7 @@ export const kanFjerneSmåbarnstilleggFraPeriode = (
 };
 
 const sjekkOmTilOgMed3ÅrIPeriode = (fødselsdato: string, periode: Date): boolean => {
-    const antallMndForskjell = differenceInCalendarMonths(periode, parseIsoString(fødselsdato));
+    const antallMndForskjell = differenceInCalendarMonths(periode, isoStringTilDate(fødselsdato));
 
     return antallMndForskjell <= 36;
 };

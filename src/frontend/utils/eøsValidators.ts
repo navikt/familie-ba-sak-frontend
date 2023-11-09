@@ -4,19 +4,19 @@ import type { OptionType } from '@navikt/familie-form-elements';
 import { feil, ok } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
-import { dagensDato, parseIsoString } from './dato';
+import { dagensDato, isoStringTilDate } from './dato';
 import type { IYearMonthPeriode, YearMonth } from './kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;
 
 const erEtter = (dato1: YearMonth, dato2: YearMonth) =>
-    isAfter(parseIsoString(dato1), parseIsoString(dato2));
+    isAfter(isoStringTilDate(dato1), isoStringTilDate(dato2));
 
 const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
-    isAfter(parseIsoString(valgtDato), endOfMonth(dagensDato));
+    isAfter(isoStringTilDate(valgtDato), endOfMonth(dagensDato));
 const valgtDatoErSenereEnnNesteMåned = (valgtDato: YearMonth) =>
-    isAfter(parseIsoString(valgtDato), endOfMonth(addMonths(dagensDato, 1)));
+    isAfter(isoStringTilDate(valgtDato), endOfMonth(addMonths(dagensDato, 1)));
 
 const erEøsPeriodeGyldig = (
     felt: FeltState<IYearMonthPeriode>,

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
-import { dagensDato, parseIsoStringMedFallback, tidenesEnde } from '../../../../../utils/dato';
+import { dagensDato, isoStringTilDateMedFallback, tidenesEnde } from '../../../../../utils/dato';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../../utils/kalender';
 import { periodeToString } from '../../../../../utils/kalender';
@@ -37,7 +37,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     isAfter(
-        parseIsoStringMedFallback({ isoDatoString: tom, fallbackDate: tidenesEnde }),
+        isoStringTilDateMedFallback({ isoDatoString: tom, fallbackDate: tidenesEnde }),
         endOfMonth(dagensDato)
     );
 

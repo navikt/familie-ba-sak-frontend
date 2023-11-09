@@ -4,7 +4,7 @@ import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
 import type { IPeriode } from './dato';
-import { dagensDato, parseIsoString } from './dato';
+import { dagensDato, isoStringTilDate } from './dato';
 import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
@@ -52,7 +52,7 @@ export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: Date, tom?: Date) => {
-    const fødselsdatoPluss18 = addYears(parseIsoString(person.fødselsdato), 18);
+    const fødselsdatoPluss18 = addYears(isoStringTilDate(person.fødselsdato), 18);
     return (
         isSameDay(fom, fødselsdatoPluss18) ||
         isAfter(fom, fødselsdatoPluss18) ||
@@ -61,7 +61,7 @@ const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: Date, 
 };
 
 const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: Date, tom?: Date) => {
-    const fødselsdato = parseIsoString(person.fødselsdato);
+    const fødselsdato = isoStringTilDate(person.fødselsdato);
 
     return isBefore(fom, fødselsdato) || (tom ? isBefore(tom, fødselsdato) : false);
 };
@@ -101,7 +101,7 @@ export const erPeriodeGyldig = (
 
         const fomDatoErFørTomDato = !tom || isBefore(fom, tom);
         const fomDatoErLikDødsfallDato =
-            !!person?.dødsfallDato && isSameDay(fom, parseIsoString(person.dødsfallDato));
+            !!person?.dødsfallDato && isSameDay(fom, isoStringTilDate(person.dødsfallDato));
 
         if (erNesteMånedEllerSenere(fom)) {
             return feil(
@@ -117,7 +117,7 @@ export const erPeriodeGyldig = (
         }
 
         if (tom && person?.dødsfallDato) {
-            const dødsfalldato = parseIsoString(person.dødsfallDato);
+            const dødsfalldato = isoStringTilDate(person.dødsfallDato);
 
             if (!er18ÅrsVilkår && isAfter(tom, dødsfalldato)) {
                 return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');

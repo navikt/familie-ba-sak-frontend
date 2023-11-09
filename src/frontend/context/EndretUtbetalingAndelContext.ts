@@ -8,7 +8,7 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
-import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
+import { dateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import type { FamilieIsoDate } from '../utils/kalender';
 import { erIsoStringGyldig } from '../utils/kalender';
 
@@ -163,8 +163,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 tom: tom && tom.verdi,
                 årsak: årsak && årsak.verdi,
                 begrunnelse: begrunnelse.verdi,
-                søknadstidspunkt: formatterDateTilIsoStringEllerUndefined(søknadstidspunkt.verdi),
-                avtaletidspunktDeltBosted: formatterDateTilIsoStringEllerUndefined(
+                søknadstidspunkt: dateTilIsoStringEllerUndefined(søknadstidspunkt.verdi),
+                avtaletidspunktDeltBosted: dateTilIsoStringEllerUndefined(
                     avtaletidspunktDeltBosted.verdi
                 ),
                 erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,

@@ -19,8 +19,8 @@ import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { IsoDatoString } from '../../../../../utils/dato';
 import {
-    formatterDateTilIsoString,
-    formatterDateTilIsoStringEllerUndefined,
+    dateTilIsoString,
+    dateTilIsoStringEllerUndefined,
     validerGyldigDato,
 } from '../../../../../utils/dato';
 
@@ -201,7 +201,7 @@ const useOpprettBehandling = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: {
-                    kravMottattDato: formatterDateTilIsoString(kravMottattDato.verdi),
+                    kravMottattDato: dateTilIsoString(kravMottattDato.verdi),
                 },
                 påvirkerSystemLaster: true,
             },
@@ -232,11 +232,9 @@ const useOpprettBehandling = (
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
                     nyMigreringsdato: erMigreringFraInfoTrygd
-                        ? formatterDateTilIsoStringEllerUndefined(migreringsdato.verdi)
+                        ? dateTilIsoStringEllerUndefined(migreringsdato.verdi)
                         : undefined,
-                    søknadMottattDato: formatterDateTilIsoStringEllerUndefined(
-                        søknadMottattDato.verdi
-                    ),
+                    søknadMottattDato: dateTilIsoStringEllerUndefined(søknadMottattDato.verdi),
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,

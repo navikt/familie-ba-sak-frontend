@@ -16,7 +16,7 @@ import {
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { parseIsoString } from '../../../utils/dato';
+import { isoStringTilDate } from '../../../utils/dato';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDato, periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
@@ -133,7 +133,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
         fomDatoNestePeriode &&
-        isAfter(parseIsoString(periode.fom), parseIsoString(fomDatoNestePeriode));
+        isAfter(isoStringTilDate(periode.fom), isoStringTilDate(fomDatoNestePeriode));
 
     const perioderSomSkalVisesITabellen = perioder.filter(
         periode =>

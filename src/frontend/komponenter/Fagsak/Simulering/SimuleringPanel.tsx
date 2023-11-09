@@ -12,7 +12,7 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { formatterIsoDatoString, parseIsoString } from '../../../utils/dato';
+import { formatterIsoDatoString, isoStringTilDate } from '../../../utils/dato';
 import { Datoformat, formaterBeløp } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
@@ -75,7 +75,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
 
     const erFørNestePeriode = (periode: ISimuleringPeriode) =>
         !fomDatoNestePeriode ||
-        isBefore(parseIsoString(periode.fom), parseIsoString(fomDatoNestePeriode));
+        isBefore(isoStringTilDate(periode.fom), isoStringTilDate(fomDatoNestePeriode));
 
     const panelTittel = (): string => {
         const utbetaltePerioder = perioder.filter(periode => erFørNestePeriode(periode));

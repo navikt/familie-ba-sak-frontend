@@ -7,7 +7,7 @@ import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 import { BehandlingStatus } from '../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import { dagensDato, formatterDateTilIsoString } from '../../../../../utils/dato';
+import { dagensDato, dateTilIsoString } from '../../../../../utils/dato';
 import {
     mockOpphørsperiode,
     mockUtbetalingsperiode,
@@ -42,8 +42,8 @@ describe('VedtakBegrunnelserContext', () => {
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            fom: formatterDateTilIsoString(enMndFremITidFom),
-                            tom: formatterDateTilIsoString(enMndFremITidTom),
+                            fom: dateTilIsoString(enMndFremITidFom),
+                            tom: dateTilIsoString(enMndFremITidTom),
                         }),
                     ],
                     BehandlingStatus.UTREDES
@@ -57,8 +57,8 @@ describe('VedtakBegrunnelserContext', () => {
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            fom: formatterDateTilIsoString(toMndFremITidFom),
-                            tom: formatterDateTilIsoString(toMndFremITidTom),
+                            fom: dateTilIsoString(toMndFremITidFom),
+                            tom: dateTilIsoString(toMndFremITidTom),
                         }),
                     ],
                     BehandlingStatus.UTREDES

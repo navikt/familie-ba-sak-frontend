@@ -2,7 +2,7 @@ import { addDays, endOfMonth, isAfter, isBefore, startOfMonth, subDays } from 'd
 
 import type { Periode } from '@navikt/familie-tidslinje';
 
-import { parseIsoString } from './dato';
+import { isoStringTilDate } from './dato';
 import type { IYtelsePeriode } from '../typer/beregning';
 
 export const splittYtelseVedEndringerPåAnnenYtelse = (
@@ -14,11 +14,11 @@ export const splittYtelseVedEndringerPåAnnenYtelse = (
         (acc, periodeSomSplitterOpp) => {
             const sisteElement: Periode = acc[acc.length - 1];
 
-            const småFom = parseIsoString(periodeSomSplitterOpp.stønadFom);
-            const småTom = parseIsoString(periodeSomSplitterOpp.stønadTom);
+            const småFom = isoStringTilDate(periodeSomSplitterOpp.stønadFom);
+            const småTom = isoStringTilDate(periodeSomSplitterOpp.stønadTom);
 
-            const periodeSomSkalSplittesFom = parseIsoString(periodeSomSkalSplittesOpp.stønadFom);
-            const periodeSomSkalSplittesTom = parseIsoString(periodeSomSkalSplittesOpp.stønadTom);
+            const periodeSomSkalSplittesFom = isoStringTilDate(periodeSomSkalSplittesOpp.stønadFom);
+            const periodeSomSkalSplittesTom = isoStringTilDate(periodeSomSkalSplittesOpp.stønadTom);
 
             const småFomErInnafor =
                 isAfter(startOfMonth(småFom), startOfMonth(periodeSomSkalSplittesFom)) &&

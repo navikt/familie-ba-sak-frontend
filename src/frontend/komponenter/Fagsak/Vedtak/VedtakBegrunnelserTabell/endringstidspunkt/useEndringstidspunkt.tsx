@@ -9,7 +9,7 @@ import { useVedtaksperioder } from '../../../../../context/behandlingContext/use
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../../../../utils/dato';
-import { formatterDateTilIsoString, validerGyldigDato } from '../../../../../utils/dato';
+import { dateTilIsoString, validerGyldigDato } from '../../../../../utils/dato';
 
 interface IProps {
     lukkModal: () => void;
@@ -57,7 +57,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
                 {
                     method: 'PUT',
                     data: {
-                        overstyrtEndringstidspunkt: formatterDateTilIsoString(
+                        overstyrtEndringstidspunkt: dateTilIsoString(
                             skjema.felter.endringstidspunkt.verdi
                         ),
                         behandlingId,

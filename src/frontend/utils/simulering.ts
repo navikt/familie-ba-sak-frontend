@@ -1,6 +1,6 @@
 import { addMonths, differenceInCalendarMonths, isAfter, isSameDay } from 'date-fns';
 
-import { formatterDateTilIsoString, parseIsoString } from './dato';
+import { dateTilIsoString, isoStringTilDate } from './dato';
 import { kalenderDato } from './kalender';
 import type { ISimuleringPeriode } from '../typer/simulering';
 
@@ -18,14 +18,14 @@ export const hentPeriodelisteMedTommePerioder = (
 
         if (!fomDatoerISimulering.some(date => isSameDay(date, aktuelPeriodeFom))) {
             periodelisteMedTommePerioder.push({
-                fom: formatterDateTilIsoString(aktuelPeriodeFom),
+                fom: dateTilIsoString(aktuelPeriodeFom),
                 tom: '',
             });
         }
     }
 
     periodelisteMedTommePerioder.sort((a, b) =>
-        isAfter(parseIsoString(a.fom), parseIsoString(b.fom)) ? 1 : -1
+        isAfter(isoStringTilDate(a.fom), isoStringTilDate(b.fom)) ? 1 : -1
     );
     return periodelisteMedTommePerioder;
 };
@@ -34,7 +34,7 @@ export const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =
     [...new Set(perioder.map(periode => kalenderDato(periode.fom).år))].sort();
 
 const hentSorterteFomdatoer = (perioder: ISimuleringPeriode[]): Date[] =>
-    perioder.map(periode => parseIsoString(periode.fom)).sort((a, b) => (isAfter(a, b) ? 1 : -1));
+    perioder.map(periode => isoStringTilDate(periode.fom)).sort((a, b) => (isAfter(a, b) ? 1 : -1));
 
 const hentAntallMånederISimuleringen = (fomListe: Date[]): number => {
     const førstePeriodeFom = fomListe[0];

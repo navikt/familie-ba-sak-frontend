@@ -14,7 +14,7 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { dagensDato, parseIsoStringMedFallback, tidenesMorgen } from './dato';
+import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from './dato';
 import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
 import { VedtakBegrunnelseType } from '../typer/vedtak';
@@ -35,7 +35,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 };
 
 const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-    const periodeFom = parseIsoStringMedFallback({
+    const periodeFom = isoStringTilDateMedFallback({
         isoDatoString: vedtaksperiode.fom,
         fallbackDate: tidenesMorgen,
     });

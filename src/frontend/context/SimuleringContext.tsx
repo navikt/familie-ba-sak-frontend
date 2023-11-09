@@ -15,7 +15,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
-import { parseIsoString } from '../utils/dato';
+import { isoStringTilDate } from '../utils/dato';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -81,7 +81,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
     const simPerioderFørMars2023 =
         simResultat?.perioder.filter(periode =>
-            isBefore(parseIsoString(periode.fom), parseIsoString(mars2023))
+            isBefore(isoStringTilDate(periode.fom), isoStringTilDate(mars2023))
         ) || [];
     const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(
         periode => periode.resultat || 0
@@ -235,7 +235,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             periode.resultat === 0 &&
             periode.forfallsdato &&
             tidSimuleringHentet &&
-            isAfter(parseIsoString(periode.forfallsdato), parseIsoString(tidSimuleringHentet))
+            isAfter(isoStringTilDate(periode.forfallsdato), isoStringTilDate(tidSimuleringHentet))
         ) {
             return {
                 ...periode,
