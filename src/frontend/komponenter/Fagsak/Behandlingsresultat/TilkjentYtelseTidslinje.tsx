@@ -96,8 +96,8 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({
                 <Tidslinje
                     rader={tidslinjeRader}
                     etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}
-                    startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
-                    sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
+                    startDato={aktivtTidslinjeVindu.startDato}
+                    sluttDato={aktivtTidslinjeVindu.sluttDato}
                     aktivtUtsnitt={
                         aktivEtikett && {
                             fom: aktivEtikett.date,
