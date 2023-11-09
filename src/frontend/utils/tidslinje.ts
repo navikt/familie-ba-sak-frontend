@@ -14,35 +14,44 @@ export const splittYtelseVedEndringerPåAnnenYtelse = (
         (acc, periodeSomSplitterOpp) => {
             const sisteElement: Periode = acc[acc.length - 1];
 
-            const småFom = isoStringTilDate(periodeSomSplitterOpp.stønadFom);
-            const småTom = isoStringTilDate(periodeSomSplitterOpp.stønadTom);
+            const fomPeriodeSplitterOpp = isoStringTilDate(periodeSomSplitterOpp.stønadFom);
+            const tomPeriodeSplitterOpp = isoStringTilDate(periodeSomSplitterOpp.stønadTom);
 
-            const periodeSomSkalSplittesFom = isoStringTilDate(periodeSomSkalSplittesOpp.stønadFom);
-            const periodeSomSkalSplittesTom = isoStringTilDate(periodeSomSkalSplittesOpp.stønadTom);
+            const fomPeriodeSomSkalSplittes = isoStringTilDate(periodeSomSkalSplittesOpp.stønadFom);
+            const tomPeriodeSomSkalSplittes = isoStringTilDate(periodeSomSkalSplittesOpp.stønadTom);
 
-            const småFomErInnafor =
-                isAfter(startOfMonth(småFom), startOfMonth(periodeSomSkalSplittesFom)) &&
-                isBefore(startOfMonth(småFom), endOfMonth(periodeSomSkalSplittesTom));
+            const fomPeriodeSplitterOppErInnafor =
+                isAfter(
+                    startOfMonth(fomPeriodeSplitterOpp),
+                    startOfMonth(fomPeriodeSomSkalSplittes)
+                ) &&
+                isBefore(
+                    startOfMonth(fomPeriodeSplitterOpp),
+                    endOfMonth(tomPeriodeSomSkalSplittes)
+                );
 
-            const småTomErInnafor =
-                isAfter(endOfMonth(småTom), startOfMonth(periodeSomSkalSplittesFom)) &&
-                isBefore(endOfMonth(småTom), endOfMonth(periodeSomSkalSplittesTom));
+            const tomPeriodeSplitterOppErInnafor =
+                isAfter(
+                    endOfMonth(tomPeriodeSplitterOpp),
+                    startOfMonth(fomPeriodeSomSkalSplittes)
+                ) &&
+                isBefore(endOfMonth(tomPeriodeSplitterOpp), endOfMonth(tomPeriodeSomSkalSplittes));
 
-            if (småFomErInnafor && småTomErInnafor) {
+            if (fomPeriodeSplitterOppErInnafor && tomPeriodeSplitterOppErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: subDays(startOfMonth(småFom), 1),
+                    tom: subDays(startOfMonth(fomPeriodeSplitterOpp), 1),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: startOfMonth(småFom),
-                    tom: endOfMonth(småTom),
+                    fom: startOfMonth(fomPeriodeSplitterOpp),
+                    tom: endOfMonth(tomPeriodeSplitterOpp),
                 };
 
                 const tredjePeriode: Periode = {
                     ...sisteElement,
-                    fom: addDays(endOfMonth(småTom), 1),
+                    fom: addDays(endOfMonth(tomPeriodeSplitterOpp), 1),
                 };
                 return [
                     ...acc.splice(0, acc.length - 1),
@@ -50,26 +59,26 @@ export const splittYtelseVedEndringerPåAnnenYtelse = (
                     andrePeriode,
                     tredjePeriode,
                 ];
-            } else if (småFomErInnafor) {
+            } else if (fomPeriodeSplitterOppErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: subDays(startOfMonth(småFom), 1),
+                    tom: subDays(startOfMonth(fomPeriodeSplitterOpp), 1),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: startOfMonth(småFom),
+                    fom: startOfMonth(fomPeriodeSplitterOpp),
                 };
                 return [...acc.splice(0, acc.length - 1), førstePeriode, andrePeriode];
-            } else if (småTomErInnafor) {
+            } else if (tomPeriodeSplitterOppErInnafor) {
                 const førstePeriode: Periode = {
                     ...sisteElement,
-                    tom: endOfMonth(småTom),
+                    tom: endOfMonth(tomPeriodeSplitterOpp),
                 };
 
                 const andrePeriode: Periode = {
                     ...sisteElement,
-                    fom: addDays(endOfMonth(småTom), 1),
+                    fom: addDays(endOfMonth(tomPeriodeSplitterOpp), 1),
                 };
                 return [...acc.splice(0, acc.length - 1), førstePeriode, andrePeriode];
             } else {
