@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { kalenderDato, KalenderEnhet, leggTil, trekkFra } from '../';
 
 describe('Kalender aritmetikk ', () => {

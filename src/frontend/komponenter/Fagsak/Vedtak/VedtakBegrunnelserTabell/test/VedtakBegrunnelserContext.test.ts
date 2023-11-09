@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 
 import { BehandlingStatus } from '../../../../../typer/behandling';

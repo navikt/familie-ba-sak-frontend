@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import type { Periode } from '@navikt/familie-tidslinje';
 
 import type { IYtelsePeriode } from '../../typer/beregning';
