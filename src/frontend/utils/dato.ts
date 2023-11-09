@@ -44,7 +44,7 @@ interface FormaterIsoStringProps {
     defaultString?: string;
 }
 
-export const formatterIsoDatoString = ({
+export const formaterIsoDatoString = ({
     isoDatoString,
     tilFormat,
     defaultString = '',
