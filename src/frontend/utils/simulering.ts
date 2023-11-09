@@ -1,4 +1,4 @@
-import { addMonths, differenceInCalendarMonths, isAfter } from 'date-fns';
+import { addMonths, differenceInCalendarMonths, isAfter, isSameDay } from 'date-fns';
 
 import { formatterDateTilIsoString, parseIsoString } from './dato';
 import { kalenderDato } from './kalender';
@@ -16,7 +16,7 @@ export const hentPeriodelisteMedTommePerioder = (
     for (let i = 0; i < antallMånederISimulering; i++) {
         const aktuelPeriodeFom = addMonths(førstePeriodeFom, i);
 
-        if (!fomDatoerISimulering.includes(aktuelPeriodeFom)) {
+        if (!fomDatoerISimulering.some(date => isSameDay(date, aktuelPeriodeFom))) {
             periodelisteMedTommePerioder.push({
                 fom: formatterDateTilIsoString(aktuelPeriodeFom),
                 tom: '',
@@ -40,5 +40,5 @@ const hentAntallMånederISimuleringen = (fomListe: Date[]): number => {
     const førstePeriodeFom = fomListe[0];
     const sistePeriodeFom = fomListe[fomListe.length - 1];
 
-    return differenceInCalendarMonths(førstePeriodeFom, sistePeriodeFom) + 1;
+    return differenceInCalendarMonths(sistePeriodeFom, førstePeriodeFom) + 1;
 };
