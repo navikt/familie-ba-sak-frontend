@@ -10,9 +10,6 @@ import type { IYearMonthPeriode, YearMonth } from './kalender';
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;
 
-const erEtter = (dato1: YearMonth, dato2: YearMonth) =>
-    isAfter(isoStringTilDate(dato1), isoStringTilDate(dato2));
-
 const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
     isAfter(isoStringTilDate(valgtDato), endOfMonth(dagensDato));
 const valgtDatoErSenereEnnNesteMåned = (valgtDato: YearMonth) =>
@@ -36,7 +33,7 @@ const erEøsPeriodeGyldig = (
             'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere'
         );
     }
-    if (initielFom && !erEtter(fom, initielFom)) {
+    if (initielFom && !isAfter(isoStringTilDate(fom), isoStringTilDate(initielFom))) {
         return feil(
             felt,
             `Du kan ikke legge inn fra og med måned som er før: ${avhengigheter?.initielFom}`
