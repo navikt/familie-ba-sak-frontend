@@ -119,9 +119,6 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
                 );
             case RessursStatus.IKKE_HENTET:
             case RessursStatus.HENTER:
-                if (distribusjonskanal.status === RessursStatus.IKKE_HENTET) {
-                    hentDistribusjonskanal(bruker.personIdent);
-                }
                 return (
                     <StyledAlert variant={'info'}>
                         <Loader title="Laster" />
