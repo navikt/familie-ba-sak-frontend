@@ -68,6 +68,8 @@ const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: Date, tom?: Da
 
 const erNesteMånedEllerSenere = (dato: Date) => isAfter(dato, endOfMonth(dagensDato));
 
+const erUendelig = (date: Date | undefined): date is undefined => date === undefined;
+
 export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
     avhengigheter?: Avhengigheter
@@ -99,7 +101,7 @@ export const erPeriodeGyldig = (
             }
         }
 
-        const fomDatoErFørTomDato = !tom || isBefore(fom, tom);
+        const fomDatoErFørTomDato = erUendelig(tom) || isBefore(fom, tom);
         const fomDatoErLikDødsfallDato =
             !!person?.dødsfallDato && isSameDay(fom, isoStringTilDate(person.dødsfallDato));
 
@@ -109,18 +111,21 @@ export const erPeriodeGyldig = (
                 'Du kan ikke legge inn fra og med dato som er i neste måned eller senere'
             );
         }
-        if (tom && !er18ÅrsVilkår && erNesteMånedEllerSenere(tom)) {
-            return feil(
-                felt,
-                'Du kan ikke legge inn til og med dato som er i neste måned eller senere'
-            );
-        }
 
-        if (tom && person?.dødsfallDato) {
-            const dødsfalldato = isoStringTilDate(person.dødsfallDato);
+        if (!erUendelig(tom)) {
+            if (!er18ÅrsVilkår && erNesteMånedEllerSenere(tom)) {
+                return feil(
+                    felt,
+                    'Du kan ikke legge inn til og med dato som er i neste måned eller senere'
+                );
+            }
 
-            if (!er18ÅrsVilkår && isAfter(tom, dødsfalldato)) {
-                return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
+            if (person?.dødsfallDato) {
+                const dødsfalldato = isoStringTilDate(person.dødsfallDato);
+
+                if (!er18ÅrsVilkår && isAfter(tom, dødsfalldato)) {
+                    return feil(felt, 'Du kan ikke sette til og med dato etter dødsfalldato');
+                }
             }
         }
 
