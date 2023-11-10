@@ -1,10 +1,10 @@
 import { addDays, differenceInCalendarMonths } from 'date-fns';
 
-import type { FamilieIsoDate } from '../../../utils/kalender';
+import type { IsoDatoString } from '../../../utils/dato';
 
 interface PeriodeMedBeløp {
-    fom: FamilieIsoDate;
-    tom: FamilieIsoDate;
+    fom: IsoDatoString;
+    tom: IsoDatoString;
     beløp: number;
 }
 export const summerBeløpForPerioder = (periodeListe: PeriodeMedBeløp[]): number => {

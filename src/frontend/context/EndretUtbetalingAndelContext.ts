@@ -8,12 +8,12 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
+import type { IsoDatoString } from '../utils/dato';
 import {
     dateTilIsoDatoStringEllerUndefined,
     erIsoStringGyldig,
     validerGyldigDato,
 } from '../utils/dato';
-import type { FamilieIsoDate } from '../utils/kalender';
 
 interface IProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -40,8 +40,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
             {
                 person: string | undefined;
-                fom: FamilieIsoDate | undefined;
-                tom: FamilieIsoDate | undefined;
+                fom: IsoDatoString | undefined;
+                tom: IsoDatoString | undefined;
                 periodeSkalUtbetalesTilSøker: boolean | undefined;
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
                 søknadstidspunkt: Date | undefined;
@@ -57,14 +57,14 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     valideringsfunksjon: felt =>
                         felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
                 }),
-                fom: useFelt<FamilieIsoDate | undefined>({
+                fom: useFelt<IsoDatoString | undefined>({
                     verdi: endretUtbetalingAndel.fom,
                     valideringsfunksjon: felt =>
                         erIsoStringGyldig(felt.verdi)
                             ? ok(felt)
                             : feil(felt, 'Du må velge f.o.m-dato'),
                 }),
-                tom: useFelt<FamilieIsoDate | undefined>({
+                tom: useFelt<IsoDatoString | undefined>({
                     verdi: endretUtbetalingAndel.tom,
                 }),
                 periodeSkalUtbetalesTilSøker: periodeSkalUtbetalesTilSøkerFelt,
