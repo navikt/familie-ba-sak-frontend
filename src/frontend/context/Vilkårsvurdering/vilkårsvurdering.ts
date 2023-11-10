@@ -1,3 +1,5 @@
+import { differenceInMilliseconds } from 'date-fns';
+
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -11,13 +13,9 @@ import type {
     IVilkårResultat,
 } from '../../typer/vilkår';
 import { Resultat } from '../../typer/vilkår';
-import {
-    kalenderDato,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    nyPeriode,
-    periodeDiff,
-} from '../../utils/kalender';
+import type { IPeriode } from '../../utils/dato';
+import { isoStringTilDateMedFallback, tidenesEnde } from '../../utils/dato';
+import { kalenderDato, kalenderDatoTilDate, kalenderDiff, nyPeriode } from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -27,6 +25,16 @@ import {
     ikkeValider,
     lagInitiellFelt,
 } from '../../utils/validators';
+
+const periodeDiff = (periodeA: IPeriode, periodeB: IPeriode) => {
+    if (!periodeA.fom && !periodeA.tom) {
+        return 1;
+    }
+    return differenceInMilliseconds(
+        isoStringTilDateMedFallback({ isoDatoString: periodeA.fom, fallbackDate: tidenesEnde }),
+        isoStringTilDateMedFallback({ isoDatoString: periodeB.fom, fallbackDate: tidenesEnde })
+    );
+};
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: FeltState<IVilkårResultat>[]
