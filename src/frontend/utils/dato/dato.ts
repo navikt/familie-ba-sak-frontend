@@ -8,12 +8,6 @@ import { Datoformat } from '../formatter';
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 export type IsoMånedString = string; // Format YYYY-MM (ISO)
 
-export interface IPeriode {
-    // Format YYYY-MM-DD (ISO)
-    fom?: IsoDatoString;
-    tom?: IsoDatoString;
-}
-
 export const dagensDato = startOfToday();
 
 export const tidenesMorgen = new Date(1000, 1, 1);
