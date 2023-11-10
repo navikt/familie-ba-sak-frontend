@@ -1,7 +1,6 @@
-import { isAfter } from 'date-fns';
+import { differenceInMilliseconds, isAfter } from 'date-fns';
 
-import { dagensDato, isoStringTilDateMedFallback, tidenesEnde } from './dato';
-import { kalenderDiff } from './kalender';
+import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
@@ -21,7 +20,10 @@ export const hentSisteBehandlingPåMinimalFagsak = (
         return undefined;
     } else {
         return fagsak.behandlinger.sort((a, b) =>
-            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+            differenceInMilliseconds(
+                isoStringTilDate(b.opprettetTidspunkt),
+                isoStringTilDate(a.opprettetTidspunkt)
+            )
         )[0];
     }
 };
@@ -41,7 +43,10 @@ export const hentSisteIkkeHenlagteBehandling = (
         return undefined;
     } else {
         return filtrerteBehandlinger.sort((a, b) =>
-            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+            differenceInMilliseconds(
+                isoStringTilDate(b.opprettetTidspunkt),
+                isoStringTilDate(a.opprettetTidspunkt)
+            )
         )[0];
     }
 };

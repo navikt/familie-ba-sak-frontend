@@ -14,8 +14,8 @@ import type {
 } from '../../typer/vilkår';
 import { Resultat } from '../../typer/vilkår';
 import type { IPeriode } from '../../utils/dato';
-import { isoStringTilDateMedFallback, tidenesEnde } from '../../utils/dato';
-import { kalenderDato, kalenderDatoTilDate, kalenderDiff, nyPeriode } from '../../utils/kalender';
+import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../../utils/dato';
+import { nyPeriode } from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -160,9 +160,9 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return kalenderDiff(
-                kalenderDatoTilDate(kalenderDato(b.person.fødselsdato)),
-                kalenderDatoTilDate(kalenderDato(a.person.fødselsdato))
+            return differenceInMilliseconds(
+                isoStringTilDate(b.person.fødselsdato),
+                isoStringTilDate(a.person.fødselsdato)
             );
         });
 };

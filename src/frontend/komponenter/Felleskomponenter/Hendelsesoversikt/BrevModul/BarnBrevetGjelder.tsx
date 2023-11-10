@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import { Alert, Checkbox, CheckboxGroup } from '@navikt/ds-react';
@@ -7,8 +8,8 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import { isoStringTilDate } from '../../../../utils/dato';
 import { lagBarnLabel } from '../../../../utils/formatter';
-import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 
 const StyledCheckbox = styled(Checkbox)`
     margin-left: 1rem;
@@ -57,9 +58,9 @@ const BarnBrevetGjelder = (props: IProps) => {
 
             return !a.ident
                 ? 1
-                : kalenderDiff(
-                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
-                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
+                : differenceInMilliseconds(
+                      isoStringTilDate(b.fødselsdato),
+                      isoStringTilDate(a.fødselsdato)
                   );
         }
     );

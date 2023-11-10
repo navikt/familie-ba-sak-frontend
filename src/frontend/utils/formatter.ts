@@ -1,6 +1,6 @@
-import { format, isBefore, isValid } from 'date-fns';
+import { differenceInMilliseconds, format, isBefore, isValid } from 'date-fns';
 
-import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
+import { dagensDato, isoStringTilDate } from './dato';
 import { YtelseType } from '../typer/beregning';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
@@ -42,10 +42,8 @@ export const formaterIsoDato = (
 export const hentAlder = (fødselsdato: string): number => {
     return fødselsdato !== ''
         ? Math.floor(
-              kalenderDiff(
-                  kalenderDatoTilDate(iDag()),
-                  kalenderDatoTilDate(kalenderDato(fødselsdato))
-              ) / millisekunderIEttÅr
+              differenceInMilliseconds(dagensDato, isoStringTilDate(fødselsdato)) /
+                  millisekunderIEttÅr
           )
         : 0;
 };

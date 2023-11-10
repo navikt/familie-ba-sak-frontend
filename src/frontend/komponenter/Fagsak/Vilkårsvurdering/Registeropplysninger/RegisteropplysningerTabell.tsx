@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
@@ -8,15 +9,8 @@ import { Button, Table } from '@navikt/ds-react';
 
 import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
-import {
-    kalenderDato,
-    kalenderDatoMedFallback,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    periodeToString,
-    TIDENES_MORGEN,
-    tilVisning,
-} from '../../../../utils/kalender';
+import { isoStringTilDateMedFallback, tidenesMorgen } from '../../../../utils/dato';
+import { kalenderDato, periodeToString, tilVisning } from '../../../../utils/kalender';
 
 const Container = styled.div`
     display: flex;
@@ -85,9 +79,9 @@ const hentDatoVerdi = (
 };
 
 const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteropplysning) =>
-    kalenderDiff(
-        kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)),
-        kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN))
+    differenceInMilliseconds(
+        isoStringTilDateMedFallback({ isoDatoString: b.fom, fallbackDate: tidenesMorgen }),
+        isoStringTilDateMedFallback({ isoDatoString: a.fom, fallbackDate: tidenesMorgen })
     );
 
 export const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;
