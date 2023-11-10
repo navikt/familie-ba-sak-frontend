@@ -6,14 +6,8 @@ import type { Periode } from '@navikt/familie-tidslinje';
 
 import type { IYtelsePeriode } from '../../typer/beregning';
 import { YtelseType } from '../../typer/beregning';
-import {
-    hentFørsteDagIYearMonth,
-    hentSisteDagIYearMonth,
-    kalenderDato,
-    kalenderDatoFraDate,
-    kalenderDatoTilDate,
-    serializeIso8601String,
-} from '../kalender';
+import { dateTilIsoString } from '../dato';
+import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth, kalenderDatoTilDate } from '../kalender';
 import { splittYtelseVedEndringerPåAnnenYtelse } from '../tidslinje';
 
 describe('utils/tidslinje', () => {
@@ -63,26 +57,14 @@ describe('utils/tidslinje', () => {
         );
 
         expect(splittaPerioder.length).toBe(3);
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-01-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-04-30'))
-        );
+        expect(dateTilIsoString(splittaPerioder[0].fom)).toBe('2020-01-01');
+        expect(dateTilIsoString(splittaPerioder[0].tom)).toBe('2020-04-30');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-05-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-07-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[1].fom)).toBe('2020-05-01');
+        expect(dateTilIsoString(splittaPerioder[1].tom)).toBe('2020-07-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[2].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-08-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[2].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-12-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[2].fom)).toBe('2020-08-01');
+        expect(dateTilIsoString(splittaPerioder[2].tom)).toBe('2020-12-31');
     });
 
     test('Utvidet periode blir splittet i 2 av fom småbarnstilleggperiode', () => {
@@ -93,19 +75,11 @@ describe('utils/tidslinje', () => {
         );
 
         expect(splittaPerioder.length).toBe(2);
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-01-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-03-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[0].fom)).toBe('2020-01-01');
+        expect(dateTilIsoString(splittaPerioder[0].tom)).toBe('2020-03-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-04-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-12-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[1].fom)).toBe('2020-04-01');
+        expect(dateTilIsoString(splittaPerioder[1].tom)).toBe('2020-12-31');
     });
 
     test('Utvidet periode blir splittet i 2 av tom småbarnstilleggperiode', () => {
@@ -116,19 +90,11 @@ describe('utils/tidslinje', () => {
         );
 
         expect(splittaPerioder.length).toBe(2);
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-01-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-08-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[0].fom)).toBe('2020-01-01');
+        expect(dateTilIsoString(splittaPerioder[0].tom)).toBe('2020-08-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-09-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-12-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[1].fom)).toBe('2020-09-01');
+        expect(dateTilIsoString(splittaPerioder[1].tom)).toBe('2020-12-31');
     });
 
     test('Utvidet periode blir splittet i 5 av 3 småbarnstilleggperioder', () => {
@@ -143,39 +109,19 @@ describe('utils/tidslinje', () => {
         );
 
         expect(splittaPerioder.length).toBe(5);
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-01-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[0].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-03-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[0].fom)).toBe('2020-01-01');
+        expect(dateTilIsoString(splittaPerioder[0].tom)).toBe('2020-03-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-04-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[1].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-04-30'))
-        );
+        expect(dateTilIsoString(splittaPerioder[1].fom)).toBe('2020-04-01');
+        expect(dateTilIsoString(splittaPerioder[1].tom)).toBe('2020-04-30');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[2].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-05-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[2].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-07-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[2].fom)).toBe('2020-05-01');
+        expect(dateTilIsoString(splittaPerioder[2].tom)).toBe('2020-07-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[3].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-08-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[3].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-08-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[3].fom)).toBe('2020-08-01');
+        expect(dateTilIsoString(splittaPerioder[3].tom)).toBe('2020-08-31');
 
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[4].fom))).toBe(
-            serializeIso8601String(kalenderDato('2020-09-01'))
-        );
-        expect(serializeIso8601String(kalenderDatoFraDate(splittaPerioder[4].tom))).toBe(
-            serializeIso8601String(kalenderDato('2020-12-31'))
-        );
+        expect(dateTilIsoString(splittaPerioder[4].fom)).toBe('2020-09-01');
+        expect(dateTilIsoString(splittaPerioder[4].tom)).toBe('2020-12-31');
     });
 });

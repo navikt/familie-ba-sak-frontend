@@ -18,7 +18,7 @@ import { Årsvelger } from './Årsvelger';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { isoStringTilDate } from '../../../utils/dato';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, periodeToString } from '../../../utils/kalender';
+import { periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
 const StyledTable = styled.table(
@@ -138,7 +138,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const perioderSomSkalVisesITabellen = perioder.filter(
         periode =>
             !periodeErEtterNesteUtbetalingsPeriode(periode) &&
-            (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr)
+            (!erMerEnn12MånederISimulering ||
+                isoStringTilDate(periode.fom).getFullYear() === aktueltÅr)
     );
 
     const antallPerioderIFremvistÅr = perioderSomSkalVisesITabellen.length;

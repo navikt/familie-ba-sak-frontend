@@ -1,7 +1,5 @@
-import { parseIso8601String, parseIso8601StringMånedÅr } from './io';
-import type { DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
-
-export const kalenderDato = (dato: FamilieIsoDate): DagMånedÅr => parseIso8601String(dato);
+import { parseIso8601StringMånedÅr } from './io';
+import type { DagMånedÅr, MånedÅr, YearMonth } from './typer';
 
 export const yearMonthTilKalenderMåned = (yearMonth: YearMonth): MånedÅr =>
     parseIso8601StringMånedÅr(yearMonth);

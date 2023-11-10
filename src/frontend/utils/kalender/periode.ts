@@ -1,10 +1,16 @@
 import { isAfter, isBefore, isSameDay } from 'date-fns';
 
 import type { IPeriode, IsoDatoString } from '../dato';
-import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../dato';
+import {
+    isoStringTilDate,
+    isoStringTilDateMedFallback,
+    isoStringTilFormatertString,
+    tidenesEnde,
+} from '../dato';
+import { Datoformat } from '../formatter';
 
 import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
-import { kalenderDato, tilVisning, yearMonthTilVisning, yearMonthTilKalenderMåned } from '.';
+import { yearMonthTilKalenderMåned, yearMonthTilVisning } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {
     return {
@@ -39,9 +45,13 @@ export const periodeOverlapperMedValgtDato = (
 };
 
 export const periodeToString = (periode: IPeriode) => {
-    return `${tilVisning(periode.fom ? kalenderDato(periode.fom) : undefined)} - ${tilVisning(
-        periode.tom ? kalenderDato(periode.tom) : undefined
-    )}`;
+    return `${isoStringTilFormatertString({
+        isoDatoString: periode.fom,
+        tilFormat: Datoformat.DATO,
+    })} - ${isoStringTilFormatertString({
+        isoDatoString: periode.tom,
+        tilFormat: Datoformat.DATO,
+    })}`;
 };
 
 export const yearMonthPeriodeToString = (periode: IYearMonthPeriode) => {
