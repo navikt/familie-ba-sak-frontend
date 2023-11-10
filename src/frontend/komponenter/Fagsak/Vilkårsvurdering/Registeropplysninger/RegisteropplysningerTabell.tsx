@@ -10,12 +10,12 @@ import { Button, Table } from '@navikt/ds-react';
 import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
 import {
+    isoDatoPeriodeTilFormatertString,
     isoStringTilDateMedFallback,
     isoStringTilFormatertString,
     tidenesMorgen,
 } from '../../../../utils/dato';
 import { Datoformat } from '../../../../utils/formatter';
-import { periodeToString } from '../../../../utils/kalender';
 
 const Container = styled.div`
     display: flex;
@@ -79,7 +79,7 @@ const hentDatoVerdi = (
         case Registeropplysning.FØDSELSDATO:
             return '';
         default:
-            return periodeToString({
+            return isoDatoPeriodeTilFormatertString({
                 fom: periode.fom,
                 tom: periode.tom,
             });

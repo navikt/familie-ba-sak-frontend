@@ -5,10 +5,14 @@ import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
-import { dagensDato, isoStringTilDateMedFallback, tidenesEnde } from '../../../../../utils/dato';
+import {
+    dagensDato,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilDateMedFallback,
+    tidenesEnde,
+} from '../../../../../utils/dato';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../../utils/kalender';
-import { periodeToString } from '../../../../../utils/kalender';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;
@@ -56,7 +60,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                 <StyledExpansionTitle>
                     {periode.fom && (
                         <Label>
-                            {periodeToString({
+                            {isoDatoPeriodeTilFormatertString({
                                 fom: periode.fom,
                                 tom: slutterSenereEnnInneværendeMåned(periode.tom)
                                     ? ''
