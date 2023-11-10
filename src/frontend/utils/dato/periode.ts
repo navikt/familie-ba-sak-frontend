@@ -21,6 +21,13 @@ export const nyIsoDatoPeriode = (fom?: IsoDatoString, tom?: IsoDatoString): IIso
     };
 };
 
+export const nyIsoMånedPeriode = (fom?: IsoMånedString, tom?: IsoMånedString): IIsoMånedPeriode => {
+    return {
+        fom: fom !== '' && fom ? fom : undefined,
+        tom: tom !== '' && tom ? tom : undefined,
+    };
+};
+
 export const isoDatoPeriodeTilFormatertString = (periode: IIsoDatoPeriode) => {
     return `${isoStringTilFormatertString({
         isoString: periode.fom,

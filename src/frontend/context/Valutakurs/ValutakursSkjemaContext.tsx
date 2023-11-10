@@ -11,9 +11,11 @@ import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
+import type { IIsoMånedPeriode } from '../../utils/dato';
 import {
     dateTilIsoDatoString,
     dateTilIsoDatoStringEllerUndefined,
+    nyIsoMånedPeriode,
     validerGyldigDato,
 } from '../../utils/dato';
 import {
@@ -24,8 +26,6 @@ import {
     isNumeric,
     tellAntallDesimaler,
 } from '../../utils/eøsValidators';
-import type { IYearMonthPeriode } from '../../utils/kalender';
-import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
     konverterDesimalverdiTilSkjemaVisning,
@@ -121,8 +121,8 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
                 verdi: barnIValutakurs,
                 valideringsfunksjon: erBarnGyldig,
             }),
-            periode: useFelt<IYearMonthPeriode>({
-                verdi: nyYearMonthPeriode(valutakurs.fom, valutakurs.tom),
+            periode: useFelt<IIsoMånedPeriode>({
+                verdi: nyIsoMånedPeriode(valutakurs.fom, valutakurs.tom),
                 avhengigheter: { initelFom },
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),
