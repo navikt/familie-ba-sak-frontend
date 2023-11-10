@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { endOfMonth } from 'date-fns';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -23,12 +24,7 @@ import type {
 import type { IVilkårConfig } from '../../../typer/vilkår';
 import { Regelverk, Resultat, vilkårConfig } from '../../../typer/vilkår';
 import { formaterIdent } from '../../../utils/formatter';
-import {
-    kalenderDato,
-    kalenderDatoFraDate,
-    kalenderDatoTilDate,
-    sisteDagIMåned,
-} from '../../../utils/kalender';
+import { kalenderDato, kalenderDatoTilDate } from '../../../utils/kalender';
 import TidslinjeEtikett from '../../Fagsak/Behandlingsresultat/TidslinjeEtikett';
 import TidslinjeNavigering from '../../Fagsak/Behandlingsresultat/TidslinjeNavigering';
 import Vinduvelger from '../../Fagsak/Behandlingsresultat/VinduVelger';
@@ -265,11 +261,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                     aktivtUtsnitt={
                                         aktivEtikett && {
                                             fom: aktivEtikett.date,
-                                            tom: kalenderDatoTilDate(
-                                                sisteDagIMåned(
-                                                    kalenderDatoFraDate(aktivEtikett.date)
-                                                )
-                                            ),
+                                            tom: endOfMonth(aktivEtikett.date),
                                         }
                                     }
                                 />

@@ -9,11 +9,6 @@ export const kalenderMåned = (dato: FamilieIsoDate): MånedÅr => {
     };
 };
 
-export const sisteDagIMåned = (dagMånedÅr: DagMånedÅr): DagMånedÅr => ({
-    ...dagMånedÅr,
-    dag: antallDagerIMåned({ år: dagMånedÅr.år, måned: dagMånedÅr.måned }),
-});
-
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth): DagMånedÅr => {
     const månedÅr = kalenderMåned(yearMonth);
 
