@@ -19,38 +19,42 @@ export const tidenesMorgen = new Date(1000, 1, 1);
 
 export const tidenesEnde = new Date(3000, 1, 1);
 
-interface FormaterDateProps {
+interface DateTilFormatertStringProps {
     date?: Date;
     tilFormat: Datoformat;
     defaultString?: string;
 }
-export const formaterDate = ({
+export const dateTilFormatertString = ({
     date,
     tilFormat,
     defaultString = '',
-}: FormaterDateProps): string => {
+}: DateTilFormatertStringProps): string => {
     return date && isValid(date) ? format(date, tilFormat) : defaultString;
 };
 
 export const dateTilIsoString = (dato?: Date): IsoDatoString =>
-    formaterDate({ date: dato, tilFormat: Datoformat.ISO_DAG, defaultString: '' });
+    dateTilFormatertString({ date: dato, tilFormat: Datoformat.ISO_DAG, defaultString: '' });
 
 export const dateTilIsoStringEllerUndefined = (dato?: Date): IsoDatoString | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
 
-interface FormaterIsoStringProps {
+interface IsoStringTilFormatertStringProps {
     isoDatoString: IsoDatoString | undefined;
     tilFormat: Datoformat;
     defaultString?: string;
 }
 
-export const formaterIsoDatoString = ({
+export const isoStringTilFormatertString = ({
     isoDatoString,
     tilFormat,
     defaultString = '',
-}: FormaterIsoStringProps): string => {
-    const dato = isoDatoString ? new Date(isoDatoString) : undefined;
-    return formaterDate({ date: dato, tilFormat: tilFormat, defaultString: defaultString });
+}: IsoStringTilFormatertStringProps): string => {
+    const dato = isoDatoString ? parseISO(isoDatoString) : undefined;
+    return dateTilFormatertString({
+        date: dato,
+        tilFormat: tilFormat,
+        defaultString: defaultString,
+    });
 };
 
 export const isoStringTilDate = (isoDatoString: IsoDatoString): Date => {
