@@ -15,7 +15,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
 import { Tilbakekrevingsvalg } from '../typer/simulering';
-import { isoStringTilDate } from '../utils/dato';
+import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '../utils/dato';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -233,9 +233,16 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     ): ISimuleringPeriode {
         if (
             periode.resultat === 0 &&
-            periode.forfallsdato &&
-            tidSimuleringHentet &&
-            isAfter(isoStringTilDate(periode.forfallsdato), isoStringTilDate(tidSimuleringHentet))
+            isAfter(
+                isoStringTilDateMedFallback({
+                    isoDatoString: periode.forfallsdato,
+                    fallbackDate: tidenesMorgen,
+                }),
+                isoStringTilDateMedFallback({
+                    isoDatoString: tidSimuleringHentet,
+                    fallbackDate: tidenesMorgen,
+                })
+            )
         ) {
             return {
                 ...periode,
