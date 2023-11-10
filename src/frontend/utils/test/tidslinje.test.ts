@@ -2,12 +2,13 @@
  * @jest-environment jsdom
  */
 
+import { endOfMonth, startOfMonth } from 'date-fns';
+
 import type { Periode } from '@navikt/familie-tidslinje';
 
 import type { IYtelsePeriode } from '../../typer/beregning';
 import { YtelseType } from '../../typer/beregning';
-import { dateTilIsoString } from '../dato';
-import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth, kalenderDatoTilDate } from '../kalender';
+import { dateTilIsoString, isoStringTilDate } from '../dato';
 import { splittYtelseVedEndringerPåAnnenYtelse } from '../tidslinje';
 
 describe('utils/tidslinje', () => {
@@ -41,10 +42,10 @@ describe('utils/tidslinje', () => {
         skalUtbetales: true,
     };
 
-    const fom = kalenderDatoTilDate(hentFørsteDagIYearMonth(utvidetYtelsePeriode.stønadFom));
+    const fom = startOfMonth(isoStringTilDate(utvidetYtelsePeriode.stønadFom));
     const periode: Periode = {
         fom,
-        tom: kalenderDatoTilDate(hentSisteDagIYearMonth(utvidetYtelsePeriode.stønadTom)),
+        tom: endOfMonth(isoStringTilDate(utvidetYtelsePeriode.stønadTom)),
         id: 'test',
         status: 'suksess',
     };
