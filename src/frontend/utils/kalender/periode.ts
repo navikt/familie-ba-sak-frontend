@@ -10,7 +10,6 @@ import {
 import { Datoformat } from '../formatter';
 
 import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
-import { parseIso8601StringMånedÅr, yearMonthTilVisning } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {
     return {
@@ -55,7 +54,11 @@ export const periodeToString = (periode: IPeriode) => {
 };
 
 export const yearMonthPeriodeToString = (periode: IYearMonthPeriode) => {
-    return `${yearMonthTilVisning(
-        periode.fom ? parseIso8601StringMånedÅr(periode.fom) : undefined
-    )} - ${yearMonthTilVisning(periode.tom ? parseIso8601StringMånedÅr(periode.tom) : undefined)}`;
+    return `${isoStringTilFormatertString({
+        isoString: periode.fom,
+        tilFormat: Datoformat.MÅNED_ÅR,
+    })} - ${isoStringTilFormatertString({
+        isoString: periode.tom,
+        tilFormat: Datoformat.MÅNED_ÅR,
+    })}`;
 };
