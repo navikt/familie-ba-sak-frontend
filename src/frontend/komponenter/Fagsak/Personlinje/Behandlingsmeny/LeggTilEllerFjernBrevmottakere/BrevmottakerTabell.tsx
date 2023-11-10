@@ -3,12 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Heading, Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
-import useLeggTilFjernBrevmottaker, { mottakerVisningsnavn } from './useLeggTilFjernBrevmottaker';
 import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
+import { mottakerVisningsnavn } from './useLeggTilFjernBrevmottaker';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 
 const FlexDiv = styled.div`
@@ -29,6 +29,7 @@ const DefinitionList = styled.dl`
     dt {
         font-weight: ${AFontWeightBold};
     }
+
     dd {
         margin-left: 0;
     }
@@ -36,10 +37,10 @@ const DefinitionList = styled.dl`
 
 interface IProps {
     mottaker: IRestBrevmottaker;
+    fjernMottaker: (mottakerId: IRestBrevmottaker) => void;
 }
 
-const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
-    const { fjernMottaker } = useLeggTilFjernBrevmottaker();
+const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, fjernMottaker }) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
@@ -51,7 +52,7 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                 {!erLesevisning && (
                     <Button
                         variant={'tertiary'}
-                        onClick={() => fjernMottaker(mottaker.id)}
+                        onClick={() => fjernMottaker(mottaker)}
                         loading={false}
                         disabled={false}
                         size={'small'}

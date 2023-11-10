@@ -3,8 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { Button, Dropdown } from '@navikt/ds-react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import MenyvalgBehandling from './MenyvalgBehandling';
@@ -52,7 +51,10 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     <MenyvalgFagsak minimalFagsak={minimalFagsak} bruker={bruker} />
                     {skalViseMenyvalgForBehandling && <Dropdown.Menu.Divider />}
                     {skalViseMenyvalgForBehandling && (
-                        <MenyvalgBehandling minimalFagsak={minimalFagsak} />
+                        <MenyvalgBehandling
+                            minimalFagsak={minimalFagsak}
+                            åpenBehandling={åpenBehandling}
+                        />
                     )}
                 </Dropdown.Menu.List>
             </StyletDropdownMenu>

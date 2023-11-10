@@ -7,10 +7,8 @@ import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useLeggTilFjernBrevmottaker, {
-    Mottaker,
-    mottakerVisningsnavn,
-} from './useLeggTilFjernBrevmottaker';
+import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
+import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
@@ -41,11 +39,17 @@ const MottakerSelect = styled(Select)`
 
 interface IProps {
     lukkModal: () => void;
+    brevmottakere: IRestBrevmottaker[];
+    lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
 }
 
-const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk, navnErPreutfylt } =
-        useLeggTilFjernBrevmottaker();
+const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal, brevmottakere, lagreMottaker }) => {
+    const { verdierFraBrevmottakerUseSkjema, navnErPreutfylt } = useBrevmottakerSkjema({
+        eksisterendeMottakere: brevmottakere,
+    });
+
+    const { skjema, valideringErOk } = verdierFraBrevmottakerUseSkjema;
+
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     return (
@@ -145,7 +149,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            onClick={lagreMottaker}
+                            onClick={() => lagreMottaker(verdierFraBrevmottakerUseSkjema)}
                         >
                             Legg til mottaker
                         </Button>

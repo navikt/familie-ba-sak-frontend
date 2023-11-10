@@ -7,7 +7,7 @@ import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
-import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
+import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 
 const StyledAlert = styled(Alert)`
@@ -26,6 +26,8 @@ const LukkKnapp = styled(Button)`
 interface Props {
     lukkModal: () => void;
     brevmottakere: IRestBrevmottaker[];
+    lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
+    fjernMottaker: (mottakerId: IRestBrevmottaker) => void;
 }
 
 const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
@@ -40,7 +42,12 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, brevmottakere }: Props) => {
+export const LeggTilBrevmottakerModal: React.FC<Props> = ({
+    lukkModal,
+    brevmottakere,
+    lagreMottaker,
+    fjernMottaker,
+}) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
@@ -72,14 +79,22 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({ lukkModal, brevmotta
                     verge eller dødsbo.
                 </StyledAlert>
                 {brevmottakere.map(mottaker => (
-                    <BrevmottakerTabell mottaker={mottaker} key={`mottaker-${mottaker.id}`} />
+                    <BrevmottakerTabell
+                        mottaker={mottaker}
+                        key={`mottaker-${mottaker.id}`}
+                        fjernMottaker={fjernMottaker}
+                    />
                 ))}
                 {erSkjemaSynlig ? (
                     <>
                         {brevmottakere.length === 1 && (
                             <StyledHeading size="medium">Ny mottaker</StyledHeading>
                         )}
-                        <BrevmottakerSkjema lukkModal={lukkModalOgSkjema} />
+                        <BrevmottakerSkjema
+                            lukkModal={lukkModalOgSkjema}
+                            brevmottakere={brevmottakere}
+                            lagreMottaker={lagreMottaker}
+                        />
                     </>
                 ) : (
                     <>
