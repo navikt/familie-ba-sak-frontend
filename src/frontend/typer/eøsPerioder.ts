@@ -1,6 +1,6 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IPeriode, IsoDatoString } from '../utils/dato';
+import type { IIsoDatoPeriode, IsoDatoString } from '../utils/dato';
 import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
@@ -156,7 +156,7 @@ export interface IValutakurs {
     id: number;
     status: EøsPeriodeStatus;
     initielFom: YearMonth;
-    periode: IPeriode;
+    periode: IIsoDatoPeriode;
     barnIdenter: OptionType[];
     valutakode: string | undefined;
     valutakursdato: Date | undefined;

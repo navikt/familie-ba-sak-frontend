@@ -13,7 +13,7 @@ import type {
     IVilkårResultat,
 } from '../../typer/vilkår';
 import { Resultat } from '../../typer/vilkår';
-import type { IPeriode } from '../../utils/dato';
+import type { IIsoDatoPeriode } from '../../utils/dato';
 import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../../utils/dato';
 import { nyPeriode } from '../../utils/kalender';
 import {
@@ -26,7 +26,7 @@ import {
     lagInitiellFelt,
 } from '../../utils/validators';
 
-const periodeDiff = (periodeA: IPeriode, periodeB: IPeriode) => {
+const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     if (!periodeA.fom && !periodeA.tom) {
         return 1;
     }

@@ -10,13 +10,13 @@ import type {
     UtdypendeVilkårsvurdering,
 } from '../../typer/vilkår';
 import { VilkårType } from '../../typer/vilkår';
-import type { IPeriode } from '../../utils/dato';
+import type { IIsoDatoPeriode } from '../../utils/dato';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
     avhengigheter?: Avhengigheter
 ): FeltState<IVilkårResultat> => {
-    const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
+    const nyPeriode: FeltState<IIsoDatoPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
         {
             ...avhengigheter,

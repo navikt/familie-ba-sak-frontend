@@ -24,7 +24,7 @@ import type {
     IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import type { IPeriode } from '../../../../../utils/dato';
+import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekster,
@@ -55,7 +55,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
         const makslengdeFritekst = 220;
 
-        const periode = useFelt<IPeriode>({
+        const periode = useFelt<IIsoDatoPeriode>({
             verdi: {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
@@ -77,7 +77,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
 
         const { hentFeilTilOppsummering, kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
             {
-                periode: IPeriode;
+                periode: IIsoDatoPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
             },
             IVedtaksperiodeMedBegrunnelser[]

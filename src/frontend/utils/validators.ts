@@ -3,7 +3,7 @@ import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid, parseISO }
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 
-import type { IPeriode } from './dato';
+import type { IIsoDatoPeriode } from './dato';
 import { dagensDato, isoStringTilDate } from './dato';
 import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 import type { IGrunnlagPerson } from '../typer/person';
@@ -71,9 +71,9 @@ const erNesteMånedEllerSenere = (dato: Date) => isAfter(dato, endOfMonth(dagens
 const erUendelig = (date: Date | undefined): date is undefined => date === undefined;
 
 export const erPeriodeGyldig = (
-    felt: FeltState<IPeriode>,
+    felt: FeltState<IIsoDatoPeriode>,
     avhengigheter?: Avhengigheter
-): FeltState<IPeriode> => {
+): FeltState<IIsoDatoPeriode> => {
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
     const erEksplisittAvslagPåSøknad: boolean | undefined =
         avhengigheter?.erEksplisittAvslagPåSøknad;

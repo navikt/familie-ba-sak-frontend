@@ -8,7 +8,7 @@ import type {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from './vedtak';
-import type { IPeriode, IsoDatoString } from '../utils/dato';
+import type { IIsoDatoPeriode, IsoDatoString } from '../utils/dato';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -79,7 +79,7 @@ export interface IVilkårResultat {
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
-    periode: FeltState<IPeriode>;
+    periode: FeltState<IIsoDatoPeriode>;
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
