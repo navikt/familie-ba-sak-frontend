@@ -1,9 +1,11 @@
+import { isAfter } from 'date-fns';
+
 import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
+import { isoStringTilDate } from '../../../utils/dato';
 import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { erEtter, kalenderDato } from '../../../utils/kalender';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -12,7 +14,7 @@ export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) =>
     if (!b.datoMottatt) {
         return 1;
     }
-    return erEtter(kalenderDato(a.datoMottatt), kalenderDato(b.datoMottatt)) ? 1 : -1;
+    return isAfter(isoStringTilDate(a.datoMottatt), isoStringTilDate(b.datoMottatt)) ? 1 : -1;
 };
 
 export const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>

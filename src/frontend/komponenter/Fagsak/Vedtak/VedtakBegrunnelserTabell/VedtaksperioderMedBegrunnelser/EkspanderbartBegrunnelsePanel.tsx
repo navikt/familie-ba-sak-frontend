@@ -1,18 +1,14 @@
 import React from 'react';
 
+import { endOfMonth, isAfter } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
+import { dagensDato, isoStringTilDateMedFallback, tidenesEnde } from '../../../../../utils/dato';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import type { IYearMonthPeriode } from '../../../../../utils/kalender';
-import {
-    erEtter,
-    kalenderDatoMedFallback,
-    periodeToString,
-    sisteDagIInneværendeMåned,
-    TIDENES_ENDE,
-} from '../../../../../utils/kalender';
+import { periodeToString } from '../../../../../utils/kalender';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;
@@ -40,7 +36,10 @@ interface IEkspanderbartBegrunnelsePanelProps {
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
-    erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
+    isAfter(
+        isoStringTilDateMedFallback({ isoDatoString: tom, fallbackDate: tidenesEnde }),
+        endOfMonth(dagensDato)
+    );
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     åpen,

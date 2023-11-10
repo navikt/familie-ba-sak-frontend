@@ -260,12 +260,8 @@ const TidslinjeVisualisering: React.FC = () => {
                                     etikettRender={(etikett: Etikett) => (
                                         <TidslinjeEtikett etikett={etikett} />
                                     )}
-                                    startDato={kalenderDatoTilDate(
-                                        aktivtTidslinjeVindu.startDato,
-                                        23,
-                                        0
-                                    )}
-                                    sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
+                                    startDato={aktivtTidslinjeVindu.startDato}
+                                    sluttDato={aktivtTidslinjeVindu.sluttDato}
                                     aktivtUtsnitt={
                                         aktivEtikett && {
                                             fom: aktivEtikett.date,

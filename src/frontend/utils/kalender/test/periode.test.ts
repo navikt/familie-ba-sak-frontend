@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { periodeOverlapperMedValgtDato } from '..';
 
 describe('Periode', () => {

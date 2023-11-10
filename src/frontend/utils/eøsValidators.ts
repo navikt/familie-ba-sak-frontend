@@ -1,31 +1,19 @@
+import { addMonths, endOfMonth, isAfter } from 'date-fns';
+
 import type { OptionType } from '@navikt/familie-form-elements';
 import { feil, ok } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
-import type { IYearMonthPeriode, MånedÅr, YearMonth } from './kalender';
-import { yearMonthTilKalenderMåned, iDag, leggTil, KalenderEnhet } from './kalender';
+import { dagensDato, isoStringTilDate } from './dato';
+import type { IYearMonthPeriode, YearMonth } from './kalender';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;
 
-const erFør = (dato1: MånedÅr, dato2: MånedÅr) => {
-    if (dato1.måned <= dato2.måned && dato1.år <= dato2.år) {
-        return true;
-    }
-
-    return dato1.år < dato2.år;
-};
-const erEtter = (dato1: YearMonth, dato2: YearMonth) =>
-    erFør(yearMonthTilKalenderMåned(dato2), yearMonthTilKalenderMåned(dato1));
-const valgtÅrMånedErNesteMånedEllerSenere = (valgtDato: MånedÅr, today: MånedÅr) =>
-    valgtDato.år > today.år || (valgtDato.år === today.år && valgtDato.måned > today.måned);
 const valgtDatoErNesteMånedEllerSenere = (valgtDato: YearMonth) =>
-    valgtÅrMånedErNesteMånedEllerSenere(yearMonthTilKalenderMåned(valgtDato), iDag());
+    isAfter(isoStringTilDate(valgtDato), endOfMonth(dagensDato));
 const valgtDatoErSenereEnnNesteMåned = (valgtDato: YearMonth) =>
-    valgtÅrMånedErNesteMånedEllerSenere(
-        yearMonthTilKalenderMåned(valgtDato),
-        leggTil(iDag(), 1, KalenderEnhet.MÅNED)
-    );
+    isAfter(isoStringTilDate(valgtDato), endOfMonth(addMonths(dagensDato, 1)));
 
 const erEøsPeriodeGyldig = (
     felt: FeltState<IYearMonthPeriode>,
@@ -45,7 +33,7 @@ const erEøsPeriodeGyldig = (
             'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere'
         );
     }
-    if (initielFom && !erEtter(fom, initielFom)) {
+    if (initielFom && !isAfter(isoStringTilDate(fom), isoStringTilDate(initielFom))) {
         return feil(
             felt,
             `Du kan ikke legge inn fra og med måned som er før: ${avhengigheter?.initielFom}`

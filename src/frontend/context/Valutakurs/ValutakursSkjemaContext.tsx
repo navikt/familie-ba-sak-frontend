@@ -12,8 +12,8 @@ import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
 import {
-    formatterDateTilIsoString,
-    formatterDateTilIsoStringEllerUndefined,
+    dateTilIsoString,
+    dateTilIsoStringEllerUndefined,
     validerGyldigDato,
 } from '../../utils/dato';
 import {
@@ -158,9 +158,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         tilbakestillFelterTilDefault();
     }
 
-    if (
-        formatterDateTilIsoString(skjema.felter.valutakursdato.verdi) !== valutakurs.valutakursdato
-    ) {
+    if (dateTilIsoString(skjema.felter.valutakursdato.verdi) !== valutakurs.valutakursdato) {
         skjema.felter.kurs?.validerOgSettFelt('');
     }
 
@@ -183,7 +181,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
                         tom: skjema.felter.periode.verdi.tom,
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         valutakode: skjema.felter.valutakode?.verdi,
-                        valutakursdato: formatterDateTilIsoStringEllerUndefined(
+                        valutakursdato: dateTilIsoStringEllerUndefined(
                             skjema.felter.valutakursdato?.verdi
                         ),
                         kurs: konverterSkjemaverdiTilDesimal(skjema.felter.kurs?.verdi),
@@ -223,8 +221,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
 
     const erValutakursdatoerLike = () =>
         (!valutakursdato.verdi && !valutakurs.valutakursdato) ||
-        formatterDateTilIsoStringEllerUndefined(valutakursdato?.verdi) ===
-            valutakurs.valutakursdato;
+        dateTilIsoStringEllerUndefined(valutakursdato?.verdi) === valutakurs.valutakursdato;
 
     const erValutakurserLike = () =>
         (!kurs.verdi && !valutakurs.kurs) ||

@@ -1,9 +1,14 @@
-import { format, setDefaultOptions } from 'date-fns';
+/**
+ * @jest-environment jsdom
+ */
+
+import { addDays, format, setDefaultOptions, subDays, subYears } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
 import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
 import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
+import { dagensDato, dateTilIsoString } from '../dato';
 import {
     Datoformat,
     formaterIdent,
@@ -13,7 +18,6 @@ import {
     kunSiffer,
     sorterUtbetaling,
 } from '../formatter';
-import { iDag, KalenderEnhet, leggTil, serializeIso8601String, trekkFra } from '../kalender';
 
 describe('formaterIdent', () => {
     beforeAll(() => {
@@ -47,19 +51,10 @@ describe('formaterIdent', () => {
 });
 
 describe('hentAlder', () => {
-    test('Skal hente riktig alder fra fødselsdato', () => {
-        const toÅrSiden = trekkFra(iDag(), 2, KalenderEnhet.ÅR);
-        expect(hentAlder(serializeIso8601String(trekkFra(toÅrSiden, 1, KalenderEnhet.DAG)))).toBe(
-            2
-        );
-    });
-
     test('Skal hente riktig alder før og etter fødselsdato', () => {
-        const toÅrSiden = trekkFra(iDag(), 2, KalenderEnhet.ÅR);
-        expect(hentAlder(serializeIso8601String(trekkFra(toÅrSiden, 1, KalenderEnhet.DAG)))).toBe(
-            2
-        );
-        expect(hentAlder(serializeIso8601String(leggTil(toÅrSiden, 1, KalenderEnhet.DAG)))).toBe(1);
+        const toÅrSiden = subYears(dagensDato, 2);
+        expect(hentAlder(dateTilIsoString(subDays(toÅrSiden, 1)))).toBe(2);
+        expect(hentAlder(dateTilIsoString(addDays(toÅrSiden, 1)))).toBe(1);
     });
 });
 

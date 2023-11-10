@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import type { YearMonth } from '..';
 import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '..';
 

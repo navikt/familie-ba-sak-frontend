@@ -6,7 +6,7 @@ import { isValid, parseISO } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato, formatterDate } from '../../../utils/dato';
+import { dagensDato, dateTilFormatertString } from '../../../utils/dato';
 import type { IsoDatoString } from '../../../utils/dato';
 import { Datoformat } from '../../../utils/formatter';
 
@@ -45,9 +45,9 @@ const DatovelgerForGammelSkjemaløsning = ({
 
     useEffect(() => {
         onDateChange(
-            formatterDate({
-                dato: selectedDay,
-                datoformat: Datoformat.ISO_DAG,
+            dateTilFormatertString({
+                date: selectedDay,
+                tilFormat: Datoformat.ISO_DAG,
                 defaultString: inputProps.value?.toString(),
             })
         );

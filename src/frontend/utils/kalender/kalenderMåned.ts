@@ -1,5 +1,5 @@
 import type { DagMånedÅr, YearMonth, FamilieIsoDate, MånedÅr } from '.';
-import { antallDagerIMåned, iDag, KalenderEnhet, leggTil, parseIso8601MånedString } from '.';
+import { antallDagerIMåned, parseIso8601MånedString } from '.';
 
 export const kalenderMåned = (dato: FamilieIsoDate): MånedÅr => {
     const dagMånedÅr = parseIso8601MånedString(dato);
@@ -30,8 +30,4 @@ export const hentSisteDagIYearMonth = (yearMonth: YearMonth): DagMånedÅr => {
         ...månedÅr,
         dag: antallDagerIMåned(månedÅr),
     };
-};
-
-export const nesteMåned = (): DagMånedÅr => {
-    return leggTil(iDag(), 1, KalenderEnhet.MÅNED);
 };

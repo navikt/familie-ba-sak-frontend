@@ -16,7 +16,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './useEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { formatterDate } from '../../../../../utils/dato';
+import { dateTilFormatertString } from '../../../../../utils/dato';
 import { Datoformat } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
@@ -62,9 +62,9 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                 )}
                 {endringstidspunktRessurs.status === RessursStatus.SUKSESS && (
                     <BodyShort>
-                        {formatterDate({
-                            dato: endringstidspunkt,
-                            datoformat: Datoformat.DATO,
+                        {dateTilFormatertString({
+                            date: endringstidspunkt,
+                            tilFormat: Datoformat.DATO,
                             defaultString: 'Ingen dato satt',
                         })}
                     </BodyShort>

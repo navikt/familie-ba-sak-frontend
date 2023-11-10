@@ -1,3 +1,5 @@
+import { differenceInCalendarMonths } from 'date-fns';
+
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -5,7 +7,7 @@ import type { IBehandling } from '../../../typer/behandling';
 import { Behandlingstype } from '../../../typer/behandling';
 import { YtelseType } from '../../../typer/beregning';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
-import { kalenderDato, kalenderDatoFraDate, kalenderDiffMåned } from '../../../utils/kalender';
+import { isoStringTilDate } from '../../../utils/dato';
 
 export const kanFjerneSmåbarnstilleggFraPeriode = (
     utbetalingsperiode: Utbetalingsperiode
@@ -16,10 +18,7 @@ export const kanFjerneSmåbarnstilleggFraPeriode = (
 };
 
 const sjekkOmTilOgMed3ÅrIPeriode = (fødselsdato: string, periode: Date): boolean => {
-    const antallMndForskjell = kalenderDiffMåned(
-        kalenderDato(fødselsdato),
-        kalenderDatoFraDate(periode)
-    );
+    const antallMndForskjell = differenceInCalendarMonths(periode, isoStringTilDate(fødselsdato));
 
     return antallMndForskjell <= 36;
 };
