@@ -34,8 +34,8 @@ import type {
 } from '../../../typer/eøsPerioder';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import { periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../utils/formatter';
-import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 

@@ -1,5 +1,12 @@
+import { isAfter, isBefore, isSameDay } from 'date-fns';
+
 import type { IsoDatoString, IsoMånedString } from './dato';
-import { isoStringTilFormatertString } from './dato';
+import {
+    isoStringTilDate,
+    isoStringTilDateMedFallback,
+    isoStringTilFormatertString,
+    tidenesEnde,
+} from './dato';
 import { Datoformat } from '../formatter';
 
 export interface IIsoDatoPeriode {
@@ -46,4 +53,22 @@ export const isoMånedPeriodeTilFormatertString = (periode: IIsoMånedPeriode) =
         isoString: periode.tom,
         tilFormat: Datoformat.MÅNED_ÅR,
     })}`;
+};
+
+export const periodeOverlapperMedValgtDato = (
+    periodeFom: IsoDatoString,
+    periodeTom: IsoDatoString | undefined,
+    valgtDato: Date
+) => {
+    const periodeFomDate = isoStringTilDate(periodeFom);
+    const periodeTomDate = isoStringTilDateMedFallback({
+        isoString: periodeTom,
+        fallbackDate: tidenesEnde,
+    });
+
+    return (
+        (isAfter(valgtDato, periodeFomDate) && isBefore(valgtDato, periodeTomDate)) ||
+        isSameDay(valgtDato, periodeFomDate) ||
+        isSameDay(valgtDato, periodeTomDate)
+    );
 };
