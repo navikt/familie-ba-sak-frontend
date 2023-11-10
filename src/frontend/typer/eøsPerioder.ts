@@ -1,7 +1,7 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IIsoDatoPeriode, IsoDatoString } from '../utils/dato';
-import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
+import type { IIsoDatoPeriode, IIsoMånedPeriode, IsoDatoString } from '../utils/dato';
+import type { YearMonth } from '../utils/kalender';
 
 export const LandkodeNorge = 'NO';
 
@@ -102,7 +102,7 @@ export interface IKompetanse extends IEøsPeriodeStatus {
     periodeId: string;
     id: number;
     initielFom: YearMonth;
-    periode: IYearMonthPeriode;
+    periode: IIsoMånedPeriode;
     barnIdenter: OptionType[];
     søkersAktivitet: KompetanseAktivitet | undefined;
     søkersAktivitetsland: string | undefined;
@@ -138,7 +138,7 @@ export interface IUtenlandskPeriodeBeløp {
     id: number;
     status: EøsPeriodeStatus;
     initielFom: YearMonth;
-    periode: IYearMonthPeriode;
+    periode: IIsoMånedPeriode;
     barnIdenter: OptionType[];
     beløp?: string | undefined;
     valutakode?: string | undefined;

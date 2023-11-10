@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
+import type { IIsoMånedPeriode } from '../../../../../utils/dato';
 import {
     dagensDato,
     isoDatoPeriodeTilFormatertString,
@@ -12,7 +13,6 @@ import {
     tidenesEnde,
 } from '../../../../../utils/dato';
 import { formaterBeløp } from '../../../../../utils/formatter';
-import type { IYearMonthPeriode } from '../../../../../utils/kalender';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;
@@ -33,7 +33,7 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
 interface IEkspanderbartBegrunnelsePanelProps {
     åpen: boolean;
     onClick?: () => void;
-    periode: IYearMonthPeriode;
+    periode: IIsoMånedPeriode;
     skalViseSum: boolean;
     summer: () => number;
     tittel: string;
