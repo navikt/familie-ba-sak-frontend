@@ -3,8 +3,8 @@ import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IsoDatoString } from './dato';
+import { erIsoStringGyldig } from './dato';
 import { Datoformat, formaterIsoDato } from './formatter';
-import { erIsoStringGyldig } from './kalender';
 import { useFagsakContext } from '../context/fagsak/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';

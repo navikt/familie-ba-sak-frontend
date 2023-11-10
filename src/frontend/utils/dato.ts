@@ -79,3 +79,10 @@ export const isoStringTilDateMedFallback = ({
 
 export const validerGyldigDato = (felt: FeltState<Date | undefined>) =>
     felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato');
+
+export const erIsoStringGyldig = (isoString?: IsoDatoString): boolean => {
+    if (!isoString) return false;
+
+    const dato = parseISO(isoString);
+    return isValid(dato);
+};

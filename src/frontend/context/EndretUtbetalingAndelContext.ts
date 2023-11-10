@@ -8,9 +8,12 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
-import { dateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
+import {
+    dateTilIsoStringEllerUndefined,
+    erIsoStringGyldig,
+    validerGyldigDato,
+} from '../utils/dato';
 import type { FamilieIsoDate } from '../utils/kalender';
-import { erIsoStringGyldig } from '../utils/kalender';
 
 interface IProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;

@@ -1,13 +1,6 @@
 import { isValid, parseISO } from 'date-fns';
 
-import type { FamilieIsoDate, MånedÅr, YearMonth } from './typer';
-
-export const erIsoStringGyldig = (familieIsoDato?: FamilieIsoDate): boolean => {
-    if (!familieIsoDato) return false;
-
-    const dato = parseISO(familieIsoDato);
-    return isValid(dato);
-};
+import type { MånedÅr, YearMonth } from './typer';
 
 export const parseIso8601StringMånedÅr = (dato: YearMonth): MånedÅr => {
     const månedÅrDato = parseISO(dato);
