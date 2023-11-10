@@ -6,6 +6,7 @@ import { feil, ok } from '@navikt/familie-skjema';
 import { Datoformat } from './formatter';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
+export type IsoMånedString = string; // Format YYYY-MM (ISO)
 
 export interface IPeriode {
     // Format YYYY-MM-DD (ISO)
@@ -32,24 +33,24 @@ export const dateTilFormatertString = ({
     return date && isValid(date) ? format(date, tilFormat) : defaultString;
 };
 
-export const dateTilIsoString = (dato?: Date): IsoDatoString =>
+export const dateTilIsoDatoString = (dato?: Date): IsoDatoString =>
     dateTilFormatertString({ date: dato, tilFormat: Datoformat.ISO_DAG, defaultString: '' });
 
-export const dateTilIsoStringEllerUndefined = (dato?: Date): IsoDatoString | undefined =>
+export const dateTilIsoDatoStringEllerUndefined = (dato?: Date): IsoDatoString | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
 
 interface IsoStringTilFormatertStringProps {
-    isoDatoString: IsoDatoString | undefined;
+    isoString: IsoDatoString | IsoMånedString | undefined;
     tilFormat: Datoformat;
     defaultString?: string;
 }
 
 export const isoStringTilFormatertString = ({
-    isoDatoString,
+    isoString,
     tilFormat,
     defaultString = '',
 }: IsoStringTilFormatertStringProps): string => {
-    const dato = isoDatoString ? parseISO(isoDatoString) : undefined;
+    const dato = isoString ? parseISO(isoString) : undefined;
     return dateTilFormatertString({
         date: dato,
         tilFormat: tilFormat,
@@ -57,7 +58,7 @@ export const isoStringTilFormatertString = ({
     });
 };
 
-export const isoStringTilDate = (isoDatoString: IsoDatoString): Date => {
+export const isoStringTilDate = (isoDatoString: IsoDatoString | IsoMånedString): Date => {
     const dato = parseISO(isoDatoString);
 
     if (!isValid(dato)) {
@@ -68,14 +69,12 @@ export const isoStringTilDate = (isoDatoString: IsoDatoString): Date => {
 };
 
 interface IsoStringTilDateProps {
-    isoDatoString: IsoDatoString | undefined;
+    isoString: IsoDatoString | IsoMånedString | undefined;
     fallbackDate: Date;
 }
 
-export const isoStringTilDateMedFallback = ({
-    isoDatoString,
-    fallbackDate,
-}: IsoStringTilDateProps) => (isoDatoString ? isoStringTilDate(isoDatoString) : fallbackDate);
+export const isoStringTilDateMedFallback = ({ isoString, fallbackDate }: IsoStringTilDateProps) =>
+    isoString ? isoStringTilDate(isoString) : fallbackDate;
 
 export const validerGyldigDato = (felt: FeltState<Date | undefined>) =>
     felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato');

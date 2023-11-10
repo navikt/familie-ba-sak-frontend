@@ -36,7 +36,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 
 const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
     const periodeFom = isoStringTilDateMedFallback({
-        isoDatoString: vedtaksperiode.fom,
+        isoString: vedtaksperiode.fom,
         fallbackDate: tidenesMorgen,
     });
     const toMånederFremITid = addMonths(startOfMonth(dagensDato), 2);

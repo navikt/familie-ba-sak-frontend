@@ -84,15 +84,15 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         }
         if (utbetaltePerioder.length === 1) {
             return `Total for ${isoStringTilFormatertString({
-                isoDatoString: perioder[0].fom,
+                isoString: perioder[0].fom,
                 tilFormat: Datoformat.MÅNED_ÅR_NAVN,
             })}`;
         }
         return `Totalt for perioden ${isoStringTilFormatertString({
-            isoDatoString: fom,
+            isoString: fom,
             tilFormat: Datoformat.DATO,
         })} - ${isoStringTilFormatertString({
-            isoDatoString: tomSisteUtbetaling,
+            isoString: tomSisteUtbetaling,
             tilFormat: Datoformat.DATO,
         })}`;
     };
@@ -150,7 +150,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                                 <BodyShort>
                                     {kapitaliserTekst(
                                         isoStringTilFormatertString({
-                                            isoDatoString: fomDatoNestePeriode,
+                                            isoString: fomDatoNestePeriode,
                                             tilFormat: Datoformat.MÅNED_ÅR_NAVN,
                                         })
                                     )}

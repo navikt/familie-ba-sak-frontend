@@ -56,7 +56,7 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
         .filter(utbetalingsperiode =>
             isAfter(
                 isoStringTilDateMedFallback({
-                    isoDatoString: utbetalingsperiode.periodeTom,
+                    isoString: utbetalingsperiode.periodeTom,
                     fallbackDate: tidenesEnde,
                 }),
                 dagensDato

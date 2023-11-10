@@ -9,7 +9,7 @@ import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
 import {
-    dateTilIsoStringEllerUndefined,
+    dateTilIsoDatoStringEllerUndefined,
     erIsoStringGyldig,
     validerGyldigDato,
 } from '../utils/dato';
@@ -166,8 +166,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 tom: tom && tom.verdi,
                 årsak: årsak && årsak.verdi,
                 begrunnelse: begrunnelse.verdi,
-                søknadstidspunkt: dateTilIsoStringEllerUndefined(søknadstidspunkt.verdi),
-                avtaletidspunktDeltBosted: dateTilIsoStringEllerUndefined(
+                søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(søknadstidspunkt.verdi),
+                avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(
                     avtaletidspunktDeltBosted.verdi
                 ),
                 erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,

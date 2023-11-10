@@ -12,7 +12,7 @@ import type {
     IRestNyRefusjonEøs,
     IRestRefusjonEøs,
 } from '../../../../typer/refusjon-eøs';
-import { dateTilIsoString, validerGyldigDato } from '../../../../utils/dato';
+import { dateTilIsoDatoString, validerGyldigDato } from '../../../../utils/dato';
 import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
@@ -93,8 +93,8 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                     method: 'POST',
                     url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}`,
                     data: {
-                        fom: dateTilIsoString(skjema.felter.fom.verdi),
-                        tom: dateTilIsoString(skjema.felter.tom.verdi),
+                        fom: dateTilIsoDatoString(skjema.felter.fom.verdi),
+                        tom: dateTilIsoDatoString(skjema.felter.tom.verdi),
                         refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
                         land: skjema.felter.land.verdi,
                         refusjonAvklart: !!skjema.felter.refusjonAvklart?.verdi,
@@ -121,8 +121,8 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
                     data: {
                         ...refusjonEøs,
                         id: refusjonEøs.id,
-                        fom: dateTilIsoString(skjema.felter.fom.verdi),
-                        tom: dateTilIsoString(skjema.felter.tom.verdi),
+                        fom: dateTilIsoDatoString(skjema.felter.fom.verdi),
+                        tom: dateTilIsoDatoString(skjema.felter.tom.verdi),
                         refusjonsbeløp: Number(skjema.felter.refusjonsbeløp.verdi),
                         land: skjema.felter.land.verdi,
                         refusjonAvklart: !!skjema.felter.refusjonAvklart?.verdi,

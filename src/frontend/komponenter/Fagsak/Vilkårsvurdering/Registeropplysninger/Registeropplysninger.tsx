@@ -75,7 +75,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
                         historikk={[
                             {
                                 verdi: isoStringTilFormatertString({
-                                    isoDatoString: fødselsdato,
+                                    isoString: fødselsdato,
                                     tilFormat: Datoformat.DATO,
                                 }),
                             },

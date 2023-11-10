@@ -31,8 +31,8 @@ const periodeDiff = (periodeA: IPeriode, periodeB: IPeriode) => {
         return 1;
     }
     return differenceInMilliseconds(
-        isoStringTilDateMedFallback({ isoDatoString: periodeA.fom, fallbackDate: tidenesEnde }),
-        isoStringTilDateMedFallback({ isoDatoString: periodeB.fom, fallbackDate: tidenesEnde })
+        isoStringTilDateMedFallback({ isoString: periodeA.fom, fallbackDate: tidenesEnde }),
+        isoStringTilDateMedFallback({ isoString: periodeB.fom, fallbackDate: tidenesEnde })
     );
 };
 

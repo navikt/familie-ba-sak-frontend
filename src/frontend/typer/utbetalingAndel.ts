@@ -1,13 +1,13 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IsoDatoString } from '../utils/dato';
+import type { IsoDatoString, IsoMånedString } from '../utils/dato';
 
 export interface IRestEndretUtbetalingAndel {
     id?: number;
     personIdent?: string;
     prosent?: number;
-    fom?: IsoDatoString;
-    tom?: IsoDatoString;
+    fom?: IsoMånedString;
+    tom?: IsoMånedString;
     begrunnelse?: string;
     søknadstidspunkt?: IsoDatoString;
     avtaletidspunktDeltBosted?: IsoDatoString;

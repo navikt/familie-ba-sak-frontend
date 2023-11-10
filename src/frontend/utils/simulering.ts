@@ -1,6 +1,6 @@
 import { addMonths, differenceInCalendarMonths, isAfter, isSameDay } from 'date-fns';
 
-import { dateTilIsoString, isoStringTilDate } from './dato';
+import { dateTilIsoDatoString, isoStringTilDate } from './dato';
 import type { ISimuleringPeriode } from '../typer/simulering';
 
 export const hentPeriodelisteMedTommePerioder = (
@@ -17,7 +17,7 @@ export const hentPeriodelisteMedTommePerioder = (
 
         if (!fomDatoerISimulering.some(date => isSameDay(date, aktuelPeriodeFom))) {
             periodelisteMedTommePerioder.push({
-                fom: dateTilIsoString(aktuelPeriodeFom),
+                fom: dateTilIsoDatoString(aktuelPeriodeFom),
                 tom: '',
             });
         }

@@ -37,7 +37,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     isAfter(
-        isoStringTilDateMedFallback({ isoDatoString: tom, fallbackDate: tidenesEnde }),
+        isoStringTilDateMedFallback({ isoString: tom, fallbackDate: tidenesEnde }),
         endOfMonth(dagensDato)
     );
 

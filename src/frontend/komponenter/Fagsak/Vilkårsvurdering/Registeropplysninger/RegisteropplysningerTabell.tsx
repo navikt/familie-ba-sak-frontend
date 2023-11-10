@@ -73,7 +73,7 @@ const hentDatoVerdi = (
         case Registeropplysning.SIVILSTAND:
         case Registeropplysning.DØDSBOADRESSE:
             return isoStringTilFormatertString({
-                isoDatoString: periode.fom,
+                isoString: periode.fom,
                 tilFormat: Datoformat.DATO,
             });
         case Registeropplysning.FØDSELSDATO:
@@ -88,8 +88,8 @@ const hentDatoVerdi = (
 
 const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteropplysning) =>
     differenceInMilliseconds(
-        isoStringTilDateMedFallback({ isoDatoString: b.fom, fallbackDate: tidenesMorgen }),
-        isoStringTilDateMedFallback({ isoDatoString: a.fom, fallbackDate: tidenesMorgen })
+        isoStringTilDateMedFallback({ isoString: b.fom, fallbackDate: tidenesMorgen }),
+        isoStringTilDateMedFallback({ isoString: a.fom, fallbackDate: tidenesMorgen })
     );
 
 export const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;

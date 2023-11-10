@@ -33,7 +33,7 @@ export const periodeOverlapperMedValgtDato = (
 ) => {
     const periodeFomDate = isoStringTilDate(periodeFom);
     const periodeTomDate = isoStringTilDateMedFallback({
-        isoDatoString: periodeTom,
+        isoString: periodeTom,
         fallbackDate: tidenesEnde,
     });
 
@@ -46,10 +46,10 @@ export const periodeOverlapperMedValgtDato = (
 
 export const periodeToString = (periode: IPeriode) => {
     return `${isoStringTilFormatertString({
-        isoDatoString: periode.fom,
+        isoString: periode.fom,
         tilFormat: Datoformat.DATO,
     })} - ${isoStringTilFormatertString({
-        isoDatoString: periode.tom,
+        isoString: periode.tom,
         tilFormat: Datoformat.DATO,
     })}`;
 };

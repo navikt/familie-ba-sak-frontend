@@ -23,7 +23,7 @@ import {
     mottakersMålformImplementering,
 } from '../utils/brevmal';
 import type { IsoDatoString } from '../utils/dato';
-import { dateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
@@ -352,7 +352,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-                datoAvtale: dateTilIsoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
+                datoAvtale: dateTilIsoDatoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
                 behandlingKategori,
                 antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),
