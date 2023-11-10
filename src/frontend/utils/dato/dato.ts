@@ -3,7 +3,7 @@ import { format, isValid, parseISO, startOfToday } from 'date-fns';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok } from '@navikt/familie-skjema';
 
-import { Datoformat } from './formatter';
+import { Datoformat } from '../formatter';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 export type IsoMånedString = string; // Format YYYY-MM (ISO)
