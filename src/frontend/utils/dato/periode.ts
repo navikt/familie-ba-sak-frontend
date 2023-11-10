@@ -2,12 +2,12 @@ import { isAfter, isBefore, isSameDay } from 'date-fns';
 
 import type { IsoDatoString, IsoMånedString } from './dato';
 import {
+    Datoformat,
     isoStringTilDate,
     isoStringTilDateMedFallback,
     isoStringTilFormatertString,
     tidenesEnde,
 } from './dato';
-import { Datoformat } from '../formatter';
 
 export interface IIsoDatoPeriode {
     // Format YYYY-MM-DD (ISO)

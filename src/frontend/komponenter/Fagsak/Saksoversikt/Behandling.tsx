@@ -13,7 +13,8 @@ import {
 } from './utils';
 import { behandlingsstatuser } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat } from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 
 interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;

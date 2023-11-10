@@ -8,9 +8,8 @@ import { nb } from 'date-fns/locale';
 import { mockBarn, mockSøker } from './person/person.mock';
 import { YtelseType } from '../../typer/beregning';
 import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
-import { dagensDato, dateTilIsoDatoString } from '../dato';
+import { dagensDato, dateTilIsoDatoString, Datoformat } from '../dato';
 import {
-    Datoformat,
     formaterIdent,
     formaterIsoDato,
     formaterTekstStorForbokstav,

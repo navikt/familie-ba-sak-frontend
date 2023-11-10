@@ -15,7 +15,8 @@ import StatusIkon from '../../../../ikoner/StatusIkon';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IIsoMånedPeriode } from '../../../../utils/dato';
-import { Datoformat, formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
+import { Datoformat } from '../../../../utils/dato';
+import { formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
 
 interface IEøsPeriodeSkjemaContainerProps {
     lesevisning: boolean;

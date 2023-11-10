@@ -4,8 +4,8 @@ import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
-import { isoStringTilDate } from '../../../utils/dato';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, isoStringTilDate } from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {

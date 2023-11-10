@@ -25,7 +25,8 @@ import {
     behandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../typer/behandling';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat } from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { sakstype } from '../Saksoversikt/Saksoversikt';
 

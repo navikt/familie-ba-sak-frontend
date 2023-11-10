@@ -16,7 +16,8 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat } from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 import { behandlingErEtterSteg } from '../../../utils/steg';
 import type { ISide } from '../Venstremeny/sider';
 import { sider } from '../Venstremeny/sider';

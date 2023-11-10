@@ -1,30 +1,12 @@
 import { differenceInMilliseconds, format, isBefore, isValid } from 'date-fns';
 
+import type { Datoformat } from './dato';
 import { dagensDato, isoStringTilDate } from './dato';
 import { YtelseType } from '../typer/beregning';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
-
-export enum Datoformat {
-    DATO = 'dd.MM.yyyy',
-    DATO_FORKORTTET = 'dd.MM.yy',
-    DATO_FORLENGET = 'PPP',
-    DATO_FORLENGET_MED_TID = 'PPPp',
-    ISO_MÅNED = 'yyyy-MM',
-    ISO_DAG = 'yyyy-MM-dd',
-    DATO_TID = 'dd.MM.yy HH:mm',
-    DATO_TID_SEKUNDER = 'dd.MM.yy HH:mm:ss',
-    MÅNED_ÅR = 'MM.yyyy',
-    MÅNED_ÅR_NAVN = 'MMMM yyyy',
-    MÅNED_ÅR_KORTNAVN = 'MMM yyyy',
-    MÅNED_NAVN = 'MMM',
-}
-
-export enum DatoformatNorsk {
-    DATO = 'ddmmåå',
-}
 
 export const millisekunderIEttÅr = 3.15576e10;
 

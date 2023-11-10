@@ -8,7 +8,8 @@ import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IInfotrygdSak } from '../../typer/infotrygd';
-import { Datoformat, formaterIsoDato } from '../../utils/formatter';
+import { Datoformat } from '../../utils/dato';
+import { formaterIsoDato } from '../../utils/formatter';
 
 interface InfotrygdtabellerProps {
     ident?: string;

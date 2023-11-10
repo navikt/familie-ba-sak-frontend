@@ -7,8 +7,7 @@ import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato } from '../../../utils/dato';
-import { Datoformat } from '../../../utils/formatter';
+import { dagensDato, Datoformat } from '../../../utils/dato';
 
 interface IProps {
     felt: Felt<Date | undefined>;

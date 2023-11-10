@@ -17,8 +17,8 @@ import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
-import { isoStringTilFormatertString } from '../../../../utils/dato';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { formaterIsoDato } from '../../../../utils/formatter';
 
 const Container = styled.div`
     width: 32rem;

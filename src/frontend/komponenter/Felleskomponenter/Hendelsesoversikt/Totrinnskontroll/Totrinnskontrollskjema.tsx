@@ -23,7 +23,8 @@ import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../ikoner/ØyeRød';
 import type { IBehandling } from '../../../../typer/behandling';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
-import { formaterIsoDato, Datoformat } from '../../../../utils/formatter';
+import { Datoformat } from '../../../../utils/dato';
+import { formaterIsoDato } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { KontrollertStatus } from '../../Venstremeny/sider';
 

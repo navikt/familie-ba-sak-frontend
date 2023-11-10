@@ -29,9 +29,8 @@ import type {
 } from '../../../typer/eøsPerioder';
 import { EøsPeriodeStatus, KompetanseResultat } from '../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
-import { dateTilFormatertString } from '../../../utils/dato';
+import { dateTilFormatertString, Datoformat } from '../../../utils/dato';
 import {
-    Datoformat,
     formaterBeløp,
     formaterIdent,
     hentAlderSomString,

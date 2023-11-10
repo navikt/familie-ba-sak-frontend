@@ -10,12 +10,12 @@ import { Button, Table } from '@navikt/ds-react';
 import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
 import {
+    Datoformat,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDateMedFallback,
     isoStringTilFormatertString,
     tidenesMorgen,
 } from '../../../../utils/dato';
-import { Datoformat } from '../../../../utils/formatter';
 
 const Container = styled.div`
     display: flex;

@@ -12,8 +12,8 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { isoStringTilFormatertString, isoStringTilDate } from '../../../utils/dato';
-import { Datoformat, formaterBeløp } from '../../../utils/formatter';
+import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../utils/dato';
+import { formaterBeløp } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;

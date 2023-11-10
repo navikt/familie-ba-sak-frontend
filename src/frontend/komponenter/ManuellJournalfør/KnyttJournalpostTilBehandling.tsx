@@ -14,8 +14,9 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../typer/behandling';
+import { Datoformat } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import { Datoformat, formaterIsoDato } from '../../utils/formatter';
+import { formaterIsoDato } from '../../utils/formatter';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 const KnyttDiv = styled.div`

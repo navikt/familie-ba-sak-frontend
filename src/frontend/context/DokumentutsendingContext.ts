@@ -23,8 +23,9 @@ import { Målform } from '../typer/søknad';
 import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import type { IsoDatoString } from '../utils/dato';
+import { Datoformat } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { Datoformat, formaterIsoDato } from '../utils/formatter';
+import { formaterIsoDato } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 

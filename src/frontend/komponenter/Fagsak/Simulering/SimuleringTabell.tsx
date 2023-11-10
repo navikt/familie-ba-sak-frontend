@@ -16,8 +16,12 @@ import {
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { isoDatoPeriodeTilFormatertString, isoStringTilDate } from '../../../utils/dato';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import {
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilDate,
+} from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
 const StyledTable = styled.table(

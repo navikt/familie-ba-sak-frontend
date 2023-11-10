@@ -17,7 +17,8 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
-import { Datoformat, formaterIsoDato } from '../../../../../utils/formatter';
+import { Datoformat } from '../../../../../utils/dato';
+import { formaterIsoDato } from '../../../../../utils/formatter';
 
 const StyledBodyShort = styled(BodyShort)`
     padding-bottom: 1rem;
