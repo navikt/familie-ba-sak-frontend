@@ -14,6 +14,13 @@ export interface IIsoMånedPeriode {
     tom?: IsoMånedString;
 }
 
+export const nyIsoDatoPeriode = (fom?: IsoDatoString, tom?: IsoDatoString): IIsoDatoPeriode => {
+    return {
+        fom: fom !== '' && fom ? fom : undefined,
+        tom: tom !== '' && tom ? tom : undefined,
+    };
+};
+
 export const isoDatoPeriodeTilFormatertString = (periode: IIsoDatoPeriode) => {
     return `${isoStringTilFormatertString({
         isoString: periode.fom,

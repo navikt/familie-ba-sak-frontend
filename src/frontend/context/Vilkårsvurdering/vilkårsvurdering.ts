@@ -14,8 +14,12 @@ import type {
 } from '../../typer/vilkår';
 import { Resultat } from '../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../utils/dato';
-import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../../utils/dato';
-import { nyPeriode } from '../../utils/kalender';
+import {
+    isoStringTilDate,
+    isoStringTilDateMedFallback,
+    nyIsoDatoPeriode,
+    tidenesEnde,
+} from '../../utils/dato';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -86,7 +90,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     ),
                                     id: vilkårResultat.id,
                                     periode: lagInitiellFelt(
-                                        nyPeriode(
+                                        nyIsoDatoPeriode(
                                             vilkårResultat.periodeFom,
                                             vilkårResultat.periodeTom
                                         ),

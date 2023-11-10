@@ -1,16 +1,9 @@
 import { isAfter, isBefore, isSameDay } from 'date-fns';
 
-import type { IIsoDatoPeriode, IsoDatoString } from '../dato';
+import type { IsoDatoString } from '../dato';
 import { isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from '../dato';
 
-import type { FamilieIsoDate, IYearMonthPeriode, YearMonth } from '.';
-
-export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IIsoDatoPeriode => {
-    return {
-        fom: fom !== '' && fom ? fom : undefined,
-        tom: tom !== '' && tom ? tom : undefined,
-    };
-};
+import type { IYearMonthPeriode, YearMonth } from '.';
 
 export const nyYearMonthPeriode = (fom?: YearMonth, tom?: YearMonth): IYearMonthPeriode => {
     return {
