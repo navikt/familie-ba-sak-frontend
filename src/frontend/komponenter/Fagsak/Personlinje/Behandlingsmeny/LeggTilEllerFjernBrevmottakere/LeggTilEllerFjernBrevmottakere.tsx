@@ -8,13 +8,13 @@ import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import type { IBehandling } from '../../../../../typer/behandling';
 
 interface BehandlingProps {
-    erPåDokumentutsending: false;
+    erPåBehandling: true;
     behandling: IBehandling;
     erLesevisning: boolean;
 }
 
 interface FagsakProps {
-    erPåDokumentutsending: true;
+    erPåBehandling: false;
     erLesevisning?: never;
     brevmottakere: SkjemaBrevmottaker[];
 }
@@ -34,9 +34,9 @@ const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
 export const LeggTilEllerFjernBrevmottakere = (props: BehandlingProps | FagsakProps) => {
     const [visModal, settVisModal] = useState(false);
 
-    const brevmottakere = props.erPåDokumentutsending
-        ? props.brevmottakere
-        : props.behandling.brevmottakere;
+    const brevmottakere = props.erPåBehandling
+        ? props.behandling.brevmottakere
+        : props.brevmottakere;
 
     const menyinnslag = utledMenyinnslag(brevmottakere.length, !!props.erLesevisning);
 
@@ -47,14 +47,14 @@ export const LeggTilEllerFjernBrevmottakere = (props: BehandlingProps | FagsakPr
             </Dropdown.Menu.List.Item>
 
             {visModal &&
-                (props.erPåDokumentutsending ? (
-                    <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisModal(false)} />
-                ) : (
+                (props.erPåBehandling ? (
                     <LeggTilBrevmottakerModalBehandling
                         lukkModal={() => settVisModal(false)}
                         behandling={props.behandling}
                         erLesevisning={props.erLesevisning}
                     />
+                ) : (
+                    <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisModal(false)} />
                 ))}
         </>
     );
