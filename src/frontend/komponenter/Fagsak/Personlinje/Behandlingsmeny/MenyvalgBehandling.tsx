@@ -6,7 +6,7 @@ import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
-import { LeggTilEllerFjernBrevmottakereBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
+import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
@@ -44,7 +44,8 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                 (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                 (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                     åpenBehandling.type === Behandlingstype.REVURDERING) && (
-                    <LeggTilEllerFjernBrevmottakereBehandling
+                    <LeggTilEllerFjernBrevmottakere
+                        erPåDokumentutsending={false}
                         behandling={åpenBehandling}
                         erLesevisning={erLesevisning}
                     />
