@@ -194,7 +194,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         )}
                         <BrevmottakereAlert
                             bruker={bruker}
-                            erPåDokumentutsending={false}
+                            erPåBehandling={true}
                             erLesevisning={erLesevisning}
                             brevmottakere={brevmottakere}
                             åpenBehandling={åpenBehandling}

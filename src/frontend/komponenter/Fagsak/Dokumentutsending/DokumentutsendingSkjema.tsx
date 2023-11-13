@@ -84,7 +84,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
 
             {manuelleInfoBrevmottakere.length > 0 && (
                 <BrevmottakereAlert
-                    erPåDokumentutsending={true}
+                    erPåBehandling={false}
                     brevmottakere={manuelleInfoBrevmottakere}
                     bruker={bruker}
                 />

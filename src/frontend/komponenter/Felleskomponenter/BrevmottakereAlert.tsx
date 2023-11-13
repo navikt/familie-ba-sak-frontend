@@ -25,14 +25,14 @@ interface Props {
 }
 
 interface BehandlingProps extends Props {
-    erPåDokumentutsending: false;
+    erPåBehandling: true;
     brevmottakere: IRestBrevmottaker[];
     erLesevisning: boolean;
     åpenBehandling: IBehandling;
 }
 
 interface FagsakProps extends Props {
-    erPåDokumentutsending: true;
+    erPåBehandling: false;
     brevmottakere: SkjemaBrevmottaker[];
 }
 
@@ -76,15 +76,15 @@ export const BrevmottakereAlert: React.FC<BehandlingProps | FagsakProps> = props
             )}
 
             {visManuelleMottakereModal &&
-                (props.erPåDokumentutsending ? (
-                    <LeggTilBrevmottakerModalFagsak
-                        lukkModal={() => settVisManuelleMottakereModal(false)}
-                    />
-                ) : (
+                (props.erPåBehandling ? (
                     <LeggTilBrevmottakerModalBehandling
                         lukkModal={() => settVisManuelleMottakereModal(false)}
                         behandling={props.åpenBehandling}
                         erLesevisning={props.erLesevisning}
+                    />
+                ) : (
+                    <LeggTilBrevmottakerModalFagsak
+                        lukkModal={() => settVisManuelleMottakereModal(false)}
                     />
                 ))}
         </>

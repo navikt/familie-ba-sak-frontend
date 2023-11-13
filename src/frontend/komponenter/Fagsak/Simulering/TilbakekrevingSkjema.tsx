@@ -301,7 +301,7 @@ const TilbakekrevingSkjema: React.FC<{
                                     Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
                                     <StyledBrevmottakereAlert
                                         bruker={bruker}
-                                        erPåDokumentutsending={false}
+                                        erPåBehandling={true}
                                         brevmottakere={brevmottakere}
                                         erLesevisning={erLesevisning}
                                         åpenBehandling={åpenBehandling}
