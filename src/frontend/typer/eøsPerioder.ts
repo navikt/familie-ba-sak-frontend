@@ -7,8 +7,6 @@ import type {
     IsoMånedString,
 } from '../utils/dato';
 
-export const LandkodeNorge = 'NO';
-
 export type KompetanseAktivitet = SøkersAktivitet | AnnenForelderAktivitet;
 
 export enum SøkersAktivitet {

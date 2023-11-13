@@ -29,16 +29,6 @@ export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
     ETTERBETALING_3ÅR: 'Etterbetaling 3 år',
 };
 
-export interface ÅrsakOption extends OptionType {
-    årsak: IEndretUtbetalingAndelÅrsak;
-}
-
-export const årsakTilOption = (årsak: IEndretUtbetalingAndelÅrsak): ÅrsakOption => ({
-    value: årsak.valueOf(),
-    label: årsakTekst[årsak],
-    årsak: årsak,
-});
-
 export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbetalingAndelÅrsak).map(
     k => k as IEndretUtbetalingAndelÅrsak
 );
