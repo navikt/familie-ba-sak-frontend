@@ -8,15 +8,10 @@ import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import { LeggTilEllerFjernBrevmottakereBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import {
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-    IBehandling,
-} from '../../../../typer/behandling';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
-import { useLagreEllerFjernMottakerPåBehandling } from './LeggTilEllerFjernBrevmottakere/useLagreOgFjernMottakerPåBehandling';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -26,10 +21,6 @@ interface IProps {
 const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-
-    const { lagreMottaker, fjernMottaker } = useLagreEllerFjernMottakerPåBehandling({
-        behandlingId: åpenBehandling.behandlingId,
-    });
 
     return (
         <>
@@ -54,9 +45,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                 (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                     åpenBehandling.type === Behandlingstype.REVURDERING) && (
                     <LeggTilEllerFjernBrevmottakereBehandling
-                        brevmottakere={åpenBehandling.brevmottakere}
-                        lagreMottaker={lagreMottaker}
-                        fjernMottaker={fjernMottaker}
+                        behandling={åpenBehandling}
                         erLesevisning={erLesevisning}
                     />
                 )}

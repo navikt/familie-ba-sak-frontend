@@ -9,6 +9,8 @@ import type {
     SkjemaBrevmottaker,
 } from './useBrevmottakerSkjema';
 import { felterTilSkjematBrevmottaker } from './useBrevmottakerSkjema';
+import { useLagreEllerFjernMottakerPåBehandling } from './useLagreOgFjernMottakerPåBehandling';
+import type { IBehandling } from '../../../../../typer/behandling';
 
 interface IProps<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     brevmottakere: T[];
@@ -23,9 +25,7 @@ interface IFagsakProps {
 }
 
 interface IBehandlingProps {
-    brevmottakere: IRestBrevmottaker[];
-    lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
-    fjernMottaker: (mottaker: IRestBrevmottaker) => void;
+    behandling: IBehandling;
     erLesevisning: boolean;
 }
 
@@ -70,9 +70,23 @@ const LeggTilEllerFjernBrevmottakere = <T extends SkjemaBrevmottaker | IRestBrev
     );
 };
 
-export const LeggTilEllerFjernBrevmottakereBehandling: React.FC<IBehandlingProps> = props => (
-    <LeggTilEllerFjernBrevmottakere {...props} />
-);
+export const LeggTilEllerFjernBrevmottakereBehandling: React.FC<IBehandlingProps> = ({
+    behandling,
+    erLesevisning,
+}) => {
+    const { lagreMottaker, fjernMottaker } = useLagreEllerFjernMottakerPåBehandling({
+        behandlingId: behandling.behandlingId,
+    });
+
+    return (
+        <LeggTilEllerFjernBrevmottakere
+            brevmottakere={behandling.brevmottakere}
+            lagreMottaker={lagreMottaker}
+            fjernMottaker={fjernMottaker}
+            erLesevisning={erLesevisning}
+        />
+    );
+};
 
 export const LeggTilEllerFjernBrevmottakereFagsak: React.FC<IFagsakProps> = ({
     brevmottakere,
