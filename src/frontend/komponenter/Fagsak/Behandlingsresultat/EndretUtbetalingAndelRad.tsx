@@ -125,7 +125,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                       fom: endretUtbetalingAndel.fom,
                                       tom: endretUtbetalingAndel.tom,
                                   },
-                                  Datoformat.DATO
+                                  Datoformat.MÅNED_ÅR
                               )
                             : ''}
                     </BodyShort>
