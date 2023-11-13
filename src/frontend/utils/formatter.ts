@@ -2,7 +2,7 @@ import { format, isBefore, isValid } from 'date-fns';
 
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 import { YtelseType } from '../typer/beregning';
-import type { IGrunnlagPerson } from '../typer/person';
+import type { IGrunnlagPerson, IPersonInfo } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
@@ -102,6 +102,9 @@ export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): stri
         return ident;
     }
 };
+
+export const lagBrukerLabel = (bruker: IPersonInfo): string =>
+    `${bruker.navn} (${hentAlder(bruker.fødselsdato)} år) ${formaterIdent(bruker.personIdent)}`;
 
 export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
     return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
