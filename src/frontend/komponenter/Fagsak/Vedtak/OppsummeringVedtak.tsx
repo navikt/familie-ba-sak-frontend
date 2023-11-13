@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
@@ -16,7 +16,6 @@ import Vedtaksmeny from './Vedtaksmeny';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVedtaksperioder } from '../../../context/behandlingContext/useVedtaksperioder';
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
@@ -29,6 +28,7 @@ import {
     BehandlingÅrsak,
     hentStegNummer,
 } from '../../../typer/behandling';
+import type { IPersonInfo } from '../../../typer/person';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -36,6 +36,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
+    bruker: IPersonInfo;
 }
 
 const StyledSkjemaSteg = styled(Skjemasteg)`
@@ -48,7 +49,7 @@ export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
+const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
@@ -60,11 +61,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
 
     const erLesevisning = vurderErLesevisning();
 
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
-
-    const personer = åpenBehandling?.personer ?? [];
     const brevmottakere = åpenBehandling?.brevmottakere ?? [];
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const navigate = useNavigate();
 
@@ -196,11 +193,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                             </BehandlingKorrigertAlert>
                         )}
                         <BrevmottakereAlert
+                            bruker={bruker}
+                            erPåDokumentutsending={false}
+                            erLesevisning={erLesevisning}
                             brevmottakere={brevmottakere}
-                            institusjon={minimalFagsak?.institusjon}
-                            personer={personer}
                             åpenBehandling={åpenBehandling}
-                            fagsakType={minimalFagsak?.fagsakType}
                         />
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
