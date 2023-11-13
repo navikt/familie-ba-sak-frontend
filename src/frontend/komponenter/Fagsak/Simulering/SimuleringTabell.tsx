@@ -20,8 +20,8 @@ import {
     Datoformat,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDate,
+    isoStringTilFormatertString,
 } from '../../../utils/dato';
-import { formaterIsoDato } from '../../../utils/formatter';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
 const StyledTable = styled.table(
@@ -174,7 +174,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 <Label>
                     Simuleringsresultat for{' '}
                     {perioder.length === 1
-                        ? `${formaterIsoDato(perioder[0].fom, Datoformat.MÅNED_ÅR_NAVN)}`
+                        ? `${isoStringTilFormatertString({
+                              isoString: perioder[0].fom,
+                              tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+                          })}`
                         : `perioden ${tilOgFraDatoForSimulering}`}
                 </Label>
             </SimuleringTabellOverskrift>
@@ -231,7 +234,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 <HøyrestiltTh>
                                     <Label>
                                         {kapitaliserTekst(
-                                            formaterIsoDato(periode.fom, Datoformat.MÅNED_NAVN)
+                                            isoStringTilFormatertString({
+                                                isoString: periode.fom,
+                                                tilFormat: Datoformat.MÅNED_NAVN,
+                                            })
                                         )}
                                     </Label>
                                 </HøyrestiltTh>

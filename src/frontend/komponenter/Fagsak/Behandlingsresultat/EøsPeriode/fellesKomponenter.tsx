@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 import {
-    ABorderDefault,
     ABorderDanger,
+    ABorderDefault,
     ABorderWarning,
     ASurfaceAction,
 } from '@navikt/ds-tokens/dist/tokens';
@@ -15,8 +15,8 @@ import StatusIkon from '../../../../ikoner/StatusIkon';
 import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IIsoMånedPeriode } from '../../../../utils/dato';
-import { Datoformat } from '../../../../utils/dato';
-import { formaterIsoDato, lagPersonLabel } from '../../../../utils/formatter';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../utils/dato';
+import { lagPersonLabel } from '../../../../utils/formatter';
 
 interface IEøsPeriodeSkjemaContainerProps {
     lesevisning: boolean;
@@ -62,12 +62,6 @@ const BarnDiv = styled.div`
     margin-top: 1px;
 `;
 
-const formatterPeriode = (periode: IIsoMånedPeriode): string => {
-    return `${formaterIsoDato(periode.fom, Datoformat.MÅNED_ÅR_KORTNAVN)} - ${
-        periode.tom ? formaterIsoDato(periode.tom, Datoformat.MÅNED_ÅR_KORTNAVN) : ''
-    }`;
-};
-
 interface IStatusBarnCelleOgPeriodeCelleProps {
     status: EøsPeriodeStatus;
     barnIdenter: string[];
@@ -93,7 +87,9 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                 </EøsPeriodeVurdertCelle>
             </Table.DataCell>
             <Table.DataCell>
-                <BodyShort size="small">{formatterPeriode(props.periode)}</BodyShort>
+                <BodyShort size="small">
+                    {isoMånedPeriodeTilFormatertString(props.periode, Datoformat.MÅNED_ÅR_KORTNAVN)}
+                </BodyShort>
             </Table.DataCell>
         </>
     );

@@ -45,13 +45,16 @@ export const isoDatoPeriodeTilFormatertString = (periode: IIsoDatoPeriode) => {
     })}`;
 };
 
-export const isoMånedPeriodeTilFormatertString = (periode: IIsoMånedPeriode) => {
+export const isoMånedPeriodeTilFormatertString = (
+    periode: IIsoMånedPeriode,
+    tilFormat: Datoformat
+) => {
     return `${isoStringTilFormatertString({
         isoString: periode.fom,
-        tilFormat: Datoformat.MÅNED_ÅR,
+        tilFormat: tilFormat,
     })} - ${isoStringTilFormatertString({
         isoString: periode.tom,
-        tilFormat: Datoformat.MÅNED_ÅR,
+        tilFormat: tilFormat,
     })}`;
 };
 

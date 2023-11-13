@@ -8,8 +8,7 @@ import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IInfotrygdSak } from '../../typer/infotrygd';
-import { Datoformat } from '../../utils/dato';
-import { formaterIsoDato } from '../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 
 interface InfotrygdtabellerProps {
     ident?: string;
@@ -44,10 +43,10 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
             {minimalFagsak?.migreringsdato !== null && (
                 <Alert
                     variant="info"
-                    children={`Saken ble migrert fra Infotrygd ${formaterIsoDato(
-                        minimalFagsak?.migreringsdato,
-                        Datoformat.DATO_FORKORTTET
-                    )}`}
+                    children={`Saken ble migrert fra Infotrygd ${isoStringTilFormatertString({
+                        isoString: minimalFagsak?.migreringsdato,
+                        tilFormat: Datoformat.DATO_FORKORTTET,
+                    })}`}
                 />
             )}
             <SakerTekst size={'small'} level={'2'}>

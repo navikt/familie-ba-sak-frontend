@@ -23,9 +23,8 @@ import { Målform } from '../typer/søknad';
 import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import type { IsoDatoString } from '../utils/dato';
-import { Datoformat } from '../utils/dato';
+import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { formaterIsoDato } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 
@@ -216,7 +215,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 return {
                     mottakerIdent: bruker.data.personIdent,
                     multiselectVerdier: barnIBrev.map(
-                        barn => `Barn født ${formaterIsoDato(barn.fødselsdato, Datoformat.DATO)}.`
+                        barn =>
+                            `Barn født ${isoStringTilFormatertString({
+                                isoString: barn.fødselsdato,
+                                tilFormat: Datoformat.DATO,
+                            })}.`
                     ),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
