@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { feil, FieldDictionary, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { FieldDictionary } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
@@ -13,7 +14,7 @@ export type BrevmottakerUseSkjema = UseSkjemaVerdi<
 >;
 
 interface Props {
-    eksisterendeMottakere: IRestBrevmottaker[];
+    eksisterendeMottakere: SkjemaBrevmottaker[];
 }
 
 export enum Mottaker {
@@ -39,6 +40,7 @@ export interface ILeggTilFjernBrevmottakerSkjemaFelter {
     poststed: string;
     land: string;
 }
+
 export interface SkjemaBrevmottaker {
     type: Mottaker;
     navn: string;
@@ -49,9 +51,9 @@ export interface SkjemaBrevmottaker {
     landkode: string;
 }
 
-export type IRestBrevmottaker = {
+export interface IRestBrevmottaker extends SkjemaBrevmottaker {
     id: number;
-} & SkjemaBrevmottaker;
+}
 
 export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const { bruker } = useFagsakContext();
@@ -204,7 +206,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
 
 export const felterTilSkjematBrevmottaker = (
     felter: FieldDictionary<ILeggTilFjernBrevmottakerSkjemaFelter>
-): SkjemaBrevmottaker | undefined => {
+): SkjemaBrevmottaker => {
     if (felter.mottaker.verdi !== '') {
         return {
             type: felter.mottaker.verdi,
@@ -216,5 +218,7 @@ export const felterTilSkjematBrevmottaker = (
             poststed: felter.poststed.verdi,
             landkode: felter.land.verdi,
         };
+    } else {
+        throw new Error('Mottaker ikke satt');
     }
 };

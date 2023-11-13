@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Dropdown } from '@navikt/ds-react';
 
 import { LeggTilEllerFjernBrevmottakereFagsak } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
+import type { SkjemaBrevmottaker } from './LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 import { useApp } from '../../../../context/AppContext';
@@ -21,6 +22,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { toggles } = useApp();
+    const [brevmottakere, settBrevmottakere] = useState<SkjemaBrevmottaker[]>([]);
 
     const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
     //todo: fiks brevvmottaker for infobrev?
@@ -29,7 +31,10 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
             <OpprettBehandling minimalFagsak={minimalFagsak} />
             {!!bruker && <OpprettFagsak personInfo={bruker} />}
             {toggles[ToggleNavn.manuellMottakerInfobrev] && erPåDokumentutsending ? (
-                <LeggTilEllerFjernBrevmottakereFagsak />
+                <LeggTilEllerFjernBrevmottakereFagsak
+                    brevmottakere={brevmottakere}
+                    settBrevmottakere={settBrevmottakere}
+                />
             ) : (
                 <Dropdown.Menu.List.Item
                     onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}

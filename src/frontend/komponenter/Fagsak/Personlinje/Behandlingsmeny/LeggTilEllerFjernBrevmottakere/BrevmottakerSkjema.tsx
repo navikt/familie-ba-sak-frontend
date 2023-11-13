@@ -7,9 +7,12 @@ import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
+import type {
+    BrevmottakerUseSkjema,
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
 import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
@@ -37,21 +40,24 @@ const MottakerSelect = styled(Select)`
     max-width: 19rem;
 `;
 
-interface IProps {
+interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lukkModal: () => void;
-    brevmottakere: IRestBrevmottaker[];
+    brevmottakere: T[];
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
+    erLesevisning: boolean;
 }
 
-const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal, brevmottakere, lagreMottaker }) => {
+const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+    lukkModal,
+    brevmottakere,
+    lagreMottaker,
+    erLesevisning,
+}: Props<T>) => {
     const { verdierFraBrevmottakerUseSkjema, navnErPreutfylt } = useBrevmottakerSkjema({
         eksisterendeMottakere: brevmottakere,
     });
 
     const { skjema, valideringErOk } = verdierFraBrevmottakerUseSkjema;
-
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
     return (
         <>
             <StyledFieldset

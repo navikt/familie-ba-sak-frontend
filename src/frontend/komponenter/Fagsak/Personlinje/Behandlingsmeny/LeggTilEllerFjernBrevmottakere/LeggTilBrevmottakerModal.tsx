@@ -7,8 +7,11 @@ import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
-import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type {
+    BrevmottakerUseSkjema,
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from './useBrevmottakerSkjema';
 
 const StyledAlert = styled(Alert)`
     margin: 1rem 0 2.5rem;
@@ -23,11 +26,12 @@ const LukkKnapp = styled(Button)`
     margin-top: 2.5rem;
 `;
 
-interface Props {
+interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lukkModal: () => void;
-    brevmottakere: IRestBrevmottaker[];
+    brevmottakere: T[];
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
-    fjernMottaker: (mottakerId: IRestBrevmottaker) => void;
+    fjernMottaker: (mottaker: T) => void;
+    erLesevisning: boolean;
 }
 
 const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
@@ -42,15 +46,13 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal: React.FC<Props> = ({
+export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     lukkModal,
     brevmottakere,
     lagreMottaker,
     fjernMottaker,
-}) => {
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
-
+    erLesevisning,
+}: Props<T>) => {
     const heading = utledHeading(brevmottakere.length, erLesevisning);
 
     const [visSkjemaNårDetErÉnBrevmottaker, settVisSkjemaNårDetErÉnBrevmottaker] = useState(false);
@@ -81,7 +83,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                 {brevmottakere.map(mottaker => (
                     <BrevmottakerTabell
                         mottaker={mottaker}
-                        key={`mottaker-${mottaker.id}`}
+                        key={`mottaker-${mottaker}`}
                         fjernMottaker={fjernMottaker}
                     />
                 ))}
@@ -94,6 +96,7 @@ export const LeggTilBrevmottakerModal: React.FC<Props> = ({
                             lukkModal={lukkModalOgSkjema}
                             brevmottakere={brevmottakere}
                             lagreMottaker={lagreMottaker}
+                            erLesevisning={erLesevisning}
                         />
                     </>
                 ) : (

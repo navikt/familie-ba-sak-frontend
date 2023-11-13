@@ -7,8 +7,8 @@ import { Button, Heading } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
-import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
-import { mottakerVisningsnavn } from './useLeggTilFjernBrevmottaker';
+import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
+import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 
 const FlexDiv = styled.div`
@@ -35,12 +35,15 @@ const DefinitionList = styled.dl`
     }
 `;
 
-interface IProps {
-    mottaker: IRestBrevmottaker;
-    fjernMottaker: (mottakerId: IRestBrevmottaker) => void;
+interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+    mottaker: T;
+    fjernMottaker: (mottaker: T) => void;
 }
 
-const BrevmottakerTabell: React.FC<IProps> = ({ mottaker, fjernMottaker }) => {
+const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+    mottaker,
+    fjernMottaker,
+}: Props<T>) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);

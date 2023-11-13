@@ -3,18 +3,30 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
-import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
+import type {
+    BrevmottakerUseSkjema,
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from './useBrevmottakerSkjema';
+import { felterTilSkjematBrevmottaker } from './useBrevmottakerSkjema';
 
-interface IProps {
-    brevmottakere: IRestBrevmottaker[];
+interface IProps<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+    brevmottakere: T[];
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
-    fjernMottaker: (mottakerId: IRestBrevmottaker) => void;
+    fjernMottaker: (mottaker: T) => void;
     erLesevisning: boolean;
 }
 
 interface IFagsakProps {
+    brevmottakere: SkjemaBrevmottaker[];
+    settBrevmottakere: (mottakere: SkjemaBrevmottaker[]) => void;
+}
+
+interface IBehandlingProps {
     brevmottakere: IRestBrevmottaker[];
-    settBrevmottakere: (mottakere: IRestBrevmottaker[]) => void;
+    lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
+    fjernMottaker: (mottaker: IRestBrevmottaker) => void;
+    erLesevisning: boolean;
 }
 
 const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
@@ -29,12 +41,12 @@ const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({
+const LeggTilEllerFjernBrevmottakere = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     brevmottakere,
     lagreMottaker,
     fjernMottaker,
     erLesevisning,
-}) => {
+}: IProps<T>) => {
     const [visModal, settVisModal] = useState(false);
 
     const menyinnslag = utledMenyinnslag(brevmottakere.length, erLesevisning);
@@ -51,33 +63,38 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({
                     lukkModal={() => settVisModal(false)}
                     lagreMottaker={lagreMottaker}
                     fjernMottaker={fjernMottaker}
+                    erLesevisning={erLesevisning}
                 />
             )}
         </>
     );
 };
 
-export const LeggTilEllerFjernBrevmottakereBehandling: React.FC<IProps> = props =>
-    LeggTilEllerFjernBrevmottakere(props);
+export const LeggTilEllerFjernBrevmottakereBehandling: React.FC<IBehandlingProps> = props => (
+    <LeggTilEllerFjernBrevmottakere {...props} />
+);
 
 export const LeggTilEllerFjernBrevmottakereFagsak: React.FC<IFagsakProps> = ({
     brevmottakere,
     settBrevmottakere,
 }) => {
     const lagreMottaker = (useSkjema: BrevmottakerUseSkjema) => {
-        const mottakere: IRestBrevmottaker[] = [...brevmottakere, mottaker];
+        const nyMottaker = felterTilSkjematBrevmottaker(useSkjema.skjema.felter);
+        const mottakere: SkjemaBrevmottaker[] = [...brevmottakere, nyMottaker];
         return settBrevmottakere(mottakere);
     };
 
-    const fjernMottaker = (mottakerId: number) => {
-        const mottakereUtenFjernetPerson = brevmottakere.filter(it => it.id !== mottakerId);
+    const fjernMottaker = (mottaker: SkjemaBrevmottaker) => {
+        const mottakereUtenFjernetPerson = brevmottakere.filter(it => it !== mottaker);
         settBrevmottakere(mottakereUtenFjernetPerson);
     };
 
-    return LeggTilEllerFjernBrevmottakere({
-        brevmottakere: [],
-        lagreMottaker: lagreMottaker,
-        fjernMottaker: () => undefined,
-        erLesevisning: false,
-    });
+    return (
+        <LeggTilEllerFjernBrevmottakere
+            brevmottakere={brevmottakere}
+            lagreMottaker={lagreMottaker}
+            fjernMottaker={fjernMottaker}
+            erLesevisning={false}
+        />
+    );
 };
