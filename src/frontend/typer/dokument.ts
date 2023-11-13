@@ -1,6 +1,6 @@
 import type { BehandlingKategori } from './behandlingstema';
 import type { Målform } from './søknad';
-import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type {
     Brevmal,
     Informasjonsbrev,
