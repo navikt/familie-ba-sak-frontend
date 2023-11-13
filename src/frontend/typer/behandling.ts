@@ -24,7 +24,7 @@ import type {
 } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
-import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestNyBehandling {

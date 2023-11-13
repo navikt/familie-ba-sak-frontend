@@ -11,7 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import type { IRestBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { SkjemaBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import {
     Informasjonsbrev,
@@ -61,7 +61,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const [manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere] = useState<
-            IRestBrevmottaker[]
+            SkjemaBrevmottaker[]
         >([]);
         const { hentForhåndsvisning, hentetDokument } = useDokument();
 
@@ -347,6 +347,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     },
                     () => {
                         settVisInnsendtBrevModal(true);
+                        settManuelleInfoBrevmottakere([]);
                         nullstillSkjema();
                     }
                 );
@@ -372,6 +373,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             visInnsendtBrevModal,
             skjema,
             nullstillSkjema,
+            manuelleInfoBrevmottakere,
+            settManuelleInfoBrevmottakere,
         };
     }
 );

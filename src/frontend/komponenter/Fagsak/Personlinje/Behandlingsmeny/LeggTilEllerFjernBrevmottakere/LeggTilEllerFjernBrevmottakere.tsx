@@ -10,6 +10,7 @@ import type {
 } from './useBrevmottakerSkjema';
 import { felterTilSkjematBrevmottaker } from './useBrevmottakerSkjema';
 import { useLagreEllerFjernMottakerPåBehandling } from './useLagreOgFjernMottakerPåBehandling';
+import { useDokumentutsending } from '../../../../../context/DokumentutsendingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 
 interface IProps<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
@@ -17,11 +18,6 @@ interface IProps<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
     fjernMottaker: (mottaker: T) => void;
     erLesevisning: boolean;
-}
-
-interface IFagsakProps {
-    brevmottakere: SkjemaBrevmottaker[];
-    settBrevmottakere: (mottakere: SkjemaBrevmottaker[]) => void;
 }
 
 interface IBehandlingProps {
@@ -88,24 +84,23 @@ export const LeggTilEllerFjernBrevmottakereBehandling: React.FC<IBehandlingProps
     );
 };
 
-export const LeggTilEllerFjernBrevmottakereFagsak: React.FC<IFagsakProps> = ({
-    brevmottakere,
-    settBrevmottakere,
-}) => {
+export const LeggTilEllerFjernBrevmottakereFagsak: React.FC = () => {
+    const { manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere } = useDokumentutsending();
+
     const lagreMottaker = (useSkjema: BrevmottakerUseSkjema) => {
         const nyMottaker = felterTilSkjematBrevmottaker(useSkjema.skjema.felter);
-        const mottakere: SkjemaBrevmottaker[] = [...brevmottakere, nyMottaker];
-        return settBrevmottakere(mottakere);
+        const mottakere: SkjemaBrevmottaker[] = [...manuelleInfoBrevmottakere, nyMottaker];
+        return settManuelleInfoBrevmottakere(mottakere);
     };
 
     const fjernMottaker = (mottaker: SkjemaBrevmottaker) => {
-        const mottakereUtenFjernetPerson = brevmottakere.filter(it => it !== mottaker);
-        settBrevmottakere(mottakereUtenFjernetPerson);
+        const mottakereUtenFjernetPerson = manuelleInfoBrevmottakere.filter(it => it !== mottaker);
+        settManuelleInfoBrevmottakere(mottakereUtenFjernetPerson);
     };
 
     return (
         <LeggTilEllerFjernBrevmottakere
-            brevmottakere={brevmottakere}
+            brevmottakere={manuelleInfoBrevmottakere}
             lagreMottaker={lagreMottaker}
             fjernMottaker={fjernMottaker}
             erLesevisning={false}
