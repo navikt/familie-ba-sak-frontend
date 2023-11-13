@@ -10,8 +10,8 @@ import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
+import { Datoformat } from '../../../utils/dato';
 import {
-    Datoformat,
     formaterIdent,
     formaterIsoDato,
     hentAlder,

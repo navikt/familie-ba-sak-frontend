@@ -9,7 +9,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
-import { Datoformat, formaterIsoDato } from '../../utils/formatter';
+import { Datoformat } from '../../utils/dato';
+import { formaterIsoDato } from '../../utils/formatter';
 
 export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
     return {

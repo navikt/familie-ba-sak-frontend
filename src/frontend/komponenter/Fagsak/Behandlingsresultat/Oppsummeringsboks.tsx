@@ -29,15 +29,13 @@ import type {
 } from '../../../typer/eøsPerioder';
 import { EøsPeriodeStatus, KompetanseResultat } from '../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import { dateTilFormatertString, Datoformat } from '../../../utils/dato';
 import {
-    Datoformat,
     formaterBeløp,
     formaterIdent,
-    formaterIsoDato,
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../utils/formatter';
-import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
 
 const TableHeaderAlignedRight = styled.th`
@@ -65,14 +63,14 @@ const VenstreTekst = styled(BodyShort)`
     text-align: left;
     font-weight: bold;
     width: 50%;
-    margin: 1.25rem 0rem;
+    margin: 1.25rem 0;
 `;
 
 const HøyreTekst = styled(BodyShort)`
     text-align: right;
     font-weight: bold;
     width: 50%;
-    margin: 1.25rem 2.5rem 1.25rem 0rem;
+    margin: 1.25rem 2.5rem 1.25rem 0;
 `;
 
 const AlertWithBottomMargin = styled(Alert)`
@@ -166,15 +164,15 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
-    const aktivÅrOgMåned = formaterIsoDato(
-        serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
-        Datoformat.ISO_MÅNED
-    );
+    const aktivÅrOgMåned = dateTilFormatertString({
+        date: aktivEtikett.date,
+        tilFormat: Datoformat.ISO_MÅNED,
+    });
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(
-            serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
-            Datoformat.MÅNED_ÅR_NAVN
-        );
+        const navn = dateTilFormatertString({
+            date: aktivEtikett.date,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+        });
         return navn[0].toUpperCase() + navn.substr(1);
     };
     const småbarnstilleggkorrigeringUrl = `/familie-ba-sak/api/småbarnstilleggkorrigering/behandling`;

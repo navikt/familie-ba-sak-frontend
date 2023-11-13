@@ -11,7 +11,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
 import type { IsoDatoString } from '../../../../utils/dato';
-import { nyPeriode } from '../../../../utils/kalender';
+import { nyIsoDatoPeriode } from '../../../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {
@@ -90,7 +90,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyPeriode(
+                                    verdi: nyIsoDatoPeriode(
                                         dato,
                                         redigerbartVilkår.verdi.periode.verdi.tom
                                     ),
@@ -112,7 +112,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyPeriode(
+                                    verdi: nyIsoDatoPeriode(
                                         redigerbartVilkår.verdi.periode.verdi.fom,
                                         dato
                                     ),

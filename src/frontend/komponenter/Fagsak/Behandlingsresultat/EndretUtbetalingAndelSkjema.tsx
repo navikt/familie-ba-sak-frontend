@@ -26,8 +26,8 @@ import {
     årsaker,
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
+import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
-import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
@@ -193,7 +193,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             value={skjema.felter.fom.verdi}
                             antallÅrFrem={finnÅrFremTilStønadTom()}
                             antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                            onEndret={(dato: YearMonth | undefined) => {
+                            onEndret={(dato: IsoMånedString | undefined) => {
                                 if (dato === undefined) {
                                     skjema.felter.fom.nullstill();
                                 } else {
@@ -209,7 +209,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         value={skjema.felter.tom.verdi}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                        onEndret={(dato: YearMonth | undefined) => {
+                        onEndret={(dato: IsoMånedString | undefined) => {
                             if (dato === undefined) {
                                 skjema.felter.tom.nullstill();
                             } else {

@@ -15,8 +15,8 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
-import { periodeToString } from '../../../../utils/kalender';
+import { Datoformat, isoDatoPeriodeTilFormatertString } from '../../../../utils/dato';
+import { formaterIsoDato } from '../../../../utils/formatter';
 import { alleRegelverk } from '../../../../utils/vilkår';
 
 interface IProps {
@@ -146,7 +146,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort>
-                    {periodeErTom ? '-' : periodeToString(vilkårResultat.verdi.periode.verdi)}
+                    {periodeErTom
+                        ? '-'
+                        : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>

@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Tag } from '@navikt/ds-react';
 
-import { Datoformat, formaterIsoDato } from '../../utils/formatter';
+import { Datoformat } from '../../utils/dato';
+import { formaterIsoDato } from '../../utils/formatter';
 
 interface IDødsfallTagProps {
     dødsfallDato: string;

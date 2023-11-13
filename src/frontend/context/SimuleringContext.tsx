@@ -235,11 +235,11 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             periode.resultat === 0 &&
             isAfter(
                 isoStringTilDateMedFallback({
-                    isoDatoString: periode.forfallsdato,
+                    isoString: periode.forfallsdato,
                     fallbackDate: tidenesMorgen,
                 }),
                 isoStringTilDateMedFallback({
-                    isoDatoString: tidSimuleringHentet,
+                    isoString: tidSimuleringHentet,
                     fallbackDate: tidenesMorgen,
                 })
             )

@@ -4,11 +4,11 @@ import type {
     IVedtaksperiodeMedBegrunnelser,
 } from '../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import type { FamilieIsoDate } from '../../kalender';
+import type { IsoDatoString } from '../../dato';
 
 interface IMockVedtaksperiode {
-    fom?: FamilieIsoDate;
-    tom?: FamilieIsoDate;
+    fom?: IsoDatoString;
+    tom?: IsoDatoString;
     begrunnelser?: IRestVedtaksbegrunnelse[];
 }
 

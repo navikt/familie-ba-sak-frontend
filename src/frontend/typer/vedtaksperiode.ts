@@ -2,12 +2,11 @@ import { ytelsetype, YtelseType } from './beregning';
 import type { IGrunnlagPerson } from './person';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 import type { IsoDatoString } from '../utils/dato';
-import type { FamilieIsoDate } from '../utils/kalender';
 
 export interface IVedtaksperiodeMedBegrunnelser {
     id: number;
-    fom?: FamilieIsoDate;
-    tom?: FamilieIsoDate;
+    fom?: IsoDatoString;
+    tom?: IsoDatoString;
     type: Vedtaksperiodetype;
     begrunnelser: IRestVedtaksbegrunnelse[];
     fritekster: string[];
@@ -35,8 +34,8 @@ export enum Vedtaksperiodetype {
 
 export type Vedtaksperiode =
     | {
-          periodeFom: FamilieIsoDate;
-          periodeTom?: FamilieIsoDate;
+          periodeFom: IsoDatoString;
+          periodeTom?: IsoDatoString;
           vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
           utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
           ytelseTyper: YtelseType[];
@@ -44,25 +43,25 @@ export type Vedtaksperiode =
           utbetaltPerMnd: number;
       }
     | {
-          periodeFom: FamilieIsoDate;
-          periodeTom?: FamilieIsoDate;
+          periodeFom: IsoDatoString;
+          periodeTom?: IsoDatoString;
           vedtaksperiodetype: Vedtaksperiodetype.OPPHØR;
       }
     | {
-          periodeFom?: FamilieIsoDate;
-          periodeTom?: FamilieIsoDate;
+          periodeFom?: IsoDatoString;
+          periodeTom?: IsoDatoString;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       }
     | {
-          periodeFom?: FamilieIsoDate;
-          periodeTom?: FamilieIsoDate;
+          periodeFom?: IsoDatoString;
+          periodeTom?: IsoDatoString;
           vedtaksperiodetype: Vedtaksperiodetype.FORTSATT_INNVILGET;
           utbetalingsperiode: Vedtaksperiode;
       };
 
 export type Utbetalingsperiode = {
-    periodeFom: FamilieIsoDate;
-    periodeTom?: FamilieIsoDate;
+    periodeFom: IsoDatoString;
+    periodeTom?: IsoDatoString;
     vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
     ytelseTyper: YtelseType[];

@@ -8,7 +8,7 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import type { IsoDatoString } from '../../../../utils/dato';
-import { erIsoStringGyldig } from '../../../../utils/kalender';
+import { erIsoStringGyldig } from '../../../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {

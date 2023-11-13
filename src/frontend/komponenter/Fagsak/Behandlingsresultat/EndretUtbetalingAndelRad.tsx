@@ -12,8 +12,8 @@ import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
+import { isoMånedPeriodeTilFormatertString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
-import { yearMonthPeriodeToString } from '../../../utils/kalender';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -120,7 +120,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                 <Table.DataCell>
                     <BodyShort size={'small'}>
                         {endretUtbetalingAndel.fom
-                            ? yearMonthPeriodeToString({
+                            ? isoMånedPeriodeTilFormatertString({
                                   fom: endretUtbetalingAndel.fom,
                                   tom: endretUtbetalingAndel.tom,
                               })

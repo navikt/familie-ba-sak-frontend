@@ -17,8 +17,8 @@ import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
-import { kalenderDato, tilVisning } from '../../../../utils/kalender';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { formaterIsoDato } from '../../../../utils/formatter';
 
 const Container = styled.div`
     width: 32rem;
@@ -72,7 +72,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
                                 focusable="false"
                             />
                         }
-                        historikk={[{ verdi: tilVisning(kalenderDato(fødselsdato)) }]}
+                        historikk={[
+                            {
+                                verdi: isoStringTilFormatertString({
+                                    isoString: fødselsdato,
+                                    tilFormat: Datoformat.DATO,
+                                }),
+                            },
+                        ]}
                     />
                     {personErDød && (
                         <RegisteropplysningerTabell

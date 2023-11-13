@@ -16,9 +16,12 @@ import {
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { isoStringTilDate } from '../../../utils/dato';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, periodeToString } from '../../../utils/kalender';
+import {
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilDate,
+} from '../../../utils/dato';
+import { formaterIsoDato } from '../../../utils/formatter';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
 const StyledTable = styled.table(
@@ -138,7 +141,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const perioderSomSkalVisesITabellen = perioder.filter(
         periode =>
             !periodeErEtterNesteUtbetalingsPeriode(periode) &&
-            (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr)
+            (!erMerEnn12MånederISimulering ||
+                isoStringTilDate(periode.fom).getFullYear() === aktueltÅr)
     );
 
     const antallPerioderIFremvistÅr = perioderSomSkalVisesITabellen.length;
@@ -152,7 +156,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
 
-    const tilOgFraDatoForSimulering = `${periodeToString({
+    const tilOgFraDatoForSimulering = `${isoDatoPeriodeTilFormatertString({
         fom,
         tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
     })}`;

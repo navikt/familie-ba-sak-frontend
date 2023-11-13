@@ -18,14 +18,14 @@ import type {
 } from '../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
-import type { IPeriode } from '../../../../utils/dato';
+import type { IIsoDatoPeriode } from '../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
     vilkårType: VilkårType;
     regelverk: Regelverk | null;
-    periode: IPeriode;
+    periode: IIsoDatoPeriode;
     begrunnelser: VedtakBegrunnelse[];
     onChange: (oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => void;
 }
