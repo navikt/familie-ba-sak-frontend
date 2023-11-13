@@ -10,9 +10,9 @@ import {
     Button,
     ErrorSummary,
     Fieldset,
-    Link,
     Heading,
     Label,
+    Link,
     Radio,
     RadioGroup,
     Tag,
@@ -122,8 +122,6 @@ const TilbakekrevingSkjema: React.FC<{
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const bruker = hentDataFraRessurs(brukerRessurs);
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
-    const personer = åpenBehandling.personer ?? [];
     const brevmottakere = åpenBehandling.brevmottakere ?? [];
     const erLesevisning = vurderErLesevisning();
 
@@ -302,11 +300,11 @@ const TilbakekrevingSkjema: React.FC<{
                                 {tilbakekrevingsvalg.verdi ===
                                     Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
                                     <StyledBrevmottakereAlert
+                                        bruker={bruker}
+                                        erPåDokumentutsending={false}
                                         brevmottakere={brevmottakere}
-                                        institusjon={minimalFagsak?.institusjon}
-                                        personer={personer}
+                                        erLesevisning={erLesevisning}
                                         åpenBehandling={åpenBehandling}
-                                        fagsakType={minimalFagsak?.fagsakType}
                                     />
                                 )}
                                 {fritekstVarsel.erSynlig && (
