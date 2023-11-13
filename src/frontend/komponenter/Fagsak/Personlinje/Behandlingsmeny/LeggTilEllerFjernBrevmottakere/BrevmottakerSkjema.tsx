@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button, Fieldset, Select, TextField } from '@navikt/ds-react';
@@ -56,8 +57,14 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     const { verdierFraBrevmottakerUseSkjema, navnErPreutfylt } = useBrevmottakerSkjema({
         eksisterendeMottakere: brevmottakere,
     });
+    const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
 
     const { skjema, valideringErOk } = verdierFraBrevmottakerUseSkjema;
+
+    const gyldigeMottakerTyper = erPåDokumentutsending
+        ? Object.values(Mottaker).filter(mottakerType => mottakerType !== Mottaker.DØDSBO)
+        : Object.values(Mottaker);
+
     return (
         <>
             <StyledFieldset
@@ -74,7 +81,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     }}
                 >
                     <option value="">Velg</option>
-                    {Object.values(Mottaker).map(mottaker => (
+                    {gyldigeMottakerTyper.map(mottaker => (
                         <option value={mottaker} key={mottaker}>
                             {mottakerVisningsnavn[mottaker]}
                         </option>
