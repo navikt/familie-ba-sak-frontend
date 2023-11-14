@@ -55,6 +55,13 @@ export interface IRestBrevmottaker extends SkjemaBrevmottaker {
     id: number;
 }
 
+const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
+    if (mottaker === Mottaker.DØDSBO) {
+        return !land || land === 'NO' ? `${navn} v/dødsbo` : `Estate of ${navn}`;
+    }
+    return navn;
+};
+
 export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const { bruker } = useFagsakContext();
     const søker = hentDataFraRessurs(bruker);
@@ -177,13 +184,6 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         }
         settNavnErPreutfylt(skalNavnVærePreutfylt);
     }, [mottaker.verdi, land.verdi]);
-
-    const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
-        if (mottaker === Mottaker.DØDSBO) {
-            return !land || land === 'NO' ? `${navn} v/dødsbo` : `Estate of ${navn}`;
-        }
-        return navn;
-    };
 
     const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
         ILeggTilFjernBrevmottakerSkjemaFelter,
