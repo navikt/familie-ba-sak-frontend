@@ -21,7 +21,7 @@ export const LeggTilBrevmottakerModalFagsak: React.FC<IFagsakModalProps> = ({ lu
 
     const fjernMottaker = (mottaker: SkjemaBrevmottaker) => {
         const mottakereUtenFjernetPerson = manuelleBrevmottakerePåFagsak.filter(
-            it => it !== mottaker
+            mottakerPåFagsak => mottakerPåFagsak !== mottaker
         );
         settManuelleBrevmottakerePåFagsak(mottakereUtenFjernetPerson);
     };
