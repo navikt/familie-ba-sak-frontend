@@ -18,7 +18,6 @@ import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import { formaterIsoDato } from '../../../../utils/formatter';
 
 const Container = styled.div`
     width: 32rem;
@@ -57,10 +56,10 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
                         style={{ marginBottom: ASpacing4 }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +
-                            formaterIsoDato(
-                                registerHistorikk.hentetTidspunkt,
-                                Datoformat.DATO_TID_SEKUNDER
-                            )
+                            isoStringTilFormatertString({
+                                isoString: registerHistorikk.hentetTidspunkt,
+                                tilFormat: Datoformat.DATO_TID_SEKUNDER,
+                            })
                         }
                     />
                     <RegisteropplysningerTabell

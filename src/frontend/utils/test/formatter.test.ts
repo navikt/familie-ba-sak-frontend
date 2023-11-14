@@ -2,21 +2,11 @@
  * @jest-environment jsdom
  */
 
-import { addDays, format, setDefaultOptions, subDays, subYears } from 'date-fns';
+import { addDays, setDefaultOptions, subDays, subYears } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
-import { mockBarn, mockSøker } from './person/person.mock';
-import { YtelseType } from '../../typer/beregning';
-import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
-import { dagensDato, dateTilIsoDatoString, Datoformat } from '../dato';
-import {
-    formaterIdent,
-    formaterIsoDato,
-    formaterTekstStorForbokstav,
-    hentAlder,
-    kunSiffer,
-    sorterUtbetaling,
-} from '../formatter';
+import { dagensDato, dateTilIsoDatoString } from '../dato';
+import { formaterIdent, formaterTekstStorForbokstav, hentAlder, kunSiffer } from '../formatter';
 
 describe('formaterIdent', () => {
     beforeAll(() => {
@@ -54,64 +44,6 @@ describe('hentAlder', () => {
         const toÅrSiden = subYears(dagensDato, 2);
         expect(hentAlder(dateTilIsoDatoString(subDays(toÅrSiden, 1)))).toBe(2);
         expect(hentAlder(dateTilIsoDatoString(addDays(toÅrSiden, 1)))).toBe(1);
-    });
-});
-
-describe('formaterIsoDato', () => {
-    const dato = new Date('2020-12-01T14:02');
-    const datoString = dato.toISOString();
-
-    test('Skal returnere dato på format DD.MM.YYYY', () => {
-        expect(formaterIsoDato(datoString, Datoformat.DATO)).toEqual('01.12.2020');
-    });
-    test('Skal returnere dato på format DD.MM.YY', () => {
-        expect(formaterIsoDato(datoString, Datoformat.DATO_FORKORTTET)).toEqual('01.12.20');
-    });
-    test('Skal returnere dato på format PPP', () => {
-        expect(formaterIsoDato(datoString, Datoformat.DATO_FORLENGET)).toEqual('1. desember 2020');
-    });
-    test('Skal returnere dato på format PPPp', () => {
-        expect(formaterIsoDato(datoString, Datoformat.DATO_FORLENGET_MED_TID)).toEqual(
-            `1. desember 2020 kl. ${format(dato, 'HH:mm')}`
-        );
-    });
-    test('Skal returnere dato på format YYYY-MM', () => {
-        expect(formaterIsoDato(datoString, Datoformat.ISO_MÅNED)).toEqual('2020-12');
-    });
-    test('Skal returnere dato på format DD.MM.YY HH:mm', () => {
-        expect(formaterIsoDato(datoString, Datoformat.DATO_TID)).toEqual(
-            `01.12.20 ${format(dato, 'HH:mm')}`
-        );
-    });
-    test('Skal returnere dato på format MMMM YYYY', () => {
-        expect(formaterIsoDato(datoString, Datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');
-    });
-
-    test('Skal gi riktig rekkefølge på utbetalinger', () => {
-        const utbetalingBarn = lagUtbetalingsperiodeDetalj({
-            person: mockBarn,
-            ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-        });
-
-        const utbetalingSmåbarnstillegg = lagUtbetalingsperiodeDetalj({
-            person: mockSøker(),
-            ytelseType: YtelseType.SMÅBARNSTILLEGG,
-        });
-
-        const utbetalingUtvidet = lagUtbetalingsperiodeDetalj({
-            person: mockSøker(),
-            ytelseType: YtelseType.UTVIDET_BARNETRYGD,
-        });
-
-        const sorterteUtbetalingsperiodedetaljer = [
-            utbetalingBarn,
-            utbetalingSmåbarnstillegg,
-            utbetalingUtvidet,
-        ].sort(sorterUtbetaling);
-
-        expect(sorterteUtbetalingsperiodedetaljer[0]).toEqual(utbetalingUtvidet);
-        expect(sorterteUtbetalingsperiodedetaljer[1]).toEqual(utbetalingSmåbarnstillegg);
-        expect(sorterteUtbetalingsperiodedetaljer[2]).toEqual(utbetalingBarn);
     });
 });
 

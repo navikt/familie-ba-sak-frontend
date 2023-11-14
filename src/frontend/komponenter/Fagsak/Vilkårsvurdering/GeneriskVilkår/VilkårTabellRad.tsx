@@ -15,8 +15,11 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
-import { Datoformat, isoDatoPeriodeTilFormatertString } from '../../../../utils/dato';
-import { formaterIsoDato } from '../../../../utils/formatter';
+import {
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilFormatertString,
+} from '../../../../utils/dato';
 import { alleRegelverk } from '../../../../utils/vilkår';
 
 interface IProps {
@@ -183,10 +186,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
                         vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${formaterIsoDato(
-                                      vilkårResultat.verdi.endretTidspunkt,
-                                      Datoformat.DATO_FORKORTTET
-                                  )}`
+                                : `Vurdert ${isoStringTilFormatertString({
+                                      isoString: vilkårResultat.verdi.endretTidspunkt,
+                                      tilFormat: Datoformat.DATO_FORKORTTET,
+                                  })}`
                             : ''}
                     </div>
                 </FlexDiv>

@@ -16,8 +16,7 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
-import { Datoformat } from '../../../utils/dato';
-import { formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { behandlingErEtterSteg } from '../../../utils/steg';
 import type { ISide } from '../Venstremeny/sider';
 import { sider } from '../Venstremeny/sider';
@@ -109,8 +108,11 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 <StyledAlert variant="info">
                     Behandlingen er satt på vent. Årsak:{' '}
                     {settPåVentÅrsaker[erBehandlingSattPåVent.årsak]}. Frist:{' '}
-                    {formaterIsoDato(erBehandlingSattPåVent.frist, Datoformat.DATO)}. Fortsett
-                    behandling via menyen.
+                    {isoStringTilFormatertString({
+                        isoString: erBehandlingSattPåVent.frist,
+                        tilFormat: Datoformat.DATO,
+                    })}
+                    . Fortsett behandling via menyen.
                 </StyledAlert>
             )}
 

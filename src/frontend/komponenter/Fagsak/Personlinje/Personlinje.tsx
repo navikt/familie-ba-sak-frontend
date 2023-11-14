@@ -10,13 +10,8 @@ import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import { Datoformat } from '../../../utils/dato';
-import {
-    formaterIdent,
-    formaterIsoDato,
-    hentAlder,
-    millisekunderIEttÅr,
-} from '../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
+import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 
 interface IProps {
@@ -52,10 +47,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                             <Tag
                                 size="small"
-                                children={`Migrert ${formaterIsoDato(
-                                    minimalFagsak?.migreringsdato,
-                                    Datoformat.DATO
-                                )}`}
+                                children={`Migrert ${isoStringTilFormatertString({
+                                    isoString: minimalFagsak?.migreringsdato,
+                                    tilFormat: Datoformat.DATO,
+                                })}`}
                                 variant={'info'}
                             />
                         )}

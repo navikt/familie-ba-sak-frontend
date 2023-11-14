@@ -23,8 +23,7 @@ import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../ikoner/ØyeRød';
 import type { IBehandling } from '../../../../typer/behandling';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
-import { Datoformat } from '../../../../utils/dato';
-import { formaterIsoDato } from '../../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { KontrollertStatus } from '../../Venstremeny/sider';
 
@@ -90,11 +89,11 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 {egetVedtak ? (
                     <SendtTilBeslutterContainer>
                         <BodyShort>
-                            {formaterIsoDato(
-                                opprettetTidspunkt,
-                                Datoformat.DATO_FORLENGET_MED_TID,
-                                'UKJENT OPPRETTELSESTIDSPUNKT'
-                            )}
+                            {isoStringTilFormatertString({
+                                isoString: opprettetTidspunkt,
+                                tilFormat: Datoformat.DATO_FORLENGET_MED_TID,
+                                defaultString: 'UKJENT OPPRETTELSESTIDSPUNKT',
+                            })}
                         </BodyShort>
                         <BodyShort>{saksbehandler}</BodyShort>
                         <br />
