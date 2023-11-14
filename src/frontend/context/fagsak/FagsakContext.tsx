@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
@@ -13,8 +13,6 @@ import {
     hentDataFraRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-
-import { useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg } from './useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg';
 import type { SkjemaBrevmottaker } from '../../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
@@ -138,14 +136,21 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         }
     };
 
-    useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg({
-        minimalFagsak,
-        settBruker,
-        oppdaterBrukerHvisFagsakEndres,
-        bruker,
-        oppdaterKlagebehandlingerPåFagsak,
-        settManuelleInfoBrevmottakere,
-    });
+    useEffect(() => {
+        if (
+            minimalFagsak.status !== RessursStatus.SUKSESS &&
+            minimalFagsak.status !== RessursStatus.HENTER
+        ) {
+            settBruker(byggTomRessurs());
+        } else {
+            oppdaterBrukerHvisFagsakEndres(
+                bruker,
+                hentDataFraRessurs(minimalFagsak)?.søkerFødselsnummer
+            );
+        }
+        oppdaterKlagebehandlingerPåFagsak();
+        settManuelleInfoBrevmottakere([]);
+    }, [minimalFagsak]);
 
     const oppdaterGjeldendeFagsak = () => {
         const fagsakId = hentDataFraRessurs(minimalFagsak)?.id;
