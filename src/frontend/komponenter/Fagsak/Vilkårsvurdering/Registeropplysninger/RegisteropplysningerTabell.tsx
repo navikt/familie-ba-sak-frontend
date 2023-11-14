@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
@@ -9,14 +10,12 @@ import { Button, Table } from '@navikt/ds-react';
 import type { IRestRegisteropplysning } from '../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
 import {
-    kalenderDato,
-    kalenderDatoMedFallback,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    periodeToString,
-    TIDENES_MORGEN,
-    tilVisning,
-} from '../../../../utils/kalender';
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilDateMedFallback,
+    isoStringTilFormatertString,
+    tidenesMorgen,
+} from '../../../../utils/dato';
 
 const Container = styled.div`
     display: flex;
@@ -73,11 +72,14 @@ const hentDatoVerdi = (
     switch (opplysningstype) {
         case Registeropplysning.SIVILSTAND:
         case Registeropplysning.DØDSBOADRESSE:
-            return tilVisning(periode.fom ? kalenderDato(periode.fom) : undefined);
+            return isoStringTilFormatertString({
+                isoString: periode.fom,
+                tilFormat: Datoformat.DATO,
+            });
         case Registeropplysning.FØDSELSDATO:
             return '';
         default:
-            return periodeToString({
+            return isoDatoPeriodeTilFormatertString({
                 fom: periode.fom,
                 tom: periode.tom,
             });
@@ -85,9 +87,9 @@ const hentDatoVerdi = (
 };
 
 const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteropplysning) =>
-    kalenderDiff(
-        kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)),
-        kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN))
+    differenceInMilliseconds(
+        isoStringTilDateMedFallback({ isoString: b.fom, fallbackDate: tidenesMorgen }),
+        isoStringTilDateMedFallback({ isoString: a.fom, fallbackDate: tidenesMorgen })
     );
 
 export const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;

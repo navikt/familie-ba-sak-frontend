@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Label, Select } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
@@ -15,6 +15,7 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
@@ -65,6 +66,9 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         visForhåndsvisningBeskjed,
         settVisfeilmeldinger,
         manuelleInfoBrevmottakere,
+        distribusjonskanal,
+        brukerHarUkjentAddresse,
+        hentDistribusjonskanal,
     } = useDokumentutsending();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
@@ -78,9 +82,64 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
 
     const { toggles } = useApp();
 
+    useEffect(() => {
+        if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
+            return;
+        }
+        hentDistribusjonskanal(bruker.personIdent);
+    }, []);
+
+    const distribusjonskanalInfo = () => {
+        switch (distribusjonskanal.status) {
+            case RessursStatus.SUKSESS:
+                switch (distribusjonskanal.data) {
+                    case Distribusjonskanal.INGEN_DISTRIBUSJON:
+                    case Distribusjonskanal.UKJENT:
+                        return (
+                            <StyledAlert
+                                variant={'warning'}
+                                children={
+                                    'Brevet kan ikke sendes fordi mottaker har ukjent adresse'
+                                }
+                            />
+                        );
+                    case Distribusjonskanal.DITT_NAV:
+                    case Distribusjonskanal.DPVT:
+                    case Distribusjonskanal.SDP:
+                        return <StyledAlert variant={'info'} children={'Brevet sendes digitalt'} />;
+                    default:
+                        return <StyledAlert variant={'info'} children={'Brevet sendes per post'} />;
+                }
+            case RessursStatus.FEILET:
+            case RessursStatus.FUNKSJONELL_FEIL:
+            case RessursStatus.IKKE_TILGANG:
+                return (
+                    <StyledAlert
+                        variant={'error'}
+                        children={distribusjonskanal.frontendFeilmelding}
+                    />
+                );
+            case RessursStatus.IKKE_HENTET:
+            case RessursStatus.HENTER:
+                return (
+                    <StyledAlert variant={'info'}>
+                        <Loader title="Laster" />
+                    </StyledAlert>
+                );
+            default:
+                return (
+                    <StyledAlert
+                        variant={'error'}
+                        children={'Ukjent feil ved henting av distribusjonskanal'}
+                    />
+                );
+        }
+    };
+
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
+            {toggles[ToggleNavn.verifiserDokdistKanal] && distribusjonskanalInfo()}
 
             {manuelleInfoBrevmottakere.length > 0 && (
                 <BrevmottakereAlert
@@ -170,7 +229,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         size="medium"
                         variant="primary"
                         loading={senderBrev()}
-                        disabled={skjemaErLåst()}
+                        disabled={skjemaErLåst() || brukerHarUkjentAddresse()}
                         onClick={sendBrevPåFagsak}
                     >
                         Send brev

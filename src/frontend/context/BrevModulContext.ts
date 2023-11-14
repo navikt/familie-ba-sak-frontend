@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
-import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
@@ -23,7 +22,8 @@ import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
 } from '../utils/brevmal';
-import { formatterDateTilIsoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
+import type { IsoDatoString } from '../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
@@ -221,7 +221,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekster: FeltState<IFritekstFelt>[];
             barnMedDeltBosted: IBarnMedOpplysninger[];
             barnBrevetGjelder: IBarnMedOpplysninger[];
-            avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
+            avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
             datoAvtale: Date | undefined;
             antallUkerSvarfrist: number | '';
             mottakerlandSed: string[];
@@ -352,7 +352,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-                datoAvtale: formatterDateTilIsoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
+                datoAvtale: dateTilIsoDatoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
                 behandlingKategori,
                 antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),

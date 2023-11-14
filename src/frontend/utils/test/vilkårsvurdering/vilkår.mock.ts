@@ -10,7 +10,7 @@ import type {
     UtdypendeVilkårsvurdering,
 } from '../../../typer/vilkår';
 import { Regelverk, Resultat, VilkårType } from '../../../typer/vilkår';
-import type { IPeriode } from '../../dato';
+import type { IIsoDatoPeriode } from '../../dato';
 import { erIkkeGenereltVilkår } from '../../vilkår';
 
 interface IMockVilkårResultat {
@@ -18,7 +18,7 @@ interface IMockVilkårResultat {
     id?: number;
     resultat?: Resultat;
     vilkårType?: VilkårType;
-    periode?: IPeriode;
+    periode?: IIsoDatoPeriode;
     begrunnelse?: string;
     endretAv?: string;
     erVurdert?: boolean;
@@ -50,7 +50,7 @@ export const mockVilkårResultater = ({
     id,
     vilkårType,
     resultat: mockFeltstate(resultat),
-    periode: mockFeltstate<IPeriode>(periode),
+    periode: mockFeltstate<IIsoDatoPeriode>(periode),
     begrunnelse: mockFeltstate(begrunnelse),
     endretAv,
     erVurdert,

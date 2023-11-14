@@ -1,10 +1,6 @@
-import {
-    erEtter,
-    kalenderDatoFraDate,
-    kalenderDatoMedFallback,
-    kalenderDiff,
-    TIDENES_ENDE,
-} from './kalender';
+import { differenceInMilliseconds, isAfter } from 'date-fns';
+
+import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
@@ -16,18 +12,6 @@ export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =
         : minimalFagsak.underBehandling
         ? 'Under behandling'
         : fagsakStatus[minimalFagsak.status].navn;
-
-export const hentSisteBehandlingPåMinimalFagsak = (
-    fagsak: IMinimalFagsak
-): VisningBehandling | undefined => {
-    if (fagsak.behandlinger.length === 0) {
-        return undefined;
-    } else {
-        return fagsak.behandlinger.sort((a, b) =>
-            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
-        )[0];
-    }
-};
 
 export const hentAktivBehandlingPåMinimalFagsak = (
     minimalFagsak: IMinimalFagsak
@@ -44,7 +28,10 @@ export const hentSisteIkkeHenlagteBehandling = (
         return undefined;
     } else {
         return filtrerteBehandlinger.sort((a, b) =>
-            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+            differenceInMilliseconds(
+                isoStringTilDate(b.opprettetTidspunkt),
+                isoStringTilDate(a.opprettetTidspunkt)
+            )
         )[0];
     }
 };
@@ -52,9 +39,12 @@ export const hentSisteIkkeHenlagteBehandling = (
 export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
     minimalFagsak.gjeldendeUtbetalingsperioder
         .filter(utbetalingsperiode =>
-            erEtter(
-                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
-                kalenderDatoFraDate(new Date())
+            isAfter(
+                isoStringTilDateMedFallback({
+                    isoString: utbetalingsperiode.periodeTom,
+                    fallbackDate: tidenesEnde,
+                }),
+                dagensDato
             )
         )
         .reduce((acc, utbetalingsperiode) => {

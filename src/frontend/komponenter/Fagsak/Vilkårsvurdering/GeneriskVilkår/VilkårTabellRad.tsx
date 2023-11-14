@@ -15,8 +15,11 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
-import { periodeToString } from '../../../../utils/kalender';
+import {
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilFormatertString,
+} from '../../../../utils/dato';
 import { alleRegelverk } from '../../../../utils/vilkår';
 
 interface IProps {
@@ -146,7 +149,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort>
-                    {periodeErTom ? '-' : periodeToString(vilkårResultat.verdi.periode.verdi)}
+                    {periodeErTom
+                        ? '-'
+                        : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
@@ -181,10 +186,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
                         vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${formaterIsoDato(
-                                      vilkårResultat.verdi.endretTidspunkt,
-                                      Datoformat.DATO_FORKORTTET
-                                  )}`
+                                : `Vurdert ${isoStringTilFormatertString({
+                                      isoString: vilkårResultat.verdi.endretTidspunkt,
+                                      tilFormat: Datoformat.DATO_FORKORTTET,
+                                  })}`
                             : ''}
                     </div>
                 </FlexDiv>

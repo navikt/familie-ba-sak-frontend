@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import classNames from 'classnames';
+import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Heading, Switch, Table } from '@navikt/ds-react';
@@ -15,7 +16,7 @@ import {
 } from './utils';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { kalenderDiff } from '../../../utils/kalender';
+import { isoStringTilDate } from '../../../utils/dato';
 
 const SwitchHøyre = styled(Switch)`
     margin-right: 0.275rem;
@@ -86,9 +87,9 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                         {behandlinger
                             .filter(behandling => skalRadVises(behandling, visHenlagteBehandlinger))
                             .sort((a, b) =>
-                                kalenderDiff(
-                                    new Date(hentTidspunktforSortering(b)),
-                                    new Date(hentTidspunktforSortering(a))
+                                differenceInMilliseconds(
+                                    isoStringTilDate(hentTidspunktforSortering(b)),
+                                    isoStringTilDate(hentTidspunktforSortering(a))
                                 )
                             )
                             .map((behandling: Saksoversiktsbehandling) => (

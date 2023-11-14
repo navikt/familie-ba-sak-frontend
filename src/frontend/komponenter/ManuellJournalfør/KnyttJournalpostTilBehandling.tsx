@@ -14,8 +14,8 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import { Datoformat, formaterIsoDato } from '../../utils/formatter';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 const KnyttDiv = styled.div`
@@ -130,10 +130,10 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             )}
                                         </KnyttTilBehandlingTd>
                                         <td>
-                                            {formaterIsoDato(
-                                                behandling.opprettetTidspunkt,
-                                                Datoformat.DATO_FORKORTTET
-                                            )}
+                                            {isoStringTilFormatertString({
+                                                isoString: behandling.opprettetTidspunkt,
+                                                tilFormat: Datoformat.DATO_FORKORTTET,
+                                            })}
                                         </td>
                                         <td>
                                             {behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}

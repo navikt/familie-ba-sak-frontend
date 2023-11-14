@@ -10,7 +10,7 @@ import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
-import { periodeToString } from '../../../../utils/kalender';
+import { isoDatoPeriodeTilFormatertString } from '../../../../utils/dato';
 import { summerBeløpForPerioder } from '../utils';
 
 interface IRefusjonEøs {
@@ -72,7 +72,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     \n${refusjonEøsListe
         .map(
             refusjonEøs =>
-                `${periodeToString({
+                `${isoDatoPeriodeTilFormatertString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
                 })} kr/mnd ${refusjonEøs.refusjonsbeløp}`

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
-import type { ISODateString } from '@navikt/familie-datovelger';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
@@ -18,11 +18,14 @@ import {
     opplysningsdokumenter,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
+import { Distribusjonskanal } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
+import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
+import type { IsoDatoString } from '../utils/dato';
+import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { Datoformat, formaterIsoDato } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 
@@ -60,10 +63,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
     ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
+        const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
+            useDokument();
+        const { toggles } = useApp();
         const [manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere] = useState<
             SkjemaBrevmottaker[]
         >([]);
-        const { hentForhåndsvisning, hentetDokument } = useDokument();
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
             IManueltBrevRequestPåFagsak | undefined
@@ -151,7 +156,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 dokumenter: string[];
                 barnMedDeltBosted: IBarnMedOpplysninger[];
                 barnSøktFor: IBarnMedOpplysninger[];
-                avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
+                avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
             },
             string
         >({
@@ -214,7 +219,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 return {
                     mottakerIdent: bruker.data.personIdent,
                     multiselectVerdier: barnIBrev.map(
-                        barn => `Barn født ${formaterIsoDato(barn.fødselsdato, Datoformat.DATO)}.`
+                        barn =>
+                            `Barn født ${isoStringTilFormatertString({
+                                isoString: barn.fødselsdato,
+                                tilFormat: Datoformat.DATO,
+                            })}.`
                     ),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
@@ -325,6 +334,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
+        const brukerHarUkjentAddresse = () =>
+            toggles[ToggleNavn.verifiserDokdistKanal] &&
+            (distribusjonskanal.status !== RessursStatus.SUKSESS ||
+                distribusjonskanal.data === Distribusjonskanal.UKJENT ||
+                distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
+
         const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
 
         const hentForhåndsvisningPåFagsak = () => {
@@ -375,6 +390,9 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillSkjema,
             manuelleInfoBrevmottakere,
             settManuelleInfoBrevmottakere,
+            distribusjonskanal,
+            brukerHarUkjentAddresse,
+            hentDistribusjonskanal,
         };
     }
 );

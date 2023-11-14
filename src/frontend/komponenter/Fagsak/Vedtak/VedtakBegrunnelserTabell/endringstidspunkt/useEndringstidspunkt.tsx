@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -9,7 +8,8 @@ import { byggHenterRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/fa
 import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
-import { formatterDateTilIsoString, validerGyldigDato } from '../../../../../utils/dato';
+import type { IsoDatoString } from '../../../../../utils/dato';
+import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../utils/dato';
 
 interface IProps {
     lukkModal: () => void;
@@ -19,11 +19,11 @@ interface IProps {
 export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
     const { request } = useHttp();
     const [endringstidspunktRessurs, settEndringstidspunktRessurs] = useState(
-        byggHenterRessurs<ISODateString | undefined>()
+        byggHenterRessurs<IsoDatoString | undefined>()
     );
 
     const hentEndringstidspunkt = () =>
-        request<void, ISODateString>({
+        request<void, IsoDatoString>({
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${behandlingId}/endringstidspunkt`,
         });
@@ -57,7 +57,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
                 {
                     method: 'PUT',
                     data: {
-                        overstyrtEndringstidspunkt: formatterDateTilIsoString(
+                        overstyrtEndringstidspunkt: dateTilIsoDatoString(
                             skjema.felter.endringstidspunkt.verdi
                         ),
                         behandlingId,

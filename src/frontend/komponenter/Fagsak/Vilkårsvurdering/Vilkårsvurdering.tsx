@@ -23,7 +23,7 @@ import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
 import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
 import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { erProd } from '../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -116,10 +116,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 {åpenBehandling?.migreringsdato !== null && (
                     <HentetLabel
                         size={'small'}
-                        children={`Saken ble migrert fra Infotrygd: ${formaterIsoDato(
-                            åpenBehandling?.migreringsdato,
-                            Datoformat.DATO
-                        )}`}
+                        children={`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
+                            isoString: åpenBehandling?.migreringsdato,
+                            tilFormat: Datoformat.DATO,
+                        })}`}
                     />
                 )}
                 <HentetLabelOgKnappDiv>
@@ -127,10 +127,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         size={'small'}
                         children={
                             registeropplysningerHentetTidpsunkt
-                                ? `Registeropplysninger hentet ${formaterIsoDato(
-                                      registeropplysningerHentetTidpsunkt,
-                                      Datoformat.DATO_TID_SEKUNDER
-                                  )} fra Folkeregisteret`
+                                ? `Registeropplysninger hentet ${isoStringTilFormatertString({
+                                      isoString: registeropplysningerHentetTidpsunkt,
+                                      tilFormat: Datoformat.DATO_TID_SEKUNDER,
+                                  })} fra Folkeregisteret`
                                 : 'Kunne ikke hente innhentingstidspunkt for registeropplysninger'
                         }
                     />
@@ -173,10 +173,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         {uregistrerteBarn.map(uregistrertBarn => (
                             <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
                                 <BodyShort>
-                                    {`${uregistrertBarn.navn} - ${formaterIsoDato(
-                                        uregistrertBarn.fødselsdato,
-                                        Datoformat.DATO
-                                    )}`}
+                                    {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
+                                        isoString: uregistrertBarn.fødselsdato,
+                                        tilFormat: Datoformat.DATO,
+                                    })}`}
                                 </BodyShort>
                             </li>
                         ))}

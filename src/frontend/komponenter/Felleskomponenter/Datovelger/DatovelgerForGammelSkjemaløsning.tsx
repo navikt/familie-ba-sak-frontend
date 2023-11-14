@@ -6,9 +6,8 @@ import { isValid, parseISO } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato, formatterDate } from '../../../utils/dato';
+import { dagensDato, dateTilFormatertString, Datoformat } from '../../../utils/dato';
 import type { IsoDatoString } from '../../../utils/dato';
-import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     value: string | undefined;
@@ -18,6 +17,7 @@ interface IProps {
     feilmelding?: string;
     readOnly?: boolean;
     kanKunVelgeFortid?: boolean;
+    minDatoAvgrensning?: Date;
 }
 
 const DatovelgerForGammelSkjemaløsning = ({
@@ -25,6 +25,7 @@ const DatovelgerForGammelSkjemaløsning = ({
     onDateChange,
     label,
     visFeilmeldinger,
+    minDatoAvgrensning,
     feilmelding = undefined,
     readOnly = false,
     kanKunVelgeFortid = false,
@@ -37,15 +38,15 @@ const DatovelgerForGammelSkjemaløsning = ({
 
     const { datepickerProps, inputProps, selectedDay } = useDatepicker({
         defaultSelected: formatterDefaultSelected(),
-        fromDate: tidligsteRelevanteDato,
+        fromDate: minDatoAvgrensning ? minDatoAvgrensning : tidligsteRelevanteDato,
         toDate: kanKunVelgeFortid ? dagensDato : senesteRelevanteDato,
     });
 
     useEffect(() => {
         onDateChange(
-            formatterDate({
-                dato: selectedDay,
-                datoformat: Datoformat.ISO_DAG,
+            dateTilFormatertString({
+                date: selectedDay,
+                tilFormat: Datoformat.ISO_DAG,
                 defaultString: inputProps.value?.toString(),
             })
         );

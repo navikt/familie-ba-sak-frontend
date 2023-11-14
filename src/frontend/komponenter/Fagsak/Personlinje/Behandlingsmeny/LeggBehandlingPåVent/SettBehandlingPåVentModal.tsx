@@ -11,7 +11,7 @@ import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling, ISettPåVent } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
-import { formatterDateTilIsoString } from '../../../../../utils/dato';
+import { dateTilIsoDatoString } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 
@@ -43,7 +43,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal, behand
                 {
                     method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
                     data: {
-                        frist: formatterDateTilIsoString(frist.verdi),
+                        frist: dateTilIsoDatoString(frist.verdi),
                         årsak: årsak.verdi,
                     },
                     url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,

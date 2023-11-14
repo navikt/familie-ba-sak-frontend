@@ -14,9 +14,9 @@ import type {
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
+import type { IIsoMånedPeriode } from '../../utils/dato';
+import { nyIsoMånedPeriode } from '../../utils/dato';
 import { erBarnGyldig, erEøsPeriodeGyldig, isEmpty, isNumeric } from '../../utils/eøsValidators';
-import { nyYearMonthPeriode } from '../../utils/kalender';
-import type { IYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 import {
     konverterDesimalverdiTilSkjemaVisning,
@@ -91,8 +91,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({
                 verdi: barnIUtenlandskPeriodeBeløp,
                 valideringsfunksjon: erBarnGyldig,
             }),
-            periode: useFelt<IYearMonthPeriode>({
-                verdi: nyYearMonthPeriode(utenlandskPeriodeBeløp.fom, utenlandskPeriodeBeløp.tom),
+            periode: useFelt<IIsoMånedPeriode>({
+                verdi: nyIsoMånedPeriode(utenlandskPeriodeBeløp.fom, utenlandskPeriodeBeløp.tom),
                 avhengigheter: { initelFom },
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { AxiosError } from 'axios';
 
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -10,9 +11,9 @@ import {
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 
 import type { FamilieAxiosRequestConfig } from '../context/AppContext';
+import type { Distribusjonskanal } from '../typer/dokument';
 
 const useDokument = () => {
     const { request } = useHttp();
@@ -20,6 +21,10 @@ const useDokument = () => {
     const [visDokumentModal, settVisDokumentModal] = useState<boolean>(false);
 
     const [hentetDokument, settHentetDokument] = React.useState<Ressurs<string>>(byggTomRessurs());
+
+    const [distribusjonskanal, settDistribusjonskanal] = React.useState<
+        Ressurs<Distribusjonskanal>
+    >(byggTomRessurs());
 
     const nullstillDokument = () => {
         settHentetDokument(byggTomRessurs);
@@ -36,6 +41,22 @@ const useDokument = () => {
         return bytes;
     };
 
+    const hentDistribusjonskanal = (personIdent: string) => {
+        settDistribusjonskanal(byggHenterRessurs());
+        request<{ ident: string }, Distribusjonskanal>({
+            method: 'POST',
+            data: { ident: personIdent },
+            url: `/familie-ba-sak/api/dokument/distribusjonskanal`,
+        })
+            .then((response: Ressurs<Distribusjonskanal>) => {
+                settDistribusjonskanal(response);
+            })
+            .catch((_error: AxiosError) => {
+                settDistribusjonskanal(
+                    byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.')
+                );
+            });
+    };
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetDokument(byggHenterRessurs());
         request<D, string>(familieAxiosRequestConfig)
@@ -73,6 +94,8 @@ const useDokument = () => {
         settHentetDokument,
         visDokumentModal,
         settVisDokumentModal,
+        distribusjonskanal,
+        hentDistribusjonskanal,
     };
 };
 

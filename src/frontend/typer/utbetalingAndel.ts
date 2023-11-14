@@ -1,14 +1,13 @@
-import type { ISODateString } from '@navikt/familie-datovelger';
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IsoDatoString } from '../utils/dato';
+import type { IsoDatoString, IsoMånedString } from '../utils/dato';
 
 export interface IRestEndretUtbetalingAndel {
     id?: number;
     personIdent?: string;
     prosent?: number;
-    fom?: ISODateString;
-    tom?: ISODateString;
+    fom?: IsoMånedString;
+    tom?: IsoMånedString;
     begrunnelse?: string;
     søknadstidspunkt?: IsoDatoString;
     avtaletidspunktDeltBosted?: IsoDatoString;
@@ -29,16 +28,6 @@ export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
     ALLEREDE_UTBETALT: 'Allerede utbetalt',
     ETTERBETALING_3ÅR: 'Etterbetaling 3 år',
 };
-
-export interface ÅrsakOption extends OptionType {
-    årsak: IEndretUtbetalingAndelÅrsak;
-}
-
-export const årsakTilOption = (årsak: IEndretUtbetalingAndelÅrsak): ÅrsakOption => ({
-    value: årsak.valueOf(),
-    label: årsakTekst[årsak],
-    årsak: årsak,
-});
 
 export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbetalingAndelÅrsak).map(
     k => k as IEndretUtbetalingAndelÅrsak

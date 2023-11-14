@@ -1,18 +1,18 @@
 import React from 'react';
 
+import { endOfMonth, isAfter } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
-import { formaterBeløp } from '../../../../../utils/formatter';
-import type { IYearMonthPeriode } from '../../../../../utils/kalender';
+import type { IIsoMånedPeriode } from '../../../../../utils/dato';
 import {
-    erEtter,
-    kalenderDatoMedFallback,
-    periodeToString,
-    sisteDagIInneværendeMåned,
-    TIDENES_ENDE,
-} from '../../../../../utils/kalender';
+    dagensDato,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilDateMedFallback,
+    tidenesEnde,
+} from '../../../../../utils/dato';
+import { formaterBeløp } from '../../../../../utils/formatter';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;
@@ -33,14 +33,17 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
 interface IEkspanderbartBegrunnelsePanelProps {
     åpen: boolean;
     onClick?: () => void;
-    periode: IYearMonthPeriode;
+    periode: IIsoMånedPeriode;
     skalViseSum: boolean;
     summer: () => number;
     tittel: string;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
-    erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
+    isAfter(
+        isoStringTilDateMedFallback({ isoString: tom, fallbackDate: tidenesEnde }),
+        endOfMonth(dagensDato)
+    );
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     åpen,
@@ -57,7 +60,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                 <StyledExpansionTitle>
                     {periode.fom && (
                         <Label>
-                            {periodeToString({
+                            {isoDatoPeriodeTilFormatertString({
                                 fom: periode.fom,
                                 tom: slutterSenereEnnInneværendeMåned(periode.tom)
                                     ? ''

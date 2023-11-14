@@ -1,6 +1,6 @@
 import { erProd } from './miljø';
 import type { IBehandling } from '../typer/behandling';
-import { BehandlerRolle, behandlingstyper } from '../typer/behandling';
+import { BehandlerRolle } from '../typer/behandling';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
@@ -23,10 +23,6 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
 export const gruppeIdTilSuperbrukerRolle = erProd()
     ? '9b8239c4-cca7-440b-b359-51a64e3f0f00'
     : '314fa714-f13c-4cdc-ac5c-e13ce08e241c';
-
-export const muligeBehandlingstyper = () => {
-    return behandlingstyper;
-};
 
 export const hentSøkersMålform = (behandling: IBehandling) =>
     behandling.personer.find((person: IGrunnlagPerson) => {

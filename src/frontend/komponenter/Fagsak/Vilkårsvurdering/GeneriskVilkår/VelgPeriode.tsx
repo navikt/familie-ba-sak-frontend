@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import type { ISODateString } from '@navikt/familie-datovelger';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -11,7 +10,8 @@ import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
-import { nyPeriode } from '../../../../utils/kalender';
+import type { IsoDatoString } from '../../../../utils/dato';
+import { nyIsoDatoPeriode } from '../../../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {
@@ -83,14 +83,14 @@ const VelgPeriode: React.FC<IProps> = ({
                             : 'F.o.m'
                     }
                     value={redigerbartVilkår.verdi.periode.verdi.fom}
-                    onDateChange={(dato?: ISODateString) => {
+                    onDateChange={(dato?: IsoDatoString) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyPeriode(
+                                    verdi: nyIsoDatoPeriode(
                                         dato,
                                         redigerbartVilkår.verdi.periode.verdi.tom
                                     ),
@@ -105,14 +105,14 @@ const VelgPeriode: React.FC<IProps> = ({
                 <DatovelgerForGammelSkjemaløsning
                     label={'T.o.m (valgfri)'}
                     value={redigerbartVilkår.verdi.periode.verdi.tom}
-                    onDateChange={(dato?: ISODateString) => {
+                    onDateChange={(dato?: IsoDatoString) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyPeriode(
+                                    verdi: nyIsoDatoPeriode(
                                         redigerbartVilkår.verdi.periode.verdi.fom,
                                         dato
                                     ),

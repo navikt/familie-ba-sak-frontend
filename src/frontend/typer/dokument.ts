@@ -33,3 +33,14 @@ export interface IManueltBrevRequestPåFagsak {
     antallUkerSvarfrist?: undefined;
     manuelleInfoBrevmottakere?: SkjemaBrevmottaker[];
 }
+
+export enum Distribusjonskanal {
+    PRINT = 'PRINT',
+    SDP = 'SDP',
+    DITT_NAV = 'DITT_NAV',
+    LOKAL_PRINT = 'LOKAL_PRINT',
+    INGEN_DISTRIBUSJON = 'INGEN_DISTRIBUSJON',
+    TRYGDERETTEN = 'TRYGDERETTEN',
+    DPVT = 'DPVT',
+    UKJENT = 'UKJENT',
+}

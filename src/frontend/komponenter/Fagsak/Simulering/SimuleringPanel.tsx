@@ -1,19 +1,19 @@
 import * as React from 'react';
 
+import { isBefore } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Label, Panel } from '@navikt/ds-react';
 import {
     ABorderDefault,
     AGreen700,
-    ATextDefault,
     ATextDanger,
+    ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { Datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, erFør } from '../../../utils/kalender';
-import { tilVisning } from '../../../utils/kalender';
+import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../utils/dato';
+import { formaterBeløp } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -74,7 +74,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         : undefined;
 
     const erFørNestePeriode = (periode: ISimuleringPeriode) =>
-        !fomDatoNestePeriode || erFør(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
+        !fomDatoNestePeriode ||
+        isBefore(isoStringTilDate(periode.fom), isoStringTilDate(fomDatoNestePeriode));
 
     const panelTittel = (): string => {
         const utbetaltePerioder = perioder.filter(periode => erFørNestePeriode(periode));
@@ -82,11 +83,18 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
             return 'Totalt';
         }
         if (utbetaltePerioder.length === 1) {
-            return `Total for ${formaterIsoDato(perioder[0].fom, Datoformat.MÅNED_ÅR_NAVN)}`;
+            return `Total for ${isoStringTilFormatertString({
+                isoString: perioder[0].fom,
+                tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+            })}`;
         }
-        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${
-            tomSisteUtbetaling ? tilVisning(kalenderDato(tomSisteUtbetaling)) : ''
-        }`;
+        return `Totalt for perioden ${isoStringTilFormatertString({
+            isoString: fom,
+            tilFormat: Datoformat.DATO,
+        })} - ${isoStringTilFormatertString({
+            isoString: tomSisteUtbetaling,
+            tilFormat: Datoformat.DATO,
+        })}`;
     };
 
     return (
@@ -141,10 +149,10 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <StyledTd>
                                 <BodyShort>
                                     {kapitaliserTekst(
-                                        formaterIsoDato(
-                                            fomDatoNestePeriode,
-                                            Datoformat.MÅNED_ÅR_NAVN
-                                        )
+                                        isoStringTilFormatertString({
+                                            isoString: fomDatoNestePeriode,
+                                            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+                                        })
                                     )}
                                 </BodyShort>
                             </StyledTd>

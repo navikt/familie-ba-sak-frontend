@@ -1,9 +1,10 @@
+import { isAfter } from 'date-fns';
+
 import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { erEtter, kalenderDato } from '../../../utils/kalender';
+import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -12,7 +13,7 @@ export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) =>
     if (!b.datoMottatt) {
         return 1;
     }
-    return erEtter(kalenderDato(a.datoMottatt), kalenderDato(b.datoMottatt)) ? 1 : -1;
+    return isAfter(isoStringTilDate(a.datoMottatt), isoStringTilDate(b.datoMottatt)) ? 1 : -1;
 };
 
 export const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
@@ -76,7 +77,11 @@ export const hentSortState = (
           };
 
 export const formaterDatoRegistrertSendtMottatt = (dato: string | undefined): string =>
-    formaterIsoDato(dato, Datoformat.DATO_TID, '-');
+    isoStringTilFormatertString({
+        isoString: dato,
+        tilFormat: Datoformat.DATO_TID,
+        defaultString: '-',
+    });
 
 export const formaterFagsak = (fagsystemKode: string | undefined, fagsakId: string | undefined) => {
     const fagsystem = mapFagsystemkodeTilTekst(fagsystemKode);

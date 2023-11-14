@@ -22,7 +22,7 @@ import { useBehandling } from '../../context/behandlingContext/BehandlingContext
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
 import type { IBarnMedOpplysninger } from '../../typer/søknad';
-import { formatterDateTilIsoStringEllerUndefined } from '../../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined } from '../../utils/dato';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 
@@ -156,7 +156,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 barnaMedOpplysninger.validerOgSettFelt([
                     ...barnaMedOpplysninger.verdi,
                     {
-                        fødselsdato: formatterDateTilIsoStringEllerUndefined(
+                        fødselsdato: dateTilIsoDatoStringEllerUndefined(
                             registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi
                         ),
                         ident: '',
