@@ -12,9 +12,11 @@ export const LeggTilBrevmottakerModalFagsak: React.FC<IFagsakModalProps> = ({ lu
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } = useFagsakContext();
 
     const lagreMottaker = (useSkjema: BrevmottakerUseSkjema) => {
-        const nyMottaker = felterTilSkjematBrevmottaker(useSkjema.skjema.felter);
-        const mottakere: SkjemaBrevmottaker[] = [...manuelleBrevmottakerePåFagsak, nyMottaker];
-        return settManuelleBrevmottakerePåFagsak(mottakere);
+        if (useSkjema.kanSendeSkjema()) {
+            const nyMottaker = felterTilSkjematBrevmottaker(useSkjema.skjema.felter);
+            const mottakere: SkjemaBrevmottaker[] = [...manuelleBrevmottakerePåFagsak, nyMottaker];
+            return settManuelleBrevmottakerePåFagsak(mottakere);
+        }
     };
 
     const fjernMottaker = (mottaker: SkjemaBrevmottaker) => {
