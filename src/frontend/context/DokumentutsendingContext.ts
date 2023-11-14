@@ -334,7 +334,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
-        const brukerHarUkjentAddresse = () =>
+        const brukerHarUkjentAdresse = () =>
             toggles[ToggleNavn.verifiserDokdistKanal] &&
             (distribusjonskanal.status !== RessursStatus.SUKSESS ||
                 distribusjonskanal.data === Distribusjonskanal.UKJENT ||
@@ -391,7 +391,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             manuelleInfoBrevmottakere,
             settManuelleInfoBrevmottakere,
             distribusjonskanal,
-            brukerHarUkjentAddresse,
+            brukerHarUkjentAdresse,
             hentDistribusjonskanal,
         };
     }

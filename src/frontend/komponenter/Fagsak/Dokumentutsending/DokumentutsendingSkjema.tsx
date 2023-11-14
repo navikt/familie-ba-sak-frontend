@@ -67,7 +67,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         settVisfeilmeldinger,
         manuelleInfoBrevmottakere,
         distribusjonskanal,
-        brukerHarUkjentAddresse,
+        brukerHarUkjentAdresse,
         hentDistribusjonskanal,
     } = useDokumentutsending();
 
@@ -229,7 +229,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         size="medium"
                         variant="primary"
                         loading={senderBrev()}
-                        disabled={skjemaErLåst() || brukerHarUkjentAddresse()}
+                        disabled={skjemaErLåst() || brukerHarUkjentAdresse()}
                         onClick={sendBrevPåFagsak}
                     >
                         Send brev
