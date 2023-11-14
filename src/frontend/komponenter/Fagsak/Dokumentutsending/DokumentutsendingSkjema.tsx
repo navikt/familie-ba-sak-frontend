@@ -15,6 +15,7 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
@@ -65,11 +66,12 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         hentSkjemaFeilmelding,
         visForhåndsvisningBeskjed,
         settVisfeilmeldinger,
-        manuelleInfoBrevmottakere,
         distribusjonskanal,
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
     } = useDokumentutsending();
+
+    const { manuelleInfoBrevmottakere } = useFagsakContext();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
 

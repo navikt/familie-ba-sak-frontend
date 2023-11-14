@@ -8,7 +8,7 @@ import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 import { useApp } from '../../../../context/AppContext';
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
@@ -23,7 +23,9 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const { toggles } = useApp();
 
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
-    const { manuelleInfoBrevmottakere } = useDokumentutsending();
+    const { manuelleInfoBrevmottakere } = useFagsakContext();
+
+    console.log('manuelleInfoBrevmottakere', manuelleInfoBrevmottakere);
 
     return (
         <>

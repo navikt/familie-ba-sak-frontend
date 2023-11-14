@@ -3,13 +3,13 @@ import React from 'react';
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import type { BrevmottakerUseSkjema, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { felterTilSkjematBrevmottaker } from './useBrevmottakerSkjema';
-import { useDokumentutsending } from '../../../../../context/DokumentutsendingContext';
+import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 
 interface IFagsakModalProps {
     lukkModal: () => void;
 }
 export const LeggTilBrevmottakerModalFagsak: React.FC<IFagsakModalProps> = ({ lukkModal }) => {
-    const { manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere } = useDokumentutsending();
+    const { manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere } = useFagsakContext();
 
     const lagreMottaker = (useSkjema: BrevmottakerUseSkjema) => {
         const nyMottaker = felterTilSkjematBrevmottaker(useSkjema.skjema.felter);

@@ -11,7 +11,6 @@ import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import { hentEnkeltInformasjonsbrevRequest } from '../komponenter/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import type { SkjemaBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import {
     Informasjonsbrev,
@@ -61,14 +60,12 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
     ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker } = useFagsakContext();
+        const { bruker, manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere } =
+            useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
             useDokument();
         const { toggles } = useApp();
-        const [manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere] = useState<
-            SkjemaBrevmottaker[]
-        >([]);
 
         const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
             IManueltBrevRequestPåFagsak | undefined
@@ -388,8 +385,6 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             visInnsendtBrevModal,
             skjema,
             nullstillSkjema,
-            manuelleInfoBrevmottakere,
-            settManuelleInfoBrevmottakere,
             distribusjonskanal,
             brukerHarUkjentAdresse,
             hentDistribusjonskanal,
