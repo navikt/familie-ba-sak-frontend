@@ -204,7 +204,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     return { verdierFraBrevmottakerUseSkjema: verdierFraUseSkjema, navnErPreutfylt };
 };
 
-export const felterTilSkjematBrevmottaker = (
+export const felterTilSkjemaBrevmottaker = (
     felter: FieldDictionary<ILeggTilFjernBrevmottakerSkjemaFelter>
 ): SkjemaBrevmottaker => {
     if (felter.mottaker.verdi !== '') {
