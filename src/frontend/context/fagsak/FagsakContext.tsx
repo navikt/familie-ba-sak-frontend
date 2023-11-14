@@ -144,6 +144,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         oppdaterBrukerHvisFagsakEndres,
         bruker,
         oppdaterKlagebehandlingerPåFagsak,
+        settManuelleInfoBrevmottakere,
     });
 
     const oppdaterGjeldendeFagsak = () => {
