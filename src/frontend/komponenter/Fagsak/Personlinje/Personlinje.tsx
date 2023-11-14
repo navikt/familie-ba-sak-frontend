@@ -69,7 +69,11 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
                         <BodyShort>Dokumenter</BodyShort>
                     </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny bruker={bruker} minimalFagsak={minimalFagsak} />
+                        <Behandlingsmeny
+                            bruker={bruker}
+                            minimalFagsak={minimalFagsak}
+                            behandling={behandling}
+                        />
                     )}
                 </>
             )}

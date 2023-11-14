@@ -2,15 +2,22 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Alert } from '@navikt/ds-react';
 import { AGray300 } from '@navikt/ds-tokens/dist/tokens';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingRouter from './BehandlingRouter';
 import Høyremeny from './Høyremeny/Høyremeny';
+import Personlinje from './Personlinje/Personlinje';
+import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
+import { useHentOgSettBehandling } from '../../context/behandlingContext/HentOgSettBehandlingContext';
+import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 
 interface Props {
     bruker: IPersonInfo;
+    fagsak: IMinimalFagsak;
 }
 
 const FlexContainer = styled.div`
@@ -35,18 +42,40 @@ const HøyremenyContainer = styled.div`
     overflow-y: scroll;
 `;
 
-const BehandlingContainer: React.FC<Props> = ({ bruker }) => (
-    <FlexContainer>
-        <VenstremenyContainer>
-            <Venstremeny />
-        </VenstremenyContainer>
-        <HovedinnholdContainer>
-            <BehandlingRouter bruker={bruker} />
-        </HovedinnholdContainer>
-        <HøyremenyContainer>
-            <Høyremeny bruker={bruker} />
-        </HøyremenyContainer>
-    </FlexContainer>
-);
+const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
+    const { behandlingRessurs } = useHentOgSettBehandling();
+
+    switch (behandlingRessurs.status) {
+        case RessursStatus.SUKSESS:
+            return (
+                <BehandlingProvider behandling={behandlingRessurs.data}>
+                    <Personlinje bruker={bruker} minimalFagsak={fagsak} />
+                    <FlexContainer>
+                        <VenstremenyContainer>
+                            <Venstremeny />
+                        </VenstremenyContainer>
+                        <HovedinnholdContainer>
+                            <BehandlingRouter bruker={bruker} />
+                        </HovedinnholdContainer>
+                        <HøyremenyContainer>
+                            <Høyremeny bruker={bruker} />
+                        </HøyremenyContainer>
+                    </FlexContainer>
+                </BehandlingProvider>
+            );
+        case RessursStatus.IKKE_TILGANG:
+            return (
+                <Alert
+                    variant="warning"
+                    children={`Du har ikke tilgang til å se denne behandlingen.`}
+                />
+            );
+        case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
+            return <Alert children={behandlingRessurs.frontendFeilmelding} variant="error" />;
+        default:
+            return <div />;
+    }
+};
 
 export default BehandlingContainer;

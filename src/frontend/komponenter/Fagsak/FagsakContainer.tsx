@@ -11,7 +11,7 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
+import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/HentOgSettBehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
@@ -108,13 +108,14 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 <Route
                                     path="/:behandlingId/*"
                                     element={
-                                        <BehandlingProvider>
-                                            <Personlinje
+                                        <HentOgSettBehandlingProvider
+                                            fagsakId={minimalFagsak.data.id}
+                                        >
+                                            <BehandlingContainer
                                                 bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsak.data}
+                                                fagsak={minimalFagsak.data}
                                             />
-                                            <BehandlingContainer bruker={brukerRessurs.data} />
-                                        </BehandlingProvider>
+                                        </HentOgSettBehandlingProvider>
                                     }
                                 />
                                 <Route
