@@ -30,11 +30,6 @@ export enum Tilbakekrevingsbehandlingstype {
     REVURDERING_TILBAKEKREVING = 'REVURDERING_TILBAKEKREVING',
 }
 
-export const tilbakekrevingstyper = [
-    Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
-    Tilbakekrevingsbehandlingstype.REVURDERING_TILBAKEKREVING,
-];
-
 export enum TilbakekrevingsbehandlingÅrsak {
     REVURDERING_KLAGE_NFP = 'REVURDERING_KLAGE_NFP',
     REVURDERING_KLAGE_KA = 'REVURDERING_KLAGE_KA',

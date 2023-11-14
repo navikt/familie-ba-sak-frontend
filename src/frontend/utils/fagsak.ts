@@ -13,21 +13,6 @@ export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =
         ? 'Under behandling'
         : fagsakStatus[minimalFagsak.status].navn;
 
-export const hentSisteBehandlingPåMinimalFagsak = (
-    fagsak: IMinimalFagsak
-): VisningBehandling | undefined => {
-    if (fagsak.behandlinger.length === 0) {
-        return undefined;
-    } else {
-        return fagsak.behandlinger.sort((a, b) =>
-            differenceInMilliseconds(
-                isoStringTilDate(b.opprettetTidspunkt),
-                isoStringTilDate(a.opprettetTidspunkt)
-            )
-        )[0];
-    }
-};
-
 export const hentAktivBehandlingPåMinimalFagsak = (
     minimalFagsak: IMinimalFagsak
 ): VisningBehandling | undefined => {

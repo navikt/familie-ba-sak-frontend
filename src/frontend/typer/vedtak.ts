@@ -1,4 +1,3 @@
-import type { Vedtaksperiodetype } from './vedtaksperiode';
 import type { VilkårType } from './vilkår';
 import type { IsoDatoString } from '../utils/dato';
 
@@ -6,19 +5,6 @@ export interface IVedtakForBehandling {
     aktiv: boolean;
     vedtaksdato: string;
     id: number;
-}
-
-export interface IRestPostFritekstVedtakBegrunnelser {
-    fom?: string;
-    tom?: string;
-    fritekster: string[];
-    vedtaksperiodetype: Vedtaksperiodetype;
-}
-
-export interface IRestDeleteVedtakBegrunnelser {
-    fom: string;
-    tom?: string;
-    vedtakbegrunnelseTyper: VedtakBegrunnelseType[];
 }
 
 export interface IRestVedtakBegrunnelseTilknyttetVilkår {

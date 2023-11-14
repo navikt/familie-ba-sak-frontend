@@ -1,6 +1,4 @@
 import type { IOppgave } from './oppgave';
-import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
-import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -102,14 +100,4 @@ export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingst
               kodeTilBehandlingUnderkategoriMap[gjelder]
           )
         : undefined;
-};
-
-export const hentKategorierHvisVisningBehandling = (
-    behandling?: VisningBehandling | ITilbakekrevingsbehandling
-) => {
-    const kategori: BehandlingKategori | undefined = (behandling as VisningBehandling)?.kategori;
-    const underkategori: BehandlingUnderkategori | undefined = (behandling as VisningBehandling)
-        ?.underkategori;
-
-    return kategori && underkategori ? { kategori, underkategori } : undefined;
 };
