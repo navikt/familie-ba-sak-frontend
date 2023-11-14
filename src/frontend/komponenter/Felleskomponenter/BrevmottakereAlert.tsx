@@ -24,14 +24,14 @@ interface Props {
     className?: string;
 }
 
-interface BehandlingProps extends Props {
+export interface BrevmottakereAlertBehandlingProps extends Props {
     erPåBehandling: true;
     brevmottakere: IRestBrevmottaker[];
     erLesevisning: boolean;
     åpenBehandling: IBehandling;
 }
 
-interface FagsakProps extends Props {
+interface BrevmottakereAlertFagsakProps extends Props {
     erPåBehandling: false;
     brevmottakere: SkjemaBrevmottaker[];
 }
@@ -40,7 +40,9 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
-export const BrevmottakereAlert: React.FC<BehandlingProps | FagsakProps> = props => {
+export const BrevmottakereAlert: React.FC<
+    BrevmottakereAlertBehandlingProps | BrevmottakereAlertFagsakProps
+> = props => {
     const { brevmottakere, className, bruker } = props;
 
     const location = useLocation();
