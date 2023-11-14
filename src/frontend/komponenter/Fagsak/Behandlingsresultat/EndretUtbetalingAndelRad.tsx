@@ -120,13 +120,13 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                 <Table.DataCell>
                     <BodyShort size={'small'}>
                         {endretUtbetalingAndel.fom
-                            ? isoMånedPeriodeTilFormatertString(
-                                  {
+                            ? isoMånedPeriodeTilFormatertString({
+                                  periode: {
                                       fom: endretUtbetalingAndel.fom,
                                       tom: endretUtbetalingAndel.tom,
                                   },
-                                  Datoformat.MÅNED_ÅR
-                              )
+                                  tilFormat: Datoformat.MÅNED_ÅR,
+                              })
                             : ''}
                     </BodyShort>
                 </Table.DataCell>

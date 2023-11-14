@@ -88,7 +88,10 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size="small">
-                    {isoMånedPeriodeTilFormatertString(props.periode, Datoformat.MÅNED_ÅR_KORTNAVN)}
+                    {isoMånedPeriodeTilFormatertString({
+                        periode: props.periode,
+                        tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                    })}
                 </BodyShort>
             </Table.DataCell>
         </>
