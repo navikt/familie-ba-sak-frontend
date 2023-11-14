@@ -71,7 +71,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         hentDistribusjonskanal,
     } = useDokumentutsending();
 
-    const { manuelleInfoBrevmottakere } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
 
@@ -143,10 +143,10 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
             {toggles[ToggleNavn.verifiserDokdistKanal] && distribusjonskanalInfo()}
 
-            {manuelleInfoBrevmottakere.length > 0 && (
+            {manuelleBrevmottakerePåFagsak.length > 0 && (
                 <BrevmottakereAlert
                     erPåBehandling={false}
-                    brevmottakere={manuelleInfoBrevmottakere}
+                    brevmottakere={manuelleBrevmottakerePåFagsak}
                     bruker={bruker}
                 />
             )}

@@ -11,14 +11,14 @@ interface IHentEnkeltInformasjonsbrevRequestInput {
     bruker: Ressurs<IPersonInfo>;
     målform: Målform;
     brevmal: Informasjonsbrev;
-    manuelleInfoBrevmottakere?: SkjemaBrevmottaker[];
+    manuelleBrevmottakerePåFagsak?: SkjemaBrevmottaker[];
 }
 
 export const hentEnkeltInformasjonsbrevRequest = ({
     bruker,
     målform,
     brevmal,
-    manuelleInfoBrevmottakere,
+    manuelleBrevmottakerePåFagsak,
 }: IHentEnkeltInformasjonsbrevRequestInput): IManueltBrevRequestPåFagsak => {
     if (bruker.status === RessursStatus.SUKSESS) {
         return {
@@ -28,7 +28,7 @@ export const hentEnkeltInformasjonsbrevRequest = ({
             mottakerMålform: målform,
             mottakerNavn: bruker.data.navn,
             brevmal: brevmal,
-            manuelleInfoBrevmottakere: manuelleInfoBrevmottakere,
+            manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
         };
     } else {
         throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');

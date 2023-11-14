@@ -7,31 +7,33 @@ import type {
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IsoDatoString } from '../utils/dato';
 
-export interface IManueltBrevRequestPåBehandling {
+interface IManueltBrevRequest {
     mottakerIdent: string;
     multiselectVerdier: string[];
     barnIBrev: string[];
-    brevmal: Brevmal;
     datoAvtale?: IsoDatoString;
+}
+
+export interface IManueltBrevRequestPåBehandling extends IManueltBrevRequest {
+    antallUkerSvarfrist?: number;
     barnasFødselsdager?: string[];
     behandlingKategori?: BehandlingKategori | undefined;
-    antallUkerSvarfrist?: number;
+    brevmal: Brevmal;
+    manuelleBrevmottakere?: never;
     mottakerMålform?: Målform;
     mottakerNavn?: string;
     mottakerlandSed?: string[];
 }
 
-export interface IManueltBrevRequestPåFagsak {
-    mottakerIdent: string;
-    multiselectVerdier: string[];
-    barnIBrev: string[];
+export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
+    antallUkerSvarfrist?: never;
+    barnasFødselsdager?: never;
+    behandlingKategori?: never;
+    brevmal: Brevmal | Informasjonsbrev;
+    manuelleBrevmottakere?: SkjemaBrevmottaker[];
     mottakerMålform: Målform;
     mottakerNavn: string;
-    brevmal: Brevmal | Informasjonsbrev;
-    datoAvtale?: string;
-    behandlingKategori?: undefined;
-    antallUkerSvarfrist?: undefined;
-    manuelleInfoBrevmottakere?: SkjemaBrevmottaker[];
+    mottakerlandSed?: never;
 }
 
 export enum Distribusjonskanal {

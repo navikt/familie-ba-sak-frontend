@@ -31,7 +31,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
         byggTomRessurs()
     );
-    const [manuelleInfoBrevmottakere, settManuelleInfoBrevmottakere] = useState<
+    const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<
         SkjemaBrevmottaker[]
     >([]);
 
@@ -150,7 +150,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             );
         }
         oppdaterKlagebehandlingerPåFagsak();
-        settManuelleInfoBrevmottakere([]);
+        settManuelleBrevmottakerePåFagsak([]);
     }, [minimalFagsak]);
 
     const oppdaterGjeldendeFagsak = () => {
@@ -170,8 +170,8 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
         oppdaterGjeldendeFagsak,
-        manuelleInfoBrevmottakere,
-        settManuelleInfoBrevmottakere,
+        manuelleBrevmottakerePåFagsak,
+        settManuelleBrevmottakerePåFagsak,
     };
 });
 

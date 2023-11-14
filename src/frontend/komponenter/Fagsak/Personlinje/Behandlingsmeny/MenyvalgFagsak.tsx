@@ -23,9 +23,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const { toggles } = useApp();
 
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
-    const { manuelleInfoBrevmottakere } = useFagsakContext();
-
-    console.log('manuelleInfoBrevmottakere', manuelleInfoBrevmottakere);
+    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
     return (
         <>
@@ -34,7 +32,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
             {toggles[ToggleNavn.manuellMottakerInfobrev] && erPåDokumentutsending ? (
                 <LeggTilEllerFjernBrevmottakere
                     erPåBehandling={false}
-                    brevmottakere={manuelleInfoBrevmottakere}
+                    brevmottakere={manuelleBrevmottakerePåFagsak}
                 />
             ) : (
                 <Dropdown.Menu.List.Item
