@@ -38,11 +38,6 @@ const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
             {(skalViseSøker || skalViseEnsligMindreårig) && (
                 <li key="søker">{lagBrukerLabel(bruker)}</li>
             )}
-            {skalViseInstitusjon && (
-                <li key="institusjon">{`Institusjon | ${
-                    institusjon.navn?.concat(' |') || ''
-                } ${formaterIdent(institusjon.orgNummer)}`}</li>
-            )}
             {harUtenlandskAdresse && !harFullmektig && (
                 <li key="utenlandsk-adresse">{lagBrukerLabel(bruker)} | Utenlandsk adresse</li>
             )}
@@ -52,6 +47,11 @@ const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
                 </li>
             )}
             {harManuellDødsboadresse && <li key="dødsbo">{bruker.navn} | Dødsbo</li>}
+            {skalViseInstitusjon && (
+                <li key="institusjon">{`Institusjon | ${
+                    institusjon.navn?.concat(' |') || ''
+                } ${formaterIdent(institusjon.orgNummer)}`}</li>
+            )}
             {harFullmektig &&
                 brevmottakere
                     .filter(mottaker => mottaker.type === Mottaker.FULLMEKTIG)

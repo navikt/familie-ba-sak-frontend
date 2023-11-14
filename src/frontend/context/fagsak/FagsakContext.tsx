@@ -155,7 +155,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
-        hentBruker,
         hentFagsakerForPerson,
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,

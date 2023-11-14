@@ -6,12 +6,14 @@ import { Button, Modal } from '@navikt/ds-react';
 
 import Brevskjema from './Brevskjema';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import type { IPersonInfo } from '../../../../typer/person';
 
 interface IProps {
     onIModalClick: () => void;
+    bruker: IPersonInfo;
 }
 
-const Brev = ({ onIModalClick }: IProps) => {
+const Brev = ({ onIModalClick, bruker }: IProps) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
 
@@ -23,6 +25,7 @@ const Brev = ({ onIModalClick }: IProps) => {
                 onSubmitSuccess={() => {
                     settVisInnsendtBrevModal(true);
                 }}
+                bruker={bruker}
             />
             {visInnsendtBrevModal && (
                 <Modal

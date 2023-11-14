@@ -6,7 +6,12 @@ import { AGray300 } from '@navikt/ds-tokens/dist/tokens';
 
 import BehandlingRouter from './BehandlingRouter';
 import Høyremeny from './Høyremeny/Høyremeny';
+import type { IPersonInfo } from '../../typer/person';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
+
+interface Props {
+    bruker: IPersonInfo;
+}
 
 const FlexContainer = styled.div`
     display: flex;
@@ -30,16 +35,16 @@ const HøyremenyContainer = styled.div`
     overflow-y: scroll;
 `;
 
-const BehandlingContainer: React.FC = () => (
+const BehandlingContainer: React.FC<Props> = ({ bruker }) => (
     <FlexContainer>
         <VenstremenyContainer>
             <Venstremeny />
         </VenstremenyContainer>
         <HovedinnholdContainer>
-            <BehandlingRouter />
+            <BehandlingRouter bruker={bruker} />
         </HovedinnholdContainer>
         <HøyremenyContainer>
-            <Høyremeny />
+            <Høyremeny bruker={bruker} />
         </HøyremenyContainer>
     </FlexContainer>
 );

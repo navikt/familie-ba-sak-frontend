@@ -31,7 +31,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
             {!!bruker && <OpprettFagsak personInfo={bruker} />}
             {toggles[ToggleNavn.manuellMottakerInfobrev] && erPåDokumentutsending ? (
                 <LeggTilEllerFjernBrevmottakere
-                    erPåBehandling={true}
+                    erPåBehandling={false}
                     brevmottakere={manuelleInfoBrevmottakere}
                 />
             ) : (

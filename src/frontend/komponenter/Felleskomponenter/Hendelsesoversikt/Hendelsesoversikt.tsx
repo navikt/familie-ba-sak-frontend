@@ -10,20 +10,27 @@ import type { Hendelse } from './typer';
 import { Tabs } from './typer';
 import { useApp } from '../../../context/AppContext';
 import { BrevModulProvider } from '../../../context/BrevModulContext';
-import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandling } from '../../../typer/behandling';
+import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
+import type { IPersonInfo } from '../../../typer/person';
 
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
     åpenBehandling: IBehandling;
+    bruker: IPersonInfo;
 }
 
 const tilHendelseItem = (hendelse: Hendelse) => (
     <HendelseItem key={hendelse.id} hendelse={hendelse} />
 );
 
-const Hendelsesoversikt = ({ hendelser, className, åpenBehandling }: IHendelsesoversiktProps) => {
+const Hendelsesoversikt = ({
+    hendelser,
+    className,
+    åpenBehandling,
+    bruker,
+}: IHendelsesoversiktProps) => {
     const { hentSaksbehandlerRolle } = useApp();
 
     const skalViseTotrinnskontroll =
@@ -53,7 +60,7 @@ const Hendelsesoversikt = ({ hendelser, className, åpenBehandling }: IHendelses
                     </div>
                 )}
                 {aktivTab === Tabs.Meldinger && (
-                    <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} />
+                    <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />
                 )}
             </BrevModulProvider>
         </div>

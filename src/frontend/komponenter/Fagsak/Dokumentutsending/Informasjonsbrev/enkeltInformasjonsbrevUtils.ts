@@ -5,13 +5,13 @@ import type { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../typer/person';
 import type { Målform } from '../../../../typer/søknad';
 import type { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import type { IRestBrevmottaker } from '../../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
+import type { SkjemaBrevmottaker } from '../../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IHentEnkeltInformasjonsbrevRequestInput {
     bruker: Ressurs<IPersonInfo>;
     målform: Målform;
     brevmal: Informasjonsbrev;
-    manuelleInfoBrevmottakere?: IRestBrevmottaker[];
+    manuelleInfoBrevmottakere?: SkjemaBrevmottaker[];
 }
 
 export const hentEnkeltInformasjonsbrevRequest = ({

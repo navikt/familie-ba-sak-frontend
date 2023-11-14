@@ -9,10 +9,15 @@ import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-ty
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../typer/logg';
-import { formaterIsoDato, Datoformat } from '../../../utils/formatter';
+import type { IPersonInfo } from '../../../typer/person';
+import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
+
+interface Props {
+    bruker: IPersonInfo;
+}
 
 const ToggleVisningHøyremeny = styled(Button)`
     position: absolute;
@@ -22,13 +27,13 @@ const ToggleVisningHøyremeny = styled(Button)`
     width: 34px;
     min-width: 34px;
     height: 34px;
-    padding: 0px;
+    padding: 0;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
 `;
 
-const Høyremeny: React.FunctionComponent = () => {
+const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
     const { åpenBehandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
 
     React.useEffect(() => {
@@ -78,6 +83,7 @@ const Høyremeny: React.FunctionComponent = () => {
                                 }
                             )}
                             åpenBehandling={åpenBehandling.data}
+                            bruker={bruker}
                         />
                     </>
                 )}
