@@ -11,13 +11,14 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useAmplitude } from '../../utils/amplitude';
 
 const HovedInnhold = styled.div`
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 3rem);
     overflow: auto;
 `;
 
@@ -59,51 +60,77 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (brukerRessurs.status) {
                 case RessursStatus.SUKSESS:
                     return (
-                        <>
-                            <Personlinje
-                                bruker={brukerRessurs.data}
-                                minimalFagsak={minimalFagsak.data}
-                            />
-                            <HovedInnhold>
-                                <Routes>
-                                    <Route
-                                        path="/saksoversikt"
-                                        element={
+                        <HovedInnhold>
+                            <Routes>
+                                <Route
+                                    path="/saksoversikt"
+                                    element={
+                                        <>
+                                            <Personlinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsak.data}
+                                            />
                                             <Saksoversikt minimalFagsak={minimalFagsak.data} />
-                                        }
-                                    />
+                                        </>
+                                    }
+                                />
 
-                                    <Route
-                                        path="/dokumentutsending"
-                                        element={
+                                <Route
+                                    path="/dokumentutsending"
+                                    element={
+                                        <>
+                                            <Personlinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsak.data}
+                                            />
                                             <DokumentutsendingProvider
                                                 fagsakId={minimalFagsak.data.id}
                                             >
                                                 <Dokumentutsending bruker={brukerRessurs.data} />
                                             </DokumentutsendingProvider>
-                                        }
-                                    />
+                                        </>
+                                    }
+                                />
 
-                                    <Route
-                                        path="/dokumenter"
-                                        element={<JournalpostListe bruker={brukerRessurs.data} />}
-                                    />
+                                <Route
+                                    path="/dokumenter"
+                                    element={
+                                        <>
+                                            <Personlinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsak.data}
+                                            />
+                                            <JournalpostListe bruker={brukerRessurs.data} />
+                                        </>
+                                    }
+                                />
 
-                                    <Route
-                                        path="/:behandlingId/*"
-                                        element={
+                                <Route
+                                    path="/:behandlingId/*"
+                                    element={
+                                        <BehandlingProvider>
+                                            <Personlinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsak.data}
+                                            />
                                             <BehandlingContainer bruker={brukerRessurs.data} />
-                                        }
-                                    />
-                                    <Route
-                                        path="/"
-                                        element={
+                                        </BehandlingProvider>
+                                    }
+                                />
+                                <Route
+                                    path="/"
+                                    element={
+                                        <>
+                                            <Personlinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsak.data}
+                                            />
                                             <Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />
-                                        }
-                                    />
-                                </Routes>
-                            </HovedInnhold>
-                        </>
+                                        </>
+                                    }
+                                />
+                            </Routes>
+                        </HovedInnhold>
                     );
                 case RessursStatus.FEILET:
                 case RessursStatus.FUNKSJONELL_FEIL:

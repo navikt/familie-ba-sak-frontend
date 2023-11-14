@@ -1,14 +1,15 @@
 import React from 'react';
 
-import { Link, BodyShort, Tag } from '@navikt/ds-react';
+import { BodyShort, Link, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
-import { FagsakType } from '../../../typer/fagsak';
+import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
@@ -17,9 +18,10 @@ import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 interface IProps {
     bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
+    behandling?: IBehandling;
 }
 
-const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
+const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     return (
         <Visittkort
