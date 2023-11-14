@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -50,9 +49,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             påvirkerSystemLaster,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
-                if (påvirkerSystemLaster || !deepEqual(hentetFagsak, minimalFagsak)) {
-                    settMinimalFagsak(hentetFagsak);
-                }
+                settMinimalFagsak(hentetFagsak);
             })
             .catch((_error: AxiosError) => {
                 settMinimalFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
