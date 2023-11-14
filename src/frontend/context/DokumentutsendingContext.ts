@@ -60,7 +60,8 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
     ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker } = useFagsakContext();
+        const { bruker, manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
+            useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
             useDokument();
@@ -225,6 +226,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: brevmal,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -254,6 +256,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -272,18 +275,21 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
@@ -292,6 +298,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                            manuelleBrevmottakerePåFagsak,
                         });
 
                     case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
@@ -324,7 +331,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
-        const brukerHarUkjentAddresse = () =>
+        const brukerHarUkjentAdresse = () =>
             toggles[ToggleNavn.verifiserDokdistKanal] &&
             (distribusjonskanal.status !== RessursStatus.SUKSESS ||
                 distribusjonskanal.data === Distribusjonskanal.UKJENT ||
@@ -352,6 +359,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     },
                     () => {
                         settVisInnsendtBrevModal(true);
+                        settManuelleBrevmottakerePåFagsak([]);
                         nullstillSkjema();
                     }
                 );
@@ -378,7 +386,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema,
             nullstillSkjema,
             distribusjonskanal,
-            brukerHarUkjentAddresse,
+            brukerHarUkjentAdresse,
             hentDistribusjonskanal,
         };
     }

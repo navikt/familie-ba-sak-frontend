@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button, Fieldset, Select, TextField } from '@navikt/ds-react';
@@ -7,11 +8,12 @@ import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useLeggTilFjernBrevmottaker, {
-    Mottaker,
-    mottakerVisningsnavn,
-} from './useLeggTilFjernBrevmottaker';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type {
+    BrevmottakerUseSkjema,
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from './useBrevmottakerSkjema';
+import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
 import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
@@ -39,15 +41,30 @@ const MottakerSelect = styled(Select)`
     max-width: 19rem;
 `;
 
-interface IProps {
+interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lukkModal: () => void;
+    brevmottakere: T[];
+    lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
+    erLesevisning: boolean;
 }
 
-const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
-    const { skjema, lagreMottaker, valideringErOk, navnErPreutfylt } =
-        useLeggTilFjernBrevmottaker();
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
+const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+    lukkModal,
+    brevmottakere,
+    lagreMottaker,
+    erLesevisning,
+}: Props<T>) => {
+    const { verdierFraBrevmottakerUseSkjema, navnErPreutfylt } = useBrevmottakerSkjema({
+        eksisterendeMottakere: brevmottakere,
+    });
+    const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
+
+    const { skjema, valideringErOk } = verdierFraBrevmottakerUseSkjema;
+
+    const gyldigeMottakerTyper = erPåDokumentutsending
+        ? Object.values(Mottaker).filter(mottakerType => mottakerType !== Mottaker.DØDSBO)
+        : Object.values(Mottaker);
+
     return (
         <>
             <StyledFieldset
@@ -64,7 +81,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                     }}
                 >
                     <option value="">Velg</option>
-                    {Object.values(Mottaker).map(mottaker => (
+                    {gyldigeMottakerTyper.map(mottaker => (
                         <option value={mottaker} key={mottaker}>
                             {mottakerVisningsnavn[mottaker]}
                         </option>
@@ -145,7 +162,7 @@ const BrevmottakerSkjema: React.FC<IProps> = ({ lukkModal }) => {
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            onClick={lagreMottaker}
+                            onClick={() => lagreMottaker(verdierFraBrevmottakerUseSkjema)}
                         >
                             Legg til mottaker
                         </Button>

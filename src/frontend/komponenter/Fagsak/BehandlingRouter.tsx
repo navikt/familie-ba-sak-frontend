@@ -20,12 +20,17 @@ import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IPersonInfo } from '../../typer/person';
 import { useAmplitude } from '../../utils/amplitude';
 import { hentSideHref } from '../../utils/miljø';
 import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
 
-const BehandlingRouter: React.FunctionComponent = () => {
+interface Props {
+    bruker: IPersonInfo;
+}
+
+const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
     const { loggSidevisning } = useAmplitude();
     const location = useLocation();
     const { åpenBehandling, leggTilBesøktSide } = useBehandling();
@@ -95,7 +100,10 @@ const BehandlingRouter: React.FunctionComponent = () => {
                         element={
                             <SimuleringProvider åpenBehandling={åpenBehandling.data}>
                                 <VedtaksperioderProvider>
-                                    <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
+                                    <OppsummeringVedtak
+                                        åpenBehandling={åpenBehandling.data}
+                                        bruker={bruker}
+                                    />
                                 </VedtaksperioderProvider>
                             </SimuleringProvider>
                         }

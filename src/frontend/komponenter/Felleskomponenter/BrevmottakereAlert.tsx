@@ -2,54 +2,70 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 
 import BrevmottakerListe from './Hendelsesoversikt/BrevModul/BrevmottakerListe';
 import { sider } from './Venstremeny/sider';
 import type { IBehandling } from '../../typer/behandling';
-import type { FagsakType } from '../../typer/fagsak';
-import type { IInstitusjon } from '../../typer/institusjon-og-verge';
-import type { IGrunnlagPerson } from '../../typer/person';
+import type { IPersonInfo } from '../../typer/person';
 import { hentSideHref } from '../../utils/miljø';
-import { LeggTilBrevmottakerModal } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModal';
-import type { IRestBrevmottaker } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useLeggTilFjernBrevmottaker';
-import { BehandlingKorrigertAlert } from '../Fagsak/Vedtak/OppsummeringVedtak';
+import { LeggTilBrevmottakerModalBehandling } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { LeggTilBrevmottakerModalFagsak } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface Props {
-    brevmottakere: IRestBrevmottaker[];
-    institusjon?: IInstitusjon;
-    personer: IGrunnlagPerson[];
-    åpenBehandling: IBehandling;
-    fagsakType?: FagsakType;
+    bruker: IPersonInfo;
     className?: string;
 }
 
-export const BrevmottakereAlert: React.FC<Props> = ({
-    brevmottakere,
-    institusjon,
-    personer,
-    åpenBehandling,
-    fagsakType,
-    className,
-}) => {
+export interface BrevmottakereAlertBehandlingProps extends Props {
+    erPåBehandling: true;
+    brevmottakere: IRestBrevmottaker[];
+    erLesevisning: boolean;
+    åpenBehandling: IBehandling;
+}
+
+interface BrevmottakereAlertFagsakProps extends Props {
+    erPåBehandling: false;
+    brevmottakere: SkjemaBrevmottaker[];
+}
+
+const StyledAlert = styled(Alert)`
+    margin-bottom: 1.5rem;
+`;
+
+export const BrevmottakereAlert: React.FC<
+    BrevmottakereAlertBehandlingProps | BrevmottakereAlertFagsakProps
+> = props => {
+    const { brevmottakere, className, bruker } = props;
+
     const location = useLocation();
     const [visManuelleMottakereModal, settVisManuelleMottakereModal] = useState(false);
-    const vedtakEllerVarselTekst =
-        hentSideHref(location.pathname) === sider.SIMULERING.href ? 'varsel' : 'vedtak';
+
+    function hentBrevtypetekst(pathname: string) {
+        if (hentSideHref(pathname) === sider.SIMULERING.href) {
+            return 'varsel';
+        } else if (pathname.includes('dokumentutsending')) {
+            return 'informasjonsbrev';
+        } else {
+            return 'vedtak';
+        }
+    }
 
     return (
         <>
             {brevmottakere && brevmottakere.length !== 0 && (
-                <BehandlingKorrigertAlert variant="info" className={className}>
-                    {`Brevmottaker(e) er endret, og ${vedtakEllerVarselTekst} sendes til:`}
-                    <BrevmottakerListe
-                        brevmottakere={brevmottakere}
-                        institusjon={institusjon}
-                        personer={personer}
-                        fagsakType={fagsakType}
-                    />
+                <StyledAlert variant="info" className={className}>
+                    {`Brevmottaker(e) er endret, og ${hentBrevtypetekst(
+                        location.pathname
+                    )} sendes til:`}
+                    <BrevmottakerListe brevmottakere={brevmottakere} bruker={bruker} />
                     <Button
                         variant={'tertiary'}
                         onClick={() => settVisManuelleMottakereModal(true)}
@@ -58,15 +74,21 @@ export const BrevmottakereAlert: React.FC<Props> = ({
                     >
                         Se detaljer
                     </Button>
-                </BehandlingKorrigertAlert>
+                </StyledAlert>
             )}
 
-            {visManuelleMottakereModal && (
-                <LeggTilBrevmottakerModal
-                    åpenBehandling={åpenBehandling}
-                    lukkModal={() => settVisManuelleMottakereModal(false)}
-                />
-            )}
+            {visManuelleMottakereModal &&
+                (props.erPåBehandling ? (
+                    <LeggTilBrevmottakerModalBehandling
+                        lukkModal={() => settVisManuelleMottakereModal(false)}
+                        behandling={props.åpenBehandling}
+                        erLesevisning={props.erLesevisning}
+                    />
+                ) : (
+                    <LeggTilBrevmottakerModalFagsak
+                        lukkModal={() => settVisManuelleMottakereModal(false)}
+                    />
+                ))}
         </>
     );
 };

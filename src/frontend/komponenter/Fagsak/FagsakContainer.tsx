@@ -29,7 +29,7 @@ const FagsakContainer: React.FunctionComponent = () => {
     const erPåSaksoversikt = location.pathname.includes('saksoversikt');
     const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
 
-    const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
+    const { bruker: brukerRessurs, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 
     useEffect(() => {
         if (fagsakId !== undefined) {
@@ -56,11 +56,14 @@ const FagsakContainer: React.FunctionComponent = () => {
 
     switch (minimalFagsak.status) {
         case RessursStatus.SUKSESS:
-            switch (bruker.status) {
+            switch (brukerRessurs.status) {
                 case RessursStatus.SUKSESS:
                     return (
                         <>
-                            <Personlinje bruker={bruker.data} minimalFagsak={minimalFagsak.data} />
+                            <Personlinje
+                                bruker={brukerRessurs.data}
+                                minimalFagsak={minimalFagsak.data}
+                            />
                             <HovedInnhold>
                                 <Routes>
                                     <Route
@@ -76,19 +79,21 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             <DokumentutsendingProvider
                                                 fagsakId={minimalFagsak.data.id}
                                             >
-                                                <Dokumentutsending bruker={bruker.data} />
+                                                <Dokumentutsending bruker={brukerRessurs.data} />
                                             </DokumentutsendingProvider>
                                         }
                                     />
 
                                     <Route
                                         path="/dokumenter"
-                                        element={<JournalpostListe bruker={bruker.data} />}
+                                        element={<JournalpostListe bruker={brukerRessurs.data} />}
                                     />
 
                                     <Route
                                         path="/:behandlingId/*"
-                                        element={<BehandlingContainer />}
+                                        element={
+                                            <BehandlingContainer bruker={brukerRessurs.data} />
+                                        }
                                     />
                                     <Route
                                         path="/"
@@ -103,7 +108,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                 case RessursStatus.FEILET:
                 case RessursStatus.FUNKSJONELL_FEIL:
                 case RessursStatus.IKKE_TILGANG:
-                    return <Alert children={bruker.frontendFeilmelding} variant="error" />;
+                    return <Alert children={brukerRessurs.frontendFeilmelding} variant="error" />;
                 default:
                     return <div />;
             }

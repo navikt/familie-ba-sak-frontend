@@ -18,11 +18,11 @@ const Container = styled.div`
     height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
 `;
 
-interface IProps {
+interface Props {
     bruker: IPersonInfo;
 }
 
-const Dokumentutsending: React.FC<IProps> = ({ bruker }) => {
+const Dokumentutsending: React.FC<Props> = ({ bruker }) => {
     const navigate = useNavigate();
 
     const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =

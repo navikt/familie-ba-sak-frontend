@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
@@ -14,7 +14,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg } from './useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg';
+import type { SkjemaBrevmottaker } from '../../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
@@ -31,6 +31,9 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
         byggTomRessurs()
     );
+    const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<
+        SkjemaBrevmottaker[]
+    >([]);
 
     const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[]>([]);
 
@@ -134,13 +137,21 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         }
     };
 
-    useOppdaterBrukerOgKlagebehandlingerNårFagsakEndrerSeg({
-        minimalFagsak,
-        settBruker,
-        oppdaterBrukerHvisFagsakEndres,
-        bruker,
-        oppdaterKlagebehandlingerPåFagsak,
-    });
+    useEffect(() => {
+        if (
+            minimalFagsak.status !== RessursStatus.SUKSESS &&
+            minimalFagsak.status !== RessursStatus.HENTER
+        ) {
+            settBruker(byggTomRessurs());
+        } else {
+            oppdaterBrukerHvisFagsakEndres(
+                bruker,
+                hentDataFraRessurs(minimalFagsak)?.søkerFødselsnummer
+            );
+        }
+        oppdaterKlagebehandlingerPåFagsak();
+        settManuelleBrevmottakerePåFagsak([]);
+    }, [minimalFagsak]);
 
     const oppdaterGjeldendeFagsak = () => {
         const fagsakId = hentDataFraRessurs(minimalFagsak)?.id;
@@ -155,11 +166,12 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
-        hentBruker,
         hentFagsakerForPerson,
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
         oppdaterGjeldendeFagsak,
+        manuelleBrevmottakerePåFagsak,
+        settManuelleBrevmottakerePåFagsak,
     };
 });
 

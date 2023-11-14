@@ -1,31 +1,26 @@
 import React from 'react';
 
-import { hentDataFraRessurs } from '@navikt/familie-typer';
-
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
-import LeggTilEllerFjernBrevmottakere from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
+import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
+    åpenBehandling: IBehandling;
 }
-const MenyvalgBehandling = ({ minimalFagsak }: IProps) => {
-    const { åpenBehandling: åpenBehandlingRessurs, vurderErLesevisning } = useBehandling();
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
 
+const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
+    const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-
-    if (åpenBehandling === undefined) {
-        return null;
-    }
 
     return (
         <>
@@ -49,7 +44,11 @@ const MenyvalgBehandling = ({ minimalFagsak }: IProps) => {
                 (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                 (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||
                     åpenBehandling.type === Behandlingstype.REVURDERING) && (
-                    <LeggTilEllerFjernBrevmottakere åpenBehandling={åpenBehandling} />
+                    <LeggTilEllerFjernBrevmottakere
+                        erPåBehandling={true}
+                        behandling={åpenBehandling}
+                        erLesevisning={erLesevisning}
+                    />
                 )}
         </>
     );
