@@ -38,10 +38,6 @@ export const LeggTilEllerFjernBrevmottakere = (props: BehandlingProps | FagsakPr
         ? props.behandling.brevmottakere
         : props.brevmottakere;
 
-    if (!brevmottakere) {
-        throw new Error('Har ikke brevmottaker!');
-    }
-
     const menyinnslag = utledMenyinnslag(brevmottakere.length, !!props.erLesevisning);
 
     return (
