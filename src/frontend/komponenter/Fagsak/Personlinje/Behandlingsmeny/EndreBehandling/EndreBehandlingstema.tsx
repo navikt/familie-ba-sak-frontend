@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 
-import { Button, Fieldset, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
+import type { IBehandling } from '../../../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 
-const EndreBehandlingstema: React.FC = () => {
+interface Props {
+    behandling: IBehandling;
+}
+
+const EndreBehandlingstema: React.FC<Props> = ({ behandling }: Props) => {
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
@@ -19,7 +23,7 @@ const EndreBehandlingstema: React.FC = () => {
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
-    const { vurderErLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
 
     const lukkEndreBehandlingModal = () => {
         nullstillSkjema();
@@ -61,9 +65,7 @@ const EndreBehandlingstema: React.FC = () => {
                             variant="primary"
                             size="small"
                             onClick={() => {
-                                if (åpenBehandling.status === RessursStatus.SUKSESS) {
-                                    endreBehandlingstema(åpenBehandling.data.behandlingId);
-                                }
+                                endreBehandlingstema(behandling.behandlingId);
                             }}
                             children={'Bekreft'}
                             loading={ressurs.status === RessursStatus.HENTER}
