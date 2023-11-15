@@ -7,8 +7,8 @@ import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-ic
 import { Alert, Button } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
@@ -19,7 +19,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { PersonType } from '../../../../typer/person';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { vilkårConfig, Resultat, annenVurderingConfig, VilkårType } from '../../../../typer/vilkår';
+import { annenVurderingConfig, Resultat, vilkårConfig, VilkårType } from '../../../../typer/vilkår';
 import PersonInformasjon from '../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -62,16 +62,16 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         erMigreringsbehandling,
         settÅpenBehandling,
         aktivSettPåVent,
-        åpenBehandling,
+        behandling,
     } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
     const kanLeggeTilUtvidetVilkår =
         erMigreringsbehandling ||
-        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
-        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.KLAGE ||
-        hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+        behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+        behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+        behandling.årsak === BehandlingÅrsak.KLAGE ||
+        behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
 
     const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
         personResultat.vilkårResultater.some(
