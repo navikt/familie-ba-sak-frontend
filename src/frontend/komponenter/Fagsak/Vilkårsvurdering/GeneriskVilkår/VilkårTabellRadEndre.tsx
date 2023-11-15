@@ -93,11 +93,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { åpenBehandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
+    const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
         useBehandling();
-    const årsakErSøknad =
-        åpenBehandling.status !== RessursStatus.SUKSESS ||
-        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
+    const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
