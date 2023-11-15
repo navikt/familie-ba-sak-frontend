@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { BodyShort, Button, Fieldset, Link, Modal, Select } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { BodyShort, Button, Dropdown, Fieldset, Link, Modal, Select } from '@navikt/ds-react';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -45,11 +44,8 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
         hentetDokument,
         settVisDokumentModal,
     } = useDokument();
-    const { åpenBehandling, vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
-
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const {
         skjema,
@@ -194,7 +190,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                                     hentForhåndsvisning({
                                         method: 'POST',
                                         data: hentSkjemaData(),
-                                        url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                        url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandling.behandlingId}`,
                                     });
                                 }}
                             >
