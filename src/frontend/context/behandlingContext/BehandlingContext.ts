@@ -42,7 +42,7 @@ interface Props {
 const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { minimalFagsak } = useFagsakContext();
-    const { behandlingRessurs, settBehandlingRessurs } = useHentOgSettBehandling();
+    const { settBehandlingRessurs } = useHentOgSettBehandling();
     const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
     const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
 
@@ -218,8 +218,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Pr
         settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
         trinnPåBehandling,
-        // @deprecated
-        åpenBehandling: behandlingRessurs,
         behandling: behandling,
         opprettBehandling,
         logg,
