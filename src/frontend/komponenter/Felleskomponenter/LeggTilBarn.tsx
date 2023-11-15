@@ -4,16 +4,15 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { BodyLong, Heading, Button, Fieldset, Modal, Link, TextField } from '@navikt/ds-react';
+import { BodyLong, Button, Fieldset, Heading, Link, Modal, TextField } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
     Adressebeskyttelsegradering,
     byggFeiletRessurs,
     byggHenterRessurs,
-    hentDataFraRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -53,8 +52,7 @@ interface IProps {
 
 const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
-    const { logg, åpenBehandling: åpenBehandlingRessurs } = useBehandling();
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
+    const { logg, behandling: åpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
