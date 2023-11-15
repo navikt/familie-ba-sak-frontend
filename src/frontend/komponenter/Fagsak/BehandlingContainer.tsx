@@ -49,7 +49,11 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
         case RessursStatus.SUKSESS:
             return (
                 <BehandlingProvider behandling={behandlingRessurs.data}>
-                    <Personlinje bruker={bruker} minimalFagsak={fagsak} />
+                    <Personlinje
+                        bruker={bruker}
+                        minimalFagsak={fagsak}
+                        behandling={behandlingRessurs.data}
+                    />
                     <FlexContainer>
                         <VenstremenyContainer>
                             <Venstremeny />
