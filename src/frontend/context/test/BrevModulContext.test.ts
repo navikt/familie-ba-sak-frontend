@@ -3,11 +3,8 @@
  */
 
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { Brevmal } from '../../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import type { IBehandling } from '../../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import {
@@ -19,21 +16,12 @@ import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
 
 describe('BrevmodulContext', () => {
     describe('hentMuligeBrevmalerImplementering', () => {
-        const lagBehandlignRessursSuksess = (behandling: IBehandling): Ressurs<IBehandling> => ({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
-
         const behandlingSøknad = mockBehandling({
             årsak: BehandlingÅrsak.SØKNAD,
             type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         });
         test('Skal returnere liste med gyldige brev for når behandlingsårsaken er SØKNAD og behandlingstypen er FØRSTEGANGSBEHANDLING', () => {
-            expect(
-                hentMuligeBrevmalerImplementering(
-                    lagBehandlignRessursSuksess(behandlingSøknad)
-                ).sort()
-            ).toEqual(
+            expect(hentMuligeBrevmalerImplementering(behandlingSøknad).sort()).toEqual(
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.FORLENGET_SVARTIDSBREV,
@@ -60,12 +48,10 @@ describe('BrevmodulContext', () => {
                     .map(årsak =>
                         expect(
                             hentMuligeBrevmalerImplementering(
-                                lagBehandlignRessursSuksess(
-                                    mockBehandling({
-                                        årsak: årsak,
-                                        type: Behandlingstype.REVURDERING,
-                                    })
-                                )
+                                mockBehandling({
+                                    årsak: årsak,
+                                    type: Behandlingstype.REVURDERING,
+                                })
                             )
                         ).toContain(Brevmal.VARSEL_OM_REVURDERING)
                     );
@@ -74,10 +60,7 @@ describe('BrevmodulContext', () => {
         const hentTilpassetInstitusjon = true;
         test('Skal returnere liste med brev tilpasset institusjon', () => {
             expect(
-                hentMuligeBrevmalerImplementering(
-                    lagBehandlignRessursSuksess(behandlingSøknad),
-                    hentTilpassetInstitusjon
-                ).sort()
+                hentMuligeBrevmalerImplementering(behandlingSøknad, hentTilpassetInstitusjon).sort()
             ).toEqual(
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
