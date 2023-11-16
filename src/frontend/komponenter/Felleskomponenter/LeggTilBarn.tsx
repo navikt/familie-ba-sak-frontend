@@ -17,12 +17,15 @@ import {
 } from '@navikt/familie-typer';
 
 import HelpText from './HelpText';
-import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
 import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import { dateTilIsoDatoStringEllerUndefined } from '../../utils/dato';
 import { identValidator } from '../../utils/validators';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 
 const StyledHeading = styled(Heading)`
@@ -48,6 +51,7 @@ export interface IRegistrerBarnSkjema {
 interface IProps {
     barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
     onSuccess?: (barn: IPersonInfo) => void;
+    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
 }
 
 const LeggTilBarn: React.FC<IProps> = ({
@@ -180,7 +184,7 @@ const LeggTilBarn: React.FC<IProps> = ({
                                     if (
                                         harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse(
                                             ressurs.data.adressebeskyttelsegradering,
-                                            åpenBehandling?.brevmottakere.length ?? 0
+                                            manuelleBrevmottakere.length
                                         )
                                     ) {
                                         settSubmitRessurs(

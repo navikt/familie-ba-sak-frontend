@@ -374,6 +374,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
+                        manuelleBrevmottakere={brevmottakere}
                     />
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (

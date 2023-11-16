@@ -8,6 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useBrevModul } from '../../../context/BrevModulContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
@@ -41,6 +42,7 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 
 const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig } = useBehandling();
+    const { brevmottakere } = useBrevModul();
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
     const { skjema } = useSøknad();
@@ -137,7 +139,10 @@ const Barna: React.FunctionComponent = () => {
                 )}
 
                 {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
-                    <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
+                    <LeggTilBarn
+                        barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
+                        manuelleBrevmottakere={brevmottakere}
+                    />
                 )}
             </StyledCheckboxGroup>
         </BarnaWrapper>
