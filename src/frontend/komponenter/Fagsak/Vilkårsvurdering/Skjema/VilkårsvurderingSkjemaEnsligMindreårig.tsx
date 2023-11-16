@@ -2,13 +2,14 @@ import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
 
-import { PersonHeader, IndentertInnhold } from './VilkårsvurderingSkjemaNormal';
+import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
 import type { IPersonResultat } from '../../../../typer/vilkår';
 import {
-    AnnenVurderingType,
     annenVurderingConfig,
+    AnnenVurderingType,
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../typer/vilkår';
@@ -22,6 +23,7 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
+    const { vurderErLesevisning } = useBehandling();
     const { vilkårsvurdering } = useVilkårsvurdering();
 
     const personResultat = vilkårsvurdering.find(
@@ -33,7 +35,11 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     return personResultat ? (
         <>
             <PersonHeader>
-                <PersonInformasjon person={personResultat.person} somOverskrift />
+                <PersonInformasjon
+                    person={personResultat.person}
+                    somOverskrift
+                    erLesevisning={vurderErLesevisning()}
+                />
             </PersonHeader>
 
             <IndentertInnhold>

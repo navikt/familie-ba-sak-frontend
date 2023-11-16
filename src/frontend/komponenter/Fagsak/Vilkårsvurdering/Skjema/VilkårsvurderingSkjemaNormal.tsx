@@ -120,7 +120,11 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
                         <PersonHeader>
-                            <PersonInformasjon person={personResultat.person} somOverskrift />
+                            <PersonInformasjon
+                                person={personResultat.person}
+                                somOverskrift
+                                erLesevisning={erLesevisning}
+                            />
 
                             {!erLesevisning &&
                                 personErEkspandert[personResultat.personIdent] &&
