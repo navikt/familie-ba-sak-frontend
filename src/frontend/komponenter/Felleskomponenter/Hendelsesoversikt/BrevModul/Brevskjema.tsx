@@ -29,6 +29,7 @@ import useDokument from '../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import type { IPersonInfo } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
@@ -41,6 +42,7 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
     onSubmitSuccess: () => void;
+    bruker: IPersonInfo;
 }
 
 const StyledList = styled.ul`
@@ -98,7 +100,7 @@ const StyledLandvelger = styled(FamilieMultiLandvelger)`
     margin-top: 1.5rem;
 `;
 
-const Brevskjema = ({ onSubmitSuccess }: IProps) => {
+const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { åpenBehandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
@@ -109,7 +111,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         kanSendeSkjema,
         mottakersMålform,
         onSubmit,
-        personer,
         settNavigerTilOpplysningsplikt,
         hentMuligeBrevMaler,
         makslengdeFritekst,
@@ -119,7 +120,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         erBrevmalMedObligatoriskFritekst,
         institusjon,
         brevmottakere,
-        fagsakType,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -199,12 +199,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 hideLegend
             >
                 <Label>Brev sendes til</Label>
-                <BrevmottakerListe
-                    personer={personer}
-                    institusjon={institusjon}
-                    brevmottakere={brevmottakere}
-                    fagsakType={fagsakType}
-                />
+                <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
                 <StyledSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={

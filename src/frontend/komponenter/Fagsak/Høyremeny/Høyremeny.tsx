@@ -9,10 +9,15 @@ import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-ty
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../typer/logg';
+import type { IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
+
+interface Props {
+    bruker: IPersonInfo;
+}
 
 const ToggleVisningHøyremeny = styled(Button)`
     position: absolute;
@@ -28,7 +33,7 @@ const ToggleVisningHøyremeny = styled(Button)`
     background-color: ${ASurfaceDefault};
 `;
 
-const Høyremeny: React.FunctionComponent = () => {
+const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
     const { åpenBehandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
 
     React.useEffect(() => {
@@ -78,6 +83,7 @@ const Høyremeny: React.FunctionComponent = () => {
                                 }
                             )}
                             åpenBehandling={åpenBehandling.data}
+                            bruker={bruker}
                         />
                     </>
                 )}

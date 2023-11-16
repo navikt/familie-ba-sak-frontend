@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { useHttp } from '@navikt/familie-http';
-import { useSkjema, useFelt, ok, feil } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus, byggHenterRessurs, hentDataFraRessurs } from '@navikt/familie-typer';
+import type { FieldDictionary } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import type { UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
+import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../typer/behandling';
-import { PersonType } from '../../../../../typer/person';
-import { AlertType, ToastTyper } from '../../../../Felleskomponenter/Toast/typer';
+
+export type BrevmottakerUseSkjema = UseSkjemaVerdi<
+    ILeggTilFjernBrevmottakerSkjemaFelter,
+    IBehandling
+>;
+
+interface Props {
+    eksisterendeMottakere: SkjemaBrevmottaker[];
+}
 
 export enum Mottaker {
     BRUKER_MED_UTENLANDSK_ADRESSE = 'BRUKER_MED_UTENLANDSK_ADRESSE',
@@ -26,7 +31,7 @@ export const mottakerVisningsnavn: Record<Mottaker, string> = {
     DØDSBO: 'Dødsbo',
 };
 
-export interface ILeggTilFjernBrevmottakerSkjema {
+export interface ILeggTilFjernBrevmottakerSkjemaFelter {
     mottaker: Mottaker | '';
     navn: string;
     adresselinje1: string;
@@ -36,8 +41,7 @@ export interface ILeggTilFjernBrevmottakerSkjema {
     land: string;
 }
 
-export interface IRestBrevmottaker {
-    id: number;
+export interface SkjemaBrevmottaker {
     type: Mottaker;
     navn: string;
     adresselinje1: string;
@@ -47,6 +51,10 @@ export interface IRestBrevmottaker {
     landkode: string;
 }
 
+export interface IRestBrevmottaker extends SkjemaBrevmottaker {
+    id: number;
+}
+
 const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
     if (mottaker === Mottaker.DØDSBO) {
         return !land || land === 'NO' ? `${navn} v/dødsbo` : `Estate of ${navn}`;
@@ -54,22 +62,15 @@ const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string)
     return navn;
 };
 
-const useLeggTilFjernBrevmottaker = () => {
-    const { settToast } = useApp();
-    const { åpenBehandling: åpenBehandlingRessurs, settÅpenBehandling } = useBehandling();
-    const { behandlingId } = useSakOgBehandlingParams();
-    const { request } = useHttp();
-    const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
-
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
-    const søker = åpenBehandling?.personer.find(person => person.type === PersonType.SØKER);
+export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
+    const { bruker } = useFagsakContext();
+    const søker = hentDataFraRessurs(bruker);
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
-        avhengigheter: { åpenBehandling },
+        avhengigheter: { eksisterendeMottakere },
         valideringsfunksjon: (felt, avhengigheter) => {
-            const eksisterendeMottakere: IRestBrevmottaker[] =
-                avhengigheter?.åpenBehandling.brevmottakere;
+            const eksisterendeMottakere: IRestBrevmottaker[] = avhengigheter?.eksisterendeMottakere;
             if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
@@ -167,11 +168,13 @@ const useLeggTilFjernBrevmottaker = () => {
         avhengigheter: { mottaker },
     });
 
-    useEffect(() => {
-        const skalNavnVærePreutfylt =
-            mottaker.verdi === Mottaker.DØDSBO ||
-            mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+    const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
 
+    const skalNavnVærePreutfylt =
+        mottaker.verdi === Mottaker.DØDSBO ||
+        mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+
+    useEffect(() => {
         if (skalNavnVærePreutfylt || skalNavnVærePreutfylt !== navnErPreutfylt) {
             navn.validerOgSettFelt(
                 skalNavnVærePreutfylt && søker?.navn
@@ -182,15 +185,10 @@ const useLeggTilFjernBrevmottaker = () => {
         settNavnErPreutfylt(skalNavnVærePreutfylt);
     }, [mottaker.verdi, land.verdi]);
 
-    const {
-        skjema,
-        kanSendeSkjema,
-        settVisfeilmeldinger,
-        onSubmit,
-        nullstillSkjema,
-        settSubmitRessurs,
-        valideringErOk,
-    } = useSkjema<ILeggTilFjernBrevmottakerSkjema, IBehandling>({
+    const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
+        ILeggTilFjernBrevmottakerSkjemaFelter,
+        IBehandling
+    >({
         felter: {
             mottaker,
             navn,
@@ -203,66 +201,24 @@ const useLeggTilFjernBrevmottaker = () => {
         skjemanavn: 'Legg til eller fjern brevmottaker',
     });
 
-    const lagreMottaker = () => {
-        if (kanSendeSkjema()) {
-            settSubmitRessurs(byggHenterRessurs());
-            settVisfeilmeldinger(false);
-            onSubmit(
-                {
-                    method: 'POST',
-                    data: {
-                        type: skjema.felter.mottaker.verdi,
-                        navn: skjema.felter.navn.verdi,
-                        adresselinje1: skjema.felter.adresselinje1.verdi,
-                        adresselinje2:
-                            skjema.felter.adresselinje2.verdi !== ''
-                                ? skjema.felter.adresselinje2.verdi
-                                : undefined,
-                        postnummer: skjema.felter.postnummer.verdi,
-                        poststed: skjema.felter.poststed.verdi,
-                        landkode: skjema.felter.land.verdi,
-                    },
-                    url: `/familie-ba-sak/api/brevmottaker/${behandlingId}`,
-                },
-                (response: Ressurs<IBehandling>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        nullstillSkjema();
-                        settToast(ToastTyper.BREVMOTTAKER_LAGRET, {
-                            alertType: AlertType.SUCCESS,
-                            tekst: 'Mottaker ble lagret',
-                        });
-                        settÅpenBehandling(response);
-                    }
-                }
-            );
-        } else {
-            settVisfeilmeldinger(true);
-        }
-    };
-
-    const fjernMottaker = (mottakerId: number) => {
-        return request<void, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/brevmottaker/${behandlingId}/${mottakerId}`,
-            påvirkerSystemLaster: false,
-        }).then((response: Ressurs<IBehandling>) => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settToast(ToastTyper.BREVMOTTAKER_FJERNET, {
-                    alertType: AlertType.SUCCESS,
-                    tekst: 'Mottaker fjernet',
-                });
-                settÅpenBehandling(response);
-            }
-        });
-    };
-
-    return {
-        skjema,
-        lagreMottaker,
-        valideringErOk,
-        fjernMottaker,
-        navnErPreutfylt,
-    };
+    return { verdierFraBrevmottakerUseSkjema: verdierFraUseSkjema, navnErPreutfylt };
 };
 
-export default useLeggTilFjernBrevmottaker;
+export const felterTilSkjemaBrevmottaker = (
+    felter: FieldDictionary<ILeggTilFjernBrevmottakerSkjemaFelter>
+): SkjemaBrevmottaker => {
+    if (felter.mottaker.verdi !== '') {
+        return {
+            type: felter.mottaker.verdi,
+            navn: felter.navn.verdi,
+            adresselinje1: felter.adresselinje1.verdi,
+            adresselinje2:
+                felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
+            postnummer: felter.postnummer.verdi,
+            poststed: felter.poststed.verdi,
+            landkode: felter.land.verdi,
+        };
+    } else {
+        throw new Error('Mottaker ikke satt');
+    }
+};
