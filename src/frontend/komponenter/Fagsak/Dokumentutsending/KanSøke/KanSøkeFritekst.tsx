@@ -3,8 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
+import { Button, Fieldset, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
@@ -20,7 +19,7 @@ const StyledFamilieFritekstFelt = styled.div`
     align-items: center;
 `;
 
-const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
+const TextareaBegrunnelseFritekst = styled(Textarea)`
     display: flex;
     margin-bottom: 0.5rem;
     flex: auto;
@@ -78,8 +77,7 @@ const KanSøkeFritekst = ({
 
                     return (
                         <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                            <FamilieTextareaBegrunnelseFritekst
-                                erLesevisning={false}
+                            <TextareaBegrunnelseFritekst
                                 key={`fritekst-${fritekstId}`}
                                 id={`${fritekstId}`}
                                 className={'fritekst-textarea'}
