@@ -50,29 +50,21 @@ interface IProps {
     onSuccess?: (barn: IPersonInfo) => void;
 }
 
-const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
+const LeggTilBarn: React.FC<IProps> = ({
+    barnaMedOpplysninger,
+    onSuccess,
+    manuelleBrevmottakere,
+}) => {
     const { request } = useHttp();
-    const { logg, behandling: åpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
-    const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
-
     const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
         inputNode?.focus();
         settFnrInputNode(inputNode);
     }, []);
 
-    React.useEffect(() => {
-        settKanLeggeTilUregistrerteBarn(true);
-    }, [logg.status]);
-
     const erFolkeregistrert = useFelt<boolean>({
         verdi: true,
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            const { kanLeggeTilUregistrerteBarn } = avhengigheter;
-            return kanLeggeTilUregistrerteBarn;
-        },
-        avhengigheter: { kanLeggeTilUregistrerteBarn },
     });
 
     const {
