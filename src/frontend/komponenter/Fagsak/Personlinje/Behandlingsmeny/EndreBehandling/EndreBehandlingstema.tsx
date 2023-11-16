@@ -6,15 +6,11 @@ import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 
-interface Props {
-    behandling: IBehandling;
-}
-
-const EndreBehandlingstema: React.FC<Props> = ({ behandling }: Props) => {
+const EndreBehandlingstema: React.FC = () => {
+    const { behandling } = useBehandling();
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)

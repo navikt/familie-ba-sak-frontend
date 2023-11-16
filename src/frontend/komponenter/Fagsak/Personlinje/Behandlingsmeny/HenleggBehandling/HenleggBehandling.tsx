@@ -11,7 +11,6 @@ import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
@@ -19,7 +18,6 @@ import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVi
 
 interface IProps {
     fagsakId: number;
-    behandling: IBehandling;
 }
 
 interface HenleggÅrsakSelect extends HTMLSelectElement {
@@ -34,7 +32,9 @@ const StyledLenke = styled(Link)`
     margin-right: auto;
 `;
 
-const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
+const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
+    const { behandling } = useBehandling();
+
     const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
     const {

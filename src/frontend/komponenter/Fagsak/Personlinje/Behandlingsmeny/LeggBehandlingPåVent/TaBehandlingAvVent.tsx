@@ -25,13 +25,9 @@ const StyledAlert = styled(Alert)`
     padding-bottom: 1rem;
 `;
 
-interface IProps {
-    behandling: IBehandling;
-}
-
-const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
+const TaBehandlingAvVent: React.FC = () => {
     const { request } = useHttp();
-    const { settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());

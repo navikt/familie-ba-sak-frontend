@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, HelpText, Fieldset, Modal, Heading, TextField } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import {
+    Alert,
+    Button,
+    Dropdown,
+    Fieldset,
+    Heading,
+    HelpText,
+    Modal,
+    TextField,
+} from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -26,13 +34,9 @@ const LeggTilBarnLegend = styled.div`
     display: flex;
 `;
 
-interface IProps {
-    behandling: IBehandling;
-}
-
-const LeggTilBarnPåBehandling: React.FC<IProps> = ({ behandling }) => {
+const LeggTilBarnPåBehandling: React.FC = () => {
     const { request } = useHttp();
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling, behandling } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 
