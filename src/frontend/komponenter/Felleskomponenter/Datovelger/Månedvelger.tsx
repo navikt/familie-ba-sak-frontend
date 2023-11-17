@@ -82,6 +82,7 @@ const Månedvelger = ({
         onMonthChange: oppdaterFeltMedValgtDato,
         fromDate: hentFromDate(),
         toDate: hentToDate(),
+        openOnFocus: false,
         onValidate: val => {
             if (val.isBefore) {
                 nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);
