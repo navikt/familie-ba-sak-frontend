@@ -30,8 +30,13 @@ export default merge.mergeWithRules({
                 options: {
                     presets: ['react-app'],
                     plugins: ['react-refresh/babel'],
+                    cacheCompression: false,
+                    cacheDirectory: true,
                 },
             },
         ],
+    },
+    cache: {
+        type: 'filesystem',
     },
 });
