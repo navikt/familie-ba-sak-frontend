@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Select, Tag, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Select, Tag, Textarea, TextField } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieReactSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -66,7 +66,7 @@ const StyledFamilieFritekstFelt = styled.div`
     }
 `;
 
-const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
+const TextareaBegrunnelseFritekst = styled(Textarea)`
     .navds-textarea__wrapper {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
@@ -293,8 +293,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                 <StyledFamilieFritekstFelt
                                                     key={`fritekst-${fritekstId}`}
                                                 >
-                                                    <FamilieTextareaBegrunnelseFritekst
-                                                        erLesevisning={false}
+                                                    <TextareaBegrunnelseFritekst
                                                         key={`fritekst-${fritekstId}`}
                                                         id={`${fritekstId}`}
                                                         label={``}
