@@ -11,7 +11,7 @@ interface IHentEnkeltInformasjonsbrevRequestInput {
     bruker: Ressurs<IPersonInfo>;
     målform: Målform;
     brevmal: Informasjonsbrev;
-    manuelleBrevmottakerePåFagsak?: SkjemaBrevmottaker[];
+    manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
 }
 
 export const hentEnkeltInformasjonsbrevRequest = ({
