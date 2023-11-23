@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
@@ -58,4 +57,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
-          VAR: image=${{ needs.build.outputs.image }}
+          VAR: image=${{ needs.build.outputs.image }},VERSION=${{ env.VERSION }}
