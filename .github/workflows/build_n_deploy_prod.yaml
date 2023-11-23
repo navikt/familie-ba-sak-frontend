@@ -5,17 +5,15 @@ on:
     branches:
       - 'main'
 
-env:
-  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
-  IMAGE_LATEST: ghcr.io/navikt/familie-ba-sak-frontend:latest
-  VERSION: familie-ba-sak-frontend:${{ github.sha }}
-
 jobs:
   build:
     name: Build and push Docker container
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,7 +25,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: yarn --prefer-offline --frozen-lockfile
-      - name: Build and publish Docker image
+
+      - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -36,10 +35,15 @@ jobs:
           yarn build
           yarn test
           yarn run cypress
-          docker build . -t ${IMAGE} -t ${IMAGE_LATEST}
-          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
-          docker push ${IMAGE}
-          docker push ${IMAGE_LATEST} 
+
+      - name: Push docker image to GAR
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: teamfamilie
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # Provided as Organization Secret
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # Provided as Organization Variable
+
   deployDev:
     name: Deploy to gcp-dev
     needs: build
@@ -52,7 +56,8 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
-          VAR: VERSION=${{ env.VERSION }}
+          VAR: image=${{ needs.build.outputs.image }}
+
   deployProd:
     name: Deploy to gcp-prod
     needs: build
@@ -65,7 +70,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: build_n_deploy/naiserator/gcp-prod.yaml
-          VAR: VERSION=${{ env.VERSION }}
+          VAR: image=${{ needs.build.outputs.image }}
 
   loggfeil:
     name: Send logg til slack ved feil
