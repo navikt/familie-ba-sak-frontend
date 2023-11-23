@@ -7,7 +7,6 @@ metadata:
     team: teamfamilie
 spec:
   image: {{ image }}
-  team: teamfamilie
   replicas:
     min: 2
     max: 2
