@@ -30,7 +30,7 @@ export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
     barnasFødselsdager?: never;
     behandlingKategori?: never;
     brevmal: Brevmal | Informasjonsbrev;
-    manuelleBrevmottakere?: SkjemaBrevmottaker[];
+    manuelleBrevmottakere: SkjemaBrevmottaker[];
     mottakerMålform: Målform;
     mottakerNavn: string;
     mottakerlandSed?: never;

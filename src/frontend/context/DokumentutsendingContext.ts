@@ -200,6 +200,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');

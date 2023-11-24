@@ -69,6 +69,7 @@ const Datovelger = ({
         fromDate: hentFromDate(),
         toDate: hentToDate(),
         disableWeekends: disableWeekends,
+        openOnFocus: false,
         onValidate: val => {
             if (val.isEmpty && !datoMåFyllesUt) {
                 felt.nullstill();

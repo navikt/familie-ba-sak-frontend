@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio, Select } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, Select, Textarea } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -73,7 +73,7 @@ const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     && {
         margin: 1rem 0;
         legend {
-            margin-bottom: 0rem;
+            margin-bottom: 0;
         }
     }
 `;
@@ -344,8 +344,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-                <FamilieTextarea
-                    erLesevisning={lesevisning}
+                <Textarea
+                    readOnly={lesevisning}
                     value={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                     label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}

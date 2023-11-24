@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Dropdown, Fieldset, Modal, Select } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
+import { Button, Dropdown, Fieldset, Modal, Select, Textarea } from '@navikt/ds-react';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
@@ -95,9 +94,9 @@ const EndreBehandlendeEnhet: React.FC = () => {
                                 })}
                             </Select>
 
-                            <FamilieTextarea
+                            <Textarea
                                 disabled={submitRessurs.status === RessursStatus.HENTER}
-                                erLesevisning={erLesevisningPåBehandling()}
+                                readOnly={erLesevisningPåBehandling()}
                                 label={'Begrunnelse'}
                                 value={begrunnelse}
                                 maxLength={4000}
