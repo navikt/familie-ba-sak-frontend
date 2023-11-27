@@ -28,7 +28,6 @@ export default merge.mergeWithRules({
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
-                    presets: ['react-app'],
                     plugins: ['react-refresh/babel'],
                     cacheCompression: false,
                     cacheDirectory: true,
