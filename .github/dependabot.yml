@@ -22,6 +22,19 @@ updates:
         - "@sentry/tracing"
         - "@sentry/core"
         - "@sentry/browser"
+    typescript-eslint:
+      patterns:
+        - "@typescript-eslint/eslint-plugin"
+        - "@typescript-eslint/parser"
+    react:
+      patterns:
+        - "react"
+        - "@types/react"
+        - "react-dom"
+        - "@types/react-dom"
+    babel:
+      patterns:
+        - "@babel/*"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
