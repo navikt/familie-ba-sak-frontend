@@ -16,6 +16,12 @@ updates:
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
+  groups:
+    sentry:
+      patterns:
+        - "@sentry/tracing"
+        - "@sentry/core"
+        - "@sentry/browser"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
