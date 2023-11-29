@@ -108,9 +108,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 <Route
                                     path="/:behandlingId/*"
                                     element={
-                                        <HentOgSettBehandlingProvider
-                                            fagsakId={minimalFagsak.data.id}
-                                        >
+                                        <HentOgSettBehandlingProvider fagsak={minimalFagsak.data}>
                                             <BehandlingContainer
                                                 bruker={brukerRessurs.data}
                                                 fagsak={minimalFagsak.data}
