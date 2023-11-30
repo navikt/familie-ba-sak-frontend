@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -25,15 +24,6 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
         const [behandlingRessurs, privatSettBehandlingRessurs] = useState<Ressurs<IBehandling>>(
             byggTomRessurs()
         );
-        const navigate = useNavigate();
-
-        const erBehandlingDelAvFagsak = fagsak.behandlinger.some(
-            visningBehandling => visningBehandling.behandlingId.toString() === behandlingId
-        );
-
-        if (behandlingId !== undefined && !erBehandlingDelAvFagsak) {
-            navigate(`/fagsak/${fagsak.id}`);
-        }
 
         const settBehandlingRessurs = (behandling: Ressurs<IBehandling>) => {
             hentMinimalFagsak(fagsak.id, false);
