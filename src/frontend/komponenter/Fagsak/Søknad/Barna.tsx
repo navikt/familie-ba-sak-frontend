@@ -142,6 +142,7 @@ const Barna: React.FunctionComponent = () => {
                     <LeggTilBarn
                         barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
                         manuelleBrevmottakere={brevmottakere}
+                        vurderErLesevisning={vurderErLesevisning}
                     />
                 )}
             </StyledCheckboxGroup>

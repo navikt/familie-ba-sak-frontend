@@ -72,6 +72,7 @@ const BarnSøktForSkjema = (props: IProps) => {
             <LeggTilBarn
                 barnaMedOpplysninger={barnSøktForFelt}
                 manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
+                vurderErLesevisning={() => false}
             />
         </CheckboxGroup>
     );

@@ -198,6 +198,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
                             manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
+                            vurderErLesevisning={() => false}
                         />
                     )}
 

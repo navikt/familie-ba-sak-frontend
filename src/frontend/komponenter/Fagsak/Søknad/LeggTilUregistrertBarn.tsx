@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import { BodyShort, Checkbox, CheckboxGroup, Heading, TextField } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo } from '../../../typer/person';
 import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
 import type { IRegistrerBarnSkjema } from '../../Felleskomponenter/LeggTilBarn';
 
 interface IProps {
     registrerBarnSkjema: ISkjema<IRegistrerBarnSkjema, IPersonInfo>;
+    vurderErLesevisning: () => boolean;
 }
 
 const Container = styled.div`
@@ -26,9 +26,7 @@ const UregistrertBarnInputs = styled.div`
     gap: 1rem;
 `;
 
-const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
-    const { vurderErLesevisning } = useBehandling();
-
+const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema, vurderErLesevisning }) => {
     return (
         <Container>
             {vurderErLesevisning() ? (
