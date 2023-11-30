@@ -7,7 +7,7 @@ import TerserWebpackPlugin from 'terser-webpack-plugin';
 import merge from 'webpack-merge';
 
 import baseConfig from './webpack.common.js';
-import SentryCliPlugin from '@sentry/webpack-plugin';
+import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const prodConfig = merge.mergeWithRules({
     module: {
@@ -54,8 +54,10 @@ const prodConfig = merge.mergeWithRules({
             threshold: 10240,
             minRatio: 0.8,
         }),
-        new SentryCliPlugin({
-            include: 'frontend_production',
+        new sentryWebpackPlugin({
+            sourcemaps: {
+                assets: ['frontend_production'],
+            },
             org: 'nav',
             project: 'familie-ba-sak-frontend',
             authToken: process.env.SENTRY_AUTH_TOKEN,
