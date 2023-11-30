@@ -54,7 +54,7 @@ const prodConfig = merge.mergeWithRules({
             threshold: 10240,
             minRatio: 0.8,
         }),
-        new sentryWebpackPlugin({
+        sentryWebpackPlugin({
             sourcemaps: {
                 assets: ['frontend_production'],
             },
