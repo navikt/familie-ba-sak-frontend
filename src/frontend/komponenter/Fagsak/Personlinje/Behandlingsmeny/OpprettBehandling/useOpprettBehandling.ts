@@ -41,7 +41,11 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const {
+        bruker: brukerRessurs,
+        minimalFagsak: minimalFagsakRessurs,
+        hentMinimalFagsak,
+    } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
     const { oppdaterKlagebehandlingerPåFagsak } = useFagsakContext();
@@ -244,6 +248,8 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
+                    hentMinimalFagsak(fagsakId, true);
+
                     lukkModal();
                     nullstillSkjema();
 
