@@ -21,6 +21,7 @@ interface IProps {
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
+    vurderErLesevisning: () => boolean;
 }
 
 const DeltBostedSkjema = (props: IProps) => {
@@ -30,6 +31,7 @@ const DeltBostedSkjema = (props: IProps) => {
         visFeilmeldinger,
         settVisFeilmeldinger,
         manuelleBrevmottakere,
+        vurderErLesevisning,
     } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
@@ -119,6 +121,7 @@ const DeltBostedSkjema = (props: IProps) => {
                     });
                 }}
                 manuelleBrevmottakere={manuelleBrevmottakere}
+                vurderErLesevisning={vurderErLesevisning}
             />
         </CheckboxGroup>
     );

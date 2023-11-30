@@ -52,12 +52,14 @@ interface IProps {
     barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
     onSuccess?: (barn: IPersonInfo) => void;
     manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
+    vurderErLesevisning: () => boolean;
 }
 
 const LeggTilBarn: React.FC<IProps> = ({
     barnaMedOpplysninger,
     onSuccess,
     manuelleBrevmottakere,
+    vurderErLesevisning,
 }) => {
     const { request } = useHttp();
     const [visModal, settVisModal] = useState<boolean>(false);
@@ -330,7 +332,10 @@ const LeggTilBarn: React.FC<IProps> = ({
                                 </Link>
                             </DrekLenkeContainer>
                             {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
-                                <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
+                                <LeggTilUregistrertBarn
+                                    registrerBarnSkjema={registrerBarnSkjema}
+                                    vurderErLesevisning={vurderErLesevisning}
+                                />
                             )}
                         </Fieldset>
                     </Modal.Body>
