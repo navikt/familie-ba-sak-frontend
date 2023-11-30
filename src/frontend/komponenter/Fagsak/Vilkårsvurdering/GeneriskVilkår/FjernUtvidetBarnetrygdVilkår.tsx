@@ -6,8 +6,8 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
 import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -24,39 +24,37 @@ interface IProps {
 
 const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVilkårId }) => {
     const { request } = useHttp();
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
     const [disabled, settDisabled] = useState<boolean>(false);
     const [visFrontendFeilmelding, settVisFrontendFeilmelding] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const fjernVilkårUtvidet = () => {
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            settDisabled(true);
-            request<{ personIdent: string; vilkårType: VilkårType }, IBehandling>({
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling.data.behandlingId}/vilkaar`,
-                data: {
-                    personIdent: personIdent,
-                    vilkårType: VilkårType.UTVIDET_BARNETRYGD,
-                },
-            }).then((oppdatertBehandling: Ressurs<IBehandling>) => {
-                if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
-                    settÅpenBehandling(oppdatertBehandling);
-                } else if (
-                    oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    oppdatertBehandling.status === RessursStatus.FEILET ||
-                    oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settVisFrontendFeilmelding(true);
-                    settFeilmelding(
-                        oppdatertBehandling.frontendFeilmelding ??
-                            'Ukjent feil ved fjerning av vilkåret utvidet barnetrygd'
-                    );
-                    settDisabled(false);
-                }
-            });
-        }
+        settDisabled(true);
+        request<{ personIdent: string; vilkårType: VilkårType }, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/vilkaar`,
+            data: {
+                personIdent: personIdent,
+                vilkårType: VilkårType.UTVIDET_BARNETRYGD,
+            },
+        }).then((oppdatertBehandling: Ressurs<IBehandling>) => {
+            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(oppdatertBehandling);
+            } else if (
+                oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
+                oppdatertBehandling.status === RessursStatus.FEILET ||
+                oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
+            ) {
+                settVisFrontendFeilmelding(true);
+                settFeilmelding(
+                    oppdatertBehandling.frontendFeilmelding ??
+                        'Ukjent feil ved fjerning av vilkåret utvidet barnetrygd'
+                );
+                settDisabled(false);
+            }
+        });
     };
 
     const onCloseModal = () => {

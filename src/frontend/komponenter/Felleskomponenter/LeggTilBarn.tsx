@@ -4,26 +4,28 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { BodyLong, Heading, Button, Fieldset, Modal, Link, TextField } from '@navikt/ds-react';
+import { BodyLong, Button, Fieldset, Heading, Link, Modal, TextField } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
     Adressebeskyttelsegradering,
     byggFeiletRessurs,
     byggHenterRessurs,
-    hentDataFraRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import HelpText from './HelpText';
-import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IPersonInfo, IRestTilgang } from '../../typer/person';
 import { adressebeskyttelsestyper } from '../../typer/person';
 import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import { dateTilIsoDatoStringEllerUndefined } from '../../utils/dato';
 import { identValidator } from '../../utils/validators';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 
 const StyledHeading = styled(Heading)`
@@ -49,32 +51,24 @@ export interface IRegistrerBarnSkjema {
 interface IProps {
     barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
     onSuccess?: (barn: IPersonInfo) => void;
+    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
 }
 
-const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
+const LeggTilBarn: React.FC<IProps> = ({
+    barnaMedOpplysninger,
+    onSuccess,
+    manuelleBrevmottakere,
+}) => {
     const { request } = useHttp();
-    const { logg, åpenBehandling: åpenBehandlingRessurs } = useBehandling();
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
     const [visModal, settVisModal] = useState<boolean>(false);
     const [fnrInputNode, settFnrInputNode] = useState<HTMLInputElement | null>(null);
-    const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(true);
-
     const fnrInputRef = React.useCallback((inputNode: HTMLInputElement | null) => {
         inputNode?.focus();
         settFnrInputNode(inputNode);
     }, []);
 
-    React.useEffect(() => {
-        settKanLeggeTilUregistrerteBarn(true);
-    }, [logg.status]);
-
     const erFolkeregistrert = useFelt<boolean>({
         verdi: true,
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            const { kanLeggeTilUregistrerteBarn } = avhengigheter;
-            return kanLeggeTilUregistrerteBarn;
-        },
-        avhengigheter: { kanLeggeTilUregistrerteBarn },
     });
 
     const {
@@ -190,7 +184,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                                     if (
                                         harBrevMottakereOgHarStrengtFortroligAdressebeskyttelse(
                                             ressurs.data.adressebeskyttelsegradering,
-                                            åpenBehandling?.brevmottakere.length ?? 0
+                                            manuelleBrevmottakere.length
                                         )
                                     ) {
                                         settSubmitRessurs(

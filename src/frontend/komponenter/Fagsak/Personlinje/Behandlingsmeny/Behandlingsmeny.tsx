@@ -4,18 +4,18 @@ import styled from 'styled-components';
 
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import MenyvalgBehandling from './MenyvalgBehandling';
 import MenyvalgFagsak from './MenyvalgFagsak';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingStatus } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 
 interface IProps {
     bruker?: IPersonInfo;
     minimalFagsak: IMinimalFagsak;
+    behandling?: IBehandling;
 }
 
 const PosisjonertMenyknapp = styled(Button)`
@@ -26,14 +26,9 @@ const StyletDropdownMenu = styled(Dropdown.Menu)`
     width: 30ch;
 `;
 
-const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
-    const { åpenBehandling: åpenBehandlingRessurs, erBehandlingAvsluttet } = useBehandling();
-    const { behandlingId: behandlingIdFraURL } = useSakOgBehandlingParams();
-
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
-
+const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
     const skalViseMenyvalgForBehandling =
-        !!behandlingIdFraURL && !!åpenBehandling && !erBehandlingAvsluttet;
+        behandling && behandling.status !== BehandlingStatus.AVSLUTTET;
 
     return (
         <Dropdown>
@@ -53,7 +48,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                     {skalViseMenyvalgForBehandling && (
                         <MenyvalgBehandling
                             minimalFagsak={minimalFagsak}
-                            åpenBehandling={åpenBehandling}
+                            åpenBehandling={behandling}
                         />
                     )}
                 </Dropdown.Menu.List>

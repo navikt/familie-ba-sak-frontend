@@ -10,12 +10,17 @@ import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
+    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
 }
 
 const DeltBostedSkjema = (props: IProps) => {
@@ -24,6 +29,7 @@ const DeltBostedSkjema = (props: IProps) => {
         avtalerOmDeltBostedPerBarnFelt,
         visFeilmeldinger,
         settVisFeilmeldinger,
+        manuelleBrevmottakere,
     } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
@@ -112,6 +118,7 @@ const DeltBostedSkjema = (props: IProps) => {
                         [barn.personIdent]: [''],
                     });
                 }}
+                manuelleBrevmottakere={manuelleBrevmottakere}
             />
         </CheckboxGroup>
     );

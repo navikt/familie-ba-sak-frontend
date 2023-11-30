@@ -6,6 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { PersonType } from '../../../../typer/person';
 import type { IPersonResultat } from '../../../../typer/vilkår';
@@ -49,6 +50,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     visFeilmeldinger,
     orgNummer,
 }) => {
+    const { vurderErLesevisning } = useBehandling();
     const { vilkårsvurdering } = useVilkårsvurdering();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
@@ -94,7 +96,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                 </>
             )}
             <AktørLinje>
-                <PersonInformasjon person={personResultat.person} somOverskrift />
+                <PersonInformasjon
+                    person={personResultat.person}
+                    somOverskrift
+                    erLesevisning={vurderErLesevisning()}
+                />
             </AktørLinje>
 
             <IndentertInnhold>

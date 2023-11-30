@@ -197,6 +197,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                             barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
+                            manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
                         />
                     )}
 

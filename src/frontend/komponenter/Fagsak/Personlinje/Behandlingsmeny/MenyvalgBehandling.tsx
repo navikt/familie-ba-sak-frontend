@@ -24,7 +24,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
 
     return (
         <>
-            <HenleggBehandling fagsakId={minimalFagsak.id} behandling={åpenBehandling} />
+            <HenleggBehandling fagsakId={minimalFagsak.id} />
             <EndreBehandlendeEnhet />
             {åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD &&
                 minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && <EndreBehandlingstema />}
@@ -34,12 +34,10 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                     åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                     åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
                     åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
-                    <LeggTilBarnPåBehandling behandling={åpenBehandling} />
+                    <LeggTilBarnPåBehandling />
                 )}
-            {åpenBehandling.status === BehandlingStatus.UTREDES && (
-                <SettEllerOppdaterVenting behandling={åpenBehandling} />
-            )}
-            {åpenBehandling.aktivSettPåVent && <TaBehandlingAvVent behandling={åpenBehandling} />}
+            {åpenBehandling.status === BehandlingStatus.UTREDES && <SettEllerOppdaterVenting />}
+            {åpenBehandling.aktivSettPåVent && <TaBehandlingAvVent />}
             {minimalFagsak.fagsakType !== FagsakType.INSTITUSJON &&
                 (!erLesevisning || åpenBehandling.brevmottakere.length > 0) &&
                 (åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING ||

@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
-import type { IBehandling } from '../../../../../typer/behandling';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 
-interface IProps {
-    behandling: IBehandling;
-}
-
-const SettEllerOppdaterVenting: React.FC<IProps> = ({ behandling }) => {
+const SettEllerOppdaterVenting: React.FC = () => {
+    const { behandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
 
     const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;

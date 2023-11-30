@@ -9,7 +9,6 @@ import CountryData from '@navikt/land-verktoy';
 
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 
 const FlexDiv = styled.div`
     display: flex;
@@ -38,14 +37,14 @@ const DefinitionList = styled.dl`
 interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     mottaker: T;
     fjernMottaker: (mottaker: T) => void;
+    erLesevisning: boolean;
 }
 
 const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     mottaker,
     fjernMottaker,
+    erLesevisning,
 }: Props<T>) => {
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (

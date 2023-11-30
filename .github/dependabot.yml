@@ -4,7 +4,7 @@ registries:
   npm-github:
     type: npm-registry
     url: https://npm.pkg.github.com
-    token: ${{ secrets.NAV_READ_PACKAGES }}
+    token: ${{ secrets.READER_TOKEN }}
 updates:
 - package-ecosystem: npm
   directory: "/"
@@ -16,6 +16,31 @@ updates:
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
+  groups:
+    sentry:
+      patterns:
+        - "@sentry/tracing"
+        - "@sentry/core"
+        - "@sentry/browser"
+    typescript-eslint:
+      patterns:
+        - "@typescript-eslint/eslint-plugin"
+        - "@typescript-eslint/parser"
+    react:
+      patterns:
+        - "react"
+        - "@types/react"
+        - "react-dom"
+        - "@types/react-dom"
+    babel:
+      patterns:
+        - "@babel/*"
+    aksel:
+      patterns:
+        - "@navikt/aksel-icons"
+        - "@navikt/ds-*"
+      exclude-patterns:
+        - "@navikt/ds-icons"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:

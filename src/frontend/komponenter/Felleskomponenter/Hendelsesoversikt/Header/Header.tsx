@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { RessursStatus } from '@navikt/familie-typer';
-
 import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
 import Meldingerknapp from './Meldingerknapp';
@@ -25,11 +23,9 @@ const StyledHeader = styled.header`
 `;
 
 const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) => {
-    const { vurderErLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning, behandling } = useBehandling();
 
-    const erMigreringFraInfotrygd =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
         <StyledHeader>
