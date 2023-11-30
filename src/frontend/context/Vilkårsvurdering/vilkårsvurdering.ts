@@ -1,3 +1,5 @@
+import { differenceInMilliseconds } from 'date-fns';
+
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -11,13 +13,13 @@ import type {
     IVilkårResultat,
 } from '../../typer/vilkår';
 import { Resultat } from '../../typer/vilkår';
+import type { IIsoDatoPeriode } from '../../utils/dato';
 import {
-    kalenderDato,
-    kalenderDatoTilDate,
-    kalenderDiff,
-    nyPeriode,
-    periodeDiff,
-} from '../../utils/kalender';
+    isoStringTilDate,
+    isoStringTilDateMedFallback,
+    nyIsoDatoPeriode,
+    tidenesEnde,
+} from '../../utils/dato';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -27,6 +29,16 @@ import {
     ikkeValider,
     lagInitiellFelt,
 } from '../../utils/validators';
+
+const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
+    if (!periodeA.fom && !periodeA.tom) {
+        return 1;
+    }
+    return differenceInMilliseconds(
+        isoStringTilDateMedFallback({ isoString: periodeA.fom, fallbackDate: tidenesEnde }),
+        isoStringTilDateMedFallback({ isoString: periodeB.fom, fallbackDate: tidenesEnde })
+    );
+};
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: FeltState<IVilkårResultat>[]
@@ -78,7 +90,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     ),
                                     id: vilkårResultat.id,
                                     periode: lagInitiellFelt(
-                                        nyPeriode(
+                                        nyIsoDatoPeriode(
                                             vilkårResultat.periodeFom,
                                             vilkårResultat.periodeTom
                                         ),
@@ -152,9 +164,9 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return kalenderDiff(
-                kalenderDatoTilDate(kalenderDato(b.person.fødselsdato)),
-                kalenderDatoTilDate(kalenderDato(a.person.fødselsdato))
+            return differenceInMilliseconds(
+                isoStringTilDate(b.person.fødselsdato),
+                isoStringTilDate(a.person.fødselsdato)
             );
         });
 };

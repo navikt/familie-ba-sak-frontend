@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
-    byggTomRessurs,
-    byggHenterRessurs,
     byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -18,7 +18,6 @@ import { BehandlingSteg, BehandlingÅrsak } from '../../typer/behandling';
 import type { ILogg } from '../../typer/logg';
 
 const useBehandlingApi = (
-    behandling: Ressurs<IBehandling>,
     oppdaterBehandling: (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak?: boolean) => void
 ) => {
     const { request } = useHttp();
@@ -26,19 +25,6 @@ const useBehandlingApi = (
 
     const navigate = useNavigate();
     const [logg, settLogg] = useState<Ressurs<ILogg[]>>(byggTomRessurs());
-
-    useEffect(() => {
-        if (behandlingId !== undefined) {
-            if (behandling.status !== RessursStatus.SUKSESS) {
-                hentBehandling();
-            } else if (
-                behandling.status === RessursStatus.SUKSESS &&
-                behandling.data.behandlingId !== parseInt(behandlingId, 10)
-            ) {
-                hentBehandling();
-            }
-        }
-    }, [behandlingId]);
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
         return request<IOpprettBehandlingData, IBehandling>({
@@ -68,16 +54,6 @@ const useBehandlingApi = (
             .catch(() => {
                 return byggFeiletRessurs('Opprettelse av behandling feilet');
             });
-    };
-
-    const hentBehandling = () => {
-        request<void, IBehandling>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/behandlinger/${behandlingId}`,
-            påvirkerSystemLaster: true,
-        }).then((response: Ressurs<IBehandling>) => {
-            oppdaterBehandling(response, false);
-        });
     };
 
     const hentLogg = (): void => {

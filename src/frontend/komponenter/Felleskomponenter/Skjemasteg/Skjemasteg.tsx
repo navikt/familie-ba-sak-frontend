@@ -6,17 +6,16 @@ import styled from 'styled-components';
 
 import { Alert, Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import {
+    ASpacing10,
+    ASpacing24,
     ASpacing4,
     ASpacing6,
     ASpacing8,
-    ASpacing10,
-    ASpacing24,
 } from '@navikt/ds-tokens/dist/tokens';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { behandlingErEtterSteg } from '../../../utils/steg';
 import type { ISide } from '../Venstremeny/sider';
 import { sider } from '../Venstremeny/sider';
@@ -78,12 +77,12 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     const location = useLocation();
     const {
         forrigeÅpneSide,
-        åpenBehandling,
+        behandling,
         vurderErLesevisning,
         erBehandleneEnhetMidlertidig,
         erBehandlingAvsluttet,
     } = useBehandling();
-    const erBehandlingSattPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
+    const erBehandlingSattPåVent = behandling.aktivSettPåVent;
 
     useEffect(() => {
         const element = document.getElementById('skjemasteg');
@@ -100,7 +99,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
 
     const kanGåVidereILesevisning = behandlingErEtterSteg(
         BehandlingSteg.VURDER_TILBAKEKREVING,
-        hentDataFraRessurs(åpenBehandling)
+        behandling
     );
     return (
         <>
@@ -108,8 +107,11 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 <StyledAlert variant="info">
                     Behandlingen er satt på vent. Årsak:{' '}
                     {settPåVentÅrsaker[erBehandlingSattPåVent.årsak]}. Frist:{' '}
-                    {formaterIsoDato(erBehandlingSattPåVent.frist, Datoformat.DATO)}. Fortsett
-                    behandling via menyen.
+                    {isoStringTilFormatertString({
+                        isoString: erBehandlingSattPåVent.frist,
+                        tilFormat: Datoformat.DATO,
+                    })}
+                    . Fortsett behandling via menyen.
                 </StyledAlert>
             )}
 

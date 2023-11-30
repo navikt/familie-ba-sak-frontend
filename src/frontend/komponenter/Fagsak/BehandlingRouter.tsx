@@ -2,9 +2,6 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router-dom';
 
-import { Alert } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
-
 import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import RegistrerInstitusjon from './InstitusjonOgVerge/RegistrerInstitusjon';
@@ -20,15 +17,20 @@ import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IPersonInfo } from '../../typer/person';
 import { useAmplitude } from '../../utils/amplitude';
 import { hentSideHref } from '../../utils/miljø';
 import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
 
-const BehandlingRouter: React.FunctionComponent = () => {
+interface Props {
+    bruker: IPersonInfo;
+}
+
+const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
     const { loggSidevisning } = useAmplitude();
     const location = useLocation();
-    const { åpenBehandling, leggTilBesøktSide } = useBehandling();
+    const { behandling, leggTilBesøktSide } = useBehandling();
 
     const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
@@ -40,81 +42,66 @@ const BehandlingRouter: React.FunctionComponent = () => {
         }
     }, [sidevisning]);
 
-    switch (åpenBehandling.status) {
-        case RessursStatus.SUKSESS:
-            return (
-                <Routes>
-                    <Route
-                        path="/registrer-institusjon"
-                        element={
-                            <InstitusjonOgVergeProvider åpenBehandling={åpenBehandling.data}>
-                                <RegistrerInstitusjon />
-                            </InstitusjonOgVergeProvider>
-                        }
-                    />
-                    <Route
-                        path="/registrer-soknad"
-                        element={
-                            <SøknadProvider åpenBehandling={åpenBehandling.data}>
-                                <RegistrerSøknad />
-                            </SøknadProvider>
-                        }
-                    />
-                    <Route
-                        path="/filtreringsregler"
-                        element={<Filtreringsregler åpenBehandling={åpenBehandling.data} />}
-                    />
-                    <Route
-                        path="/vilkaarsvurdering"
-                        element={
-                            <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
-                                <Vilkårsvurdering åpenBehandling={åpenBehandling.data} />
-                            </VilkårsvurderingProvider>
-                        }
-                    />
-                    <Route
-                        path="/tilkjent-ytelse"
-                        element={
-                            <TidslinjeProvider>
-                                <EøsProvider åpenBehandling={åpenBehandling.data}>
-                                    <Behandlingsresultat åpenBehandling={åpenBehandling.data} />
-                                </EøsProvider>
-                            </TidslinjeProvider>
-                        }
-                    />
-                    <Route
-                        path="/simulering"
-                        element={
-                            <SimuleringProvider åpenBehandling={åpenBehandling.data}>
-                                <Simulering åpenBehandling={åpenBehandling.data} />
-                            </SimuleringProvider>
-                        }
-                    />
-                    <Route
-                        path="/vedtak"
-                        element={
-                            <SimuleringProvider åpenBehandling={åpenBehandling.data}>
-                                <VedtaksperioderProvider>
-                                    <OppsummeringVedtak åpenBehandling={åpenBehandling.data} />
-                                </VedtaksperioderProvider>
-                            </SimuleringProvider>
-                        }
-                    />
-                </Routes>
-            );
-        case RessursStatus.IKKE_TILGANG:
-            return (
-                <Alert
-                    variant="warning"
-                    children={`Du har ikke tilgang til å se denne behandlingen.`}
-                />
-            );
-        case RessursStatus.FEILET:
-        case RessursStatus.FUNKSJONELL_FEIL:
-            return <Alert children={åpenBehandling.frontendFeilmelding} variant="error" />;
-        default:
-            return <div />;
-    }
+    return (
+        <Routes>
+            <Route
+                path="/registrer-institusjon"
+                element={
+                    <InstitusjonOgVergeProvider åpenBehandling={behandling}>
+                        <RegistrerInstitusjon />
+                    </InstitusjonOgVergeProvider>
+                }
+            />
+            <Route
+                path="/registrer-soknad"
+                element={
+                    <SøknadProvider åpenBehandling={behandling}>
+                        <RegistrerSøknad />
+                    </SøknadProvider>
+                }
+            />
+            <Route
+                path="/filtreringsregler"
+                element={<Filtreringsregler åpenBehandling={behandling} />}
+            />
+            <Route
+                path="/vilkaarsvurdering"
+                element={
+                    <VilkårsvurderingProvider åpenBehandling={behandling}>
+                        <Vilkårsvurdering åpenBehandling={behandling} />
+                    </VilkårsvurderingProvider>
+                }
+            />
+            <Route
+                path="/tilkjent-ytelse"
+                element={
+                    <TidslinjeProvider>
+                        <EøsProvider åpenBehandling={behandling}>
+                            <Behandlingsresultat åpenBehandling={behandling} />
+                        </EøsProvider>
+                    </TidslinjeProvider>
+                }
+            />
+            <Route
+                path="/simulering"
+                element={
+                    <SimuleringProvider åpenBehandling={behandling}>
+                        <Simulering åpenBehandling={behandling} />
+                    </SimuleringProvider>
+                }
+            />
+            <Route
+                path="/vedtak"
+                element={
+                    <SimuleringProvider åpenBehandling={behandling}>
+                        <VedtaksperioderProvider>
+                            <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
+                        </VedtaksperioderProvider>
+                    </SimuleringProvider>
+                }
+            />
+        </Routes>
+    );
 };
 
 export default BehandlingRouter;

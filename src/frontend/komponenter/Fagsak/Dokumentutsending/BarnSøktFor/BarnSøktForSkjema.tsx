@@ -1,11 +1,14 @@
 import React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
+
 import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
+import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
+import { isoStringTilDate } from '../../../../utils/dato';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 
 interface IProps {
@@ -15,6 +18,7 @@ interface IProps {
 }
 
 const BarnSøktForSkjema = (props: IProps) => {
+    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
     const { barnSøktForFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
 
     const sorterteBarn = barnSøktForFelt.verdi.sort(
@@ -29,9 +33,9 @@ const BarnSøktForSkjema = (props: IProps) => {
 
             return !a.ident
                 ? 1
-                : kalenderDiff(
-                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
-                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
+                : differenceInMilliseconds(
+                      isoStringTilDate(b.fødselsdato),
+                      isoStringTilDate(a.fødselsdato)
                   );
         }
     );
@@ -65,7 +69,10 @@ const BarnSøktForSkjema = (props: IProps) => {
                 />
             ))}
 
-            <LeggTilBarn barnaMedOpplysninger={barnSøktForFelt} />
+            <LeggTilBarn
+                barnaMedOpplysninger={barnSøktForFelt}
+                manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
+            />
         </CheckboxGroup>
     );
 };

@@ -1,19 +1,26 @@
 import React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
+
 import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
 import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
+import { isoStringTilDate } from '../../../../utils/dato';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
+    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
 }
 
 const DeltBostedSkjema = (props: IProps) => {
@@ -22,6 +29,7 @@ const DeltBostedSkjema = (props: IProps) => {
         avtalerOmDeltBostedPerBarnFelt,
         visFeilmeldinger,
         settVisFeilmeldinger,
+        manuelleBrevmottakere,
     } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort(
@@ -36,9 +44,9 @@ const DeltBostedSkjema = (props: IProps) => {
 
             return !a.ident
                 ? 1
-                : kalenderDiff(
-                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
-                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
+                : differenceInMilliseconds(
+                      isoStringTilDate(b.fødselsdato),
+                      isoStringTilDate(a.fødselsdato)
                   );
         }
     );
@@ -110,6 +118,7 @@ const DeltBostedSkjema = (props: IProps) => {
                         [barn.personIdent]: [''],
                     });
                 }}
+                manuelleBrevmottakere={manuelleBrevmottakere}
             />
         </CheckboxGroup>
     );

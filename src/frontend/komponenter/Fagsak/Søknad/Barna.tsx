@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import { Alert, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
@@ -7,13 +8,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useBrevModul } from '../../../context/BrevModulContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
+import { isoStringTilDate } from '../../../utils/dato';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 
 const BarnMedDiskresjonskode = styled.div`
@@ -40,6 +42,7 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 
 const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig } = useBehandling();
+    const { brevmottakere } = useBrevModul();
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
     const { skjema } = useSøknad();
@@ -56,9 +59,9 @@ const Barna: React.FunctionComponent = () => {
 
             return !a.ident
                 ? 1
-                : kalenderDiff(
-                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
-                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
+                : differenceInMilliseconds(
+                      isoStringTilDate(b.fødselsdato),
+                      isoStringTilDate(a.fødselsdato)
                   );
         }
     );
@@ -136,7 +139,10 @@ const Barna: React.FunctionComponent = () => {
                 )}
 
                 {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
-                    <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
+                    <LeggTilBarn
+                        barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
+                        manuelleBrevmottakere={brevmottakere}
+                    />
                 )}
             </StyledCheckboxGroup>
         </BarnaWrapper>

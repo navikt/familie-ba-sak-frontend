@@ -7,8 +7,7 @@ import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato, dateTilFormatertString } from '../../../utils/dato';
-import { Datoformat } from '../../../utils/formatter';
+import { dagensDato, dateTilFormatertString, Datoformat } from '../../../utils/dato';
 
 interface IProps {
     felt: Felt<Date | undefined>;
@@ -83,6 +82,7 @@ const Månedvelger = ({
         onMonthChange: oppdaterFeltMedValgtDato,
         fromDate: hentFromDate(),
         toDate: hentToDate(),
+        openOnFocus: false,
         onValidate: val => {
             if (val.isBefore) {
                 nullstillOgSettFeilmelding(Feilmelding.FØR_MIN_DATO);

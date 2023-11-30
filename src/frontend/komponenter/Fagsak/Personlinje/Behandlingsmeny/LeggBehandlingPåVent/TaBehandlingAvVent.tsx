@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
-import { Dropdown } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Dropdown, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
@@ -17,7 +16,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
-import { Datoformat, formaterIsoDato } from '../../../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 
 const StyledBodyShort = styled(BodyShort)`
     padding-bottom: 1rem;
@@ -26,13 +25,9 @@ const StyledAlert = styled(Alert)`
     padding-bottom: 1rem;
 `;
 
-interface IProps {
-    behandling: IBehandling;
-}
-
-const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
+const TaBehandlingAvVent: React.FC = () => {
     const { request } = useHttp();
-    const { settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
@@ -49,7 +44,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}/fortsettbehandling`,
         })
             .then((ressurs: Ressurs<IBehandling>) => {
-                settÅpenBehandling(ressurs, true);
+                settÅpenBehandling(ressurs);
                 settSubmitRessurs(ressurs);
                 lukkModal();
             })
@@ -81,10 +76,10 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ behandling }) => {
                                 }. `}
                         </BodyShort>
                         <StyledBodyShort>
-                            {`Frist: ${formaterIsoDato(
-                                behandling?.aktivSettPåVent?.frist,
-                                Datoformat.DATO
-                            )}. `}
+                            {`Frist: ${isoStringTilFormatertString({
+                                isoString: behandling?.aktivSettPåVent?.frist,
+                                tilFormat: Datoformat.DATO,
+                            })}. `}
                             Gå via meny for å endre årsak og frist på ventende behandling.
                         </StyledBodyShort>
 

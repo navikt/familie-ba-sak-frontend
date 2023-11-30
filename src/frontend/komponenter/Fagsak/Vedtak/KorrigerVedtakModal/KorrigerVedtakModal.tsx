@@ -3,8 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Fieldset, Modal } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
+import { BodyLong, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
@@ -69,14 +68,14 @@ const KorrigerVedtakModal = ({
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         kanKunVelgeFortid
                     />
-                    <FamilieTextarea
+                    <Textarea
                         {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
                         id={'korriger-vedtak-begrunnelse'}
                         label={'Begrunnelse (valgfri)'}
                         description={'Begrunn hva som er gjort feil i tidligere vedtak'}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                         value={skjema.felter.begrunnelse.verdi}
                         onChange={changeEvent =>
                             skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)

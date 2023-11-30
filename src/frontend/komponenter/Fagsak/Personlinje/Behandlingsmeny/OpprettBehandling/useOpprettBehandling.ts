@@ -8,7 +8,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
@@ -19,8 +18,8 @@ import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { IsoDatoString } from '../../../../../utils/dato';
 import {
-    dateTilIsoString,
-    dateTilIsoStringEllerUndefined,
+    dateTilIsoDatoString,
+    dateTilIsoDatoStringEllerUndefined,
     validerGyldigDato,
 } from '../../../../../utils/dato';
 
@@ -42,7 +41,6 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { settÅpenBehandling } = useBehandling();
     const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
@@ -201,7 +199,7 @@ const useOpprettBehandling = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: {
-                    kravMottattDato: dateTilIsoString(kravMottattDato.verdi),
+                    kravMottattDato: dateTilIsoDatoString(kravMottattDato.verdi),
                 },
                 påvirkerSystemLaster: true,
             },
@@ -232,9 +230,9 @@ const useOpprettBehandling = (
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
                     nyMigreringsdato: erMigreringFraInfoTrygd
-                        ? dateTilIsoStringEllerUndefined(migreringsdato.verdi)
+                        ? dateTilIsoDatoStringEllerUndefined(migreringsdato.verdi)
                         : undefined,
-                    søknadMottattDato: dateTilIsoStringEllerUndefined(søknadMottattDato.verdi),
+                    søknadMottattDato: dateTilIsoDatoStringEllerUndefined(søknadMottattDato.verdi),
                     barnasIdenter: erHelmanuellMigrering
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,
@@ -262,8 +260,6 @@ const useOpprettBehandling = (
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
-
-                    settÅpenBehandling(response);
                 }
             }
         );

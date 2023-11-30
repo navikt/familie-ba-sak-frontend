@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { Button, Fieldset, Modal } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
+import { Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useRegistrerDødsfallDatoSkjemaContext } from '../../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
@@ -46,13 +45,13 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                         readOnly={erLesevisning}
                         kanKunVelgeFortid
                     />
-                    <FamilieTextarea
+                    <Textarea
                         {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
                         id={'manuell-dødsdato-begrunnelse'}
                         label={'Begrunnelse'}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                         value={skjema.felter.begrunnelse.verdi}
                         onChange={changeEvent =>
                             skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)

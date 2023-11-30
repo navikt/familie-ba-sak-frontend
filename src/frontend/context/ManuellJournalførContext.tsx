@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
+import { differenceInMilliseconds } from 'date-fns';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
@@ -37,8 +38,8 @@ import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { isoStringTilDate } from '../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
-import { kalenderDiff } from '../utils/kalender';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;
@@ -357,7 +358,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const hentSorterteBehandlinger = () => {
         return minimalFagsak?.behandlinger.length
             ? minimalFagsak.behandlinger.sort((a, b) =>
-                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+                  differenceInMilliseconds(
+                      isoStringTilDate(b.opprettetTidspunkt),
+                      isoStringTilDate(a.opprettetTidspunkt)
+                  )
               )
             : [];
     };

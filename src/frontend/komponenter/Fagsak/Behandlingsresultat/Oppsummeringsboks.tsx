@@ -11,7 +11,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import {
-    erMigreringsBehandling,
     kanFjerneSmåbarnstilleggFraPeriode,
     kanLeggeSmåbarnstilleggTilPeriode,
 } from './OppsummeringsboksUtils';
@@ -19,6 +18,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import type { IBehandling } from '../../../typer/behandling';
+import { Behandlingstype } from '../../../typer/behandling';
 import { ytelsetype } from '../../../typer/beregning';
 import type {
     IEøsPeriodeStatus,
@@ -29,15 +29,13 @@ import type {
 } from '../../../typer/eøsPerioder';
 import { EøsPeriodeStatus, KompetanseResultat } from '../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
+import { dateTilFormatertString, Datoformat } from '../../../utils/dato';
 import {
-    Datoformat,
     formaterBeløp,
     formaterIdent,
-    formaterIsoDato,
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../utils/formatter';
-import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
 
 const TableHeaderAlignedRight = styled.th`
@@ -65,14 +63,14 @@ const VenstreTekst = styled(BodyShort)`
     text-align: left;
     font-weight: bold;
     width: 50%;
-    margin: 1.25rem 0rem;
+    margin: 1.25rem 0;
 `;
 
 const HøyreTekst = styled(BodyShort)`
     text-align: right;
     font-weight: bold;
     width: 50%;
-    margin: 1.25rem 2.5rem 1.25rem 0rem;
+    margin: 1.25rem 2.5rem 1.25rem 0;
 `;
 
 const AlertWithBottomMargin = styled(Alert)`
@@ -155,7 +153,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     valutakurser,
 }) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, åpenBehandling, vurderErLesevisning } = useBehandling();
+    const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();
@@ -166,15 +164,15 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
-    const aktivÅrOgMåned = formaterIsoDato(
-        serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
-        Datoformat.ISO_MÅNED
-    );
+    const aktivÅrOgMåned = dateTilFormatertString({
+        date: aktivEtikett.date,
+        tilFormat: Datoformat.ISO_MÅNED,
+    });
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(
-            serializeIso8601String(kalenderDatoFraDate(aktivEtikett.date)),
-            Datoformat.MÅNED_ÅR_NAVN
-        );
+        const navn = dateTilFormatertString({
+            date: aktivEtikett.date,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+        });
         return navn[0].toUpperCase() + navn.substr(1);
     };
     const småbarnstilleggkorrigeringUrl = `/familie-ba-sak/api/småbarnstilleggkorrigering/behandling`;
@@ -184,25 +182,23 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     ) => {
         setJustererSmåbarnstillegg(true);
 
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            request<ISmåbarnstilleggkorrigering, IBehandling>({
-                method: 'DELETE',
-                data: småbarnstilleggkorrigering,
-                url: `${småbarnstilleggkorrigeringUrl}/${åpenBehandling.data.behandlingId}`,
-            }).then((response: Ressurs<IBehandling>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
-                        alertType: AlertType.SUCCESS,
-                        tekst: 'Småbarnstillegg er fjernet',
-                    });
-                    settRestFeil(undefined);
-                    settÅpenBehandling(response);
-                } else {
-                    settRestFeil('Teknisk feil ved fjerning av småbarnstillegg');
-                }
-                setJustererSmåbarnstillegg(false);
-            });
-        }
+        request<ISmåbarnstilleggkorrigering, IBehandling>({
+            method: 'DELETE',
+            data: småbarnstilleggkorrigering,
+            url: `${småbarnstilleggkorrigeringUrl}/${behandling.behandlingId}`,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
+                    alertType: AlertType.SUCCESS,
+                    tekst: 'Småbarnstillegg er fjernet',
+                });
+                settRestFeil(undefined);
+                settÅpenBehandling(response);
+            } else {
+                settRestFeil('Teknisk feil ved fjerning av småbarnstillegg');
+            }
+            setJustererSmåbarnstillegg(false);
+        });
     };
 
     const leggSmåbarnstilleggTilIMåned = (
@@ -210,25 +206,23 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     ) => {
         setJustererSmåbarnstillegg(true);
 
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            request<ISmåbarnstilleggkorrigering, IBehandling>({
-                method: 'POST',
-                data: småbarnstilleggkorrigering,
-                url: `${småbarnstilleggkorrigeringUrl}/${åpenBehandling.data.behandlingId}`,
-            }).then((response: Ressurs<IBehandling>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
-                        alertType: AlertType.SUCCESS,
-                        tekst: 'Småbarnstillegg er lagt til',
-                    });
-                    settRestFeil(undefined);
-                    settÅpenBehandling(response);
-                } else {
-                    settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg');
-                }
-                setJustererSmåbarnstillegg(false);
-            });
-        }
+        request<ISmåbarnstilleggkorrigering, IBehandling>({
+            method: 'POST',
+            data: småbarnstilleggkorrigering,
+            url: `${småbarnstilleggkorrigeringUrl}/${behandling.behandlingId}`,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
+                    alertType: AlertType.SUCCESS,
+                    tekst: 'Småbarnstillegg er lagt til',
+                });
+                settRestFeil(undefined);
+                settÅpenBehandling(response);
+            } else {
+                settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg');
+            }
+            setJustererSmåbarnstillegg(false);
+        });
     };
 
     React.useEffect(() => {
@@ -335,7 +329,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                     </FlexDiv>
 
                     {kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode) &&
-                        erMigreringsBehandling(åpenBehandling) && (
+                        behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD && (
                             <Button
                                 id={'fjern-småbarnstillegg'}
                                 variant={'tertiary'}
@@ -351,7 +345,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             </Button>
                         )}
                     {kanLeggeSmåbarnstilleggTilPeriode(utbetalingsperiode, aktivEtikett.date) &&
-                        erMigreringsBehandling(åpenBehandling) && (
+                        behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD && (
                             <Button
                                 id={'legg-til-småbarnstillegg'}
                                 variant={'tertiary'}

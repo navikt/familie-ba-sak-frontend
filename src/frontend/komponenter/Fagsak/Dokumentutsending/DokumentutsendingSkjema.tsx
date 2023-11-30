@@ -15,10 +15,16 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
+import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
+
+interface Props {
+    bruker: IPersonInfo;
+}
 
 const Container = styled.div`
     padding: 2rem;
@@ -48,11 +54,7 @@ const SendBrevKnapp = styled(Button)`
     margin-right: 1rem;
 `;
 
-interface IProps {
-    bruker: IPersonInfo;
-}
-
-const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
+const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     const {
         hentForhåndsvisningPåFagsak,
         hentetDokument,
@@ -65,9 +67,11 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
         visForhåndsvisningBeskjed,
         settVisfeilmeldinger,
         distribusjonskanal,
-        brukerHarUkjentAddresse,
+        brukerHarUkjentAdresse,
         hentDistribusjonskanal,
     } = useDokumentutsending();
+
+    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
     const årsakVerdi = skjema.felter.årsak.verdi;
 
@@ -139,6 +143,14 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
             {toggles[ToggleNavn.verifiserDokdistKanal] && distribusjonskanalInfo()}
 
+            {manuelleBrevmottakerePåFagsak.length > 0 && (
+                <BrevmottakereAlert
+                    erPåBehandling={false}
+                    brevmottakere={manuelleBrevmottakerePåFagsak}
+                    bruker={bruker}
+                />
+            )}
+
             <StyledFieldset
                 error={hentSkjemaFeilmelding()}
                 errorPropagation={false}
@@ -185,6 +197,7 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
                             barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
+                            manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
                         />
                     )}
 
@@ -219,7 +232,7 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ bruker }) => {
                         size="medium"
                         variant="primary"
                         loading={senderBrev()}
-                        disabled={skjemaErLåst() || brukerHarUkjentAddresse()}
+                        disabled={skjemaErLåst() || brukerHarUkjentAdresse()}
                         onClick={sendBrevPåFagsak}
                     >
                         Send brev

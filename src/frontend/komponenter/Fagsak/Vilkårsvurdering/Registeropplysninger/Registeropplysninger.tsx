@@ -17,8 +17,7 @@ import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../typer/person';
 import { Registeropplysning } from '../../../../typer/registeropplysning';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
-import { kalenderDato, tilVisning } from '../../../../utils/kalender';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 
 const Container = styled.div`
     width: 32rem;
@@ -57,10 +56,10 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
                         style={{ marginBottom: ASpacing4 }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +
-                            formaterIsoDato(
-                                registerHistorikk.hentetTidspunkt,
-                                Datoformat.DATO_TID_SEKUNDER
-                            )
+                            isoStringTilFormatertString({
+                                isoString: registerHistorikk.hentetTidspunkt,
+                                tilFormat: Datoformat.DATO_TID_SEKUNDER,
+                            })
                         }
                     />
                     <RegisteropplysningerTabell
@@ -72,7 +71,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
                                 focusable="false"
                             />
                         }
-                        historikk={[{ verdi: tilVisning(kalenderDato(fødselsdato)) }]}
+                        historikk={[
+                            {
+                                verdi: isoStringTilFormatertString({
+                                    isoString: fødselsdato,
+                                    tilFormat: Datoformat.DATO,
+                                }),
+                            },
+                        ]}
                     />
                     {personErDød && (
                         <RegisteropplysningerTabell

@@ -1,9 +1,11 @@
 import type { OptionType } from '@navikt/familie-form-elements';
 
-import type { IPeriode, IsoDatoString } from '../utils/dato';
-import type { IYearMonthPeriode, YearMonth } from '../utils/kalender';
-
-export const LandkodeNorge = 'NO';
+import type {
+    IIsoDatoPeriode,
+    IIsoMånedPeriode,
+    IsoDatoString,
+    IsoMånedString,
+} from '../utils/dato';
 
 export type KompetanseAktivitet = SøkersAktivitet | AnnenForelderAktivitet;
 
@@ -83,8 +85,8 @@ export interface IEøsPeriodeStatus {
 
 export interface IRestEøsPeriode extends IEøsPeriodeStatus {
     id: number;
-    fom: YearMonth;
-    tom?: YearMonth;
+    fom: IsoMånedString;
+    tom?: IsoMånedString;
     barnIdenter: string[];
 }
 
@@ -101,8 +103,8 @@ export interface IRestKompetanse extends IRestEøsPeriode {
 export interface IKompetanse extends IEøsPeriodeStatus {
     periodeId: string;
     id: number;
-    initielFom: YearMonth;
-    periode: IYearMonthPeriode;
+    initielFom: IsoMånedString;
+    periode: IIsoMånedPeriode;
     barnIdenter: OptionType[];
     søkersAktivitet: KompetanseAktivitet | undefined;
     søkersAktivitetsland: string | undefined;
@@ -137,8 +139,8 @@ export interface IUtenlandskPeriodeBeløp {
     periodeId: string;
     id: number;
     status: EøsPeriodeStatus;
-    initielFom: YearMonth;
-    periode: IYearMonthPeriode;
+    initielFom: IsoMånedString;
+    periode: IIsoMånedPeriode;
     barnIdenter: OptionType[];
     beløp?: string | undefined;
     valutakode?: string | undefined;
@@ -155,8 +157,8 @@ export interface IValutakurs {
     periodeId: string;
     id: number;
     status: EøsPeriodeStatus;
-    initielFom: YearMonth;
-    periode: IPeriode;
+    initielFom: IsoMånedString;
+    periode: IIsoDatoPeriode;
     barnIdenter: OptionType[];
     valutakode: string | undefined;
     valutakursdato: Date | undefined;

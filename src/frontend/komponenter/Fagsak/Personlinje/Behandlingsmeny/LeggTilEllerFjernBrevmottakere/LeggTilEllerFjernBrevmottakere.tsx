@@ -2,12 +2,21 @@ import React, { useState } from 'react';
 
 import { Dropdown } from '@navikt/ds-react';
 
-import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { LeggTilBrevmottakerModalBehandling } from './LeggTilBrevmottakerModalBehandling';
+import { LeggTilBrevmottakerModalFagsak } from './LeggTilBrevmottakerModalFagsak';
+import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import type { IBehandling } from '../../../../../typer/behandling';
 
-interface IProps {
-    åpenBehandling: IBehandling;
+interface BehandlingProps {
+    erPåBehandling: true;
+    behandling: IBehandling;
+    erLesevisning: boolean;
+}
+
+interface FagsakProps {
+    erPåBehandling: false;
+    erLesevisning?: never;
+    brevmottakere: SkjemaBrevmottaker[];
 }
 
 const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
@@ -22,12 +31,14 @@ const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) => {
+export const LeggTilEllerFjernBrevmottakere = (props: BehandlingProps | FagsakProps) => {
     const [visModal, settVisModal] = useState(false);
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
 
-    const menyinnslag = utledMenyinnslag(åpenBehandling.brevmottakere.length, erLesevisning);
+    const brevmottakere = props.erPåBehandling
+        ? props.behandling.brevmottakere
+        : props.brevmottakere;
+
+    const menyinnslag = utledMenyinnslag(brevmottakere.length, !!props.erLesevisning);
 
     return (
         <>
@@ -35,14 +46,16 @@ const LeggTilEllerFjernBrevmottakere: React.FC<IProps> = ({ åpenBehandling }) =
                 {menyinnslag}
             </Dropdown.Menu.List.Item>
 
-            {visModal && (
-                <LeggTilBrevmottakerModal
-                    åpenBehandling={åpenBehandling}
-                    lukkModal={() => settVisModal(false)}
-                />
-            )}
+            {visModal &&
+                (props.erPåBehandling ? (
+                    <LeggTilBrevmottakerModalBehandling
+                        lukkModal={() => settVisModal(false)}
+                        behandling={props.behandling}
+                        erLesevisning={props.erLesevisning}
+                    />
+                ) : (
+                    <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisModal(false)} />
+                ))}
         </>
     );
 };
-
-export default LeggTilEllerFjernBrevmottakere;

@@ -3,13 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Heading, Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
-import useLeggTilFjernBrevmottaker, { mottakerVisningsnavn } from './useLeggTilFjernBrevmottaker';
-import type { IRestBrevmottaker } from './useLeggTilFjernBrevmottaker';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
+import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
 
 const FlexDiv = styled.div`
     display: flex;
@@ -29,19 +28,23 @@ const DefinitionList = styled.dl`
     dt {
         font-weight: ${AFontWeightBold};
     }
+
     dd {
         margin-left: 0;
     }
 `;
 
-interface IProps {
-    mottaker: IRestBrevmottaker;
+interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+    mottaker: T;
+    fjernMottaker: (mottaker: T) => void;
+    erLesevisning: boolean;
 }
 
-const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
-    const { fjernMottaker } = useLeggTilFjernBrevmottaker();
-    const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning();
+const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+    mottaker,
+    fjernMottaker,
+    erLesevisning,
+}: Props<T>) => {
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (
@@ -51,7 +54,7 @@ const BrevmottakerTabell: React.FC<IProps> = ({ mottaker }) => {
                 {!erLesevisning && (
                     <Button
                         variant={'tertiary'}
-                        onClick={() => fjernMottaker(mottaker.id)}
+                        onClick={() => fjernMottaker(mottaker)}
                         loading={false}
                         disabled={false}
                         size={'small'}

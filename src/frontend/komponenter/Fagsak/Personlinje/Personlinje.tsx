@@ -1,30 +1,27 @@
 import React from 'react';
 
-import { Link, BodyShort, Tag } from '@navikt/ds-react';
+import { BodyShort, Link, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
-import { FagsakType } from '../../../typer/fagsak';
+import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import {
-    Datoformat,
-    formaterIdent,
-    formaterIsoDato,
-    hentAlder,
-    millisekunderIEttÅr,
-} from '../../../utils/formatter';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
+import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 
 interface IProps {
     bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
+    behandling?: IBehandling;
 }
 
-const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
+const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     return (
         <Visittkort
@@ -52,10 +49,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                             <Tag
                                 size="small"
-                                children={`Migrert ${formaterIsoDato(
-                                    minimalFagsak?.migreringsdato,
-                                    Datoformat.DATO
-                                )}`}
+                                children={`Migrert ${isoStringTilFormatertString({
+                                    isoString: minimalFagsak?.migreringsdato,
+                                    tilFormat: Datoformat.DATO,
+                                })}`}
                                 variant={'info'}
                             />
                         )}
@@ -72,7 +69,11 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                         <BodyShort>Dokumenter</BodyShort>
                     </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny bruker={bruker} minimalFagsak={minimalFagsak} />
+                        <Behandlingsmeny
+                            bruker={bruker}
+                            minimalFagsak={minimalFagsak}
+                            behandling={behandling}
+                        />
                     )}
                 </>
             )}

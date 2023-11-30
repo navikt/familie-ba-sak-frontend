@@ -1,51 +1,19 @@
-import { format, isBefore, isValid } from 'date-fns';
+import { differenceInMilliseconds, isBefore } from 'date-fns';
 
-import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
+import { dagensDato, isoStringTilDate } from './dato';
 import { YtelseType } from '../typer/beregning';
-import type { IGrunnlagPerson } from '../typer/person';
+import type { IGrunnlagPerson, IPersonInfo } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
 
-export enum Datoformat {
-    DATO = 'dd.MM.yyyy',
-    DATO_FORKORTTET = 'dd.MM.yy',
-    DATO_FORLENGET = 'PPP',
-    DATO_FORLENGET_MED_TID = 'PPPp',
-    ISO_MÅNED = 'yyyy-MM',
-    ISO_DAG = 'yyyy-MM-dd',
-    DATO_TID = 'dd.MM.yy HH:mm',
-    DATO_TID_SEKUNDER = 'dd.MM.yy HH:mm:ss',
-    MÅNED_ÅR_NAVN = 'MMMM yyyy',
-    MÅNED_ÅR_KORTNAVN = 'MMM yyyy',
-    MÅNED_NAVN = 'MMM',
-}
-
-export enum DatoformatNorsk {
-    DATO = 'ddmmåå',
-}
-
 export const millisekunderIEttÅr = 3.15576e10;
-
-export const formaterIsoDato = (
-    datoString: string | undefined,
-    tilFormat: Datoformat,
-    defaultString?: string
-): string => {
-    if (!datoString) {
-        return defaultString ?? '';
-    }
-    const dato = new Date(datoString);
-    return isValid(dato) ? format(dato, tilFormat) : datoString;
-};
 
 export const hentAlder = (fødselsdato: string): number => {
     return fødselsdato !== ''
         ? Math.floor(
-              kalenderDiff(
-                  kalenderDatoTilDate(iDag()),
-                  kalenderDatoTilDate(kalenderDato(fødselsdato))
-              ) / millisekunderIEttÅr
+              differenceInMilliseconds(dagensDato, isoStringTilDate(fødselsdato)) /
+                  millisekunderIEttÅr
           )
         : 0;
 };
@@ -102,6 +70,9 @@ export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): stri
         return ident;
     }
 };
+
+export const lagBrukerLabel = (bruker: IPersonInfo): string =>
+    `${bruker.navn} (${hentAlder(bruker.fødselsdato)} år) ${formaterIdent(bruker.personIdent)}`;
 
 export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
     return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(

@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Select, Tag, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Select, Tag, Textarea, TextField } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieReactSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -29,6 +29,7 @@ import useDokument from '../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import type { IPersonInfo } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
@@ -41,6 +42,7 @@ import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
     onSubmitSuccess: () => void;
+    bruker: IPersonInfo;
 }
 
 const StyledList = styled.ul`
@@ -64,7 +66,7 @@ const StyledFamilieFritekstFelt = styled.div`
     }
 `;
 
-const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
+const TextareaBegrunnelseFritekst = styled(Textarea)`
     .navds-textarea__wrapper {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
@@ -98,8 +100,8 @@ const StyledLandvelger = styled(FamilieMultiLandvelger)`
     margin-top: 1.5rem;
 `;
 
-const Brevskjema = ({ onSubmitSuccess }: IProps) => {
-    const { åpenBehandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
+const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
+    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
@@ -109,7 +111,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         kanSendeSkjema,
         mottakersMålform,
         onSubmit,
-        personer,
         settNavigerTilOpplysningsplikt,
         hentMuligeBrevMaler,
         makslengdeFritekst,
@@ -119,7 +120,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         erBrevmalMedObligatoriskFritekst,
         institusjon,
         brevmottakere,
-        fagsakType,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -141,8 +141,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetDokument.status === RessursStatus.HENTER;
 
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+    const behandlingId = behandling.behandlingId;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
@@ -151,8 +150,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const behandlingSteg =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.steg : undefined;
+    const behandlingSteg = behandling.steg;
 
     if (institusjon) {
         skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
@@ -199,12 +197,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 hideLegend
             >
                 <Label>Brev sendes til</Label>
-                <BrevmottakerListe
-                    personer={personer}
-                    institusjon={institusjon}
-                    brevmottakere={brevmottakere}
-                    fagsakType={fagsakType}
-                />
+                <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
                 <StyledSelect
                     {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={
@@ -298,8 +291,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                 <StyledFamilieFritekstFelt
                                                     key={`fritekst-${fritekstId}`}
                                                 >
-                                                    <FamilieTextareaBegrunnelseFritekst
-                                                        erLesevisning={false}
+                                                    <TextareaBegrunnelseFritekst
                                                         key={`fritekst-${fritekstId}`}
                                                         id={`${fritekstId}`}
                                                         label={``}
@@ -381,6 +373,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
+                        manuelleBrevmottakere={brevmottakere}
                     />
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
@@ -461,27 +454,25 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
-                        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-                            const harRegistrertSøknad =
-                                hentStegNummer(åpenBehandling.data.steg) >
-                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
-                            settNavigerTilOpplysningsplikt(
-                                harRegistrertSøknad &&
-                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
-                            );
-                            onSubmit<IManueltBrevRequestPåBehandling>(
-                                {
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
-                                },
-                                (ressurs: Ressurs<IBehandling>) => {
-                                    onSubmitSuccess();
-                                    settÅpenBehandling(ressurs);
-                                    hentLogg();
-                                }
-                            );
-                        }
+                        const harRegistrertSøknad =
+                            hentStegNummer(behandling.steg) >
+                            hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
+                        settNavigerTilOpplysningsplikt(
+                            harRegistrertSøknad &&
+                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                        );
+                        onSubmit<IManueltBrevRequestPåBehandling>(
+                            {
+                                method: 'POST',
+                                data: hentSkjemaData(),
+                                url: `/familie-ba-sak/api/dokument/send-brev/${behandling.behandlingId}`,
+                            },
+                            (ressurs: Ressurs<IBehandling>) => {
+                                onSubmitSuccess();
+                                settÅpenBehandling(ressurs);
+                                hentLogg();
+                            }
+                        );
                     }}
                 >
                     Send brev

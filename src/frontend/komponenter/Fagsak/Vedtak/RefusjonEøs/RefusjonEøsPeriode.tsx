@@ -9,7 +9,7 @@ import RefusjonEøsSkjema from './RefusjonEøsSkjema';
 import { useRefusjonEøs } from './useRefusjonEøs';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../typer/refusjon-eøs';
-import { periodeToString } from '../../../../utils/kalender';
+import { isoDatoPeriodeTilFormatertString } from '../../../../utils/dato';
 
 interface IRefusjonEøsPeriode {
     refusjonEøs: IRestRefusjonEøs;
@@ -97,7 +97,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
             }
         >
             <Table.DataCell scope="row">
-                {periodeToString({
+                {isoDatoPeriodeTilFormatertString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
                 })}

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
 
 import { BodyShort, Heading } from '@navikt/ds-react';
@@ -14,7 +15,6 @@ import type { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
 import type { FagsakType } from '../../../typer/fagsak';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { formaterIdent } from '../../../utils/formatter';
-import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
 
 const TidslinjeHeader = styled.div`
     display: flex;
@@ -101,9 +101,7 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({
                     aktivtUtsnitt={
                         aktivEtikett && {
                             fom: aktivEtikett.date,
-                            tom: kalenderDatoTilDate(
-                                sisteDagIMåned(kalenderDatoFraDate(aktivEtikett.date))
-                            ),
+                            tom: endOfMonth(aktivEtikett.date),
                         }
                     }
                 />

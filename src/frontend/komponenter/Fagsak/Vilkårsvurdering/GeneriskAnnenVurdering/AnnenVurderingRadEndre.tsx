@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Radio } from '@navikt/ds-react';
-import { FamilieKnapp, FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { Fieldset, Radio, Textarea } from '@navikt/ds-react';
+import { FamilieKnapp, FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -50,7 +50,7 @@ const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     && {
         margin: 1rem 0;
         legend {
-            margin-bottom: 0rem;
+            margin-bottom: 0;
         }
     }
 `;
@@ -208,8 +208,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     </Radio>
                 </StyledFamilieRadioGruppe>
 
-                <FamilieTextarea
-                    erLesevisning={erLesevisning}
+                <Textarea
+                    readOnly={erLesevisning}
                     value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}

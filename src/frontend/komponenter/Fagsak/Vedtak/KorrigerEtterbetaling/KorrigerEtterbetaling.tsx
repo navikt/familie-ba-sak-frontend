@@ -3,9 +3,8 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 import { ArrowUndoIcon, DocPencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Modal, Select, TextField } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Modal, Select, Textarea, TextField } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -19,7 +18,7 @@ interface IKorrigerEtterbetaling {
 }
 
 const AngreKnapp = styled(Button)`
-    margin: 0.5rem 0rem;
+    margin: 0.5rem 0;
 `;
 
 const baseSkjemaelementStyle = css`
@@ -35,7 +34,7 @@ const StyledTextField = styled(TextField)`
     width: 7.5rem;
 `;
 
-const StyledFamilieTextarea = styled(FamilieTextarea)`
+const StyledTextarea = styled(Textarea)`
     ${baseSkjemaelementStyle}
 `;
 
@@ -136,7 +135,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                     readOnly={erLesevisning}
                                     className={erLesevisning ? 'lesevisning' : ''}
                                 />
-                                <StyledFamilieTextarea
+                                <StyledTextarea
                                     label={'Begrunnelse (valgfri)'}
                                     id={'korrigering-begrunnelse'}
                                     value={skjema.felter.begrunnelse.verdi}
@@ -146,7 +145,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                         )
                                     }
                                     maxLength={erLesevisning ? 0 : 1000}
-                                    erLesevisning={erLesevisning}
+                                    readOnly={erLesevisning}
                                 />
                             </div>
                             {!erLesevisning && (

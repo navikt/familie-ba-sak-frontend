@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
@@ -15,8 +14,11 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
-import { Datoformat, formaterIsoDato } from '../../../../utils/formatter';
-import { periodeToString } from '../../../../utils/kalender';
+import {
+    Datoformat,
+    isoDatoPeriodeTilFormatertString,
+    isoStringTilFormatertString,
+} from '../../../../utils/dato';
 import { alleRegelverk } from '../../../../utils/vilkår';
 
 interface IProps {
@@ -80,7 +82,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     settFokusPåKnapp,
 }) => {
-    const { vurderErLesevisning, åpenBehandling, aktivSettPåVent } = useBehandling();
+    const { vurderErLesevisning, behandling, aktivSettPåVent } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
@@ -146,7 +148,9 @@ const VilkårTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort>
-                    {periodeErTom ? '-' : periodeToString(vilkårResultat.verdi.periode.verdi)}
+                    {periodeErTom
+                        ? '-'
+                        : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
@@ -177,14 +181,13 @@ const VilkårTabellRad: React.FC<IProps> = ({
                         <StyledPersonIcon title={'Manuell vurdering'} />
                     )}
                     <div>
-                        {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        vilkårResultat.verdi.erVurdert
-                            ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
+                        {vilkårResultat.verdi.erVurdert
+                            ? vilkårResultat.verdi.behandlingId === behandling.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${formaterIsoDato(
-                                      vilkårResultat.verdi.endretTidspunkt,
-                                      Datoformat.DATO_FORKORTTET
-                                  )}`
+                                : `Vurdert ${isoStringTilFormatertString({
+                                      isoString: vilkårResultat.verdi.endretTidspunkt,
+                                      tilFormat: Datoformat.DATO_FORKORTTET,
+                                  })}`
                             : ''}
                     </div>
                 </FlexDiv>

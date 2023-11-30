@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Heading } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
+import { Heading, Textarea } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
@@ -21,11 +20,11 @@ const Annet: React.FunctionComponent = () => {
         <AnnetWrapper>
             <Heading size={'medium'} level={'2'} children={'Annet'} />
             <br />
-            <FamilieTextarea
+            <Textarea
                 {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(
                     skjema.visFeilmeldinger
                 )}
-                erLesevisning={lesevisning}
+                readOnly={lesevisning}
                 label={!lesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
                 maxLength={2000}
             />

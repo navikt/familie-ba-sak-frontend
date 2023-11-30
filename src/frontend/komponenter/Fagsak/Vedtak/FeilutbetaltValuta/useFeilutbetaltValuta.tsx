@@ -12,7 +12,7 @@ import type {
     IRestFeilutbetaltValuta,
     IRestNyFeilutbetaltValutaPeriode,
 } from '../../../../typer/eøs-feilutbetalt-valuta';
-import { dateTilIsoString, validerGyldigDato } from '../../../../utils/dato';
+import { dateTilIsoDatoString, validerGyldigDato } from '../../../../utils/dato';
 import { erPositivtHeltall } from '../../../../utils/validators';
 
 interface IProps {
@@ -82,8 +82,8 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                     method: 'POST',
                     url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}`,
                     data: {
-                        fom: dateTilIsoString(skjema.felter.fom?.verdi),
-                        tom: dateTilIsoString(skjema.felter.tom?.verdi),
+                        fom: dateTilIsoDatoString(skjema.felter.fom?.verdi),
+                        tom: dateTilIsoDatoString(skjema.felter.tom?.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                     },
                 },
@@ -108,8 +108,8 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
                     data: {
                         ...feilutbetaltValuta,
                         id: feilutbetaltValuta.id,
-                        fom: dateTilIsoString(skjema.felter.fom.verdi),
-                        tom: dateTilIsoString(skjema.felter.tom.verdi),
+                        fom: dateTilIsoDatoString(skjema.felter.fom.verdi),
+                        tom: dateTilIsoDatoString(skjema.felter.tom.verdi),
                         feilutbetaltBeløp: Number(skjema.felter.feilutbetaltBeløp.verdi),
                     },
                 },

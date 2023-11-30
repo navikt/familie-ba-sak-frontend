@@ -1,17 +1,16 @@
 import React from 'react';
 
-import { addMonths, format } from 'date-fns';
+import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Link, Tabs } from '@navikt/ds-react';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import {
@@ -22,9 +21,8 @@ import {
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { Datoformat } from '../../../utils/formatter';
-import { kalenderDiff, periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 
@@ -56,12 +54,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const { settÅpenBehandling } = useBehandling();
-
-    React.useEffect(() => {
-        settÅpenBehandling(byggTomRessurs(), false);
-    }, [minimalFagsak.status]);
-
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
@@ -73,7 +65,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
+                  differenceInMilliseconds(
+                      isoStringTilDate(b.opprettetTidspunkt),
+                      isoStringTilDate(a.opprettetTidspunkt)
+                  )
               )[0]
             : undefined;
 

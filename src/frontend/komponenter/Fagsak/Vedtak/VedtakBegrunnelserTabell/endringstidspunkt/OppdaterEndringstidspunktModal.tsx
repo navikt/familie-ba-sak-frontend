@@ -16,8 +16,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './useEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { dateTilFormatertString } from '../../../../../utils/dato';
-import { Datoformat } from '../../../../../utils/formatter';
+import { dateTilFormatertString, Datoformat } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 

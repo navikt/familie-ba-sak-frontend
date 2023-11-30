@@ -10,15 +10,16 @@ import {
     Button,
     ErrorSummary,
     Fieldset,
-    Link,
     Heading,
     Label,
+    Link,
     Radio,
     RadioGroup,
     Tag,
+    Textarea,
 } from '@navikt/ds-react';
 import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieTextarea, FlexDiv } from '@navikt/familie-form-elements';
+import { FlexDiv } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -30,6 +31,7 @@ import type { IBehandling } from '../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
 import type { Målform } from '../../../typer/søknad';
 import { målform } from '../../../typer/søknad';
+import type { BrevmottakereAlertBehandlingProps } from '../../Felleskomponenter/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import HelpText from '../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -97,11 +99,11 @@ const HeadingMedEkstraLuft = styled(Heading)`
     margin-bottom: 2rem;
 `;
 
-const TextareaMedEkstraLuft = styled(FamilieTextarea)`
+const TextareaMedEkstraLuft = styled(Textarea)`
     margin-bottom: 2rem;
 `;
 
-const StyledBrevmottakereAlert = styled(BrevmottakereAlert)`
+const StyledBrevmottakereAlert = styled(BrevmottakereAlert)<BrevmottakereAlertBehandlingProps>`
     margin: 1rem 0 3rem 2rem;
 `;
 
@@ -118,12 +120,10 @@ const TilbakekrevingSkjema: React.FC<{
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
-    const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { bruker: brukerRessurs } = useFagsakContext();
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const bruker = hentDataFraRessurs(brukerRessurs);
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
-    const personer = åpenBehandling.personer ?? [];
     const brevmottakere = åpenBehandling.brevmottakere ?? [];
     const erLesevisning = vurderErLesevisning();
 
@@ -236,7 +236,7 @@ const TilbakekrevingSkjema: React.FC<{
                         tilbakekrevingSkjema.visFeilmeldinger ||
                             begrunnelse.verdi.length > maksLengdeTekst
                     )}
-                    erLesevisning={erLesevisning}
+                    readOnly={erLesevisning}
                     maxLength={maksLengdeTekst}
                     description="Hva er årsaken til feilutbetaling? Hvordan og når ble feilutbetalingen oppdaget? Begrunn hvordan feilutbetalingen skal behandles videre."
                 />
@@ -302,16 +302,16 @@ const TilbakekrevingSkjema: React.FC<{
                                 {tilbakekrevingsvalg.verdi ===
                                     Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
                                     <StyledBrevmottakereAlert
+                                        bruker={bruker}
+                                        erPåBehandling={true}
                                         brevmottakere={brevmottakere}
-                                        institusjon={minimalFagsak?.institusjon}
-                                        personer={personer}
+                                        erLesevisning={erLesevisning}
                                         åpenBehandling={åpenBehandling}
-                                        fagsakType={minimalFagsak?.fagsakType}
                                     />
                                 )}
                                 {fritekstVarsel.erSynlig && (
                                     <FritekstVarsel>
-                                        <FamilieTextarea
+                                        <Textarea
                                             label={
                                                 <FritektsVarselLabel>
                                                     <FlexRad>
@@ -374,7 +374,7 @@ const TilbakekrevingSkjema: React.FC<{
                                                 tilbakekrevingSkjema.visFeilmeldinger ||
                                                     fritekstVarsel.verdi.length > maksLengdeTekst
                                             )}
-                                            erLesevisning={erLesevisning}
+                                            readOnly={erLesevisning}
                                             maxLength={maksLengdeTekst}
                                         />
 
@@ -423,10 +423,10 @@ const TilbakekrevingSkjema: React.FC<{
                     </RadioGroup>
                 )}
                 {erLesevisning && fritekstVarsel.erSynlig && (
-                    <FamilieTextarea
+                    <Textarea
                         label="Fritekst i varselet"
                         {...fritekstVarsel.hentNavInputProps(tilbakekrevingSkjema.visFeilmeldinger)}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                     />
                 )}
 

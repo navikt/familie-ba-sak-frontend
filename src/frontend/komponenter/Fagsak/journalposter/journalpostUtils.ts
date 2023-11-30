@@ -4,8 +4,7 @@ import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
-import { isoStringTilDate } from '../../../utils/dato';
-import { Datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -78,7 +77,11 @@ export const hentSortState = (
           };
 
 export const formaterDatoRegistrertSendtMottatt = (dato: string | undefined): string =>
-    formaterIsoDato(dato, Datoformat.DATO_TID, '-');
+    isoStringTilFormatertString({
+        isoString: dato,
+        tilFormat: Datoformat.DATO_TID,
+        defaultString: '-',
+    });
 
 export const formaterFagsak = (fagsystemKode: string | undefined, fagsakId: string | undefined) => {
     const fagsystem = mapFagsystemkodeTilTekst(fagsystemKode);

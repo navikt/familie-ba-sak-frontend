@@ -4,9 +4,17 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Label, Radio, RadioGroup, Fieldset, Select } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    Label,
+    Radio,
+    RadioGroup,
+    Fieldset,
+    Select,
+    Textarea,
+} from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -26,8 +34,8 @@ import {
     årsaker,
     årsakTekst,
 } from '../../../typer/utbetalingAndel';
+import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
-import type { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
@@ -64,7 +72,7 @@ const StyledFerdigKnapp = styled(Button)`
     margin-right: 0.5rem;
 `;
 
-const StyledFamilieTextarea = styled(FamilieTextarea)`
+const StyledTextarea = styled(Textarea)`
     min-height: 8rem;
 `;
 
@@ -193,7 +201,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             value={skjema.felter.fom.verdi}
                             antallÅrFrem={finnÅrFremTilStønadTom()}
                             antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                            onEndret={(dato: YearMonth | undefined) => {
+                            onEndret={(dato: IsoMånedString | undefined) => {
                                 if (dato === undefined) {
                                     skjema.felter.fom.nullstill();
                                 } else {
@@ -209,7 +217,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         value={skjema.felter.tom.verdi}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                        onEndret={(dato: YearMonth | undefined) => {
+                        onEndret={(dato: IsoMånedString | undefined) => {
                             if (dato === undefined) {
                                 skjema.felter.tom.nullstill();
                             } else {
@@ -334,9 +342,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 )}
 
                 <Feltmargin>
-                    <StyledFamilieTextarea
+                    <StyledTextarea
                         {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
-                        erLesevisning={erLesevisning}
+                        readOnly={erLesevisning}
                         label={'Begrunnelse'}
                         resize
                         value={

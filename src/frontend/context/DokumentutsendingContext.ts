@@ -23,8 +23,8 @@ import { Målform } from '../typer/søknad';
 import { ToggleNavn } from '../typer/toggles';
 import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
 import type { IsoDatoString } from '../utils/dato';
+import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import { Datoformat, formaterIsoDato } from '../utils/formatter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 
@@ -60,7 +60,8 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
     ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker } = useFagsakContext();
+        const { bruker, manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
+            useFagsakContext();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
             useDokument();
@@ -199,6 +200,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -215,12 +217,17 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 return {
                     mottakerIdent: bruker.data.personIdent,
                     multiselectVerdier: barnIBrev.map(
-                        barn => `Barn født ${formaterIsoDato(barn.fødselsdato, Datoformat.DATO)}.`
+                        barn =>
+                            `Barn født ${isoStringTilFormatertString({
+                                isoString: barn.fødselsdato,
+                                tilFormat: Datoformat.DATO,
+                            })}.`
                     ),
                     barnIBrev: barnIBrev.map(barn => barn.ident),
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: brevmal,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -250,6 +257,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     mottakerMålform: målform,
                     mottakerNavn: bruker.data.navn,
                     brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
+                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 };
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -268,18 +276,21 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
+                            manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
@@ -288,6 +299,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                            manuelleBrevmottakerePåFagsak,
                         });
 
                     case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
@@ -320,7 +332,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
-        const brukerHarUkjentAddresse = () =>
+        const brukerHarUkjentAdresse = () =>
             toggles[ToggleNavn.verifiserDokdistKanal] &&
             (distribusjonskanal.status !== RessursStatus.SUKSESS ||
                 distribusjonskanal.data === Distribusjonskanal.UKJENT ||
@@ -348,6 +360,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     },
                     () => {
                         settVisInnsendtBrevModal(true);
+                        settManuelleBrevmottakerePåFagsak([]);
                         nullstillSkjema();
                     }
                 );
@@ -374,7 +387,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema,
             nullstillSkjema,
             distribusjonskanal,
-            brukerHarUkjentAddresse,
+            brukerHarUkjentAdresse,
             hentDistribusjonskanal,
         };
     }

@@ -5,14 +5,19 @@ import styled from 'styled-components';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
-import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../typer/logg';
-import { formaterIsoDato, Datoformat } from '../../../utils/formatter';
+import type { IPersonInfo } from '../../../typer/person';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
+
+interface Props {
+    bruker: IPersonInfo;
+}
 
 const ToggleVisningHøyremeny = styled(Button)`
     position: absolute;
@@ -22,22 +27,20 @@ const ToggleVisningHøyremeny = styled(Button)`
     width: 34px;
     min-width: 34px;
     height: 34px;
-    padding: 0px;
+    padding: 0;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
 `;
 
-const Høyremeny: React.FunctionComponent = () => {
-    const { åpenBehandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
+const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
+    const { behandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
 
     React.useEffect(() => {
-        if (åpenBehandling && åpenBehandling.status === RessursStatus.SUKSESS) {
-            hentLogg();
-        }
-    }, [åpenBehandling]);
+        hentLogg();
+    }, [behandling]);
 
-    return åpenBehandling.status === RessursStatus.SUKSESS ? (
+    return (
         <>
             <div className={åpenHøyremeny ? 'høyremeny' : ''}>
                 <ToggleVisningHøyremeny
@@ -60,16 +63,16 @@ const Høyremeny: React.FunctionComponent = () => {
                 />
                 {åpenHøyremeny && (
                     <>
-                        <Behandlingskort åpenBehandling={åpenBehandling.data} />
+                        <Behandlingskort åpenBehandling={behandling} />
                         <Hendelsesoversikt
                             hendelser={hentDataFraRessursMedFallback(logg, []).map(
                                 (loggElement: ILogg): Hendelse => {
                                     return {
                                         id: loggElement.id.toString(),
-                                        dato: formaterIsoDato(
-                                            loggElement.opprettetTidspunkt,
-                                            Datoformat.DATO_TID
-                                        ),
+                                        dato: isoStringTilFormatertString({
+                                            isoString: loggElement.opprettetTidspunkt,
+                                            tilFormat: Datoformat.DATO_TID,
+                                        }),
                                         utførtAv: loggElement.opprettetAv,
                                         rolle: loggElement.rolle,
                                         tittel: loggElement.tittel,
@@ -77,13 +80,14 @@ const Høyremeny: React.FunctionComponent = () => {
                                     };
                                 }
                             )}
-                            åpenBehandling={åpenBehandling.data}
+                            åpenBehandling={behandling}
+                            bruker={bruker}
                         />
                     </>
                 )}
             </div>
         </>
-    ) : null;
+    );
 };
 
 export default Høyremeny;

@@ -7,7 +7,7 @@ import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../typer/vedtak';
-import { dateTilIsoString, validerGyldigDato } from '../../utils/dato';
+import { dateTilIsoDatoString, validerGyldigDato } from '../../utils/dato';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
@@ -69,7 +69,7 @@ export const useKorrigerVedtakSkjemaContext = ({
                 {
                     method: 'POST',
                     data: {
-                        vedtaksdato: dateTilIsoString(skjema.felter.vedtaksdato.verdi),
+                        vedtaksdato: dateTilIsoDatoString(skjema.felter.vedtaksdato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
                     url: korrigertVedtakURL,

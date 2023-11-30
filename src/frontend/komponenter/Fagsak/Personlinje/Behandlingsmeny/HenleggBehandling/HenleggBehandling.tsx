@@ -3,16 +3,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { BodyShort, Button, Fieldset, Link, Modal, Select } from '@navikt/ds-react';
+import { BodyShort, Button, Fieldset, Link, Modal, Select, Textarea } from '@navikt/ds-react';
 import { Dropdown } from '@navikt/ds-react';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
@@ -20,7 +18,6 @@ import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVi
 
 interface IProps {
     fagsakId: number;
-    behandling: IBehandling;
 }
 
 interface HenleggÅrsakSelect extends HTMLSelectElement {
@@ -35,7 +32,9 @@ const StyledLenke = styled(Link)`
     margin-right: auto;
 `;
 
-const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
+const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
+    const { behandling } = useBehandling();
+
     const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
     const {
@@ -45,11 +44,8 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
         hentetDokument,
         settVisDokumentModal,
     } = useDokument();
-    const { åpenBehandling, vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
-
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const {
         skjema,
@@ -151,12 +147,11 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                                     })}
                             </Select>
 
-                            <FamilieTextarea
+                            <Textarea
                                 {...skjema.felter.begrunnelse.hentNavInputProps(
                                     skjema.visFeilmeldinger
                                 )}
                                 label={'Begrunnelse'}
-                                erLesevisning={false}
                                 maxLength={4000}
                             />
                         </Fieldset>
@@ -194,7 +189,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId, behandling }) => {
                                     hentForhåndsvisning({
                                         method: 'POST',
                                         data: hentSkjemaData(),
-                                        url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                        url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandling.behandlingId}`,
                                     });
                                 }}
                             >

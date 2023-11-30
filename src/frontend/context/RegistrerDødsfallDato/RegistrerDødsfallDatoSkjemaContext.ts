@@ -8,7 +8,7 @@ import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { IManuellDødsfall } from '../../typer/dødsfall';
 import type { IGrunnlagPerson } from '../../typer/person';
-import { dateTilIsoString, validerGyldigDato } from '../../utils/dato';
+import { dateTilIsoDatoString, validerGyldigDato } from '../../utils/dato';
 import { isEmpty } from '../../utils/eøsValidators';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
@@ -23,7 +23,7 @@ const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
         : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
 export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IProps) => {
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
     const {
@@ -70,9 +70,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IP
         }
     }, [valideringsstatuser]);
 
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandlingId}`;
+    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandling.behandlingId}`;
 
     const registrerManuellDødsfall = () => {
         if (kanSendeSkjema()) {
@@ -82,7 +80,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IP
                 {
                     method: 'POST',
                     data: {
-                        dødsfallDato: dateTilIsoString(skjema.felter.dødsfallDato.verdi),
+                        dødsfallDato: dateTilIsoDatoString(skjema.felter.dødsfallDato.verdi),
                         begrunnelse: skjema.felter.begrunnelse.verdi,
                         personIdent: person.personIdent,
                     },

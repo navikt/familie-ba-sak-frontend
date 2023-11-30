@@ -6,9 +6,8 @@ import { isValid, parseISO } from 'date-fns';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import { senesteRelevanteDato, tidligsteRelevanteDato } from './utils';
-import { dagensDato, dateTilFormatertString } from '../../../utils/dato';
+import { dagensDato, dateTilFormatertString, Datoformat } from '../../../utils/dato';
 import type { IsoDatoString } from '../../../utils/dato';
-import { Datoformat } from '../../../utils/formatter';
 
 interface IProps {
     value: string | undefined;
@@ -41,6 +40,7 @@ const DatovelgerForGammelSkjemaløsning = ({
         defaultSelected: formatterDefaultSelected(),
         fromDate: minDatoAvgrensning ? minDatoAvgrensning : tidligsteRelevanteDato,
         toDate: kanKunVelgeFortid ? dagensDato : senesteRelevanteDato,
+        openOnFocus: false,
     });
 
     useEffect(() => {

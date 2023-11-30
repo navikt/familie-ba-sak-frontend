@@ -22,9 +22,9 @@ import type {
     KompetanseAktivitet,
     KompetanseResultat,
 } from '../../typer/eøsPerioder';
+import type { IIsoMånedPeriode } from '../../utils/dato';
+import { nyIsoMånedPeriode } from '../../utils/dato';
 import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
-import type { IYearMonthPeriode } from '../../utils/kalender';
-import { nyYearMonthPeriode } from '../../utils/kalender';
 import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
@@ -37,9 +37,7 @@ interface IProps {
 
 const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => {
     const [erKompetanseEkspandert, settErKompetanseEkspandert] = React.useState<boolean>(false);
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
+    const { behandling, settÅpenBehandling } = useBehandling();
     const { request } = useHttp();
 
     const initelFom = useFelt<string>({ verdi: kompetanse.fom });
@@ -72,8 +70,8 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
                 verdi: barnIKompetanse,
                 valideringsfunksjon: erBarnGyldig,
             }),
-            periode: useFelt<IYearMonthPeriode>({
-                verdi: nyYearMonthPeriode(kompetanse.fom, kompetanse.tom),
+            periode: useFelt<IIsoMånedPeriode>({
+                verdi: nyIsoMånedPeriode(kompetanse.fom, kompetanse.tom),
                 avhengigheter: { initelFom },
                 valideringsfunksjon: erEøsPeriodeGyldig,
             }),
@@ -123,7 +121,7 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
                         erAnnenForelderOmfattetAvNorskLovgivning:
                             kompetanse.erAnnenForelderOmfattetAvNorskLovgivning,
                     },
-                    url: `/familie-ba-sak/api/kompetanse/${behandlingId}`,
+                    url: `/familie-ba-sak/api/kompetanse/${behandling.behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -141,7 +139,7 @@ const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => 
         settVisfeilmeldinger(false);
         request<void, IBehandling>({
             method: 'DELETE',
-            url: `/familie-ba-sak/api/kompetanse/${behandlingId}/${kompetanse.id}`,
+            url: `/familie-ba-sak/api/kompetanse/${behandling.behandlingId}/${kompetanse.id}`,
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();

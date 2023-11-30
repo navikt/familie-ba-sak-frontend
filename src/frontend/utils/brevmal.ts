@@ -1,6 +1,4 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { erOrgNr } from './formatter';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -12,17 +10,13 @@ import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 
 export const hentMuligeBrevmalerImplementering = (
-    åpenBehandling: Ressurs<IBehandling>,
+    åpenBehandling: IBehandling,
     tilpassetInstitusjon = false
 ): Brevmal[] => {
-    if (åpenBehandling.status !== RessursStatus.SUKSESS) {
-        return [];
-    }
-
     const brevmaler: Brevmal[] = (Object.keys(Brevmal) as Brevmal[]).filter(
         brevmal => tilpassetInstitusjon === brevmal.endsWith('INSTITUSJON')
     );
-    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling.data));
+    return brevmaler.filter(brevmal => brevmalKanVelgesForBehandling(brevmal, åpenBehandling));
 };
 
 const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehandling): boolean => {

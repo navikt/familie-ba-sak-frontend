@@ -1,18 +1,18 @@
 import type { INøkkelPar } from './common';
-import type { YearMonth } from '../utils/kalender';
+import type { IsoMånedString } from '../utils/dato';
 
 export interface IPersonMedAndelerTilkjentYtelse {
     personIdent: string;
     ytelsePerioder: IYtelsePeriode[];
     beløp: number;
-    stønadFom: YearMonth;
-    stønadTom: YearMonth;
+    stønadFom: IsoMånedString;
+    stønadTom: IsoMånedString;
 }
 
 export interface IYtelsePeriode {
     beløp: number;
-    stønadFom: YearMonth;
-    stønadTom: YearMonth;
+    stønadFom: IsoMånedString;
+    stønadTom: IsoMånedString;
     ytelseType: YtelseType;
     skalUtbetales: boolean;
 }

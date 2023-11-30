@@ -18,7 +18,10 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
 
     return (
         <li>
-            <PersonInformasjon person={utbetalingsperiodeDetaljer[0].person} />
+            <PersonInformasjon
+                person={utbetalingsperiodeDetaljer[0].person}
+                erLesevisning={false}
+            />
             <div className={'saksoversikt__utbetalinger__ytelser'}>
                 {utbetalingsperiodeDetaljer.map((utbetalingsperiodeDetalj, index) => {
                     return (
