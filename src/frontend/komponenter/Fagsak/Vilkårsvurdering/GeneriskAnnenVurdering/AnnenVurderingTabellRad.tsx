@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
@@ -57,7 +56,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     annenVurdering,
 }) => {
-    const { vurderErLesevisning, åpenBehandling } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
         vurderErLesevisning() || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
@@ -112,10 +111,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                 <FlexDiv>
                     <StyledPersonIcon title={'Manuell vurdering'} />
                     <div>
-                        {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        annenVurdering.verdi.erVurdert
-                            ? 'Vurdert i denne behandlingen'
-                            : ''}
+                        {annenVurdering.verdi.erVurdert ? 'Vurdert i denne behandlingen' : ''}
                     </div>
                 </FlexDiv>
             </Table.DataCell>

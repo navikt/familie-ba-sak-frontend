@@ -1,10 +1,5 @@
 import { differenceInCalendarMonths } from 'date-fns';
 
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
-import type { IBehandling } from '../../../typer/behandling';
-import { Behandlingstype } from '../../../typer/behandling';
 import { YtelseType } from '../../../typer/beregning';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { isoStringTilDate } from '../../../utils/dato';
@@ -41,12 +36,4 @@ export const kanLeggeSmåbarnstilleggTilPeriode = (
         harPersonTilOgMed3ÅrIPeriode &&
         !kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode)
     );
-};
-
-export const erMigreringsBehandling = (behandling: Ressurs<IBehandling>): boolean => {
-    if (behandling.status === RessursStatus.SUKSESS) {
-        return behandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-    } else {
-        return false;
-    }
 };

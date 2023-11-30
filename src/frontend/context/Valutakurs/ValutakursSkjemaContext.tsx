@@ -7,7 +7,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
@@ -70,9 +70,7 @@ interface IProps {
 const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
     const [sletterValutakurs, settSletterValutakurs] = React.useState<boolean>(false);
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
+    const { behandling, settÅpenBehandling } = useBehandling();
     const initelFom = useFelt<string>({ verdi: valutakurs.fom });
     const { request } = useHttp();
 
@@ -186,7 +184,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
                         ),
                         kurs: konverterSkjemaverdiTilDesimal(skjema.felter.kurs?.verdi),
                     },
-                    url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}`,
+                    url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandling.behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -205,7 +203,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         settSletterValutakurs(true);
         request<void, IBehandling>({
             method: 'DELETE',
-            url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandlingId}/${valutakurs.id}`,
+            url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandling.behandlingId}/${valutakurs.id}`,
         }).then((response: Ressurs<IBehandling>) => {
             settSletterValutakurs(false);
             if (response.status === RessursStatus.SUKSESS) {

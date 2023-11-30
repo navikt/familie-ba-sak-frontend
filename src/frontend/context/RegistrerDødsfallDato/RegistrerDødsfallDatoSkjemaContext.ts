@@ -23,7 +23,7 @@ const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
         : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
 export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IProps) => {
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
     const {
@@ -70,9 +70,7 @@ export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IP
         }
     }, [valideringsstatuser]);
 
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandlingId}`;
+    const korrigertVedtakURL = `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandling.behandlingId}`;
 
     const registrerManuellDødsfall = () => {
         if (kanSendeSkjema()) {

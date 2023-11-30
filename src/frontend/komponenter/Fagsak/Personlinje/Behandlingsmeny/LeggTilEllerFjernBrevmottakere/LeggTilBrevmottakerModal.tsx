@@ -88,6 +88,7 @@ export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBre
                         mottaker={mottaker}
                         key={`mottaker-${mottaker}`}
                         fjernMottaker={fjernMottaker}
+                        erLesevisning={erLesevisning}
                     />
                 ))}
                 {erSkjemaSynlig ? (

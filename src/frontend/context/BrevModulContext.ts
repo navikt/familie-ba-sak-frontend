@@ -16,8 +16,7 @@ import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import { FagsakType } from '../typer/fagsak';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
-import type { IBarnMedOpplysninger } from '../typer/søknad';
-import type { Målform } from '../typer/søknad';
+import type { IBarnMedOpplysninger, Målform } from '../typer/søknad';
 import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
@@ -29,19 +28,18 @@ import type { IFritekstFelt } from '../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
-    const { åpenBehandling: åpenBehandlingRessurs } = useBehandling();
+    const { behandling } = useBehandling();
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
 
-    const åpenBehandling = hentDataFraRessurs(åpenBehandlingRessurs);
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
-    const behandlingKategori = åpenBehandling?.kategori;
+    const behandlingKategori = behandling?.kategori;
 
-    const personer = åpenBehandling?.personer ?? [];
-    const brevmottakere = åpenBehandling?.brevmottakere ?? [];
+    const personer = behandling?.personer ?? [];
+    const brevmottakere = behandling?.brevmottakere ?? [];
     const institusjon = minimalFagsak?.institusjon;
     const fagsakType = minimalFagsak?.fagsakType;
 
@@ -270,7 +268,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjema.felter.dokumenter.nullstill();
         nullstillDeltBosted();
         nullstillBarnBrevetGjelder();
-    }, [åpenBehandling]);
+    }, [behandling]);
 
     useEffect(() => {
         nullstillDeltBosted();
@@ -286,7 +284,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         );
 
     const hentMuligeBrevMaler = (): Brevmal[] =>
-        hentMuligeBrevmalerImplementering(åpenBehandlingRessurs, !!institusjon);
+        hentMuligeBrevmalerImplementering(behandling, !!institusjon);
 
     const leggTilFritekst = (valideringsmelding?: string) => {
         skjema.felter.fritekster.validerOgSettFelt([

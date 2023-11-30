@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -16,7 +16,7 @@ import { tilBehandlingstema } from '../../../../../typer/behandlingstema';
 
 const useEndreBehandling = (lukkModal: () => void) => {
     const { request } = useHttp();
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandling();
 
     const [ressurs, settRessurs] = useState(byggTomRessurs());
 
@@ -33,7 +33,7 @@ const useEndreBehandling = (lukkModal: () => void) => {
 
     useEffect(() => {
         nullstillSkjema();
-    }, [åpenBehandling]);
+    }, [behandling]);
 
     const endreBehandlingstema = (behandlingId: number) => {
         const { behandlingstema } = skjema.felter;
@@ -56,13 +56,9 @@ const useEndreBehandling = (lukkModal: () => void) => {
     };
 
     const nullstillSkjema = () => {
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            const { kategori, underkategori } = åpenBehandling.data;
-
-            skjema.felter.behandlingstema.validerOgSettFelt(
-                tilBehandlingstema(kategori, underkategori)
-            );
-        }
+        skjema.felter.behandlingstema.validerOgSettFelt(
+            tilBehandlingstema(behandling.kategori, behandling.underkategori)
+        );
     };
 
     return {
