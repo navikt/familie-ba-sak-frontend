@@ -137,6 +137,7 @@ export const BrukerPanel: React.FC = () => {
                 settÅpen(!åpen);
             }}
             size="small"
+            aria-label="Brukerpanel"
         >
             <ExpansionCard.Header>
                 <ExpansionCard.Title>

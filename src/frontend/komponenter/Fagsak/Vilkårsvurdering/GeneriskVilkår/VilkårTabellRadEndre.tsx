@@ -47,10 +47,10 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-export const Container = styled.div`
+export const Container = styled.div<{ lesevisning: boolean; vilkårResultat: Resultat }>`
     max-width: 30rem;
     border-left: 0.125rem solid
-        ${(props: { lesevisning: boolean; vilkårResultat: Resultat }) => {
+        ${props => {
             if (props.lesevisning) {
                 return ABorderDefault;
             }
