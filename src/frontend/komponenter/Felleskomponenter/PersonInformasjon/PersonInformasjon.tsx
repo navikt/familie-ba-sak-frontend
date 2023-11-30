@@ -6,10 +6,9 @@ import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, CopyButton, Dropdown, Heading } from '@navikt/ds-react';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IGrunnlagPerson } from '../../../typer/person';
 import { personTypeMap } from '../../../typer/person';
-import { hentAlder, formaterIdent } from '../../../utils/formatter';
+import { formaterIdent, hentAlder } from '../../../utils/formatter';
 import DødsfallTag from '../DødsfallTag';
 import RegistrerDødsfallDato from '../RegistrerDødsfallDato/RegistrerDødsfallDato';
 
@@ -17,6 +16,7 @@ interface IProps {
     person: IGrunnlagPerson;
     somOverskrift?: boolean;
     width?: string;
+    erLesevisning: boolean;
 }
 
 const StyledDropdownMeny = styled(Dropdown.Menu)`
@@ -29,13 +29,14 @@ const FlexBox = styled.div`
     gap: 0.25rem;
 `;
 
-const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskrift = false }) => {
+const PersonInformasjon: React.FunctionComponent<IProps> = ({
+    person,
+    somOverskrift = false,
+    erLesevisning,
+}) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
-    const { vurderErLesevisning } = useBehandling();
-
-    const erLesevisning = vurderErLesevisning();
 
     return (
         <div className={'personinformasjon'}>

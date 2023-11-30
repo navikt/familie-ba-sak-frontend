@@ -8,7 +8,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
@@ -42,7 +41,6 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { settÅpenBehandling } = useBehandling();
     const { bruker: brukerRessurs, minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
@@ -262,8 +260,6 @@ const useOpprettBehandling = (
                             `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
-
-                    settÅpenBehandling(response);
                 }
             }
         );

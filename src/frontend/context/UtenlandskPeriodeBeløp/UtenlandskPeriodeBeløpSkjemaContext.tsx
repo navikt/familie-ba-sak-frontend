@@ -2,16 +2,16 @@ import React from 'react';
 
 import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
 import type {
+    EøsPeriodeStatus,
     IRestUtenlandskPeriodeBeløp,
     IUtenlandskPeriodeBeløp,
-    EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../typer/eøsPerioder';
 import type { IIsoMånedPeriode } from '../../utils/dato';
@@ -65,9 +65,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({
 }: IProps) => {
     const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] =
         React.useState<boolean>(false);
-    const { åpenBehandling, settÅpenBehandling } = useBehandling();
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.behandlingId : null;
+    const { behandling, settÅpenBehandling } = useBehandling();
     const initelFom = useFelt<string>({ verdi: utenlandskPeriodeBeløp.fom });
     const { request } = useHttp();
 
@@ -132,7 +130,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({
                         valutakode: skjema.felter.valutakode?.verdi,
                         intervall: skjema.felter.intervall?.verdi,
                     },
-                    url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}`,
+                    url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandling.behandlingId}`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -150,7 +148,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({
         settVisfeilmeldinger(false);
         request<void, IBehandling>({
             method: 'DELETE',
-            url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløp.id}`,
+            url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandling.behandlingId}/${utenlandskPeriodeBeløp.id}`,
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();

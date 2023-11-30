@@ -5,13 +5,12 @@ import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Link, Tabs } from '@navikt/ds-react';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import {
@@ -22,8 +21,7 @@ import {
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import { Datoformat, isoStringTilDate } from '../../../utils/dato';
-import { periodeOverlapperMedValgtDato } from '../../../utils/dato';
+import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
@@ -56,12 +54,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const { settÅpenBehandling } = useBehandling();
-
-    React.useEffect(() => {
-        settÅpenBehandling(byggTomRessurs(), false);
-    }, [minimalFagsak.status]);
-
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(

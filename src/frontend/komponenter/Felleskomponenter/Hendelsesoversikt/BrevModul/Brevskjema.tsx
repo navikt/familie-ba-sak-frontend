@@ -101,7 +101,7 @@ const StyledLandvelger = styled(FamilieMultiLandvelger)`
 `;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { åpenBehandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
+    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
@@ -141,8 +141,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetDokument.status === RessursStatus.HENTER;
 
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+    const behandlingId = behandling.behandlingId;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
@@ -151,8 +150,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const behandlingSteg =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.steg : undefined;
+    const behandlingSteg = behandling.steg;
 
     if (institusjon) {
         skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
@@ -375,6 +373,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         settVisFeilmeldinger={settVisfeilmeldinger}
+                        manuelleBrevmottakere={brevmottakere}
                     />
                 )}
                 {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (
@@ -455,27 +454,25 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
-                        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-                            const harRegistrertSøknad =
-                                hentStegNummer(åpenBehandling.data.steg) >
-                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
-                            settNavigerTilOpplysningsplikt(
-                                harRegistrertSøknad &&
-                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
-                            );
-                            onSubmit<IManueltBrevRequestPåBehandling>(
-                                {
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
-                                },
-                                (ressurs: Ressurs<IBehandling>) => {
-                                    onSubmitSuccess();
-                                    settÅpenBehandling(ressurs);
-                                    hentLogg();
-                                }
-                            );
-                        }
+                        const harRegistrertSøknad =
+                            hentStegNummer(behandling.steg) >
+                            hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
+                        settNavigerTilOpplysningsplikt(
+                            harRegistrertSøknad &&
+                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                        );
+                        onSubmit<IManueltBrevRequestPåBehandling>(
+                            {
+                                method: 'POST',
+                                data: hentSkjemaData(),
+                                url: `/familie-ba-sak/api/dokument/send-brev/${behandling.behandlingId}`,
+                            },
+                            (ressurs: Ressurs<IBehandling>) => {
+                                onSubmitSuccess();
+                                settÅpenBehandling(ressurs);
+                                hentLogg();
+                            }
+                        );
                     }}
                 >
                     Send brev

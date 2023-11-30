@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
+import { useHentOgSettBehandling } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './util';
@@ -35,35 +35,26 @@ import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
 import { useFagsakContext } from '../fagsak/FagsakContext';
 
-const [BehandlingProvider, useBehandling] = createUseContext(() => {
+interface Props {
+    behandling: IBehandling;
+}
+
+const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentMinimalFagsak, minimalFagsak } = useFagsakContext();
-    const [åpenBehandling, privatSettÅpenBehandling] = useState<Ressurs<IBehandling>>(
-        byggTomRessurs()
-    );
+    const { minimalFagsak } = useFagsakContext();
+    const { settBehandlingRessurs } = useHentOgSettBehandling();
     const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
     const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
-
-    const settÅpenBehandling = (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak = true) => {
-        if (oppdaterMinimalFagsak && fagsakId) {
-            hentMinimalFagsak(fagsakId, false);
-        }
-        privatSettÅpenBehandling(behandling);
-        settBehandlingsstegSubmitressurs(byggTomRessurs());
-    };
 
     const {
         submitRessurs: behandlingsstegSubmitressurs,
         vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
-        settSubmitRessurs: settBehandlingsstegSubmitressurs,
-    } = useBehandlingssteg(settÅpenBehandling, hentDataFraRessurs(åpenBehandling));
+    } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
-    const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(
-        åpenBehandling,
-        settÅpenBehandling
-    );
+    const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } =
+        useBehandlingApi(settBehandlingRessurs);
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -80,10 +71,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     }>({});
 
     useEffect(() => {
-        const siderPåBehandling =
-            åpenBehandling.status === RessursStatus.SUKSESS
-                ? hentTrinnForBehandling(åpenBehandling.data)
-                : [];
+        const siderPåBehandling = hentTrinnForBehandling(behandling);
 
         const sideHref = hentSideHref(location.pathname);
         settTrinnPåBehandling(
@@ -102,7 +90,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         );
 
         automatiskNavigeringTilSideForSteg();
-    }, [åpenBehandling]);
+    }, [behandling]);
 
     useEffect(() => {
         settForrigeÅpneSide(
@@ -139,14 +127,14 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     };
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return hentDataFraRessurs(åpenBehandling)?.steg;
+        return behandling?.steg;
     };
 
     const vurderErLesevisning = (
         sjekkTilgangTilEnhet = true,
         skalIgnorereOmEnhetErMidlertidig = false
     ): boolean => {
-        const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
+        const åpenBehandlingData = behandling;
         if (
             åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_VENT ||
             åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_MASKINELL_VENT
@@ -183,45 +171,32 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     };
 
     const automatiskNavigeringTilSideForSteg = () => {
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(åpenBehandling.data);
+        const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(behandling);
 
-            if (
-                (erViPåUdefinertFagsakSide(location.pathname) ||
-                    erViPåUlovligSteg(location.pathname, sideForSteg)) &&
-                sideForSteg
-            ) {
-                navigate(
-                    `/fagsak/${fagsakId}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
-                );
-            }
+        if (
+            (erViPåUdefinertFagsakSide(location.pathname) ||
+                erViPåUlovligSteg(location.pathname, sideForSteg)) &&
+            sideForSteg
+        ) {
+            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`);
         }
     };
 
     const søkersMålform: Målform =
-        åpenBehandling.status === RessursStatus.SUKSESS
-            ? åpenBehandling.data.personer.find(person => person.type === PersonType.SØKER)
-                  ?.målform ?? Målform.NB
-            : Målform.NB;
+        behandling.personer.find(person => person.type === PersonType.SØKER)?.målform ?? Målform.NB;
 
     const kanBeslutteVedtak =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.status === BehandlingStatus.FATTER_VEDTAK &&
+        behandling.status === BehandlingStatus.FATTER_VEDTAK &&
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        innloggetSaksbehandler?.email !== åpenBehandling.data.endretAv;
+        innloggetSaksbehandler?.email !== behandling.endretAv;
 
-    const erMigreringsbehandling =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erMigreringsbehandling = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const erBehandleneEnhetMidlertidig =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
-            MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
+        behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
+        MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
 
-    const erBehandlingAvsluttet =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.status === BehandlingStatus.AVSLUTTET;
+    const erBehandlingAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;
 
     const gjelderInstitusjon =
         minimalFagsak.status === RessursStatus.SUKSESS &&
@@ -243,18 +218,17 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
         trinnPåBehandling,
-        åpenBehandling,
+        behandling: behandling,
         opprettBehandling,
         logg,
         hentLogg,
         behandlingsstegSubmitressurs,
         vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
-        settÅpenBehandling,
         oppdaterRegisteropplysninger,
         sendTilBeslutterNesteOnClick,
         erMigreringsbehandling,
-        aktivSettPåVent: hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent,
+        aktivSettPåVent: behandling?.aktivSettPåVent,
         erBehandleneEnhetMidlertidig,
         åpenHøyremeny,
         settÅpenHøyremeny,
@@ -264,6 +238,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         gjelderInstitusjon,
         samhandlerOrgnr,
         gjelderEnsligMindreårig,
+        settÅpenBehandling: settBehandlingRessurs,
     };
 });
 
