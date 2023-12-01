@@ -55,7 +55,7 @@
     "@sentry/browser": "^7.83.0",
     "@sentry/core": "^7.83.0",
     "@sentry/tracing": "^7.83.0",
-    "@sentry/webpack-plugin": "^1.19.1",
+    "@sentry/webpack-plugin": "^2.10.2",
     "@types/amplitude-js": "^8.16.0",
     "@types/classnames": "^2.3.1",
     "@types/deep-equal": "^1.0.1",
