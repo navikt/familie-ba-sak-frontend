@@ -23,10 +23,10 @@ interface IEøsPeriodeSkjemaContainerProps {
     status: EøsPeriodeStatus;
 }
 
-export const EøsPeriodeSkjemaContainer = styled.div`
+export const EøsPeriodeSkjemaContainer = styled.div<IEøsPeriodeSkjemaContainerProps>`
     max-width: 34rem;
     border-left: 0.125rem solid
-        ${(props: IEøsPeriodeSkjemaContainerProps) => {
+        ${props => {
             if (props.lesevisning) return ABorderDefault;
             if (props.status === EøsPeriodeStatus.IKKE_UTFYLT) return ABorderWarning;
             if (props.status === EøsPeriodeStatus.UFULLSTENDIG) return ABorderDanger;

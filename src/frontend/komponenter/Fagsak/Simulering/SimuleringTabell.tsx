@@ -24,13 +24,11 @@ import {
 } from '../../../utils/dato';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
-const StyledTable = styled.table(
-    (props: { bredde: number }) => `
-    width: ${props.bredde}rem;
+const StyledTable = styled.table<{ bredde: number }>`
+    width: ${props => props.bredde}rem;
     border-collapse: collapse;
     table-layout: fixed;
-`
-);
+`;
 
 const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
@@ -44,8 +42,8 @@ const HøyrestiltTh = styled.th`
     text-align: right !important;
 `;
 
-const BodyshortMedFarge = styled(BodyShort)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
+const BodyshortMedFarge = styled(BodyShort)<{ farge?: string }>`
+    color: ${props => (props.farge ? props.farge : ATextDefault)};
 `;
 
 const VenstreKolonne = styled.col`
@@ -60,7 +58,7 @@ const SkillelinjeKolonne = styled.col`
     width: 1.125rem;
 `;
 
-const Skillelinje = styled.td`
+const Skillelinje = styled.td<{ erHeader?: boolean }>`
     position: relative;
     padding: 0.5rem !important;
     border: none !important;
@@ -68,7 +66,7 @@ const Skillelinje = styled.td`
     hr {
         border: none;
         border-right: 1px dashed ${ABorderDefault};
-        height: ${(props: { erHeader?: boolean }) => (props.erHeader ? '3.875rem' : '3.25rem')};
+        height: ${props => (props.erHeader ? '3.875rem' : '3.25rem')};
         position: absolute;
         top: -0.375rem;
     }
@@ -85,8 +83,8 @@ const ManuellPosteringRad = styled.tr`
     background-color: ${ASurfaceSubtle};
 `;
 
-const LabelMedFarge = styled(Label)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
+const LabelMedFarge = styled(Label)<{ farge?: string }>`
+    color: ${props => (props.farge ? props.farge : ATextDefault)};
 `;
 
 const StyledSwitch = styled(Switch)`

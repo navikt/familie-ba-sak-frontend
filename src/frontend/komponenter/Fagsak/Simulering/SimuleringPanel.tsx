@@ -26,20 +26,16 @@ const StyledTable = styled.table`
     border-spacing: 0 0.5rem;
 `;
 
-const StyledTh = styled.th(
-    (props: { erHøyrestilt?: boolean }) => `
-        text-align: ${props.erHøyrestilt ? 'right' : 'left'};
-    `
-);
+const StyledTh = styled.th<{ erHøyrestilt?: boolean }>`
+    text-align: ${props => (props.erHøyrestilt ? 'right' : 'left')};
+`;
 
-const StyledTd = styled.th(
-    (props: { erHøyrestilt?: boolean }) => `
-        text-align: ${props.erHøyrestilt ? 'right' : 'left'};
-    `
-);
+const StyledTd = styled.th<{ erHøyrestilt?: boolean }>`
+    text-align: ${props => (props.erHøyrestilt ? 'right' : 'left')};
+`;
 
-const LabelMedFarge = styled(Label)`
-    color: ${(props: { farge?: string }) => (props.farge ? props.farge : ATextDefault)};
+const LabelMedFarge = styled(Label)<{ farge?: string }>`
+    color: ${props => (props.farge ? props.farge : ATextDefault)};
 `;
 
 const StyledHr = styled.hr`
