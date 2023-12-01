@@ -200,7 +200,7 @@ export const BrukerPanel: React.FC = () => {
                                 <StyledSelect
                                     label="Fagsaktype"
                                     size="small"
-                                    onChange={event =>
+                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                                         oppdaterFagsaktype(event.target.value as FagsakType)
                                     }
                                     value={skjema.felter.fagsakType.verdi}
@@ -217,7 +217,9 @@ export const BrukerPanel: React.FC = () => {
                                     <StyledSelect
                                         label="Institusjon"
                                         size="small"
-                                        onChange={event => settValgtInstitusjon(event.target.value)}
+                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                            settValgtInstitusjon(event.target.value)
+                                        }
                                         value={valgtInstitusjon}
                                     >
                                         <option value="">Velg</option>

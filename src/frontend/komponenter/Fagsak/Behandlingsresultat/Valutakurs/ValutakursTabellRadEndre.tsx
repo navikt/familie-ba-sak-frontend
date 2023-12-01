@@ -163,7 +163,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             label={'Valutakurs'}
                             readOnly={lesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
-                            onChange={event =>
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
                         />

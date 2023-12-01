@@ -125,7 +125,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     readOnly={lesevisning}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
-                    onChange={event =>
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         )
@@ -157,7 +157,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     readOnly={lesevisning}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    onChange={event => {
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         );

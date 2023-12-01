@@ -169,7 +169,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         label={<Label>Velg hvem det gjelder</Label>}
                         value={skjema.felter.person.verdi ?? ''}
                         placeholder={'Velg person'}
-                        onChange={(event): void => {
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             skjema.felter.person.validerOgSettFelt(event.target.value);
                         }}
                         readOnly={erLesevisning}
@@ -321,7 +321,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             }
                             placeholder={'Velg sats'}
                             readOnly={erLesevisning}
-                            onChange={(event): void => {
+                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                                 skjema.felter.fullSats.validerOgSettFelt(
                                     optionTilsats(event.target.value)
                                 );
