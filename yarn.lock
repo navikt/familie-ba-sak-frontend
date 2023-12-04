@@ -2075,39 +2075,39 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@navikt/aksel-icons@5.6.1", "@navikt/aksel-icons@^5.6.1":
-  version "5.6.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.6.1/2929441e9c379ca7185235e4b51fd7dce6b333b4#2929441e9c379ca7185235e4b51fd7dce6b333b4"
-  integrity sha512-SltUf7YD1+ZGJaww2RA54/r6wnUyYA8hfZeeoqCgOmPtn+tqX751AKxq2QxzHyQmm3EBWbelW8wRKCF9+n5q0w==
+"@navikt/aksel-icons@5.11.3", "@navikt/aksel-icons@^5.11.3":
+  version "5.11.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.11.3/93a356b38526127dd65a5eb72bae46cf826c6374#93a356b38526127dd65a5eb72bae46cf826c6374"
+  integrity sha512-Xe9f66aEN4XyZuyq6eIVtP8TweeX2BAKRJUi9k6K7DwUDzfgNL8/AZ0CsXzPjNzyQpRmXoA8atCO3GK+oPAh1g==
 
-"@navikt/ds-css@5.6.1":
-  version "5.6.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.6.1/03f4282efc02cfec2546a60a6ba97fdb2c83d9a6#03f4282efc02cfec2546a60a6ba97fdb2c83d9a6"
-  integrity sha512-FMg0VKp4k7TeyQJ32VuwewQIejMUVdHMsdM6FHY8OOPpcfat/10NtUJSp9rT7A9jZ4Ezi+9eGAz/miNXAiN94w==
+"@navikt/ds-css@5.11.3":
+  version "5.11.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.11.3/eb6859cc13fc45e8ed7a8fa3c81e816e424b09ed#eb6859cc13fc45e8ed7a8fa3c81e816e424b09ed"
+  integrity sha512-rgSiLalhGW0+yYIgwbNlGvi2moEsrTRMBdvCTISk6iuElqr0ncC18IeqqYRdL6krhd8E48lhazQOFBxz0DEljQ==
 
 "@navikt/ds-icons@2.2.0":
   version "2.2.0"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.2.0/3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90#3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90"
   integrity sha512-86vmaBIwdk8THOOYqHusiSKZ8e7imaog7EdHsJz+9CCt7uKE+as+c/aVCyz1LUJjjXhdt7ify4mq4MzPuHK9MQ==
 
-"@navikt/ds-react@5.6.1":
-  version "5.6.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.6.1/3708463c64696e4be067b699743bfd78f0204b67#3708463c64696e4be067b699743bfd78f0204b67"
-  integrity sha512-gw3IKVYya0nf27/EHmACdKIC7nbY1+C7a1XoxPCBxlPGwvKyEYwKW7pqgt95I6gYTkrMYrAferWGfYySthVgqw==
+"@navikt/ds-react@5.11.3":
+  version "5.11.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.11.3/44dff3febdcdc58d27e98159c057abc647d74056#44dff3febdcdc58d27e98159c057abc647d74056"
+  integrity sha512-JoAU8SRl9aQQUU8y+iJOWfVRkgs5dqHH0iPWPJVPizNIwrVB8eGqBg+zci+HUzPWuKbzacCmI07i5bhFfcSbMQ==
   dependencies:
     "@floating-ui/react" "0.25.4"
-    "@navikt/aksel-icons" "^5.6.1"
-    "@navikt/ds-tokens" "^5.6.1"
+    "@navikt/aksel-icons" "^5.11.3"
+    "@navikt/ds-tokens" "^5.11.3"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
-    date-fns "2.29.3"
+    date-fns "^2.30.0"
     react-day-picker "8.3.4"
 
-"@navikt/ds-tokens@5.6.1", "@navikt/ds-tokens@^5.6.1":
-  version "5.6.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/5.6.1/f1ab1e8578b07f3fb62fc6458473c9882ccfe26a#f1ab1e8578b07f3fb62fc6458473c9882ccfe26a"
-  integrity sha512-gdg93aLtrPf/fuLXKmtmq/HdZLD/dfk7hbPkeVWi8hC6xetrxIf6ooJOPRX+OG8oW+pofKLStsWOeDutLdbumQ==
+"@navikt/ds-tokens@5.11.3", "@navikt/ds-tokens@^5.11.3":
+  version "5.11.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/5.11.3/3d54345bd05527f037c9e05588aeea42d261c463#3d54345bd05527f037c9e05588aeea42d261c463"
+  integrity sha512-tUoWAd1otecxdG8XuR0NRmq4Rsxvd0TqyRBXAXeDMpyX54JADyMY+LjqBhBxvieWmjnB541gaQxz02p9VTmrLQ==
 
 "@navikt/familie-backend@^10.0.10":
   version "10.0.10"
@@ -4957,12 +4957,7 @@ data-urls@^3.0.2:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-date-fns@2.29.3:
-  version "2.29.3"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
-  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
-
-date-fns@2.30.0:
+date-fns@2.30.0, date-fns@^2.30.0:
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
