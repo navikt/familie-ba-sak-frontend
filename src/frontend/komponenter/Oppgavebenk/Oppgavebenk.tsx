@@ -6,7 +6,7 @@ import OppgaveHeader from './OppgaveHeader';
 import OppgaveList from './OppgaveList';
 import { useAmplitude } from '../../utils/amplitude';
 
-const StyledDiv = styled.div`
+const Container = styled.article`
     padding: 0.5rem;
     height: ${`calc(100vh - 30px - 1.1rem)`};
     width: 100vw;
@@ -25,10 +25,10 @@ const Oppgavebenk: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <StyledDiv>
+        <Container>
             <OppgaveHeader />
             <OppgaveList />
-        </StyledDiv>
+        </Container>
     );
 };
 

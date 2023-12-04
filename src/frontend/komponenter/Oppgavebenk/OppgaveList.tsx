@@ -51,7 +51,7 @@ const StyledAlert = styled(Alert)`
     margin-top: 1rem;
 `;
 
-const StyledDiv = styled.div`
+const HeaderMedPaginering = styled.div`
     margin-top: 1rem;
     display: flex;
     align-items: center;
@@ -64,13 +64,13 @@ const OppgaveList: React.FunctionComponent = () => {
     const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
 
     return (
-        <div className={'oppgavelist'}>
-            <StyledDiv>
-                <Heading size={'medium'} level={'2'}>
+        <section>
+            <HeaderMedPaginering>
+                <Heading size={'medium'} level={'1'}>
                     Oppgaveliste
                 </Heading>
                 <OppgavelisteNavigator />
-            </StyledDiv>
+            </HeaderMedPaginering>
             <div>
                 <div>
                     <table className="tabell" {...getTableProps()}>
@@ -134,7 +134,7 @@ const OppgaveList: React.FunctionComponent = () => {
             {oppgaver.status === RessursStatus.HENTER && (
                 <StyledAlert variant="info">Henter...</StyledAlert>
             )}
-        </div>
+        </section>
     );
 };
 
