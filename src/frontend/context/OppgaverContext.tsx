@@ -64,20 +64,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     );
 
     const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
-    const data: ReadonlyArray<IOppgaveRad> = useMemo(() => {
+    const oppgaverader: ReadonlyArray<IOppgaveRad> = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
             ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
             : [];
     }, [oppgaver]);
 
     const lagretSortering = localStorage.getItem(OPPGAVEBENK_SORTERINGSNØKKEL);
+    const sorteringsregel = lagretSortering
+        ? JSON.parse(lagretSortering)
+        : [{ id: 'opprettetTidspunkt', desc: false }];
 
     const tableInstance: TableInstance<IOppgaveRad> &
         UseSortByInstanceProps<IOppgaveRad> &
         UsePaginationInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
         {
             columns,
-            data,
+            data: oppgaverader,
             initialState: {
                 pageSize: oppgaveSideLimit,
                 pageIndex: 0,
@@ -458,6 +461,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     return {
+        oppgaverader,
+        sorteringsregel,
         fordelOppgave,
         hentOppgaver,
         oppgaveFelter,

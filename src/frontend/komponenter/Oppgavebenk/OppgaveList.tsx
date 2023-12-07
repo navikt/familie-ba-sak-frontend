@@ -1,16 +1,25 @@
 import React from 'react';
 
-import classNames from 'classnames';
-import type { Cell, ColumnInstance } from 'react-table';
+import type { ColumnInstance } from 'react-table';
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import OppgaveDirektelenke from './OppgaveDirektelenke';
 import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
+import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { useOppgaver } from '../../context/OppgaverContext';
-import type { IOppgaveRad } from '../../context/OppgaverContextUtils';
+import { intDatoTilNorskDato, type IOppgaveRad } from '../../context/OppgaverContextUtils';
+import {
+    type GjelderFilter,
+    gjelderFilter,
+    oppgaveTypeFilter,
+    PrioritetFilter,
+    type OppgavetypeFilter,
+} from '../../typer/oppgave';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 export const styleFraAccessorEllerId = (id: string) => {
     switch (id) {
@@ -59,9 +68,7 @@ const HeaderMedPaginering = styled.div`
 `;
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, tableInstance } = useOppgaver();
-
-    const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
+    const { oppgaver, oppgaverader } = useOppgaver();
 
     return (
         <section>
@@ -71,57 +78,93 @@ const OppgaveList: React.FunctionComponent = () => {
                 </Heading>
                 <OppgavelisteNavigator />
             </HeaderMedPaginering>
-            <div>
-                <div>
-                    <table className="tabell" {...getTableProps()}>
-                        <thead>
-                            {headerGroups.map(headerGroup => (
-                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map(column => (
-                                        <th
-                                            role="columnheader"
-                                            aria-sort={getAriaSort(column)}
-                                            className={getSortLenkClassName(column)}
-                                            {...column.getHeaderProps(
-                                                column.getSortByToggleProps()
-                                            )}
-                                        >
-                                            {column.render('Header')}
-                                        </th>
-                                    ))}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                            {page.map(row => {
-                                prepareRow(row);
-                                return (
-                                    <tr {...row.getRowProps()}>
-                                        {row.cells.map((cell: Cell<IOppgaveRad>) => (
-                                            <td
-                                                className={classNames([
-                                                    cell.column.isSorted
-                                                        ? 'tabell__td--sortert'
-                                                        : '',
-                                                    styleFraAccessorEllerId(cell.column.id),
-                                                ])}
-                                                title={
-                                                    (typeof cell.value === 'string' &&
-                                                        cell.value) ||
-                                                    ''
-                                                }
-                                                {...cell.getCellProps()}
-                                            >
-                                                {cell.render('Cell')}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <Table size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.ColumnHeader sortKey="opprettetTidspunkt" sortable>
+                            Reg. dato
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="oppgavetype" sortable>
+                            Oppgavetype
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="behandlingstema" sortable>
+                            Gjelder
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="behandlingstype" sortable>
+                            Behandlingstype
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
+                            Frist
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="prioritet" sortable>
+                            Prioritet
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="beskrivelse" sortable>
+                            Beskrivelse
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="ident" sortable>
+                            Bruker
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="tildeltEnhetsnr" sortable>
+                            Enhet
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="tilordnetRessurs" sortable>
+                            Saksbehandler
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortKey="handlinger" sortable>
+                            Handlinger
+                        </Table.ColumnHeader>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {oppgaverader.map(rad => (
+                        <Table.Row>
+                            <Table.DataCell>
+                                {rad.opprettetTidspunkt
+                                    ? intDatoTilNorskDato(rad.opprettetTidspunkt)
+                                    : 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {rad.oppgavetype
+                                    ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
+                                          ?.navn ?? rad.oppgavetype
+                                    : 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {rad.behandlingstema
+                                    ? gjelderFilter[rad.behandlingstema as GjelderFilter]?.navn ??
+                                      rad.behandlingstema
+                                    : 'Ikke satt'}
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.behandlingstype}</Table.DataCell>
+                            <Table.DataCell>
+                                {rad.fristFerdigstillelse
+                                    ? intDatoTilNorskDato(rad.fristFerdigstillelse)
+                                    : 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {PrioritetFilter[rad.prioritet as keyof typeof PrioritetFilter]}
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.beskrivelse}</Table.DataCell>
+                            <Table.DataCell>
+                                {hentFnrFraOppgaveIdenter(rad.ident) || 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.tildeltEnhetsnr}</Table.DataCell>
+                            <Table.DataCell>
+                                <OppgavelisteSaksbehandler
+                                    oppgave={rad.tilordnetRessurs.oppg}
+                                    innloggetSaksbehandler={
+                                        rad.tilordnetRessurs.innloggetSaksbehandler
+                                    }
+                                />
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <OppgaveDirektelenke oppgave={rad.handlinger} />
+                            </Table.DataCell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
                 <StyledAlert variant="warning">Ingen oppgaver</StyledAlert>
