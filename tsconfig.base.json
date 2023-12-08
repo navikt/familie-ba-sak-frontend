@@ -20,6 +20,6 @@
       "jsx": "react",
       "esModuleInterop": true,
       "isolatedModules": true,
-      "importsNotUsedAsValues": "error",
+      "verbatimModuleSyntax": true,
     }
   }
