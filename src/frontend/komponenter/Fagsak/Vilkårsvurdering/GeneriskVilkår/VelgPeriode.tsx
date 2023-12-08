@@ -38,9 +38,6 @@ const MarginFieldset = styled(Fieldset)`
 const FlexDiv = styled.div`
     display: flex;
     gap: 1.125rem;
-    & > * {
-        min-width: 11rem;
-    }
 `;
 
 const VelgPeriode: React.FC<IProps> = ({
