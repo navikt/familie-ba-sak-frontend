@@ -220,7 +220,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 </StyledDataCell>
 
                                 <StyledDataCell>
-                                    {(journalpost.dokumenter?.length ?? []) > 0 ? (
+                                    {(journalpost.dokumenter ?? []).length > 0 ? (
                                         <Vedleggsliste>
                                             {journalpost.dokumenter?.map(dokument => (
                                                 <JournalpostDokument
