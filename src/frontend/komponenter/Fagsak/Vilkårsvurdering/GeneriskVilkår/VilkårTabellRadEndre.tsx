@@ -47,14 +47,14 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-export const Container = styled.div<{ lesevisning: boolean; vilkårResultat: Resultat }>`
+export const Container = styled.div<{ $lesevisning: boolean; $vilkårResultat: Resultat }>`
     max-width: 30rem;
     border-left: 0.125rem solid
         ${props => {
-            if (props.lesevisning) {
+            if (props.$lesevisning) {
                 return ABorderDefault;
             }
-            if (props.vilkårResultat === Resultat.IKKE_VURDERT) {
+            if (props.$vilkårResultat === Resultat.IKKE_VURDERT) {
                 return ABorderWarning;
             }
             return ASurfaceAction;
@@ -220,8 +220,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             errorPropagation={false}
         >
             <Container
-                lesevisning={lesevisning}
-                vilkårResultat={vilkårResultat.verdi.resultat.verdi}
+                $lesevisning={lesevisning}
+                $vilkårResultat={vilkårResultat.verdi.resultat.verdi}
             >
                 {visRegelverkValg() && (
                     <Select

@@ -19,9 +19,9 @@ interface Props {
     bruker: IPersonInfo;
 }
 
-const ToggleVisningHøyremeny = styled(Button)<{ åpenhøyremeny: boolean }>`
+const ToggleVisningHøyremeny = styled(Button)<{ $åpenhøyremeny: boolean }>`
     position: absolute;
-    margin-left: ${props => (!props.åpenhøyremeny ? '-20px' : '-17px')};
+    margin-left: ${props => (!props.$åpenhøyremeny ? '-20px' : '-17px')};
     top: 370px;
     width: 34px;
     min-width: 34px;
@@ -43,7 +43,7 @@ const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
         <>
             <div className={åpenHøyremeny ? 'høyremeny' : ''}>
                 <ToggleVisningHøyremeny
-                    åpenhøyremeny={true}
+                    $åpenhøyremeny={true}
                     variant="secondary"
                     size="small"
                     aria-label="Skjul høyremeny"

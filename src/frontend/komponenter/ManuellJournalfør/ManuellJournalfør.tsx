@@ -14,13 +14,13 @@ import {
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import Personlinje from '../Fagsak/Personlinje/Personlinje';
 
-const ToKolonnerDiv = styled.div<{ viserAlert?: boolean }>`
+const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
     display: grid;
     grid-template-columns: 40rem 1fr;
     grid-template-rows: 1fr;
     height: calc(
         100vh -
-            ${props => (props.viserAlert ? fagsakHeaderHøydeRem + 5.25 : fagsakHeaderHøydeRem)}rem
+            ${props => (props.$viserAlert ? fagsakHeaderHøydeRem + 5.25 : fagsakHeaderHøydeRem)}rem
     );
 `;
 
@@ -50,7 +50,7 @@ const ManuellJournalførContent: React.FC = () => {
                         </>
                     )}
 
-                    <ToKolonnerDiv viserAlert={viserAlert}>
+                    <ToKolonnerDiv $viserAlert={viserAlert}>
                         <JournalpostSkjema />
                         <DokumentPanel />
                     </ToKolonnerDiv>

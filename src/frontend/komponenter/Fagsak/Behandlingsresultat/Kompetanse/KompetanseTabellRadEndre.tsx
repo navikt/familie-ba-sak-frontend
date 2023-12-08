@@ -94,7 +94,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             legend="Kompetanseskjema"
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
                 <StyledFamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
