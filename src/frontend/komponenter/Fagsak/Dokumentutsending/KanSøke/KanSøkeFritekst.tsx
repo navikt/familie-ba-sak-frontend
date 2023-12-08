@@ -85,7 +85,9 @@ const KanSøkeFritekst = ({
                                 label={`Kulepunkt ${fritekstId}`}
                                 hideLabel={true}
                                 maxLength={makslengdeFritekst}
-                                onChange={event => onChangeFritekst(event, fritekstId)}
+                                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                    onChangeFritekst(event, fritekstId)
+                                }
                                 error={skjema.visFeilmeldinger && fritekst.feilmelding}
                                 /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                 autoFocus

@@ -55,7 +55,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     tittel,
 }) => {
     return (
-        <StyledExpansionCard open={åpen} onToggle={onClick} size="small">
+        <StyledExpansionCard open={åpen} onToggle={onClick} size="small" aria-label="Begrunnelser">
             <StyledExpansionHeader>
                 <StyledExpansionTitle>
                     {periode.fom && (

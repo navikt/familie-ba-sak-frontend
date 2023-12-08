@@ -300,9 +300,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekst}
                                                         description={hjelpetekst}
-                                                        onChange={event =>
-                                                            onChangeFritekst(event, fritekstId)
-                                                        }
+                                                        onChange={(
+                                                            event: React.ChangeEvent<HTMLTextAreaElement>
+                                                        ) => onChangeFritekst(event, fritekstId)}
                                                         error={
                                                             skjema.visFeilmeldinger &&
                                                             fritekst.feilmelding

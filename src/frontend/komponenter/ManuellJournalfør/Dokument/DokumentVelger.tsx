@@ -47,6 +47,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFe
                 }
             }}
             size="small"
+            aria-label="Dokumentvelger"
         >
             <ExpansionCard.Header>
                 <ExpansionCard.Title>

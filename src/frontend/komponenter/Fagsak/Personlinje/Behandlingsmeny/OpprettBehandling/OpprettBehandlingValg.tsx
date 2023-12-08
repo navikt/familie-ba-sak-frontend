@@ -3,7 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Select } from '@navikt/ds-react';
-import type { FormatOptionLabelMeta, ISelectOption } from '@navikt/familie-form-elements';
+import type {
+    FormatOptionLabelMeta,
+    ISelectOption,
+    MultiValue,
+    SingleValue,
+} from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
@@ -283,7 +288,9 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                                 return <BodyShort>{option.value}</BodyShort>;
                             }
                         }}
-                        onChange={valgteOptions => {
+                        onChange={(
+                            valgteOptions: MultiValue<ISelectOption> | SingleValue<ISelectOption>
+                        ) => {
                             skjema.felter.valgteBarn.onChange(
                                 valgteOptions === null ? [] : (valgteOptions as ISelectOption[])
                             );

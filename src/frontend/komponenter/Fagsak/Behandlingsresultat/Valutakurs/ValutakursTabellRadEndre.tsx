@@ -106,7 +106,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             legend={'Valutakurs skjema'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
@@ -163,7 +163,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             label={'Valutakurs'}
                             readOnly={lesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
-                            onChange={event =>
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
                         />

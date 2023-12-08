@@ -57,6 +57,7 @@ export const AvsenderPanel: React.FC = () => {
                 settÅpen(!åpen);
             }}
             size="small"
+            aria-label="Avsenderpanel"
         >
             <ExpansionCard.Header>
                 <ExpansionCard.Title>

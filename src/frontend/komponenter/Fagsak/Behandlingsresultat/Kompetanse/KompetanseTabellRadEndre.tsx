@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
+import type { MultiValue, OptionType, SingleValue } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -94,7 +94,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             legend="Kompetanseskjema"
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer lesevisning={lesevisning} status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
                 <StyledFamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
@@ -102,7 +102,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     isMulti
                     options={tilgjengeligeBarn}
                     value={skjema.felter.barnIdenter.verdi}
-                    onChange={options =>
+                    onChange={(options: MultiValue<OptionType> | SingleValue<OptionType>) =>
                         skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
                     }
                 />
@@ -125,7 +125,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     readOnly={lesevisning}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
-                    onChange={event =>
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         )
@@ -157,7 +157,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     readOnly={lesevisning}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    onChange={event => {
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         );
