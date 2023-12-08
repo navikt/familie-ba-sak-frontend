@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
+import type { MultiValue, OptionType, SingleValue } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -102,7 +102,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     isMulti
                     options={tilgjengeligeBarn}
                     value={skjema.felter.barnIdenter.verdi}
-                    onChange={options =>
+                    onChange={(options: MultiValue<OptionType> | SingleValue<OptionType>) =>
                         skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
                     }
                 />

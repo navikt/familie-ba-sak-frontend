@@ -3,7 +3,13 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import type {
+    ActionMeta,
+    CSSObjectWithLabel,
+    ISelectOption,
+    MultiValue,
+    SingleValue,
+} from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
@@ -180,7 +186,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                 mapUtdypendeVilkårsvurderingTilOption
             )}
             propSelectStyles={{
-                menu: provided => ({
+                menu: (provided: CSSObjectWithLabel) => ({
                     ...provided,
                     zIndex: 3,
                 }),
@@ -188,7 +194,10 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti
-            onChange={(_, action: ActionMeta<ISelectOption>) => {
+            onChange={(
+                _: MultiValue<ISelectOption> | SingleValue<ISelectOption>,
+                action: ActionMeta<ISelectOption>
+            ) => {
                 håndterEndring(action);
             }}
             options={muligeUtdypendeVilkårsvurderinger.map(mapUtdypendeVilkårsvurderingTilOption)}
