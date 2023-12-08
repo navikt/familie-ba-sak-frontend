@@ -70,6 +70,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
     } = useDokumentutsending();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
@@ -198,6 +199,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
                             manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
+                            vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
                         />
                     )}
 
