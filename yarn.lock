@@ -2061,10 +2061,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.11.4/4c44cc238b7aca5ab1cb0e62d204a3d98f50623b#4c44cc238b7aca5ab1cb0e62d204a3d98f50623b"
   integrity sha512-7iRniSsoQAijBA9Bj3OzBDS8dX/ANI8kEImJlaIuR8hssxd3h1NXeZAG2+sbOkqJYq+xG7PCRFDHwTXf/PLL3A==
 
-"@navikt/ds-icons@2.2.0":
-  version "2.2.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.2.0/3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90#3bcfc2145b897a7c36c6ca4ce20ba3b991d64a90"
-  integrity sha512-86vmaBIwdk8THOOYqHusiSKZ8e7imaog7EdHsJz+9CCt7uKE+as+c/aVCyz1LUJjjXhdt7ify4mq4MzPuHK9MQ==
+"@navikt/ds-icons@1.3.27":
+  version "1.3.27"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.27/7260508181259885d994ed5874ddb975ac03ff74#7260508181259885d994ed5874ddb975ac03ff74"
+  integrity sha512-VfFIZaDW7o4oXqxcyKrshSnGVH6WnhQonRk7U50N4n7FT5TCkm6X5BFzA9j3EQ4rNmxXaNVH7re1S3E6yecHGg==
 
 "@navikt/ds-react@5.11.4":
   version "5.11.4"
