@@ -2571,7 +2571,7 @@
     "@sentry/types" "7.83.0"
     "@sentry/utils" "7.83.0"
 
-"@sentry/core@7.87.0", "@sentry/core@^7.5.0", "@sentry/core@^7.86.0":
+"@sentry/core@7.87.0", "@sentry/core@^7.5.0", "@sentry/core@^7.87.0":
   version "7.87.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.87.0.tgz#98cdd1ce04f781353224dd1ac79b4ef7f6786053"
   integrity sha512-jkoXqK/nuYh8DYS+n7uaSuSIdw4HJemyRkXsWjAEPtEgD7taGMafZGbP5pl+XE38SE59jTBxmKnkUEZOFMgZGA==
