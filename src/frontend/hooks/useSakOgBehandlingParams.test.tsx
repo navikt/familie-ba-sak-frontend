@@ -9,11 +9,15 @@ import { MemoryRouter as Router } from 'react-router-dom';
 
 import useSakOgBehandlingParams from './useSakOgBehandlingParams';
 
+interface IProps {
+    children?: React.ReactNode;
+}
+
 const renderUseSakOgBehandlingParamsHookMedPath = (path: string) => {
     const {
         result: { current },
     } = renderHook(() => useSakOgBehandlingParams(), {
-        wrapper: ({ children }) => {
+        wrapper: ({ children }: IProps) => {
             return <Router initialEntries={[{ pathname: path }]}>{children}</Router>;
         },
     });
