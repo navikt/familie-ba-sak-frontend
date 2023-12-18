@@ -40,6 +40,7 @@ const initalState: IModal = {
 
 interface IProps {
     autentisertSaksbehandler: ISaksbehandler | undefined;
+    children?: React.ReactNode;
 }
 
 interface AuthProviderExports {
@@ -254,7 +255,11 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     };
 });
 
-const AuthOgHttpProvider: React.FC = ({ children }) => {
+interface AuthOgHttpProps {
+    children?: React.ReactNode;
+}
+
+const AuthOgHttpProvider: React.FC<AuthOgHttpProps> = ({ children }) => {
     const { innloggetSaksbehandler, settAutentisert } = useAuth();
 
     return (

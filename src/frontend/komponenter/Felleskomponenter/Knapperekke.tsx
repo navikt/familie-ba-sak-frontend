@@ -8,7 +8,10 @@ const Container = styled.div`
     margin-top: 1rem;
 `;
 
-const Knapperekke: React.FC = ({ children }) => {
+interface IProps {
+    children?: React.ReactNode;
+}
+const Knapperekke: React.FC<IProps> = ({ children }) => {
     return <Container>{children}</Container>;
 };
 

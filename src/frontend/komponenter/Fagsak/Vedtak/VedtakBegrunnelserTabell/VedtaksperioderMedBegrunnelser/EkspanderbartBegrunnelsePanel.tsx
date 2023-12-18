@@ -37,6 +37,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
     skalViseSum: boolean;
     summer: () => number;
     tittel: string;
+    children?: React.ReactNode;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>

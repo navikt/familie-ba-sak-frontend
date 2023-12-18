@@ -33,7 +33,11 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const LitenKnapp: React.FC = ({ children }) => {
+interface IProps {
+    children?: React.ReactNode;
+}
+
+const LitenKnapp: React.FC<IProps> = ({ children }) => {
     return (
         <StyledButton size="small" variant="tertiary">
             {children}

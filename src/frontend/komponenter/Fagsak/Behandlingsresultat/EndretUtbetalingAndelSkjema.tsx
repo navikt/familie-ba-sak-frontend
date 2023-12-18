@@ -168,7 +168,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={<Label>Velg hvem det gjelder</Label>}
                         value={skjema.felter.person.verdi ?? ''}
-                        placeholder={'Velg person'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             skjema.felter.person.validerOgSettFelt(event.target.value);
                         }}
@@ -233,7 +232,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         value={skjema.felter.årsak.verdi ?? ''}
                         label={'Årsak'}
-                        placeholder={'Velg årsak'}
                         onChange={(event): void => {
                             skjema.felter.årsak.validerOgSettFelt(
                                 event.target.value as IEndretUtbetalingAndelÅrsak
@@ -319,7 +317,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                         : undefined
                                     : undefined
                             }
-                            placeholder={'Velg sats'}
                             readOnly={erLesevisning}
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                                 skjema.felter.fullSats.validerOgSettFelt(
