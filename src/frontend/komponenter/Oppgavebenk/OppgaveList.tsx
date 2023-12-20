@@ -67,6 +67,20 @@ const HeaderMedPaginering = styled.div`
     justify-content: space-between;
 `;
 
+enum Sorteringsnøkkel {
+    OPPRETTET_TIDSPUNKT = 'OPPRETTET_TIDSPUNKT',
+    OPPGAVETYPE = 'OPPGAVETYPE',
+    BEHANDLINGSTEMA = 'BEHANDLINGSTEMA',
+    BEHANDLINGSTYPE = 'BEHANDLINGSTYPE',
+    FRIST_FERDIGSTILLELSE = 'FRIST_FERDIGSTILLELSE',
+    PRIORITET = 'PRIORITET',
+    BESKRIVELSE = 'BESKRIVELSE',
+    IDENT = 'IDENT',
+    TILDELT_ENHETSNR = 'TILDELT_ENHETSNR',
+    TILORDNET_RESSURS = 'TILORDNET_RESSURS',
+    HANDLINGER = 'HANDLINGER',
+}
+
 const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     // Har laget issue i Aksel om å få size som tillatt prop direkte på DataCell https://github.com/navikt/aksel/issues/2551
     <Table.DataCell className="navds-body-short--small">{children}</Table.DataCell>
@@ -86,37 +100,40 @@ const OppgaveList: React.FunctionComponent = () => {
             <Table size="small">
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeader sortKey="opprettetTidspunkt" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.OPPRETTET_TIDSPUNKT} sortable>
                             Reg. dato
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="oppgavetype" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.OPPGAVETYPE} sortable>
                             Oppgavetype
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="behandlingstema" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTEMA} sortable>
                             Gjelder
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="behandlingstype" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTYPE} sortable>
                             Behandlingstype
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
+                        <Table.ColumnHeader
+                            sortKey={Sorteringsnøkkel.FRIST_FERDIGSTILLELSE}
+                            sortable
+                        >
                             Frist
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="prioritet" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.PRIORITET} sortable>
                             Prioritet
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="beskrivelse" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BESKRIVELSE} sortable>
                             Beskrivelse
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="ident" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.IDENT} sortable>
                             Bruker
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="tildeltEnhetsnr" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.TILDELT_ENHETSNR} sortable>
                             Enhet
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="tilordnetRessurs" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.TILORDNET_RESSURS} sortable>
                             Saksbehandler
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey="handlinger" sortable>
+                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.HANDLINGER} sortable>
                             Handlinger
                         </Table.ColumnHeader>
                     </Table.Row>
