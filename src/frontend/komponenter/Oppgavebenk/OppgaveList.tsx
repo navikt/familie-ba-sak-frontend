@@ -3,7 +3,7 @@ import React from 'react';
 import type { ColumnInstance } from 'react-table';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Heading, Table } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from './OppgaveDirektelenke';
@@ -69,9 +69,7 @@ const HeaderMedPaginering = styled.div`
 
 const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     // Har laget issue i Aksel om å få size som tillatt prop direkte på DataCell https://github.com/navikt/aksel/issues/2551
-    <BodyShort size="small">
-        <Table.DataCell>{children}</Table.DataCell>
-    </BodyShort>
+    <Table.DataCell className="navds-body-short--small">{children}</Table.DataCell>
 );
 
 const OppgaveList: React.FunctionComponent = () => {
