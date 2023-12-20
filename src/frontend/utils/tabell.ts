@@ -1,9 +1,9 @@
 import type { SortState } from '@navikt/ds-react';
 
 export enum Sorteringsrekkefølge {
-    STIGENDE,
-    SYNKENDE,
-    INGEN_SORTERING,
+    STIGENDE = 'ascending',
+    SYNKENDE = 'descending',
+    INGEN_SORTERING = '',
 }
 
 export const hentSortState = (
@@ -16,3 +16,17 @@ export const hentSortState = (
               orderBy: sortKey,
               direction: sortering === Sorteringsrekkefølge.STIGENDE ? 'ascending' : 'descending',
           };
+
+export const hentNesteSorteringsrekkefølge = (
+    forrigeSorteringsrekkefølge: string
+): Sorteringsrekkefølge => {
+    switch (forrigeSorteringsrekkefølge) {
+        case undefined:
+            return Sorteringsrekkefølge.STIGENDE;
+        case 'ascending':
+            return Sorteringsrekkefølge.SYNKENDE;
+        case 'descending':
+        default:
+            return Sorteringsrekkefølge.INGEN_SORTERING;
+    }
+};

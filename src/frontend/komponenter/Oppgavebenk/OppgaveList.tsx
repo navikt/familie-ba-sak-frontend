@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import type { ColumnInstance } from 'react-table';
 import styled from 'styled-components';
 
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { Alert, Heading, Table, type SortState } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from './OppgaveDirektelenke';
-import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { intDatoTilNorskDato, type IOppgaveRad } from '../../context/OppgaverContextUtils';
+import { intDatoTilNorskDato } from '../../context/OppgaverContextUtils';
 import {
     type GjelderFilter,
     gjelderFilter,
@@ -20,41 +18,13 @@ import {
     type OppgavetypeFilter,
 } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import {
+    Sorteringsrekkefølge,
+    hentSortState,
+    hentNesteSorteringsrekkefølge,
+} from '../../utils/tabell';
 
-export const styleFraAccessorEllerId = (id: string) => {
-    switch (id) {
-        case 'beskrivelse':
-            return 'beskrivelse';
-        case 'tilordnetRessurs':
-            return 'tilordnet-ressurs';
-        case 'handlinger':
-            return 'handlinger';
-        default:
-            return null;
-    }
-};
-
-export const getAriaSort = (
-    column: ColumnInstance<IOppgaveRad>
-): 'none' | 'descending' | 'ascending' | undefined => {
-    if (column.isSortedDesc === true) {
-        return ariaSortMap.get(FeltSortOrder.DESCENDANT);
-    }
-    if (column.isSortedDesc === false) {
-        return ariaSortMap.get(FeltSortOrder.ASCENDANT);
-    }
-    return ariaSortMap.get(FeltSortOrder.NONE);
-};
-
-export const getSortLenkClassName = (column: ColumnInstance<IOppgaveRad>) => {
-    if (column.isSortedDesc === true) {
-        return 'tabell__th--sortert-desc';
-    }
-    if (column.isSortedDesc === false) {
-        return 'tabell__th--sortert-asc';
-    }
-    return '';
-};
+const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
 const StyledAlert = styled(Alert)`
     margin-top: 1rem;
@@ -89,6 +59,23 @@ const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, oppgaverader } = useOppgaver();
 
+    const lagretSortering = localStorage.getItem(OPPGAVEBENK_SORTERINGSNØKKEL);
+    const [sortering, settSortering] = useState<SortState | undefined>(
+        lagretSortering
+            ? JSON.parse(lagretSortering)
+            : hentSortState(Sorteringsrekkefølge.STIGENDE, Sorteringsnøkkel.OPPRETTET_TIDSPUNKT)
+    );
+
+    const settOgLagreSortering = (sorteringsnøkkel: Sorteringsnøkkel): void => {
+        const nyRekkefølge =
+            sorteringsnøkkel === sortering?.orderBy
+                ? hentNesteSorteringsrekkefølge(sortering.direction as Sorteringsrekkefølge)
+                : Sorteringsrekkefølge.STIGENDE;
+        const nySortering = hentSortState(nyRekkefølge, sorteringsnøkkel);
+        localStorage.setItem(OPPGAVEBENK_SORTERINGSNØKKEL, JSON.stringify(nySortering));
+        settSortering(nySortering);
+    };
+
     return (
         <section>
             <HeaderMedPaginering>
@@ -97,7 +84,13 @@ const OppgaveList: React.FunctionComponent = () => {
                 </Heading>
                 <OppgavelisteNavigator />
             </HeaderMedPaginering>
-            <Table size="small">
+            <Table
+                size="small"
+                sort={sortering}
+                onSortChange={(nøkkel?: string) =>
+                    nøkkel && settOgLagreSortering(nøkkel as Sorteringsnøkkel)
+                }
+            >
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeader sortKey={Sorteringsnøkkel.OPPRETTET_TIDSPUNKT} sortable>
