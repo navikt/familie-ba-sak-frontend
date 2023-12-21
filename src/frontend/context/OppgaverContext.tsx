@@ -17,7 +17,7 @@ import {
 
 import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
-import { type IOppgaveRad, Sorteringsnøkkel } from './OppgaverContextUtils';
+import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
 import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
@@ -63,7 +63,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         initialOppgaveFelter(innloggetSaksbehandler)
     );
 
-    const oppgaverader: ReadonlyArray<IOppgaveRad> = useMemo(() => {
+    const oppgaverader: IOppgaveRad[] = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
             ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
             : [];
@@ -75,6 +75,20 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             ? JSON.parse(lagretSortering)
             : hentSortState(Sorteringsrekkefølge.STIGENDE, Sorteringsnøkkel.OPPRETTET_TIDSPUNKT)
     );
+
+    const [sorterteOppgaverader, settSorterteOppgaverader] = useState<IOppgaveRad[]>(oppgaverader);
+    useEffect(() => {
+        settSorterteOppgaverader(
+            oppgaverader.sort((a, b) => {
+                if (sortering) {
+                    return sortering.direction === Sorteringsrekkefølge.STIGENDE
+                        ? sorterEtterNøkkel(b, a, sortering.orderBy as Sorteringsnøkkel)
+                        : sorterEtterNøkkel(a, b, sortering.orderBy as Sorteringsnøkkel);
+                }
+                return 1;
+            })
+        );
+    }, [oppgaverader, sortering]);
 
     const settOgLagreSortering = (sorteringsnøkkel: Sorteringsnøkkel): void => {
         const nyRekkefølge =
@@ -462,6 +476,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         gåTilFagsakEllerVisFeilmelding,
         sortering,
         settOgLagreSortering,
+        sorterteOppgaverader,
     };
 });
 const Oppgaver: React.FC = () => {
