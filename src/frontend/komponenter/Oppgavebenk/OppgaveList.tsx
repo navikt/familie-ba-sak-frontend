@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading, Table, type SortState } from '@navikt/ds-react';
+import { Alert, Heading, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { intDatoTilNorskDato } from '../../context/OppgaverContextUtils';
+import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
 import {
     type GjelderFilter,
     gjelderFilter,
@@ -18,13 +18,6 @@ import {
     type OppgavetypeFilter,
 } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import {
-    Sorteringsrekkefølge,
-    hentSortState,
-    hentNesteSorteringsrekkefølge,
-} from '../../utils/tabell';
-
-const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
 const StyledAlert = styled(Alert)`
     margin-top: 1rem;
@@ -37,44 +30,13 @@ const HeaderMedPaginering = styled.div`
     justify-content: space-between;
 `;
 
-enum Sorteringsnøkkel {
-    OPPRETTET_TIDSPUNKT = 'OPPRETTET_TIDSPUNKT',
-    OPPGAVETYPE = 'OPPGAVETYPE',
-    BEHANDLINGSTEMA = 'BEHANDLINGSTEMA',
-    BEHANDLINGSTYPE = 'BEHANDLINGSTYPE',
-    FRIST_FERDIGSTILLELSE = 'FRIST_FERDIGSTILLELSE',
-    PRIORITET = 'PRIORITET',
-    BESKRIVELSE = 'BESKRIVELSE',
-    IDENT = 'IDENT',
-    TILDELT_ENHETSNR = 'TILDELT_ENHETSNR',
-    TILORDNET_RESSURS = 'TILORDNET_RESSURS',
-    HANDLINGER = 'HANDLINGER',
-}
-
 const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     // Har laget issue i Aksel om å få size som tillatt prop direkte på DataCell https://github.com/navikt/aksel/issues/2551
     <Table.DataCell className="navds-body-short--small">{children}</Table.DataCell>
 );
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, oppgaverader } = useOppgaver();
-
-    const lagretSortering = localStorage.getItem(OPPGAVEBENK_SORTERINGSNØKKEL);
-    const [sortering, settSortering] = useState<SortState | undefined>(
-        lagretSortering
-            ? JSON.parse(lagretSortering)
-            : hentSortState(Sorteringsrekkefølge.STIGENDE, Sorteringsnøkkel.OPPRETTET_TIDSPUNKT)
-    );
-
-    const settOgLagreSortering = (sorteringsnøkkel: Sorteringsnøkkel): void => {
-        const nyRekkefølge =
-            sorteringsnøkkel === sortering?.orderBy
-                ? hentNesteSorteringsrekkefølge(sortering.direction as Sorteringsrekkefølge)
-                : Sorteringsrekkefølge.STIGENDE;
-        const nySortering = hentSortState(nyRekkefølge, sorteringsnøkkel);
-        localStorage.setItem(OPPGAVEBENK_SORTERINGSNØKKEL, JSON.stringify(nySortering));
-        settSortering(nySortering);
-    };
+    const { oppgaver, oppgaverader, sortering, settOgLagreSortering } = useOppgaver();
 
     return (
         <section>
@@ -133,7 +95,7 @@ const OppgaveList: React.FunctionComponent = () => {
                 </Table.Header>
                 <Table.Body>
                     {oppgaverader.map(rad => (
-                        <Table.Row>
+                        <Table.Row key={rad.id}>
                             <DataCellSmall>
                                 {rad.opprettetTidspunkt
                                     ? intDatoTilNorskDato(rad.opprettetTidspunkt)

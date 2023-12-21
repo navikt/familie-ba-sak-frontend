@@ -3,14 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
-import type {
-    Column,
-    TableInstance,
-    UsePaginationInstanceProps,
-    UseSortByInstanceProps,
-} from 'react-table';
-import { usePagination, useSortBy, useTable } from 'react-table';
 
+import type { SortState } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -23,8 +17,8 @@ import {
 
 import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
-import type { IOppgaveRad } from './OppgaverContextUtils';
-import { kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
+import { type IOppgaveRad, Sorteringsnøkkel } from './OppgaverContextUtils';
+import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
@@ -41,6 +35,11 @@ import {
 import { erIsoStringGyldig } from '../utils/dato';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+import {
+    Sorteringsrekkefølge,
+    hentSortState,
+    hentNesteSorteringsrekkefølge,
+} from '../utils/tabell';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
@@ -64,7 +63,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         initialOppgaveFelter(innloggetSaksbehandler)
     );
 
-    const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
     const oppgaverader: ReadonlyArray<IOppgaveRad> = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
             ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
@@ -72,34 +70,21 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     }, [oppgaver]);
 
     const lagretSortering = localStorage.getItem(OPPGAVEBENK_SORTERINGSNØKKEL);
-    const sorteringsregel = lagretSortering
-        ? JSON.parse(lagretSortering)
-        : [{ id: 'opprettetTidspunkt', desc: false }];
-
-    const tableInstance: TableInstance<IOppgaveRad> &
-        UseSortByInstanceProps<IOppgaveRad> &
-        UsePaginationInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
-        {
-            columns,
-            data: oppgaverader,
-            initialState: {
-                pageSize: oppgaveSideLimit,
-                pageIndex: 0,
-                sortBy: lagretSortering
-                    ? JSON.parse(lagretSortering)
-                    : [{ id: 'opprettetTidspunkt', desc: false }],
-            },
-        },
-        useSortBy,
-        usePagination
+    const [sortering, settSortering] = useState<SortState | undefined>(
+        lagretSortering && lagretSortering !== '"{}"' && lagretSortering !== '"undefined"'
+            ? JSON.parse(lagretSortering)
+            : hentSortState(Sorteringsrekkefølge.STIGENDE, Sorteringsnøkkel.OPPRETTET_TIDSPUNKT)
     );
 
-    useEffect(() => {
-        localStorage.setItem(
-            OPPGAVEBENK_SORTERINGSNØKKEL,
-            JSON.stringify(tableInstance.state.sortBy)
-        );
-    }, [tableInstance.state.sortBy]);
+    const settOgLagreSortering = (sorteringsnøkkel: Sorteringsnøkkel): void => {
+        const nyRekkefølge =
+            sorteringsnøkkel === sortering?.orderBy
+                ? hentNesteSorteringsrekkefølge(sortering.direction as Sorteringsrekkefølge)
+                : Sorteringsrekkefølge.STIGENDE;
+        const nySortering = hentSortState(nyRekkefølge, sorteringsnøkkel);
+        localStorage.setItem(OPPGAVEBENK_SORTERINGSNØKKEL, JSON.stringify(nySortering || {}));
+        settSortering(nySortering);
+    };
 
     useEffect(() => {
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
@@ -463,7 +448,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     return {
         oppgaverader,
-        sorteringsregel,
         fordelOppgave,
         hentOppgaver,
         oppgaveFelter,
@@ -475,8 +459,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
         validerSkjema,
-        tableInstance,
         gåTilFagsakEllerVisFeilmelding,
+        sortering,
+        settOgLagreSortering,
     };
 });
 const Oppgaver: React.FC = () => {
