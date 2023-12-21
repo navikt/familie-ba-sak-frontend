@@ -54,6 +54,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
+    const [side, settSide] = useState<number>(1);
 
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
@@ -467,6 +468,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         hentOppgaver,
         oppgaveFelter,
         oppgaver,
+        side,
+        settSide,
         settSortOrderPåOppgaveFelt,
         settVerdiPåOppgaveFelt,
         tilbakestillFordelingPåOppgave,
