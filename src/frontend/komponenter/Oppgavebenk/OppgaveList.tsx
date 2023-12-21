@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { useOppgaver } from '../../context/OppgaverContext';
+import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
 import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
 import {
     type GjelderFilter,
@@ -36,7 +36,12 @@ const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 );
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, oppgaverader, sortering, settOgLagreSortering } = useOppgaver();
+    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgaver();
+
+    const oppgaverPåDenneSiden = sorterteOppgaverader.slice(
+        (side - 1) * oppgaveSideLimit,
+        side * oppgaveSideLimit
+    );
 
     return (
         <section>
@@ -94,7 +99,7 @@ const OppgaveList: React.FunctionComponent = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {oppgaverader.map(rad => (
+                    {oppgaverPåDenneSiden.map(rad => (
                         <Table.Row key={rad.id}>
                             <DataCellSmall>
                                 {rad.opprettetTidspunkt
