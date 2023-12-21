@@ -2,14 +2,21 @@ import * as React from 'react';
 
 import '@navikt/ds-css';
 
+import { initializeFaro } from '@grafana/faro-web-sdk';
+
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import Container from './Container';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
+import nais from '../../../nais';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
 import { useAmplitude } from '../utils/amplitude';
 
+initializeFaro({
+    url: nais.telemetryCollectorURL,
+    app: nais.app,
+});
 const App: React.FC = () => {
     const { loggSkjermstørrelse } = useAmplitude();
     const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<
