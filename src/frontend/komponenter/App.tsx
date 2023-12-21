@@ -8,7 +8,7 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import Container from './Container';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
-import nais from '../../../nais';
+import nais from '../../nais';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
 import { useAmplitude } from '../utils/amplitude';
