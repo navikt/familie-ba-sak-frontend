@@ -25,12 +25,13 @@ import webpackDevConfig from '../webpack/webpack.dev';
 
 const port = 8000;
 
-initializeFaro({
-    url: nais.telemetryCollectorURL,
-    app: nais.app,
-});
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     let middleware;
+
+    initializeFaro({
+        url: nais.telemetryCollectorURL,
+        app: nais.app,
+    });
 
     if (process.env.NODE_ENV === 'development') {
         const compiler = webpack(webpackDevConfig);
