@@ -58,6 +58,3 @@ spec:
       access: readwrite
     - instance: lookup
       access: read
-frontend:
-  generatedConfig:
-    mountPath: /src/frontend/nais.js

@@ -1,5 +1,1 @@
-module.exports = {
-    externals: {
-        '.nais.js': 'excludedFile',
-    },
-};
+module.exports = {};
