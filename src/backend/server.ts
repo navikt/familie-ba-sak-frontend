@@ -2,6 +2,7 @@ import './konfigurerApp.js';
 
 import path from 'path';
 
+import { initializeFaro } from '@grafana/faro-web-sdk';
 import bodyParser from 'body-parser';
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
@@ -19,10 +20,15 @@ import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doEndringslogProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
+import nais from '../frontend/nais';
 import webpackDevConfig from '../webpack/webpack.dev';
 
 const port = 8000;
 
+initializeFaro({
+    url: nais.telemetryCollectorURL,
+    app: nais.app,
+});
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     let middleware;
 
