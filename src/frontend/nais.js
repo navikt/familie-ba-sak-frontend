@@ -1,5 +1,5 @@
 export default {
-    telemetryCollectorURL: 'http://localhost:12347/collect',
+    telemetryCollectorURL: 'https://telemetry.ekstern.dev.nav.no/collect',
     app: {
         name: 'familie-ba-sak-frontend',
     },

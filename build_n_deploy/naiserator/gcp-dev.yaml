@@ -60,4 +60,4 @@ spec:
       access: read
 frontend:
   generatedConfig:
-    mountPath: /frontend/nais.js
+    mountPath: /src/frontend/nais.js
