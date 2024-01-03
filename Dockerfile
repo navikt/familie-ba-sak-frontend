@@ -17,4 +17,6 @@ COPY package.json .
 CMD ["--es-module-specifier-resolution=node", "node_dist/backend/server.js"]
 
 COPY --from=busybox /bin/sh /bin/sh
+COPY --from=busybox /bin/less /bin/less
+COPY --from=busybox /bin/ls /bin/ls
 COPY --from=busybox /bin/printenv /bin/printenv
