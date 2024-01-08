@@ -1,13 +1,13 @@
 import * as React from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { showReportDialog } from '@sentry/browser';
 import { configureScope, withScope, captureException } from '@sentry/core';
 
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-interface IProps {
+interface IProps extends PropsWithChildren {
     autentisertSaksbehandler?: ISaksbehandler;
-    children?: React.ReactNode;
 }
 
 class ErrorBoundary extends React.Component<IProps> {

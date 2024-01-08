@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
@@ -38,9 +39,8 @@ const initalState: IModal = {
     visModal: false,
 };
 
-interface IProps {
+interface IProps extends PropsWithChildren {
     autentisertSaksbehandler: ISaksbehandler | undefined;
-    children?: React.ReactNode;
 }
 
 interface AuthProviderExports {
@@ -255,11 +255,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     };
 });
 
-interface AuthOgHttpProps {
-    children?: React.ReactNode;
-}
-
-const AuthOgHttpProvider: React.FC<AuthOgHttpProps> = ({ children }) => {
+const AuthOgHttpProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const { innloggetSaksbehandler, settAutentisert } = useAuth();
 
     return (

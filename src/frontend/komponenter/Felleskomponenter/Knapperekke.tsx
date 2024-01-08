@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -8,10 +9,7 @@ const Container = styled.div`
     margin-top: 1rem;
 `;
 
-interface IProps {
-    children?: React.ReactNode;
-}
-const Knapperekke: React.FC<IProps> = ({ children }) => {
+const Knapperekke: React.FC<PropsWithChildren> = ({ children }) => {
     return <Container>{children}</Container>;
 };
 

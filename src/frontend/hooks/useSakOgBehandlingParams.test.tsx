@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import { renderHook } from '@testing-library/react-hooks';
@@ -9,15 +10,11 @@ import { MemoryRouter as Router } from 'react-router-dom';
 
 import useSakOgBehandlingParams from './useSakOgBehandlingParams';
 
-interface IProps {
-    children?: React.ReactNode;
-}
-
 const renderUseSakOgBehandlingParamsHookMedPath = (path: string) => {
     const {
         result: { current },
     } = renderHook(() => useSakOgBehandlingParams(), {
-        wrapper: ({ children }: IProps) => {
+        wrapper: ({ children }: PropsWithChildren) => {
             return <Router initialEntries={[{ pathname: path }]}>{children}</Router>;
         },
     });

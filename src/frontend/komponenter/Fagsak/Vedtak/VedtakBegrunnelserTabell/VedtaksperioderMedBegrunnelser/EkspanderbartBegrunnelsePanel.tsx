@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import { endOfMonth, isAfter } from 'date-fns';
@@ -30,14 +31,13 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
     margin-left: 0;
 `;
 
-interface IEkspanderbartBegrunnelsePanelProps {
+interface IEkspanderbartBegrunnelsePanelProps extends PropsWithChildren {
     åpen: boolean;
     onClick?: () => void;
     periode: IIsoMånedPeriode;
     skalViseSum: boolean;
     summer: () => number;
     tittel: string;
-    children?: React.ReactNode;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>

@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import * as React from 'react';
 import { useEffect } from 'react';
 
@@ -20,8 +21,7 @@ import { behandlingErEtterSteg } from '../../../utils/steg';
 import type { ISide } from '../Venstremeny/sider';
 import { sider } from '../Venstremeny/sider';
 
-interface IProps {
-    children?: React.ReactNode;
+interface IProps extends PropsWithChildren {
     className?: string;
     forrigeKnappTittel?: string;
     forrigeOnClick?: () => void;

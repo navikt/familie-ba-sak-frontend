@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
@@ -5,11 +6,10 @@ import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtak
 import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { summer } from '../../../../../utils/formatter';
 
-interface IEkspanderbartBegrunnelsePanelProps {
+interface IEkspanderbartBegrunnelsePanelProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: () => void;
-    children?: React.ReactNode;
 }
 
 const EkspanderbartVedtaksbegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
