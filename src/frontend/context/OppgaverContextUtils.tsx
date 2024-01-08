@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import type { Column } from 'react-table';
@@ -33,7 +34,7 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const LitenKnapp: React.FC = ({ children }) => {
+const LitenKnapp: React.FC<PropsWithChildren> = ({ children }) => {
     return (
         <StyledButton size="small" variant="tertiary">
             {children}
