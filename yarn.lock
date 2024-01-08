@@ -2147,13 +2147,13 @@
     deep-equal "^2.0.5"
     hashids "^2.2.10"
 
-"@navikt/familie-tidslinje@6.0.0":
-  version "6.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/6.0.0/82cfb641efdff1c4a222632049bb4e35975bd10d#82cfb641efdff1c4a222632049bb4e35975bd10d"
-  integrity sha512-k4C7j8AwDN7ohbXxHfI2d0z01eo6jpFUrWLoy9JJw2y1Hde5pz2D5d2vViTJmKemGUV+9OIv+ll1Zfn59wfKFQ==
+"@navikt/familie-tidslinje@7.0.0":
+  version "7.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/7.0.0/76c17e9434002f25950fa7f49b7529509cf1f9d6#76c17e9434002f25950fa7f49b7529509cf1f9d6"
+  integrity sha512-PTP3wb18sOFIJxceG9tYa1HmnWKdJVwyivFnzVr066BWdzh8Hqgt2u27AnBLrZH0tVNFB3vcRyVCCGczHT3gzQ==
   dependencies:
-    classnames "^2.3.2"
-    nanoid "^4.0.0"
+    classnames "^2.5.1"
+    nanoid "^5.0.4"
 
 "@navikt/familie-typer@8.0.0", "@navikt/familie-typer@^8.0.0":
   version "8.0.0"
@@ -8498,10 +8498,10 @@ nanoid@^3.3.7:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
 
-nanoid@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.0.tgz#6e144dee117609232c3f415c34b0e550e64999a5"
-  integrity sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==
+nanoid@^5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.4.tgz#d2b608d8169d7da669279127615535705aa52edf"
+  integrity sha512-vAjmBf13gsmhXSgBrtIclinISzFFy22WwCYoyilZlsrRXNIHSwgFQ1bEdjRwMT3aoadeIF6HMuDRlOxzfXV8ig==
 
 natural-compare@^1.4.0:
   version "1.4.0"
