@@ -215,7 +215,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             </StyledTag>
                         </LabelOgEtikett>
                     }
-                    placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
                         skjema.felter.dokumenter.nullstill();

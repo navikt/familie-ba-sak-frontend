@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -7,13 +8,12 @@ import { Button } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 
-interface IProps {
+interface IProps extends PropsWithChildren {
     naviger: (retning: NavigeringsRetning) => void;
     kanNavigereTilHøyre?: boolean;
     kanNavigereTilVenstre?: boolean;
     navigerTilVenstreTittel?: string;
     navigerTilHøyreTittel?: string;
-    children?: React.ReactNode | React.ReactChild | React.ReactChildren;
 }
 
 const StyledTidslinjenavigering = styled.div`
