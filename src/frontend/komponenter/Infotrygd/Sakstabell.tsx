@@ -13,7 +13,7 @@ const IngenSakerTekst = styled(BodyShort)`
 export const Sakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
     return (
         <>
-            <Table className="tabell">
+            <Table>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Saksblokk</Table.HeaderCell>
