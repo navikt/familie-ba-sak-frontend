@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OppgaveDirektelenke from './OppgaveDirektelenke';
@@ -28,6 +28,17 @@ const HeaderMedPaginering = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+`;
+
+const Beskrivelse = styled(Table.DataCell)`
+    max-width: 15rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const ForkortetTooltip = styled(Tooltip)`
+    max-width: 30rem;
 `;
 
 const OppgaveList: React.FunctionComponent = () => {
@@ -121,7 +132,9 @@ const OppgaveList: React.FunctionComponent = () => {
                             <Table.DataCell>
                                 {PrioritetFilter[rad.prioritet as keyof typeof PrioritetFilter]}
                             </Table.DataCell>
-                            <Table.DataCell>{rad.beskrivelse}</Table.DataCell>
+                            <ForkortetTooltip content={rad.beskrivelse}>
+                                <Beskrivelse>{rad.beskrivelse}</Beskrivelse>
+                            </ForkortetTooltip>
                             <Table.DataCell>
                                 {hentFnrFraOppgaveIdenter(rad.ident) || 'Ukjent'}
                             </Table.DataCell>
