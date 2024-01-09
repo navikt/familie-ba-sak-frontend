@@ -167,8 +167,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             hideLegend
         >
             <Container
-                lesevisning={erLesevisning}
-                vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
+                $lesevisning={erLesevisning}
+                $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
             >
                 <StyledFamilieRadioGruppe
                     erLesevisning={erLesevisning}

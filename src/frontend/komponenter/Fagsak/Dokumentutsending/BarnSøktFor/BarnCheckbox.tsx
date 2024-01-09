@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
@@ -72,7 +72,7 @@ const BarnCheckbox: React.FC<IProps> = ({ barn, barnSøktForFelt }) => {
                                 ),
                             ]);
                         }}
-                        icon={<Delete />}
+                        icon={<TrashIcon />}
                     >
                         {'Fjern barn'}
                     </FjernBarnKnapp>

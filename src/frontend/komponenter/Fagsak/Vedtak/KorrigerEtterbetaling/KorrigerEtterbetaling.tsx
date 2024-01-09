@@ -100,7 +100,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                     id={'korrigering-aarsak'}
                                     value={skjema.felter.årsak.verdi}
                                     readOnly={erLesevisning}
-                                    onChange={option =>
+                                    onChange={(option: React.ChangeEvent<HTMLSelectElement>) =>
                                         skjema.felter.årsak.validerOgSettFelt(option.target.value)
                                     }
                                     error={
@@ -121,7 +121,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                     id={'korrigering-belop'}
                                     type={'number'}
                                     value={skjema.felter.beløp.verdi}
-                                    onChange={changeEvent =>
+                                    onChange={(changeEvent: React.ChangeEvent<HTMLInputElement>) =>
                                         skjema.felter.beløp.validerOgSettFelt(
                                             changeEvent.target.value
                                         )
@@ -139,7 +139,9 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
                                     label={'Begrunnelse (valgfri)'}
                                     id={'korrigering-begrunnelse'}
                                     value={skjema.felter.begrunnelse.verdi}
-                                    onChange={changeEvent =>
+                                    onChange={(
+                                        changeEvent: React.ChangeEvent<HTMLTextAreaElement>
+                                    ) =>
                                         skjema.felter.begrunnelse.validerOgSettFelt(
                                             changeEvent.target.value
                                         )

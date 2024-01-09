@@ -13,15 +13,14 @@ import { erSidenAktiv } from './sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 
-const ToggleVisningVenstremeny = styled(Button)`
+const ToggleVisningVenstremeny = styled(Button)<{ $åpenvenstremeny: boolean }>`
     position: fixed;
-    margin-left: ${(props: { åpenvenstremeny: boolean }) =>
-        props.åpenvenstremeny ? '-17px' : '0px'};
+    margin-left: ${props => (props.$åpenvenstremeny ? '-17px' : '0px')};
     top: 370px;
     width: 34px;
     min-width: 34px;
     height: 34px;
-    padding: 0px;
+    padding: 0;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
@@ -123,7 +122,7 @@ const Venstremeny: React.FunctionComponent = () => {
                     }}
                     size="small"
                     aria-label="Skjul venstremeny"
-                    åpenvenstremeny={åpenVenstremeny ? 1 : 0}
+                    $åpenvenstremeny={åpenVenstremeny ? 1 : 0}
                     title={åpenVenstremeny ? 'Skjul venstremeny' : 'Vis venstremeny'}
                     icon={
                         åpenVenstremeny ? (

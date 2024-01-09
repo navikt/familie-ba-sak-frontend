@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
 import { endOfMonth, isAfter } from 'date-fns';
@@ -30,7 +31,7 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
     margin-left: 0;
 `;
 
-interface IEkspanderbartBegrunnelsePanelProps {
+interface IEkspanderbartBegrunnelsePanelProps extends PropsWithChildren {
     åpen: boolean;
     onClick?: () => void;
     periode: IIsoMånedPeriode;
@@ -55,7 +56,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     tittel,
 }) => {
     return (
-        <StyledExpansionCard open={åpen} onToggle={onClick} size="small">
+        <StyledExpansionCard open={åpen} onToggle={onClick} size="small" aria-label="Begrunnelser">
             <StyledExpansionHeader>
                 <StyledExpansionTitle>
                     {periode.fom && (

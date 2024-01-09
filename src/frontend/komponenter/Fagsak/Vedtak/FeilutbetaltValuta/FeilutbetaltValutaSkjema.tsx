@@ -64,7 +64,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
                 label={'Feilutbetalt beløp per måned'}
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
-                onChange={changeEvent =>
+                onChange={(changeEvent: React.ChangeEvent<HTMLInputElement>) =>
                     skjema.felter.feilutbetaltBeløp.validerOgSettFelt(changeEvent.target.value)
                 }
             />

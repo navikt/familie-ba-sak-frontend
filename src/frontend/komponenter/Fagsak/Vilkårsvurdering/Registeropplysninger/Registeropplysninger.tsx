@@ -42,7 +42,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({
 
     return (
         <>
-            <SemiBoldHeading level={3} size="medium">
+            <SemiBoldHeading level={'3'} size="medium">
                 Registeropplysninger
             </SemiBoldHeading>
             {manglerRegisteropplysninger ? (

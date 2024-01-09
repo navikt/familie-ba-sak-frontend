@@ -215,7 +215,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             </StyledTag>
                         </LabelOgEtikett>
                     }
-                    placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
                         skjema.felter.dokumenter.nullstill();
@@ -300,9 +299,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekst}
                                                         description={hjelpetekst}
-                                                        onChange={event =>
-                                                            onChangeFritekst(event, fritekstId)
-                                                        }
+                                                        onChange={(
+                                                            event: React.ChangeEvent<HTMLTextAreaElement>
+                                                        ) => onChangeFritekst(event, fritekstId)}
                                                         error={
                                                             skjema.visFeilmeldinger &&
                                                             fritekst.feilmelding

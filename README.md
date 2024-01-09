@@ -5,6 +5,7 @@ Frontend app for barnetrygd sak.
 
 # Kom i gang med utvikling
 
+* Logg deg på naisdevice og gcloud og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler
 * Installere avhengigheter `yarn`
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
@@ -12,29 +13,6 @@ Frontend app for barnetrygd sak.
 Hente avhengigheter krever at du har et Personal Access Token i GitHub med SSO til Nav-IT. For å opprette det må du gjøre følgende:
 1. Lag/forny access token med read rettigheter på pakker i Github (under developer settings)
 2. Logg inn på npm med `npm login --scope=@navikt --registry=https://npm.pkg.github.com` og benytt brukernavn, epost og tokenet du nettopp genererte
-
-Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. 
-Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
-mot dev-gcp clusteret i konsollen.
-```
-    CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
-    CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
-    COOKIE_KEY1='<any string of length 32>'
-    COOKIE_KEY2='<any string of length 32>'
-    DREK_URL=<any string eller en url for testing>
-    
-    SESSION_SECRET='<any string of length 32>'
-    BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
-
-    ENV=local
-    APP_VERSION=0.0.1
-```
-
-Ønsker du å kjøre mot preprod gjøres det med dette i .env fila.
-```
- BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
- ENV=lokalt-mot-preprod
-```
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
@@ -54,6 +32,32 @@ curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicros
 
 ---
 
+## Miljøvariabler
+For å hente miljøvariabler kan du logge på naisdevice og gcloud og kjøre [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh).
+
+Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
+Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
+mot dev-gcp clusteret i konsollen.
+```
+    CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
+    CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
+    COOKIE_KEY1='<any string of length 32>'
+    COOKIE_KEY2='<any string of length 32>'
+    DREK_URL=<any string eller en url for testing>
+    
+    SESSION_SECRET='<any string of length 32>'
+    
+    BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
+    ENV=local
+    
+    APP_VERSION=0.0.1
+```
+
+Ønsker du å kjøre mot preprod gjøres det med dette i .env fila.
+```
+ BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
+ ENV=lokalt-mot-preprod
+```
 
 # Bygg og deploy
 Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og main går til produksjon.

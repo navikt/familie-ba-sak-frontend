@@ -134,7 +134,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                onChange={changeEvent =>
+                onChange={(changeEvent: React.ChangeEvent<HTMLInputElement>) =>
                     skjema.felter.refusjonsbeløp.validerOgSettFelt(changeEvent.target.value)
                 }
                 readOnly={erLesevisning}
