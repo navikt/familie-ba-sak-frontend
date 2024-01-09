@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import styled from 'styled-components';
-
-import { Alert, BodyShort, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HGrid } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
@@ -15,17 +13,6 @@ interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     innloggetSaksbehandler?: ISaksbehandler;
 }
-
-const StyledBodyShort = styled(BodyShort)`
-    width: 5rem;
-    margin-right: 2.5rem;
-    text-align: left;
-`;
-
-const StyledButton = styled(Button)`
-    text-align: center;
-    min-width: fit-content;
-`;
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
     oppgave,
@@ -60,10 +47,10 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         ) !== undefined;
 
     return oppgave.tilordnetRessurs ? (
-        <div className={'kolonne'}>
-            <StyledBodyShort>{oppgave.tilordnetRessurs}</StyledBodyShort>
+        <HGrid columns={2} gap={'6'} align="center">
+            <BodyShort>{oppgave.tilordnetRessurs}</BodyShort>
             {oppgaveTypeErStøttet && (
-                <StyledButton
+                <Button
                     variant="tertiary"
                     size="small"
                     key={'tilbakestill'}
@@ -73,12 +60,12 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     children={'Tilbakestill'}
                 />
             )}
-        </div>
+        </HGrid>
     ) : (
-        <div className={'kolonne'}>
-            <StyledBodyShort>Ikke tildelt</StyledBodyShort>
+        <HGrid columns={2} gap={'6'} align="center">
+            <BodyShort>Ikke tildelt</BodyShort>
             {oppgaveTypeErStøttet && (
-                <StyledButton
+                <Button
                     variant="secondary"
                     size="small"
                     key={'plukk'}
@@ -92,7 +79,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     children={'Tildel meg'}
                 />
             )}
-        </div>
+        </HGrid>
     );
 };
 
