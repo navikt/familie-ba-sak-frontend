@@ -41,6 +41,10 @@ const ForkortetTooltip = styled(Tooltip)`
     max-width: 30rem;
 `;
 
+const StyledColumnHeader = styled(Table.ColumnHeader)`
+    white-space: nowrap;
+`;
+
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgaver();
 
@@ -65,42 +69,42 @@ const OppgaveList: React.FunctionComponent = () => {
             >
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.OPPRETTET_TIDSPUNKT} sortable>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.OPPRETTET_TIDSPUNKT} sortable>
                             Reg. dato
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.OPPGAVETYPE} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.OPPGAVETYPE} sortable>
                             Oppgavetype
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTEMA} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTEMA} sortable>
                             Gjelder
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTYPE} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTYPE} sortable>
                             Behandlingstype
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader
+                        </StyledColumnHeader>
+                        <StyledColumnHeader
                             sortKey={Sorteringsnøkkel.FRIST_FERDIGSTILLELSE}
                             sortable
                         >
                             Frist
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.PRIORITET} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.PRIORITET} sortable>
                             Prioritet
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.BESKRIVELSE} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BESKRIVELSE} sortable>
                             Beskrivelse
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.IDENT} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.IDENT} sortable>
                             Bruker
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.TILDELT_ENHETSNR} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.TILDELT_ENHETSNR} sortable>
                             Enhet
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.TILORDNET_RESSURS} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.TILORDNET_RESSURS} sortable>
                             Saksbehandler
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortKey={Sorteringsnøkkel.HANDLINGER} sortable>
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.HANDLINGER} sortable>
                             Handlinger
-                        </Table.ColumnHeader>
+                        </StyledColumnHeader>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
