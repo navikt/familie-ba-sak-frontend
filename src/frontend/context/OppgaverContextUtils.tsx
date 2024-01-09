@@ -5,7 +5,6 @@ import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from
 import { behandlingstypeFilter, enhetFilter } from '../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 
-
 export enum Sorteringsnøkkel {
     OPPRETTET_TIDSPUNKT = 'opprettetTidspunkt',
     OPPGAVETYPE = 'oppgavetype',
