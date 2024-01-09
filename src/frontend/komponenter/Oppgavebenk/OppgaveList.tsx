@@ -30,11 +30,6 @@ const HeaderMedPaginering = styled.div`
     justify-content: space-between;
 `;
 
-const DataCellSmall: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    // Har laget issue i Aksel om å få size som tillatt prop direkte på DataCell https://github.com/navikt/aksel/issues/2551
-    <Table.DataCell className="navds-body-short--small">{children}</Table.DataCell>
-);
-
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgaver();
 
@@ -52,7 +47,6 @@ const OppgaveList: React.FunctionComponent = () => {
                 <OppgavelisteNavigator />
             </HeaderMedPaginering>
             <Table
-                size="small"
                 sort={sortering}
                 onSortChange={(nøkkel?: string) =>
                     nøkkel && settOgLagreSortering(nøkkel as Sorteringsnøkkel)
@@ -101,48 +95,48 @@ const OppgaveList: React.FunctionComponent = () => {
                 <Table.Body>
                     {oppgaverPåDenneSiden.map(rad => (
                         <Table.Row key={rad.id}>
-                            <DataCellSmall>
+                            <Table.DataCell>
                                 {rad.opprettetTidspunkt
                                     ? intDatoTilNorskDato(rad.opprettetTidspunkt)
                                     : 'Ukjent'}
-                            </DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>
                                 {rad.oppgavetype
                                     ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
                                           ?.navn ?? rad.oppgavetype
                                     : 'Ukjent'}
-                            </DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>
                                 {rad.behandlingstema
                                     ? gjelderFilter[rad.behandlingstema as GjelderFilter]?.navn ??
                                       rad.behandlingstema
                                     : 'Ikke satt'}
-                            </DataCellSmall>
-                            <DataCellSmall>{rad.behandlingstype}</DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.behandlingstype}</Table.DataCell>
+                            <Table.DataCell>
                                 {rad.fristFerdigstillelse
                                     ? intDatoTilNorskDato(rad.fristFerdigstillelse)
                                     : 'Ukjent'}
-                            </DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>
                                 {PrioritetFilter[rad.prioritet as keyof typeof PrioritetFilter]}
-                            </DataCellSmall>
-                            <DataCellSmall>{rad.beskrivelse}</DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.beskrivelse}</Table.DataCell>
+                            <Table.DataCell>
                                 {hentFnrFraOppgaveIdenter(rad.ident) || 'Ukjent'}
-                            </DataCellSmall>
-                            <DataCellSmall>{rad.tildeltEnhetsnr}</DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.tildeltEnhetsnr}</Table.DataCell>
+                            <Table.DataCell>
                                 <OppgavelisteSaksbehandler
                                     oppgave={rad.tilordnetRessurs.oppg}
                                     innloggetSaksbehandler={
                                         rad.tilordnetRessurs.innloggetSaksbehandler
                                     }
                                 />
-                            </DataCellSmall>
-                            <DataCellSmall>
+                            </Table.DataCell>
+                            <Table.DataCell>
                                 <OppgaveDirektelenke oppgave={rad.handlinger} />
-                            </DataCellSmall>
+                            </Table.DataCell>
                         </Table.Row>
                     ))}
                 </Table.Body>
