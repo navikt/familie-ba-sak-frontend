@@ -4,9 +4,12 @@ import { useState } from 'react';
 import { isAfter } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Heading, Label, Switch, Table } from '@navikt/ds-react';
+import { Alert, Heading, Switch, Table } from '@navikt/ds-react';
 import {
+    AFontWeightBold,
+    AFontWeightRegular,
     AGreen700,
+    ASpacing18,
     ASurfaceSubtle,
     ATextDanger,
     ATextDefault,
@@ -31,16 +34,27 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
-const BodyshortMedFarge = styled(BodyShort)<{ $farge?: string }>`
-    color: ${props => (props.$farge ? props.$farge : ATextDefault)};
-`;
-
 const ManuellPosteringRad = styled(Table.Row)`
     background-color: ${ASurfaceSubtle};
 `;
 
-const LabelMedFarge = styled(Label)<{ $farge?: string }>`
-    color: ${props => (props.$farge ? props.$farge : ATextDefault)};
+const DataCelle = styled(Table.DataCell)`
+    width: ${ASpacing18};
+`;
+
+const DataCellMedFarge = styled(DataCelle)<{
+    $erNegativtBeløp: boolean;
+    $erNesteUtbetalingsperiode: boolean;
+}>`
+    color: ${props => {
+        if (props.$erNegativtBeløp) return ATextDanger;
+        else if (props.$erNesteUtbetalingsperiode) {
+            return AGreen700;
+        }
+        return ATextDefault;
+    }};
+    font-weight: ${props =>
+        props.$erNesteUtbetalingsperiode ? AFontWeightBold : AFontWeightRegular};
 `;
 
 const StyledSwitch = styled(Switch)`
@@ -103,6 +117,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         fom,
         tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
     })}`;
+
+    const erNesteUtbetalingsperiode = (periode: ISimuleringPeriode): boolean =>
+        fomDatoNestePeriode === periode.fom;
 
     return (
         <>
@@ -169,62 +186,47 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     <Table.Row>
                         <FørsteKolonne>Nytt beløp</FørsteKolonne>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <Table.DataCell key={'nytt beløp - ' + periode.fom} align={'right'}>
+                            <DataCelle key={'nytt beløp - ' + periode.fom} align={'right'}>
                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
-                            </Table.DataCell>
+                            </DataCelle>
                         ))}
                     </Table.Row>
                     <Table.Row>
                         <FørsteKolonne>Tidligere utbetalt</FørsteKolonne>
                         {perioderSomSkalVisesITabellen.map(periode => {
                             return (
-                                <Table.DataCell
+                                <DataCelle
                                     key={'tidligere utbetalt - ' + periode.fom}
                                     align={'right'}
                                 >
                                     {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
-                                </Table.DataCell>
+                                </DataCelle>
                             );
                         })}
                     </Table.Row>
                     <Table.Row>
                         <FørsteKolonne>Resultat</FørsteKolonne>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <Table.DataCell key={'resultat - ' + periode.fom} align={'right'}>
-                                {fomDatoNestePeriode === periode.fom ? (
-                                    <LabelMedFarge
-                                        $farge={
-                                            periode.resultat && periode.resultat < 0
-                                                ? ATextDanger
-                                                : AGreen700
-                                        }
-                                    >
-                                        {formaterBeløpUtenValutakode(periode.resultat)}
-                                    </LabelMedFarge>
-                                ) : (
-                                    <BodyshortMedFarge
-                                        $farge={
-                                            periode.resultat && periode.resultat < 0
-                                                ? ATextDanger
-                                                : ATextDefault
-                                        }
-                                    >
-                                        {formaterBeløpUtenValutakode(periode.resultat)}
-                                    </BodyshortMedFarge>
-                                )}
-                            </Table.DataCell>
+                            <DataCellMedFarge
+                                key={'resultat - ' + periode.fom}
+                                align={'right'}
+                                $erNegativtBeløp={!!periode.resultat && periode.resultat < 0}
+                                $erNesteUtbetalingsperiode={erNesteUtbetalingsperiode(periode)}
+                            >
+                                {formaterBeløpUtenValutakode(periode.resultat)}
+                            </DataCellMedFarge>
                         ))}
                     </Table.Row>
                     {visManuellePosteringer && (
                         <ManuellPosteringRad>
                             <FørsteKolonne>Manuell postering</FørsteKolonne>
                             {perioderSomSkalVisesITabellen.map(periode => (
-                                <Table.DataCell
+                                <DataCelle
                                     key={'manuell postering - ' + periode.fom}
                                     align={'right'}
                                 >
                                     {formaterBeløpUtenValutakode(periode.manuellPostering)}
-                                </Table.DataCell>
+                                </DataCelle>
                             ))}
                         </ManuellPosteringRad>
                     )}
