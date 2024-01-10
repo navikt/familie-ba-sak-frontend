@@ -22,7 +22,7 @@ import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
-import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakStatus } from '../typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
@@ -182,33 +182,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     .join('&'),
             });
         }
-    };
-
-    const settSortOrderPåOppgaveFelt = (felt: string) => {
-        let midlertidigOppgaveFelter = oppgaveFelter;
-        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
-            if (oppgaveFelt.nøkkel === felt) {
-                midlertidigOppgaveFelter = {
-                    ...midlertidigOppgaveFelter,
-                    [oppgaveFelt.nøkkel]: {
-                        ...oppgaveFelt,
-                        order:
-                            oppgaveFelt.order === FeltSortOrder.ASCENDANT
-                                ? FeltSortOrder.DESCENDANT
-                                : FeltSortOrder.ASCENDANT,
-                    },
-                };
-            } else if (oppgaveFelt.order && oppgaveFelt.order !== FeltSortOrder.NONE) {
-                midlertidigOppgaveFelter = {
-                    ...midlertidigOppgaveFelter,
-                    [oppgaveFelt.nøkkel]: {
-                        ...oppgaveFelt,
-                        order: FeltSortOrder.NONE,
-                    },
-                };
-            }
-            settOppgaveFelter(midlertidigOppgaveFelter);
-        });
     };
 
     const tilbakestillOppgaveFelter = () => {
@@ -468,7 +441,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         oppgaver,
         side,
         settSide,
-        settSortOrderPåOppgaveFelt,
         settVerdiPåOppgaveFelt,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
