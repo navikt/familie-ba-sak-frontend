@@ -17,6 +17,7 @@ import {
     PrioritetFilter,
     type OppgavetypeFilter,
 } from '../../typer/oppgave';
+import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 const StyledAlert = styled(Alert)`
@@ -110,11 +111,18 @@ const OppgaveList: React.FunctionComponent = () => {
                 <Table.Body>
                     {oppgaverPåDenneSiden.map(rad => (
                         <Table.Row key={rad.id}>
-                            <Table.DataCell>
-                                {rad.opprettetTidspunkt
-                                    ? intDatoTilNorskDato(rad.opprettetTidspunkt)
-                                    : 'Ukjent'}
-                            </Table.DataCell>
+                            <Tooltip
+                                content={isoStringTilFormatertString({
+                                    isoString: rad.opprettetTidspunkt,
+                                    tilFormat: Datoformat.DATO_TID,
+                                })}
+                            >
+                                <Table.DataCell>
+                                    {rad.opprettetTidspunkt
+                                        ? intDatoTilNorskDato(rad.opprettetTidspunkt)
+                                        : 'Ukjent'}
+                                </Table.DataCell>
+                            </Tooltip>
                             <Table.DataCell>
                                 {rad.oppgavetype
                                     ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
