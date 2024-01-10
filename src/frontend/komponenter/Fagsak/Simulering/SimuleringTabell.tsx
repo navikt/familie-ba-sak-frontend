@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { isAfter } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Label, Switch, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, Switch, Table } from '@navikt/ds-react';
 import {
     AGreen700,
     ASurfaceSubtle,
@@ -33,13 +33,6 @@ const StyledAlert = styled(Alert)`
 
 const BodyshortMedFarge = styled(BodyShort)<{ $farge?: string }>`
     color: ${props => (props.$farge ? props.$farge : ATextDefault)};
-`;
-
-const SimuleringTabellOverskrift = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1rem;
 `;
 
 const ManuellPosteringRad = styled(Table.Row)`
@@ -120,23 +113,20 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     tilsvarende de manuelle posteringene i tabellen.
                 </StyledAlert>
             )}
-            <SimuleringTabellOverskrift>
-                <Label>
-                    Simuleringsresultat for{' '}
-                    {perioder.length === 1
-                        ? `${isoStringTilFormatertString({
-                              isoString: perioder[0].fom,
-                              tilFormat: Datoformat.MÅNED_ÅR_NAVN,
-                          })}`
-                        : `perioden ${tilOgFraDatoForSimulering}`}
-                </Label>
-            </SimuleringTabellOverskrift>
+            <Heading size={'small'} level={'2'} spacing>
+                Simuleringsresultat for{' '}
+                {perioder.length === 1
+                    ? `${isoStringTilFormatertString({
+                          isoString: perioder[0].fom,
+                          tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+                      })}`
+                    : `perioden ${tilOgFraDatoForSimulering}`}
+            </Heading>
 
             {finnesManuellePosteringer && (
                 <StyledSwitch
                     checked={visManuellePosteringer}
                     onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
-                    position="right"
                     size="small"
                 >
                     Vis manuelle posteringer
