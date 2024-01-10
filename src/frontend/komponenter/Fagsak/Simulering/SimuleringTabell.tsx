@@ -38,13 +38,19 @@ const ManuellPosteringRad = styled(Table.Row)`
     background-color: ${ASurfaceSubtle};
 `;
 
-const DataCelle = styled(Table.DataCell)`
+const HeaderCelle = styled(Table.HeaderCell)<{ $skalViseStipletLinje: boolean }>`
+    border-left: ${props => props.$skalViseStipletLinje && 'dotted'};
+`;
+
+const DataCelle = styled(Table.DataCell)<{ $skalViseStipletLinje: boolean }>`
     width: ${ASpacing18};
+    border-left: ${props => props.$skalViseStipletLinje && 'dotted'};
 `;
 
 const DataCellMedFarge = styled(DataCelle)<{
     $erNegativtBeløp: boolean;
     $erNesteUtbetalingsperiode: boolean;
+    $skalViseStipletLinje: boolean; // Sendes videre til DataCelle
 }>`
     color: ${props => {
         if (props.$erNegativtBeløp) return ATextDanger;
@@ -170,14 +176,18 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             )}
                         </Table.DataCell>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <Table.HeaderCell key={'måned - ' + periode.fom} align={'right'}>
+                            <HeaderCelle
+                                key={'måned - ' + periode.fom}
+                                align={'right'}
+                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
+                            >
                                 {kapitaliserTekst(
                                     isoStringTilFormatertString({
                                         isoString: periode.fom,
                                         tilFormat: Datoformat.MÅNED_NAVN,
                                     })
                                 )}
-                            </Table.HeaderCell>
+                            </HeaderCelle>
                         ))}
                     </Table.Row>
                 </Table.Header>
@@ -186,7 +196,11 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     <Table.Row>
                         <FørsteKolonne>Nytt beløp</FørsteKolonne>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <DataCelle key={'nytt beløp - ' + periode.fom} align={'right'}>
+                            <DataCelle
+                                key={'nytt beløp - ' + periode.fom}
+                                align={'right'}
+                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
+                            >
                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
                             </DataCelle>
                         ))}
@@ -198,6 +212,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 <DataCelle
                                     key={'tidligere utbetalt - ' + periode.fom}
                                     align={'right'}
+                                    $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                                 >
                                     {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
                                 </DataCelle>
@@ -212,6 +227,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 align={'right'}
                                 $erNegativtBeløp={!!periode.resultat && periode.resultat < 0}
                                 $erNesteUtbetalingsperiode={erNesteUtbetalingsperiode(periode)}
+                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                             >
                                 {formaterBeløpUtenValutakode(periode.resultat)}
                             </DataCellMedFarge>
@@ -224,6 +240,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 <DataCelle
                                     key={'manuell postering - ' + periode.fom}
                                     align={'right'}
+                                    $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                                 >
                                     {formaterBeløpUtenValutakode(periode.manuellPostering)}
                                 </DataCelle>
