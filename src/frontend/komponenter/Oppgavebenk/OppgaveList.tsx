@@ -123,18 +123,22 @@ const OppgaveList: React.FunctionComponent = () => {
                                         : 'Ukjent'}
                                 </Table.DataCell>
                             </Tooltip>
-                            <Table.DataCell>
-                                {rad.oppgavetype
-                                    ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
-                                          ?.navn ?? rad.oppgavetype
-                                    : 'Ukjent'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {rad.behandlingstema
-                                    ? gjelderFilter[rad.behandlingstema as GjelderFilter]?.navn ??
-                                      rad.behandlingstema
-                                    : 'Ikke satt'}
-                            </Table.DataCell>
+                            <Tooltip content={rad.oppgavetype || 'Ukjent'}>
+                                <Table.DataCell>
+                                    {rad.oppgavetype
+                                        ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
+                                              ?.navn ?? rad.oppgavetype
+                                        : 'Ukjent'}
+                                </Table.DataCell>
+                            </Tooltip>
+                            <Tooltip content={rad.behandlingstema || 'Ikke satt'}>
+                                <Table.DataCell>
+                                    {rad.behandlingstema
+                                        ? gjelderFilter[rad.behandlingstema as GjelderFilter]
+                                              ?.navn ?? rad.behandlingstema
+                                        : 'Ikke satt'}
+                                </Table.DataCell>
+                            </Tooltip>
                             <Table.DataCell>{rad.behandlingstype}</Table.DataCell>
                             <Table.DataCell>
                                 {rad.fristFerdigstillelse
