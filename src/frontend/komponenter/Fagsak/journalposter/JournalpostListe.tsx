@@ -20,11 +20,10 @@ import {
     formaterDatoRegistrertSendtMottatt,
     hentDatoRegistrertSendt,
     hentSorterteJournalposter,
-    hentSortState,
-    Sorteringsrekkefølge,
 } from './journalpostUtils';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
+import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const Container = styled.div`
@@ -220,7 +219,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 </StyledDataCell>
 
                                 <StyledDataCell>
-                                    {(journalpost.dokumenter ?? []).length > 0 ? (
+                                    {journalpost.dokumenter?.length ? (
                                         <Vedleggsliste>
                                             {journalpost.dokumenter?.map(dokument => (
                                                 <JournalpostDokument

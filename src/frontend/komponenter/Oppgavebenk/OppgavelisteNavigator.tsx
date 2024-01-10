@@ -24,30 +24,35 @@ const StyledPagination = styled(Pagination)`
     padding-left: 1rem;
 `;
 
-const antallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
+const beregnAntallSider = (oppgaver: IOppgave[]): number =>
+    Math.ceil(oppgaver.length / oppgaveSideLimit);
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
-    const { oppgaver, tableInstance } = useOppgaver();
-    const { state, gotoPage, page } = tableInstance;
-    const { pageIndex } = state;
+    const { oppgaver, side, settSide } = useOppgaver();
 
-    return oppgaver.status === RessursStatus.SUKSESS && pageIndex >= 0 ? (
+    if (oppgaver.status !== RessursStatus.SUKSESS) {
+        return null;
+    }
+    const antallSider = beregnAntallSider(oppgaver.data.oppgaver);
+
+    return (
         <StyledDiv>
             |
             <StyledSpan>
-                Viser {pageIndex * oppgaveSideLimit + 1} -{' '}
-                {pageIndex * oppgaveSideLimit + page.length} av {oppgaver.data.oppgaver.length}{' '}
-                oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
+                Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
+                {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
+                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
+                oppgaver)
             </StyledSpan>
             |
             <StyledPagination
                 size="small"
-                page={pageIndex + 1}
-                count={antallSider(oppgaver.data.oppgaver)}
-                onPageChange={(side: number) => gotoPage(side - 1)}
+                page={side}
+                count={antallSider}
+                onPageChange={settSide}
             />
         </StyledDiv>
-    ) : null;
+    );
 };
 
 export default OppgavelisteNavigator;

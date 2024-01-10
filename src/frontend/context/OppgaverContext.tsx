@@ -3,14 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
-import type {
-    Column,
-    TableInstance,
-    UsePaginationInstanceProps,
-    UseSortByInstanceProps,
-} from 'react-table';
-import { usePagination, useSortBy, useTable } from 'react-table';
 
+import type { SortState } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -23,12 +17,12 @@ import {
 
 import { useApp } from './AppContext';
 import { useFagsakContext } from './fagsak/FagsakContext';
-import type { IOppgaveRad } from './OppgaverContextUtils';
-import { kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
+import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
+import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
-import { FeltSortOrder, initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { initialOppgaveFelter } from '../komponenter/Oppgavebenk/oppgavefelter';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakStatus } from '../typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
@@ -41,6 +35,11 @@ import {
 import { erIsoStringGyldig } from '../utils/dato';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+import {
+    Sorteringsrekkefølge,
+    hentSortState,
+    hentNesteSorteringsrekkefølge,
+} from '../utils/tabell';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
@@ -54,6 +53,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
+    const [side, settSide] = useState<number>(1);
 
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
@@ -63,39 +63,42 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         initialOppgaveFelter(innloggetSaksbehandler)
     );
 
-    const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
-    const data: ReadonlyArray<IOppgaveRad> = useMemo(() => {
+    const oppgaverader: IOppgaveRad[] = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
             ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
             : [];
     }, [oppgaver]);
 
     const lagretSortering = localStorage.getItem(OPPGAVEBENK_SORTERINGSNØKKEL);
-
-    const tableInstance: TableInstance<IOppgaveRad> &
-        UseSortByInstanceProps<IOppgaveRad> &
-        UsePaginationInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
-        {
-            columns,
-            data,
-            initialState: {
-                pageSize: oppgaveSideLimit,
-                pageIndex: 0,
-                sortBy: lagretSortering
-                    ? JSON.parse(lagretSortering)
-                    : [{ id: 'opprettetTidspunkt', desc: false }],
-            },
-        },
-        useSortBy,
-        usePagination
+    const [sortering, settSortering] = useState<SortState | undefined>(
+        lagretSortering && lagretSortering !== '"{}"' && lagretSortering !== '"undefined"'
+            ? JSON.parse(lagretSortering)
+            : hentSortState(Sorteringsrekkefølge.STIGENDE, Sorteringsnøkkel.OPPRETTET_TIDSPUNKT)
     );
 
+    const [sorterteOppgaverader, settSorterteOppgaverader] = useState<IOppgaveRad[]>(oppgaverader);
     useEffect(() => {
-        localStorage.setItem(
-            OPPGAVEBENK_SORTERINGSNØKKEL,
-            JSON.stringify(tableInstance.state.sortBy)
+        settSorterteOppgaverader(
+            oppgaverader.sort((a, b) => {
+                if (sortering) {
+                    return sortering.direction === Sorteringsrekkefølge.STIGENDE
+                        ? sorterEtterNøkkel(b, a, sortering.orderBy as Sorteringsnøkkel)
+                        : sorterEtterNøkkel(a, b, sortering.orderBy as Sorteringsnøkkel);
+                }
+                return 1;
+            })
         );
-    }, [tableInstance.state.sortBy]);
+    }, [oppgaverader, sortering]);
+
+    const settOgLagreSortering = (sorteringsnøkkel: Sorteringsnøkkel): void => {
+        const nyRekkefølge =
+            sorteringsnøkkel === sortering?.orderBy
+                ? hentNesteSorteringsrekkefølge(sortering.direction as Sorteringsrekkefølge)
+                : Sorteringsrekkefølge.STIGENDE;
+        const nySortering = hentSortState(nyRekkefølge, sorteringsnøkkel);
+        localStorage.setItem(OPPGAVEBENK_SORTERINGSNØKKEL, JSON.stringify(nySortering || {}));
+        settSortering(nySortering);
+    };
 
     useEffect(() => {
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
@@ -179,33 +182,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     .join('&'),
             });
         }
-    };
-
-    const settSortOrderPåOppgaveFelt = (felt: string) => {
-        let midlertidigOppgaveFelter = oppgaveFelter;
-        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
-            if (oppgaveFelt.nøkkel === felt) {
-                midlertidigOppgaveFelter = {
-                    ...midlertidigOppgaveFelter,
-                    [oppgaveFelt.nøkkel]: {
-                        ...oppgaveFelt,
-                        order:
-                            oppgaveFelt.order === FeltSortOrder.ASCENDANT
-                                ? FeltSortOrder.DESCENDANT
-                                : FeltSortOrder.ASCENDANT,
-                    },
-                };
-            } else if (oppgaveFelt.order && oppgaveFelt.order !== FeltSortOrder.NONE) {
-                midlertidigOppgaveFelter = {
-                    ...midlertidigOppgaveFelter,
-                    [oppgaveFelt.nøkkel]: {
-                        ...oppgaveFelt,
-                        order: FeltSortOrder.NONE,
-                    },
-                };
-            }
-            settOppgaveFelter(midlertidigOppgaveFelter);
-        });
     };
 
     const tilbakestillOppgaveFelter = () => {
@@ -458,17 +434,21 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     return {
+        oppgaverader,
         fordelOppgave,
         hentOppgaver,
         oppgaveFelter,
         oppgaver,
-        settSortOrderPåOppgaveFelt,
+        side,
+        settSide,
         settVerdiPåOppgaveFelt,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
         validerSkjema,
-        tableInstance,
         gåTilFagsakEllerVisFeilmelding,
+        sortering,
+        settOgLagreSortering,
+        sorterteOppgaverader,
     };
 });
 const Oppgaver: React.FC = () => {

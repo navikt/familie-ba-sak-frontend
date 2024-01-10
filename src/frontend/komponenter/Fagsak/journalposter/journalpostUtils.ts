@@ -1,10 +1,10 @@
 import { isAfter } from 'date-fns';
 
-import type { SortState } from '@navikt/ds-react';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
 
 import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
+import { Sorteringsrekkefølge } from '../../../utils/tabell';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -18,12 +18,6 @@ export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) =>
 
 export const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
     -1 * sorterJournalposterStigende(a, b);
-
-export enum Sorteringsrekkefølge {
-    STIGENDE,
-    SYNKENDE,
-    INGEN_SORTERING,
-}
 
 export const hentSorterteJournalposter = (
     journalposter: IJournalpost[],
@@ -64,17 +58,6 @@ export const hentDatoRegistrertSendt = (
         }
     })?.dato;
 };
-
-export const hentSortState = (
-    sortering: Sorteringsrekkefølge,
-    sortKey: string
-): SortState | undefined =>
-    sortering === Sorteringsrekkefølge.INGEN_SORTERING
-        ? undefined
-        : {
-              orderBy: sortKey,
-              direction: sortering === Sorteringsrekkefølge.STIGENDE ? 'ascending' : 'descending',
-          };
 
 export const formaterDatoRegistrertSendtMottatt = (dato: string | undefined): string =>
     isoStringTilFormatertString({

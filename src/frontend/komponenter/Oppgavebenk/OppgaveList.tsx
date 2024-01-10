@@ -1,127 +1,175 @@
 import React from 'react';
 
-import classNames from 'classnames';
-import type { Cell, ColumnInstance } from 'react-table';
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
+import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
-import { useOppgaver } from '../../context/OppgaverContext';
-import type { IOppgaveRad } from '../../context/OppgaverContextUtils';
-
-export const styleFraAccessorEllerId = (id: string) => {
-    switch (id) {
-        case 'beskrivelse':
-            return 'beskrivelse';
-        case 'tilordnetRessurs':
-            return 'tilordnet-ressurs';
-        case 'handlinger':
-            return 'handlinger';
-        default:
-            return null;
-    }
-};
-
-export const getAriaSort = (
-    column: ColumnInstance<IOppgaveRad>
-): 'none' | 'descending' | 'ascending' | undefined => {
-    if (column.isSortedDesc === true) {
-        return ariaSortMap.get(FeltSortOrder.DESCENDANT);
-    }
-    if (column.isSortedDesc === false) {
-        return ariaSortMap.get(FeltSortOrder.ASCENDANT);
-    }
-    return ariaSortMap.get(FeltSortOrder.NONE);
-};
-
-export const getSortLenkClassName = (column: ColumnInstance<IOppgaveRad>) => {
-    if (column.isSortedDesc === true) {
-        return 'tabell__th--sortert-desc';
-    }
-    if (column.isSortedDesc === false) {
-        return 'tabell__th--sortert-asc';
-    }
-    return '';
-};
+import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
+import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
+import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
+import {
+    type GjelderFilter,
+    gjelderFilter,
+    oppgaveTypeFilter,
+    PrioritetFilter,
+    type OppgavetypeFilter,
+} from '../../typer/oppgave';
+import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 const StyledAlert = styled(Alert)`
     margin-top: 1rem;
 `;
 
-const StyledDiv = styled.div`
+const HeaderMedPaginering = styled.div`
     margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 `;
 
-const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, tableInstance } = useOppgaver();
+const Beskrivelse = styled(Table.DataCell)`
+    max-width: 15rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
 
-    const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
+const ForkortetTooltip = styled(Tooltip)`
+    max-width: 30rem;
+`;
+
+const StyledColumnHeader = styled(Table.ColumnHeader)`
+    white-space: nowrap;
+`;
+
+const OppgaveList: React.FunctionComponent = () => {
+    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgaver();
+
+    const oppgaverPåDenneSiden = sorterteOppgaverader.slice(
+        (side - 1) * oppgaveSideLimit,
+        side * oppgaveSideLimit
+    );
 
     return (
-        <div className={'oppgavelist'}>
-            <StyledDiv>
-                <Heading size={'medium'} level={'2'}>
+        <section>
+            <HeaderMedPaginering>
+                <Heading size={'medium'} level={'1'}>
                     Oppgaveliste
                 </Heading>
                 <OppgavelisteNavigator />
-            </StyledDiv>
-            <div>
-                <div>
-                    <table className="tabell" {...getTableProps()}>
-                        <thead>
-                            {headerGroups.map(headerGroup => (
-                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map(column => (
-                                        <th
-                                            role="columnheader"
-                                            aria-sort={getAriaSort(column)}
-                                            className={getSortLenkClassName(column)}
-                                            {...column.getHeaderProps(
-                                                column.getSortByToggleProps()
-                                            )}
-                                        >
-                                            {column.render('Header')}
-                                        </th>
-                                    ))}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                            {page.map(row => {
-                                prepareRow(row);
-                                return (
-                                    <tr {...row.getRowProps()}>
-                                        {row.cells.map((cell: Cell<IOppgaveRad>) => (
-                                            <td
-                                                className={classNames([
-                                                    cell.column.isSorted
-                                                        ? 'tabell__td--sortert'
-                                                        : '',
-                                                    styleFraAccessorEllerId(cell.column.id),
-                                                ])}
-                                                title={
-                                                    (typeof cell.value === 'string' &&
-                                                        cell.value) ||
-                                                    ''
-                                                }
-                                                {...cell.getCellProps()}
-                                            >
-                                                {cell.render('Cell')}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </HeaderMedPaginering>
+            <Table
+                sort={sortering}
+                onSortChange={(nøkkel?: string) =>
+                    nøkkel && settOgLagreSortering(nøkkel as Sorteringsnøkkel)
+                }
+            >
+                <Table.Header>
+                    <Table.Row>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.OPPRETTET_TIDSPUNKT} sortable>
+                            Reg. dato
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.OPPGAVETYPE} sortable>
+                            Oppgavetype
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTEMA} sortable>
+                            Gjelder
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BEHANDLINGSTYPE} sortable>
+                            Behandlingstype
+                        </StyledColumnHeader>
+                        <StyledColumnHeader
+                            sortKey={Sorteringsnøkkel.FRIST_FERDIGSTILLELSE}
+                            sortable
+                        >
+                            Frist
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.PRIORITET} sortable>
+                            Prioritet
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.BESKRIVELSE} sortable>
+                            Beskrivelse
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.IDENT} sortable>
+                            Bruker
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.TILDELT_ENHETSNR} sortable>
+                            Enhet
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.TILORDNET_RESSURS} sortable>
+                            Saksbehandler
+                        </StyledColumnHeader>
+                        <StyledColumnHeader sortKey={Sorteringsnøkkel.HANDLINGER} sortable>
+                            Handlinger
+                        </StyledColumnHeader>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {oppgaverPåDenneSiden.map(rad => (
+                        <Table.Row key={rad.id}>
+                            <Tooltip
+                                content={isoStringTilFormatertString({
+                                    isoString: rad.opprettetTidspunkt,
+                                    tilFormat: Datoformat.DATO_TID,
+                                })}
+                            >
+                                <Table.DataCell>
+                                    {rad.opprettetTidspunkt
+                                        ? intDatoTilNorskDato(rad.opprettetTidspunkt)
+                                        : 'Ukjent'}
+                                </Table.DataCell>
+                            </Tooltip>
+                            <Tooltip content={rad.oppgavetype || 'Ukjent'}>
+                                <Table.DataCell>
+                                    {rad.oppgavetype
+                                        ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
+                                              ?.navn ?? rad.oppgavetype
+                                        : 'Ukjent'}
+                                </Table.DataCell>
+                            </Tooltip>
+                            <Tooltip content={rad.behandlingstema || 'Ikke satt'}>
+                                <Table.DataCell>
+                                    {rad.behandlingstema
+                                        ? gjelderFilter[rad.behandlingstema as GjelderFilter]
+                                              ?.navn ?? rad.behandlingstema
+                                        : 'Ikke satt'}
+                                </Table.DataCell>
+                            </Tooltip>
+                            <Table.DataCell>{rad.behandlingstype}</Table.DataCell>
+                            <Table.DataCell>
+                                {rad.fristFerdigstillelse
+                                    ? intDatoTilNorskDato(rad.fristFerdigstillelse)
+                                    : 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {PrioritetFilter[rad.prioritet as keyof typeof PrioritetFilter]}
+                            </Table.DataCell>
+                            <ForkortetTooltip content={rad.beskrivelse}>
+                                <Beskrivelse>{rad.beskrivelse}</Beskrivelse>
+                            </ForkortetTooltip>
+                            <Table.DataCell>
+                                {hentFnrFraOppgaveIdenter(rad.ident) || 'Ukjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>{rad.tildeltEnhetsnr}</Table.DataCell>
+                            <Table.DataCell>
+                                <OppgavelisteSaksbehandler
+                                    oppgave={rad.tilordnetRessurs.oppg}
+                                    innloggetSaksbehandler={
+                                        rad.tilordnetRessurs.innloggetSaksbehandler
+                                    }
+                                />
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <OppgaveDirektelenke oppgave={rad.handlinger} />
+                            </Table.DataCell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
                 <StyledAlert variant="warning">Ingen oppgaver</StyledAlert>
@@ -134,7 +182,7 @@ const OppgaveList: React.FunctionComponent = () => {
             {oppgaver.status === RessursStatus.HENTER && (
                 <StyledAlert variant="info">Henter...</StyledAlert>
             )}
-        </div>
+        </section>
     );
 };
 
