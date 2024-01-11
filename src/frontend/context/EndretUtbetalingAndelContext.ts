@@ -2,9 +2,14 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
+import {
+    prosentTilUtbetaling,
+    Utbetaling,
+    utbetalingTilProsent,
+} from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
@@ -29,12 +34,10 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     : feil(felt, 'Du må velge en årsak'),
         });
 
-        const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean | undefined>({
-            verdi:
-                endretUtbetalingAndel.prosent === undefined ||
-                endretUtbetalingAndel.prosent === null
-                    ? undefined
-                    : endretUtbetalingAndel.prosent > 0,
+        const utbetalingFelt = useFelt<Utbetaling | undefined>({
+            verdi: prosentTilUtbetaling(endretUtbetalingAndel.prosent),
+            valideringsfunksjon: felt =>
+                felt.verdi ? ok(felt) : feil(felt, 'Du må velge utbetaling'),
         });
 
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
@@ -42,7 +45,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 person: string | undefined;
                 fom: IsoDatoString | undefined;
                 tom: IsoDatoString | undefined;
-                periodeSkalUtbetalesTilSøker: boolean | undefined;
+                utbetaling: Utbetaling | undefined;
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
                 søknadstidspunkt: Date | undefined;
                 avtaletidspunktDeltBosted: Date | undefined;
@@ -67,7 +70,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 tom: useFelt<IsoDatoString | undefined>({
                     verdi: endretUtbetalingAndel.tom,
                 }),
-                periodeSkalUtbetalesTilSøker: periodeSkalUtbetalesTilSøkerFelt,
+                utbetaling: utbetalingFelt,
                 årsak: årsakFelt,
                 søknadstidspunkt: useFelt<Date | undefined>({
                     verdi: undefined,
@@ -91,20 +94,11 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                             : undefined,
                     avhengigheter: {
                         årsak: årsakFelt,
-                        periodeSkalUtbetalesTilSøker: periodeSkalUtbetalesTilSøkerFelt,
+                        periodeSkalUtbetalesTilSøker: utbetalingFelt,
                     },
                     skalFeltetVises: (avhengigheter: Avhengigheter) =>
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
-                        periodeSkalUtbetalesTilSøkerFelt.verdi === true,
-                    valideringsfunksjon: (felt, avhengigheter) => {
-                        const feilmelding = 'Du må velge om brukeren skal ha full sats eller ikke.';
-                        if (avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED)
-                            return felt.verdi ? ok(felt) : feil(felt, feilmelding);
-                        else
-                            return typeof felt.verdi === 'boolean'
-                                ? ok(felt)
-                                : feil(felt, feilmelding);
-                    },
+                        utbetalingFelt.verdi === Utbetaling.FULL_UTBETALING,
                 }),
                 begrunnelse: useFelt<string | undefined>({
                     verdi: endretUtbetalingAndel.begrunnelse,
@@ -141,13 +135,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             settDatofelterTilDefaultverdier();
         };
 
-        const hentProsentForEndretUtbetaling = () => {
-            return (
-                (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                (skjema.felter.fullSats.verdi ? 1 : 2)
-            );
-        };
-
         const hentSkjemaData = () => {
             const {
                 person,
@@ -161,7 +148,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             return {
                 id: endretUtbetalingAndel.id,
                 personIdent: person && person.verdi,
-                prosent: hentProsentForEndretUtbetaling(),
+                prosent: utbetalingTilProsent(skjema.felter.utbetaling.verdi),
                 fom: fom && fom.verdi,
                 tom: tom && tom.verdi,
                 årsak: årsak && årsak.verdi,
