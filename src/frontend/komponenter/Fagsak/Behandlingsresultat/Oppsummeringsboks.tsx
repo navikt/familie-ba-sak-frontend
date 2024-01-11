@@ -4,7 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HGrid, Label, VStack } from '@navikt/ds-react';
+import { ASpacing10, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -38,43 +39,24 @@ import {
 } from '../../../utils/formatter';
 import { AlertType, ToastTyper } from '../../Felleskomponenter/Toast/typer';
 
-const TableHeaderAlignedRight = styled.th`
-    text-align: right;
-`;
-
-const TableDataAlignedRight = styled.td`
-    text-align: right;
-`;
-
-const AlertAlignedRight = styled(Alert)`
-    float: right;
-`;
-
-const FlexDiv = styled.div`
-    display: flex;
-`;
-
-const UtbetalingsbeløpTable = styled.table`
-    width: 100%;
-    padding-bottom: 1rem;
-`;
-
-const VenstreTekst = styled(BodyShort)`
-    text-align: left;
-    font-weight: bold;
-    width: 50%;
-    margin: 1.25rem 0;
-`;
-
-const HøyreTekst = styled(BodyShort)`
-    text-align: right;
-    font-weight: bold;
-    width: 50%;
-    margin: 1.25rem 2.5rem 1.25rem 0;
-`;
-
 const AlertWithBottomMargin = styled(Alert)`
     margin-bottom: 1.5rem;
+`;
+
+const UtbetalingsbeløpStack = styled(VStack)`
+    padding-right: ${ASpacing10};
+    padding-bottom: ${ASpacing4};
+`;
+
+const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
+    <HGrid columns="1fr 5rem 5rem" gap={'4'}>
+        {children}
+    </HGrid>
+);
+
+const TotaltUtbetaltRad = styled(HGrid)`
+    border-top: 1px dashed;
+    padding-top: ${ASpacing4};
 `;
 
 interface IProps {
@@ -264,69 +246,41 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
             </div>
             {utbetalingsperiode !== undefined && (
                 <>
-                    <UtbetalingsbeløpTable>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <BodyShort>Person</BodyShort>
-                                </th>
-                                <th>
-                                    <BodyShort>Sats</BodyShort>
-                                </th>
-                                <TableHeaderAlignedRight>
-                                    <BodyShort>Beløp</BodyShort>
-                                </TableHeaderAlignedRight>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {utbetalingsperiode.utbetalingsperiodeDetaljer
-                                .sort(sorterUtbetaling)
-                                .map((detalj, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>
-                                                <BodyShort>{`${
-                                                    detalj.person.navn
-                                                } (${hentAlderSomString(
-                                                    detalj.person.fødselsdato
-                                                )}) | ${formaterIdent(
-                                                    detalj.person.personIdent
-                                                )}`}</BodyShort>
-                                            </td>
-                                            <td>
-                                                <BodyShort>
-                                                    {ytelsetype[detalj.ytelseType].navn}
-                                                </BodyShort>
-                                            </td>
-                                            <TableDataAlignedRight>
-                                                {utbetalingsBeløpStatusMap.get(
-                                                    detalj.person.personIdent
-                                                ) ? (
-                                                    <BodyShort>
-                                                        {formaterBeløp(detalj.utbetaltPerMnd)}
-                                                    </BodyShort>
-                                                ) : (
-                                                    <AlertAlignedRight
-                                                        variant="warning"
-                                                        children={'Må beregnes'}
-                                                        size={'small'}
-                                                        inline
-                                                    />
-                                                )}
-                                            </TableDataAlignedRight>
-                                        </tr>
-                                    );
-                                })}
-                        </tbody>
-                    </UtbetalingsbeløpTable>
-
-                    <div className="dashed-hr" style={{ marginRight: '2.5rem' }}>
-                        <div className="line" />
-                    </div>
-                    <FlexDiv>
-                        <VenstreTekst>Totalt utbetalt per mnd</VenstreTekst>
-                        <HøyreTekst>{formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}</HøyreTekst>
-                    </FlexDiv>
+                    <UtbetalingsbeløpStack gap={'4'}>
+                        <UtbetalingsbeløpRad>
+                            <BodyShort>Person</BodyShort>
+                            <BodyShort>Sats</BodyShort>
+                            <BodyShort align="end">Beløp</BodyShort>
+                        </UtbetalingsbeløpRad>
+                        {utbetalingsperiode.utbetalingsperiodeDetaljer
+                            .sort(sorterUtbetaling)
+                            .map(detalj => (
+                                <UtbetalingsbeløpRad key={detalj.person.navn}>
+                                    <BodyShort>{`${detalj.person.navn} (${hentAlderSomString(
+                                        detalj.person.fødselsdato
+                                    )}) | ${formaterIdent(detalj.person.personIdent)}`}</BodyShort>
+                                    <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
+                                    {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
+                                        <BodyShort align="end">
+                                            {formaterBeløp(detalj.utbetaltPerMnd)}
+                                        </BodyShort>
+                                    ) : (
+                                        <Alert
+                                            variant="warning"
+                                            children={'Må beregnes'}
+                                            size={'small'}
+                                            inline
+                                        />
+                                    )}
+                                </UtbetalingsbeløpRad>
+                            ))}
+                        <TotaltUtbetaltRad columns="1fr 5rem">
+                            <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
+                            <BodyShort weight="semibold" align="end">
+                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                            </BodyShort>
+                        </TotaltUtbetaltRad>
+                    </UtbetalingsbeløpStack>
 
                     {kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode) &&
                         behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD && (
