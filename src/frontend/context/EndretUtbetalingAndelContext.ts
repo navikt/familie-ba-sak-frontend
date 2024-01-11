@@ -5,9 +5,9 @@ import createUseContext from 'constate';
 import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
+import type { Utbetaling } from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
 import {
     prosentTilUtbetaling,
-    Utbetaling,
     utbetalingTilProsent,
 } from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
 import type { IBehandling } from '../typer/behandling';
@@ -49,7 +49,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
                 søknadstidspunkt: Date | undefined;
                 avtaletidspunktDeltBosted: Date | undefined;
-                fullSats: boolean | undefined;
                 begrunnelse: string | undefined;
             },
             IBehandling
@@ -85,20 +84,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     skalFeltetVises: (avhengigheter: Avhengigheter) =>
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
                     valideringsfunksjon: validerGyldigDato,
-                }),
-                fullSats: useFelt<boolean | undefined>({
-                    verdi:
-                        endretUtbetalingAndel.prosent !== null &&
-                        endretUtbetalingAndel.prosent !== undefined
-                            ? endretUtbetalingAndel.prosent === 100
-                            : undefined,
-                    avhengigheter: {
-                        årsak: årsakFelt,
-                        periodeSkalUtbetalesTilSøker: utbetalingFelt,
-                    },
-                    skalFeltetVises: (avhengigheter: Avhengigheter) =>
-                        avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
-                        utbetalingFelt.verdi === Utbetaling.FULL_UTBETALING,
                 }),
                 begrunnelse: useFelt<string | undefined>({
                     verdi: endretUtbetalingAndel.begrunnelse,

@@ -15,15 +15,7 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import {
-    IEndretUtbetalingAndelFullSats,
-    IEndretUtbetalingAndelÅrsak,
-    optionTilsats,
-    satser,
-    satsTilOption,
-    årsaker,
-    årsakTekst,
-} from '../../../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak, årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
@@ -48,10 +40,6 @@ const StyledFieldset = styled(Fieldset)`
 const StyledSelectPersonvelger = styled(Select)`
     min-width: 20rem;
     z-index: 1000;
-`;
-
-const StyledSelectSatsvelger = styled(Select)`
-    max-width: 10rem;
 `;
 
 const Feltmargin = styled.div`
@@ -281,41 +269,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             readOnly={erLesevisning}
                         />
-                    </Feltmargin>
-                )}
-                {skjema.felter.fullSats.erSynlig && (
-                    <Feltmargin>
-                        <StyledSelectSatsvelger
-                            {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            label={<Label>Sats</Label>}
-                            value={
-                                skjema.felter.fullSats.verdi !== undefined &&
-                                skjema.felter.fullSats.verdi !== null
-                                    ? skjema.felter.fullSats.verdi
-                                        ? IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()
-                                        : undefined
-                                    : undefined
-                            }
-                            readOnly={erLesevisning}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                                skjema.felter.fullSats.validerOgSettFelt(
-                                    optionTilsats(event.target.value)
-                                );
-                            }}
-                        >
-                            <option value={undefined}>Velg sats</option>
-                            {satser.map(sats => (
-                                <option value={sats.valueOf()} key={sats.valueOf()}>
-                                    {
-                                        satsTilOption(
-                                            sats === IEndretUtbetalingAndelFullSats.FULL_SATS
-                                        ).label
-                                    }
-                                </option>
-                            ))}
-                        </StyledSelectSatsvelger>
                     </Feltmargin>
                 )}
 
