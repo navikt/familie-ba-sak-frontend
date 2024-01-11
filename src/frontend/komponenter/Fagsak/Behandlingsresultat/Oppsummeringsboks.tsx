@@ -4,8 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, HGrid, Heading, VStack } from '@navikt/ds-react';
-import { ASpacing10, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, BodyShort, Box, Button, HGrid, Heading, VStack } from '@navikt/ds-react';
+import { ASpacing10, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -44,8 +44,7 @@ const AlertWithBottomMargin = styled(Alert)`
 `;
 
 const UtbetalingsbeløpStack = styled(VStack)`
-    padding-right: ${ASpacing10};
-    padding-bottom: ${ASpacing4};
+    padding: ${ASpacing6} ${ASpacing10} ${ASpacing4} 0;
 `;
 
 const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
@@ -223,7 +222,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     };
 
     return (
-        <div className={'behandlingsresultat-informasjonsboks'}>
+        <Box borderColor="border-strong" borderWidth="1" padding="10">
             <HGrid columns={'1fr 3rem'} align="center">
                 <Heading level={'3'} size="xsmall">
                     {månedNavnOgÅr()}
@@ -238,7 +237,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
             </HGrid>
             {restFeil && <AlertWithBottomMargin variant="error">{restFeil}</AlertWithBottomMargin>}
             {utbetalingsperiode === undefined ? (
-                <BodyShort>Ingen utbetalinger</BodyShort>
+                <BodyShort spacing>Ingen utbetalinger</BodyShort>
             ) : (
                 <>
                     <UtbetalingsbeløpStack gap={'4'}>
@@ -311,7 +310,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         )}
                 </>
             )}
-        </div>
+        </Box>
     );
 };
 export { Oppsummeringsboks };
