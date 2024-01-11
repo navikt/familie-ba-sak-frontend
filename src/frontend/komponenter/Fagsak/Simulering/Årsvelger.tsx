@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Detail } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
@@ -39,7 +39,7 @@ export const Årsvelger: React.FC<Props> = ({
             navigerTilHøyreTittel={`Vis simuleringsresultat for ${aktueltÅr + 1}`}
             navigerTilVenstreTittel={`Vis simuleringsresultat for ${aktueltÅr - 1}`}
         >
-            <Detail>{årISimuleringen[indexFramvistÅr]}</Detail>
+            <BodyShort size={'small'}>{årISimuleringen[indexFramvistÅr]}</BodyShort>
         </TidslinjeNavigering>
     </FlexColumn>
 );
