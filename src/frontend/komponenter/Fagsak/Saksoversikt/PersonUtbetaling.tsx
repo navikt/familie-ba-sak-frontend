@@ -11,7 +11,7 @@ import { formaterBeløp, hentAlder } from '../../../utils/formatter';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
 const Ytelser = styled.section`
-    margin: ${ASpacing2} 0 ${ASpacing8} ${ASpacing8};
+    margin: ${ASpacing2} 0 ${ASpacing4} ${ASpacing8};
     border-bottom: 1px dashed;
 `;
 
@@ -28,7 +28,7 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
         hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
 
     return (
-        <li>
+        <section>
             <PersonInformasjon
                 person={utbetalingsperiodeDetaljer[0].person}
                 erLesevisning={false}
@@ -55,7 +55,7 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                     );
                 })}
             </Ytelser>
-        </li>
+        </section>
     );
 };
 
