@@ -4,30 +4,20 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    BodyShort,
-    Button,
-    Label,
-    Radio,
-    RadioGroup,
-    Fieldset,
-    Select,
-    Textarea,
-} from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import type {
-    IRestEndretUtbetalingAndel,
-    IEndretUtbetalingAndelÅrsak,
-} from '../../../typer/utbetalingAndel';
+import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import {
     IEndretUtbetalingAndelFullSats,
+    IEndretUtbetalingAndelÅrsak,
     optionTilsats,
     satser,
     satsTilOption,
@@ -249,37 +239,28 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Feltmargin>
-                    {erLesevisning ? (
-                        <>
-                            <Label>Utbetaling</Label>
-                            <BodyShort>
-                                {skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
-                            </BodyShort>
-                        </>
-                    ) : (
-                        <RadioGroup
-                            legend={<Label>Utbetaling</Label>}
-                            value={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={(val: boolean | undefined) =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(val)
+                    <RadioGroup
+                        legend={<Label>Utbetaling</Label>}
+                        value={skjema.felter.utbetaling.verdi}
+                        onChange={skjema.felter.utbetaling.validerOgSettFelt}
+                        readOnly={erLesevisning}
+                    >
+                        {Object.values(Utbetaling).map(utbetaling => {
+                            if (
+                                utbetaling === Utbetaling.DELT_UTBETALING &&
+                                skjema.felter.årsak.verdi !==
+                                    IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR
+                            ) {
+                                return;
                             }
-                        >
-                            <Radio
-                                name={'utbetaling'}
-                                value={true}
-                                id={'ja-perioden-utbetales-til-søker'}
-                            >
-                                {'Perioden skal utbetales'}
-                            </Radio>
-                            <Radio
-                                name={'utbetaling'}
-                                value={false}
-                                id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                            >
-                                {'Perioden skal ikke utbetales'}
-                            </Radio>
-                        </RadioGroup>
-                    )}
+
+                            return (
+                                <Radio name={'utbetaling'} value={utbetaling} id={utbetaling}>
+                                    {utbetalingTilLabel(utbetaling)}
+                                </Radio>
+                            );
+                        })}
+                    </RadioGroup>
                 </Feltmargin>
 
                 <Feltmargin>
