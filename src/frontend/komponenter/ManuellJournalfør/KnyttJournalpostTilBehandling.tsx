@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Alert, Checkbox, Heading, Table } from '@navikt/ds-react';
+import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -24,6 +25,11 @@ const KnyttDiv = styled.div`
 const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
+
+const StyledAlert = styled(Alert)`
+    margin-top: ${ASpacing8};
+`;
+
 export const KnyttJournalpostTilBehandling: React.FC = () => {
     const {
         skjema,
@@ -131,20 +137,17 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                 <KnyttTilNyBehandling />
             )}
             {visGenerellSakInfoStripe && (
-                <>
-                    <br />
-                    <Alert variant="info">
-                        <GenerellSakInfoStripeTittel>
-                            {hentSorterteBehandlinger().length > 0
-                                ? `Du velger å journalføre uten å knytte til behandling(er).`
-                                : `Du velger å journalføre uten å knytte til ny behandling.`}
-                        </GenerellSakInfoStripeTittel>
-                        <div>
-                            {`Journalposten knyttes kun til person (tilsvarende "Knytt til generell
+                <StyledAlert variant="info">
+                    <GenerellSakInfoStripeTittel>
+                        {hentSorterteBehandlinger().length > 0
+                            ? `Du velger å journalføre uten å knytte til behandling(er).`
+                            : `Du velger å journalføre uten å knytte til ny behandling.`}
+                    </GenerellSakInfoStripeTittel>
+                    <div>
+                        {`Journalposten knyttes kun til person (tilsvarende "Knytt til generell
                             sak" i Gosys)`}
-                        </div>
-                    </Alert>
-                </>
+                    </div>
+                </StyledAlert>
             )}
         </KnyttDiv>
     );
