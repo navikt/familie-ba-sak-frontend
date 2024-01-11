@@ -1,12 +1,23 @@
 import React from 'react';
 
-import { BodyShort } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { BodyShort, HStack } from '@navikt/ds-react';
+import { ASpacing2, ASpacing4, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
 import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, hentAlder } from '../../../utils/formatter';
-import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+
+const Ytelser = styled.section`
+    margin: ${ASpacing2} 0 ${ASpacing8} ${ASpacing8};
+    border-bottom: 1px dashed;
+`;
+
+const Ytelselinje = styled(HStack)`
+    margin-bottom: ${ASpacing4};
+`;
 
 interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
@@ -22,10 +33,13 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                 person={utbetalingsperiodeDetaljer[0].person}
                 erLesevisning={false}
             />
-            <div className={'saksoversikt__utbetalinger__ytelser'}>
-                {utbetalingsperiodeDetaljer.map((utbetalingsperiodeDetalj, index) => {
+            <Ytelser>
+                {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
                     return (
-                        <div key={index} className={'saksoversikt__utbetalinger__ytelselinje'}>
+                        <Ytelselinje
+                            justify="space-between"
+                            key={utbetalingsperiodeDetalj.person.personIdent}
+                        >
                             <BodyShort>
                                 {utbetalingsperiodeDetalj.ytelseType ===
                                 YtelseType.ORDINÆR_BARNETRYGD
@@ -37,11 +51,10 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                             <BodyShort>
                                 {formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}
                             </BodyShort>
-                        </div>
+                        </Ytelselinje>
                     );
                 })}
-                <DashedHr />
-            </div>
+            </Ytelser>
         </li>
     );
 };
