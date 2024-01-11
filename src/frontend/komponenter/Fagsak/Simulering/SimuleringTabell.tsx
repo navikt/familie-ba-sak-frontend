@@ -26,7 +26,7 @@ import {
 } from '../../../utils/dato';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 
-const StyledTable = styled(Table)`
+const IkkeFullBreddeTabell = styled(Table)`
     width: unset;
 `;
 
@@ -155,7 +155,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                     Vis manuelle posteringer
                 </StyledSwitch>
             )}
-            <StyledTable
+            <IkkeFullBreddeTabell
                 aria-label={`Simuleringsresultat for ${
                     erMerEnn12MånederISimulering
                         ? aktueltÅr
@@ -248,7 +248,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         </ManuellPosteringRad>
                     )}
                 </Table.Body>
-            </StyledTable>
+            </IkkeFullBreddeTabell>
         </>
     );
 };
