@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, HGrid, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HGrid, Heading, VStack } from '@navikt/ds-react';
 import { ASpacing10, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -224,18 +224,10 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
     return (
         <div className={'behandlingsresultat-informasjonsboks'}>
-            <div className={'behandlingsresultat-informasjonsboks__header'}>
-                <div className={'behandlingsresultat-informasjonsboks__header__info'}>
-                    {restFeil && (
-                        <AlertWithBottomMargin variant="error" inline>
-                            {restFeil}
-                        </AlertWithBottomMargin>
-                    )}
-
-                    <Label>{månedNavnOgÅr()}</Label>
-
-                    {utbetalingsperiode === undefined && <BodyShort>Ingen utbetalinger</BodyShort>}
-                </div>
+            <HGrid columns={'1fr 3rem'} align="center">
+                <Heading level={'3'} size="xsmall">
+                    {månedNavnOgÅr()}
+                </Heading>
                 <Button
                     variant="tertiary"
                     icon={<XMarkIcon />}
@@ -243,8 +235,11 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         settAktivEtikett(undefined);
                     }}
                 />
-            </div>
-            {utbetalingsperiode !== undefined && (
+            </HGrid>
+            {restFeil && <AlertWithBottomMargin variant="error">{restFeil}</AlertWithBottomMargin>}
+            {utbetalingsperiode === undefined ? (
+                <BodyShort>Ingen utbetalinger</BodyShort>
+            ) : (
                 <>
                     <UtbetalingsbeløpStack gap={'4'}>
                         <UtbetalingsbeløpRad>
