@@ -1,5 +1,3 @@
-import type { OptionType } from '@navikt/familie-form-elements';
-
 import type { IsoDatoString, IsoMånedString } from '../utils/dato';
 
 export interface IRestEndretUtbetalingAndel {
@@ -32,25 +30,3 @@ export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
 export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbetalingAndelÅrsak).map(
     k => k as IEndretUtbetalingAndelÅrsak
 );
-
-export enum IEndretUtbetalingAndelFullSats {
-    FULL_SATS = 'FULL_SATS',
-}
-
-export interface SatsOption extends OptionType {
-    fullSats: boolean;
-}
-
-export const satsTilOption = (fullSats: boolean): SatsOption => ({
-    value: fullSats ? '100' : '50',
-    label: fullSats ? 'Full' : 'Delt',
-    fullSats: fullSats,
-});
-
-export const optionTilsats = (satsLabel: string): boolean => {
-    return satsLabel === IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf();
-};
-
-export const satser: IEndretUtbetalingAndelFullSats[] = Object.keys(
-    IEndretUtbetalingAndelFullSats
-).map(k => k as IEndretUtbetalingAndelFullSats);
