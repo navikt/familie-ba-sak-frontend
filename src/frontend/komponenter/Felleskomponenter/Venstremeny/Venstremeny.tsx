@@ -7,6 +7,7 @@ import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import {
     ABorderFocus,
     AGrayalpha500,
+    ASpacing14,
     ASpacing2,
     ASpacing8,
     ASurfaceDefault,
@@ -41,6 +42,7 @@ const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean; $erUnderside?: boolean
     text-decoration: none;
     color: ${props => (props.$erLenkenAktiv ? ATextDefault : AGrayalpha500)};
     padding: ${ASpacing2} ${ASpacing8};
+    padding-left: ${props => props.$erUnderside && ASpacing14};
 
     &:focus {
         box-shadow: 0 0 0 3px ${ABorderFocus};
