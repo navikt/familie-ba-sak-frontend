@@ -9,12 +9,10 @@ import { BodyShort } from '@navikt/ds-react';
 import { ABorderSelected, ASurfaceNeutralSubtle } from '@navikt/ds-tokens/dist/tokens';
 
 const StyledNavLink = styled(NavLink)<{ $erPåDenneSiden: boolean }>`
-    ${props =>
-        props.$erPåDenneSiden &&
-        `
+    &.active {
         background-color: ${ASurfaceNeutralSubtle};
-        box-shadow: inset 0.35rem 0 0 0 ${ABorderSelected}
-    `};
+        box-shadow: inset 0.35rem 0 0 0 ${ABorderSelected};
+    }
 `;
 
 interface Props extends PropsWithChildren {
