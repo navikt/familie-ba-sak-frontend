@@ -39,12 +39,12 @@ const ManuellPosteringRad = styled(Table.Row)`
 `;
 
 const HeaderCelle = styled(Table.HeaderCell)<{ $skalViseStipletLinje: boolean }>`
-    border-left: ${props => props.$skalViseStipletLinje && 'dotted'};
+    border-left: ${props => props.$skalViseStipletLinje && '1px dashed'};
 `;
 
 const DataCelle = styled(Table.DataCell)<{ $skalViseStipletLinje: boolean }>`
     width: ${ASpacing18};
-    border-left: ${props => props.$skalViseStipletLinje && 'dotted'};
+    border-left: ${props => props.$skalViseStipletLinje && '1px dashed'};
 `;
 
 const DataCellMedFarge = styled(DataCelle)<{
