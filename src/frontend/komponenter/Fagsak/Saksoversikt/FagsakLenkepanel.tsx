@@ -2,8 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Box, LinkPanel } from '@navikt/ds-react';
-import { ASpacing16, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, BodyShort, Box, HStack, LinkPanel } from '@navikt/ds-react';
+import {
+    AFontSizeHeadingMedium,
+    AFontSizeXlarge,
+    ASpacing16,
+    ASpacing8,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -26,23 +31,12 @@ interface IInnholdstabell {
     behandling?: VisningBehandling;
 }
 
-const Container = styled.div`
-    display: flex;
-    width: 100%;
-`;
-
 const HeaderTekst = styled(BodyShort)`
-    font-size: var(--a-font-size-xlarge);
-    font-weight: var(--a-font-weight-regular);
+    font-size: ${AFontSizeXlarge};
 `;
 
 const BodyTekst = styled(BodyShort)`
-    font-size: var(--a-font-size-heading-medium);
-    font-weight: var(--a-font-weight-bold);
-`;
-
-const BehandlingstemaContainer = styled.div`
-    margin-right: 5rem;
+    font-size: ${AFontSizeHeadingMedium};
 `;
 
 const FagsakPanelMedAktivBehandling = styled(LinkPanel)`
@@ -67,16 +61,18 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
         minimalFagsak.løpendeUnderkategori &&
         tilBehandlingstema(minimalFagsak.løpendeKategori, minimalFagsak.løpendeUnderkategori);
     return (
-        <Container>
-            <BehandlingstemaContainer>
+        <HStack gap="20">
+            <div>
                 <HeaderTekst spacing>Behandlingstema</HeaderTekst>
-                <BodyTekst>{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
-            </BehandlingstemaContainer>
+                <BodyTekst weight="semibold">
+                    {behandlingstema ? behandlingstema.navn : '-'}
+                </BodyTekst>
+            </div>
             <div>
                 <HeaderTekst spacing>Status</HeaderTekst>
-                <BodyTekst>{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
+                <BodyTekst weight="semibold">{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
             </div>
-        </Container>
+        </HStack>
     );
 };
 
