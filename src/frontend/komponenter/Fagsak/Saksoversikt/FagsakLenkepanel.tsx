@@ -101,28 +101,27 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
     const aktivBehandling: VisningBehandling | undefined =
         hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
 
-    return aktivBehandling ? (
+    return (
         <>
-            <FagsakPanelMedAktivBehandling
-                title={genererHoverTekst(aktivBehandling)}
-                href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
-            >
-                <LinkPanel.Description>
+            {aktivBehandling ? (
+                <FagsakPanelMedAktivBehandling
+                    title={genererHoverTekst(aktivBehandling)}
+                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
+                >
+                    <LinkPanel.Description>
+                        <Innholdstabell minimalFagsak={minimalFagsak} />
+                    </LinkPanel.Description>
+                </FagsakPanelMedAktivBehandling>
+            ) : (
+                <FagsakPanel
+                    borderColor="border-strong"
+                    borderWidth="1"
+                    borderRadius="small"
+                    padding="8"
+                >
                     <Innholdstabell minimalFagsak={minimalFagsak} />
-                </LinkPanel.Description>
-            </FagsakPanelMedAktivBehandling>
-            <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
-        </>
-    ) : (
-        <>
-            <FagsakPanel
-                borderColor="border-strong"
-                borderWidth="1"
-                borderRadius="small"
-                padding="8"
-            >
-                <Innholdstabell minimalFagsak={minimalFagsak} />
-            </FagsakPanel>
+                </FagsakPanel>
+            )}
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     );
