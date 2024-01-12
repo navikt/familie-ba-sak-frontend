@@ -1,9 +1,9 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, LinkPanel, Panel } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, LinkPanel } from '@navikt/ds-react';
+import { ASpacing16, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -45,6 +45,22 @@ const BehandlingstemaContainer = styled.div`
     margin-right: 5rem;
 `;
 
+const FagsakPanelMedAktivBehandling = styled(LinkPanel)`
+    width: calc(10 * ${ASpacing16});
+    margin-top: ${ASpacing8};
+    padding: ${ASpacing8};
+`;
+
+const FagsakPanel = styled(Box)`
+    width: calc(10 * ${ASpacing16});
+    margin-top: ${ASpacing8};
+`;
+
+const StyledAlert = styled(Alert)`
+    width: calc(10 * ${ASpacing16});
+    margin-top: ${ASpacing8};
+`;
+
 const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
     const behandlingstema: IBehandlingstema | undefined =
         minimalFagsak.løpendeKategori &&
@@ -67,21 +83,9 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
 const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
     switch (fagsakType) {
         case FagsakType.INSTITUSJON:
-            return (
-                <Alert
-                    className="fagsak-type-label"
-                    children={'Dette er en institusjonssak'}
-                    variant={'info'}
-                ></Alert>
-            );
+            return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-            return (
-                <Alert
-                    className="fagsak-type-label"
-                    children={'Dette er en enslig mindreårig sak'}
-                    variant={'info'}
-                ></Alert>
-            );
+            return <StyledAlert variant={'info'}>Dette er en enslig mindreårig-sak</StyledAlert>;
         default:
             return null;
     }
@@ -99,22 +103,26 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
 
     return aktivBehandling ? (
         <>
-            <LinkPanel
+            <FagsakPanelMedAktivBehandling
                 title={genererHoverTekst(aktivBehandling)}
-                className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
                 href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
             >
                 <LinkPanel.Description>
                     <Innholdstabell minimalFagsak={minimalFagsak} />
                 </LinkPanel.Description>
-            </LinkPanel>
+            </FagsakPanelMedAktivBehandling>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     ) : (
         <>
-            <Panel className={'fagsak-panel'} border>
+            <FagsakPanel
+                borderColor="border-strong"
+                borderWidth="1"
+                borderRadius="small"
+                padding="8"
+            >
                 <Innholdstabell minimalFagsak={minimalFagsak} />
-            </Panel>
+            </FagsakPanel>
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     );
