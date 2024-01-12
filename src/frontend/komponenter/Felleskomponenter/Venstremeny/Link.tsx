@@ -1,12 +1,23 @@
-import type { ReactChild } from 'react';
+import type { PropsWithChildren } from 'react';
 import React from 'react';
 
-import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { NavHashLink as NavLink } from 'react-router-hash-link';
+import styled from 'styled-components';
 
-interface Props {
-    children: ReactChild;
+import { BodyShort } from '@navikt/ds-react';
+import { ABorderSelected, ASurfaceNeutralSubtle } from '@navikt/ds-tokens/dist/tokens';
+
+const StyledNavLink = styled(NavLink)<{ $erPåDenneSiden: boolean }>`
+    ${props =>
+        props.$erPåDenneSiden &&
+        `
+        background-color: ${ASurfaceNeutralSubtle};
+        box-shadow: inset 0.35rem 0 0 0 ${ABorderSelected}
+    `};
+`;
+
+interface Props extends PropsWithChildren {
     id: string;
     to?: string;
     active?: boolean;
@@ -20,26 +31,23 @@ const Link: React.FC<Props> = ({ active = true, id, to, children, className }) =
     };
 
     return active && to ? (
-        <NavLink
+        <StyledNavLink
             id={id}
             to={to}
             tabIndex={0}
             onClick={onClick}
-            className={classNames(
-                className,
-                `${location.pathname}${location.hash}` === to ? 'active' : ''
-            )}
+            className={className}
             scroll={el => {
                 el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }}
+            $erPåDenneSiden={`${location.pathname}${location.hash}` === to}
         >
             {children}
-        </NavLink>
+        </StyledNavLink>
     ) : (
-        // eslint-disable-next-line
-        <a key={id} className={classNames('inactive', className)}>
+        <BodyShort key={id} className={className}>
             {children}
-        </a>
+        </BodyShort>
     );
 };
 
