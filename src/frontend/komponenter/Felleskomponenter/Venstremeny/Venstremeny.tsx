@@ -3,15 +3,17 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import {
     ABorderFocus,
+    ABorderWarning,
     AGrayalpha500,
-    ASpacing14,
     ASpacing2,
+    ASpacing6,
     ASpacing8,
     ASurfaceDefault,
     ASurfaceHover,
+    ASurfaceWarning,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
@@ -38,11 +40,10 @@ const Meny = styled(VStack)`
     padding: ${ASpacing8} 0;
 `;
 
-const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean; $erUnderside?: boolean }>`
+const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean }>`
     text-decoration: none;
     color: ${props => (props.$erLenkenAktiv ? ATextDefault : AGrayalpha500)};
     padding: ${ASpacing2} ${ASpacing8};
-    padding-left: ${props => props.$erUnderside && ASpacing14};
 
     &:focus {
         box-shadow: 0 0 0 3px ${ABorderFocus};
@@ -57,6 +58,17 @@ const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean; $erUnderside?: boolean
                 }
         `;
     }};
+`;
+
+const UndersideSirkel = styled.span`
+    border-color: ${ABorderWarning};
+    border-radius: 50%;
+    background-color: ${ASurfaceWarning};
+    display: inline-grid;
+    grid-column: circle;
+    place-items: center;
+    height: ${ASpacing6};
+    width: ${ASpacing6};
 `;
 
 const Venstremeny: React.FunctionComponent = () => {
@@ -92,19 +104,18 @@ const Venstremeny: React.FunctionComponent = () => {
                                             key={`${sideId}_${underside.hash}`}
                                             id={`${sideId}_${underside.hash}`}
                                             to={`${tilPath}#${underside.hash}`}
-                                            $erUnderside
                                             $erLenkenAktiv={erSidenAktiv(side, behandling)}
                                         >
-                                            <>
+                                            <HStack align="center" gap="1">
                                                 {antallAksjonspunkter > 0 ? (
-                                                    <div className={'underside__sirkel-tall'}>
+                                                    <UndersideSirkel>
                                                         {antallAksjonspunkter}
-                                                    </div>
+                                                    </UndersideSirkel>
                                                 ) : (
-                                                    <div className={'underside__sirkel-plass'} />
+                                                    <Box padding="3" />
                                                 )}
                                                 <BodyShort size="small">{underside.navn}</BodyShort>
-                                            </>
+                                            </HStack>
                                         </MenyLenke>
                                     );
                                 })}
