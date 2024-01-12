@@ -541,12 +541,16 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const kanKnytteJournalpostTilBehandling = () => {
-        return dataForManuellJournalføring.status !== RessursStatus.SUKSESS
-            ? false
-            : dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.BEH_SED &&
-              erTilordnetInnloggetSaksbehandler()
-            ? true
-            : !erLesevisning();
+        if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
+            return false;
+        }
+        if (
+            dataForManuellJournalføring.data.oppgave.oppgavetype === OppgavetypeFilter.BEH_SED &&
+            erTilordnetInnloggetSaksbehandler()
+        ) {
+            return true;
+        }
+        return !erLesevisning();
     };
 
     const kanKnyttesTilInstitusjonsfagsak = () => {

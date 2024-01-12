@@ -1,5 +1,4 @@
 import './index.less';
-import 'nav-frontend-tabell-style';
 
 import React from 'react';
 

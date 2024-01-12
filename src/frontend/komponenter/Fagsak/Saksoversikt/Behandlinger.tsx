@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import classNames from 'classnames';
 import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
@@ -69,9 +68,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                 )}
             </StyledHeading>
             {behandlinger.length > 0 ? (
-                <Table
-                    className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
-                >
+                <Table size={'large'}>
                     <Table.Header>
                         <Table.Row>
                             <StyledOpprettetKolonne scope="col">Opprettet</StyledOpprettetKolonne>
