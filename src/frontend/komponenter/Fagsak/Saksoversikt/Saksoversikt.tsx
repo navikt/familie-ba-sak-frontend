@@ -4,7 +4,8 @@ import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Link, Tabs } from '@navikt/ds-react';
+import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
+import { ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
@@ -33,11 +34,6 @@ interface IProps {
 const basakTab = { label: 'Saksoversikt', key: 'basak' };
 const infotrygdTab = { label: 'Infotrygd', key: 'infotrygd' };
 
-const FlexSpaceBetween = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
 const SaksoversiktWrapper = styled.div`
     max-width: 70rem;
     margin: 2.5rem 4rem;
@@ -48,9 +44,7 @@ const StyledHeading = styled(Heading)`
 `;
 
 const StyledAlert = styled(Alert)`
-    .navds-alert__wrapper {
-        flex: 1;
-    }
+    width: calc(10 * ${ASpacing16});
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
@@ -90,13 +84,15 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     );
 
     const lenkeTilBehandlingsresultat = () => {
-        return aktivBehandling ? (
-            <Link
-                href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
-            >
-                Se detaljer
-            </Link>
-        ) : null;
+        return (
+            aktivBehandling && (
+                <Link
+                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
+                >
+                    Se detaljer
+                </Link>
+            )
+        );
     };
 
     const løpendeMånedligUtbetaling = () => {
@@ -106,21 +102,21 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         ) {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
-                <Alert className={'saksoversikt__alert'} variant="info">
+                <StyledAlert variant="info">
                     Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
-                </Alert>
+                </StyledAlert>
             ) : (
                 <>
                     {utbetalingsperiodeNesteMåned &&
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
-                            <StyledAlert className={'saksoversikt__alert'} variant="info">
-                                <FlexSpaceBetween>
+                            <StyledAlert variant="info">
+                                <VStack>
                                     {`Utbetalingen endres fra og med ${format(
                                         nesteMåned,
                                         Datoformat.MÅNED_ÅR_NAVN
-                                    )}`}
+                                    )}.`}
                                     {lenkeTilBehandlingsresultat()}
-                                </FlexSpaceBetween>
+                                </VStack>
                             </StyledAlert>
                         )}
                     <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
@@ -128,19 +124,19 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             );
         } else if (utbetalingsperiodeNesteMåned) {
             return (
-                <StyledAlert className={'saksoversikt__alert'} variant="info">
-                    <FlexSpaceBetween>
-                        {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}`}
+                <StyledAlert variant="info">
+                    <VStack>
+                        {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
                         {lenkeTilBehandlingsresultat()}
-                    </FlexSpaceBetween>
+                    </VStack>
                 </StyledAlert>
             );
         } else {
             return (
-                <Alert className={'saksoversikt__alert'} variant="error">
+                <StyledAlert variant="error">
                     Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte
                     hvis problemet vedvarer.
-                </Alert>
+                </StyledAlert>
             );
         }
     };
