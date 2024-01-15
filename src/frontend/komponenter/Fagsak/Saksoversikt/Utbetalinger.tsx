@@ -3,15 +3,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { ABorderStrong, ASpacing16, ASpacing2, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { ABorderStrong, ASpacing2, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
+import { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import PersonUtbetaling from './PersonUtbetaling';
 import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
 
 const LøpendeUtbetalinger = styled(VStack)`
-    max-width: calc(10 * ${ASpacing16});
+    max-width: ${SaksoversiktPanelBredde};
     margin-top: ${ASpacing8};
 `;
 

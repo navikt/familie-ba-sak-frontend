@@ -31,6 +31,8 @@ interface IInnholdstabell {
     behandling?: VisningBehandling;
 }
 
+export const SaksoversiktPanelBredde = `calc(10 * ${ASpacing16})`;
+
 const HeaderTekst = styled(BodyShort)`
     font-size: ${AFontSizeXlarge};
 `;
@@ -40,18 +42,18 @@ const BodyTekst = styled(BodyShort)`
 `;
 
 const FagsakPanelMedAktivBehandling = styled(LinkPanel)`
-    width: calc(10 * ${ASpacing16});
+    width: ${SaksoversiktPanelBredde};
     margin-top: ${ASpacing8};
     padding: ${ASpacing8};
 `;
 
 const FagsakPanel = styled(Box)`
-    width: calc(10 * ${ASpacing16});
+    width: ${SaksoversiktPanelBredde};
     margin-top: ${ASpacing8};
 `;
 
 const StyledAlert = styled(Alert)`
-    width: calc(10 * ${ASpacing16});
+    width: ${SaksoversiktPanelBredde};
     margin-top: ${ASpacing8};
 `;
 

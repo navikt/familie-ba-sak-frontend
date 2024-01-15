@@ -5,11 +5,10 @@ import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
-import { ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
-import FagsakLenkepanel from './FagsakLenkepanel';
+import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 import type { IBehandling } from '../../../typer/behandling';
@@ -44,7 +43,7 @@ const StyledHeading = styled(Heading)`
 `;
 
 const StyledAlert = styled(Alert)`
-    width: calc(10 * ${ASpacing16});
+    width: ${SaksoversiktPanelBredde};
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
