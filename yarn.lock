@@ -2102,14 +2102,14 @@
     classnames "^2.3.2"
     react-select "^5.7.0"
 
-"@navikt/familie-header@12.0.0":
-  version "12.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/12.0.0/4f96471ee373b3b2a21794abff348ae41e0755e9#4f96471ee373b3b2a21794abff348ae41e0755e9"
-  integrity sha512-nP5qsKQFZCEILVrvQHV2pd0Nlkgi2bCUfSMqReZ05ZwUe5N4eMu8Gx4PfGs2lmLb73vBIzgUOlx3WfpupCZ+tw==
+"@navikt/familie-header@13.0.1":
+  version "13.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/13.0.1/6f376f999ac5997c603f1558da4f5be7cff7b97a#6f376f999ac5997c603f1558da4f5be7cff7b97a"
+  integrity sha512-7+bRZX/auHpmtqSSizGePIoqmpdNFU2m50fp9ShB5taTJ2Ie1Zb/ujD6qI2UiQ2ZfLPGmMyrRbs37eO3+M/ZvQ==
   dependencies:
-    "@navikt/familie-ikoner" "^7.0.1"
+    "@navikt/familie-ikoner" "^9.0.0"
     "@navikt/familie-typer" "^8.0.1"
-    "@navikt/familie-validering" "^5.0.2"
+    "@navikt/familie-validering" "^6.0.0"
 
 "@navikt/familie-http@6.0.0", "@navikt/familie-http@^6.0.0":
   version "6.0.0"
@@ -2131,6 +2131,13 @@
   version "7.0.1"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/7.0.1/548ee43f1d104947a45b11978b4f8429ab600629#548ee43f1d104947a45b11978b4f8429ab600629"
   integrity sha512-kNCcEic8DS2jNGKVWFguKEFM0Y8j154ofXVBRNBT5PfQcR61DYioZLz6knSmXPGWrQQqYxAGNSdKqDUpO8jn5Q==
+  dependencies:
+    "@navikt/familie-typer" "^8.0.1"
+
+"@navikt/familie-ikoner@^9.0.0":
+  version "9.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.0/4cc833bc49ab5b16b2a10e7ae70425a37803f9e2#4cc833bc49ab5b16b2a10e7ae70425a37803f9e2"
+  integrity sha512-AsC+WrVQcG0LJskzQDLizjeWVpvh70E8hQ/A+CBFrWPyGks4FtrCNIUFxWwPmJhznFZdd283THJ1HDcc5f6gsg==
   dependencies:
     "@navikt/familie-typer" "^8.0.1"
 
@@ -2167,20 +2174,20 @@
     classnames "^2.5.1"
     nanoid "^5.0.4"
 
-"@navikt/familie-typer@8.0.0", "@navikt/familie-typer@^8.0.0":
+"@navikt/familie-typer@8.0.0":
   version "8.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.0/f950131d30a4561cba4e35e262d5b71874d7abe0#f950131d30a4561cba4e35e262d5b71874d7abe0"
   integrity sha512-+Lt3+u8CNvCaNN3pnaodWq+NE8sHWyJ/bXWYj1fgKHLY9/WnJCQDrhHiHy3xAwJM1HSkfrmApwRZnwOqywG5MA==
 
-"@navikt/familie-typer@^8.0.1":
+"@navikt/familie-typer@^8.0.0", "@navikt/familie-typer@^8.0.1":
   version "8.0.1"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.1/75574867acea945c485ce14faaa3d1d8a6232f02#75574867acea945c485ce14faaa3d1d8a6232f02"
   integrity sha512-zlOxNLT3fVW9EmQq4n0CtIAdCRMDfJUwhhXuYWkxnFvaa61MCBnMBC52W6+kv+MUwo8DN/8jNkKZkjvWPVxdpA==
 
-"@navikt/familie-validering@^5.0.2":
-  version "5.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/5.0.2/b890a334ca5f5aa5aeba6873f3fb00aff30be759#b890a334ca5f5aa5aeba6873f3fb00aff30be759"
-  integrity sha512-S8C3egFMHC97auVFOlWMmG2Z84X1mwtVAvmp3ACEpFFRtzKQ2CD25ZJV7Sqf3IqHZLLAzGEaYCeMtYIAPwp3ag==
+"@navikt/familie-validering@^6.0.0":
+  version "6.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/6.0.0/19f4b7104e61b3e3cc2251c03c33d1b3c7fe6356#19f4b7104e61b3e3cc2251c03c33d1b3c7fe6356"
+  integrity sha512-IvySSdyKPeLVOLjgKpWlIdDxdLsmxebyn5gHw+wdxxLWhO6tJ4IWK939cjqSRItEJtrYCQVSM/Kb1lz6ScvRMA==
 
 "@navikt/familie-visittkort@12.0.0":
   version "12.0.0"
