@@ -42,7 +42,7 @@
     "@navikt/familie-header": "12.0.0",
     "@navikt/familie-http": "6.0.0",
     "@navikt/familie-ikoner": "7.0.0",
-    "@navikt/familie-logging": "6.0.0",
+    "@navikt/familie-logging": "7.0.0",
     "@navikt/familie-skjema": "7.0.3",
     "@navikt/familie-tidslinje": "7.0.0",
     "@navikt/familie-typer": "8.0.0",
