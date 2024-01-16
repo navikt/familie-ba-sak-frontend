@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { BodyShort, Link, Tag } from '@navikt/ds-react';
+import styled from 'styled-components';
+
+import { Buldings3Icon } from '@navikt/aksel-icons';
+import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
+import { AGreen600, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
-import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
@@ -14,6 +17,17 @@ import type { IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
+
+const IkonSirkel = styled.span`
+    border-color: ${AGreen600};
+    border-radius: 50%;
+    background-color: ${AGreen600};
+    display: inline-grid;
+    place-items: center;
+    height: ${ASpacing6};
+    width: ${ASpacing6};
+    color: white;
+`;
 
 interface IProps {
     bruker?: IPersonInfo;
@@ -29,20 +43,25 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
             ident={formaterIdent(bruker?.personIdent ?? '')}
             alder={hentAlder(bruker?.fødselsdato ?? '')}
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
-            ValgfrittIkon={
-                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? KontorIkonGrønn : undefined
+            ikon={
+                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? (
+                    <IkonSirkel>
+                        <Buldings3Icon width={20} height={20} />
+                    </IkonSirkel>
+                ) : undefined
             }
+            dempetKantlinje
+            padding
         >
-            <div className="visittkort__pipe">|</div>
+            <div>|</div>
             <BodyShort>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
             {bruker?.dødsfallDato?.length && (
                 <>
-                    <div className="visittkort__pipe"></div>
+                    <div>|</div>
                     <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
                 </>
             )}
-            <div style={{ flex: 1 }}></div>
-            <div style={{ flex: 1 }}></div>
+            <Spacer />
             {minimalFagsak !== undefined && (
                 <>
                     {minimalFagsak?.migreringsdato !== undefined &&
@@ -56,16 +75,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
                                 variant={'info'}
                             />
                         )}
-                    <Link
-                        className={'visittkort__lenke'}
-                        href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
-                    >
+                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
                         <BodyShort>Saksoversikt</BodyShort>
                     </Link>
-                    <Link
-                        className={'visittkort__lenke'}
-                        href={`/fagsak/${minimalFagsak.id}/dokumenter`}
-                    >
+                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
                         <BodyShort>Dokumenter</BodyShort>
                     </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
