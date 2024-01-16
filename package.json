@@ -156,8 +156,7 @@
     },
     "moduleNameMapper": {
       "\\.(css|less|svg)$": "<rootDir>/src/mockFile.js",
-      "nav-(.*)-style": "<rootDir>/src/mockFile.js",
-      "nav-frontend-core": "<rootDir>/src/mockFile.js"
+      "nav-(.*)-style": "<rootDir>/src/mockFile.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!(@navikt)/)"
