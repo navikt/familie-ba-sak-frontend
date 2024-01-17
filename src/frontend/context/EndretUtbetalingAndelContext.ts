@@ -38,6 +38,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             verdi: prosentTilUtbetaling(endretUtbetalingAndel.prosent),
             valideringsfunksjon: felt =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge utbetaling'),
+            avhengigheter: årsakFelt,
+            nullstillVedAvhengighetEndring: true,
         });
 
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
