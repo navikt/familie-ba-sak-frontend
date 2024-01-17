@@ -10,7 +10,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { erUtbetalingTillatForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
+import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
@@ -238,7 +238,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     >
                         {Object.values(Utbetaling)
                             .filter(utbetaling =>
-                                erUtbetalingTillatForÅrsak({
+                                erUtbetalingTillattForÅrsak({
                                     årsak: skjema.felter.årsak.verdi,
                                     utbetaling,
                                 })

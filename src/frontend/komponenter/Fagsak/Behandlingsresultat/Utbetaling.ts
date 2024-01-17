@@ -51,7 +51,7 @@ export function utbetalingTilLabel(utbetaling?: Utbetaling) {
     }
 }
 
-export function erUtbetalingTillatForÅrsak({
+export function erUtbetalingTillattForÅrsak({
     årsak,
     utbetaling,
 }: {
