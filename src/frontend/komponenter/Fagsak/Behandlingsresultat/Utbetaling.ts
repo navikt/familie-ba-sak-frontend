@@ -1,3 +1,5 @@
+import { IEndretUtbetalingAndelÅrsak } from '../../../typer/utbetalingAndel';
+
 export enum Utbetaling {
     FULL_UTBETALING = 'FULL_UTBETALING',
     DELT_UTBETALING = 'DELT_UTBETALING',
@@ -46,5 +48,30 @@ export function utbetalingTilLabel(utbetaling?: Utbetaling) {
             return 'Perioden skal ikke utbetales';
         case undefined:
             return 'Ikke valgt';
+    }
+}
+
+export function erUtbetalingTillatForÅrsak({
+    årsak,
+    utbetaling,
+}: {
+    årsak?: IEndretUtbetalingAndelÅrsak;
+    utbetaling?: Utbetaling;
+}) {
+    if (!årsak) {
+        return true;
+    }
+
+    switch (utbetaling) {
+        case Utbetaling.FULL_UTBETALING:
+            return årsak !== IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR;
+        case Utbetaling.DELT_UTBETALING:
+            return årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR;
+        case Utbetaling.INGEN_UTBETALING:
+            return true;
+        case undefined:
+            return false;
+        default:
+            throw new Error(`Ukent utbetalingstype`);
     }
 }
