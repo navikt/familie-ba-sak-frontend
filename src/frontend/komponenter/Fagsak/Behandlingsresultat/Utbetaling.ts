@@ -72,6 +72,6 @@ export function erUtbetalingTillattForÅrsak({
         case undefined:
             return false;
         default:
-            throw new Error(`Ukent utbetalingstype`);
+            throw new Error(`Ukjent utbetalingstype`);
     }
 }
