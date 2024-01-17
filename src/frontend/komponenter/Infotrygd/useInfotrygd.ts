@@ -53,9 +53,8 @@ export const useInfotrygdSkjema = () => {
 
 export const useInfotrygdRequest = () => {
     const { request } = useHttp();
-    const [infotrygdsakerRessurs, settInfotrygdsakerRessurs] = useState<Ressurs<IInfotrygdsaker>>(
-        byggTomRessurs()
-    );
+    const [infotrygdsakerRessurs, settInfotrygdsakerRessurs] =
+        useState<Ressurs<IInfotrygdsaker>>(byggTomRessurs());
 
     const hentInfotrygdsaker = (ident: string) => {
         settInfotrygdsakerRessurs(byggHenterRessurs<IInfotrygdsaker>());

@@ -26,8 +26,8 @@ const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
         return antallMottakere === 0
             ? 'Legg til brevmottaker'
             : antallMottakere === 1
-            ? 'Legg til eller fjern brevmottaker'
-            : 'Se eller fjern brevmottakere';
+              ? 'Legg til eller fjern brevmottaker'
+              : 'Se eller fjern brevmottakere';
     }
 };
 
