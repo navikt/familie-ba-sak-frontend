@@ -1,9 +1,14 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, LinkPanel, Panel } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, HStack, LinkPanel } from '@navikt/ds-react';
+import {
+    AFontSizeHeadingMedium,
+    AFontSizeXlarge,
+    ASpacing16,
+    ASpacing8,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -26,23 +31,30 @@ interface IInnholdstabell {
     behandling?: VisningBehandling;
 }
 
-const Container = styled.div`
-    display: flex;
-    width: 100%;
-`;
+export const SaksoversiktPanelBredde = `calc(10 * ${ASpacing16})`;
 
 const HeaderTekst = styled(BodyShort)`
-    font-size: var(--a-font-size-xlarge);
-    font-weight: var(--a-font-weight-regular);
+    font-size: ${AFontSizeXlarge};
 `;
 
 const BodyTekst = styled(BodyShort)`
-    font-size: var(--a-font-size-heading-medium);
-    font-weight: var(--a-font-weight-bold);
+    font-size: ${AFontSizeHeadingMedium};
 `;
 
-const BehandlingstemaContainer = styled.div`
-    margin-right: 5rem;
+const FagsakPanelMedAktivBehandling = styled(LinkPanel)`
+    width: ${SaksoversiktPanelBredde};
+    margin-top: ${ASpacing8};
+    padding: ${ASpacing8};
+`;
+
+const FagsakPanel = styled(Box)`
+    width: ${SaksoversiktPanelBredde};
+    margin-top: ${ASpacing8};
+`;
+
+const StyledAlert = styled(Alert)`
+    width: ${SaksoversiktPanelBredde};
+    margin-top: ${ASpacing8};
 `;
 
 const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
@@ -51,37 +63,27 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
         minimalFagsak.løpendeUnderkategori &&
         tilBehandlingstema(minimalFagsak.løpendeKategori, minimalFagsak.løpendeUnderkategori);
     return (
-        <Container>
-            <BehandlingstemaContainer>
+        <HStack gap="20">
+            <div>
                 <HeaderTekst spacing>Behandlingstema</HeaderTekst>
-                <BodyTekst>{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
-            </BehandlingstemaContainer>
+                <BodyTekst weight="semibold">
+                    {behandlingstema ? behandlingstema.navn : '-'}
+                </BodyTekst>
+            </div>
             <div>
                 <HeaderTekst spacing>Status</HeaderTekst>
-                <BodyTekst>{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
+                <BodyTekst weight="semibold">{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
             </div>
-        </Container>
+        </HStack>
     );
 };
 
 const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
     switch (fagsakType) {
         case FagsakType.INSTITUSJON:
-            return (
-                <Alert
-                    className="fagsak-type-label"
-                    children={'Dette er en institusjonssak'}
-                    variant={'info'}
-                ></Alert>
-            );
+            return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-            return (
-                <Alert
-                    className="fagsak-type-label"
-                    children={'Dette er en enslig mindreårig sak'}
-                    variant={'info'}
-                ></Alert>
-            );
+            return <StyledAlert variant={'info'}>Dette er en enslig mindreårig-sak</StyledAlert>;
         default:
             return null;
     }
@@ -97,24 +99,27 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
     const aktivBehandling: VisningBehandling | undefined =
         hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
 
-    return aktivBehandling ? (
+    return (
         <>
-            <LinkPanel
-                title={genererHoverTekst(aktivBehandling)}
-                className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
-                href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
-            >
-                <LinkPanel.Description>
+            {aktivBehandling ? (
+                <FagsakPanelMedAktivBehandling
+                    title={genererHoverTekst(aktivBehandling)}
+                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
+                >
+                    <LinkPanel.Description>
+                        <Innholdstabell minimalFagsak={minimalFagsak} />
+                    </LinkPanel.Description>
+                </FagsakPanelMedAktivBehandling>
+            ) : (
+                <FagsakPanel
+                    borderColor="border-strong"
+                    borderWidth="1"
+                    borderRadius="small"
+                    padding="8"
+                >
                     <Innholdstabell minimalFagsak={minimalFagsak} />
-                </LinkPanel.Description>
-            </LinkPanel>
-            <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
-        </>
-    ) : (
-        <>
-            <Panel className={'fagsak-panel'} border>
-                <Innholdstabell minimalFagsak={minimalFagsak} />
-            </Panel>
+                </FagsakPanel>
+            )}
             <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
         </>
     );

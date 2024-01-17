@@ -4,36 +4,18 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    BodyShort,
-    Button,
-    Label,
-    Radio,
-    RadioGroup,
-    Fieldset,
-    Select,
-    Textarea,
-} from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import type {
-    IRestEndretUtbetalingAndel,
-    IEndretUtbetalingAndelÅrsak,
-} from '../../../typer/utbetalingAndel';
-import {
-    IEndretUtbetalingAndelFullSats,
-    optionTilsats,
-    satser,
-    satsTilOption,
-    årsaker,
-    årsakTekst,
-} from '../../../typer/utbetalingAndel';
+import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak, årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
@@ -58,10 +40,6 @@ const StyledFieldset = styled(Fieldset)`
 const StyledSelectPersonvelger = styled(Select)`
     min-width: 20rem;
     z-index: 1000;
-`;
-
-const StyledSelectSatsvelger = styled(Select)`
-    max-width: 10rem;
 `;
 
 const Feltmargin = styled.div`
@@ -249,37 +227,28 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Feltmargin>
-                    {erLesevisning ? (
-                        <>
-                            <Label>Utbetaling</Label>
-                            <BodyShort>
-                                {skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
-                            </BodyShort>
-                        </>
-                    ) : (
-                        <RadioGroup
-                            legend={<Label>Utbetaling</Label>}
-                            value={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={(val: boolean | undefined) =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(val)
+                    <RadioGroup
+                        legend={<Label>Utbetaling</Label>}
+                        value={skjema.felter.utbetaling.verdi}
+                        onChange={skjema.felter.utbetaling.validerOgSettFelt}
+                        readOnly={erLesevisning}
+                    >
+                        {Object.values(Utbetaling).map(utbetaling => {
+                            if (
+                                utbetaling === Utbetaling.DELT_UTBETALING &&
+                                skjema.felter.årsak.verdi !==
+                                    IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR
+                            ) {
+                                return;
                             }
-                        >
-                            <Radio
-                                name={'utbetaling'}
-                                value={true}
-                                id={'ja-perioden-utbetales-til-søker'}
-                            >
-                                {'Perioden skal utbetales'}
-                            </Radio>
-                            <Radio
-                                name={'utbetaling'}
-                                value={false}
-                                id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                            >
-                                {'Perioden skal ikke utbetales'}
-                            </Radio>
-                        </RadioGroup>
-                    )}
+
+                            return (
+                                <Radio name={'utbetaling'} value={utbetaling} id={utbetaling}>
+                                    {utbetalingTilLabel(utbetaling)}
+                                </Radio>
+                            );
+                        })}
+                    </RadioGroup>
                 </Feltmargin>
 
                 <Feltmargin>
@@ -300,41 +269,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             readOnly={erLesevisning}
                         />
-                    </Feltmargin>
-                )}
-                {skjema.felter.fullSats.erSynlig && (
-                    <Feltmargin>
-                        <StyledSelectSatsvelger
-                            {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            label={<Label>Sats</Label>}
-                            value={
-                                skjema.felter.fullSats.verdi !== undefined &&
-                                skjema.felter.fullSats.verdi !== null
-                                    ? skjema.felter.fullSats.verdi
-                                        ? IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()
-                                        : undefined
-                                    : undefined
-                            }
-                            readOnly={erLesevisning}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                                skjema.felter.fullSats.validerOgSettFelt(
-                                    optionTilsats(event.target.value)
-                                );
-                            }}
-                        >
-                            <option value={undefined}>Velg sats</option>
-                            {satser.map(sats => (
-                                <option value={sats.valueOf()} key={sats.valueOf()}>
-                                    {
-                                        satsTilOption(
-                                            sats === IEndretUtbetalingAndelFullSats.FULL_SATS
-                                        ).label
-                                    }
-                                </option>
-                            ))}
-                        </StyledSelectSatsvelger>
                     </Feltmargin>
                 )}
 

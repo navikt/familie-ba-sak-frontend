@@ -1,132 +1,56 @@
-import type { PropsWithChildren } from 'react';
-import React from 'react';
-
-import type { Column } from 'react-table';
-import styled from 'styled-components';
-
-import { Button } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import OppgaveDirektelenke from '../komponenter/Oppgavebenk/OppgaveDirektelenke';
-import OppgavelisteSaksbehandler from '../komponenter/Oppgavebenk/OppgavelisteSaksbehandler';
 import type { IPar } from '../typer/common';
-import type {
-    BehandlingstypeFilter,
-    EnhetFilter,
-    GjelderFilter,
-    IOppgave,
-    IOppgaveIdent,
-    OppgavetypeFilter,
-} from '../typer/oppgave';
-import {
-    behandlingstypeFilter,
-    enhetFilter,
-    gjelderFilter,
-    oppgaveTypeFilter,
-    PrioritetFilter,
-} from '../typer/oppgave';
+import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '../typer/oppgave';
+import { behandlingstypeFilter, enhetFilter } from '../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 
-const StyledButton = styled(Button)`
-    .navds-button__inner {
-        font-weight: 600;
-        margin: 0;
-    }
-`;
-
-const LitenKnapp: React.FC<PropsWithChildren> = ({ children }) => {
-    return (
-        <StyledButton size="small" variant="tertiary">
-            {children}
-        </StyledButton>
-    );
-};
-
-export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
-    {
-        accessor: 'opprettetTidspunkt',
-        Header: <LitenKnapp>Reg. dato</LitenKnapp>,
-        Cell: ({ value: opprettetTidspunkt }) => {
-            return opprettetTidspunkt ? intDatoTilNorskDato(opprettetTidspunkt) : 'Ukjent';
-        },
-    },
-    {
-        accessor: 'oppgavetype',
-        Header: <LitenKnapp>Oppgavetype</LitenKnapp>,
-        Cell: ({ value: oppgavetype }) => {
-            return oppgavetype
-                ? oppgaveTypeFilter[oppgavetype as OppgavetypeFilter]?.navn ?? oppgavetype
-                : 'Ukjent';
-        },
-    },
-    {
-        accessor: 'behandlingstema',
-        Header: <LitenKnapp>Gjelder</LitenKnapp>,
-        Cell: ({ value: behandlingstema }) => {
-            return behandlingstema
-                ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
-                : 'Ikke satt';
-        },
-    },
-    {
-        accessor: 'behandlingstype',
-        Header: <LitenKnapp>Behandlingstype</LitenKnapp>,
-    },
-    {
-        accessor: 'fristFerdigstillelse',
-        Header: <LitenKnapp>Frist</LitenKnapp>,
-        Cell: ({ value: fristFerdigstillelse }) => {
-            return fristFerdigstillelse ? intDatoTilNorskDato(fristFerdigstillelse) : 'Ukjent';
-        },
-    },
-    {
-        accessor: 'prioritet',
-        Header: <LitenKnapp>Prioritet</LitenKnapp>,
-        Cell: ({ value: prioritet }) => {
-            return PrioritetFilter[prioritet as keyof typeof PrioritetFilter];
-        },
-    },
-    {
-        accessor: 'beskrivelse',
-        Header: <LitenKnapp>Beskrivelse</LitenKnapp>,
-    },
-    {
-        accessor: 'ident',
-        Header: <LitenKnapp>Bruker</LitenKnapp>,
-        Cell: ({ value: identer }) => {
-            return hentFnrFraOppgaveIdenter(identer) || 'Ukjent';
-        },
-    },
-    {
-        accessor: 'tildeltEnhetsnr',
-        Header: <LitenKnapp>Enhet</LitenKnapp>,
-    },
-    {
-        accessor: 'tilordnetRessurs',
-        Header: <LitenKnapp>Saksbehandler</LitenKnapp>,
-        Cell: ({ value: tilordnetRessurs }) => {
-            return (
-                <OppgavelisteSaksbehandler
-                    oppgave={tilordnetRessurs.oppg}
-                    innloggetSaksbehandler={tilordnetRessurs.innloggetSaksbehandler}
-                />
-            );
-        },
-    },
-    {
-        accessor: 'handlinger',
-        Header: <LitenKnapp>Handlinger</LitenKnapp>,
-        Cell: ({ value: handlinger }) => {
-            return <OppgaveDirektelenke oppgave={handlinger} />;
-        },
-    },
-];
+export enum Sorteringsnøkkel {
+    OPPRETTET_TIDSPUNKT = 'opprettetTidspunkt',
+    OPPGAVETYPE = 'oppgavetype',
+    BEHANDLINGSTEMA = 'behandlingstema',
+    BEHANDLINGSTYPE = 'behandlingstype',
+    FRIST_FERDIGSTILLELSE = 'fristFerdigstillelse',
+    PRIORITET = 'prioritet',
+    BESKRIVELSE = 'beskrivelse',
+    IDENT = 'ident',
+    TILDELT_ENHETSNR = 'tildeltEnhetsnr',
+    TILORDNET_RESSURS = 'tilordnetRessurs',
+    HANDLINGER = 'handlinger',
+}
 
 export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs' | 'identer'> {
     ident: IOppgaveIdent[] | undefined;
     tilordnetRessurs: { oppg: IOppgave; innloggetSaksbehandler?: ISaksbehandler };
     handlinger: IOppgave;
 }
+
+export const sorterEtterNøkkel = (
+    a: IOppgaveRad,
+    b: IOppgaveRad,
+    sorteringsnøkkel: Sorteringsnøkkel
+): number => {
+    let aVerdi;
+    let bVerdi;
+    if (sorteringsnøkkel === Sorteringsnøkkel.IDENT) {
+        aVerdi = hentFnrFraOppgaveIdenter(b.ident) || 'Ukjent';
+        bVerdi = hentFnrFraOppgaveIdenter(b.ident) || 'Ukjent';
+    } else if (sorteringsnøkkel === Sorteringsnøkkel.TILORDNET_RESSURS) {
+        aVerdi = a.tilordnetRessurs.oppg.tilordnetRessurs || 'Ikke tildelt';
+        bVerdi = b.tilordnetRessurs.oppg.tilordnetRessurs || 'Ikke tildelt';
+    } else {
+        aVerdi = a[sorteringsnøkkel];
+        bVerdi = b[sorteringsnøkkel];
+    }
+
+    if (bVerdi < aVerdi) {
+        return -1;
+    }
+    if (bVerdi > aVerdi) {
+        return 1;
+    }
+    return 0;
+};
 
 export const mapIOppgaverTilOppgaveRad = (
     oppgaver: IOppgave[],

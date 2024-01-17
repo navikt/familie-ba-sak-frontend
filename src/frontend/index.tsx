@@ -1,5 +1,4 @@
 import './index.less';
-import 'nav-frontend-tabell-style';
 
 import React from 'react';
 
@@ -9,6 +8,7 @@ import { Integrations } from '@sentry/tracing';
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from './komponenter/App';
 
@@ -33,9 +33,10 @@ if (process.env.NODE_ENV !== 'production') {
     axe(React, ReactDOM, 1000);
 }
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container!);
+root.render(
     <React.StrictMode>
         <App />
-    </React.StrictMode>,
-    document.getElementById('app')
+    </React.StrictMode>
 );
