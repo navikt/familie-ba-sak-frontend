@@ -18,9 +18,8 @@ interface IProps {
 
 export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
     const { request } = useHttp();
-    const [endringstidspunktRessurs, settEndringstidspunktRessurs] = useState(
-        byggHenterRessurs<IsoDatoString | undefined>()
-    );
+    const [endringstidspunktRessurs, settEndringstidspunktRessurs] =
+        useState(byggHenterRessurs<IsoDatoString | undefined>());
 
     const hentEndringstidspunkt = () =>
         request<void, IsoDatoString>({

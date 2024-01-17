@@ -97,9 +97,8 @@ const TidslinjeVisualisering: React.FC = () => {
 
     const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } = useTidslinje();
 
-    const [tidslinjerRessurs, settTidslinjerRessurs] = useState<Ressurs<ITidslinjer>>(
-        byggTomRessurs()
-    );
+    const [tidslinjerRessurs, settTidslinjerRessurs] =
+        useState<Ressurs<ITidslinjer>>(byggTomRessurs());
     const { request } = useHttp();
 
     useEffect(() => {

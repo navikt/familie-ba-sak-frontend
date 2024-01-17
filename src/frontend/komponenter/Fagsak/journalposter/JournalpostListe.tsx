@@ -113,9 +113,8 @@ const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
-    const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<IJournalpost[]>>(
-        byggTomRessurs()
-    );
+    const [journalposterRessurs, settJournalposterRessurs] =
+        useState<Ressurs<IJournalpost[]>>(byggTomRessurs());
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );

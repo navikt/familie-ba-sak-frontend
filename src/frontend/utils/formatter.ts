@@ -48,8 +48,8 @@ export const formaterIdent = (personIdent: string, ukjentTekst = 'Ukjent id') =>
     return erPersonId(personIdent)
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
         : erOrgNr(personIdent)
-        ? `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`
-        : ukjentTekst;
+          ? `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`
+          : ukjentTekst;
 };
 
 export const formaterNavnAlderOgIdent = (person: {

@@ -10,8 +10,8 @@ export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =
     minimalFagsak.behandlinger.length === 0
         ? '-'
         : minimalFagsak.underBehandling
-        ? 'Under behandling'
-        : fagsakStatus[minimalFagsak.status].navn;
+          ? 'Under behandling'
+          : fagsakStatus[minimalFagsak.status].navn;
 
 export const hentAktivBehandlingPåMinimalFagsak = (
     minimalFagsak: IMinimalFagsak

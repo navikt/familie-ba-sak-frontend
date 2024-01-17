@@ -62,15 +62,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
-    const [dataForManuellJournalføring, settDataForManuellJournalføring] = useState(
-        byggTomRessurs<IDataForManuellJournalføring>()
-    );
+    const [dataForManuellJournalføring, settDataForManuellJournalføring] =
+        useState(byggTomRessurs<IDataForManuellJournalføring>());
     const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<
         boolean | undefined
     >(undefined);
-    const [institusjonsfagsaker, settInstitusjonsfagsaker] = useState<Ressurs<IMinimalFagsak[]>>(
-        byggTomRessurs<IMinimalFagsak[]>()
-    );
+    const [institusjonsfagsaker, settInstitusjonsfagsaker] =
+        useState<Ressurs<IMinimalFagsak[]>>(byggTomRessurs<IMinimalFagsak[]>());
 
     useEffect(() => {
         if (oppgaveId) {
@@ -436,8 +434,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                                 ? BehandlingÅrsak.SØKNAD
                                 : nyBehandlingsårsak === ''
-                                ? BehandlingÅrsak.SØKNAD
-                                : nyBehandlingsårsak,
+                                  ? BehandlingÅrsak.SØKNAD
+                                  : nyBehandlingsårsak,
 
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         fagsakType: skjema.felter.fagsakType.verdi,
@@ -509,8 +507,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                                     ? BehandlingÅrsak.SØKNAD
                                     : nyBehandlingsårsak === ''
-                                    ? BehandlingÅrsak.SØKNAD
-                                    : nyBehandlingsårsak,
+                                      ? BehandlingÅrsak.SØKNAD
+                                      : nyBehandlingsårsak,
                             navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         },
                     },

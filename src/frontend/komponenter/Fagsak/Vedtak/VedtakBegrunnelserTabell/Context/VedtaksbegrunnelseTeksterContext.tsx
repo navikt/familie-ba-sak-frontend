@@ -11,9 +11,8 @@ import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
 const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = constate(() => {
     const { request } = useHttp();
 
-    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] = React.useState<
-        Ressurs<VedtaksbegrunnelseTekster>
-    >(byggTomRessurs());
+    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] =
+        React.useState<Ressurs<VedtaksbegrunnelseTekster>>(byggTomRessurs());
 
     useEffect(() => {
         request<void, VedtaksbegrunnelseTekster>({

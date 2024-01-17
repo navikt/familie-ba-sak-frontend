@@ -22,9 +22,8 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
         const { request } = useHttp();
         const { behandlingId } = useSakOgBehandlingParams();
         const { hentMinimalFagsak } = useFagsakContext();
-        const [behandlingRessurs, privatSettBehandlingRessurs] = useState<Ressurs<IBehandling>>(
-            byggTomRessurs()
-        );
+        const [behandlingRessurs, privatSettBehandlingRessurs] =
+            useState<Ressurs<IBehandling>>(byggTomRessurs());
         const navigate = useNavigate();
 
         const erBehandlingDelAvFagsak = fagsak.behandlinger.some(
