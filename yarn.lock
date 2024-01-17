@@ -2127,20 +2127,6 @@
   dependencies:
     "@navikt/familie-typer" "^8.0.1"
 
-"@navikt/familie-ikoner@^7.0.1":
-  version "7.0.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/7.0.1/548ee43f1d104947a45b11978b4f8429ab600629#548ee43f1d104947a45b11978b4f8429ab600629"
-  integrity sha512-kNCcEic8DS2jNGKVWFguKEFM0Y8j154ofXVBRNBT5PfQcR61DYioZLz6knSmXPGWrQQqYxAGNSdKqDUpO8jn5Q==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.1"
-
-"@navikt/familie-ikoner@^9.0.0":
-  version "9.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.0/4cc833bc49ab5b16b2a10e7ae70425a37803f9e2#4cc833bc49ab5b16b2a10e7ae70425a37803f9e2"
-  integrity sha512-AsC+WrVQcG0LJskzQDLizjeWVpvh70E8hQ/A+CBFrWPyGks4FtrCNIUFxWwPmJhznFZdd283THJ1HDcc5f6gsg==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.1"
-
 "@navikt/familie-logging@7.0.0":
   version "7.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.0/04cf21c20ff7617168fa6cac2e7bab884f33e660#04cf21c20ff7617168fa6cac2e7bab884f33e660"
@@ -2255,6 +2241,11 @@
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@piotrgorecki/i18n-currency-name/-/i18n-currency-name-1.3.0.tgz#c7d6b9f6df705bf4f2516f1d25c455af14d7c167"
   integrity sha512-Txbw0UmGgyvkZEFzjycmh7hEwYeRftILvx4G72PrMBHoS18PGnPODWbZvw7bi+KoV+buMezEHy8ezojc0f7YvQ==
+
+"@pkgr/core@^0.1.0":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
+  integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.5":
   version "0.5.7"
@@ -5795,12 +5786,13 @@ eslint-plugin-jsx-a11y@^6.8.0:
     object.entries "^1.1.7"
     object.fromentries "^2.0.7"
 
-eslint-plugin-prettier@^4.2.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-4.2.1.tgz#651cbb88b1dab98bfd42f017a12fa6b2d993f94b"
-  integrity sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==
+eslint-plugin-prettier@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-5.1.3.tgz#17cfade9e732cef32b5f5be53bd4e07afd8e67e1"
+  integrity sha512-C9GCVAs4Eq7ZC/XFQHITLiHJxQngdtraXaM+LoUFoFp/lHNl2Zn8f3WQbe9HvTBBQ9YnKFB0/2Ajdqwo5D1EAw==
   dependencies:
     prettier-linter-helpers "^1.0.0"
+    synckit "^0.8.6"
 
 eslint-plugin-react@^7.33.1:
   version "7.33.1"
@@ -9608,10 +9600,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.8.4:
-  version "2.8.4"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
-  integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
+prettier@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.4.tgz#4723cadeac2ce7c9227de758e5ff9b14e075f283"
+  integrity sha512-FWu1oLHKCrtpO1ypU6J0SbK2d9Ckwysq6bHj/uaCP26DxrPpppCLQRGVuqAxSTvhF00AcvDRyYrLNW7ocBhFFQ==
 
 pretty-bytes@^5.6.0:
   version "5.6.0"
@@ -10927,6 +10919,14 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
+synckit@^0.8.6:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/synckit/-/synckit-0.8.8.tgz#fe7fe446518e3d3d49f5e429f443cf08b6edfcd7"
+  integrity sha512-HwOKAP7Wc5aRGYdKH+dw0PRRpbO841v2DENBtjnR5HFWoiNByAl7vrx3p0G/rCyYXQsrxqtX48TImFtPcIHSpQ==
+  dependencies:
+    "@pkgr/core" "^0.1.0"
+    tslib "^2.6.2"
+
 tabbable@^6.0.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-6.1.1.tgz#40cfead5ed11be49043f04436ef924c8890186a0"
@@ -11143,7 +11143,7 @@ tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.3, tslib@^2.3.0, tslib@^2.5.0:
+tslib@^2.0.3, tslib@^2.3.0, tslib@^2.5.0, tslib@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
