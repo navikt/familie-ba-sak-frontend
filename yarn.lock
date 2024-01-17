@@ -2120,12 +2120,12 @@
     "@sentry/core" "^7.5.0"
     constate "^3.3.2"
 
-"@navikt/familie-ikoner@7.0.0":
-  version "7.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/7.0.0/8629366b465243d28ae1a9c199153529b5583817#8629366b465243d28ae1a9c199153529b5583817"
-  integrity sha512-SowUSxLMw7jhGWgyOM9u//orOUcGb1VXYPwDj+8dumuTQqyxWcF/Q0Y+txVI6uCMmFOlUYTRoCGNP7J2/B7C1g==
+"@navikt/familie-ikoner@9.0.0", "@navikt/familie-ikoner@^9.0.0":
+  version "9.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.0/4cc833bc49ab5b16b2a10e7ae70425a37803f9e2#4cc833bc49ab5b16b2a10e7ae70425a37803f9e2"
+  integrity sha512-AsC+WrVQcG0LJskzQDLizjeWVpvh70E8hQ/A+CBFrWPyGks4FtrCNIUFxWwPmJhznFZdd283THJ1HDcc5f6gsg==
   dependencies:
-    "@navikt/familie-typer" "^8.0.0"
+    "@navikt/familie-typer" "^8.0.1"
 
 "@navikt/familie-ikoner@^7.0.1":
   version "7.0.1"
@@ -2189,15 +2189,14 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-validering/6.0.0/19f4b7104e61b3e3cc2251c03c33d1b3c7fe6356#19f4b7104e61b3e3cc2251c03c33d1b3c7fe6356"
   integrity sha512-IvySSdyKPeLVOLjgKpWlIdDxdLsmxebyn5gHw+wdxxLWhO6tJ4IWK939cjqSRItEJtrYCQVSM/Kb1lz6ScvRMA==
 
-"@navikt/familie-visittkort@12.0.0":
-  version "12.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/12.0.0/2fbf0c4ef0e9fcdde0c0021af58c7e689cf5bc3a#2fbf0c4ef0e9fcdde0c0021af58c7e689cf5bc3a"
-  integrity sha512-f8PBgdgVJSELAQnQw0OOrVjhhcxi5NTU3qqJIlyNwlziyqEZUVM+QmDaYkTEQU9FduJDamBoqvKQUzW4B7V/uw==
+"@navikt/familie-visittkort@14.0.0":
+  version "14.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/14.0.0/d9dc43d6cd97c9469039266d2a4ba5a1a6f1e674#d9dc43d6cd97c9469039266d2a4ba5a1a6f1e674"
+  integrity sha512-hqO3IwZ0yUuRGoJuWPt4FNS1AEVfObH17IxUMgO9iZ0EH8ZOs8skHMlZ+WClSNC/71qUgpviZ3UD5ya/cb4xKg==
   dependencies:
-    "@navikt/familie-ikoner" "^7.0.1"
+    "@navikt/familie-ikoner" "^9.0.0"
     "@navikt/familie-typer" "^8.0.1"
-    classnames "^2.3.2"
-    prop-types "^15.8.1"
+    classnames "^2.5.1"
 
 "@navikt/flagg-ikoner@3.2.7":
   version "3.2.7"
@@ -8527,11 +8526,6 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
-
-nav-frontend-core@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-6.0.1.tgz#81feef412890cb84074d329a2e3a8b6bca4ba314"
-  integrity sha512-zFAPRXgmS3Nhu5SyafsTnCFg2/PEbrUF+g1xGo+pKIxGfJgCeLi47gPSe7Kjeh3IwIo0ex3cA7tfbUIWOY65dQ==
 
 needle@^3.1.0:
   version "3.2.0"

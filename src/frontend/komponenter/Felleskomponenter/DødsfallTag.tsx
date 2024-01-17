@@ -13,7 +13,7 @@ const DødsfallTag: React.FC<IDødsfallTagProps> = ({ dødsfallDato }) => {
         isoString: dødsfallDato,
         tilFormat: Datoformat.DATO,
     });
-    return <Tag variant="neutral-filled">{`Død ${formatertDato}`}</Tag>;
+    return <Tag variant="neutral-filled" size="small">{`Død ${formatertDato}`}</Tag>;
 };
 
 export default DødsfallTag;
