@@ -44,11 +44,14 @@ const Toast: React.FC<{ toastId: string; toast: IToast }> = ({ toastId, toast })
      * https://ux.stackexchange.com/questions/11203/how-long-should-a-temporary-notification-toast-appear
      */
     useEffect(() => {
-        const timer = setTimeout(() => {
-            // eslint-disable-next-line
-            const { [toastId]: fjernetToast, ...resterendeToast } = toasts;
-            settToasts(resterendeToast);
-        }, Math.max(...[toast.tekst.length * 50, 7000]));
+        const timer = setTimeout(
+            () => {
+                // eslint-disable-next-line
+                const { [toastId]: fjernetToast, ...resterendeToast } = toasts;
+                settToasts(resterendeToast);
+            },
+            Math.max(...[toast.tekst.length * 50, 7000])
+        );
         return () => clearTimeout(timer);
     });
 

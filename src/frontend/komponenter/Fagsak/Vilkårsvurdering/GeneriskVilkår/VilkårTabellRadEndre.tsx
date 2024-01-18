@@ -245,7 +245,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         {Object.entries(alleRegelverk).map(
                             ([regelverk, { tekst }]: [
                                 string,
-                                { tekst: string; symbol: ReactNode }
+                                { tekst: string; symbol: ReactNode },
                             ]) => {
                                 return (
                                     <option

@@ -51,9 +51,8 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: st
 
 export const useSamhandlerRequest = () => {
     const { request } = useHttp();
-    const [samhandlerRessurs, settSamhandlerRessurs] = useState<Ressurs<ISamhandlerInfo>>(
-        byggTomRessurs()
-    );
+    const [samhandlerRessurs, settSamhandlerRessurs] =
+        useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
     const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());

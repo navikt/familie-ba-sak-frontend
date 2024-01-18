@@ -174,8 +174,8 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     egetVedtak
                         ? 'Underkjenn eget vedtak'
                         : beslutning === TotrinnskontrollBeslutning.UNDERKJENT
-                        ? 'Send til saksbehandler'
-                        : 'Godkjenn vedtaket'
+                          ? 'Send til saksbehandler'
+                          : 'Godkjenn vedtaket'
                 }
             />
         </Fieldset>

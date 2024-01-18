@@ -52,9 +52,8 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { request } = useHttp();
     const navigate = useNavigate();
 
-    const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IBehandling>>(
-        byggTomRessurs()
-    );
+    const [innsendtVedtak, settInnsendtVedtak] =
+        React.useState<Ressurs<IBehandling>>(byggTomRessurs());
     const [modalVerdi, settModalVerdi] = React.useState<IModalVerdier>(initiellModalVerdi);
     React.useEffect(() => {
         settModalVerdi({
