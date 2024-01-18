@@ -2093,14 +2093,13 @@
     classnames "^2.5.1"
     react-transition-group "^4.4.5"
 
-"@navikt/familie-form-elements@13.0.0":
-  version "13.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/13.0.0/c3ec85621cb87c35cece49ce4a0d59d17ab0ad7c#c3ec85621cb87c35cece49ce4a0d59d17ab0ad7c"
-  integrity sha512-C7Co3jFGad7TdS7P2QM1l58rb4T82lE31Gx6gOC7MXRaBKTDnd9MJCf8AXazUyjmxUASmWepdSoGo/bgZjtJdA==
+"@navikt/familie-form-elements@14.0.0":
+  version "14.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/14.0.0/2e7b6e26fde5e677096fcf1c523ed25159926bb1#2e7b6e26fde5e677096fcf1c523ed25159926bb1"
+  integrity sha512-P5cMOmDkC2UEshd4P7RmMwfzGq9Lj1z5hRyuHMOtw4KDXaiaNpY6x6CKuP9dxu/MgsOPbuy5vxMNCRBpMHALyA==
   dependencies:
-    "@types/classnames" "^2.3.1"
-    classnames "^2.3.2"
-    react-select "^5.7.0"
+    classnames "^2.5.1"
+    react-select "^5.8.0"
 
 "@navikt/familie-header@13.0.1":
   version "13.0.1"
@@ -4325,7 +4324,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
-classnames@*, classnames@^2.3.2, classnames@^2.5.1:
+classnames@*, classnames@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
   integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
@@ -9848,10 +9847,10 @@ react-router@6.3.0:
   dependencies:
     history "^5.2.0"
 
-react-select@^5.7.0:
-  version "5.7.4"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.7.4.tgz#d8cad96e7bc9d6c8e2709bdda8f4363c5dd7ea7d"
-  integrity sha512-NhuE56X+p9QDFh4BgeygHFIvJJszO1i1KSkg/JPcIJrbovyRtI+GuOEa4XzFCEpZRAEoEI8u/cAHK+jG/PgUzQ==
+react-select@^5.8.0:
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.8.0.tgz#bd5c467a4df223f079dd720be9498076a3f085b5"
+  integrity sha512-TfjLDo58XrhP6VG5M/Mi56Us0Yt8X7xD6cDybC7yoRMUNm7BGO7qk8J0TLQOua/prb8vUOtsfnXZwfm30HGsAA==
   dependencies:
     "@babel/runtime" "^7.12.0"
     "@emotion/cache" "^11.4.0"
