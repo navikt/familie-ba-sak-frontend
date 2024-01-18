@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Buldings3Icon } from '@navikt/aksel-icons';
+import { Buildings3Icon } from '@navikt/aksel-icons';
 import { AGreen600 } from '@navikt/ds-tokens/dist/tokens';
 
 interface IKontorIkonGrønn {
@@ -32,7 +32,7 @@ const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
 }) => {
     return (
         <IkonSirkel $height={height} $width={width}>
-            <Buldings3Icon
+            <Buildings3Icon
                 height={height === '24' ? 20 : 28}
                 width={width === '24' ? 20 : 28}
                 className={className}
