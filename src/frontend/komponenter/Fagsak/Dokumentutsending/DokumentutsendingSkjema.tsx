@@ -19,7 +19,10 @@ import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
-import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
+import {
+    BrevmottakereAlert,
+    type BrevmottakereAlertFagsakProps,
+} from '../../Felleskomponenter/BrevmottakereAlert';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 
 interface Props {
@@ -54,6 +57,10 @@ const SendBrevKnapp = styled(Button)`
     margin-right: 1rem;
 `;
 
+const StyledBrevmottakereAlert = styled(BrevmottakereAlert)<BrevmottakereAlertFagsakProps>`
+    margin: 1rem 0;
+`;
+
 const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     const {
         hentForhåndsvisningPåFagsak,
@@ -69,6 +76,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         distribusjonskanal,
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
+        brukerHarManuellAdresse,
     } = useDokumentutsending();
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
@@ -86,9 +94,6 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     const { toggles } = useApp();
 
     useEffect(() => {
-        if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
-            return;
-        }
         hentDistribusjonskanal(bruker.personIdent);
     }, []);
 
@@ -142,10 +147,10 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-            {toggles[ToggleNavn.verifiserDokdistKanal] && distribusjonskanalInfo()}
+            {!brukerHarManuellAdresse && distribusjonskanalInfo()}
 
             {manuelleBrevmottakerePåFagsak.length > 0 && (
-                <BrevmottakereAlert
+                <StyledBrevmottakereAlert
                     erPåBehandling={false}
                     brevmottakere={manuelleBrevmottakerePåFagsak}
                     bruker={bruker}
