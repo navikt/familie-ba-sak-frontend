@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ABlue800 } from '@navikt/ds-tokens/dist/tokens';
+import { ABorderFocus } from '@navikt/ds-tokens/dist/tokens';
 
 const FamilieBaseKnapp = styled.button`
     background: none;
@@ -12,7 +12,7 @@ const FamilieBaseKnapp = styled.button`
     outline: inherit;
 
     :focus {
-        box-shadow: 0 0 0 3px ${ABlue800};
+        box-shadow: 0 0 0 3px ${ABorderFocus};
     }
 `;
 

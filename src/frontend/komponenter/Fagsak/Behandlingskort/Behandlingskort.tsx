@@ -4,14 +4,15 @@ import styled from 'styled-components';
 
 import { BodyShort, Heading } from '@navikt/ds-react';
 import {
-    ABlue700,
-    AGray100,
-    AGray300,
-    AGray400,
-    AGray600,
-    AGray900,
-    AGreen600,
-    ARed600,
+    ABorderAction,
+    ABorderDanger,
+    ABorderDefault,
+    ABorderSubtle,
+    ABorderSuccess,
+    AIconInfo,
+    AIconSuccess,
+    ATextDanger,
+    ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
@@ -35,49 +36,49 @@ interface IBehandlingskortProps {
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return AGray300;
+        return ABorderSubtle;
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return AGreen600;
+            return ABorderSuccess;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return ABlue700;
+            return ABorderAction;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return ARed600;
+            return ABorderDanger;
         case BehandlingResultat.IKKE_VURDERT:
-            return AGray100;
+            return ABorderSubtle;
         default:
-            return AGray600;
+            return ABorderDefault;
     }
 };
 
 const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return AGray900;
+        return ATextDefault;
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return AGreen600;
+            return AIconSuccess;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return ABlue700;
+            return AIconInfo;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return ARed600;
+            return ATextDanger;
         default:
-            return AGray900;
+            return ATextDefault;
     }
 };
 
 const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
-    border: 1px solid ${AGray400};
-    border-left: 0.5rem solid ${AGray400};
+    border: 1px solid ${ABorderSubtle};
+    border-left: 0.5rem solid ${ABorderSubtle};
     border-radius: 0.25rem;
     padding: 0.5rem;
     margin: 0.5rem;
@@ -91,7 +92,7 @@ const StyledHeading = styled(Heading)`
 
 const StyledHr = styled.hr`
     border: none;
-    border-bottom: 1px solid ${AGray100};
+    border-bottom: 1px solid ${ABorderSubtle};
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {

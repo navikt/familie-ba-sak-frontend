@@ -18,7 +18,6 @@ import {
     Tag,
     Textarea,
 } from '@navikt/ds-react';
-import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import { FlexDiv } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -69,12 +68,6 @@ const StyledHelpText = styled(HelpText)`
 
 const StyledHelpTextContainer = styled.div`
     max-width: 20rem;
-`;
-
-const StyledTag = styled(Tag)`
-    margin-left: auto;
-    background-color: ${AGray100};
-    border-color: ${AGray600};
 `;
 
 const TilbakekrevingFieldset = styled(Fieldset)`
@@ -365,9 +358,9 @@ const TilbakekrevingSkjema: React.FC<{
                                                             </StyledHelpTextContainer>
                                                         </StyledHelpText>
                                                     </FlexRad>
-                                                    <StyledTag variant="info" size="small">
+                                                    <Tag variant="neutral" size="small">
                                                         Skriv {målform[søkerMålform].toLowerCase()}
-                                                    </StyledTag>
+                                                    </Tag>
                                                 </FritektsVarselLabel>
                                             }
                                             {...fritekstVarsel.hentNavInputProps(

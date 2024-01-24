@@ -1,15 +1,16 @@
 import { addMonths, isBefore, startOfMonth } from 'date-fns';
 
 import {
-    ABlue100,
-    AGray100,
-    AGray600,
-    AGreen100,
-    AGreen500,
-    AOrange100,
-    AOrange600,
-    ARed50,
-    ARed600,
+    ABorderDanger,
+    ABorderDefault,
+    ABorderInfo,
+    ABorderSuccess,
+    ABorderWarning,
+    ASurfaceDangerSubtle,
+    ASurfaceInfoSubtle,
+    ASurfaceNeutralSubtle,
+    ASurfaceSuccessSubtle,
+    ASurfaceWarningSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -69,18 +70,18 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return AGreen100;
+            return ASurfaceSuccessSubtle;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return ARed50;
+            return ASurfaceDangerSubtle;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return AOrange100;
+            return ASurfaceWarningSubtle;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return AGray100;
+            return ASurfaceNeutralSubtle;
         default:
-            return ABlue100;
+            return ASurfaceInfoSubtle;
     }
 };
 
@@ -90,18 +91,18 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return AGreen500;
+            return ABorderSuccess;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return ARed600;
+            return ABorderDanger;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return AOrange600;
+            return ABorderWarning;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return AGray600;
+            return ABorderDefault;
         default:
-            return ABlue100;
+            return ABorderInfo;
     }
 };
 
