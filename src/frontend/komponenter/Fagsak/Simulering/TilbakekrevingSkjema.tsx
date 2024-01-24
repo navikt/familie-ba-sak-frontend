@@ -11,10 +11,12 @@ import {
     ErrorSummary,
     Fieldset,
     Heading,
+    HStack,
     Label,
     Link,
     Radio,
     RadioGroup,
+    Spacer,
     Tag,
     Textarea,
 } from '@navikt/ds-react';
@@ -47,19 +49,6 @@ const FritekstVarsel = styled.div`
     label {
         width: 100%;
     }
-`;
-
-const FritektsVarselLabel = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
-const FlexRad = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: row;
 `;
 
 const StyledHelpText = styled(HelpText)`
@@ -306,8 +295,8 @@ const TilbakekrevingSkjema: React.FC<{
                                     <FritekstVarsel>
                                         <Textarea
                                             label={
-                                                <FritektsVarselLabel>
-                                                    <FlexRad>
+                                                <HStack align="center" justify="space-between">
+                                                    <HStack align="center">
                                                         <Label>Fritekst i varselet</Label>
                                                         <StyledHelpText placement="right">
                                                             <StyledHelpTextContainer>
@@ -357,11 +346,12 @@ const TilbakekrevingSkjema: React.FC<{
                                                                 </Link>
                                                             </StyledHelpTextContainer>
                                                         </StyledHelpText>
-                                                    </FlexRad>
+                                                    </HStack>
+                                                    <Spacer />
                                                     <Tag variant="neutral" size="small">
                                                         Skriv {målform[søkerMålform].toLowerCase()}
                                                     </Tag>
-                                                </FritektsVarselLabel>
+                                                </HStack>
                                             }
                                             {...fritekstVarsel.hentNavInputProps(
                                                 tilbakekrevingSkjema.visFeilmeldinger ||
