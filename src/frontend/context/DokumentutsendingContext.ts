@@ -330,12 +330,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.submitRessurs.status === RessursStatus.HENTER ||
             hentetDokument.status === RessursStatus.HENTER;
 
-        const brukerHarManuellAdresse = manuelleBrevmottakerePåFagsak.some(
+        const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
             mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
         );
 
         const brukerHarUkjentAdresse = () =>
-            !brukerHarManuellAdresse &&
+            !brukerHarUtenlandskAdresse &&
             (distribusjonskanal.status !== RessursStatus.SUKSESS ||
                 distribusjonskanal.data === Distribusjonskanal.UKJENT ||
                 distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
@@ -389,7 +389,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema,
             nullstillSkjema,
             distribusjonskanal,
-            brukerHarManuellAdresse,
+            brukerHarUtenlandskAdresse,
             brukerHarUkjentAdresse,
             hentDistribusjonskanal,
         };

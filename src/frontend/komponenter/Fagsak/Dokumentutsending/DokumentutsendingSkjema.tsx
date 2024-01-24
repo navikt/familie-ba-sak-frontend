@@ -76,7 +76,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         distribusjonskanal,
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
-        brukerHarManuellAdresse,
+        brukerHarUtenlandskAdresse,
     } = useDokumentutsending();
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
@@ -147,7 +147,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-            {!brukerHarManuellAdresse && distribusjonskanalInfo()}
+            {!brukerHarUtenlandskAdresse && distribusjonskanalInfo()}
 
             {manuelleBrevmottakerePåFagsak.length > 0 && (
                 <StyledBrevmottakereAlert
