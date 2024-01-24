@@ -31,7 +31,7 @@ export interface BrevmottakereAlertBehandlingProps extends Props {
     åpenBehandling: IBehandling;
 }
 
-export interface BrevmottakereAlertFagsakProps extends Props {
+interface BrevmottakereAlertFagsakProps extends Props {
     erPåBehandling: false;
     brevmottakere: SkjemaBrevmottaker[];
 }

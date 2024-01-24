@@ -19,10 +19,7 @@ import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
-import {
-    BrevmottakereAlert,
-    type BrevmottakereAlertFagsakProps,
-} from '../../Felleskomponenter/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 
 interface Props {
@@ -57,7 +54,7 @@ const SendBrevKnapp = styled(Button)`
     margin-right: 1rem;
 `;
 
-const StyledBrevmottakereAlert = styled(BrevmottakereAlert)<BrevmottakereAlertFagsakProps>`
+const StyledBrevmottakereAlert = styled(BrevmottakereAlert)`
     margin: 1rem 0;
 `;
 
