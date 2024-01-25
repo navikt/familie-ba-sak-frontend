@@ -3,11 +3,11 @@ import { addMonths, isBefore, startOfMonth } from 'date-fns';
 import {
     ABorderDanger,
     ABorderDefault,
-    ABorderInfo,
+    ABorderSubtle,
     ABorderSuccess,
     ABorderWarning,
+    ASurfaceActionSubtle,
     ASurfaceDangerSubtle,
-    ASurfaceInfoSubtle,
     ASurfaceNeutralSubtle,
     ASurfaceSuccessSubtle,
     ASurfaceWarningSubtle,
@@ -81,7 +81,7 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
             return ASurfaceNeutralSubtle;
         default:
-            return ASurfaceInfoSubtle;
+            return ASurfaceActionSubtle;
     }
 };
 
@@ -102,7 +102,7 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
             return ABorderDefault;
         default:
-            return ABorderInfo;
+            return ABorderSubtle;
     }
 };
 
