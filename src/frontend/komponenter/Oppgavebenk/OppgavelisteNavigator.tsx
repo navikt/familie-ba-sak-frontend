@@ -28,7 +28,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
     const antallSider = beregnAntallSider(oppgaver.data.oppgaver);
 
     return (
-        <HStack align="center" justify="space-between">
+        <HStack align="center" justify="space-between" wrap={false}>
             |
             <StyledSpan>
                 Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
