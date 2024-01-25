@@ -1,15 +1,12 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { Buldings3Icon } from '@navikt/aksel-icons';
 import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
-import { AGreen600, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
+import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
@@ -17,17 +14,6 @@ import type { IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
-
-const IkonSirkel = styled.span`
-    border-color: ${AGreen600};
-    border-radius: 50%;
-    background-color: ${AGreen600};
-    display: inline-grid;
-    place-items: center;
-    height: ${ASpacing6};
-    width: ${ASpacing6};
-    color: white;
-`;
 
 interface IProps {
     bruker?: IPersonInfo;
@@ -45,9 +31,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
             ikon={
                 minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? (
-                    <IkonSirkel>
-                        <Buldings3Icon width={20} height={20} />
-                    </IkonSirkel>
+                    <KontorIkonGrønn height={'24'} width={'24'} />
                 ) : undefined
             }
             dempetKantlinje

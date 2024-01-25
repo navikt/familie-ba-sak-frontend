@@ -54,6 +54,10 @@ const SendBrevKnapp = styled(Button)`
     margin-right: 1rem;
 `;
 
+const StyledBrevmottakereAlert = styled(BrevmottakereAlert)`
+    margin: 1rem 0;
+`;
+
 const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     const {
         hentForhåndsvisningPåFagsak,
@@ -69,6 +73,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         distribusjonskanal,
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
+        brukerHarUtenlandskAdresse,
     } = useDokumentutsending();
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
@@ -86,9 +91,6 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     const { toggles } = useApp();
 
     useEffect(() => {
-        if (!toggles[ToggleNavn.verifiserDokdistKanal]) {
-            return;
-        }
         hentDistribusjonskanal(bruker.personIdent);
     }, []);
 
@@ -142,10 +144,10 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-            {toggles[ToggleNavn.verifiserDokdistKanal] && distribusjonskanalInfo()}
+            {!brukerHarUtenlandskAdresse && distribusjonskanalInfo()}
 
             {manuelleBrevmottakerePåFagsak.length > 0 && (
-                <BrevmottakereAlert
+                <StyledBrevmottakereAlert
                     erPåBehandling={false}
                     brevmottakere={manuelleBrevmottakerePåFagsak}
                     bruker={bruker}
