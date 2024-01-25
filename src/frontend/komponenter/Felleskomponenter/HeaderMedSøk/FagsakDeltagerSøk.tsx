@@ -32,9 +32,8 @@ const FagsakDeltagerSøk: React.FC = () => {
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
 
-    const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
-        byggTomRessurs()
-    );
+    const [fagsakDeltagere, settFagsakDeltagere] =
+        React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
 
     const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
         ISøkeresultat | undefined
@@ -95,7 +94,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                               fagsakDeltager.fagsakType !== FagsakType.INSTITUSJON ? (
                                   ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
                               ) : (
-                                  <KontorIkonGrønn height={32} width={32} />
+                                  <KontorIkonGrønn height={'32'} width={'32'} />
                               )
                           ) : (
                               <IkkeTilgang height={30} width={30} />

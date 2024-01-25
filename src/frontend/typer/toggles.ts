@@ -12,7 +12,6 @@ export enum ToggleNavn {
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     manuellMottakerInfobrev = 'familie-ba-sak.manuell-mottaker-infobrev',
-    verifiserDokdistKanal = 'familie-ba-sak.dokdistkanal-integrasjon',
 }
 
 export const alleTogglerAv = (): IToggles => {

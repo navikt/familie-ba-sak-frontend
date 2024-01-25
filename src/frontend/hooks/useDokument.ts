@@ -22,9 +22,8 @@ const useDokument = () => {
 
     const [hentetDokument, settHentetDokument] = React.useState<Ressurs<string>>(byggTomRessurs());
 
-    const [distribusjonskanal, settDistribusjonskanal] = React.useState<
-        Ressurs<Distribusjonskanal>
-    >(byggTomRessurs());
+    const [distribusjonskanal, settDistribusjonskanal] =
+        React.useState<Ressurs<Distribusjonskanal>>(byggTomRessurs());
 
     const nullstillDokument = () => {
         settHentetDokument(byggTomRessurs);

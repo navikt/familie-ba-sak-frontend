@@ -10,12 +10,15 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { Utbetaling, utbetalingTilLabel } from './Utbetaling';
+import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak, årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
+import type {
+    IRestEndretUtbetalingAndel,
+    IEndretUtbetalingAndelÅrsak,
+} from '../../../typer/utbetalingAndel';
+import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
@@ -233,21 +236,20 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         onChange={skjema.felter.utbetaling.validerOgSettFelt}
                         readOnly={erLesevisning}
                     >
-                        {Object.values(Utbetaling).map(utbetaling => {
-                            if (
-                                utbetaling === Utbetaling.DELT_UTBETALING &&
-                                skjema.felter.årsak.verdi !==
-                                    IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR
-                            ) {
-                                return;
-                            }
-
-                            return (
-                                <Radio name={'utbetaling'} value={utbetaling} id={utbetaling}>
-                                    {utbetalingTilLabel(utbetaling)}
-                                </Radio>
-                            );
-                        })}
+                        {Object.values(Utbetaling)
+                            .filter(utbetaling =>
+                                erUtbetalingTillattForÅrsak({
+                                    årsak: skjema.felter.årsak.verdi,
+                                    utbetaling,
+                                })
+                            )
+                            .map(utbetaling => {
+                                return (
+                                    <Radio name={'utbetaling'} value={utbetaling} id={utbetaling}>
+                                        {utbetalingTilLabel(utbetaling)}
+                                    </Radio>
+                                );
+                            })}
                     </RadioGroup>
                 </Feltmargin>
 

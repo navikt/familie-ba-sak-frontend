@@ -14,11 +14,7 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
-import {
-    Datoformat,
-    isoDatoPeriodeTilFormatertString,
-    isoStringTilFormatertString,
-} from '../../../../utils/dato';
+import { isoDatoPeriodeTilFormatertString } from '../../../../utils/dato';
 import { alleRegelverk } from '../../../../utils/vilkår';
 
 interface IProps {
@@ -184,10 +180,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                         {vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === behandling.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${isoStringTilFormatertString({
-                                      isoString: vilkårResultat.verdi.endretTidspunkt,
-                                      tilFormat: Datoformat.DATO_FORKORTTET,
-                                  })}`
+                                : 'Vurdert i tidligere behandling'
                             : ''}
                     </div>
                 </FlexDiv>

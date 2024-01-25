@@ -42,8 +42,8 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
         return antallMottakere === 0
             ? 'Legg til brevmottaker'
             : antallMottakere === 1
-            ? 'Legg til eller fjern brevmottaker'
-            : 'Brevmottakere';
+              ? 'Legg til eller fjern brevmottaker'
+              : 'Brevmottakere';
     }
 };
 

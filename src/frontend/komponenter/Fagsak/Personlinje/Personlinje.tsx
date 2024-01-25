@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BodyShort, Link, Tag } from '@navikt/ds-react';
+import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
@@ -29,20 +29,23 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
             ident={formaterIdent(bruker?.personIdent ?? '')}
             alder={hentAlder(bruker?.fødselsdato ?? '')}
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
-            ValgfrittIkon={
-                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? KontorIkonGrønn : undefined
+            ikon={
+                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? (
+                    <KontorIkonGrønn height={'24'} width={'24'} />
+                ) : undefined
             }
+            dempetKantlinje
+            padding
         >
-            <div className="visittkort__pipe">|</div>
+            <div>|</div>
             <BodyShort>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
             {bruker?.dødsfallDato?.length && (
                 <>
-                    <div className="visittkort__pipe"></div>
+                    <div>|</div>
                     <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
                 </>
             )}
-            <div style={{ flex: 1 }}></div>
-            <div style={{ flex: 1 }}></div>
+            <Spacer />
             {minimalFagsak !== undefined && (
                 <>
                     {minimalFagsak?.migreringsdato !== undefined &&
@@ -56,16 +59,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
                                 variant={'info'}
                             />
                         )}
-                    <Link
-                        className={'visittkort__lenke'}
-                        href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
-                    >
+                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
                         <BodyShort>Saksoversikt</BodyShort>
                     </Link>
-                    <Link
-                        className={'visittkort__lenke'}
-                        href={`/fagsak/${minimalFagsak.id}/dokumenter`}
-                    >
+                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
                         <BodyShort>Dokumenter</BodyShort>
                     </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (

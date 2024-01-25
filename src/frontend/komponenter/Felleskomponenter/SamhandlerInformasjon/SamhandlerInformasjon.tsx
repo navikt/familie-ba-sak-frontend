@@ -49,7 +49,7 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
         <FlexDiv>
             {somOverskrift && (
                 <>
-                    <KontorIkonGrønn className={'kontor-ikon'} height={32} width={32} />
+                    <KontorIkonGrønn className={'kontor-ikon'} height={'32'} width={'32'} />
                     <Heading level="2" size="medium" className={'navn'} title={navn}>
                         {navn}
                     </Heading>
@@ -75,8 +75,8 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
                 <>
                     <KontorIkonGrønn
                         className={'kontor-ikon--for-normaltekst'}
-                        height={24}
-                        width={24}
+                        height={'24'}
+                        width={'24'}
                     />
                     <BodyShort className={'navn'} title={navn}>
                         {navn}
