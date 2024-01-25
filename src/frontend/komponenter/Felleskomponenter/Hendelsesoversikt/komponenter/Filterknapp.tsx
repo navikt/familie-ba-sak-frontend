@@ -3,7 +3,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ABlue500, ABlue800, AGray600, AGray800 } from '@navikt/ds-tokens/dist/tokens';
+import {
+    ABorderFocus,
+    ATextAction,
+    ATextDefault,
+    ATextSubtle,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import { randomUUID } from '../../../../utils/commons';
 import FamilieBaseKnapp from '../../FamilieBaseKnapp';
@@ -24,24 +29,24 @@ const StyledButton = styled(FamilieBaseKnapp)<IFilterknappProps>`
     align-items: center;
     transition: box-shadow 0.1s ease-in-out;
     cursor: ${({ disabled }) => (disabled ? 'initial' : 'pointer')};
-    box-shadow: ${({ aktiv }) => (aktiv ? `inset 0 -5px 0 -1px ${ABlue500}` : '')};
+    box-shadow: ${({ aktiv }) => (aktiv ? `inset 0 -5px 0 -1px ${ABorderFocus}` : '')};
 
     > * {
         transition: fill 0.1s ease-in-out;
         fill: ${({ aktiv, disabled }) => {
             if (disabled) {
-                return AGray600;
+                return ATextSubtle;
             } else if (aktiv) {
-                return ABlue500;
+                return ATextAction;
             } else {
-                return AGray800;
+                return ATextDefault;
             }
         }};
         color: ${({ aktiv, disabled }) => {
             if (disabled) {
-                return AGray600;
+                return ATextSubtle;
             } else if (aktiv) {
-                return ABlue500;
+                return ATextAction;
             } else {
                 return '';
             }
@@ -50,7 +55,7 @@ const StyledButton = styled(FamilieBaseKnapp)<IFilterknappProps>`
 
     :focus {
         outline: ${({ disabled }) => (!disabled ? `none` : '')};
-        border: ${({ disabled }) => (!disabled ? `3px solid ${ABlue800}` : '')};
+        border: ${({ disabled }) => (!disabled ? `3px solid ${ABorderFocus}` : '')};
     }
 `;
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { BodyShort, Label } from '@navikt/ds-react';
-import { AGray900 } from '@navikt/ds-tokens/dist/tokens';
+import { ATextDefault } from '@navikt/ds-tokens/dist/tokens';
 
 export interface IInformasjon {
     label: string;
@@ -23,7 +23,7 @@ const Informasjonsbolk: React.FC<IProps> = ({ informasjon, infoTeksFarve }) => {
             {informasjon.map((info: IInformasjon) => {
                 return (
                     <Label
-                        style={{ color: infoTeksFarve ?? AGray900, display: 'block' }}
+                        style={{ color: infoTeksFarve ?? ATextDefault, display: 'block' }}
                         title={info.tekstTitle}
                         key={info.tekst + info.label}
                         children={info.tekst}

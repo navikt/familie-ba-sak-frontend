@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Select, Tag, Textarea, TextField } from '@navikt/ds-react';
-import { AGray100, AGray600 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -76,11 +75,6 @@ const TextareaBegrunnelseFritekst = styled(Textarea)`
 const StyledButton = styled(Button)`
     height: fit-content;
     align-self: center;
-`;
-
-const StyledTag = styled(Tag)`
-    background-color: ${AGray100};
-    border-color: ${AGray600};
 `;
 
 const LabelOgEtikett = styled.div`
@@ -210,9 +204,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             >
                                 Velg brevmal
                             </Label>
-                            <StyledTag variant="info" size="small">
+                            <Tag variant="neutral" size="small">
                                 {målform[mottakersMålform()]}
-                            </StyledTag>
+                            </Tag>
                         </LabelOgEtikett>
                     }
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {

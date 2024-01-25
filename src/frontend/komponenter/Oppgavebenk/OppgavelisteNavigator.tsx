@@ -2,19 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Pagination } from '@navikt/ds-react';
-import { AGray800 } from '@navikt/ds-tokens/dist/tokens';
+import { HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
-
-const StyledDiv = styled.div`
-    color: ${AGray800};
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
 
 const StyledSpan = styled.span`
     padding: 0 1rem 0 1rem;
@@ -36,7 +28,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
     const antallSider = beregnAntallSider(oppgaver.data.oppgaver);
 
     return (
-        <StyledDiv>
+        <HStack align="center" justify="space-between" wrap={false}>
             |
             <StyledSpan>
                 Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
@@ -51,7 +43,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
                 count={antallSider}
                 onPageChange={settSide}
             />
-        </StyledDiv>
+        </HStack>
     );
 };
 
