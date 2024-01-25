@@ -295,8 +295,12 @@ const TilbakekrevingSkjema: React.FC<{
                                     <FritekstVarsel>
                                         <Textarea
                                             label={
-                                                <HStack align="center" justify="space-between">
-                                                    <HStack align="center">
+                                                <HStack
+                                                    align="center"
+                                                    justify="space-between"
+                                                    wrap={false}
+                                                >
+                                                    <HStack align="center" wrap={false}>
                                                         <Label>Fritekst i varselet</Label>
                                                         <StyledHelpText placement="right">
                                                             <StyledHelpTextContainer>
