@@ -82,7 +82,7 @@ const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
     border-radius: 0.25rem;
     padding: 0.5rem;
     margin: 0.5rem;
-    border-left-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
+    border-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
 `;
 
 const StyledHeading = styled(Heading)`
