@@ -3,15 +3,22 @@ import * as React from 'react';
 import { isBefore } from 'date-fns';
 import styled from 'styled-components';
 
-import { BodyShort, Box, HStack, Label, Spacer, VStack } from '@navikt/ds-react';
-import { AGreen700, ASpacing4, ATextDanger, ATextDefault } from '@navikt/ds-tokens/dist/tokens';
+import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
+import {
+    AFontWeightBold,
+    AGreen700,
+    ASpacing4,
+    ATextDanger,
+    ATextDefault,
+} from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../utils/dato';
 import { formaterBeløp } from '../../../utils/formatter';
 
-const LabelMedFarge = styled(Label)<{ $farge?: string }>`
+const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
     color: ${props => (props.$farge ? props.$farge : ATextDefault)};
+    font-weight: ${AFontWeightBold};
 `;
 
 const HStackMedBorderTop = styled(HStack)`
@@ -78,27 +85,27 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         <StyledBox borderColor="border-strong" borderWidth="1" padding="10">
             <VStack aria-label={'Simuleringsoversikt'} gap="3">
                 <HStack>
-                    <Label>{panelTittel()}</Label>
+                    <BodyShort weight="semibold">{panelTittel()}</BodyShort>
                 </HStack>
                 <HStack>
                     <BodyShort>Feilutbetaling</BodyShort>
                     <Spacer />
-                    <LabelMedFarge $farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
+                    <BoldTekstMedFarge $farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
                         {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
-                    </LabelMedFarge>
+                    </BoldTekstMedFarge>
                 </HStack>
 
                 <HStack>
                     <BodyShort>Etterbetaling</BodyShort>
                     <Spacer />
-                    <LabelMedFarge>
+                    <BoldTekstMedFarge>
                         {formaterBeløpEllerDashOmUndefined(etterbetaling)}
-                    </LabelMedFarge>
+                    </BoldTekstMedFarge>
                 </HStack>
                 <HStackMedBorderTop>
-                    <Label>Neste utbetaling</Label>
+                    <BodyShort weight="semibold">Neste utbetaling</BodyShort>
                     <Spacer />
-                    {!nestePeriode && <Label>-</Label>}
+                    {!nestePeriode && <BodyShort weight="semibold">-</BodyShort>}
                 </HStackMedBorderTop>
                 {nestePeriode && (
                     <HStack>
@@ -111,7 +118,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             )}
                         </BodyShort>
                         <Spacer />
-                        <LabelMedFarge
+                        <BoldTekstMedFarge
                             $farge={
                                 nestePeriode?.resultat && nestePeriode.resultat > 0
                                     ? AGreen700
@@ -119,7 +126,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             }
                         >
                             {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                        </LabelMedFarge>
+                        </BoldTekstMedFarge>
                     </HStack>
                 )}
             </VStack>
