@@ -3,10 +3,12 @@ import * as React from 'react';
 import { isBefore } from 'date-fns';
 import styled from 'styled-components';
 
-import { BodyShort, Label, Panel } from '@navikt/ds-react';
+import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
 import {
     ABorderDefault,
+    AFontWeightBold,
     AGreen700,
+    ASpacing4,
     ATextDanger,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
@@ -15,32 +17,19 @@ import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simuleri
 import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../utils/dato';
 import { formaterBeløp } from '../../../utils/formatter';
 
-const StyledPanel = styled(Panel)`
-    max-width: 26rem;
-    padding: 2rem;
-    margin-bottom: 2.5rem;
-`;
-
-const StyledTable = styled.table`
-    width: 100%;
-    border-spacing: 0 0.5rem;
-`;
-
-const StyledTh = styled.th<{ $erHøyrestilt?: boolean }>`
-    text-align: ${props => (props.$erHøyrestilt ? 'right' : 'left')};
-`;
-
-const StyledTd = styled.th<{ $erHøyrestilt?: boolean }>`
-    text-align: ${props => (props.$erHøyrestilt ? 'right' : 'left')};
-`;
-
-const LabelMedFarge = styled(Label)<{ $farge?: string }>`
+const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
     color: ${props => (props.$farge ? props.$farge : ATextDefault)};
+    font-weight: ${AFontWeightBold};
 `;
 
-const StyledHr = styled.hr`
+const HStackMedBorderTop = styled(HStack)`
     border-top: 1px solid ${ABorderDefault};
-    margin-left: 0.125rem;
+    padding-top: ${ASpacing4};
+`;
+
+const StyledBox = styled(Box)`
+    max-width: 26rem;
+    margin-bottom: 2.5rem;
 `;
 
 interface ISimuleringProps {
@@ -94,81 +83,55 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     };
 
     return (
-        <StyledPanel border>
-            <StyledTable aria-label={'Simuleringsoversikt'}>
-                <tbody>
-                    <tr>
-                        <StyledTh colSpan={2}>
-                            <Label>{panelTittel()}</Label>
-                        </StyledTh>
-                    </tr>
-                    <tr>
-                        <StyledTd>
-                            <BodyShort>Feilutbetaling</BodyShort>
-                        </StyledTd>
-                        <StyledTd $erHøyrestilt={true}>
-                            <LabelMedFarge $farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
-                                {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
-                            </LabelMedFarge>
-                        </StyledTd>
-                    </tr>
+        <StyledBox borderColor="border-strong" borderWidth="1" padding="10">
+            <VStack aria-label={'Simuleringsoversikt'} gap="3">
+                <HStack>
+                    <BodyShort weight="semibold">{panelTittel()}</BodyShort>
+                </HStack>
+                <HStack>
+                    <BodyShort>Feilutbetaling</BodyShort>
+                    <Spacer />
+                    <BoldTekstMedFarge $farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
+                        {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
+                    </BoldTekstMedFarge>
+                </HStack>
 
-                    <tr>
-                        <StyledTd>
-                            <BodyShort>Etterbetaling</BodyShort>
-                        </StyledTd>
-                        <StyledTd $erHøyrestilt={true}>
-                            <LabelMedFarge>
-                                {formaterBeløpEllerDashOmUndefined(etterbetaling)}
-                            </LabelMedFarge>
-                        </StyledTd>
-                    </tr>
-                </tbody>
-            </StyledTable>
-
-            <StyledHr />
-
-            <StyledTable aria-label={'Neste utbetaling'}>
-                <tbody>
-                    <tr>
-                        <StyledTh colSpan={2}>
-                            <Label>Neste utbetaling</Label>
-                        </StyledTh>
-                        {!nestePeriode && (
-                            <StyledTh $erHøyrestilt={true}>
-                                <Label>-</Label>
-                            </StyledTh>
-                        )}
-                    </tr>
-                    {nestePeriode && (
-                        <tr>
-                            <StyledTd>
-                                <BodyShort>
-                                    {kapitaliserTekst(
-                                        isoStringTilFormatertString({
-                                            isoString: fomDatoNestePeriode,
-                                            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
-                                        })
-                                    )}
-                                </BodyShort>
-                            </StyledTd>
-
-                            <StyledTd $erHøyrestilt={true}>
-                                <LabelMedFarge
-                                    $farge={
-                                        nestePeriode?.resultat && nestePeriode.resultat > 0
-                                            ? AGreen700
-                                            : ATextDefault
-                                    }
-                                >
-                                    {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                                </LabelMedFarge>
-                            </StyledTd>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
-        </StyledPanel>
+                <HStack>
+                    <BodyShort>Etterbetaling</BodyShort>
+                    <Spacer />
+                    <BoldTekstMedFarge>
+                        {formaterBeløpEllerDashOmUndefined(etterbetaling)}
+                    </BoldTekstMedFarge>
+                </HStack>
+                <HStackMedBorderTop>
+                    <BodyShort weight="semibold">Neste utbetaling</BodyShort>
+                    <Spacer />
+                    {!nestePeriode && <BodyShort weight="semibold">-</BodyShort>}
+                </HStackMedBorderTop>
+                {nestePeriode && (
+                    <HStack>
+                        <BodyShort>
+                            {kapitaliserTekst(
+                                isoStringTilFormatertString({
+                                    isoString: fomDatoNestePeriode,
+                                    tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+                                })
+                            )}
+                        </BodyShort>
+                        <Spacer />
+                        <BoldTekstMedFarge
+                            $farge={
+                                nestePeriode?.resultat && nestePeriode.resultat > 0
+                                    ? AGreen700
+                                    : ATextDefault
+                            }
+                        >
+                            {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
+                        </BoldTekstMedFarge>
+                    </HStack>
+                )}
+            </VStack>
+        </StyledBox>
     );
 };
 export default SimuleringPanel;
