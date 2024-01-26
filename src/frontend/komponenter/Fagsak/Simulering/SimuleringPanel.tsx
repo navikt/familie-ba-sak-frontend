@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
 import {
+    ABorderDefault,
     AFontWeightBold,
     AGreen700,
     ASpacing4,
@@ -22,7 +23,7 @@ const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
 `;
 
 const HStackMedBorderTop = styled(HStack)`
-    border-top: 1px solid;
+    border-top: 1px solid ${ABorderDefault};
     padding-top: ${ASpacing4};
 `;
 
