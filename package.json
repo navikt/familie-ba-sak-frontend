@@ -43,7 +43,7 @@
     "@navikt/familie-http": "6.0.0",
     "@navikt/familie-ikoner": "9.0.0",
     "@navikt/familie-logging": "7.0.0",
-    "@navikt/familie-skjema": "7.0.3",
+    "@navikt/familie-skjema": "8.0.0",
     "@navikt/familie-tidslinje": "7.0.0",
     "@navikt/familie-typer": "8.0.0",
     "@navikt/familie-visittkort": "14.0.0",
