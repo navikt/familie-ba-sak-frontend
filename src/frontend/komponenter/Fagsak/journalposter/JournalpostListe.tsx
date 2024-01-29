@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { ArrowRightIcon, ArrowLeftIcon, ArrowDownIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Alert, Table } from '@navikt/ds-react';
+import {
+    ArrowRightIcon,
+    ArrowLeftIcon,
+    ArrowDownIcon,
+    MagnifyingGlassIcon,
+} from '@navikt/aksel-icons';
+import { BodyShort, Heading, Alert, Table, Modal, Link } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
+import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
     byggHenterRessurs,
     byggTomRessurs,
@@ -21,8 +26,10 @@ import {
     hentDatoRegistrertSendt,
     hentSorterteJournalposter,
 } from './journalpostUtils';
+import { useApp } from '../../../context/AppContext';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -82,6 +89,10 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
     width: 10rem;
 `;
 
+const StyledMagnifyingGlassIcon = styled(MagnifyingGlassIcon)`
+    transform: rotate(90deg);
+`;
+
 export const Vedleggsliste = styled.ul`
     list-style-type: none;
     margin: 0;
@@ -120,6 +131,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     );
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
         useDokument();
+    const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
+    const { toggles } = useApp();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -149,6 +162,26 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
                 break;
         }
+    };
+
+    const UtsendingsinfoModal: React.FC<Utsendingsinfo> = ({
+        digitalpostSendt,
+        fysiskpostSendt,
+    }) => {
+        const tittel = digitalpostSendt ? 'Digital post sendt' : 'Sendt per post';
+        const adresse = digitalpostSendt?.adresse || fysiskpostSendt?.adressetekstKonvolutt;
+        return (
+            <Modal
+                open
+                closeOnBackdropClick
+                onClose={() => settUtsendingsinfo(undefined)}
+                width={'30rem'}
+                header={{ heading: tittel, size: 'small' }}
+                portal
+            >
+                <Modal.Body>{adresse}</Modal.Body>
+            </Modal>
+        );
     };
 
     if (
@@ -253,7 +286,20 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         size="small"
                                         title={journalpost.avsenderMottaker?.navn}
                                     >
-                                        {journalpost.avsenderMottaker?.navn}
+                                        {journalpost.utsendingsinfo &&
+                                        toggles[ToggleNavn.journalpostUtsendingsinfo] ? (
+                                            <Link
+                                                href="#"
+                                                onClick={() =>
+                                                    settUtsendingsinfo(journalpost.utsendingsinfo)
+                                                }
+                                            >
+                                                {journalpost.avsenderMottaker?.navn}
+                                                <StyledMagnifyingGlassIcon />
+                                            </Link>
+                                        ) : (
+                                            journalpost.avsenderMottaker?.navn
+                                        )}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
@@ -279,6 +325,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         pdfdata={hentetDokument}
                     />
                 )}
+                {utsendingsinfo && <UtsendingsinfoModal {...utsendingsinfo} />}
             </Container>
         );
     } else {
