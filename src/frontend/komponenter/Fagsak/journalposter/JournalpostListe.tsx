@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import {
-    ArrowRightIcon,
-    ArrowLeftIcon,
     ArrowDownIcon,
+    ArrowLeftIcon,
+    ArrowRightIcon,
     MagnifyingGlassIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Alert, Table, Modal, Link } from '@navikt/ds-react';
+import { BodyShort, Heading, Alert, Table, Link } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
@@ -21,11 +21,12 @@ import {
 
 import { JournalpostDokument } from './JournalpostDokument';
 import {
-    formaterFagsak,
     formaterDatoRegistrertSendtMottatt,
+    formaterFagsak,
     hentDatoRegistrertSendt,
     hentSorterteJournalposter,
 } from './journalpostUtils';
+import { UtsendingsinfoModal } from './UtsendingsinfoModal';
 import { useApp } from '../../../context/AppContext';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
@@ -162,26 +163,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
                 break;
         }
-    };
-
-    const UtsendingsinfoModal: React.FC<Utsendingsinfo> = ({
-        digitalpostSendt,
-        fysiskpostSendt,
-    }) => {
-        const tittel = digitalpostSendt ? 'Digital post sendt' : 'Sendt per post';
-        const adresse = digitalpostSendt?.adresse || fysiskpostSendt?.adressetekstKonvolutt;
-        return (
-            <Modal
-                open
-                closeOnBackdropClick
-                onClose={() => settUtsendingsinfo(undefined)}
-                width={'30rem'}
-                header={{ heading: tittel, size: 'small' }}
-                portal
-            >
-                <Modal.Body>{adresse}</Modal.Body>
-            </Modal>
-        );
     };
 
     if (
@@ -325,7 +306,12 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         pdfdata={hentetDokument}
                     />
                 )}
-                {utsendingsinfo && <UtsendingsinfoModal {...utsendingsinfo} />}
+                {utsendingsinfo && (
+                    <UtsendingsinfoModal
+                        onClose={() => settUtsendingsinfo(undefined)}
+                        data={utsendingsinfo}
+                    />
+                )}
             </Container>
         );
     } else {
