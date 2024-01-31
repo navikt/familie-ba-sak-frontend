@@ -8,7 +8,7 @@ import {
     ArrowRightIcon,
     MagnifyingGlassIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Alert, Table, Link } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
@@ -88,6 +88,13 @@ const StyledHeaderCell = styled(Table.HeaderCell)`
 const StyledColumnHeader = styled(Table.ColumnHeader)`
     white-space: nowrap;
     width: 10rem;
+`;
+
+const StyledButton = styled(Button)`
+    padding: 0;
+    .navds-label {
+        font-weight: normal;
+    }
 `;
 
 const StyledMagnifyingGlassIcon = styled(MagnifyingGlassIcon)`
@@ -263,25 +270,27 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    <EllipsisBodyShort
-                                        size="small"
-                                        title={journalpost.avsenderMottaker?.navn}
-                                    >
-                                        {journalpost.utsendingsinfo &&
-                                        toggles[ToggleNavn.journalpostUtsendingsinfo] ? (
-                                            <Link
-                                                href="#"
-                                                onClick={() =>
-                                                    settUtsendingsinfo(journalpost.utsendingsinfo)
-                                                }
-                                            >
-                                                {journalpost.avsenderMottaker?.navn}
-                                                <StyledMagnifyingGlassIcon />
-                                            </Link>
-                                        ) : (
+                                    {journalpost.utsendingsinfo &&
+                                    toggles[ToggleNavn.journalpostUtsendingsinfo] ? (
+                                        <StyledButton
+                                            icon={<StyledMagnifyingGlassIcon />}
+                                            iconPosition={'right'}
+                                            variant={'tertiary'}
+                                            size={'xsmall'}
+                                            onClick={() =>
+                                                settUtsendingsinfo(journalpost.utsendingsinfo)
+                                            }
+                                        >
+                                            {journalpost.avsenderMottaker?.navn}
+                                        </StyledButton>
+                                    ) : (
+                                        <EllipsisBodyShort
+                                            size="small"
+                                            title={journalpost.avsenderMottaker?.navn}
+                                        >
                                             journalpost.avsenderMottaker?.navn
-                                        )}
-                                    </EllipsisBodyShort>
+                                        </EllipsisBodyShort>
+                                    )}
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     <EllipsisBodyShort size="small" title={journalpost.tittel}>
