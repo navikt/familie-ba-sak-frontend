@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Label, Radio, TextField } from '@navikt/ds-react';
-import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { HStack, Label, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';
@@ -25,16 +23,6 @@ const StyledFamilieLandvelger = styled(FamilieLandvelger)`
     > * {
         margin: 0;
     }
-`;
-
-const FlexDatoInputWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: ${ASpacing3};
-`;
-
-const FlexRowDiv = styled.div`
-    display: flex;
 `;
 
 const StyledTextField = styled(TextField)`
@@ -73,8 +61,8 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 }
             />
 
-            <FamilieRadioGruppe
-                erLesevisning={erLesevisning}
+            <RadioGroup
+                readOnly={erLesevisning}
                 legend="Tekst i vedtaksbrev"
                 value={
                     erLesevisning
@@ -103,10 +91,10 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 >
                     {'Refusjon ikke avklart'}
                 </Radio>
-            </FamilieRadioGruppe>
-            <FlexDatoInputWrapper>
+            </RadioGroup>
+            <VStack gap={'2'}>
                 <Label size="small">Angi periode som skal refunderes til EØS-land</Label>
-                <FlexRowDiv style={{ gap: '2rem' }}>
+                <HStack gap={'4'}>
                     <Månedvelger
                         felt={skjema.felter.fom}
                         label={'F.o.m'}
@@ -124,8 +112,8 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                         tilhørendeFomFelt={skjema.felter.fom}
                         kanKunVelgeFortid
                     />
-                </FlexRowDiv>
-            </FlexDatoInputWrapper>
+                </HStack>
+            </VStack>
             <StyledTextField
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
