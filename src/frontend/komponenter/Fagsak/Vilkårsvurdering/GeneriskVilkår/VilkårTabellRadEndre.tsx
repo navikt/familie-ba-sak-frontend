@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio, Select, Textarea } from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieKnapp, FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -69,7 +69,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+const StyledRadioGroup = styled(RadioGroup)`
     && {
         margin: 1rem 0;
         legend {
@@ -262,8 +262,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         )}
                     </Select>
                 )}
-                <StyledFamilieRadioGruppe
-                    erLesevisning={lesevisning}
+                <StyledRadioGroup
+                    readOnly={lesevisning}
                     value={
                         redigerbartVilkår.verdi.resultatBegrunnelse
                             ? redigerbartVilkår.verdi.resultatBegrunnelse
@@ -314,7 +314,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 Ikke aktuelt
                             </Radio>
                         )}
-                </StyledFamilieRadioGruppe>
+                </StyledRadioGroup>
                 {!gjelderInstitusjon && (
                     <UtdypendeVilkårsvurderingMultiselect
                         redigerbartVilkår={redigerbartVilkår}
