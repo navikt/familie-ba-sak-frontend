@@ -2069,16 +2069,7 @@
     "@navikt/familie-typer" "^8.0.1"
     "@navikt/familie-validering" "^6.0.0"
 
-"@navikt/familie-http@6.0.0":
-  version "6.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/6.0.0/c8f004059e329a28d508cef225a37328536e360b#c8f004059e329a28d508cef225a37328536e360b"
-  integrity sha512-2+rNB9TMQP4kemJxrR0gFlQM2bCM+tY+aVJfwWEKxKQo50llgfXoSf9kCJTUtolpWotQlEpc1hLkZvyjPYaFng==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.0"
-    "@sentry/core" "^7.5.0"
-    constate "^3.3.2"
-
-"@navikt/familie-http@^7.0.1":
+"@navikt/familie-http@7.0.1", "@navikt/familie-http@^7.0.1":
   version "7.0.1"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.1/fdc9aad38d1a2a108251023724a6c17d6bcbc181#fdc9aad38d1a2a108251023724a6c17d6bcbc181"
   integrity sha512-z/3/O+ranRoLErhv95GSO3SQlw9derBsFcExMVVlRjQ50zXENAJaausdbn5EJ4dZHPYVMgBrpw0yNOi63zuyiw==
@@ -2120,7 +2111,7 @@
     classnames "^2.5.1"
     nanoid "^5.0.4"
 
-"@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.0", "@navikt/familie-typer@^8.0.1", "@navikt/familie-typer@^8.0.2":
+"@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.1", "@navikt/familie-typer@^8.0.2":
   version "8.0.2"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.2/21bcc780c35b6a8699d1c52b54e61d83580736f7#21bcc780c35b6a8699d1c52b54e61d83580736f7"
   integrity sha512-pKSpCzryJE6eiN/Ssox1oLLKPW5ezsT+/gTHbhgxOtM/frFSZLguSjwhgiDp2kovckJ84nxhnQurK6igw8GEHw==
@@ -2546,7 +2537,7 @@
     "@sentry/types" "7.83.0"
     "@sentry/utils" "7.83.0"
 
-"@sentry/core@7.99.0", "@sentry/core@^7.5.0", "@sentry/core@^7.99.0":
+"@sentry/core@7.99.0", "@sentry/core@^7.99.0":
   version "7.99.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.99.0.tgz#6881aae5ac1436637b3d88e0b12df4ab56016c5f"
   integrity sha512-vOAtzcAXEUtS/oW7wi3wMkZ3hsb5Ch96gKyrrj/mXdOp2zrcwdNV6N9/pawq2E9P/7Pw8AXw4CeDZztZrjQLuA==
