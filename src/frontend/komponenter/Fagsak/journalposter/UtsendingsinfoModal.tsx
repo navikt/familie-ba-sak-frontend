@@ -18,8 +18,8 @@ export const UtsendingsinfoModal: React.FC<IProps> = ({
         <Modal
             open
             closeOnBackdropClick
-            onClose={() => onClose()}
-            width={'30rem'}
+            onClose={onClose}
+            width="small"
             header={{ heading: tittel, size: 'small' }}
             portal
         >
