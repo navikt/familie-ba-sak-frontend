@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { ArrowRightIcon, ArrowLeftIcon, ArrowDownIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Alert, Table } from '@navikt/ds-react';
+import {
+    ArrowDownIcon,
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    MagnifyingGlassIcon,
+} from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import type { IJournalpost, Ressurs } from '@navikt/familie-typer';
+import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
     byggHenterRessurs,
     byggTomRessurs,
@@ -16,13 +21,16 @@ import {
 
 import { JournalpostDokument } from './JournalpostDokument';
 import {
-    formaterFagsak,
     formaterDatoRegistrertSendtMottatt,
+    formaterFagsak,
     hentDatoRegistrertSendt,
     hentSorterteJournalposter,
 } from './journalpostUtils';
+import { UtsendingsinfoModal } from './UtsendingsinfoModal';
+import { useApp } from '../../../context/AppContext';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -82,6 +90,17 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
     width: 10rem;
 `;
 
+const StyledButton = styled(Button)`
+    padding: 0;
+    .navds-label {
+        font-weight: normal;
+    }
+`;
+
+const StyledMagnifyingGlassIcon = styled(MagnifyingGlassIcon)`
+    transform: rotate(90deg);
+`;
+
 export const Vedleggsliste = styled.ul`
     list-style-type: none;
     margin: 0;
@@ -120,6 +139,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     );
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
         useDokument();
+    const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
+    const { toggles } = useApp();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -249,12 +270,27 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    <EllipsisBodyShort
-                                        size="small"
-                                        title={journalpost.avsenderMottaker?.navn}
-                                    >
-                                        {journalpost.avsenderMottaker?.navn}
-                                    </EllipsisBodyShort>
+                                    {journalpost.utsendingsinfo &&
+                                    toggles[ToggleNavn.journalpostUtsendingsinfo] ? (
+                                        <StyledButton
+                                            icon={<StyledMagnifyingGlassIcon />}
+                                            iconPosition={'right'}
+                                            variant={'tertiary'}
+                                            size={'xsmall'}
+                                            onClick={() =>
+                                                settUtsendingsinfo(journalpost.utsendingsinfo)
+                                            }
+                                        >
+                                            {journalpost.avsenderMottaker?.navn}
+                                        </StyledButton>
+                                    ) : (
+                                        <EllipsisBodyShort
+                                            size="small"
+                                            title={journalpost.avsenderMottaker?.navn}
+                                        >
+                                            {journalpost.avsenderMottaker?.navn}
+                                        </EllipsisBodyShort>
+                                    )}
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     <EllipsisBodyShort size="small" title={journalpost.tittel}>
@@ -277,6 +313,12 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     <PdfVisningModal
                         onRequestClose={() => settVisDokumentModal(false)}
                         pdfdata={hentetDokument}
+                    />
+                )}
+                {utsendingsinfo && (
+                    <UtsendingsinfoModal
+                        onClose={() => settUtsendingsinfo(undefined)}
+                        data={utsendingsinfo}
                     />
                 )}
             </Container>
