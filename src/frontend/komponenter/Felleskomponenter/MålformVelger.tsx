@@ -2,13 +2,12 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Heading, Radio } from '@navikt/ds-react';
-import { FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { Målform, målform } from '../../typer/søknad';
 
-const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+const StyledRadioGroup = styled(RadioGroup)`
     margin: 2rem 0;
 `;
 
@@ -34,9 +33,9 @@ const MålformVelger: React.FC<IProps> = ({
     };
 
     return (
-        <StyledFamilieRadioGruppe
+        <StyledRadioGroup
             {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
-            erLesevisning={erLesevisning}
+            readOnly={erLesevisning}
             value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
             legend={Legend}
         >
@@ -57,7 +56,7 @@ const MålformVelger: React.FC<IProps> = ({
             >
                 {målform[Målform.NN]}
             </StyledRadio>
-        </StyledFamilieRadioGruppe>
+        </StyledRadioGroup>
     );
 };
 
