@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Radio, Textarea } from '@navikt/ds-react';
-import { FamilieKnapp, FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -46,7 +46,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+const StyledRadioGroup = styled(RadioGroup)`
     && {
         margin: 1rem 0;
         legend {
@@ -170,8 +170,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                 $lesevisning={erLesevisning}
                 $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
             >
-                <StyledFamilieRadioGruppe
-                    erLesevisning={erLesevisning}
+                <StyledRadioGroup
+                    readOnly={erLesevisning}
                     value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
                         annenVurderingConfig.spørsmål
@@ -206,7 +206,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     >
                         {'Nei'}
                     </Radio>
-                </StyledFamilieRadioGruppe>
+                </StyledRadioGroup>
 
                 <Textarea
                     readOnly={erLesevisning}

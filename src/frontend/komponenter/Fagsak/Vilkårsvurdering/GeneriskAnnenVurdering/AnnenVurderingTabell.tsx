@@ -18,9 +18,6 @@ export const annenVurderingResultatFeilmeldingId = (annenVurdering: IAnnenVurder
 export const annenVurderingBegrunnelseFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
     `annen-vurdering-begrunnelse_${annenVurdering.type}_${annenVurdering.id}`;
 
-export const annenVurderingPeriodeFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
-    `annen-vurdering-periode_${annenVurdering.type}_${annenVurdering.id}`;
-
 interface IProps {
     person: IGrunnlagPerson;
     andreVurderinger: FeltState<IAnnenVurdering>[];

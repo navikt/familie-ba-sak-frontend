@@ -2,14 +2,13 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Heading, Radio } from '@navikt/ds-react';
-import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
+import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 
-const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+const StyledRadioGroup = styled(RadioGroup)`
     margin: 2rem 0;
 `;
 
@@ -27,9 +26,9 @@ const SøknadType: React.FunctionComponent = () => {
     };
 
     return (
-        <StyledFamilieRadioGruppe
+        <StyledRadioGroup
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-            erLesevisning={erLesevisning}
+            readOnly={erLesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
             legend={<Heading size={'medium'} level={'2'} children={'Hva har bruker søkt om?'} />}
         >
@@ -49,7 +48,7 @@ const SøknadType: React.FunctionComponent = () => {
             >
                 {behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
             </StyledRadio>
-        </StyledFamilieRadioGruppe>
+        </StyledRadioGroup>
     );
 };
 
