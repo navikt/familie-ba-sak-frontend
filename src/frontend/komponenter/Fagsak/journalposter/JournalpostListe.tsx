@@ -288,7 +288,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                             size="small"
                                             title={journalpost.avsenderMottaker?.navn}
                                         >
-                                            journalpost.avsenderMottaker?.navn
+                                            {journalpost.avsenderMottaker?.navn}
                                         </EllipsisBodyShort>
                                     )}
                                 </StyledDataCell>
