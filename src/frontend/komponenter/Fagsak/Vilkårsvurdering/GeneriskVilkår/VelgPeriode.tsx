@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
 
 import { HelpText, Label, Fieldset } from '@navikt/ds-react';
@@ -11,7 +12,7 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import type { IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
 import type { IsoDatoString } from '../../../../utils/dato';
-import { nyIsoDatoPeriode } from '../../../../utils/dato';
+import { dagensDato, nyIsoDatoPeriode } from '../../../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 interface IProps {
@@ -97,7 +98,7 @@ const VelgPeriode: React.FC<IProps> = ({
                     }}
                     visFeilmeldinger={false}
                     readOnly={erLesevisning}
-                    kanKunVelgeFortid
+                    maksDatoAvgrensning={endOfMonth(dagensDato)}
                 />
                 <DatovelgerForGammelSkjemaløsning
                     label={'T.o.m (valgfri)'}
