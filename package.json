@@ -160,6 +160,6 @@
     }
   },
   "resolutions": {
-    "styled-components": "^5"
+    "styled-components": "^6"
   }
 }
