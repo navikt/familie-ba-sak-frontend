@@ -6,6 +6,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import TypeScriptTypeChecker from 'fork-ts-checker-webpack-plugin';
 import { createRequire } from 'module';
+import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 
 const require = createRequire(import.meta.url);
 
@@ -39,6 +40,7 @@ const baseConfig = {
                 files: './src/**/*.{ts,tsx,js,jsx}',
             },
         }),
+        new ESLintWebpackPlugin({ eslintPath: require.resolve('eslint') }),
     ],
     devtool: 'inline-source-map',
     module: {
@@ -48,19 +50,6 @@ const baseConfig = {
                 resolve: {
                     fullySpecified: false, // Fikser at man ikke kan gjøre import uten filextension fra moduler med type: module i package.json
                 },
-            },
-            {
-                test: /\.(ts|tsx)$/,
-                enforce: 'pre',
-                exclude: /node_modules/,
-                use: [
-                    {
-                        options: {
-                            eslintPath: require.resolve('eslint'),
-                        },
-                        loader: require.resolve('eslint-loader'),
-                    },
-                ],
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
