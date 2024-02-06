@@ -97,7 +97,6 @@
     "@types/react-router-hash-link": "^2.4.5",
     "@types/styled-components": "^5.1.14",
     "@types/uuid": "^9.0.0",
-    "@types/webpack-dev-middleware": "^3.7.1",
     "@types/webpack-env": "^1.18.0",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
