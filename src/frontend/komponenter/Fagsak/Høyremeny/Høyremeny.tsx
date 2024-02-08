@@ -32,6 +32,11 @@ const ToggleVisningHøyremeny = styled(Button)<{ $åpenhøyremeny: boolean }>`
     background-color: ${ASurfaceDefault};
 `;
 
+const Container = styled.div<{ $erÅpen: boolean }>`
+    width: ${props => props.$erÅpen && '25rem'};
+    height: ${props => props.$erÅpen && `calc(100vh - 8rem)`};
+`;
+
 const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
     const { behandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
 
@@ -40,52 +45,50 @@ const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
     }, [behandling]);
 
     return (
-        <>
-            <div className={åpenHøyremeny ? 'høyremeny' : ''}>
-                <ToggleVisningHøyremeny
-                    $åpenhøyremeny={true}
-                    variant="secondary"
-                    size="small"
-                    aria-label="Skjul høyremeny"
-                    title={åpenHøyremeny ? 'Skjul høyremeny' : 'Vis høyremeny'}
-                    icon={
-                        åpenHøyremeny ? (
-                            <ChevronRightIcon aria-label="Skjul høyremeny" />
-                        ) : (
-                            <ChevronLeftIcon aria-label="Vis høyremeny" />
-                        )
-                    }
-                    onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                    onClick={() => {
-                        settÅpenHøyremeny(!åpenHøyremeny);
-                    }}
-                />
-                {åpenHøyremeny && (
-                    <>
-                        <Behandlingskort åpenBehandling={behandling} />
-                        <Hendelsesoversikt
-                            hendelser={hentDataFraRessursMedFallback(logg, []).map(
-                                (loggElement: ILogg): Hendelse => {
-                                    return {
-                                        id: loggElement.id.toString(),
-                                        dato: isoStringTilFormatertString({
-                                            isoString: loggElement.opprettetTidspunkt,
-                                            tilFormat: Datoformat.DATO_TID,
-                                        }),
-                                        utførtAv: loggElement.opprettetAv,
-                                        rolle: loggElement.rolle,
-                                        tittel: loggElement.tittel,
-                                        beskrivelse: loggElement.tekst,
-                                    };
-                                }
-                            )}
-                            åpenBehandling={behandling}
-                            bruker={bruker}
-                        />
-                    </>
-                )}
-            </div>
-        </>
+        <Container $erÅpen={åpenHøyremeny}>
+            <ToggleVisningHøyremeny
+                $åpenhøyremeny={true}
+                variant="secondary"
+                size="small"
+                aria-label="Skjul høyremeny"
+                title={åpenHøyremeny ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                icon={
+                    åpenHøyremeny ? (
+                        <ChevronRightIcon aria-label="Skjul høyremeny" />
+                    ) : (
+                        <ChevronLeftIcon aria-label="Vis høyremeny" />
+                    )
+                }
+                onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                onClick={() => {
+                    settÅpenHøyremeny(!åpenHøyremeny);
+                }}
+            />
+            {åpenHøyremeny && (
+                <>
+                    <Behandlingskort åpenBehandling={behandling} />
+                    <Hendelsesoversikt
+                        hendelser={hentDataFraRessursMedFallback(logg, []).map(
+                            (loggElement: ILogg): Hendelse => {
+                                return {
+                                    id: loggElement.id.toString(),
+                                    dato: isoStringTilFormatertString({
+                                        isoString: loggElement.opprettetTidspunkt,
+                                        tilFormat: Datoformat.DATO_TID,
+                                    }),
+                                    utførtAv: loggElement.opprettetAv,
+                                    rolle: loggElement.rolle,
+                                    tittel: loggElement.tittel,
+                                    beskrivelse: loggElement.tekst,
+                                };
+                            }
+                        )}
+                        åpenBehandling={behandling}
+                        bruker={bruker}
+                    />
+                </>
+            )}
+        </Container>
     );
 };
 
