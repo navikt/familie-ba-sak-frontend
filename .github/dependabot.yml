@@ -20,7 +20,6 @@ updates:
     sentry:
       patterns:
         - "@sentry/tracing"
-        - "@sentry/core"
         - "@sentry/browser"
     typescript-eslint:
       patterns:
