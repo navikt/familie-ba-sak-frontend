@@ -2189,10 +2189,10 @@
     deep-equal "^2.2.3"
     hashids "^2.3.0"
 
-"@navikt/familie-tidslinje@8.0.0":
-  version "8.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/8.0.0/395fae6f24f5588dbf3b513b606812642d98513c#395fae6f24f5588dbf3b513b606812642d98513c"
-  integrity sha512-X659vS+0xwmRsPpgg0mEp4ZYbIsVrU+mtJEw0gfh4kN+0NVr2RbfLLBQY3f/jTmYMdCaUiJGonQJgIvLduj9Rg==
+"@navikt/familie-tidslinje@9.0.0":
+  version "9.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/9.0.0/c47784edeede9ac706cd57c03ada59f90f687cd2#c47784edeede9ac706cd57c03ada59f90f687cd2"
+  integrity sha512-CuOILz0YYAOb1/XP4A/Tv/ZOHL5GVfWnhcW8DGJzeAd276hNtJv9qreTKDuYONRoRQpAUMLzxKQNz5Tb4h7ABQ==
   dependencies:
     classnames "^2.5.1"
     nanoid "^5.0.4"
