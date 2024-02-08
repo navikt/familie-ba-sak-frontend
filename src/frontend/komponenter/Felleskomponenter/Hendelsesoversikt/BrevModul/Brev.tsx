@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { Button, Modal } from '@navikt/ds-react';
+import { ASpacing4, ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 
 import Brevskjema from './Brevskjema';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
@@ -13,6 +15,10 @@ interface IProps {
     bruker: IPersonInfo;
 }
 
+const Container = styled.div`
+    margin: 0 ${ASpacing5} ${ASpacing4};
+`;
+
 const Brev = ({ onIModalClick, bruker }: IProps) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
@@ -20,7 +26,7 @@ const Brev = ({ onIModalClick, bruker }: IProps) => {
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     return (
-        <div className={'brev'}>
+        <Container>
             <Brevskjema
                 onSubmitSuccess={() => {
                     settVisInnsendtBrevModal(true);
@@ -65,7 +71,7 @@ const Brev = ({ onIModalClick, bruker }: IProps) => {
                     </Modal.Footer>
                 </Modal>
             )}
-        </div>
+        </Container>
     );
 };
 export default Brev;
