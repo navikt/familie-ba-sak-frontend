@@ -6,7 +6,7 @@ import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import {
     ABorderDefault,
     ABorderSubtle,
-    ASpacing2,
+    ASpacing1,
     ASpacing4,
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
@@ -21,7 +21,7 @@ interface IHendelseItemProps {
 const Hendelsesbeskrivelse = styled(BodyShort)`
     white-space: pre-wrap;
     word-wrap: break-word;
-    padding: ${ASpacing2} 0;
+    padding: ${ASpacing1} 0;
 `;
 
 const StyledVStack = styled(VStack)`
