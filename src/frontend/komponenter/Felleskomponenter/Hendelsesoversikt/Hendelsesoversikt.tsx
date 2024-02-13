@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import classNames from 'classnames';
+import styled from 'styled-components';
+
+import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
@@ -15,7 +17,6 @@ import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
 import type { IPersonInfo } from '../../../typer/person';
 
 export interface IHendelsesoversiktProps {
-    className?: string;
     hendelser: Hendelse[];
     åpenBehandling: IBehandling;
     bruker: IPersonInfo;
@@ -25,12 +26,21 @@ const tilHendelseItem = (hendelse: Hendelse) => (
     <HendelseItem key={hendelse.id} hendelse={hendelse} />
 );
 
-const Hendelsesoversikt = ({
-    hendelser,
-    className,
-    åpenBehandling,
-    bruker,
-}: IHendelsesoversiktProps) => {
+const høydePersonlinje = '8rem';
+const høydeBehandlingskort = '18rem';
+const høydeTabs = '4rem';
+
+const HistorikkTab = styled.div`
+    height: calc(100vh - ${høydePersonlinje} - ${høydeBehandlingskort} - ${høydeTabs});
+    overflow: auto;
+`;
+
+const HistorikkListe = styled.ul`
+    padding-left: ${ASpacing5};
+    list-style: none;
+`;
+
+const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesoversiktProps) => {
     const { hentSaksbehandlerRolle } = useApp();
 
     const skalViseTotrinnskontroll =
@@ -42,7 +52,7 @@ const Hendelsesoversikt = ({
     );
 
     return (
-        <div className={classNames('hendelsesoversikt', className)}>
+        <div>
             <BrevModulProvider>
                 <Header
                     aktivTab={aktivTab}
@@ -53,11 +63,9 @@ const Hendelsesoversikt = ({
                     <Totrinnskontroll åpenBehandling={åpenBehandling} />
                 )}
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
-                    <div className={'historikk'}>
-                        <ul className={'hendelsesoversikt__list'}>
-                            {hendelser?.map(tilHendelseItem)}
-                        </ul>
-                    </div>
+                    <HistorikkTab>
+                        <HistorikkListe>{hendelser?.map(tilHendelseItem)}</HistorikkListe>
+                    </HistorikkTab>
                 )}
                 {aktivTab === Tabs.Meldinger && (
                     <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />
