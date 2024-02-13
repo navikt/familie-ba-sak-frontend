@@ -26,8 +26,12 @@ const tilHendelseItem = (hendelse: Hendelse) => (
     <HendelseItem key={hendelse.id} hendelse={hendelse} />
 );
 
+const høydePersonlinje = '8rem';
+const høydeBehandlingskort = '18rem';
+const høydeTabs = '4rem';
+
 const HistorikkTab = styled.div`
-    height: 35rem;
+    height: calc(100vh - ${høydePersonlinje} - ${høydeBehandlingskort} - ${høydeTabs});
     overflow: auto;
 `;
 
