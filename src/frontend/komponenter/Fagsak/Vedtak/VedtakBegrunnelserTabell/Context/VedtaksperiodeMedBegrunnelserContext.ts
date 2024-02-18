@@ -23,7 +23,6 @@ import type {
     IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
