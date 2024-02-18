@@ -50,8 +50,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
             useState<Ressurs<string[]>>(byggTomRessurs());
         const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
-        const maksAntallKulepunkter =
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
+        const maksAntallKulepunkter = 3;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IIsoDatoPeriode>({
