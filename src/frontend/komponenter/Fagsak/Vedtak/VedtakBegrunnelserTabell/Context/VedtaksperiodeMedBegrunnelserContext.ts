@@ -23,7 +23,6 @@ import type {
     IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
@@ -50,8 +49,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
             useState<Ressurs<string[]>>(byggTomRessurs());
         const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
-        const maksAntallKulepunkter =
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
+        const maksAntallKulepunkter = 3;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IIsoDatoPeriode>({
