@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
 import {
     ABorderDefault,
     ABorderSubtle,
@@ -26,6 +26,7 @@ const Hendelsesbeskrivelse = styled(BodyShort)`
 
 const StyledVStack = styled(VStack)`
     margin-bottom: ${ASpacing6};
+    margin-right: ${ASpacing4};
 `;
 
 const Sirkel = styled.div`
@@ -45,7 +46,7 @@ const Strek = styled.div`
 `;
 const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
     <li>
-        <HStack gap="4">
+        <HGrid columns="0.5rem 1fr" gap="4">
             <VStack align="center">
                 <Sirkel />
                 <Strek />
@@ -63,7 +64,7 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
                         : ''
                 }`}</BodyShort>
             </StyledVStack>
-        </HStack>
+        </HGrid>
     </li>
 );
 
