@@ -55,17 +55,19 @@ const prodConfig = merge.mergeWithRules({
             minRatio: 0.8,
         }),
         sentryWebpackPlugin({
-            sourcemaps: {
-                assets: ['frontend_production'],
-            },
             org: 'nav',
             project: 'familie-ba-sak-frontend',
             authToken: process.env.SENTRY_AUTH_TOKEN,
             url: 'https://sentry.gc.nav.no/',
-            release: process.env.SENTRY_RELEASE,
-            urlPrefix: `~/assets`,
-            errorHandler: (err, invokeErr, compilation) => {
-                compilation.warnings.push('Sentry CLI Plugin: ' + err.message);
+            release: {
+                name: process.env.SENTRY_RELEASE,
+                uploadLegacySourcemaps: {
+                    paths: ['frontend_production'],
+                    urlPrefix: `~/assets`,
+                },
+            },
+            errorHandler: err => {
+                console.warn('Sentry CLI Plugin: ' + err.message);
             },
         }),
     ],
