@@ -1,5 +1,6 @@
 import { ytelsetype, YtelseType } from './beregning';
 import type { IGrunnlagPerson } from './person';
+import type { IEndretUtbetalingAndelÅrsak } from './utbetalingAndel';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 import type { IsoDatoString } from '../utils/dato';
 
@@ -74,6 +75,7 @@ export interface IUtbetalingsperiodeDetalj {
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
     erPåvirketAvEndring: boolean;
+    endringsårsak?: IEndretUtbetalingAndelÅrsak;
 }
 
 export interface IRestOverstyrtEndringstidspunkt {

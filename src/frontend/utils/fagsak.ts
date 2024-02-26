@@ -5,6 +5,7 @@ import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visni
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';
+import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
     minimalFagsak.behandlinger.length === 0
@@ -48,9 +49,15 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
             )
         )
         .reduce((acc, utbetalingsperiode) => {
-            utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
-                acc.add(utbetalingsperiodeDetalj.person.personIdent)
-            );
+            utbetalingsperiode.utbetalingsperiodeDetaljer
+                .filter(
+                    utbetalingsperiodeDetalj =>
+                        utbetalingsperiodeDetalj.endringsårsak !==
+                        IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
+                )
+                .map(utbetalingsperiodeDetalj =>
+                    acc.add(utbetalingsperiodeDetalj.person.personIdent)
+                );
 
             return acc;
         }, new Set());
