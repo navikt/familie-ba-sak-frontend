@@ -22,8 +22,8 @@ export enum IEndretUtbetalingAndelÅrsak {
 
 export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
     DELT_BOSTED: 'Delt bosted',
-    ENDRE_MOTTAKER: 'Endre mottaker, begge foreldre rett. Opphør',
-    ALLEREDE_UTBETALT: 'Allerede utbetalt. Innvilge',
+    ENDRE_MOTTAKER: 'Endre mottaker, begge foreldre rett - opphør',
+    ALLEREDE_UTBETALT: 'Allerede utbetalt - innvilgelse',
     ETTERBETALING_3ÅR: 'Etterbetaling 3 år',
 };
 
