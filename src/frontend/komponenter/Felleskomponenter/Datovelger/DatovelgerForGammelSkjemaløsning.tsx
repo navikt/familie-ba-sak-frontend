@@ -41,7 +41,6 @@ const DatovelgerForGammelSkjemaløsning = ({
         defaultSelected: formatterDefaultSelected(),
         fromDate: minDatoAvgrensning ? minDatoAvgrensning : tidligsteRelevanteDato,
         toDate: maksDatoAvgrensning ? maksDatoAvgrensning : senesteRelevanteDato,
-        openOnFocus: false,
     });
 
     useEffect(() => {
