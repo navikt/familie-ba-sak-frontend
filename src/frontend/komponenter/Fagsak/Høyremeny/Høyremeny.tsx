@@ -47,6 +47,7 @@ const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
     return (
         <Container $erÅpen={åpenHøyremeny}>
             <ToggleVisningHøyremeny
+                forwardedAs={Button}
                 $åpenhøyremeny={true}
                 variant="secondary"
                 size="small"

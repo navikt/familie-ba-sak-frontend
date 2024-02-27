@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Combobox } from '@navikt/ds-react/esm/form/combobox';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import { opplysningsdokumenter } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
@@ -27,7 +27,7 @@ export const Dokumentvelger = () => {
 
     return (
         <Container>
-            <Combobox
+            <UNSAFE_Combobox
                 label="Velg dokumenter"
                 isMultiSelect
                 onToggleSelected={onToggleSelected}
