@@ -1794,13 +1794,13 @@
     "@navikt/familie-typer" "^8.0.2"
     "@navikt/fnrvalidator" "^1.3.1"
 
-"@navikt/familie-http@7.0.1", "@navikt/familie-http@^7.0.1":
-  version "7.0.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.1/fdc9aad38d1a2a108251023724a6c17d6bcbc181#fdc9aad38d1a2a108251023724a6c17d6bcbc181"
-  integrity sha512-z/3/O+ranRoLErhv95GSO3SQlw9derBsFcExMVVlRjQ50zXENAJaausdbn5EJ4dZHPYVMgBrpw0yNOi63zuyiw==
+"@navikt/familie-http@^7.0.3":
+  version "7.0.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.3/bcf01d1ceca7c4343a9477db0433cc1800af6939#bcf01d1ceca7c4343a9477db0433cc1800af6939"
+  integrity sha512-PPaSmyaqeSjmZkQ8zSpHN1qKdBDUi1u9Dkv6FiIWvnf4TihnONCPqcMaYkoLYMcz6gm7YZL4QlkZ7f4WKJVomA==
   dependencies:
     "@navikt/familie-typer" "^8.0.2"
-    "@sentry/core" "^7.99.0"
+    "@sentry/core" "^7.102.1"
     constate "^3.3.2"
 
 "@navikt/familie-ikoner@9.0.0":
@@ -1824,12 +1824,12 @@
   dependencies:
     winston "^3.11.0"
 
-"@navikt/familie-skjema@8.0.5":
-  version "8.0.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.0.5/e2d01e9ab14f4c9b34f7130db0d67625c58d6301#e2d01e9ab14f4c9b34f7130db0d67625c58d6301"
-  integrity sha512-06iyi9sOhphceeLCdJMJfV+8fWbFUApcTkCSjo6dEL4FDQG/GCpBtOMIAQImbkHXlT4E/tErx+3iiZhW8JyZBg==
+"@navikt/familie-skjema@8.0.8":
+  version "8.0.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.0.8/8dd5f292a35ebd64c9d224875e76e5c585457f79#8dd5f292a35ebd64c9d224875e76e5c585457f79"
+  integrity sha512-Ij5cVgaAdV+Va/C6LmRvo7+POKF5Jha7g9Q6hZRhoDFxOhD8eVfMIuoydTF6zthAodxySZFNj2hj62o8D/y4ow==
   dependencies:
-    "@navikt/familie-http" "^7.0.1"
+    "@navikt/familie-http" "^7.0.3"
     "@navikt/familie-typer" "^8.0.2"
     "@types/deep-equal" "^1.0.4"
     deep-equal "^2.2.3"
@@ -2263,7 +2263,7 @@
     "@sentry/cli-win32-i686" "2.22.3"
     "@sentry/cli-win32-x64" "2.22.3"
 
-"@sentry/core@7.103.0", "@sentry/core@^7.99.0":
+"@sentry/core@7.103.0":
   version "7.103.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.103.0.tgz#8f626362c96f9aa4b4a52042c431d16372491dc1"
   integrity sha512-LCI+PIDoF/RLqN41fNXum3ilmS6ukni6L7t38vSdibbe2G0804EbPLtOIpv2PkS8E6CFuRW5zOb+8OwEAAtZWw==
@@ -2278,6 +2278,14 @@
   dependencies:
     "@sentry/types" "7.83.0"
     "@sentry/utils" "7.83.0"
+
+"@sentry/core@^7.102.1":
+  version "7.104.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.104.0.tgz#2c6ce6eb6a84b8015bffb25e906407ec1d81a224"
+  integrity sha512-XPndD6IGQGd07/EntvYVzOWQUo/Gd7L3DwYFeEKeBv6ByWjbBNmVZFRhU0GPPsCHKyW9yMU9OO9diLSS4ijsRg==
+  dependencies:
+    "@sentry/types" "7.104.0"
+    "@sentry/utils" "7.104.0"
 
 "@sentry/node@^7.60.0":
   version "7.83.0"
@@ -2312,6 +2320,11 @@
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.103.0.tgz#f413f922216c97ec86bae39f9d527669d8afedbd"
   integrity sha512-NCvKyx8d2AGBQKPARrJemZmZ16DiMo688OEikZg4BbvFNDUzK5Egm2BH0vfLDhbNkU19o3maJowrYo42m8r9Zw==
 
+"@sentry/types@7.104.0":
+  version "7.104.0"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.104.0.tgz#f4458ede188b422827de71e605e7c1faf940103e"
+  integrity sha512-5bs0xe0+GZR4QBm9Nrqw59o0sv3kBtCosrZDVxBru/dQbrfnB+/kVorvuM0rV3+coNITTKcKDegSZmK1d2uOGQ==
+
 "@sentry/types@7.83.0":
   version "7.83.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.83.0.tgz#117e45900603190c547e52bba35e1b3d539d47fb"
@@ -2323,6 +2336,13 @@
   integrity sha512-phkUJt3F0UOkVq+M4GfdAh2ewI3ASrNiJddx9aO7GnT0aDwwVBHZltnqt95qgAB8W+BipTSt1dAh8yUbbq1Ceg==
   dependencies:
     "@sentry/types" "7.103.0"
+
+"@sentry/utils@7.104.0":
+  version "7.104.0"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.104.0.tgz#2dec1a3cf2c0bc17e1c14cffab056d5bff15f197"
+  integrity sha512-ZVg+xZirI9DlOi0NegNVocswdh/8p6QkzlQzDQY2LP2CC6JQdmwi64o0S4rPH4YIHNKQJTpIjduoxeKgd1EO5g==
+  dependencies:
+    "@sentry/types" "7.104.0"
 
 "@sentry/utils@7.83.0":
   version "7.83.0"
