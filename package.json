@@ -78,7 +78,7 @@
     "quill-delta": "^5.1.0"
   },
   "devDependencies": {
-    "@axe-core/react": "^4.8.1",
+    "@axe-core/react": "^4.8.5",
     "@babel/core": "^7.24.0",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-env": "^7.24.0",
