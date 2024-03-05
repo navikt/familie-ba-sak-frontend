@@ -94,7 +94,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
                 path="/vedtak"
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
-                        <VedtaksperioderProvider>
+                        <VedtaksperioderProvider åpenBehandling={behandling}>
                             <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
                         </VedtaksperioderProvider>
                     </SimuleringProvider>

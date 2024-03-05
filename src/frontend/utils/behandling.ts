@@ -1,5 +1,5 @@
 import { erProd } from './miljø';
-import type { IBehandling } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../typer/behandling';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
@@ -30,3 +30,14 @@ export const hentSøkersMålform = (behandling: IBehandling) =>
     })?.målform ?? Målform.NB;
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
+
+export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling) => {
+    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+
+    return (
+        åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
+        åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
+        åpenBehandling.årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID &&
+        !erMigreringFraInfotrygd
+    );
+};
