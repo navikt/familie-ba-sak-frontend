@@ -88,12 +88,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
-            <Vedtaksmeny
-                åpenBehandling={åpenBehandling}
-                erBehandlingMedVedtaksbrevutsending={erVedtaksbrevutsending}
-                visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
-                visRefusjonEøs={() => settVisRefusjonEøs(true)}
-            />
+            {åpenBehandling.status == BehandlingStatus.UTREDES && (
+                <Vedtaksmeny
+                    åpenBehandling={åpenBehandling}
+                    erBehandlingMedVedtaksbrevutsending={erVedtaksbrevutsending}
+                    visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
+                    visRefusjonEøs={() => settVisRefusjonEøs(true)}
+                />
+            )}
 
             <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
 
