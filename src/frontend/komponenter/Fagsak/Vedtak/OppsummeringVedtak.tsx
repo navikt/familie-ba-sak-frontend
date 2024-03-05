@@ -125,9 +125,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     };
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erSmåbarnstilleggEndringFramITid =
+        åpenBehandling.årsak === BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID;
     const erBehandlingMedVedtaksbrevutsending =
         åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
         åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
+        åpenBehandling.årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID &&
         !erMigreringFraInfotrygd;
 
     const hentInfostripeTekst = (årsak: BehandlingÅrsak, status: BehandlingStatus): string => {
@@ -262,6 +265,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 <Alert variant="info">
                     {`Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.`}
                 </Alert>
+            ) : erSmåbarnstilleggEndringFramITid ? (
+                <Alert variant="info">{`Du er inne på en behandling uten vedtaksbrev.`}</Alert>
             ) : (
                 <Alert variant="info">
                     {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}

@@ -75,6 +75,7 @@ export enum BehandlingÅrsak {
     ENDRE_MIGRERINGSDATO = 'ENDRE_MIGRERINGSDATO',
     HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
     OMREGNING_SMÅBARNSTILLEGG = 'OMREGNING_SMÅBARNSTILLEGG',
+    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID = 'SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID',
 }
 
 export const behandlingÅrsak: Record<
@@ -113,6 +114,7 @@ export const behandlingÅrsak: Record<
     FEIL_PROSESSUELL: 'Prosessuell feil',
     FEIL_REGELVERKSFORSTÅELSE: 'Feil regelverksforståelse',
     KØET_BEHANDLING: 'Køet behandling',
+    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID: 'Småbarnstillegg med endring fram i tid',
 };
 
 export enum BehandlingSteg {
