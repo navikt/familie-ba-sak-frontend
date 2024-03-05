@@ -12,7 +12,7 @@ import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
-import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingStatus, type IBehandling } from '../../../typer/behandling';
 import { Behandlingstype } from '../../../typer/behandling';
 import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { FagsakType } from '../../../typer/fagsak';
@@ -87,7 +87,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             </Dropdown.Menu.List.Item>
                         )}
                     {fagsakType === FagsakType.NORMAL &&
-                        vedtakHarFortsattUtbetaling(åpenBehandling.resultat) && (
+                        vedtakHarFortsattUtbetaling(åpenBehandling.resultat) &&
+                        åpenBehandling.status != BehandlingStatus.AVSLUTTET && (
                             <Dropdown.Menu.List.Item onClick={visRefusjonEøs}>
                                 <StarsEuIcon fontSize={'1.4rem'} />
                                 Legg til refusjon EØS
