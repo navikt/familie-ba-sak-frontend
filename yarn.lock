@@ -1870,6 +1870,11 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/1.3.1/342f97429038c439ad477c4ce7800fe59e8018d1#342f97429038c439ad477c4ce7800fe59e8018d1"
   integrity sha512-z9iH10PIFiFb88LQt8EcEC0eCiuzTnG9kaZkjjji5eKwK7Fq7MU3D7NgaqdZTakaj1JgXc6fd73tCC+sHXmrPw==
 
+"@navikt/fnrvalidator@^2.0.1":
+  version "2.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.0.1/57de4e00f3f1ed9f545b5d6de552b3801d946553#57de4e00f3f1ed9f545b5d6de552b3801d946553"
+  integrity sha512-1TKLW3YgQD6P6FEZix7FO4YnrGkN6VjFX5mYyBfQXoq6DiskUMe50e0JX6OaGGp/OPt+pK3vUzqktzrWWQvTbA==
+
 "@navikt/hoykontrast@^3.1.0":
   version "3.1.0"
   resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.1.0/a57192249058e44959c3004e3551cfd8cde30c56aae5e9789602dce37459ecd2#ed7182afd5158872c8d87d6dbe87316f51e99388"
