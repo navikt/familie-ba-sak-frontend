@@ -13,6 +13,7 @@ import {
     behandlingsresultater,
     BehandlingStatus,
     behandlingstyper,
+    BehandlingÅrsak,
     behandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../typer/behandling';
@@ -48,7 +49,7 @@ export type Saksoversiktsbehandling =
           saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE;
       });
 
-export const skalRadVises = (
+export const skalHenlagtBehandlingVises = (
     behandling: Saksoversiktsbehandling,
     visHenlagteBehandlinger: boolean
 ): boolean => {
@@ -58,6 +59,15 @@ export const skalRadVises = (
         return !erBehandlingHenlagt(behandling.resultat);
     }
     return Behandlingsresultatstype.HENLAGT !== behandling.resultat;
+};
+
+export const skalMånedligValutajusteringVises = (
+    behandling: Saksoversiktsbehandling,
+    visMånedligValutajusteringer: boolean
+): boolean => {
+    if (visMånedligValutajusteringer) return true;
+
+    return behandling.årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING;
 };
 
 export const hentOpprettetTidspunkt = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
