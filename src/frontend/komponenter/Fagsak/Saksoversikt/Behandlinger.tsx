@@ -20,7 +20,6 @@ import { isoStringTilDate } from '../../../utils/dato';
 
 const StyledSwitch = styled(Switch)`
     margin-right: 0.275rem;
-    bottom: 0;
 `;
 
 const StyledFieldSet = styled(Fieldset)`
