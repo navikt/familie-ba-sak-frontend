@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
-import { BodyShort, Fieldset, Heading, Switch, Table } from '@navikt/ds-react';
+import { BodyShort, Fieldset, Heading, HStack, Spacer, Switch, Table } from '@navikt/ds-react';
 
 import { Behandling } from './Behandling';
 import type { Saksoversiktsbehandling } from './utils';
@@ -20,14 +20,21 @@ import { isoStringTilDate } from '../../../utils/dato';
 
 const StyledSwitch = styled(Switch)`
     margin-right: 0.275rem;
+    bottom: 0;
 `;
 
 const StyledFieldSet = styled(Fieldset)`
     float: right;
+    display: flex;
+    flex-direction: column;
 `;
 
 const StyledHeading = styled(Heading)`
     margin-top: 3.75rem;
+`;
+
+const StyledDiv = styled.div`
+    margin-top: auto;
 `;
 
 const StyledOpprettetKolonne = styled(Table.HeaderCell)`
@@ -61,37 +68,44 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <StyledHeading level="2" size={'medium'} spacing>
-                Behandlinger
-                <StyledFieldSet legend="Filtreringer på behandlinger" hideLegend>
-                    {finnesHenlagteBehandlingerSomKanFiltreresBort && (
-                        <StyledSwitch
-                            size="small"
-                            position="left"
-                            id={'vis-henlagte-behandlinger'}
-                            checked={visHenlagteBehandlinger}
-                            onChange={() => {
-                                setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                            }}
-                        >
-                            Vis henlagte behandlinger
-                        </StyledSwitch>
-                    )}
-                    {finnesMånedligValutajusteringerSomKanFiltreresBort && (
-                        <StyledSwitch
-                            size="small"
-                            position="left"
-                            id={'vis-månedlig-valutajustering-behandlinger'}
-                            checked={visMånedligeValutajusteringer}
-                            onChange={() => {
-                                setVisMånedligeValutajusteringer(!visMånedligeValutajusteringer);
-                            }}
-                        >
-                            Vis månedlig valutajustering behandlinger
-                        </StyledSwitch>
-                    )}
-                </StyledFieldSet>
-            </StyledHeading>
+            <HStack gap="3" wrap={false}>
+                <StyledHeading level="2" size={'medium'} spacing>
+                    Behandlinger
+                </StyledHeading>
+                <Spacer />
+                <StyledDiv>
+                    <StyledFieldSet legend="Filtreringer på behandlinger" hideLegend>
+                        {finnesHenlagteBehandlingerSomKanFiltreresBort && (
+                            <StyledSwitch
+                                size="small"
+                                position="left"
+                                id={'vis-henlagte-behandlinger'}
+                                checked={visHenlagteBehandlinger}
+                                onChange={() => {
+                                    setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
+                                }}
+                            >
+                                Vis henlagte behandlinger
+                            </StyledSwitch>
+                        )}
+                        {finnesMånedligValutajusteringerSomKanFiltreresBort && (
+                            <StyledSwitch
+                                size="small"
+                                position="left"
+                                id={'vis-månedlig-valutajustering-behandlinger'}
+                                checked={visMånedligeValutajusteringer}
+                                onChange={() => {
+                                    setVisMånedligeValutajusteringer(
+                                        !visMånedligeValutajusteringer
+                                    );
+                                }}
+                            >
+                                Vis månedlig valutajusteringer
+                            </StyledSwitch>
+                        )}
+                    </StyledFieldSet>
+                </StyledDiv>
+            </HStack>
             {behandlinger.length > 0 ? (
                 <Table size={'large'}>
                     <Table.Header>
