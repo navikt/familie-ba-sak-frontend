@@ -34,11 +34,15 @@ export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling) => {
     const { type, årsak } = åpenBehandling;
 
-    const erBehandlingÅrsakUtenBrevutsending =
-        årsak in [BehandlingÅrsak.SATSENDRING, BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID];
+    const erBehandlingÅrsakUtenBrevutsending = [
+        BehandlingÅrsak.SATSENDRING,
+        BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID,
+    ].includes(årsak);
 
-    const erBehanldingTypeUtenBrevutsenting =
-        type in [Behandlingstype.MIGRERING_FRA_INFOTRYGD, Behandlingstype.TEKNISK_ENDRING];
+    const erBehanldingTypeUtenBrevutsenting = [
+        Behandlingstype.MIGRERING_FRA_INFOTRYGD,
+        Behandlingstype.TEKNISK_ENDRING,
+    ].includes(type);
 
     return !erBehanldingTypeUtenBrevutsenting && !erBehandlingÅrsakUtenBrevutsending;
 };
