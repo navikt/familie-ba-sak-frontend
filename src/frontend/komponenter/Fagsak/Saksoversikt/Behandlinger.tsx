@@ -23,7 +23,6 @@ const StyledSwitch = styled(Switch)`
 `;
 
 const StyledFieldSet = styled(Fieldset)`
-    float: right;
     display: flex;
     flex-direction: column;
 `;
