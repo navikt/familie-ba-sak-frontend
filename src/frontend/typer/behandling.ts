@@ -76,6 +76,7 @@ export enum BehandlingÅrsak {
     HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
     OMREGNING_SMÅBARNSTILLEGG = 'OMREGNING_SMÅBARNSTILLEGG',
     SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID = 'SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID',
+    MÅNEDLIG_VALUTAJUSTERING = 'MÅNEDLIG_VALUTAJUSTERING',
 }
 
 export const behandlingÅrsak: Record<
@@ -107,6 +108,7 @@ export const behandlingÅrsak: Record<
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
     REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
         'Feilutbetalt beløp helt eller delvis bortfalt',
+    MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
 
     /** Klage: **/
     ANNET: 'Annet',
