@@ -7,6 +7,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -67,8 +68,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         );
     };
 
-    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erVedtaksbrevutsending = erBehandlingMedVedtaksbrevutsending(åpenBehandling);
+
+    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
         <StyledSkjemaSteg
@@ -88,16 +90,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
-            {åpenBehandling.status == BehandlingStatus.UTREDES && (
-                <Vedtaksmeny
-                    åpenBehandling={åpenBehandling}
-                    erBehandlingMedVedtaksbrevutsending={erVedtaksbrevutsending}
-                    visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
-                    visRefusjonEøs={() => settVisRefusjonEøs(true)}
-                />
+            {erVedtaksbrevutsending ? (
+                <>
+                    <Vedtaksmeny
+                        åpenBehandling={åpenBehandling}
+                        visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
+                        visRefusjonEøs={() => settVisRefusjonEøs(true)}
+                    />
+                    <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
+                </>
+            ) : (
+                <Vedtaksalert åpenBehandling={åpenBehandling} />
             )}
-
-            <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
 
             {visModal && <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />}
         </StyledSkjemaSteg>

@@ -18,13 +18,11 @@ import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
-    Behandlingstype,
     BehandlingÅrsak,
     hentStegNummer,
     type IBehandling,
 } from '../../../typer/behandling';
 import type { IPersonInfo } from '../../../typer/person';
-import { erBehandlingMedVedtaksbrevutsending } from '../../../utils/behandling';
 import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -55,11 +53,6 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
     } = useVedtaksperioder();
 
     const erLesevisning = vurderErLesevisning();
-
-    const erVedtaksbrevutsending = erBehandlingMedVedtaksbrevutsending(åpenBehandling);
-
-    const erSmåbarnstilleggEndringFramITid =
-        åpenBehandling.årsak === BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID;
 
     const hentInfostripeTekst = (årsak: BehandlingÅrsak, status: BehandlingStatus): string => {
         if (status === BehandlingStatus.AVSLUTTET) {
@@ -92,26 +85,6 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
             url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
         });
     };
-
-    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-
-    if (!erVedtaksbrevutsending) {
-        if (erMigreringFraInfotrygd) {
-            return (
-                <Alert variant="info">
-                    Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.
-                </Alert>
-            );
-        } else if (erSmåbarnstilleggEndringFramITid) {
-            return <Alert variant="info">Du er inne på en behandling uten vedtaksbrev.</Alert>;
-        } else {
-            return (
-                <Alert variant="info">
-                    Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.
-                </Alert>
-            );
-        }
-    }
 
     return (
         <>
