@@ -95,6 +95,7 @@ export const behandlingÅrsak: Record<
     OMREGNING_18ÅR: 'Omregning 18 år',
     OMREGNING_SMÅBARNSTILLEGG: 'Omregning småbarnstillegg',
     SMÅBARNSTILLEGG: 'Småbarnstillegg',
+    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID: 'Småbarnstillegg med endring fram i tid',
     SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
     ENDRE_MIGRERINGSDATO: 'Endre migreringsdato',
@@ -114,7 +115,6 @@ export const behandlingÅrsak: Record<
     FEIL_PROSESSUELL: 'Prosessuell feil',
     FEIL_REGELVERKSFORSTÅELSE: 'Feil regelverksforståelse',
     KØET_BEHANDLING: 'Køet behandling',
-    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID: 'Småbarnstillegg med endring fram i tid',
 };
 
 export enum BehandlingSteg {
