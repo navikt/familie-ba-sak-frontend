@@ -32,12 +32,13 @@ export const hentSøkersMålform = (behandling: IBehandling) =>
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
 export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling) => {
-    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const { type, årsak } = åpenBehandling;
 
-    return (
-        åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
-        åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
-        åpenBehandling.årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID &&
-        !erMigreringFraInfotrygd
-    );
+    const erBehandlingÅrsakUtenBrevutsending =
+        årsak in [BehandlingÅrsak.SATSENDRING, BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID];
+
+    const erBehanldingTypeUtenBrevutsenting =
+        type in [Behandlingstype.REVURDERING, Behandlingstype.TEKNISK_ENDRING];
+
+    return !erBehanldingTypeUtenBrevutsenting && !erBehandlingÅrsakUtenBrevutsending;
 };
