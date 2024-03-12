@@ -99,7 +99,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                     );
                                 }}
                             >
-                                Vis månedlig valutajusteringer
+                                Vis månedlige valutajusteringer
                             </StyledSwitch>
                         )}
                     </StyledFieldSet>
