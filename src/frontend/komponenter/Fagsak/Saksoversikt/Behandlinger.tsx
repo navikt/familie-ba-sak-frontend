@@ -11,8 +11,8 @@ import {
     hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
     hentTidspunktforSortering,
-    skalHenlagtBehandlingVises,
-    skalMånedligValutajusteringVises,
+    skalVisesNårHenlagtBehandlingerSkjules,
+    skalVisesNårMånedligeValutajusteringerSkjules,
 } from './utils';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
@@ -54,12 +54,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
     const behandlinger = hentBehandlingerTilSaksoversikten(minimalFagsak, klagebehandlinger);
 
     const finnesHenlagteBehandlingerSomKanFiltreresBort = behandlinger.some(
-        (behandling: Saksoversiktsbehandling) => !skalHenlagtBehandlingVises(behandling, false)
+        (behandling: Saksoversiktsbehandling) =>
+            !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
     );
 
     const finnesMånedligValutajusteringerSomKanFiltreresBort = behandlinger.some(
         (behandling: Saksoversiktsbehandling) =>
-            !skalMånedligValutajusteringVises(behandling, false)
+            !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
     );
 
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
@@ -120,14 +121,16 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </Table.Header>
                     <Table.Body>
                         {behandlinger
-                            .filter(behandling =>
-                                skalHenlagtBehandlingVises(behandling, visHenlagteBehandlinger)
-                            )
-                            .filter(behandling =>
-                                skalMånedligValutajusteringVises(
-                                    behandling,
-                                    visMånedligeValutajusteringer
-                                )
+                            .filter(
+                                behandling =>
+                                    skalVisesNårHenlagtBehandlingerSkjules(
+                                        behandling,
+                                        visHenlagteBehandlinger
+                                    ) &&
+                                    skalVisesNårMånedligeValutajusteringerSkjules(
+                                        behandling,
+                                        visMånedligeValutajusteringer
+                                    )
                             )
                             .sort((a, b) =>
                                 differenceInMilliseconds(

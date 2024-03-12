@@ -49,7 +49,7 @@ export type Saksoversiktsbehandling =
           saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE;
       });
 
-export const skalHenlagtBehandlingVises = (
+export const skalVisesNårHenlagtBehandlingerSkjules = (
     behandling: Saksoversiktsbehandling,
     visHenlagteBehandlinger: boolean
 ): boolean => {
@@ -61,7 +61,7 @@ export const skalHenlagtBehandlingVises = (
     return Behandlingsresultatstype.HENLAGT !== behandling.resultat;
 };
 
-export const skalMånedligValutajusteringVises = (
+export const skalVisesNårMånedligeValutajusteringerSkjules = (
     behandling: Saksoversiktsbehandling,
     visMånedligValutajusteringer: boolean
 ): boolean => {
