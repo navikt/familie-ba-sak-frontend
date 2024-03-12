@@ -126,7 +126,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                     skalVisesNårHenlagtBehandlingerSkjules(
                                         behandling,
                                         visHenlagteBehandlinger
-                                    ) &&
+                                    ) ||
                                     skalVisesNårMånedligeValutajusteringerSkjules(
                                         behandling,
                                         visMånedligeValutajusteringer
