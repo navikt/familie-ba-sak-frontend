@@ -75,6 +75,7 @@ export enum BehandlingÅrsak {
     ENDRE_MIGRERINGSDATO = 'ENDRE_MIGRERINGSDATO',
     HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
     OMREGNING_SMÅBARNSTILLEGG = 'OMREGNING_SMÅBARNSTILLEGG',
+    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID = 'SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID',
     MÅNEDLIG_VALUTAJUSTERING = 'MÅNEDLIG_VALUTAJUSTERING',
 }
 
@@ -95,6 +96,7 @@ export const behandlingÅrsak: Record<
     OMREGNING_18ÅR: 'Omregning 18 år',
     OMREGNING_SMÅBARNSTILLEGG: 'Omregning småbarnstillegg',
     SMÅBARNSTILLEGG: 'Småbarnstillegg',
+    SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID: 'Småbarnstillegg med endring fram i tid',
     SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
     ENDRE_MIGRERINGSDATO: 'Endre migreringsdato',

@@ -12,15 +12,13 @@ import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
-import type { IBehandling } from '../../../typer/behandling';
-import { Behandlingstype } from '../../../typer/behandling';
+import { Behandlingstype, type IBehandling } from '../../../typer/behandling';
 import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { FagsakType } from '../../../typer/fagsak';
 import { vedtakHarFortsattUtbetaling } from '../../../utils/vedtakUtils';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
-    erBehandlingMedVedtaksbrevutsending: boolean;
     visFeilutbetaltValuta: () => void;
     visRefusjonEøs: () => void;
 }
@@ -37,7 +35,6 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
 
 const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
-    erBehandlingMedVedtaksbrevutsending,
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
@@ -62,20 +59,16 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
             </KnappHøyreHjørne>
             <StyledDropdownMeny>
                 <Dropdown.Menu.List>
-                    {erBehandlingMedVedtaksbrevutsending && (
-                        <>
-                            <KorrigerEtterbetaling
-                                erLesevisning={erLesevisning}
-                                korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
-                                behandlingId={åpenBehandling.behandlingId}
-                            />
-                            <KorrigerVedtak
-                                erLesevisning={erLesevisning}
-                                korrigertVedtak={åpenBehandling.korrigertVedtak}
-                                behandlingId={åpenBehandling.behandlingId}
-                            />
-                        </>
-                    )}
+                    <KorrigerEtterbetaling
+                        erLesevisning={erLesevisning}
+                        korrigertEtterbetaling={åpenBehandling.korrigertEtterbetaling}
+                        behandlingId={åpenBehandling.behandlingId}
+                    />
+                    <KorrigerVedtak
+                        erLesevisning={erLesevisning}
+                        korrigertVedtak={åpenBehandling.korrigertVedtak}
+                        behandlingId={åpenBehandling.behandlingId}
+                    />
 
                     <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
