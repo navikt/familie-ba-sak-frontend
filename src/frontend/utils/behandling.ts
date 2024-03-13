@@ -39,10 +39,10 @@ export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling
         BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID,
     ].includes(årsak);
 
-    const erBehanldingTypeUtenBrevutsenting = [
+    const erBehandlingTypeUtenBrevutsending = [
         Behandlingstype.MIGRERING_FRA_INFOTRYGD,
         Behandlingstype.TEKNISK_ENDRING,
     ].includes(type);
 
-    return !erBehanldingTypeUtenBrevutsenting && !erBehandlingÅrsakUtenBrevutsending;
+    return !erBehandlingTypeUtenBrevutsending && !erBehandlingÅrsakUtenBrevutsending;
 };
