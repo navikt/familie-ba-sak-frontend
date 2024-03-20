@@ -37,6 +37,7 @@ export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling
     const erBehandlingÅrsakUtenBrevutsending = [
         BehandlingÅrsak.SATSENDRING,
         BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID,
+        BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING,
     ].includes(årsak);
 
     const erBehandlingTypeUtenBrevutsending = [
