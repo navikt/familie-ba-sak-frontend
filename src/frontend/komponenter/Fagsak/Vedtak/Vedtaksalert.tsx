@@ -12,6 +12,7 @@ export const Vedtaksalert: React.FunctionComponent<Props> = ({ åpenBehandling }
     const erSmåbarnstilleggEndringFramITid =
         åpenBehandling.årsak === BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID;
     const erSatsendring = åpenBehandling.årsak === BehandlingÅrsak.SATSENDRING;
+    const erValutajustering = åpenBehandling.årsak === BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING;
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     if (erMigreringFraInfotrygd) {
@@ -20,7 +21,7 @@ export const Vedtaksalert: React.FunctionComponent<Props> = ({ åpenBehandling }
                 Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.
             </Alert>
         );
-    } else if (erSmåbarnstilleggEndringFramITid || erSatsendring) {
+    } else if (erSmåbarnstilleggEndringFramITid || erSatsendring || erValutajustering) {
         return <Alert variant="info">Du er inne på en behandling uten vedtaksbrev.</Alert>;
     } else {
         return (
