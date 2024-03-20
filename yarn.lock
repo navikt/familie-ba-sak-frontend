@@ -2145,10 +2145,10 @@
     "@sentry/types" "7.106.1"
     "@sentry/utils" "7.106.1"
 
-"@sentry/babel-plugin-component-annotate@2.15.0":
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-2.15.0.tgz#9988ec28244bcc560e8a469d471bd8817256d5f4"
-  integrity sha512-4AaRN2E1iqOPlceDE5ae4thnq717reEQkqOslSWpJf7FmJ+oDrp2bWQhO82xcW8ZBBMbtkOGw2wmrScq5TnMxw==
+"@sentry/babel-plugin-component-annotate@2.16.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-2.16.0.tgz#c831713b85516fb3f9da2985836ddf444dc634e6"
+  integrity sha512-+uy1qPkA5MSNgJ0L9ur/vNTydfdHwHnBX2RQ+0thsvkqf90fU788YjkkXwUiBBNuqNyI69JiOW6frixAWy7oUg==
 
 "@sentry/browser@^7.106.1":
   version "7.106.1"
@@ -2163,13 +2163,13 @@
     "@sentry/types" "7.106.1"
     "@sentry/utils" "7.106.1"
 
-"@sentry/bundler-plugin-core@2.15.0":
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.15.0.tgz#1192040eea7d111ebfb74c215ab4bf54704bf1ee"
-  integrity sha512-K6tEmo6ilUdR5uEQZ4P1uaXCvRoAeq5JsJAg7lRv0JSG5XG67jhoHu+mrpiDMB93FxbTgCQkPCT87Z0Bmqpmew==
+"@sentry/bundler-plugin-core@2.16.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.16.0.tgz#0c33e7a054fb56e43bd160ac141f71dfebf6dda5"
+  integrity sha512-dhgIZsIR3L9KnE2OO5JJm6hPtStAjEPYKQsZzxRr69uVhd9xAvfXeXr0afKVNVEcIDksas6yMgHqwQ2wOXFIAg==
   dependencies:
     "@babel/core" "^7.18.5"
-    "@sentry/babel-plugin-component-annotate" "2.15.0"
+    "@sentry/babel-plugin-component-annotate" "2.16.0"
     "@sentry/cli" "^2.22.3"
     dotenv "^16.3.1"
     find-up "^5.0.0"
@@ -2268,12 +2268,12 @@
   dependencies:
     "@sentry/types" "7.106.1"
 
-"@sentry/webpack-plugin@^2.15.0":
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.15.0.tgz#616b20efe30ceba5688a540193b52400a7f14b91"
-  integrity sha512-rsm6lGVz+uyvRVMJ+3TpC6k8qYKjpulLQMtbefq2CSqBKRupAWmtPVxPzrTspUtYPyCmA3P26mnYowi9hKTVEg==
+"@sentry/webpack-plugin@^2.16.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.16.0.tgz#4764577edb10c9575a8b4ce03135493f995f56b9"
+  integrity sha512-BeKLmtK4OD9V3j92fm/lm6yp+++s2U5Uf17HwNFGt39PEOq+wUDISsx0dhXA5Qls2Bg3WhguDK71blCaVefMeg==
   dependencies:
-    "@sentry/bundler-plugin-core" "2.15.0"
+    "@sentry/bundler-plugin-core" "2.16.0"
     unplugin "1.0.1"
     uuid "^9.0.0"
 
