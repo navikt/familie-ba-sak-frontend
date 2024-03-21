@@ -9,8 +9,10 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
+import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
+import { useApp } from '../../../context/AppContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import {
@@ -20,6 +22,7 @@ import {
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
@@ -48,6 +51,7 @@ const StyledAlert = styled(Alert)`
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
+    const { toggles } = useApp();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -177,6 +181,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             <Tabs.Panel value={basakTab.key}>
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
+
+                    {toggles[ToggleNavn.kanStarteValutajustering] &&
+                        minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
+                            <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
+                        )}
 
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                     {minimalFagsak.status === FagsakStatus.LØPENDE && (
