@@ -30,6 +30,7 @@ import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
