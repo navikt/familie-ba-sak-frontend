@@ -17,6 +17,7 @@ export const genererIdBasertPåAndreFritekster = (fritekster?: Felt<FeltState<IF
 export const lagInitiellFritekst = (
     initiellVerdi: string,
     id: number,
+    makslengde: number,
     valideringsmelding?: string
 ): FeltState<IFritekstFelt> => ({
     feilmelding: initiellVerdi === '' ? 'Fritekstfeltet er tomt.' : '',
@@ -25,8 +26,8 @@ export const lagInitiellFritekst = (
         id: id,
     },
     valider: (felt: FeltState<IFritekstFelt>) => {
-        if (felt.verdi.tekst.length > 220) {
-            return feil(felt, 'Du har nådd maks antall tegn: 220.');
+        if (felt.verdi.tekst.length > makslengde) {
+            return feil(felt, `Du har nådd maks antall tegn: ${makslengde}.`);
         } else if (felt.verdi.tekst.trim().length === 0) {
             return feil(
                 felt,

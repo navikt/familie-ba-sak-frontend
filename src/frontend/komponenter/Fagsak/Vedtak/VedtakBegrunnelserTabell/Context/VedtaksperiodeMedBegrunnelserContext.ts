@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
 
         const maksAntallKulepunkter = 3;
-        const makslengdeFritekst = 220;
+        const makslengdeFritekst = 350;
 
         const periode = useFelt<IIsoDatoPeriode>({
             verdi: {
@@ -101,7 +101,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
 
             skjema.felter.fritekster.validerOgSettFelt(
                 vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
-                    lagInitiellFritekst(fritekst, id)
+                    lagInitiellFritekst(fritekst, id, makslengdeFritekst)
                 )
             );
         };
@@ -203,7 +203,11 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const leggTilFritekst = () => {
             skjema.felter.fritekster.validerOgSettFelt([
                 ...skjema.felter.fritekster.verdi,
-                lagInitiellFritekst('', genererIdBasertPåAndreFritekster(skjema.felter.fritekster)),
+                lagInitiellFritekst(
+                    '',
+                    genererIdBasertPåAndreFritekster(skjema.felter.fritekster),
+                    makslengdeFritekst
+                ),
             ]);
         };
 

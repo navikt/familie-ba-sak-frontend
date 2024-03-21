@@ -44,7 +44,11 @@ const KanSøkeFritekst = ({
     const leggTilFritekst = () => {
         friteksterFelt.validerOgSettFelt([
             ...friteksterFelt.verdi,
-            lagInitiellFritekst('', genererIdBasertPåAndreFritekster(friteksterFelt)),
+            lagInitiellFritekst(
+                '',
+                genererIdBasertPåAndreFritekster(friteksterFelt),
+                makslengdeFritekst
+            ),
         ]);
     };
 
