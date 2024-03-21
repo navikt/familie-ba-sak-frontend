@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
-import { GjenomførValutajusteringKnapp } from './GjenomførValutajusteringKnapp';
+import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 import { useApp } from '../../../context/AppContext';
@@ -184,7 +184,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
                     {toggles[ToggleNavn.kanStarteValutajustering] &&
                         minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
-                            <GjenomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
+                            <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
                         )}
 
                     <FagsakLenkepanel minimalFagsak={minimalFagsak} />

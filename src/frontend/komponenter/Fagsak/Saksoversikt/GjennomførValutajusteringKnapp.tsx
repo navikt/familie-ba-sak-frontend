@@ -17,7 +17,7 @@ const StyledButton = styled(Button)`
     margin-top: 1rem;
 `;
 
-export const GjenomførValutajusteringKnapp: React.FunctionComponent<Props> = ({ fagsakId }) => {
+export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = ({ fagsakId }) => {
     const { request } = useHttp();
     const { settMinimalFagsak } = useFagsakContext();
     const [visFeilmelidng, settVisFeilmelding] = useState(false);
