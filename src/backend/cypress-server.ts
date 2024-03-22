@@ -3,6 +3,7 @@ import path from 'path';
 import type { Express, Request, Response } from 'express';
 // eslint-disable-next-line
 import express from 'express';
+import RateLimit from 'express-rate-limit';
 import expressStaticGzip from 'express-static-gzip';
 
 import { logInfo } from '@navikt/familie-logging';
@@ -17,9 +18,18 @@ import {
 } from './mock-data';
 import type { IKlagebehandling } from '../frontend/typer/klage';
 
+// set up rate limiter: maximum of five requests per minute
+
 const port = 8000;
 
 const app: Express = express();
+const limiter = RateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // max 100 requests per windowMs
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
 
