@@ -16,6 +16,7 @@ const mockBegrunnelse = (): IRestVedtaksbegrunnelse => {
     return {
         standardbegrunnelse: 'Test',
         vedtakBegrunnelseType: VedtakBegrunnelseType.INNVILGET,
+        støtterFritekst: false,
     };
 };
 
