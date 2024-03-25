@@ -18,6 +18,7 @@ export interface IVedtaksperiodeMedBegrunnelser {
 export interface IRestVedtaksbegrunnelse {
     standardbegrunnelse: VedtakBegrunnelse;
     vedtakBegrunnelseType: VedtakBegrunnelseType;
+    støtterFritekst: boolean;
 }
 
 export interface IRestPutVedtaksperiodeMedFritekster {
