@@ -38,6 +38,7 @@ import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { erAlfanumerisk } from '../utils/commons';
 import { isoStringTilDate } from '../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 
@@ -152,6 +153,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             bruker: useFelt<IPersonInfo | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: (felt: FeltState<IPersonInfo | undefined>) => {
+                    if (felt?.verdi?.personIdent && !erAlfanumerisk(felt.verdi.personIdent)) {
+                        return feil(felt, 'Brukers ident er ikke gyldig');
+                    }
+
                     return felt.verdi !== undefined ? ok(felt) : feil(felt, 'Bruker er ikke satt');
                 },
             }),
@@ -163,6 +168,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             avsenderIdent: useFelt<string>({
                 verdi: '',
+                valideringsfunksjon: (felt: FeltState<string>) => {
+                    return erAlfanumerisk(felt.verdi)
+                        ? ok(felt)
+                        : feil(felt, 'Avsenders ident er ikke gyldig');
+                },
             }),
             knyttTilNyBehandling,
             behandlingstype,

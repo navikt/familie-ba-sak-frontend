@@ -33,3 +33,8 @@ export function partition<T>(predicate: (val: T) => boolean, arr: Array<T>): [Ar
     });
     return partitioned;
 }
+
+export function erAlfanumerisk(str: string) {
+    const regex = /^[a-zæøåA-ZÆØÅ0-9]*$/;
+    return regex.test(str);
+}
