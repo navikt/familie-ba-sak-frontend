@@ -18,7 +18,7 @@ const Environment = () => {
             buildPath: 'frontend_development',
             namespace: 'local',
             proxyUrl: 'https://familie-ba-sak.intern.dev.nav.no/api',
-            familieTilbakeUrl: 'https://familie-tilbake.intern.dev.nav.no',
+            familieTilbakeUrl: 'https://familie-tilbake-frontend.intern.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
