@@ -53,14 +53,13 @@ export const doEndringslogProxy: any = () => {
 export const doRedirectProxy = () => {
     return (req: Request, res: Response) => {
         const urlKey = Object.keys(redirectRecords).find(k => req.originalUrl.includes(k));
-        let newUrl;
         if (urlKey) {
-            newUrl = req.originalUrl.replace(urlKey, redirectRecords[urlKey]);
+            const basePath = redirectRecords[urlKey];
+            const path = req.originalUrl.replace(urlKey, '');
             stdoutLogger.info(`Redirect ${urlKey} -> ${redirectRecords[urlKey]}`);
-            res.redirect(newUrl);
+            res.redirect(basePath + path);
         } else {
             console.log(`Ustøttet redirect: ${req.originalUrl}`);
-            newUrl = req.originalUrl;
             res.sendStatus(404);
         }
     };
