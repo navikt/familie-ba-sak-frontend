@@ -30,7 +30,7 @@ export const doProxy: any = () => {
 };
 
 // eslint-disable-next-line
-export const doEndringslogProxy: any = () => {
+export const doEndringsloggProxy: any = () => {
     return createProxyMiddleware({
         changeOrigin: true,
         on: { proxyReq: restream },
