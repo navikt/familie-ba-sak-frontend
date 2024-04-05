@@ -67,11 +67,6 @@ export const sessionConfig: ISessionKonfigurasjon = {
     sessionMaxAgeSekunder: 12 * 60 * 60,
 };
 
-export const saksbehandlerConfig: IApi = {
-    clientId: appConfig.clientId,
-    scopes: [`${appConfig.clientId}/.default`],
-};
-
 if (!process.env.BA_SAK_SCOPE) {
     throw new Error('Scope mot familie-ba-sak er ikke konfigurert');
 }
@@ -88,7 +83,6 @@ export const oboConfig: IApi = {
 export const buildPath = env.buildPath;
 export const proxyUrl = env.proxyUrl;
 export const endringsloggProxyUrl = env.endringsloggProxyUrl;
-export const namespace = env.namespace;
 
 export const redirectRecords: Record<string, string> = {
     '/redirect/familie-tilbake': env.familieTilbakeUrl,
