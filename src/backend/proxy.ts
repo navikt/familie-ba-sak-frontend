@@ -20,33 +20,23 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
 
 // eslint-disable-next-line
 export const doProxy: any = () => {
-    return createProxyMiddleware('/familie-ba-sak/api', {
+    return createProxyMiddleware({
         changeOrigin: true,
-        logLevel: 'info',
-        onProxyReq: restream,
-        pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/familie-ba-sak/api', '');
-            return `/api${newPath}`;
-        },
+        on: { proxyReq: restream },
         secure: true,
         target: `${proxyUrl}`,
-        logProvider: () => stdoutLogger,
+        logger: stdoutLogger,
     });
 };
 
 // eslint-disable-next-line
-export const doEndringslogProxy: any = () => {
-    return createProxyMiddleware('/endringslogg', {
+export const doEndringsloggProxy: any = () => {
+    return createProxyMiddleware({
         changeOrigin: true,
-        logLevel: 'info',
-        onProxyReq: restream,
-        pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/endringslogg', '');
-            return `${newPath}`;
-        },
+        on: { proxyReq: restream },
         secure: true,
         target: `${endringsloggProxyUrl}`,
-        logProvider: () => stdoutLogger,
+        logger: stdoutLogger,
     });
 };
 
