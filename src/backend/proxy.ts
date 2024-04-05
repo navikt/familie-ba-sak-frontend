@@ -31,17 +31,12 @@ export const doProxy: any = () => {
 
 // eslint-disable-next-line
 export const doEndringslogProxy: any = () => {
-    return createProxyMiddleware('/endringslogg', {
+    return createProxyMiddleware({
         changeOrigin: true,
-        logLevel: 'info',
-        onProxyReq: restream,
-        pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/endringslogg', '');
-            return `${newPath}`;
-        },
+        on: { proxyReq: restream },
         secure: true,
         target: `${endringsloggProxyUrl}`,
-        logProvider: () => stdoutLogger,
+        logger: stdoutLogger,
     });
 };
 
