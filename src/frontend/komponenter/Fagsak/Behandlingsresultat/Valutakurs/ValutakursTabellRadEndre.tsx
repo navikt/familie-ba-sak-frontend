@@ -3,18 +3,17 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Link, Heading, Button, Fieldset, TextField } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, Link, TextField } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IValutakurs } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -62,9 +61,11 @@ interface IProps {
     slettValutakurs: () => void;
     sletterValutakurs: boolean;
     erManuellInputAvKurs: boolean;
+    vurderingsform: Vurderingsform | undefined;
 }
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
+    vurderingsform,
     skjema,
     tilgjengeligeBarn,
     status,
@@ -76,7 +77,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     erManuellInputAvKurs,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const lesevisning = vurderErLesevisning(true);
+    const lesevisning = vurderErLesevisning(true) || vurderingsform === Vurderingsform.AUTOMATISK;
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {

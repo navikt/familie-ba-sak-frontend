@@ -80,6 +80,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                     sletterValutakurs={sletterValutakurs}
                     erManuellInputAvKurs={erManuellInputAvKurs}
                     key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
+                    vurderingsform={valutakurs.vurderingsform}
                 />
             }
         >
