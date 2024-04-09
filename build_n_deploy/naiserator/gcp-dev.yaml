@@ -23,6 +23,7 @@ spec:
     path: /metrics
   ingresses:
     - https://barnetrygd.intern.dev.nav.no
+    - https://barnetrygd.ansatt.dev.nav.no
   azure:
     application:
       enabled: true
