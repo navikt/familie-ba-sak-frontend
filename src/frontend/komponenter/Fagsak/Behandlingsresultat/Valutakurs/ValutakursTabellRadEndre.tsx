@@ -185,46 +185,48 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     )}
                 </Fieldset>
 
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={erLesevisning}
-                            onClick={() => sendInnSkjema()}
-                            size="small"
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={erLesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="small"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
-
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        !erLesevisning && (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={() => slettValutakurs()}
-                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                    barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
-                                loading={sletterValutakurs}
-                                disabled={sletterValutakurs}
-                                size={'small'}
-                                icon={<TrashIcon />}
+                {!erLesevisning && (
+                    <Knapperad>
+                        <div>
+                            <FamilieKnapp
+                                erLesevisning={erLesevisning}
+                                onClick={() => sendInnSkjema()}
+                                size="small"
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
-                                Fjern
-                            </Button>
-                        )}
-                </Knapperad>
+                                Ferdig
+                            </FamilieKnapp>
+                            <FamilieKnapp
+                                style={{ marginLeft: '1rem' }}
+                                erLesevisning={erLesevisning}
+                                onClick={() => toggleForm(false)}
+                                size="small"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </FamilieKnapp>
+                        </div>
+
+                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
+                            !erLesevisning && (
+                                <Button
+                                    variant={'tertiary'}
+                                    onClick={() => slettValutakurs()}
+                                    id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                        barn => `${barn}-`
+                                    )}_${skjema.felter.initielFom.verdi}`}
+                                    loading={sletterValutakurs}
+                                    disabled={sletterValutakurs}
+                                    size={'small'}
+                                    icon={<TrashIcon />}
+                                >
+                                    Fjern
+                                </Button>
+                            )}
+                    </Knapperad>
+                )}
             </EøsPeriodeSkjemaContainer>
         </Fieldset>
     );
