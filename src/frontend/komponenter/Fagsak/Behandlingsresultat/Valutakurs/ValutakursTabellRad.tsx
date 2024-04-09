@@ -92,6 +92,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                     fom: valutakurs.fom,
                     tom: valutakurs.tom,
                 }}
+                vurderingsform={valutakurs.vurderingsform}
             />
             <Table.DataCell>
                 {valutakurs.valutakursdato
