@@ -69,7 +69,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     erManuellInputAvKurs,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const lesevisning = vurderErLesevisning(true) || vurderingsform === Vurderingsform.AUTOMATISK;
+    const erLesevisning = vurderErLesevisning(true) || vurderingsform === Vurderingsform.AUTOMATISK;
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -99,7 +99,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             legend={'Valutakurs skjema'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+            <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
                 {vurderingsform === Vurderingsform.AUTOMATISK && (
                     <HStack wrap={false} align={'center'} gap={'4'}>
                         <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" />
@@ -108,7 +108,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                 )}
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                    erLesevisning={erLesevisning}
                     label={'Barn'}
                     isMulti
                     options={tilgjengeligeBarn}
@@ -122,10 +122,10 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erLesevisning}
                 />
                 <Fieldset
-                    className={lesevisning ? 'lesevisning' : ''}
+                    className={erLesevisning ? 'lesevisning' : ''}
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
@@ -135,7 +135,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             felt={skjema.felter.valutakursdato}
                             label={'Valutakursdato'}
                             visFeilmeldinger={false}
-                            readOnly={lesevisning}
+                            readOnly={erLesevisning}
                             disableWeekends
                             kanKunVelgeFortid
                         />
@@ -156,11 +156,11 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             }}
                             utenMargin
                             kanNullstilles
-                            dempetEtikett={!lesevisning}
+                            dempetEtikett={!erLesevisning}
                         />
                         <StyledTextField
                             label={'Valutakurs'}
-                            readOnly={lesevisning || !erManuellInputAvKurs}
+                            readOnly={erLesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
@@ -188,7 +188,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                 <Knapperad>
                     <div>
                         <FamilieKnapp
-                            erLesevisning={lesevisning}
+                            erLesevisning={erLesevisning}
                             onClick={() => sendInnSkjema()}
                             size="small"
                             variant={valideringErOk() ? 'primary' : 'secondary'}
@@ -199,7 +199,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         </FamilieKnapp>
                         <FamilieKnapp
                             style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
+                            erLesevisning={erLesevisning}
                             onClick={() => toggleForm(false)}
                             size="small"
                             variant="tertiary"
@@ -209,7 +209,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     </div>
 
                     {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        !lesevisning && (
+                        !erLesevisning && (
                             <Button
                                 variant={'tertiary'}
                                 onClick={() => slettValutakurs()}
