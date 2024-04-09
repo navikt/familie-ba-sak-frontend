@@ -9,6 +9,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import { FagsakType } from '../../../../../typer/fagsak';
 import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
@@ -66,13 +67,25 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
+    const fagsakErHentetOk = minimalFagsak.status === RessursStatus.SUKSESS;
+
+    const gjelderInstitusjon =
+        fagsakErHentetOk && minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
+
+    const mottakerIdentSomSkalBrukes = fagsakErHentetOk
+        ? gjelderInstitusjon
+            ? minimalFagsak.data.institusjon!.orgNummer
+            : minimalFagsak.data.søkerFødselsnummer
+        : '';
+
+    const brevmalSomSkalBrukes = gjelderInstitusjon
+        ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
+        : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
+
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerIdent:
-            minimalFagsak.status === RessursStatus.SUKSESS
-                ? minimalFagsak.data.søkerFødselsnummer
-                : '',
+        mottakerIdent: mottakerIdentSomSkalBrukes,
         multiselectVerdier: [],
-        brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
+        brevmal: brevmalSomSkalBrukes,
         barnIBrev: [],
     });
 

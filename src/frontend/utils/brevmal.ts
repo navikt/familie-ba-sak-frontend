@@ -50,6 +50,8 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             );
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             return false;
+        case Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON:
+            return false;
         case Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
