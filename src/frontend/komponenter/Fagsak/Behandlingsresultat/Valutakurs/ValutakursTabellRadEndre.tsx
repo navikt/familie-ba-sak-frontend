@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { TrashIcon, CogRotationIcon } from '@navikt/aksel-icons';
+import { TrashIcon, CogRotationIcon, PersonEnvelopeIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
@@ -100,10 +100,15 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             hideLegend
         >
             <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
-                {vurderingsform === Vurderingsform.AUTOMATISK && (
+                {vurderingsform === Vurderingsform.AUTOMATISK ? (
                     <HStack wrap={false} align={'center'} gap={'4'}>
                         <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" />
                         <Label>Automatisk vurdert</Label>
+                    </HStack>
+                ) : (
+                    <HStack wrap={false} align={'center'} gap={'4'}>
+                        <PersonEnvelopeIcon title="Manuelt vurdert" fontSize="1.5rem" />
+                        <Label>Manuelt vurdert</Label>
                     </HStack>
                 )}
                 <FamilieReactSelect
