@@ -20,47 +20,36 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
 
 // eslint-disable-next-line
 export const doProxy: any = () => {
-    return createProxyMiddleware('/familie-ba-sak/api', {
+    return createProxyMiddleware({
         changeOrigin: true,
-        logLevel: 'info',
-        onProxyReq: restream,
-        pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/familie-ba-sak/api', '');
-            return `/api${newPath}`;
-        },
+        on: { proxyReq: restream },
         secure: true,
         target: `${proxyUrl}`,
-        logProvider: () => stdoutLogger,
+        logger: stdoutLogger,
     });
 };
 
 // eslint-disable-next-line
-export const doEndringslogProxy: any = () => {
-    return createProxyMiddleware('/endringslogg', {
+export const doEndringsloggProxy: any = () => {
+    return createProxyMiddleware({
         changeOrigin: true,
-        logLevel: 'info',
-        onProxyReq: restream,
-        pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/endringslogg', '');
-            return `${newPath}`;
-        },
+        on: { proxyReq: restream },
         secure: true,
         target: `${endringsloggProxyUrl}`,
-        logProvider: () => stdoutLogger,
+        logger: stdoutLogger,
     });
 };
 
 export const doRedirectProxy = () => {
     return (req: Request, res: Response) => {
         const urlKey = Object.keys(redirectRecords).find(k => req.originalUrl.includes(k));
-        let newUrl;
         if (urlKey) {
-            newUrl = req.originalUrl.replace(urlKey, redirectRecords[urlKey]);
+            const basePath = redirectRecords[urlKey];
+            const path = req.originalUrl.replace(urlKey, '');
             stdoutLogger.info(`Redirect ${urlKey} -> ${redirectRecords[urlKey]}`);
-            res.redirect(newUrl);
+            res.redirect(basePath + path);
         } else {
             console.log(`Ustøttet redirect: ${req.originalUrl}`);
-            newUrl = req.originalUrl;
             res.sendStatus(404);
         }
     };

@@ -17,7 +17,7 @@ import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import { attachToken, doEndringslogProxy, doProxy, doRedirectProxy } from './proxy';
+import { attachToken, doEndringsloggProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 import webpackDevConfig from '../webpack/webpack.dev';
 
@@ -60,7 +60,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         '/endringslogg',
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
-        doEndringslogProxy()
+        doEndringsloggProxy()
     );
 
     app.use('/redirect', doRedirectProxy());
