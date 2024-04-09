@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { CogRotationIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
 import {
     ABorderDanger,
     ABorderDefault,
@@ -24,7 +24,7 @@ interface IEøsPeriodeSkjemaContainerProps {
     $status: EøsPeriodeStatus;
 }
 
-export const EøsPeriodeSkjemaContainer = styled.div<IEøsPeriodeSkjemaContainerProps>`
+export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
     max-width: 34rem;
     border-left: 0.125rem solid
         ${props => {

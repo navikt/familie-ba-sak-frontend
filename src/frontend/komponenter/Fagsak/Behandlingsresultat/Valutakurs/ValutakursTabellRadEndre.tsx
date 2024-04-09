@@ -33,14 +33,6 @@ const StyledTextField = styled(TextField)`
     width: 8rem;
 `;
 
-const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 1.5rem;
-`;
-
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
     `valutakurs-periode_${valutakurs.felter.barnIdenter.verdi.map(barn => `${barn.value}`)}_${
         valutakurs.felter.initielFom.verdi
@@ -107,7 +99,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             legend={'Valutakurs skjema'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={lesevisning}
@@ -119,14 +111,14 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
                     }
                 />
-                <StyledEøsPeriodeSkjema
+                <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
-                <StyledFieldset
+                <Fieldset
                     className={lesevisning ? 'lesevisning' : ''}
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
@@ -185,7 +177,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             .
                         </StyledISKAlert>
                     )}
-                </StyledFieldset>
+                </Fieldset>
 
                 <Knapperad>
                     <div>
