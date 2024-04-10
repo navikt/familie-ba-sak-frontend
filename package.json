@@ -84,7 +84,7 @@
     "@babel/preset-env": "^7.24.1",
     "@babel/preset-typescript": "^7.24.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
-    "@testing-library/react": "^14.2.0",
+    "@testing-library/react": "^15.0.0",
     "@types/amplitude-js": "^8.16.0",
     "@types/classnames": "^2.3.1",
     "@types/deep-equal": "^1.0.1",
