@@ -135,6 +135,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
+                    hideLegend={vurderingsform === Vurderingsform.AUTOMATISK}
                 >
                     <ValutakursRad>
                         <Datovelger
