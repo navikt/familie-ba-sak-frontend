@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
@@ -16,7 +16,9 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
-    const { minimalFagsak } = useFagsakContext();
+
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
@@ -66,13 +68,23 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
+    const institusjon = minimalFagsak?.institusjon;
+
+    const mottakerIdentSomSkalBrukes = institusjon
+        ? minimalFagsak?.institusjon!.orgNummer
+        : minimalFagsak?.søkerFødselsnummer;
+
+    const mottakerNavnSomSkalBrukes = institusjon ? minimalFagsak?.institusjon!.navn : '';
+
+    const brevmalSomSkalBrukes = institusjon
+        ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
+        : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
+
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerIdent:
-            minimalFagsak.status === RessursStatus.SUKSESS
-                ? minimalFagsak.data.søkerFødselsnummer
-                : '',
+        mottakerNavn: mottakerNavnSomSkalBrukes,
+        mottakerIdent: mottakerIdentSomSkalBrukes ?? '',
         multiselectVerdier: [],
-        brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
+        brevmal: brevmalSomSkalBrukes,
         barnIBrev: [],
     });
 
