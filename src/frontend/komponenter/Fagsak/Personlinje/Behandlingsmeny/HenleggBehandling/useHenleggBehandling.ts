@@ -3,13 +3,12 @@ import { useState } from 'react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
-import { FagsakType } from '../../../../../typer/fagsak';
 import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
@@ -17,7 +16,9 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
-    const { minimalFagsak } = useFagsakContext();
+
+    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
@@ -67,23 +68,21 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
-    const fagsakErHentetOk = minimalFagsak.status === RessursStatus.SUKSESS;
+    const institusjon = minimalFagsak?.institusjon;
 
-    const gjelderInstitusjon =
-        fagsakErHentetOk && minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
+    const mottakerIdentSomSkalBrukes = institusjon
+        ? minimalFagsak?.institusjon!.orgNummer
+        : minimalFagsak?.søkerFødselsnummer;
 
-    const mottakerIdentSomSkalBrukes = fagsakErHentetOk
-        ? gjelderInstitusjon
-            ? minimalFagsak.data.institusjon!.orgNummer
-            : minimalFagsak.data.søkerFødselsnummer
-        : '';
+    const mottakerNavnSomSkalBrukes = institusjon ? minimalFagsak?.institusjon!.navn : '';
 
-    const brevmalSomSkalBrukes = gjelderInstitusjon
+    const brevmalSomSkalBrukes = institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerIdent: mottakerIdentSomSkalBrukes,
+        mottakerNavn: mottakerNavnSomSkalBrukes,
+        mottakerIdent: mottakerIdentSomSkalBrukes ?? '',
         multiselectVerdier: [],
         brevmal: brevmalSomSkalBrukes,
         barnIBrev: [],
