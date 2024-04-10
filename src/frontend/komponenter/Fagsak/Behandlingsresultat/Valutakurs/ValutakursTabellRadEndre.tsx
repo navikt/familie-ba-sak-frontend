@@ -102,14 +102,17 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
                 {vurderingsform === Vurderingsform.AUTOMATISK && (
                     <HStack wrap={false} align={'center'} gap={'4'}>
-                        <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" />
-                        <Label>Automatisk vurdert</Label>
+                        <CogRotationIcon
+                            title="Automatisk registrert valutakurs"
+                            fontSize="1.5rem"
+                        />
+                        <Label>Automatisk registrert valutakurs</Label>
                     </HStack>
                 )}
                 {vurderingsform === Vurderingsform.MANUELL && (
                     <HStack wrap={false} align={'center'} gap={'4'}>
-                        <PersonGavelIcon title="Manuelt vurdert" fontSize="1.5rem" />
-                        <Label>Manuelt vurdert</Label>
+                        <PersonGavelIcon title="Manuelt registrert valutakurs" fontSize="1.5rem" />
+                        <Label>Manuelt registrert valutakurs</Label>
                     </HStack>
                 )}
                 <FamilieReactSelect
