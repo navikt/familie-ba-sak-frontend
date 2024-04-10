@@ -150,6 +150,7 @@ export interface IUtenlandskPeriodeBeløp {
 export enum Vurderingsform {
     MANUELL = 'MANUELL',
     AUTOMATISK = 'AUTOMATISK',
+    IKKE_VURDERT = 'IKKE_VURDERT',
 }
 
 export interface IRestValutakurs extends IRestEøsPeriode {
