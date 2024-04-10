@@ -2,7 +2,12 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
+import {
+    CogRotationIcon,
+    PadlockLockedFillIcon,
+    PersonGavelIcon,
+    TrashIcon,
+} from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
@@ -152,7 +157,12 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         <StyledFamilieValutavelger
                             erLesevisning={true}
                             id={'valuta'}
-                            label={'Valuta'}
+                            label={
+                                <HStack wrap={false} align={'center'} gap={'2'}>
+                                    <PadlockLockedFillIcon />
+                                    <Label>Valuta</Label>
+                                </HStack>
+                            }
                             kunEøs
                             medFlag
                             size="small"
