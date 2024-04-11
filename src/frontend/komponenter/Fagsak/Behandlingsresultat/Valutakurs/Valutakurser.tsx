@@ -71,7 +71,9 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                         id={'vis-alle-valuta-perioder'}
                         checked={visAlleValutaperioder}
                         onChange={() => {
-                            setVisAlleValutaperioder(!visAlleValutaperioder);
+                            setVisAlleValutaperioder(
+                                forrigeVisAlleValutaperioder => !forrigeVisAlleValutaperioder
+                            );
                         }}
                     >
                         Vis alle valutaperioder
@@ -98,23 +100,19 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {valutakurser
-                        .filter(
-                            (_, index) =>
-                                index === 0 ||
-                                !månedligValutajusteringToggleErSlåttPå ||
-                                visAlleValutaperioder
-                        )
-                        .map(valutakurs => (
-                            <ValutakursTabellRad
-                                key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
-                                    valutakurs.fom
-                                }-${valutakurs.tom}`}
-                                valutakurs={valutakurs}
-                                åpenBehandling={åpenBehandling}
-                                visFeilmeldinger={visFeilmeldinger}
-                            />
-                        ))}
+                    {(!månedligValutajusteringToggleErSlåttPå || visAlleValutaperioder
+                        ? valutakurser
+                        : valutakurser.slice(0, 1)
+                    ).map(valutakurs => (
+                        <ValutakursTabellRad
+                            key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
+                                valutakurs.fom
+                            }-${valutakurs.tom}`}
+                            valutakurs={valutakurs}
+                            åpenBehandling={åpenBehandling}
+                            visFeilmeldinger={visFeilmeldinger}
+                        />
+                    ))}
                 </Table.Body>
             </StyledTable>
         </ValutakurserContainer>
