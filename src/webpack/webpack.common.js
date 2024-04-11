@@ -17,10 +17,6 @@ const baseConfig = {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
         fallback: { crypto: false },
     },
-    output: {
-        filename: '[name].[contenthash].js',
-        path: path.resolve(process.cwd(), 'node_dist/'),
-    },
     entry: ['./src/frontend/index.tsx'],
     plugins: [
         new HtmlWebpackPlugin({
