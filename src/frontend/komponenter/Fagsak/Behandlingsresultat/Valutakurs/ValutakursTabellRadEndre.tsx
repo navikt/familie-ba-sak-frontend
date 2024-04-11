@@ -2,19 +2,23 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Link, Heading, Button, Fieldset, TextField } from '@navikt/ds-react';
+import {
+    CogRotationIcon,
+    PadlockLockedFillIcon,
+    PersonGavelIcon,
+    TrashIcon,
+} from '@navikt/aksel-icons';
+import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IValutakurs } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -32,14 +36,6 @@ const StyledISKAlert = styled(Alert)`
 
 const StyledTextField = styled(TextField)`
     width: 8rem;
-`;
-
-const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 1.5rem;
 `;
 
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
@@ -62,9 +58,11 @@ interface IProps {
     slettValutakurs: () => void;
     sletterValutakurs: boolean;
     erManuellInputAvKurs: boolean;
+    vurderingsform: Vurderingsform | undefined;
 }
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
+    vurderingsform,
     skjema,
     tilgjengeligeBarn,
     status,
@@ -76,7 +74,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     erManuellInputAvKurs,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const lesevisning = vurderErLesevisning(true);
+    const erLesevisning = vurderErLesevisning(true) || vurderingsform === Vurderingsform.AUTOMATISK;
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -106,10 +104,25 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             legend={'Valutakurs skjema'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
+                {vurderingsform === Vurderingsform.AUTOMATISK && (
+                    <HStack wrap={false} align={'center'} gap={'4'}>
+                        <CogRotationIcon
+                            title="Automatisk registrert valutakurs"
+                            fontSize="1.5rem"
+                        />
+                        <Label>Automatisk registrert valutakurs</Label>
+                    </HStack>
+                )}
+                {vurderingsform === Vurderingsform.MANUELL && (
+                    <HStack wrap={false} align={'center'} gap={'4'}>
+                        <PersonGavelIcon title="Manuelt registrert valutakurs" fontSize="1.5rem" />
+                        <Label>Manuelt registrert valutakurs</Label>
+                    </HStack>
+                )}
                 <FamilieReactSelect
                     {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                    erLesevisning={erLesevisning}
                     label={'Barn'}
                     isMulti
                     options={tilgjengeligeBarn}
@@ -118,32 +131,38 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
                     }
                 />
-                <StyledEøsPeriodeSkjema
+                <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erLesevisning}
                 />
-                <StyledFieldset
-                    className={lesevisning ? 'lesevisning' : ''}
+                <Fieldset
+                    className={erLesevisning ? 'lesevisning' : ''}
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
+                    hideLegend={vurderingsform === Vurderingsform.AUTOMATISK}
                 >
                     <ValutakursRad>
                         <Datovelger
                             felt={skjema.felter.valutakursdato}
                             label={'Valutakursdato'}
                             visFeilmeldinger={false}
-                            readOnly={lesevisning}
+                            readOnly={erLesevisning}
                             disableWeekends
                             kanKunVelgeFortid
                         />
                         <StyledFamilieValutavelger
                             erLesevisning={true}
                             id={'valuta'}
-                            label={'Valuta'}
+                            label={
+                                <HStack wrap={false} align={'center'} gap={'2'}>
+                                    <PadlockLockedFillIcon />
+                                    <Label>Valuta</Label>
+                                </HStack>
+                            }
                             kunEøs
                             medFlag
                             size="small"
@@ -157,11 +176,11 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             }}
                             utenMargin
                             kanNullstilles
-                            dempetEtikett={!lesevisning}
+                            dempetEtikett={!erLesevisning}
                         />
                         <StyledTextField
                             label={'Valutakurs'}
-                            readOnly={lesevisning || !erManuellInputAvKurs}
+                            readOnly={erLesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
@@ -184,48 +203,50 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             .
                         </StyledISKAlert>
                     )}
-                </StyledFieldset>
+                </Fieldset>
 
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => sendInnSkjema()}
-                            size="small"
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="small"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
-
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        !lesevisning && (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={() => slettValutakurs()}
-                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                    barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
-                                loading={sletterValutakurs}
-                                disabled={sletterValutakurs}
-                                size={'small'}
-                                icon={<TrashIcon />}
+                {!erLesevisning && (
+                    <Knapperad>
+                        <div>
+                            <FamilieKnapp
+                                erLesevisning={erLesevisning}
+                                onClick={() => sendInnSkjema()}
+                                size="small"
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
-                                Fjern
-                            </Button>
-                        )}
-                </Knapperad>
+                                Ferdig
+                            </FamilieKnapp>
+                            <FamilieKnapp
+                                style={{ marginLeft: '1rem' }}
+                                erLesevisning={erLesevisning}
+                                onClick={() => toggleForm(false)}
+                                size="small"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </FamilieKnapp>
+                        </div>
+
+                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
+                            !erLesevisning && (
+                                <Button
+                                    variant={'tertiary'}
+                                    onClick={() => slettValutakurs()}
+                                    id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                        barn => `${barn}-`
+                                    )}_${skjema.felter.initielFom.verdi}`}
+                                    loading={sletterValutakurs}
+                                    disabled={sletterValutakurs}
+                                    size={'small'}
+                                    icon={<TrashIcon />}
+                                >
+                                    Fjern
+                                </Button>
+                            )}
+                    </Knapperad>
+                )}
             </EøsPeriodeSkjemaContainer>
         </Fieldset>
     );

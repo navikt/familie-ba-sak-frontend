@@ -2,7 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Table } from '@navikt/ds-react';
+import { CogRotationIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
 import {
     ABorderDanger,
     ABorderDefault,
@@ -12,10 +13,10 @@ import {
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, Vurderingsform } from '../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../typer/person';
-import type { IIsoMånedPeriode } from '../../../../utils/dato';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../utils/dato';
+import type { IIsoMånedPeriode } from '../../../../utils/dato';
 import { lagPersonLabel } from '../../../../utils/formatter';
 
 interface IEøsPeriodeSkjemaContainerProps {
@@ -23,7 +24,7 @@ interface IEøsPeriodeSkjemaContainerProps {
     $status: EøsPeriodeStatus;
 }
 
-export const EøsPeriodeSkjemaContainer = styled.div<IEøsPeriodeSkjemaContainerProps>`
+export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
     max-width: 34rem;
     border-left: 0.125rem solid
         ${props => {
@@ -42,11 +43,8 @@ export const Knapperad = styled.div`
     margin: 2rem 0 1rem;
 `;
 
-const EøsPeriodeVurdertCelle = styled.div`
-    display: flex;
-    svg {
-        margin-right: 1rem;
-    }
+const StyledCogRotationIcon = styled(CogRotationIcon)`
+    min-width: 1.5rem;
 `;
 
 const BarnDiv = styled.div`
@@ -59,16 +57,23 @@ interface IStatusBarnCelleOgPeriodeCelleProps {
     barnIdenter: string[];
     personer: IGrunnlagPerson[];
     periode: IIsoMånedPeriode;
+    vurderingsform?: Vurderingsform;
 }
 
 export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCelleProps) => {
     return (
         <>
             <Table.DataCell>
-                <EøsPeriodeVurdertCelle>
-                    <div>
+                <HStack wrap={false} align="center" gap="4">
+                    {props.vurderingsform === Vurderingsform.AUTOMATISK ? (
+                        <StyledCogRotationIcon
+                            title="Automatisk vurdert"
+                            fontSize="1.5rem"
+                            width="1.5rem"
+                        />
+                    ) : (
                         <StatusIkon status={mapEøsPeriodeStatusTilStatus[props.status]} />
-                    </div>
+                    )}
                     <BarnDiv>
                         {props.barnIdenter.map(barn => (
                             <BodyShort size="small" key={barn}>
@@ -76,7 +81,7 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
                             </BodyShort>
                         ))}
                     </BarnDiv>
-                </EøsPeriodeVurdertCelle>
+                </HStack>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size="small">

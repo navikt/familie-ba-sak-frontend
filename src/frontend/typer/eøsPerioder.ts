@@ -147,10 +147,17 @@ export interface IUtenlandskPeriodeBeløp {
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
 }
 
+export enum Vurderingsform {
+    MANUELL = 'MANUELL',
+    AUTOMATISK = 'AUTOMATISK',
+    IKKE_VURDERT = 'IKKE_VURDERT',
+}
+
 export interface IRestValutakurs extends IRestEøsPeriode {
     valutakode?: string;
     valutakursdato?: IsoDatoString;
     kurs?: string;
+    vurderingsform?: Vurderingsform;
 }
 
 export interface IValutakurs {
