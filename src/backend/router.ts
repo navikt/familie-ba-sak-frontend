@@ -1,9 +1,9 @@
 import path from 'path';
 
-import type { Response, Request, Router } from 'express';
+import type { Request, Response, Router } from 'express';
 
 import type { Client } from '@navikt/familie-backend';
-import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
+import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
 import { buildPath } from './config';
@@ -12,7 +12,7 @@ import { prometheusTellere } from './metrikker';
 export default (authClient: Client, router: Router) => {
     router.get('/version', (req: Request, res: Response) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        console.log('ip: ', ip);
+        logRequest(req, `ip: ${ip}`, LOG_LEVEL.INFO);
         res.status(200)
             .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
             .end();
