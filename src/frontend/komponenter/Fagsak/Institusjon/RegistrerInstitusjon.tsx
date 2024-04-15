@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { SamhandlerTabell } from './SamhandlerTabell';
 import { useSamhandlerRequest } from './useSamhandler';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useInstitusjonOgVerge } from '../../../context/InstitusjonOgVergeContext';
+import { useInstitusjon } from '../../../context/InstitusjonContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
@@ -22,7 +22,7 @@ const StyledAlert = styled(Alert)`
 
 const RegistrerInstitusjon: React.FC = () => {
     const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
-        useInstitusjonOgVerge();
+        useInstitusjon();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
@@ -40,7 +40,7 @@ const RegistrerInstitusjon: React.FC = () => {
                     nesteOnClick={onSubmitMottaker}
                     nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
                     senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-                    steg={BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE}
+                    steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
                 >
                     {samhandlerRessurs.status === RessursStatus.SUKSESS && (
                         <SamhandlerTabell samhandler={samhandlerRessurs.data} />

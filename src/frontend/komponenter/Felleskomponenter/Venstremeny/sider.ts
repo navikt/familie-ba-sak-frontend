@@ -50,11 +50,11 @@ export const sider: Record<SideId, ISide> = {
     REGISTRER_INSTITUSJON: {
         href: 'registrer-institusjon',
         navn: 'Registrer institusjon',
-        steg: BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE,
+        steg: BehandlingSteg.REGISTRERE_INSTITUSJON,
         visSide: (åpenBehandling: IBehandling) => {
             return (
                 åpenBehandling.stegTilstand.find(
-                    value => value.behandlingSteg === BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE
+                    value => value.behandlingSteg === BehandlingSteg.REGISTRERE_INSTITUSJON
                 ) !== undefined
             );
         },

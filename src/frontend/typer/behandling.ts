@@ -4,7 +4,6 @@ import type { INøkkelPar } from './common';
 import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
-import type { IVerge } from './institusjon-og-verge';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { IGrunnlagPerson } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
@@ -121,7 +120,7 @@ export const behandlingÅrsak: Record<
 
 export enum BehandlingSteg {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
-    REGISTRERE_INSTITUSJON_OG_VERGE = 'REGISTRERE_INSTITUSJON_OG_VERGE',
+    REGISTRERE_INSTITUSJON = 'REGISTRERE_INSTITUSJON',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
@@ -275,7 +274,6 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    verge?: IVerge;
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
