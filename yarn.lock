@@ -1954,10 +1954,10 @@
   dependencies:
     typescript "^5.4.2"
 
-"@navikt/hoykontrast@^3.1.0":
-  version "3.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.1.0/a57192249058e44959c3004e3551cfd8cde30c56aae5e9789602dce37459ecd2#ed7182afd5158872c8d87d6dbe87316f51e99388"
-  integrity sha512-ZO7kPvFYucgriMoryT8dJ5gBpusAO4dvfop5J8e/TnpKW3qtjj8VVFmFxBVxEWLGDm8AyZXeI6n9FG7i7/etmQ==
+"@navikt/hoykontrast@^4.0.1":
+  version "4.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/4.0.1/c4285ca3b9c97aa684abb2b5208a30ca0957e727#c4285ca3b9c97aa684abb2b5208a30ca0957e727"
+  integrity sha512-aQO+L7hT3XHXizAdtb84d3qdczgns76H7mLATRVTJTOSMamWv+M+tVYq3W3kLZ7cIUaMczv3vVxxK1wl7IvCXQ==
 
 "@navikt/land-verktoy@3.2.10":
   version "3.2.10"
