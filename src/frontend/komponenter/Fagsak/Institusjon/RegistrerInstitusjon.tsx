@@ -21,8 +21,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const RegistrerInstitusjon: React.FC = () => {
-    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
-        useInstitusjon();
+    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } = useInstitusjon();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
