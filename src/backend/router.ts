@@ -10,7 +10,9 @@ import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
 
 export default (authClient: Client, router: Router) => {
-    router.get('/version', (_: Request, res: Response) => {
+    router.get('/version', (req: Request, res: Response) => {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        console.log('ip: ', ip);
         res.status(200)
             .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
             .end();
