@@ -90,11 +90,6 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         <>
             {visDokumentModal && (
                 <PdfVisningModal
-                    onRequestOpen={() => {
-                        if (hentetDokument.status !== RessursStatus.HENTER) {
-                            hentVedtaksbrev();
-                        }
-                    }}
                     onRequestClose={() => {
                         settVisDokumentModal(false);
                         nullstillDokument();
@@ -165,7 +160,9 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                     id={'forhandsvis-vedtaksbrev'}
                     variant={'secondary'}
                     size={'medium'}
-                    onClick={() => settVisDokumentModal(!visDokumentModal)}
+                    onClick={() => {
+                        hentVedtaksbrev();
+                    }}
                     loading={hentetDokument.status === RessursStatus.HENTER}
                     icon={<FileTextIcon aria-hidden />}
                 >
