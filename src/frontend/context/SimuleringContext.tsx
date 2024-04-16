@@ -101,7 +101,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const erMigreringFraInfotrygdMedAvvik =
         erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
 
-    const harManuellePosteringer = simResultat?.perioder.some(
+    const behandlingHarManuellePosteringer = simResultat?.perioder.some(
         periode => periode.manuellPostering && periode.manuellPostering > 0
     );
 
@@ -132,7 +132,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         erMigreringFraInfotrygdMedAvvik && !behandlingErMigreringMedAvvikInnenforBeløpsgrenser;
 
     const behandlingErMigreringMedManuellePosteringer =
-        erMigreringFraInfotrygd && harManuellePosteringer;
+        erMigreringFraInfotrygd && behandlingHarManuellePosteringer;
 
     const behandlingErEndreMigreringsdato =
         åpenBehandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
@@ -268,6 +268,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         behandlingErMigreringMedManuellePosteringer,
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
         behandlingErEndreMigreringsdato,
+        behandlingHarManuellePosteringer,
     };
 });
 
