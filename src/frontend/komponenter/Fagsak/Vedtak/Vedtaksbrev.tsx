@@ -161,6 +161,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                     variant={'secondary'}
                     size={'medium'}
                     onClick={() => {
+                        settVisDokumentModal(true);
                         hentVedtaksbrev();
                     }}
                     loading={hentetDokument.status === RessursStatus.HENTER}
