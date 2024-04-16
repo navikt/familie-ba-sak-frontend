@@ -112,7 +112,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             {behandlingHarManuellePosteringerOgAutomatiskBeregnetValuta && (
                 <StyledAlert variant={'warning'}>
                     Behandlingen har perioder med manuelle posteringer og automatisk beregnet
-                    valuta. Gå tilbake til "behandlingsresultat" og legg inn valuta manuelt før du
+                    valuta. Gå tilbake til "Behandlingsresultat" og legg inn valuta manuelt før du
                     fortsetter behandlingen.
                 </StyledAlert>
             )}
