@@ -14,10 +14,8 @@ export const saksbehandlerHarKunLesevisning = (
         return true;
     }
 
-    if (steg && hentStegNummer(steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK)) {
-        return false;
-    } else {
-        // Default til lesevisning dersom vi er usikre
-        return true;
-    }
+    const saksbehandlerKanRedigere =
+        steg && hentStegNummer(steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+    return !saksbehandlerKanRedigere;
 };
