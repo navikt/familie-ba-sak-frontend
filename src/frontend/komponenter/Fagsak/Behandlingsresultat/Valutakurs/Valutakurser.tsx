@@ -104,8 +104,10 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     {valutakurser
                         .filter(
                             (valutakurs, index) =>
-                                index === 0 || valutakurs.status !== EøsPeriodeStatus.OK,
-                            !månedligValutajusteringToggleErSlåttPå || visAlleValutaperioder
+                                index === 0 ||
+                                valutakurs.status !== EøsPeriodeStatus.OK ||
+                                !månedligValutajusteringToggleErSlåttPå ||
+                                visAlleValutaperioder
                         )
                         .map(valutakurs => (
                             <ValutakursTabellRad
