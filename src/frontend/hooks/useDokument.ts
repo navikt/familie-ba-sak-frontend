@@ -34,8 +34,7 @@ const useDokument = () => {
         const binaryLen = binaryString.length;
         const bytes = new Uint8Array(binaryLen);
         for (let i = 0; i < binaryLen; i++) {
-            const ascii = binaryString.charCodeAt(i);
-            bytes[i] = ascii;
+            bytes[i] = binaryString.charCodeAt(i);
         }
         return bytes;
     };

@@ -69,10 +69,7 @@ export const useSamhandlerRequest = () => {
                 return ressurs;
             })
             .catch((_error: AxiosError) => {
-                const ressurs: Ressurs<ISamhandlerInfo> = byggFeiletRessurs(
-                    'Ukjent feil ved innhenting av samhandlerinfo'
-                );
-                return ressurs;
+                return byggFeiletRessurs('Ukjent feil ved innhenting av samhandlerinfo');
             });
     };
 
