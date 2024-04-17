@@ -56,7 +56,7 @@ function* lopenrGenerator(dato: Date) {
 }
 
 export default function* generator(dato: Date) {
-    if (!(dato instanceof Date) || dato.getFullYear() < 1854) {
+    if (dato.getFullYear() < 1854) {
         throw new Error('Ugyldig dato argument');
     }
     const fnrDato = fodselsnummerFormatDato(dato);
