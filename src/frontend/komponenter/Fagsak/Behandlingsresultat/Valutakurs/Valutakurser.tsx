@@ -10,6 +10,7 @@ import { useApp } from '../../../../context/AppContext';
 import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../typer/toggles';
 
 const ValutakurserContainer = styled.div`
@@ -100,19 +101,24 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {(!månedligValutajusteringToggleErSlåttPå || visAlleValutaperioder
-                        ? valutakurser
-                        : valutakurser.slice(0, 1)
-                    ).map(valutakurs => (
-                        <ValutakursTabellRad
-                            key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
-                                valutakurs.fom
-                            }-${valutakurs.tom}`}
-                            valutakurs={valutakurs}
-                            åpenBehandling={åpenBehandling}
-                            visFeilmeldinger={visFeilmeldinger}
-                        />
-                    ))}
+                    {valutakurser
+                        .filter(
+                            (valutakurs, index) =>
+                                index === 0 ||
+                                valutakurs.status !== EøsPeriodeStatus.OK ||
+                                !månedligValutajusteringToggleErSlåttPå ||
+                                visAlleValutaperioder
+                        )
+                        .map(valutakurs => (
+                            <ValutakursTabellRad
+                                key={`${valutakurs.barnIdenter.map(barn => `${barn}-`)}-${
+                                    valutakurs.fom
+                                }-${valutakurs.tom}`}
+                                valutakurs={valutakurs}
+                                åpenBehandling={åpenBehandling}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        ))}
                 </Table.Body>
             </StyledTable>
         </ValutakurserContainer>

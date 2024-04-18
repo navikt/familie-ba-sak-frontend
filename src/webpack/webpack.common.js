@@ -70,7 +70,7 @@ const baseConfig = {
                         loader: 'css-loader',
                         options: {
                             modules: {
-                                compileType: 'icss',
+                                mode: 'icss',
                             },
                             importLoaders: 2,
                         },
