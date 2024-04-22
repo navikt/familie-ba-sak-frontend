@@ -25,6 +25,9 @@ const ValutakursTabellRad: React.FC<IProps> = ({
     åpenBehandling,
     visFeilmeldinger,
 }) => {
+    const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] =
+        React.useState(false);
+
     const barn: OptionType[] = valutakurs.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
@@ -46,6 +49,10 @@ const ValutakursTabellRad: React.FC<IProps> = ({
         valutakurs,
         barnIValutakurs: barn,
     });
+
+    if (erValutakursEkspandert && !skalRendreContentIEkspanderbartPanel) {
+        settSkalRendreContentIEkspanderbartPanel(true);
+    }
 
     React.useEffect(() => {
         if (visFeilmeldinger && erValutakursEkspandert) {
@@ -69,19 +76,21 @@ const ValutakursTabellRad: React.FC<IProps> = ({
             onOpenChange={() => toggleForm(true)}
             id={valutakursFeilmeldingId(valutakurs)}
             content={
-                <ValutakursTabellRadEndre
-                    skjema={skjema}
-                    tilgjengeligeBarn={barn}
-                    status={valutakurs.status}
-                    valideringErOk={valideringErOk}
-                    sendInnSkjema={sendInnSkjema}
-                    toggleForm={toggleForm}
-                    slettValutakurs={slettValutakurs}
-                    sletterValutakurs={sletterValutakurs}
-                    erManuellInputAvKurs={erManuellInputAvKurs}
-                    key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
-                    vurderingsform={valutakurs.vurderingsform}
-                />
+                skalRendreContentIEkspanderbartPanel ? (
+                    <ValutakursTabellRadEndre
+                        skjema={skjema}
+                        tilgjengeligeBarn={barn}
+                        status={valutakurs.status}
+                        valideringErOk={valideringErOk}
+                        sendInnSkjema={sendInnSkjema}
+                        toggleForm={toggleForm}
+                        slettValutakurs={slettValutakurs}
+                        sletterValutakurs={sletterValutakurs}
+                        erManuellInputAvKurs={erManuellInputAvKurs}
+                        key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
+                        vurderingsform={valutakurs.vurderingsform}
+                    />
+                ) : null
             }
         >
             <StatusBarnCelleOgPeriodeCelle
