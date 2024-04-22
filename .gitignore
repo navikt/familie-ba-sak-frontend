@@ -1,7 +1,7 @@
 node_modules
 frontend_production
 frontend_development
-node_dist
+backend
 dist
 .DS_Store
 .idea

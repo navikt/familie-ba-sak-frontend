@@ -58,7 +58,7 @@ const OppgaveList: React.FunctionComponent = () => {
         <section>
             <HeaderMedPaginering>
                 <Heading size={'medium'} level={'1'}>
-                    Oppgaveliste
+                    Oppgaveliste123
                 </Heading>
                 <OppgavelisteNavigator />
             </HeaderMedPaginering>
