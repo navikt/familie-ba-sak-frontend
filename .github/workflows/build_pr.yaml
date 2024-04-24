@@ -24,7 +24,7 @@ jobs:
       - name: 🔧💻 Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: yarn
           registry-url: "https://npm.pkg.github.com"
 
@@ -46,7 +46,7 @@ jobs:
       - name: 🔧💻 Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: yarn
           registry-url: "https://npm.pkg.github.com"
 
@@ -68,7 +68,7 @@ jobs:
       - name: 🔧💻 Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: yarn
           registry-url: "https://npm.pkg.github.com"
 
@@ -90,7 +90,7 @@ jobs:
       - name: 🔧💻 Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: yarn
           registry-url: "https://npm.pkg.github.com"
 
