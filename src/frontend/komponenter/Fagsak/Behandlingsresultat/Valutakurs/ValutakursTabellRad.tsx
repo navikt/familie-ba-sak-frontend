@@ -16,7 +16,7 @@ import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato'
 import { lagPersonLabel } from '../../../../utils/formatter';
 
 interface IProps {
-    valutakurs?: IRestValutakurs;
+    valutakurs: IRestValutakurs;
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
@@ -28,10 +28,6 @@ const ValutakursTabellRad: React.FC<IProps> = ({
 }) => {
     const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] =
         React.useState(false);
-
-    if (!valutakurs) {
-        return null;
-    }
 
     const barn: OptionType[] = valutakurs.barnIdenter.map(barn => ({
         value: barn,

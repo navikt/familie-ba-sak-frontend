@@ -3,7 +3,7 @@
     "compilerOptions": {
         "allowJs": true,
         "skipLibCheck": true,
-        "outDir": "node_dist",
+        "outDir": "backend",
         "rootDir": "./src",
         "resolveJsonModule": true,
         "types": ["express-session"],

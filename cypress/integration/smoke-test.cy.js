@@ -1,4 +1,4 @@
-import { fagsakMock } from '../../node_dist/backend/mock-data';
+import { fagsakMock } from '../../backend/backend/mock-data';
 import { oppgaveMock } from '../../src/backend/mock-data';
 
 describe('Oppgavebenken', () => {
