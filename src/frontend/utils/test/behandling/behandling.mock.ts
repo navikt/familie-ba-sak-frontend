@@ -94,6 +94,7 @@ export const mockBehandling = ({
         feilutbetaltValuta: [],
         brevmottakere: [],
         refusjonEøs: [],
+        vurderingsstrategiForValutakurser: null,
     };
 };
 
