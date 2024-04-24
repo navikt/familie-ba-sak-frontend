@@ -65,6 +65,8 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
     const { settÅpenBehandling } = useBehandling();
     const { request } = useHttp();
     const månedligValutajusteringToggleErSlåttPå = toggles[ToggleNavn.månedligValutajustering];
+    const kanOverstyreAutomatiskeValutakurser =
+        toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
@@ -125,21 +127,22 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             Vis alle valutaperioder
                         </Switch>
                     )}
-                    {(åpenBehandling.vurderingsstrategiForValutakurser ===
-                        VurderingsstrategiForValutakurser.MANUELL ||
-                        erValutakursSomErVurdertAutomatisk) && (
-                        <Button
-                            size="xsmall"
-                            variant="danger"
-                            onClick={overstyrValutakurserTilÅVæreManuelle}
-                            id={'endre-vurderingsstrategi-for-valutakurser'}
-                        >
-                            {åpenBehandling.vurderingsstrategiForValutakurser ===
-                            VurderingsstrategiForValutakurser.MANUELL
-                                ? 'Gjenopprett automatiske valutakurser'
-                                : 'Overstyr automatiske valutakurser'}
-                        </Button>
-                    )}
+                    {kanOverstyreAutomatiskeValutakurser &&
+                        (åpenBehandling.vurderingsstrategiForValutakurser ===
+                            VurderingsstrategiForValutakurser.MANUELL ||
+                            erValutakursSomErVurdertAutomatisk) && (
+                            <Button
+                                size="xsmall"
+                                variant="danger"
+                                onClick={overstyrValutakurserTilÅVæreManuelle}
+                                id={'endre-vurderingsstrategi-for-valutakurser'}
+                            >
+                                {åpenBehandling.vurderingsstrategiForValutakurser ===
+                                VurderingsstrategiForValutakurser.MANUELL
+                                    ? 'Gjenopprett automatiske valutakurser'
+                                    : 'Overstyr automatiske valutakurser'}
+                            </Button>
+                        )}
                 </VStack>
             </HStack>
             {!erValutakurserGyldige() && (

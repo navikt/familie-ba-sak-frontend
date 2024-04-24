@@ -15,6 +15,7 @@ export enum ToggleNavn {
     manuellMottakerInfobrev = 'familie-ba-sak.manuell-mottaker-infobrev',
     journalpostUtsendingsinfo = 'familie-ba-sak.vis-dokument-utsendingsinfo',
     månedligValutajustering = 'familie-ba-sak.automatisk-valutajustering',
+    kanOverstyreAutomatiskeValutakurser = 'familie-ba-sak.kan-overstyre-automatiske-valutakurser',
 }
 
 export const alleTogglerAv = (): IToggles => {
