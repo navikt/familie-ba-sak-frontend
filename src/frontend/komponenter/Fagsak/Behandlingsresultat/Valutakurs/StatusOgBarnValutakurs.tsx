@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { CogRotationIcon, PencilIcon } from '@navikt/aksel-icons';
+import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import {
     ABorderDanger,
@@ -45,8 +45,8 @@ export const Knapperad = styled.div`
     margin: 2rem 0 1rem;
 `;
 
-const GulPencilIcon = styled(PencilIcon)`
-    color: var(--a-icon-warning);
+const BlåPencilIcon = styled(PencilWritingIcon)`
+    color: var(--a-blue-700);
 `;
 
 const BarnDiv = styled.div`
@@ -65,19 +65,16 @@ interface StatusProps {
 }
 
 const PeriodeStatus: React.FC<StatusProps> = ({
-    valutakurs,
-    vurderingsstrategiForValutakurser,
-}) => {
+                                                  valutakurs,
+                                                  vurderingsstrategiForValutakurser,
+                                              }) => {
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
-        return (
-            <HStack wrap={false} align="center" gap="2">
-                {vurderingsstrategiForValutakurser ===
-                    VurderingsstrategiForValutakurser.MANUELL && (
-                    <GulPencilIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
-                )}
-                <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
-            </HStack>
-        );
+        if (vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
+            return <BlåPencilIcon title="Automatisk vurdert valutakurs åpen for redigering" fontSize="1.5rem"
+                                  width="1.5rem" />;
+        } else {
+            return <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />;
+        }
     } else {
         return <StatusIkon status={mapEøsPeriodeStatusTilStatus[valutakurs.status]} />;
     }
