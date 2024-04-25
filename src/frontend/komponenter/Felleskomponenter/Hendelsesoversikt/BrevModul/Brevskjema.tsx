@@ -34,7 +34,7 @@ import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import { useSamhandlerRequest } from '../../../Fagsak/InstitusjonOgVerge/useSamhandler';
+import { useSamhandlerRequest } from '../../../Fagsak/Institusjon/useSamhandler';
 import Datovelger from '../../Datovelger/Datovelger';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';

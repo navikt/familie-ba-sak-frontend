@@ -7,7 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import type { FagsakType, IMinimalFagsak } from '../../../typer/fagsak';
-import type { IInstitusjon } from '../../../typer/institusjon-og-verge';
+import type { IInstitusjon } from '../../../typer/institusjon';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import type { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
