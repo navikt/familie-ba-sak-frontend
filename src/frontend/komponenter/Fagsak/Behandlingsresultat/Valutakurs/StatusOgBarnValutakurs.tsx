@@ -65,13 +65,18 @@ interface StatusProps {
 }
 
 const PeriodeStatus: React.FC<StatusProps> = ({
-                                                  valutakurs,
-                                                  vurderingsstrategiForValutakurser,
-                                              }) => {
+    valutakurs,
+    vurderingsstrategiForValutakurser,
+}) => {
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
         if (vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
-            return <BlåPencilIcon title="Automatisk vurdert valutakurs åpen for redigering" fontSize="1.5rem"
-                                  width="1.5rem" />;
+            return (
+                <BlåPencilIcon
+                    title="Automatisk vurdert valutakurs åpen for redigering"
+                    fontSize="1.5rem"
+                    width="1.5rem"
+                />
+            );
         } else {
             return <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />;
         }
