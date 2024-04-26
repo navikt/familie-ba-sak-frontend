@@ -3,47 +3,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import {
-    ABorderDanger,
-    ABorderDefault,
-    ABorderWarning,
-    ASurfaceAction,
-} from '@navikt/ds-tokens/dist/tokens';
+import { BodyShort, HStack } from '@navikt/ds-react';
 
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
-import {
-    EøsPeriodeStatus,
-    type IRestValutakurs,
-    Vurderingsform,
-} from '../../../../typer/eøsPerioder';
+import { type IRestValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../utils/formatter';
-
-interface IEøsPeriodeSkjemaContainerProps {
-    $lesevisning: boolean;
-    $status: EøsPeriodeStatus;
-}
-
-export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
-    max-width: 34rem;
-    border-left: 0.125rem solid
-        ${props => {
-            if (props.$lesevisning) return ABorderDefault;
-            if (props.$status === EøsPeriodeStatus.IKKE_UTFYLT) return ABorderWarning;
-            if (props.$status === EøsPeriodeStatus.UFULLSTENDIG) return ABorderDanger;
-            return ASurfaceAction;
-        }};
-    padding-left: 2rem;
-    margin-left: -3rem;
-`;
-
-export const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 2rem 0 1rem;
-`;
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     color: var(--a-blue-700);
