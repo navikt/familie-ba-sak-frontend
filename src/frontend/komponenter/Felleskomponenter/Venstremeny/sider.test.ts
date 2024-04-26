@@ -19,7 +19,7 @@ describe('sider.ts', () => {
             const behandling = mockBehandling({
                 stegTilstand: [
                     {
-                        behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE,
+                        behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON,
                         behandlingStegStatus: BehandlingStegStatus.IKKE_UTFØRT,
                     },
                 ],

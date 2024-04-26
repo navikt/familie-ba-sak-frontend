@@ -24,8 +24,8 @@ import { fagsakStatus, FagsakType } from '../../typer/fagsak';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
-import { SamhandlerTabell } from '../Fagsak/InstitusjonOgVerge/SamhandlerTabell';
-import { useSamhandlerRequest } from '../Fagsak/InstitusjonOgVerge/useSamhandler';
+import { SamhandlerTabell } from '../Fagsak/Institusjon/SamhandlerTabell';
+import { useSamhandlerRequest } from '../Fagsak/Institusjon/useSamhandler';
 
 const FlexDiv = styled.div`
     display: flex;

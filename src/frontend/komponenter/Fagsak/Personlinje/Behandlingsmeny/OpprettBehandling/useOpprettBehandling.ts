@@ -257,7 +257,7 @@ const useOpprettBehandling = (
 
                     if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
                         navigate(
-                            behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON_OG_VERGE
+                            behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
                                 ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
                                 : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );

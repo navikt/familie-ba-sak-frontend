@@ -4,7 +4,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 
 import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
-import RegistrerInstitusjon from './InstitusjonOgVerge/RegistrerInstitusjon';
+import RegistrerInstitusjon from './Institusjon/RegistrerInstitusjon';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
@@ -12,7 +12,7 @@ import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { VedtaksperioderProvider } from '../../context/behandlingContext/useVedtaksperioder';
 import { EøsProvider } from '../../context/Eøs/EøsContext';
-import { InstitusjonOgVergeProvider } from '../../context/InstitusjonOgVergeContext';
+import { InstitusjonProvider } from '../../context/InstitusjonContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -47,9 +47,9 @@ const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
             <Route
                 path="/registrer-institusjon"
                 element={
-                    <InstitusjonOgVergeProvider åpenBehandling={behandling}>
+                    <InstitusjonProvider åpenBehandling={behandling}>
                         <RegistrerInstitusjon />
-                    </InstitusjonOgVergeProvider>
+                    </InstitusjonProvider>
                 }
             />
             <Route
