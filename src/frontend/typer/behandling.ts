@@ -279,6 +279,12 @@ export interface IBehandling {
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
     refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: IRestBrevmottaker[];
+    vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
+}
+
+export enum VurderingsstrategiForValutakurser {
+    MANUELL = 'MANUELL',
+    AUTOMATISK = 'AUTOMATISK',
 }
 
 export interface IArbeidsfordelingPåBehandling {

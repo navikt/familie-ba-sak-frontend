@@ -18,6 +18,7 @@ import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
@@ -59,6 +60,7 @@ interface IProps {
     sletterValutakurs: boolean;
     erManuellInputAvKurs: boolean;
     vurderingsform: Vurderingsform | undefined;
+    åpenBehandling: IBehandling;
 }
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
@@ -72,9 +74,17 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     slettValutakurs,
     sletterValutakurs,
     erManuellInputAvKurs,
+    åpenBehandling,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const erLesevisning = vurderErLesevisning(true) || vurderingsform === Vurderingsform.AUTOMATISK;
+    const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
+    const skaAutomatiskeValutakurserKunneRedigeres =
+        åpenBehandling.vurderingsstrategiForValutakurser ===
+        VurderingsstrategiForValutakurser.MANUELL;
+
+    const erLesevisning =
+        vurderErLesevisning(true) ||
+        (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -105,7 +115,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
             hideLegend
         >
             <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
-                {vurderingsform === Vurderingsform.AUTOMATISK && (
+                {erValutakursVurdertAutomatisk && (
                     <HStack wrap={false} align={'center'} gap={'4'}>
                         <CogRotationIcon
                             title="Automatisk registrert valutakurs"
@@ -143,7 +153,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
-                    hideLegend={vurderingsform === Vurderingsform.AUTOMATISK}
+                    hideLegend={erValutakursVurdertAutomatisk}
                 >
                     <ValutakursRad>
                         <Datovelger

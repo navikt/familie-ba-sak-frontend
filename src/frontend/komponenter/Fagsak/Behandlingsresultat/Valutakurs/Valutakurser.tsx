@@ -3,14 +3,20 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading, HStack, Spacer, Switch, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Spacer, Switch, Table, VStack } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
 import { useApp } from '../../../../context/AppContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../../context/Eøs/EøsContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
+import {
+    EøsPeriodeStatus,
+    type IRestValutakurs,
+    Vurderingsform,
+} from '../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../typer/toggles';
 
 const ValutakurserContainer = styled.div`
@@ -23,6 +29,10 @@ const StyledTable = styled(Table)`
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
+`;
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1rem;
 `;
 
 const StyledHeaderCell = styled(Table.HeaderCell)`
@@ -52,11 +62,47 @@ interface IProps {
 const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeilmeldinger }) => {
     const { erValutakurserGyldige } = useEøs();
     const { toggles } = useApp();
+    const { settÅpenBehandling } = useBehandling();
+    const { request } = useHttp();
     const månedligValutajusteringToggleErSlåttPå = toggles[ToggleNavn.månedligValutajustering];
+    const kanOverstyreAutomatiskeValutakurser =
+        toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
+
+    const hentNesteVurderingsstrategi = (
+        vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
+    ): VurderingsstrategiForValutakurser => {
+        switch (vurderingsstrategiForValutakurser) {
+            case VurderingsstrategiForValutakurser.AUTOMATISK:
+                return VurderingsstrategiForValutakurser.MANUELL;
+            case VurderingsstrategiForValutakurser.MANUELL:
+                return VurderingsstrategiForValutakurser.AUTOMATISK;
+            case null:
+                return VurderingsstrategiForValutakurser.MANUELL;
+        }
+    };
+
+    const overstyrValutakurserTilÅVæreManuelle = () => {
+        const nesteVurderingsstrategi = hentNesteVurderingsstrategi(
+            åpenBehandling.vurderingsstrategiForValutakurser
+        );
+
+        request<undefined, IBehandling>({
+            method: 'PUT',
+            url: `/familie-ba-sak/api/differanseberegning/valutakurs/behandlinger/${åpenBehandling.behandlingId}/endre-vurderingsstrategi-til/${nesteVurderingsstrategi}`,
+            påvirkerSystemLaster: true,
+        }).then((response: Ressurs<IBehandling>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(response);
+            }
+        });
+    };
 
     const finnesValutaperioderSomKanSkjules =
         valutakurser.length > 1 && månedligValutajusteringToggleErSlåttPå;
     const [visAlleValutaperioder, setVisAlleValutaperioder] = useState(false);
+    const erValutakursSomErVurdertAutomatisk = valutakurser.some(
+        restValutakurs => restValutakurs.vurderingsform == Vurderingsform.AUTOMATISK
+    );
 
     return (
         <ValutakurserContainer>
@@ -65,24 +111,42 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     Valuta
                 </Heading>
                 <Spacer />
-                {finnesValutaperioderSomKanSkjules && (
-                    <Switch
-                        size="small"
-                        position="left"
-                        id={'vis-alle-valuta-perioder'}
-                        checked={visAlleValutaperioder}
-                        onChange={() => {
-                            setVisAlleValutaperioder(
-                                forrigeVisAlleValutaperioder => !forrigeVisAlleValutaperioder
-                            );
-                        }}
-                    >
-                        Vis alle valutaperioder
-                    </Switch>
-                )}
+                <VStack gap="2">
+                    {finnesValutaperioderSomKanSkjules && (
+                        <Switch
+                            size="small"
+                            position="left"
+                            id={'vis-alle-valuta-perioder'}
+                            checked={visAlleValutaperioder}
+                            onChange={() => {
+                                setVisAlleValutaperioder(
+                                    forrigeVisAlleValutaperioder => !forrigeVisAlleValutaperioder
+                                );
+                            }}
+                        >
+                            Vis alle valutaperioder
+                        </Switch>
+                    )}
+                    {kanOverstyreAutomatiskeValutakurser &&
+                        (åpenBehandling.vurderingsstrategiForValutakurser ===
+                            VurderingsstrategiForValutakurser.MANUELL ||
+                            erValutakursSomErVurdertAutomatisk) && (
+                            <Button
+                                size="xsmall"
+                                variant="danger"
+                                onClick={overstyrValutakurserTilÅVæreManuelle}
+                                id={'endre-vurderingsstrategi-for-valutakurser'}
+                            >
+                                {åpenBehandling.vurderingsstrategiForValutakurser ===
+                                VurderingsstrategiForValutakurser.MANUELL
+                                    ? 'Gjenopprett automatiske valutakurser'
+                                    : 'Overstyr automatiske valutakurser'}
+                            </Button>
+                        )}
+                </VStack>
             </HStack>
             {!erValutakurserGyldige() && (
-                <Alert
+                <StyledAlert
                     variant={'warning'}
                     fullWidth
                     children={

@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Table } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
 
+import { PeriodeValutakurs } from './PeriodeValutakurs';
+import { StatusOgBarnValutakurs } from './StatusOgBarnValutakurs';
 import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
 import {
     useValutakursSkjema,
@@ -12,7 +14,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { lagPersonLabel } from '../../../../utils/formatter';
-import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 
 interface IProps {
     valutakurs: IRestValutakurs;
@@ -89,20 +90,17 @@ const ValutakursTabellRad: React.FC<IProps> = ({
                         erManuellInputAvKurs={erManuellInputAvKurs}
                         key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
                         vurderingsform={valutakurs.vurderingsform}
+                        åpenBehandling={åpenBehandling}
                     />
                 ) : null
             }
         >
-            <StatusBarnCelleOgPeriodeCelle
-                status={valutakurs.status}
-                barnIdenter={valutakurs.barnIdenter}
-                personer={åpenBehandling.personer}
-                periode={{
-                    fom: valutakurs.fom,
-                    tom: valutakurs.tom,
-                }}
-                vurderingsform={valutakurs.vurderingsform}
-            />
+            <Table.DataCell>
+                <StatusOgBarnValutakurs valutakurs={valutakurs} åpenBehandling={åpenBehandling} />
+            </Table.DataCell>
+            <Table.DataCell>
+                <PeriodeValutakurs valutakurs={valutakurs} />
+            </Table.DataCell>
             <Table.DataCell>
                 {valutakurs.valutakursdato
                     ? isoStringTilFormatertString({
