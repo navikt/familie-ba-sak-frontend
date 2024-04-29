@@ -25,14 +25,17 @@ import type { IsoDatoString } from '../utils/dato';
 import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../utils/fritekstfelter';
-import { genererIdBasertPåAndreFritekster, lagInitiellFritekst } from '../utils/fritekstfelter';
+import {
+    genererIdBasertPåAndreFritekstKulepunkter,
+    lagInitiellFritekst,
+} from '../utils/fritekstfelter';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { behandling } = useBehandling();
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
-    const makslengdeFritekst = 220;
+    const makslengdeFritekstHvertKulepunkt = 220;
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
@@ -64,7 +67,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
     });
 
-    const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+    const fritekstKulepunkter = useFelt<FeltState<IFritekstFelt>[]>({
         verdi: [],
         valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
             return felt.verdi.some(
@@ -140,7 +143,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             felt: FeltState<ISelectOptionMedBrevtekst[]>,
             avhengigheter?: Avhengigheter
         ) => {
-            if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
+            if (felt.verdi.length === 0 && avhengigheter?.fritekstKulepunkter.verdi.length === 0) {
                 return feil(
                     felt,
                     'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt med fritekst'
@@ -161,7 +164,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
-        avhengigheter: { brevmal, fritekster },
+        avhengigheter: { brevmal, fritekstKulepunkter },
         nullstillVedAvhengighetEndring: false,
     });
 
@@ -216,7 +219,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent: string;
             brevmal: Brevmal | '';
             dokumenter: ISelectOptionMedBrevtekst[];
-            fritekster: FeltState<IFritekstFelt>[];
+            fritekstKulepunkter: FeltState<IFritekstFelt>[];
             barnMedDeltBosted: IBarnMedOpplysninger[];
             barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
@@ -230,7 +233,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent,
             brevmal,
             dokumenter,
-            fritekster,
+            fritekstKulepunkter,
             barnMedDeltBosted,
             barnBrevetGjelder,
             avtalerOmDeltBostedPerBarn,
@@ -286,19 +289,19 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const hentMuligeBrevMaler = (): Brevmal[] =>
         hentMuligeBrevmalerImplementering(behandling, !!institusjon);
 
-    const leggTilFritekst = (valideringsmelding?: string) => {
-        skjema.felter.fritekster.validerOgSettFelt([
-            ...skjema.felter.fritekster.verdi,
+    const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
+        skjema.felter.fritekstKulepunkter.validerOgSettFelt([
+            ...skjema.felter.fritekstKulepunkter.verdi,
             lagInitiellFritekst(
                 '',
-                genererIdBasertPåAndreFritekster(fritekster),
-                makslengdeFritekst,
+                genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter),
+                makslengdeFritekstHvertKulepunkt,
                 valideringsmelding
             ),
         ]);
     };
 
-    const erBrevmalMedObligatoriskFritekst = (brevmal: Brevmal) =>
+    const erBrevmalMedObligatoriskFritekstKulepunkt = (brevmal: Brevmal) =>
         [
             Brevmal.VARSEL_OM_REVURDERING,
             Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON,
@@ -314,14 +317,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      */
     useEffect(() => {
         if (
-            fritekster.verdi.length === 0 &&
-            erBrevmalMedObligatoriskFritekst(brevmal.verdi as Brevmal)
+            fritekstKulepunkter.verdi.length === 0 &&
+            erBrevmalMedObligatoriskFritekstKulepunkt(brevmal.verdi as Brevmal)
         ) {
             const valideringsmelding =
                 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
-            leggTilFritekst(valideringsmelding);
+            leggTilFritekstKulepunkt(valideringsmelding);
         }
-    }, [brevmal, fritekster]);
+    }, [brevmal, fritekstKulepunkter]);
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
         const erVarselOmRevurderingDeltBosted =
@@ -338,7 +341,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                         return selectOption.value;
                     }
                 }),
-                ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
+                ...skjema.felter.fritekstKulepunkter.verdi.map(f => f.verdi.tekst),
             ];
 
             const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(
@@ -387,11 +390,11 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         onSubmit,
         personer,
         settNavigerTilOpplysningsplikt,
-        leggTilFritekst,
-        makslengdeFritekst,
+        leggTilFritekstKulepunkt,
+        makslengdeFritekstHvertKulepunkt,
         maksAntallKulepunkter,
         settVisfeilmeldinger,
-        erBrevmalMedObligatoriskFritekst,
+        erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
         fagsakType,

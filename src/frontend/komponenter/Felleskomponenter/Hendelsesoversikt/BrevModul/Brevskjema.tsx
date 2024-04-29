@@ -107,11 +107,11 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         onSubmit,
         settNavigerTilOpplysningsplikt,
         hentMuligeBrevMaler,
-        makslengdeFritekst,
+        makslengdeFritekstHvertKulepunkt,
         maksAntallKulepunkter,
-        leggTilFritekst,
+        leggTilFritekstKulepunkt,
         settVisfeilmeldinger,
-        erBrevmalMedObligatoriskFritekst,
+        erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
     } = useBrevModul();
@@ -142,7 +142,8 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
         'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
-    const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
+    const erMaksAntallKulepunkter =
+        skjema.felter.fritekstKulepunkter.verdi.length >= maksAntallKulepunkter;
 
     const behandlingSteg = behandling.steg;
 
@@ -157,19 +158,22 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 : institusjon.navn;
     }
 
-    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
-        skjema.felter.fritekster.validerOgSettFelt([
-            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
-                if (mapFritekst.verdi.id === fritekstId) {
-                    return mapFritekst.valider({
-                        ...mapFritekst,
+    const onChangeFritekstKulepunkt = (
+        event: React.ChangeEvent<HTMLTextAreaElement>,
+        fritekstKulepunktId: number
+    ) =>
+        skjema.felter.fritekstKulepunkter.validerOgSettFelt([
+            ...skjema.felter.fritekstKulepunkter.verdi.map(fritekstKulepunkt => {
+                if (fritekstKulepunkt.verdi.id === fritekstKulepunktId) {
+                    return fritekstKulepunkt.valider({
+                        ...fritekstKulepunkt,
                         verdi: {
-                            ...mapFritekst.verdi,
+                            ...fritekstKulepunkt.verdi,
                             tekst: event.target.value,
                         },
                     });
                 } else {
-                    return mapFritekst;
+                    return fritekstKulepunkt;
                 }
             }),
         ]);
@@ -249,12 +253,12 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         }
                     />
                 )}
-                {skjema.felter.fritekster.erSynlig && (
+                {skjema.felter.fritekstKulepunkter.erSynlig && (
                     <FritekstWrapper>
                         <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
                         {erLesevisning ? (
                             <StyledList id={fritekstSkjemaGruppeId}>
-                                {skjema.felter.fritekster.verdi.map(
+                                {skjema.felter.fritekstKulepunkter.verdi.map(
                                     (fritekst: FeltState<IFritekstFelt>) => (
                                         <li>{fritekst.verdi.tekst}</li>
                                     )
@@ -267,7 +271,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                     hideLegend
                                     id={fritekstSkjemaGruppeId}
                                 >
-                                    {skjema.felter.fritekster.verdi.map(
+                                    {skjema.felter.fritekstKulepunkter.verdi.map(
                                         (fritekst: FeltState<IFritekstFelt>, index: number) => {
                                             const fritekstId = fritekst.verdi.id;
                                             const valgtBrevmal = skjema.felter.brevmal
@@ -291,11 +295,16 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         size={'small'}
                                                         className={'fritekst-textarea'}
                                                         value={fritekst.verdi.tekst}
-                                                        maxLength={makslengdeFritekst}
+                                                        maxLength={makslengdeFritekstHvertKulepunkt}
                                                         description={hjelpetekst}
                                                         onChange={(
                                                             event: React.ChangeEvent<HTMLTextAreaElement>
-                                                        ) => onChangeFritekst(event, fritekstId)}
+                                                        ) =>
+                                                            onChangeFritekstKulepunkt(
+                                                                event,
+                                                                fritekstId
+                                                            )
+                                                        }
                                                         error={
                                                             skjema.visFeilmeldinger &&
                                                             fritekst.feilmelding
@@ -304,16 +313,16 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         autoFocus
                                                     />
                                                     {!(
-                                                        erBrevmalMedObligatoriskFritekst(
+                                                        erBrevmalMedObligatoriskFritekstKulepunkt(
                                                             valgtBrevmal
                                                         ) && index === 0
                                                     ) && (
                                                         <StyledButton
                                                             variant={'tertiary'}
                                                             onClick={() => {
-                                                                skjema.felter.fritekster.validerOgSettFelt(
+                                                                skjema.felter.fritekstKulepunkter.validerOgSettFelt(
                                                                     [
-                                                                        ...skjema.felter.fritekster.verdi.filter(
+                                                                        ...skjema.felter.fritekstKulepunkter.verdi.filter(
                                                                             mapFritekst =>
                                                                                 mapFritekst.verdi
                                                                                     .id !==
@@ -339,7 +348,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 {!erMaksAntallKulepunkter && !erLesevisning && (
                                     <Button
                                         variant={'tertiary'}
-                                        onClick={() => leggTilFritekst()}
+                                        onClick={() => leggTilFritekstKulepunkt()}
                                         id={`legg-til-fritekst`}
                                         size={'small'}
                                         icon={<PlusCircleIcon />}

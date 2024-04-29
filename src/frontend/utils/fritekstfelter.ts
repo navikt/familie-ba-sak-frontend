@@ -6,9 +6,18 @@ export interface IFritekstFelt {
     id: number;
 }
 
-export const genererIdBasertPåAndreFritekster = (fritekster?: Felt<FeltState<IFritekstFelt>[]>) => {
-    if (fritekster && fritekster.verdi.length > 0) {
-        return Math.max(...fritekster.verdi.map(fritekst => fritekst.verdi.id, 10)) + 1;
+export const genererIdBasertPåAndreFritekstKulepunkter = (
+    fritekstKulepunkter?: Felt<FeltState<IFritekstFelt>[]>
+) => {
+    if (fritekstKulepunkter && fritekstKulepunkter.verdi.length > 0) {
+        return (
+            Math.max(
+                ...fritekstKulepunkter.verdi.map(
+                    fritekstKulepunkt => fritekstKulepunkt.verdi.id,
+                    10
+                )
+            ) + 1
+        );
     } else {
         return 1;
     }
