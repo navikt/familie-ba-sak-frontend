@@ -62,12 +62,14 @@ interface IProps {
 const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeilmeldinger }) => {
     const { erValutakurserGyldige } = useEøs();
     const { toggles } = useApp();
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling, vurderErLesevisning } = useBehandling();
     const { request } = useHttp();
     const kanOppretteAutomatiskeValutakurserPåManuelleSaker =
         toggles[ToggleNavn.kanOppretteAutomatiskeValutakurserPåManuelleSaker];
     const kanOverstyreAutomatiskeValutakurser =
         toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
+
+    const erLesevisning = vurderErLesevisning();
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
@@ -128,7 +130,8 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             Vis alle valutaperioder
                         </Switch>
                     )}
-                    {kanOverstyreAutomatiskeValutakurser &&
+                    {!erLesevisning &&
+                        kanOverstyreAutomatiskeValutakurser &&
                         (åpenBehandling.vurderingsstrategiForValutakurser ===
                             VurderingsstrategiForValutakurser.MANUELL ||
                             erValutakursSomErVurdertAutomatisk) && (
