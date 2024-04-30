@@ -153,7 +153,11 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             erValutakursSomErVurdertAutomatisk) && (
                             <Button
                                 size="xsmall"
-                                variant="danger"
+                                variant={
+                                    erManuellVurderingsstrategiForValutakurser
+                                        ? 'danger'
+                                        : 'primary'
+                                }
                                 onClick={() =>
                                     erManuellVurderingsstrategiForValutakurser
                                         ? visGjenopprettAutomatiskeValutakurserModal()
