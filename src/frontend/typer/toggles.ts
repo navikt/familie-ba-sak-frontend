@@ -7,14 +7,14 @@ export enum ToggleNavn {
     kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
-    kanStarteValutajustering = 'familie-ba-sak.kan-starte-valutajustering',
+    kanKjoreAutmatiskValutajusteringBehandlingForEnkeltSak = 'familie-ba-sak.kan-kjore-autmatisk-valutajustering-behandling-for-enkelt-sak',
 
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     manuellMottakerInfobrev = 'familie-ba-sak.manuell-mottaker-infobrev',
     journalpostUtsendingsinfo = 'familie-ba-sak.vis-dokument-utsendingsinfo',
-    månedligValutajustering = 'familie-ba-sak.automatisk-valutajustering',
+    kanOppretteAutomatiskeValutakurserPåManuelleSaker = 'familie-ba-sak.kan-opprette-automatiske-valutakurser-paa-manuelle-saker',
     kanOverstyreAutomatiskeValutakurser = 'familie-ba-sak.kan-overstyre-automatiske-valutakurser',
 }
 
