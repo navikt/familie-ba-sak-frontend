@@ -182,7 +182,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
 
-                    {toggles[ToggleNavn.kanStarteValutajustering] &&
+                    {toggles[ToggleNavn.kanKjoreAutmatiskValutajusteringBehandlingForEnkeltSak] &&
                         minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
                             <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
                         )}

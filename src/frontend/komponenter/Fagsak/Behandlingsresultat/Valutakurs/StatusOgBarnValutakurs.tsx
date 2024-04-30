@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
 
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { mapEøsPeriodeStatusTilStatus } from '../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../ikoner/StatusIkon';
 import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
@@ -34,8 +35,14 @@ const PeriodeStatus: React.FC<StatusProps> = ({
     valutakurs,
     vurderingsstrategiForValutakurser,
 }) => {
+    const { vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
-        if (vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
+        if (
+            !erLesevisning &&
+            vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL
+        ) {
             return (
                 <BlåPencilIcon
                     title="Automatisk vurdert valutakurs åpen for redigering"
