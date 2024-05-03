@@ -215,37 +215,39 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                 </Table.Body>
             </StyledTable>
 
-            <Modal
-                open={erGjenopprettAutomatiskeValutakurserModalÅpen}
-                onClose={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
-                header={{ heading: 'Gjenopprett automatiske valutakurser' }}
-            >
-                <Modal.Body>
-                    <BodyLong>
-                        Er du sikker på at du vil gjenopprette de automatiske valutakursene? Alle
-                        manuelle endringer du har gjort i valutakursene denne behandlingen vil bli
-                        slettet.
-                    </BodyLong>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        type="button"
-                        onClick={() => {
-                            endreVurderingsstrategiForValutakurser();
-                            settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
-                        }}
-                    >
-                        Gjenopprett automatiske valutakurser
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
-                    >
-                        Avbryt
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            {erGjenopprettAutomatiskeValutakurserModalÅpen && (
+                <Modal
+                    open={erGjenopprettAutomatiskeValutakurserModalÅpen}
+                    onClose={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                    header={{ heading: 'Gjenopprett automatiske valutakurser' }}
+                >
+                    <Modal.Body>
+                        <BodyLong>
+                            Er du sikker på at du vil gjenopprette de automatiske valutakursene?
+                            Alle manuelle endringer du har gjort i valutakursene denne behandlingen
+                            vil bli slettet.
+                        </BodyLong>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                endreVurderingsstrategiForValutakurser();
+                                settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
+                            }}
+                        >
+                            Gjenopprett automatiske valutakurser
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                        >
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </ValutakurserContainer>
     );
 };
