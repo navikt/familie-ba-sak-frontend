@@ -75,13 +75,16 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
     const { toggles } = useApp();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandling();
     const { request } = useHttp();
+    const [
+        erGjenopprettAutomatiskeValutakurserModalÅpen,
+        settErGjenopprettAutomatiskeValutakurserModalÅpen,
+    ] = useState(false);
     const kanOppretteAutomatiskeValutakurserPåManuelleSaker =
         toggles[ToggleNavn.kanOppretteAutomatiskeValutakurserPåManuelleSaker];
     const kanOverstyreAutomatiskeValutakurser =
         toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
 
     const erLesevisning = vurderErLesevisning();
-    const gjenopprettAutomatiskeValutakurserModalRef = React.useRef<HTMLDialogElement>(null);
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
@@ -94,10 +97,6 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
             case null:
                 return VurderingsstrategiForValutakurser.MANUELL;
         }
-    };
-
-    const visGjenopprettAutomatiskeValutakurserModal = () => {
-        gjenopprettAutomatiskeValutakurserModalRef.current?.showModal();
     };
 
     const endreVurderingsstrategiForValutakurser = () => {
@@ -163,7 +162,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                                 }
                                 onClick={() =>
                                     erManuellVurderingsstrategiForValutakurser
-                                        ? visGjenopprettAutomatiskeValutakurserModal()
+                                        ? settErGjenopprettAutomatiskeValutakurserModalÅpen(true)
                                         : endreVurderingsstrategiForValutakurser()
                                 }
                                 id={'endre-vurderingsstrategi-for-valutakurser'}
@@ -217,7 +216,8 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
             </StyledTable>
 
             <Modal
-                ref={gjenopprettAutomatiskeValutakurserModalRef}
+                open={erGjenopprettAutomatiskeValutakurserModalÅpen}
+                onClose={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
                 header={{ heading: 'Gjenopprett automatiske valutakurser' }}
             >
                 <Modal.Body>
@@ -232,7 +232,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                         type="button"
                         onClick={() => {
                             endreVurderingsstrategiForValutakurser();
-                            gjenopprettAutomatiskeValutakurserModalRef.current?.close();
+                            settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
                         }}
                     >
                         Gjenopprett automatiske valutakurser
@@ -240,7 +240,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                     <Button
                         type="button"
                         variant="secondary"
-                        onClick={() => gjenopprettAutomatiskeValutakurserModalRef.current?.close()}
+                        onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
                     >
                         Avbryt
                     </Button>
