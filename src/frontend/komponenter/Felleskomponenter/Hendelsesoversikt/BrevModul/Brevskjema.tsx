@@ -108,12 +108,15 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         settNavigerTilOpplysningsplikt,
         hentMuligeBrevMaler,
         makslengdeFritekstHvertKulepunkt,
+        maksLengdeFritekstAvsnitt,
         maksAntallKulepunkter,
         leggTilFritekstKulepunkt,
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
+        visFritekstAvsnittTekstboks,
+        settVisFritekstAvsnittTekstboks,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -357,6 +360,72 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                     </Button>
                                 )}
                             </>
+                        )}
+                    </FritekstWrapper>
+                )}
+                {skjema.felter.fritekstAvsnitt.erSynlig && (
+                    <FritekstWrapper>
+                        <Label htmlFor={fritekstSkjemaGruppeId}>Legg til fritekst avsnitt</Label>
+                        {visFritekstAvsnittTekstboks ? (
+                            erLesevisning ? (
+                                skjema.felter.fritekstAvsnitt.verdi
+                            ) : (
+                                <Fieldset
+                                    legend="Legg til fritekst avsnitt"
+                                    hideLegend
+                                    id={fritekstSkjemaGruppeId}
+                                >
+                                    <StyledFamilieFritekstFelt>
+                                        <TextareaBegrunnelseFritekst
+                                            label={``}
+                                            size={'small'}
+                                            className={'fritekst-textarea'}
+                                            value={skjema.felter.fritekstAvsnitt.verdi}
+                                            maxLength={maksLengdeFritekstAvsnitt}
+                                            onChange={(
+                                                event: React.ChangeEvent<HTMLTextAreaElement>
+                                            ) =>
+                                                skjema.felter.fritekstAvsnitt.validerOgSettFelt(
+                                                    event.target.value
+                                                )
+                                            }
+                                            error={
+                                                skjema.visFeilmeldinger &&
+                                                skjema.felter.fritekstAvsnitt?.feilmelding
+                                            }
+                                            /* eslint-disable-next-line jsx-a11y/no-autofocus */
+                                            autoFocus
+                                        />
+
+                                        <StyledButton
+                                            variant={'tertiary'}
+                                            onClick={() => {
+                                                skjema.felter.fritekstAvsnitt.nullstill();
+                                                settVisFritekstAvsnittTekstboks(false);
+                                            }}
+                                            id={`fjern_fritekst`}
+                                            size={'small'}
+                                            aria-label={'Fjern fritekst'}
+                                            icon={<TrashIcon />}
+                                        >
+                                            {'Fjern'}
+                                        </StyledButton>
+                                    </StyledFamilieFritekstFelt>
+                                </Fieldset>
+                            )
+                        ) : (
+                            skjema.felter.fritekstAvsnitt &&
+                            !erLesevisning && (
+                                <Button
+                                    variant={'tertiary'}
+                                    onClick={() => settVisFritekstAvsnittTekstboks(true)}
+                                    id={`legg-til-fritekst-avsnitt`}
+                                    size={'small'}
+                                    icon={<PlusCircleIcon />}
+                                >
+                                    {'Legg til fritekst avsnitt'}
+                                </Button>
+                            )
                         )}
                     </FritekstWrapper>
                 )}

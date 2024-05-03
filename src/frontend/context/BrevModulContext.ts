@@ -36,6 +36,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
+    const maksLengdeFritekstAvsnitt = 1000;
+
+    const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = React.useState(false);
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
@@ -93,6 +96,39 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
+    const fritekstAvsnitt = useFelt<string | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: fritekst => {
+            if (fritekst.verdi === undefined) {
+                return ok(fritekst);
+            }
+
+            if (fritekst.verdi.trim() === '') {
+                return feil(
+                    fritekst,
+                    'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+                );
+            }
+
+            if (fritekst.verdi.length > maksLengdeFritekstAvsnitt) {
+                return feil(fritekst, `Du har nådd maks antall tegn: ${maksLengdeFritekstAvsnitt}`);
+            }
+
+            return ok(fritekst);
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                [
+                    Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
+                    Brevmal.INNHENTE_OPPLYSNINGER,
+                    Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                ].includes(avhengigheter.brevmal.verdi)
+            );
+        },
+        avhengigheter: { brevmal },
+    });
+
     const antallUkerSvarfrist = useFelt({
         verdi: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
         valideringsfunksjon: (felt: FeltState<number | ''>) => {
@@ -143,10 +179,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             felt: FeltState<ISelectOptionMedBrevtekst[]>,
             avhengigheter?: Avhengigheter
         ) => {
-            if (felt.verdi.length === 0 && avhengigheter?.fritekstKulepunkter.verdi.length === 0) {
+            if (
+                felt.verdi.length === 0 &&
+                avhengigheter?.fritekstKulepunkter.verdi.length === 0 &&
+                avhengigheter?.fritekstAvsnitt.verdi?.length === 0
+            ) {
                 return feil(
                     felt,
-                    'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt med fritekst'
+                    'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt eller avsnitt med fritekst'
                 );
             }
 
@@ -164,7 +204,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ].includes(avhengigheter?.brevmal.verdi)
             );
         },
-        avhengigheter: { brevmal, fritekstKulepunkter },
+        avhengigheter: { brevmal, fritekstKulepunkter, fritekstAvsnitt },
         nullstillVedAvhengighetEndring: false,
     });
 
@@ -220,6 +260,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal: Brevmal | '';
             dokumenter: ISelectOptionMedBrevtekst[];
             fritekstKulepunkter: FeltState<IFritekstFelt>[];
+            fritekstAvsnitt: string | undefined;
             barnMedDeltBosted: IBarnMedOpplysninger[];
             barnBrevetGjelder: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
@@ -234,6 +275,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal,
             dokumenter,
             fritekstKulepunkter,
+            fritekstAvsnitt,
             barnMedDeltBosted,
             barnBrevetGjelder,
             avtalerOmDeltBostedPerBarn,
@@ -363,6 +405,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                         ? institusjon.navn
                         : personer.find(person => person.personIdent === mottakerIdent.verdi)?.navn,
                 mottakerlandSed: mottakerlandSed.verdi,
+                fritekstAvsnitt: skjema.felter.fritekstAvsnitt.verdi,
             };
         }
     };
@@ -392,12 +435,15 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         settNavigerTilOpplysningsplikt,
         leggTilFritekstKulepunkt,
         makslengdeFritekstHvertKulepunkt,
+        maksLengdeFritekstAvsnitt,
         maksAntallKulepunkter,
         settVisfeilmeldinger,
         erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
         fagsakType,
+        visFritekstAvsnittTekstboks,
+        settVisFritekstAvsnittTekstboks,
     };
 });
 

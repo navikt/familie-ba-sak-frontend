@@ -23,6 +23,7 @@ export interface IManueltBrevRequestPåBehandling extends IManueltBrevRequest {
     mottakerMålform?: Målform;
     mottakerNavn?: string;
     mottakerlandSed?: string[];
+    fritekstAvsnitt?: string;
 }
 
 export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
