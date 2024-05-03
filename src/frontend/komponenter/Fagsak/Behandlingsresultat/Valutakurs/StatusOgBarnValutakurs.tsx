@@ -13,7 +13,11 @@ import { type IRestValutakurs, Vurderingsform } from '../../../../typer/eøsPeri
 import { lagPersonLabel } from '../../../../utils/formatter';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
+    min-width: 1.5rem;
     color: var(--a-blue-700);
+`;
+const StyledCogRotationIcon = styled(CogRotationIcon)`
+    min-width: 1.5rem;
 `;
 
 const BarnDiv = styled.div`
@@ -51,7 +55,13 @@ const PeriodeStatus: React.FC<StatusProps> = ({
                 />
             );
         } else {
-            return <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />;
+            return (
+                <StyledCogRotationIcon
+                    title="Automatisk vurdert"
+                    fontSize="1.5rem"
+                    width="1.5rem"
+                />
+            );
         }
     } else {
         return <StatusIkon status={mapEøsPeriodeStatusTilStatus[valutakurs.status]} />;
