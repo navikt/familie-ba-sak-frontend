@@ -1964,10 +1964,10 @@
     country-data-list "^1.2.2"
     i18n-iso-countries "^7.5.0"
 
-"@navikt/landvelger@3.1.5":
-  version "3.1.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/3.1.5/4ffd24c5cd50cc60f9140f29027ecd7643e5d088#4ffd24c5cd50cc60f9140f29027ecd7643e5d088"
-  integrity sha512-Ij4NzV7ZPUxWfwTEbnkpSsBPrmYW93lYluYNfdaS+CKcE999YC/MQvpiVs3keO751+VXREqb80pONSEJYmdzsQ==
+"@navikt/landvelger@4.0.0":
+  version "4.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/4.0.0/aaa229b0a675e3de3404361b17b502cce52552e3#aaa229b0a675e3de3404361b17b502cce52552e3"
+  integrity sha512-XBhsaYCIMmJjydopZWivFoit3y54ZlRgWMJVg2IxNIwciIYEh/uJwLQ7ka+LAO3BDyKG0DO7qS5ny5Gy441IDQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
