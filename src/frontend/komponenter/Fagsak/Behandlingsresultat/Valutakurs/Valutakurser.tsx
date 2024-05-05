@@ -3,7 +3,18 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, Heading, HStack, Spacer, Switch, Table, VStack } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyLong,
+    Button,
+    Heading,
+    HStack,
+    Modal,
+    Spacer,
+    Switch,
+    Table,
+    VStack,
+} from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -62,11 +73,18 @@ interface IProps {
 const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeilmeldinger }) => {
     const { erValutakurserGyldige } = useEøs();
     const { toggles } = useApp();
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling, vurderErLesevisning } = useBehandling();
     const { request } = useHttp();
-    const månedligValutajusteringToggleErSlåttPå = toggles[ToggleNavn.månedligValutajustering];
+    const [
+        erGjenopprettAutomatiskeValutakurserModalÅpen,
+        settErGjenopprettAutomatiskeValutakurserModalÅpen,
+    ] = useState(false);
+    const kanOppretteAutomatiskeValutakurserPåManuelleSaker =
+        toggles[ToggleNavn.kanOppretteAutomatiskeValutakurserPåManuelleSaker];
     const kanOverstyreAutomatiskeValutakurser =
         toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
+
+    const erLesevisning = vurderErLesevisning();
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
@@ -81,7 +99,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
         }
     };
 
-    const overstyrValutakurserTilÅVæreManuelle = () => {
+    const endreVurderingsstrategiForValutakurser = () => {
         const nesteVurderingsstrategi = hentNesteVurderingsstrategi(
             åpenBehandling.vurderingsstrategiForValutakurser
         );
@@ -98,11 +116,15 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
     };
 
     const finnesValutaperioderSomKanSkjules =
-        valutakurser.length > 1 && månedligValutajusteringToggleErSlåttPå;
+        valutakurser.length > 1 && kanOppretteAutomatiskeValutakurserPåManuelleSaker;
     const [visAlleValutaperioder, setVisAlleValutaperioder] = useState(false);
     const erValutakursSomErVurdertAutomatisk = valutakurser.some(
         restValutakurs => restValutakurs.vurderingsform == Vurderingsform.AUTOMATISK
     );
+
+    const erManuellVurderingsstrategiForValutakurser =
+        åpenBehandling.vurderingsstrategiForValutakurser ===
+        VurderingsstrategiForValutakurser.MANUELL;
 
     return (
         <ValutakurserContainer>
@@ -127,18 +149,25 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             Vis alle valutaperioder
                         </Switch>
                     )}
-                    {kanOverstyreAutomatiskeValutakurser &&
-                        (åpenBehandling.vurderingsstrategiForValutakurser ===
-                            VurderingsstrategiForValutakurser.MANUELL ||
+                    {!erLesevisning &&
+                        kanOverstyreAutomatiskeValutakurser &&
+                        (erManuellVurderingsstrategiForValutakurser ||
                             erValutakursSomErVurdertAutomatisk) && (
                             <Button
                                 size="xsmall"
-                                variant="danger"
-                                onClick={overstyrValutakurserTilÅVæreManuelle}
+                                variant={
+                                    erManuellVurderingsstrategiForValutakurser
+                                        ? 'danger'
+                                        : 'primary'
+                                }
+                                onClick={() =>
+                                    erManuellVurderingsstrategiForValutakurser
+                                        ? settErGjenopprettAutomatiskeValutakurserModalÅpen(true)
+                                        : endreVurderingsstrategiForValutakurser()
+                                }
                                 id={'endre-vurderingsstrategi-for-valutakurser'}
                             >
-                                {åpenBehandling.vurderingsstrategiForValutakurser ===
-                                VurderingsstrategiForValutakurser.MANUELL
+                                {erManuellVurderingsstrategiForValutakurser
                                     ? 'Gjenopprett automatiske valutakurser'
                                     : 'Overstyr automatiske valutakurser'}
                             </Button>
@@ -170,7 +199,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             (valutakurs, index) =>
                                 index === 0 ||
                                 valutakurs.status !== EøsPeriodeStatus.OK ||
-                                !månedligValutajusteringToggleErSlåttPå ||
+                                !kanOppretteAutomatiskeValutakurserPåManuelleSaker ||
                                 visAlleValutaperioder
                         )
                         .map(valutakurs => (
@@ -185,6 +214,40 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                         ))}
                 </Table.Body>
             </StyledTable>
+
+            {erGjenopprettAutomatiskeValutakurserModalÅpen && (
+                <Modal
+                    open={erGjenopprettAutomatiskeValutakurserModalÅpen}
+                    onClose={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                    header={{ heading: 'Gjenopprett automatiske valutakurser' }}
+                >
+                    <Modal.Body>
+                        <BodyLong>
+                            Er du sikker på at du vil gjenopprette de automatiske valutakursene?
+                            Alle manuelle endringer du har gjort i valutakursene denne behandlingen
+                            vil bli slettet.
+                        </BodyLong>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                endreVurderingsstrategiForValutakurser();
+                                settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
+                            }}
+                        >
+                            Gjenopprett automatiske valutakurser
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                        >
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </ValutakurserContainer>
     );
 };
