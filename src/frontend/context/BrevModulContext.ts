@@ -182,7 +182,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             if (
                 felt.verdi.length === 0 &&
                 avhengigheter?.fritekstKulepunkter.verdi.length === 0 &&
-                avhengigheter?.fritekstAvsnitt.verdi?.length === 0
+                avhengigheter?.fritekstAvsnitt.verdi === undefined
             ) {
                 return feil(
                     felt,
