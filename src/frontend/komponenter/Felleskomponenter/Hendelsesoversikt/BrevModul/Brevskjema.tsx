@@ -272,10 +272,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                 <Textarea
                                                     key={`fritekst-${fritekstId}`}
                                                     id={`${fritekstId}`}
-                                                    label="Skriv inn fritekstavsnitt"
+                                                    label="Skriv inn kulepunkt"
                                                     hideLabel
                                                     size={'small'}
-                                                    className={'fritekst-textarea'}
                                                     value={fritekst.verdi.tekst}
                                                     maxLength={makslengdeFritekstHvertKulepunkt}
                                                     description={hjelpetekst}
@@ -348,9 +347,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             >
                                 <StyledFamilieFritekstFelt>
                                     <Textarea
-                                        label={``}
+                                        label="Skriv inn fritekstavsnitt"
+                                        hideLabel
                                         size={'small'}
-                                        className={'fritekst-textarea'}
                                         value={skjema.felter.fritekstAvsnitt.verdi}
                                         maxLength={maksLengdeFritekstAvsnitt}
                                         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
