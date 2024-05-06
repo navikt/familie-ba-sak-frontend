@@ -26,7 +26,7 @@ import type {
 import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import {
-    genererIdBasertPåAndreFritekster,
+    genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../utils/fritekstfelter';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
@@ -205,7 +205,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
                 ...skjema.felter.fritekster.verdi,
                 lagInitiellFritekst(
                     '',
-                    genererIdBasertPåAndreFritekster(skjema.felter.fritekster),
+                    genererIdBasertPåAndreFritekstKulepunkter(skjema.felter.fritekster),
                     makslengdeFritekst
                 ),
             ]);

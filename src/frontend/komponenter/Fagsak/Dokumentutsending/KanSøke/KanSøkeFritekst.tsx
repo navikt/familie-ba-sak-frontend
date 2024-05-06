@@ -9,7 +9,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
-    genererIdBasertPåAndreFritekster,
+    genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
@@ -46,7 +46,7 @@ const KanSøkeFritekst = ({
             ...friteksterFelt.verdi,
             lagInitiellFritekst(
                 '',
-                genererIdBasertPåAndreFritekster(friteksterFelt),
+                genererIdBasertPåAndreFritekstKulepunkter(friteksterFelt),
                 makslengdeFritekst
             ),
         ]);
