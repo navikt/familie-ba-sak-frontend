@@ -22,8 +22,7 @@
     "start:cypress": "tsc -p tsconfig.backend.json && yarn set-node-options NODE_ENV=production node backend/backend/cypress-server.js",
     "run:cypress": "cypress run",
     "cypress": "npm-run-all -p start:cypress -r run:cypress",
-    "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck",
-    "knip": "knip"
+    "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
@@ -125,7 +124,6 @@
     "husky": "^9.0.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "knip": "^5.13.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "lint-staged": "^15.2.0",
