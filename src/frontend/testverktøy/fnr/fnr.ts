@@ -15,17 +15,3 @@ export function beregnKontrollsiffer2(fodselsnummer: string) {
     const kontrollSiffer2Multiplikatorer = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
     return beregnKontrollsiffer(fodselsnummer, kontrollSiffer2Multiplikatorer);
 }
-
-/**
- * Validerer et fødselsnummer.
- * @param fnr - fødselsnummer
- */
-export function valider(fnr: string) {
-    if (fnr.length !== 11) {
-        return false;
-    }
-    return (
-        parseInt(fnr[9], 10) === beregnKontrollsiffer1(fnr) &&
-        parseInt(fnr[10], 10) === beregnKontrollsiffer2(fnr)
-    );
-}
