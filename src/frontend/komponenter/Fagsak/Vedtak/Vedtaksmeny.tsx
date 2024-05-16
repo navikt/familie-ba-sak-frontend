@@ -2,13 +2,20 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CalculatorIcon, ChevronDownIcon, StarsEuIcon } from '@navikt/aksel-icons';
+import {
+    ArrowUndoIcon,
+    CalculatorIcon,
+    ChevronDownIcon,
+    StarsEuIcon,
+    TasklistStartIcon,
+} from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
+import type { ISammensattKontrollsakContext } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
@@ -21,6 +28,7 @@ interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     visFeilutbetaltValuta: () => void;
     visRefusjonEøs: () => void;
+    sammensattKontrollsakContext: ISammensattKontrollsakContext;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -37,9 +45,12 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     visFeilutbetaltValuta,
     visRefusjonEøs,
+    sammensattKontrollsakContext,
 }) => {
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
+    const { nullstillSammensattKontrollsak, settVisSammensattKontrollsak } =
+        sammensattKontrollsakContext;
 
     const erLesevisning = vurderErLesevisning();
 
@@ -69,7 +80,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                         korrigertVedtak={åpenBehandling.korrigertVedtak}
                         behandlingId={åpenBehandling.behandlingId}
                     />
-
                     <EndreEndringstidspunkt åpenBehandling={åpenBehandling} />
                     {åpenBehandling.type === Behandlingstype.REVURDERING &&
                         åpenBehandling.kategori === BehandlingKategori.EØS &&
@@ -86,6 +96,18 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 Legg til refusjon EØS
                             </Dropdown.Menu.List.Item>
                         )}
+                    {åpenBehandling.sammensattKontrollsak ||
+                    sammensattKontrollsakContext.visSammensattKontrollsak ? (
+                        <Dropdown.Menu.List.Item onClick={nullstillSammensattKontrollsak}>
+                            <ArrowUndoIcon fontSize={'1.4rem'} />
+                            Angre sammensatt kontrollsak
+                        </Dropdown.Menu.List.Item>
+                    ) : (
+                        <Dropdown.Menu.List.Item onClick={() => settVisSammensattKontrollsak(true)}>
+                            <TasklistStartIcon fontSize={'1.4rem'} />
+                            Sammensatt kontrollsak
+                        </Dropdown.Menu.List.Item>
+                    )}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>

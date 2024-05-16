@@ -7,6 +7,7 @@ import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { IGrunnlagPerson } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
+import type { IRestSammensattKontrollsak } from './sammensatt-kontrollsak';
 import type { ITilbakekreving } from './simulering';
 import type { ISøknadDTO } from './søknad';
 import type {
@@ -278,6 +279,7 @@ export interface IBehandling {
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
     refusjonEøs: IRestRefusjonEøs[];
+    sammensattKontrollsak?: IRestSammensattKontrollsak;
     brevmottakere: IRestBrevmottaker[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
 }

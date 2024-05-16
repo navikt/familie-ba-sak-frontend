@@ -8,6 +8,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import { useSammensattKontrollsak } from '../../komponenter/Fagsak/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import type { IBehandling } from '../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
 
@@ -19,12 +20,15 @@ export const [VedtaksperioderProvider, useVedtaksperioder] = constate(
     ({ åpenBehandling }: Props) => {
         const { behandlingId } = useSakOgBehandlingParams();
         const { request } = useHttp();
+        const sammensattKontrollsakContext = useSammensattKontrollsak();
+
         const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(
             åpenBehandling.feilutbetaltValuta.length > 0
         );
         const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(
             åpenBehandling.refusjonEøs.length > 0
         );
+
         const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
             React.useState(false);
 
@@ -65,6 +69,7 @@ export const [VedtaksperioderProvider, useVedtaksperioder] = constate(
             settErUlagretNyFeilutbetaltValutaPeriode,
             erUlagretNyRefusjonEøsPeriode,
             settErUlagretNyRefusjonEøsPeriode,
+            sammensattKontrollsakContext,
         };
     }
 );

@@ -47,6 +47,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisFeilutbetaltValuta,
         erUlagretNyFeilutbetaltValutaPeriode,
         erUlagretNyRefusjonEøsPeriode,
+        sammensattKontrollsakContext,
     } = useVedtaksperioder();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
@@ -96,6 +97,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         åpenBehandling={åpenBehandling}
                         visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
                         visRefusjonEøs={() => settVisRefusjonEøs(true)}
+                        sammensattKontrollsakContext={sammensattKontrollsakContext}
                     />
                     <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
                 </>
