@@ -12,7 +12,7 @@ import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Co
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useVedtaksperioder } from '../../../context/behandlingContext/useVedtaksperioder';
+import { useVedtakSteg } from '../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import {
@@ -36,7 +36,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
     const { vurderErLesevisning } = useBehandling();
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
     const {
         hentForhåndsvisning,
         nullstillDokument,
@@ -52,7 +52,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
         sammensattKontrollsakContext,
-    } = useVedtaksperioder();
+    } = useVedtakSteg();
 
     const erLesevisning = vurderErLesevisning();
 

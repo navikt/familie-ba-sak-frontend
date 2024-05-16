@@ -5,7 +5,7 @@ import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtaksperioder } from '../../../../../context/behandlingContext/useVedtaksperioder';
+import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../../../../utils/dato';
@@ -48,7 +48,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
         skjemanavn: 'Oppdater første endringstidspunkt',
     });
 
-    const { hentVedtaksperioder } = useVedtaksperioder();
+    const { hentVedtaksperioder } = useVedtakSteg();
 
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {
