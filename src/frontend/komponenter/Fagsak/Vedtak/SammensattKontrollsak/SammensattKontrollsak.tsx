@@ -32,7 +32,7 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
         <StyledVStack gap="5">
             <Textarea
                 label="Fritekst til vedtaksbrev"
-                description="Beskriv hvilke vurderinger og hjemler som er lagt til grunn"
+                description="Her skal du skrive hvilke vurderinger som er gjort, hvilken informasjon som er lagt til grunn og hvilke hjemler som er brukt."
                 onChange={event => {
                     settFritekst(event.target.value);
                 }}
@@ -41,7 +41,8 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
             />
             {fritekstErEndret && (
                 <Alert variant="warning" size="small">
-                    Du har ikke lagret dine siste endringer og vil miste disse om du forlater siden
+                    Du har ikke lagret dine siste endringer, og vil miste disse om du forlater siden
+                    uten å lagre.
                 </Alert>
             )}
             {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
