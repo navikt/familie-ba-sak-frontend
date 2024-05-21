@@ -4,12 +4,19 @@ import * as React from 'react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
+import {
+    Behandlingstype,
+    erBehandlingAvslått,
+    erBehandlingFortsattInnvilget,
+    type IBehandling,
+} from '../../../../typer/behandling';
 import type {
     IRestOpprettSammensattKontrollsak,
     IRestSammensattKontrollsak,
 } from '../../../../typer/sammensatt-kontrollsak';
+import { ToggleNavn } from '../../../../typer/toggles';
 
 export interface ISammensattKontrollsakContext {
     fritekst: string;
@@ -24,13 +31,15 @@ export interface ISammensattKontrollsakContext {
     visSammensattKontrollsak: boolean;
     settVisSammensattKontrollsak: (visSammensattKontrollsak: boolean) => void;
     nullstillSammensattKontrollsak: () => void;
+    skalViseSammensattKontrollsakMenyValg: () => boolean;
 }
 
 export const useSammensattKontrollsak = (): ISammensattKontrollsakContext => {
     const {
-        behandling: { behandlingId, sammensattKontrollsak },
+        behandling: { behandlingId, sammensattKontrollsak, resultat, type },
         settÅpenBehandling,
     } = useBehandling();
+    const { toggles } = useApp();
     const { request } = useHttp();
     const [fritekst, settFritekst] = useState(sammensattKontrollsak?.fritekst ?? '');
     const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
@@ -42,6 +51,18 @@ export const useSammensattKontrollsak = (): ISammensattKontrollsakContext => {
     const erSammensattKontrollsak = (
         sammensattKontrollsak: IRestSammensattKontrollsak | undefined
     ): sammensattKontrollsak is IRestSammensattKontrollsak => !!sammensattKontrollsak;
+
+    const skalViseSammensattKontrollsakMenyValg = (): boolean => {
+        console.log(!erBehandlingFortsattInnvilget(resultat));
+        if (!toggles[ToggleNavn.kanOppretteOgEndreSammensatteKontrollsaker]) {
+            return false;
+        }
+        return (
+            type !== Behandlingstype.FØRSTEGANGSBEHANDLING &&
+            !erBehandlingAvslått(resultat) &&
+            !erBehandlingFortsattInnvilget(resultat)
+        );
+    };
 
     const opprettEllerOppdaterSammensattKontrollsak = () => {
         settFeilmelding(undefined);
@@ -115,5 +136,6 @@ export const useSammensattKontrollsak = (): ISammensattKontrollsakContext => {
         visSammensattKontrollsak,
         settVisSammensattKontrollsak,
         nullstillSammensattKontrollsak,
+        skalViseSammensattKontrollsakMenyValg,
     };
 };

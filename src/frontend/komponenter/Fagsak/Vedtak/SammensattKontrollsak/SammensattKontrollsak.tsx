@@ -28,6 +28,9 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
         opprettEllerOppdaterSammensattKontrollsak,
         feilmelding,
     } = sammensattKontrollsakContext;
+
+    const erLesevisning = vurderErLesevisning();
+
     return (
         <StyledVStack gap="5">
             <Textarea
@@ -38,6 +41,7 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
                 }}
                 value={fritekst}
                 minRows={20}
+                readOnly={erLesevisning}
             />
             {fritekstErEndret && (
                 <Alert variant="warning" size="small">
@@ -48,7 +52,7 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
             {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
             <HStack>
                 <FamilieKnapp
-                    erLesevisning={vurderErLesevisning()}
+                    erLesevisning={erLesevisning}
                     onClick={opprettEllerOppdaterSammensattKontrollsak}
                     variant="primary"
                     size="small"

@@ -49,10 +49,15 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 }) => {
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
-    const { nullstillSammensattKontrollsak, settVisSammensattKontrollsak } =
-        sammensattKontrollsakContext;
+    const {
+        nullstillSammensattKontrollsak,
+        settVisSammensattKontrollsak,
+        skalViseSammensattKontrollsakMenyValg,
+    } = sammensattKontrollsakContext;
 
     const erLesevisning = vurderErLesevisning();
+
+    const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
     const fagsakType = minimalFagsak?.fagsakType;
@@ -96,18 +101,21 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                                 Legg til refusjon EØS
                             </Dropdown.Menu.List.Item>
                         )}
-                    {åpenBehandling.sammensattKontrollsak ||
-                    sammensattKontrollsakContext.visSammensattKontrollsak ? (
-                        <Dropdown.Menu.List.Item onClick={nullstillSammensattKontrollsak}>
-                            <ArrowUndoIcon fontSize={'1.4rem'} />
-                            Angre sammensatt kontrollsak
-                        </Dropdown.Menu.List.Item>
-                    ) : (
-                        <Dropdown.Menu.List.Item onClick={() => settVisSammensattKontrollsak(true)}>
-                            <TasklistStartIcon fontSize={'1.4rem'} />
-                            Sammensatt kontrollsak
-                        </Dropdown.Menu.List.Item>
-                    )}
+                    {visSammensattKontrollsakMenyValg &&
+                        (åpenBehandling.sammensattKontrollsak ||
+                        sammensattKontrollsakContext.visSammensattKontrollsak ? (
+                            <Dropdown.Menu.List.Item onClick={nullstillSammensattKontrollsak}>
+                                <ArrowUndoIcon fontSize={'1.4rem'} />
+                                Angre sammensatt kontrollsak
+                            </Dropdown.Menu.List.Item>
+                        ) : (
+                            <Dropdown.Menu.List.Item
+                                onClick={() => settVisSammensattKontrollsak(true)}
+                            >
+                                <TasklistStartIcon fontSize={'1.4rem'} />
+                                Sammensatt kontrollsak
+                            </Dropdown.Menu.List.Item>
+                        ))}
                 </Dropdown.Menu.List>
             </StyledDropdownMeny>
         </Dropdown>
