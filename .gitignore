@@ -13,4 +13,4 @@ ci-tests/reports
 cypress/videos
 cypress/screenshots
 cypress.env.json
-
+*.iml
