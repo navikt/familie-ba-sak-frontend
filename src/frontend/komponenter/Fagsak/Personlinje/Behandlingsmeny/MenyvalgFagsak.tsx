@@ -12,7 +12,6 @@ import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
 import { BehandlerRolle } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
-import { ToggleNavn } from '../../../../typer/toggles';
 
 interface IProps {
     bruker?: IPersonInfo;
@@ -21,7 +20,7 @@ interface IProps {
 
 const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const navigate = useNavigate();
-    const { toggles, hentSaksbehandlerRolle } = useApp();
+    const { hentSaksbehandlerRolle } = useApp();
 
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
@@ -31,19 +30,18 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
         <>
             <OpprettBehandling minimalFagsak={minimalFagsak} />
             {!!bruker && <OpprettFagsak personInfo={bruker} />}
-            {toggles[ToggleNavn.manuellMottakerInfobrev] && erPåDokumentutsending ? (
+            {erPåDokumentutsending && (
                 <LeggTilEllerFjernBrevmottakere
                     erPåBehandling={false}
                     brevmottakere={manuelleBrevmottakerePåFagsak}
                 />
-            ) : (
-                erSaksbehandlerEllerHøyere && (
-                    <Dropdown.Menu.List.Item
-                        onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
-                    >
-                        Send informasjonsbrev
-                    </Dropdown.Menu.List.Item>
-                )
+            )}
+            {!erPåDokumentutsending && erSaksbehandlerEllerHøyere && (
+                <Dropdown.Menu.List.Item
+                    onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
+                >
+                    Send informasjonsbrev
+                </Dropdown.Menu.List.Item>
             )}
         </>
     );
