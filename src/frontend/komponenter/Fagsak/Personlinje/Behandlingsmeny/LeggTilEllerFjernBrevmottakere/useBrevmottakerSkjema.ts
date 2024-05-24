@@ -5,7 +5,7 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<
@@ -31,7 +31,7 @@ export const mottakerVisningsnavn: Record<Mottaker, string> = {
     DØDSBO: 'Dødsbo',
 };
 
-export interface ILeggTilFjernBrevmottakerSkjemaFelter {
+interface ILeggTilFjernBrevmottakerSkjemaFelter {
     mottaker: Mottaker | '';
     navn: string;
     adresselinje1: string;

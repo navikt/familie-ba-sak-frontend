@@ -3,7 +3,7 @@ import * as React from 'react';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { ATextDefault } from '@navikt/ds-tokens/dist/tokens';
 
-export interface IInformasjon {
+interface IInformasjon {
     label: string;
     tekst: string;
     tekstTitle?: string;

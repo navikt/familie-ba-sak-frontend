@@ -17,13 +17,13 @@ import {
     saksbehandlerFilter,
 } from '../../typer/oppgave';
 
-export enum FeltSortOrder {
+enum FeltSortOrder {
     NONE = 'NONE',
     ASCENDANT = 'ASCENDANT',
     DESCENDANT = 'DESCENDANT',
 }
 
-export interface IOppgaveFilter {
+interface IOppgaveFilter {
     selectedValue?: string;
     initialValue?: string;
     type: 'dato' | 'select';
