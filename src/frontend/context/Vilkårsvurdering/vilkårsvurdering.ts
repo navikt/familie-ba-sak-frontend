@@ -40,7 +40,7 @@ const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     );
 };
 
-export const sorterVilkårsvurderingForPerson = (
+const sorterVilkårsvurderingForPerson = (
     vilkårResultater: FeltState<IVilkårResultat>[]
 ): FeltState<IVilkårResultat>[] => {
     return vilkårResultater.sort(

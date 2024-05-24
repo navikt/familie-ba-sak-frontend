@@ -182,18 +182,3 @@ export const initialOppgaveFelter = (innloggetSaksbehandler?: ISaksbehandler): I
         },
     };
 };
-
-export const ariaSortMap = new Map<FeltSortOrder, 'none' | 'descending' | 'ascending'>([
-    [FeltSortOrder.NONE, 'none'],
-    [FeltSortOrder.DESCENDANT, 'descending'],
-    [FeltSortOrder.ASCENDANT, 'ascending'],
-]);
-
-export const sortLenkClassNameMap = new Map<
-    FeltSortOrder,
-    '' | 'tabell__th--sortert-desc' | 'tabell__th--sortert-asc'
->([
-    [FeltSortOrder.NONE, ''],
-    [FeltSortOrder.DESCENDANT, 'tabell__th--sortert-desc'],
-    [FeltSortOrder.ASCENDANT, 'tabell__th--sortert-asc'],
-]);

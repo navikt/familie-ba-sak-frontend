@@ -53,20 +53,3 @@ export const mockOpphørsperiode = ({
         utbetalingsperiodeDetaljer: [],
     };
 };
-
-export const mockAvslagsperiode = ({
-    fom = '2019-06-01',
-    tom = '2019-06-30',
-    begrunnelser = [mockBegrunnelse()],
-}: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
-    return {
-        id: 0,
-        fom,
-        tom,
-        type: Vedtaksperiodetype.AVSLAG,
-        begrunnelser,
-        fritekster: [],
-        gyldigeBegrunnelser: [],
-        utbetalingsperiodeDetaljer: [],
-    };
-};

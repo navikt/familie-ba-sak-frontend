@@ -6,7 +6,7 @@ import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typ
 import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
 import { Sorteringsrekkefølge } from '../../../utils/tabell';
 
-export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
+const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
         return -1;
     }
@@ -16,7 +16,7 @@ export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) =>
     return isAfter(isoStringTilDate(a.datoMottatt), isoStringTilDate(b.datoMottatt)) ? 1 : -1;
 };
 
-export const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
+const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
     -1 * sorterJournalposterStigende(a, b);
 
 export const hentSorterteJournalposter = (
@@ -33,7 +33,7 @@ export const hentSorterteJournalposter = (
     }
 };
 
-export const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
+const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
     switch (kode) {
         case 'BA':
             return 'NAV Barnetrygd';

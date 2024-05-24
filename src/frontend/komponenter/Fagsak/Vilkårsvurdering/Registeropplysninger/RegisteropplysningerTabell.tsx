@@ -92,7 +92,7 @@ const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteroppl
         isoStringTilDateMedFallback({ isoString: a.fom, fallbackDate: tidenesMorgen })
     );
 
-export const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;
+const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;
 
 const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = ({
     opplysningstype,
