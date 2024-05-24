@@ -55,7 +55,7 @@ export interface HelpTextProps
         | 'left-end';
 }
 
-export const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
+const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
     (
         {
             className,
