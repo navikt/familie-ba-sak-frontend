@@ -13,7 +13,6 @@ export enum ToggleNavn {
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
-    manuellMottakerInfobrev = 'familie-ba-sak.manuell-mottaker-infobrev',
     journalpostUtsendingsinfo = 'familie-ba-sak.vis-dokument-utsendingsinfo',
     kanOppretteAutomatiskeValutakurserPåManuelleSaker = 'familie-ba-sak.kan-opprette-automatiske-valutakurser-paa-manuelle-saker',
     kanOverstyreAutomatiskeValutakurser = 'familie-ba-sak.kan-overstyre-automatiske-valutakurser',
