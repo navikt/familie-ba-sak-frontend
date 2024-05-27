@@ -3,7 +3,6 @@ import './index.less';
 import React from 'react';
 
 import axe from '@axe-core/react';
-import { initializeFaro } from '@grafana/faro-web-sdk';
 import { init } from '@sentry/browser';
 import { Integrations } from '@sentry/tracing';
 import { setDefaultOptions } from 'date-fns';
@@ -27,14 +26,6 @@ if (process.env.NODE_ENV !== 'development') {
         environment,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 0.2,
-    });
-
-    initializeFaro({
-        isolate: true,
-        url: 'https://telemetry.ekstern.dev.nav.no/collect',
-        app: {
-            name: 'familie-ba-sak-frontend',
-        },
     });
 }
 
