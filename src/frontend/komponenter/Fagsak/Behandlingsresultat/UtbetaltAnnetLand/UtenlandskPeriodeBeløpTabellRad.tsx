@@ -85,15 +85,17 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({
             onOpenChange={() => toggleForm(true)}
             id={utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp)}
             content={
-                <UtenlandskPeriodeBeløpTabellRadEndre
-                    skjema={skjema}
-                    tilgjengeligeBarn={barn}
-                    valideringErOk={valideringErOk}
-                    sendInnSkjema={sendInnSkjema}
-                    toggleForm={toggleForm}
-                    slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
-                    status={utenlandskPeriodeBeløp.status}
-                />
+                erUtenlandskPeriodeBeløpEkspandert && (
+                    <UtenlandskPeriodeBeløpTabellRadEndre
+                        skjema={skjema}
+                        tilgjengeligeBarn={barn}
+                        valideringErOk={valideringErOk}
+                        sendInnSkjema={sendInnSkjema}
+                        toggleForm={toggleForm}
+                        slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
+                        status={utenlandskPeriodeBeløp.status}
+                    />
+                )
             }
         >
             <StatusBarnCelleOgPeriodeCelle
