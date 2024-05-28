@@ -9,6 +9,7 @@ import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
 import { useAmplitude } from '../utils/amplitude';
+import { initGrafanaFaro } from '../utils/grafanaFaro';
 
 const App: React.FC = () => {
     const { loggSkjermstørrelse } = useAmplitude();
@@ -17,6 +18,7 @@ const App: React.FC = () => {
     >(undefined);
 
     React.useEffect(() => {
+        initGrafanaFaro();
         loggSkjermstørrelse();
         hentInnloggetBruker().then((innhentetInnloggetSaksbehandler: ISaksbehandler) => {
             settInnloggetSaksbehandler(innhentetInnloggetSaksbehandler);
