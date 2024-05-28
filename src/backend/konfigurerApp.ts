@@ -23,7 +23,7 @@ export const konfigurerAzure = () => {
             break;
         case 'preprod':
             process.env.AAD_LOGOUT_REDIRECT_URL = `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=https:\\\\${host}.intern.dev.nav.no`;
-            process.env.AAD_REDIRECT_URL = `https://${host}.intern.dev.nav.no/auth/openid/callback`;
+            process.env.AAD_REDIRECT_URL = `https://${host}.ansatt.dev.nav.no/auth/openid/callback`;
             process.env.GRAPH_API = 'https://graph.microsoft.com/v1.0/me';
             settAzureAdPropsFraEnv();
             break;
