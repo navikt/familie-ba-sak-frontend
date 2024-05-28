@@ -27,10 +27,8 @@ import {
     hentSorterteJournalposter,
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
-import { useApp } from '../../../context/AppContext';
 import useDokument from '../../../hooks/useDokument';
 import type { IPersonInfo } from '../../../typer/person';
-import { ToggleNavn } from '../../../typer/toggles';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
@@ -140,7 +138,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
         useDokument();
     const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
-    const { toggles } = useApp();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -270,8 +267,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {journalpost.utsendingsinfo &&
-                                    toggles[ToggleNavn.journalpostUtsendingsinfo] ? (
+                                    {journalpost.utsendingsinfo ? (
                                         <StyledButton
                                             icon={<StyledMagnifyingGlassIcon />}
                                             iconPosition={'right'}
