@@ -84,18 +84,20 @@ const KompetanseTabellRad: React.FC<IProps> = ({
             onOpenChange={() => toggleForm(true)}
             id={kompetanseFeilmeldingId(kompetanse)}
             content={
-                <KompetanseTabellRadEndre
-                    skjema={skjema}
-                    tilgjengeligeBarn={barn}
-                    valideringErOk={valideringErOk}
-                    sendInnSkjema={sendInnSkjema}
-                    toggleForm={toggleForm}
-                    slettKompetanse={slettKompetanse}
-                    status={kompetanse.status}
-                    erAnnenForelderOmfattetAvNorskLovgivning={
-                        kompetanse.erAnnenForelderOmfattetAvNorskLovgivning
-                    }
-                />
+                erKompetanseEkspandert && (
+                    <KompetanseTabellRadEndre
+                        skjema={skjema}
+                        tilgjengeligeBarn={barn}
+                        valideringErOk={valideringErOk}
+                        sendInnSkjema={sendInnSkjema}
+                        toggleForm={toggleForm}
+                        slettKompetanse={slettKompetanse}
+                        status={kompetanse.status}
+                        erAnnenForelderOmfattetAvNorskLovgivning={
+                            kompetanse.erAnnenForelderOmfattetAvNorskLovgivning
+                        }
+                    />
+                )
             }
         >
             <StatusBarnCelleOgPeriodeCelle
