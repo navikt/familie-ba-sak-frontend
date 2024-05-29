@@ -15,7 +15,7 @@ import { Samhandler } from './Infotrygd/Samhandler';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 import { useApp } from '../context/AppContext';
-import { FagsakProvider } from '../context/fagsak/FagsakContext';
+import { FagsakProvider } from '../context/Fagsak/FagsakContext';
 import { Oppgaver } from '../context/OppgaverContext';
 import { TidslinjeProvider } from '../context/TidslinjeContext';
 

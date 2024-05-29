@@ -4,7 +4,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IsoDatoString } from './dato';
 import { Datoformat, erIsoStringGyldig, isoStringTilFormatertString } from './dato';
-import { useFagsakContext } from '../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../context/Fagsak/FagsakContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';

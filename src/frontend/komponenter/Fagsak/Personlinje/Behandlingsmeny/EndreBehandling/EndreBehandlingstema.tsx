@@ -5,7 +5,7 @@ import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 
