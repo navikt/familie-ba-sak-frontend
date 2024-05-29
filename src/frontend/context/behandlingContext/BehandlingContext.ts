@@ -33,7 +33,7 @@ import { Målform } from '../../typer/søknad';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
-import { useFagsakContext } from '../fagsak/FagsakContext';
+import { useFagsakContext } from '../Fagsak/FagsakContext';
 
 interface Props {
     behandling: IBehandling;

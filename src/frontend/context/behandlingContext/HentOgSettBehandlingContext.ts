@@ -11,7 +11,7 @@ import { byggFeiletRessurs, byggTomRessurs } from '@navikt/familie-typer';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
-import { useFagsakContext } from '../fagsak/FagsakContext';
+import { useFagsakContext } from '../Fagsak/FagsakContext';
 
 interface Props {
     fagsak: IMinimalFagsak;
