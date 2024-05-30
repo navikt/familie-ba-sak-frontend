@@ -100,7 +100,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                 })}
             </Table.DataCell>
             <Table.DataCell align="right">
-                {feilutbetaltValuta.feilutbetaltBeløp} {'kr/mnd'}
+                {feilutbetaltValuta.feilutbetaltBeløp} {'kr'}
             </Table.DataCell>
             <Table.DataCell align="center">
                 <Tooltip content="Fjern periode">
