@@ -5,7 +5,7 @@ Frontend app for barnetrygd sak.
 
 # Kom i gang med utvikling
 
-* Logg deg på naisdevice og gcloud og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler
+* Logg deg på naisdevice og gcloud, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler
 * Installere avhengigheter `yarn`
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
