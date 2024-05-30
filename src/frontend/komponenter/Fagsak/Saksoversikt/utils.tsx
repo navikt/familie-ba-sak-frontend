@@ -32,7 +32,7 @@ import {
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
 
-export enum Saksoversiktbehandlingstype {
+enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
     TILBAKEBETALING = 'TILBAKEBETALING',
     KLAGE = 'KLAGE',

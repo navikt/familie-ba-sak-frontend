@@ -15,7 +15,7 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';

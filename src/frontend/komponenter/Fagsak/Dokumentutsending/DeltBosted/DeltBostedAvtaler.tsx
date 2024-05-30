@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
@@ -29,10 +29,6 @@ const DatovelgerOgSlettknapp = styled.div<{ feil: boolean }>`
     .knapp {
         height: 2rem;
     }
-`;
-
-export const StyledErrorMessage = styled(ErrorMessage)`
-    margin-bottom: 1rem;
 `;
 
 const FjernAvtaleKnapp = styled(Button)`

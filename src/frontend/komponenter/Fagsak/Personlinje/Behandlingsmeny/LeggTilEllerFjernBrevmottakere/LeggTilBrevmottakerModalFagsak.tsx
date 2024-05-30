@@ -3,7 +3,7 @@ import React from 'react';
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import type { BrevmottakerUseSkjema, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { felterTilSkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { useFagsakContext } from '../../../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 
 interface IFagsakModalProps {
     lukkModal: () => void;

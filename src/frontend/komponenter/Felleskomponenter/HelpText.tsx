@@ -24,7 +24,7 @@ function mergeRefs<T = any>(
     };
 }
 
-export interface HelpTextProps
+interface HelpTextProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         Pick<PopoverProps, 'strategy' | 'placement'> {
     /**
@@ -55,7 +55,7 @@ export interface HelpTextProps
         | 'left-end';
 }
 
-export const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
+const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
     (
         {
             className,

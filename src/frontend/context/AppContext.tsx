@@ -276,4 +276,4 @@ const AppProvider: React.FC<IProps> = ({ autentisertSaksbehandler, children }) =
     );
 };
 
-export { AppProvider, useApp, useAuth };
+export { AppProvider, useApp };
