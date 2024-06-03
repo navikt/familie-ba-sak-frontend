@@ -14,7 +14,7 @@ import {
     skalVisesNårHenlagtBehandlingerSkjules,
     skalVisesNårMånedligeValutajusteringerSkjules,
 } from './utils';
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { isoStringTilDate } from '../../../utils/dato';
 

@@ -7,7 +7,7 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
+import { useFagsakContext } from './Fagsak/FagsakContext';
 import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';

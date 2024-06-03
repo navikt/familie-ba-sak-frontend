@@ -6,7 +6,7 @@ import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaE
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
 import { FagsakType } from '../../../../typer/fagsak';
 
 interface IProps {

@@ -81,12 +81,12 @@ export const tilBehandlingstema = (
     );
 };
 
-export const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
+const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
     ab0180: BehandlingUnderkategori.ORDINÆR,
     ab0096: BehandlingUnderkategori.UTVIDET,
 };
 
-export const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = {
+const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = {
     ae0118: BehandlingKategori.NASJONAL,
     ae0120: BehandlingKategori.EØS,
 };

@@ -128,14 +128,14 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
     }
 };
 
-export const inneholderUmuligeAlternativer = (
+const inneholderUmuligeAlternativer = (
     valgteAlternativer: UtdypendeVilkårsvurdering[],
     muligeAlternativer: UtdypendeVilkårsvurdering[]
 ): boolean => {
     return valgteAlternativer.some(item => !muligeAlternativer.includes(item));
 };
 
-export const filtrerUtUmuligeAlternativer = (
+const filtrerUtUmuligeAlternativer = (
     valgteAlternativer: UtdypendeVilkårsvurdering[],
     muligeAlternativer: UtdypendeVilkårsvurdering[]
 ): UtdypendeVilkårsvurdering[] => {

@@ -13,7 +13,7 @@ import { dagensDato, isoStringTilDate } from '../utils/dato';
 import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import { splittYtelseVedEndringerPåAnnenYtelse } from '../utils/tidslinje';
 
-export interface ITidslinjeVindu {
+interface ITidslinjeVindu {
     id: number;
     label: string;
     måneder: number;

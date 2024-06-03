@@ -25,7 +25,7 @@ import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatte
 import { SamhandlerTabell } from '../../Fagsak/Institusjon/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../../Fagsak/Institusjon/useSamhandler';
 
-export interface IOpprettFagsakModal {
+interface IOpprettFagsakModal {
     lukkModal: () => void;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;

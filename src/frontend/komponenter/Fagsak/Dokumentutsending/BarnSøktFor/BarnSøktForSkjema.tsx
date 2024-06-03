@@ -7,7 +7,7 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
 import { useApp } from '../../../../context/AppContext';
-import { useFagsakContext } from '../../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';

@@ -16,7 +16,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { useApp } from './AppContext';
-import { useFagsakContext } from './fagsak/FagsakContext';
+import { useFagsakContext } from './Fagsak/FagsakContext';
 import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
 import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
@@ -45,7 +45,7 @@ const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
 export const oppgaveSideLimit = 15;
 
-export const maksAntallOppgaver = 150;
+const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const navigate = useNavigate();

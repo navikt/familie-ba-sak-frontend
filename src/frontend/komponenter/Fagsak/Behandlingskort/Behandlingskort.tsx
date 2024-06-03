@@ -16,7 +16,7 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../context/fagsak/FagsakContext';
+import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../typer/behandling';
 import {
     BehandlingResultat,
