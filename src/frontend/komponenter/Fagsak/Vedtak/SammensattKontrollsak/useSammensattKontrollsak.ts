@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
+
+import createUseContext from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     Behandlingstype,
     erBehandlingAvslått,
@@ -19,122 +19,127 @@ import type {
 import { ToggleNavn } from '../../../../typer/toggles';
 
 export interface ISammensattKontrollsakContext {
-    fritekst: string;
-    settFritekst: (fritekst: string) => void;
-    fritekstErEndret: boolean;
-    opprettEllerOppdaterSammensattKontrollsak: () => void;
-    slettSammensattKontrollsak: (sammensattKontrollsak: IRestSammensattKontrollsak) => void;
-    erSammensattKontrollsak: (
-        sammensattKontrollsak?: IRestSammensattKontrollsak
-    ) => sammensattKontrollsak is IRestSammensattKontrollsak;
-    feilmelding?: string;
+    opprettEllerOppdaterSammensattKontrollsak: (fritekst: string) => void;
+    slettSammensattKontrollsak: () => void;
+    feilmelding: string | undefined;
+    sammensattKontrollsak?: IRestSammensattKontrollsak;
     visSammensattKontrollsak: boolean;
     settVisSammensattKontrollsak: (visSammensattKontrollsak: boolean) => void;
-    nullstillSammensattKontrollsak: () => void;
     skalViseSammensattKontrollsakMenyValg: () => boolean;
 }
 
-export const useSammensattKontrollsak = (): ISammensattKontrollsakContext => {
-    const {
-        behandling: { behandlingId, sammensattKontrollsak, resultat, type },
-        settÅpenBehandling,
-    } = useBehandling();
-    const { toggles } = useApp();
-    const { request } = useHttp();
-    const [fritekst, settFritekst] = useState(sammensattKontrollsak?.fritekst ?? '');
-    const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
-    const [visSammensattKontrollsak, settVisSammensattKontrollsak] =
-        React.useState(!!sammensattKontrollsak);
+interface ISammensattKontrollsakProps {
+    åpenBehandling: IBehandling;
+}
 
-    const fritekstErEndret = fritekst !== (sammensattKontrollsak?.fritekst ?? '');
+export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createUseContext(
+    ({ åpenBehandling }: ISammensattKontrollsakProps): ISammensattKontrollsakContext => {
+        const { behandlingId, resultat, type } = åpenBehandling;
+        const { request } = useHttp();
+        const { toggles } = useApp();
+        const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
+        const [visSammensattKontrollsak, settVisSammensattKontrollsak] = useState<boolean>(false);
+        const [sammensattKontrollsak, settSammensattKontrollsak] =
+            useState<IRestSammensattKontrollsak>();
 
-    const erSammensattKontrollsak = (
-        sammensattKontrollsak: IRestSammensattKontrollsak | undefined
-    ): sammensattKontrollsak is IRestSammensattKontrollsak => !!sammensattKontrollsak;
+        useEffect(() => {
+            if (!sammensattKontrollsak) {
+                hentSammensattKontrollsak();
+            }
+        }, [åpenBehandling.behandlingId]);
 
-    const skalViseSammensattKontrollsakMenyValg = (): boolean => {
-        if (!toggles[ToggleNavn.kanOppretteOgEndreSammensatteKontrollsaker]) {
-            return false;
-        }
-        return (
-            type !== Behandlingstype.FØRSTEGANGSBEHANDLING &&
-            !erBehandlingAvslått(resultat) &&
-            !erBehandlingFortsattInnvilget(resultat)
-        );
-    };
+        const skalViseSammensattKontrollsakMenyValg = (): boolean => {
+            if (!toggles[ToggleNavn.kanOppretteOgEndreSammensatteKontrollsaker]) {
+                return false;
+            }
+            return (
+                type !== Behandlingstype.FØRSTEGANGSBEHANDLING &&
+                !erBehandlingAvslått(resultat) &&
+                !erBehandlingFortsattInnvilget(resultat)
+            );
+        };
 
-    const opprettEllerOppdaterSammensattKontrollsak = () => {
-        settFeilmelding(undefined);
-        if (erSammensattKontrollsak(sammensattKontrollsak)) {
-            oppdaterSammensattKontrollsak(sammensattKontrollsak);
-        } else {
-            opprettSammensattKontrollsak();
-        }
-    };
+        const erSammensattKontrollsak = (
+            sammensattKontrollsak: IRestSammensattKontrollsak | undefined
+        ): sammensattKontrollsak is IRestSammensattKontrollsak => !!sammensattKontrollsak;
 
-    const mottaRespons = (respons: Ressurs<IBehandling>, onSuccess: () => void = () => {}) => {
-        if (respons.status == RessursStatus.SUKSESS) {
-            settÅpenBehandling(respons);
-            onSuccess();
-        } else if (
-            respons.status === RessursStatus.FEILET ||
-            respons.status === RessursStatus.FUNKSJONELL_FEIL ||
-            respons.status === RessursStatus.IKKE_TILGANG
-        ) {
-            settFeilmelding(respons.frontendFeilmelding);
-        }
-    };
+        const opprettEllerOppdaterSammensattKontrollsak = (fritekst: string) => {
+            settFeilmelding(undefined);
+            if (erSammensattKontrollsak(sammensattKontrollsak)) {
+                oppdaterSammensattKontrollsak(sammensattKontrollsak, fritekst);
+            } else {
+                opprettSammensattKontrollsak(fritekst);
+            }
+        };
 
-    const nullstillSammensattKontrollsak = () => {
-        if (erSammensattKontrollsak(sammensattKontrollsak)) {
-            slettSammensattKontrollsak(sammensattKontrollsak);
-        } else {
-            settVisSammensattKontrollsak(false);
-            settFritekst('');
-        }
-    };
+        const mottaRespons = (respons: Ressurs<IRestSammensattKontrollsak | undefined>) => {
+            if (respons.status == RessursStatus.SUKSESS) {
+                if (erSammensattKontrollsak(respons.data)) {
+                    settSammensattKontrollsak(respons.data);
+                    settVisSammensattKontrollsak(true);
+                }
+            } else if (
+                respons.status === RessursStatus.FEILET ||
+                respons.status === RessursStatus.FUNKSJONELL_FEIL ||
+                respons.status === RessursStatus.IKKE_TILGANG
+            ) {
+                settFeilmelding(respons.frontendFeilmelding);
+            }
+        };
 
-    const opprettSammensattKontrollsak = () => {
-        request<IRestOpprettSammensattKontrollsak, IBehandling>({
-            method: 'POST',
-            data: { behandlingId: behandlingId, fritekst: fritekst },
-            url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
-        }).then(mottaRespons);
-    };
+        const hentSammensattKontrollsak = () => {
+            request<void, IRestSammensattKontrollsak>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/sammensatt-kontrollsak/${behandlingId}`,
+            }).then(mottaRespons);
+        };
 
-    const oppdaterSammensattKontrollsak = (sammensattKontrollsak: IRestSammensattKontrollsak) => {
-        request<IRestSammensattKontrollsak, IBehandling>({
-            method: 'PUT',
-            data: { ...sammensattKontrollsak, fritekst: fritekst },
-            url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
-        }).then(mottaRespons);
-    };
+        const opprettSammensattKontrollsak = (fritekst: string) => {
+            request<IRestOpprettSammensattKontrollsak, IRestSammensattKontrollsak>({
+                method: 'POST',
+                data: { behandlingId: behandlingId, fritekst: fritekst },
+                url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
+                påvirkerSystemLaster: true,
+            }).then(mottaRespons);
+        };
 
-    const slettSammensattKontrollsak = (sammensattKontrollsak: IRestSammensattKontrollsak) => {
-        settFeilmelding(undefined);
-        request<IRestSammensattKontrollsak, IBehandling>({
-            method: 'DELETE',
-            data: { ...sammensattKontrollsak, fritekst: fritekst },
-            url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
-        }).then((response: Ressurs<IBehandling>) =>
-            mottaRespons(response, () => {
-                settFritekst('');
+        const oppdaterSammensattKontrollsak = (
+            sammensattKontrollsak: IRestSammensattKontrollsak,
+            fritekst: string
+        ) => {
+            request<IRestSammensattKontrollsak, IRestSammensattKontrollsak>({
+                method: 'PUT',
+                data: { ...sammensattKontrollsak, fritekst: fritekst },
+                url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
+                påvirkerSystemLaster: true,
+            }).then(mottaRespons);
+        };
+
+        const slettSammensattKontrollsak = () => {
+            settFeilmelding(undefined);
+            if (erSammensattKontrollsak(sammensattKontrollsak)) {
+                request<IRestSammensattKontrollsak, number>({
+                    method: 'DELETE',
+                    data: { ...sammensattKontrollsak },
+                    url: `/familie-ba-sak/api/sammensatt-kontrollsak`,
+                    påvirkerSystemLaster: true,
+                }).then(() => {
+                    settSammensattKontrollsak(undefined);
+                    settVisSammensattKontrollsak(false);
+                });
+            } else {
                 settVisSammensattKontrollsak(false);
-            })
-        );
-    };
+            }
+        };
 
-    return {
-        fritekst,
-        settFritekst,
-        fritekstErEndret,
-        opprettEllerOppdaterSammensattKontrollsak,
-        slettSammensattKontrollsak,
-        erSammensattKontrollsak,
-        feilmelding,
-        visSammensattKontrollsak,
-        settVisSammensattKontrollsak,
-        nullstillSammensattKontrollsak,
-        skalViseSammensattKontrollsakMenyValg,
-    };
-};
+        return {
+            opprettEllerOppdaterSammensattKontrollsak,
+            slettSammensattKontrollsak,
+            feilmelding,
+            sammensattKontrollsak,
+            visSammensattKontrollsak,
+            settVisSammensattKontrollsak,
+            skalViseSammensattKontrollsakMenyValg,
+        };
+    }
+);

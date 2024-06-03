@@ -15,7 +15,7 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
-import type { ISammensattKontrollsakContext } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
@@ -28,7 +28,6 @@ interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
     visFeilutbetaltValuta: () => void;
     visRefusjonEøs: () => void;
-    sammensattKontrollsakContext: ISammensattKontrollsakContext;
 }
 
 const KnappHøyreHjørne = styled(Button)`
@@ -45,15 +44,16 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     åpenBehandling,
     visFeilutbetaltValuta,
     visRefusjonEøs,
-    sammensattKontrollsakContext,
 }) => {
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
     const {
-        nullstillSammensattKontrollsak,
+        visSammensattKontrollsak,
         settVisSammensattKontrollsak,
         skalViseSammensattKontrollsakMenyValg,
-    } = sammensattKontrollsakContext;
+        slettSammensattKontrollsak,
+        sammensattKontrollsak,
+    } = useSammensattKontrollsak();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -102,9 +102,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             </Dropdown.Menu.List.Item>
                         )}
                     {visSammensattKontrollsakMenyValg &&
-                        (åpenBehandling.sammensattKontrollsak ||
-                        sammensattKontrollsakContext.visSammensattKontrollsak ? (
-                            <Dropdown.Menu.List.Item onClick={nullstillSammensattKontrollsak}>
+                        (sammensattKontrollsak || visSammensattKontrollsak ? (
+                            <Dropdown.Menu.List.Item onClick={slettSammensattKontrollsak}>
                                 <ArrowUndoIcon fontSize={'1.4rem'} />
                                 Angre sammensatt kontrollsak
                             </Dropdown.Menu.List.Item>

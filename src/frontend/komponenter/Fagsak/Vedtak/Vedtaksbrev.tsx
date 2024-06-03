@@ -8,6 +8,7 @@ import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
+import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../context/AppContext';
@@ -51,8 +52,9 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settVisFeilutbetaltValuta,
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
-        sammensattKontrollsakContext,
     } = useVedtakSteg();
+
+    const { visSammensattKontrollsak } = useSammensattKontrollsak();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -125,7 +127,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                     </Alert>
                 ) : (
                     <>
-                        {sammensattKontrollsakContext.visSammensattKontrollsak ? (
+                        {visSammensattKontrollsak ? (
                             <SammensattKontrollsak />
                         ) : (
                             <>

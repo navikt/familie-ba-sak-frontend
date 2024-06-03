@@ -8,6 +8,7 @@ import RegistrerInstitusjon from './Institusjon/RegistrerInstitusjon';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import { SammensattKontrollsakProvider } from './Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../context/behandlingContext/useVedtakSteg';
@@ -95,7 +96,9 @@ const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
                         <VedtakStegProvider åpenBehandling={behandling}>
-                            <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
+                            <SammensattKontrollsakProvider åpenBehandling={behandling}>
+                                <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
+                            </SammensattKontrollsakProvider>
                         </VedtakStegProvider>
                     </SimuleringProvider>
                 }

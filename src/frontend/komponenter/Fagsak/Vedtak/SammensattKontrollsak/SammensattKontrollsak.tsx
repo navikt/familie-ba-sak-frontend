@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -19,13 +19,12 @@ const StyledFamilieKnapp = styled(FamilieKnapp)`
 
 const SammensattKontrollsak: React.FC = () => {
     const { vurderErLesevisning } = useBehandling();
-    const {
-        fritekst,
-        settFritekst,
-        fritekstErEndret,
-        opprettEllerOppdaterSammensattKontrollsak,
-        feilmelding,
-    } = useSammensattKontrollsak();
+    const { sammensattKontrollsak, opprettEllerOppdaterSammensattKontrollsak, feilmelding } =
+        useSammensattKontrollsak();
+
+    const [fritekst, settFritekst] = useState<string>(sammensattKontrollsak?.fritekst ?? '');
+
+    const fritekstErEndret = fritekst !== (sammensattKontrollsak?.fritekst ?? '');
 
     const erLesevisning = vurderErLesevisning();
 
@@ -50,9 +49,10 @@ const SammensattKontrollsak: React.FC = () => {
             {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
             <StyledFamilieKnapp
                 erLesevisning={erLesevisning}
-                onClick={opprettEllerOppdaterSammensattKontrollsak}
+                onClick={() => opprettEllerOppdaterSammensattKontrollsak(fritekst)}
                 variant="primary"
                 size="small"
+                loading={false}
             >
                 Lagre
             </StyledFamilieKnapp>
