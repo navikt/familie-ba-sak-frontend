@@ -126,9 +126,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                 ) : (
                     <>
                         {sammensattKontrollsakContext.visSammensattKontrollsak ? (
-                            <SammensattKontrollsak
-                                sammensattKontrollsakContext={sammensattKontrollsakContext}
-                            />
+                            <SammensattKontrollsak />
                         ) : (
                             <>
                                 <VedtaksbegrunnelseTeksterProvider>

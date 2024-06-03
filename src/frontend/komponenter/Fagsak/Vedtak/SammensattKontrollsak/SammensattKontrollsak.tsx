@@ -2,24 +2,22 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, ErrorMessage, HStack, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 
-import type { ISammensattKontrollsakContext } from './useSammensattKontrollsak';
+import { useSammensattKontrollsak } from './useSammensattKontrollsak';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-
-interface ISammensattKontrollsakProps {
-    sammensattKontrollsakContext: ISammensattKontrollsakContext;
-}
 
 const StyledVStack = styled(VStack)`
     margin-bottom: ${ASpacing6};
 `;
 
-const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
-    sammensattKontrollsakContext,
-}) => {
+const StyledFamilieKnapp = styled(FamilieKnapp)`
+    align-self: start;
+`;
+
+const SammensattKontrollsak: React.FC = () => {
     const { vurderErLesevisning } = useBehandling();
     const {
         fritekst,
@@ -27,7 +25,7 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
         fritekstErEndret,
         opprettEllerOppdaterSammensattKontrollsak,
         feilmelding,
-    } = sammensattKontrollsakContext;
+    } = useSammensattKontrollsak();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -50,16 +48,14 @@ const SammensattKontrollsak: React.FC<ISammensattKontrollsakProps> = ({
                 </Alert>
             )}
             {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
-            <HStack>
-                <FamilieKnapp
-                    erLesevisning={erLesevisning}
-                    onClick={opprettEllerOppdaterSammensattKontrollsak}
-                    variant="primary"
-                    size="small"
-                >
-                    Lagre
-                </FamilieKnapp>
-            </HStack>
+            <StyledFamilieKnapp
+                erLesevisning={erLesevisning}
+                onClick={opprettEllerOppdaterSammensattKontrollsak}
+                variant="primary"
+                size="small"
+            >
+                Lagre
+            </StyledFamilieKnapp>
         </StyledVStack>
     );
 };

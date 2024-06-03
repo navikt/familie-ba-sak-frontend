@@ -46,14 +46,13 @@ export const useSammensattKontrollsak = (): ISammensattKontrollsakContext => {
     const [visSammensattKontrollsak, settVisSammensattKontrollsak] =
         React.useState(!!sammensattKontrollsak);
 
-    const fritekstErEndret = fritekst.length > 0 && fritekst !== sammensattKontrollsak?.fritekst;
+    const fritekstErEndret = fritekst !== (sammensattKontrollsak?.fritekst ?? '');
 
     const erSammensattKontrollsak = (
         sammensattKontrollsak: IRestSammensattKontrollsak | undefined
     ): sammensattKontrollsak is IRestSammensattKontrollsak => !!sammensattKontrollsak;
 
     const skalViseSammensattKontrollsakMenyValg = (): boolean => {
-        console.log(!erBehandlingFortsattInnvilget(resultat));
         if (!toggles[ToggleNavn.kanOppretteOgEndreSammensatteKontrollsaker]) {
             return false;
         }
