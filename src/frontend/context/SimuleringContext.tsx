@@ -268,7 +268,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         behandlingErMigreringMedManuellePosteringer,
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
         behandlingErEndreMigreringsdato,
-        behandlingHarManuellePosteringer,
     };
 });
 
