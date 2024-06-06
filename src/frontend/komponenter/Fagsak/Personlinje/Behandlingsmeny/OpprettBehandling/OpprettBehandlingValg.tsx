@@ -89,7 +89,8 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                       kanManueltKorrigereMedVedtaksbrev) &&
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
-                  årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
+                  årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
+                  årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING
           );
 
 interface IProps {
