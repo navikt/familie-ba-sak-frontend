@@ -15,7 +15,6 @@ import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg } from '../../../typer/behandling';
-import { Vurderingsform } from '../../../typer/eøsPerioder';
 import type { ITilbakekreving } from '../../../typer/simulering';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -48,13 +47,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErMigreringMedManuellePosteringer,
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
         behandlingErEndreMigreringsdato,
-        behandlingHarManuellePosteringer,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
-
-    const finnesPerioderMedAutomatiskBeregnetValutaIBehandling = åpenBehandling.valutakurser.some(
-        valutakurs => valutakurs.vurderingsform == Vurderingsform.AUTOMATISK
-    );
 
     const nesteOnClick = () => {
         if (vurderErLesevisning()) {
@@ -87,9 +81,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         return <div />;
     }
 
-    const behandlingHarManuellePosteringerOgAutomatiskBeregnetValuta =
-        behandlingHarManuellePosteringer && finnesPerioderMedAutomatiskBeregnetValutaIBehandling;
-
     return (
         <Skjemasteg
             senderInn={tilbakekrevingSkjema.submitRessurs.status === RessursStatus.HENTER}
@@ -98,7 +89,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
-            skalViseNesteKnapp={!behandlingHarManuellePosteringerOgAutomatiskBeregnetValuta}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
             {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
@@ -107,13 +97,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     migreringsdato. Når behandlingsresultatet blir 0 kr i alle perioder, får vi ikke
                     simulert mot økonomi for å se eventuelle avvik. Det er derfor viktig at du selv
                     sjekker at det ikke har vært noen utbetalinger fra Infotrygd i disse periodene.
-                </StyledAlert>
-            )}
-            {behandlingHarManuellePosteringerOgAutomatiskBeregnetValuta && (
-                <StyledAlert variant={'warning'}>
-                    Behandlingen har perioder med manuelle posteringer og automatisk beregnet
-                    valuta. Gå tilbake til "Behandlingsresultat" og legg inn valuta manuelt før du
-                    fortsetter behandlingen.
                 </StyledAlert>
             )}
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
