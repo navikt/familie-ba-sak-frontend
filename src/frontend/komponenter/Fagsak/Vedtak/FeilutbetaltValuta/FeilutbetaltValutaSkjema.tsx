@@ -61,7 +61,7 @@ const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjem
             <StyledTextField
                 {...skjema.felter.feilutbetaltBeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label={'Feilutbetalt beløp per måned'}
+                label={'Feilutbetalt beløp'}
                 value={skjema.felter.feilutbetaltBeløp.verdi}
                 type="number"
                 onChange={(changeEvent: React.ChangeEvent<HTMLInputElement>) =>

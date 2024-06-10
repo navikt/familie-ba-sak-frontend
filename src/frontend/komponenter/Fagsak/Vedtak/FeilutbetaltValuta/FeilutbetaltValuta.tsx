@@ -77,7 +77,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                 `${isoDatoPeriodeTilFormatertString({
                     fom: feilutbetaltValuta.fom,
                     tom: feilutbetaltValuta.tom,
-                })} ${'kr/mnd'} ${feilutbetaltValuta.feilutbetaltBeløp}`
+                })} kr ${feilutbetaltValuta.feilutbetaltBeløp}`
         )
         .join('\n')}`;
 
@@ -93,7 +93,6 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
                         <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell align="right" scope="col">
                             Feilutbetalt beløp
-                            {' per måned'}
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col" />
                     </Table.Row>
