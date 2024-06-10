@@ -75,7 +75,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
                 `${isoDatoPeriodeTilFormatertString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
-                })} kr/mnd ${refusjonEøs.refusjonsbeløp}`
+                })} kroner ${refusjonEøs.refusjonsbeløp}`
         )
         .join('\n')}`;
 
