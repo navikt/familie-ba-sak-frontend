@@ -7,11 +7,13 @@ import { RessursStatus } from '@navikt/familie-typer';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
+import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
+import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useVedtaksperioder } from '../../../context/behandlingContext/useVedtaksperioder';
+import { useVedtakSteg } from '../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import {
@@ -35,7 +37,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
     const { vurderErLesevisning } = useBehandling();
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtaksperioder();
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
     const {
         hentForhåndsvisning,
         nullstillDokument,
@@ -50,7 +52,9 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settVisFeilutbetaltValuta,
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
-    } = useVedtaksperioder();
+    } = useVedtakSteg();
+
+    const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -123,36 +127,44 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                     </Alert>
                 ) : (
                     <>
-                        <VedtaksbegrunnelseTeksterProvider>
-                            <VedtaksperioderMedBegrunnelser
-                                åpenBehandling={åpenBehandling}
-                                vedtaksperioderMedBegrunnelserRessurs={
-                                    vedtaksperioderMedBegrunnelserRessurs
-                                }
-                            />
-                        </VedtaksbegrunnelseTeksterProvider>
-                        {visFeilutbetaltValuta && (
-                            <FeilutbetaltValuta
-                                feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
-                                behandlingId={åpenBehandling.behandlingId}
-                                fagsakId={fagsakId}
-                                settErUlagretNyFeilutbetaltValutaPeriode={
-                                    settErUlagretNyFeilutbetaltValutaPeriode
-                                }
-                                erLesevisning={erLesevisning}
-                                skjulFeilutbetaltValuta={() => settVisFeilutbetaltValuta(false)}
-                            />
-                        )}
-                        {visRefusjonEøs && (
-                            <RefusjonEøs
-                                refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
-                                behandlingId={åpenBehandling.behandlingId}
-                                fagsakId={fagsakId}
-                                settErUlagretNyRefusjonEøsPeriode={
-                                    settErUlagretNyRefusjonEøsPeriode
-                                }
-                                skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
-                            />
+                        {erSammensattKontrollsak ? (
+                            <SammensattKontrollsak />
+                        ) : (
+                            <>
+                                <VedtaksbegrunnelseTeksterProvider>
+                                    <VedtaksperioderMedBegrunnelser
+                                        åpenBehandling={åpenBehandling}
+                                        vedtaksperioderMedBegrunnelserRessurs={
+                                            vedtaksperioderMedBegrunnelserRessurs
+                                        }
+                                    />
+                                </VedtaksbegrunnelseTeksterProvider>
+                                {visFeilutbetaltValuta && (
+                                    <FeilutbetaltValuta
+                                        feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
+                                        behandlingId={åpenBehandling.behandlingId}
+                                        fagsakId={fagsakId}
+                                        settErUlagretNyFeilutbetaltValutaPeriode={
+                                            settErUlagretNyFeilutbetaltValutaPeriode
+                                        }
+                                        erLesevisning={erLesevisning}
+                                        skjulFeilutbetaltValuta={() =>
+                                            settVisFeilutbetaltValuta(false)
+                                        }
+                                    />
+                                )}
+                                {visRefusjonEøs && (
+                                    <RefusjonEøs
+                                        refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
+                                        behandlingId={åpenBehandling.behandlingId}
+                                        fagsakId={fagsakId}
+                                        settErUlagretNyRefusjonEøsPeriode={
+                                            settErUlagretNyRefusjonEøsPeriode
+                                        }
+                                        skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
+                                    />
+                                )}
+                            </>
                         )}
                     </>
                 )}

@@ -227,6 +227,21 @@ export enum BehandlingResultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
 }
 
+export const erBehandlingAvslått = (behandlingsResultat?: BehandlingResultat): boolean => {
+    return [
+        BehandlingResultat.AVSLÅTT,
+        BehandlingResultat.AVSLÅTT_OG_ENDRET,
+        BehandlingResultat.AVSLÅTT_ENDRET_OG_OPPHØRT,
+        BehandlingResultat.AVSLÅTT_OG_OPPHØRT,
+    ].some(resultat => resultat === behandlingsResultat);
+};
+
+export const erBehandlingFortsattInnvilget = (
+    behandlingsResultat?: BehandlingResultat
+): boolean => {
+    return behandlingsResultat === BehandlingResultat.FORTSATT_INNVILGET;
+};
+
 export const erBehandlingHenlagt = (behandlingsresultat?: BehandlingResultat) => {
     return (
         behandlingsresultat === BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET ||
