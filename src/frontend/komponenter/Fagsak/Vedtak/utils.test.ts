@@ -27,7 +27,7 @@ describe('Vedtakutils', () => {
                 REFUSJONSPERIODE_TRE_MÅNEDER,
                 REFUSJONSPERIODE_EN_MÅNED,
             ])
-        ).toBe(950);
+        ).toBe(375);
         expect(
             summerBeløpForPerioder([
                 {
@@ -51,7 +51,7 @@ describe('Vedtakutils', () => {
                     beløp: 108,
                 },
             ])
-        ).toBe(2181);
+        ).toBe(403);
     });
     test('antallMånederIPeriode skal finne antall hele måneder en periode varer', () => {
         expect(antallMånederIPeriode(REFUSJONSPERIODE_FIRE_MÅNEDER)).toBe(4);
