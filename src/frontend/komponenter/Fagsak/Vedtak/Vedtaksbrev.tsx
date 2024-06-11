@@ -54,7 +54,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settErUlagretNyFeilutbetaltValutaPeriode,
     } = useVedtakSteg();
 
-    const { visSammensattKontrollsak } = useSammensattKontrollsak();
+    const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -127,7 +127,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
                     </Alert>
                 ) : (
                     <>
-                        {visSammensattKontrollsak ? (
+                        {erSammensattKontrollsak ? (
                             <SammensattKontrollsak />
                         ) : (
                             <>

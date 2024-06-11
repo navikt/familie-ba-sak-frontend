@@ -18,34 +18,22 @@ import type {
 } from '../../../../typer/sammensatt-kontrollsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 
-export interface ISammensattKontrollsakContext {
-    opprettEllerOppdaterSammensattKontrollsak: (fritekst: string) => void;
-    slettSammensattKontrollsak: () => void;
-    feilmelding: string | undefined;
-    sammensattKontrollsak?: IRestSammensattKontrollsak;
-    visSammensattKontrollsak: boolean;
-    settVisSammensattKontrollsak: (visSammensattKontrollsak: boolean) => void;
-    skalViseSammensattKontrollsakMenyValg: () => boolean;
-}
-
 interface ISammensattKontrollsakProps {
     åpenBehandling: IBehandling;
 }
 
 export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createUseContext(
-    ({ åpenBehandling }: ISammensattKontrollsakProps): ISammensattKontrollsakContext => {
+    ({ åpenBehandling }: ISammensattKontrollsakProps) => {
         const { behandlingId, resultat, type } = åpenBehandling;
         const { request } = useHttp();
         const { toggles } = useApp();
         const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
-        const [visSammensattKontrollsak, settVisSammensattKontrollsak] = useState<boolean>(false);
+        const [erSammensattKontrollsak, settErSammensattKontrollsak] = useState<boolean>(false);
         const [sammensattKontrollsak, settSammensattKontrollsak] =
             useState<IRestSammensattKontrollsak>();
 
         useEffect(() => {
-            if (!sammensattKontrollsak) {
-                hentSammensattKontrollsak();
-            }
+            hentSammensattKontrollsak();
         }, [åpenBehandling.behandlingId]);
 
         const skalViseSammensattKontrollsakMenyValg = (): boolean => {
@@ -59,13 +47,13 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
             );
         };
 
-        const erSammensattKontrollsak = (
+        const erIRestSammensattKontrollsak = (
             sammensattKontrollsak: IRestSammensattKontrollsak | undefined
         ): sammensattKontrollsak is IRestSammensattKontrollsak => !!sammensattKontrollsak;
 
         const opprettEllerOppdaterSammensattKontrollsak = (fritekst: string) => {
             settFeilmelding(undefined);
-            if (erSammensattKontrollsak(sammensattKontrollsak)) {
+            if (erIRestSammensattKontrollsak(sammensattKontrollsak)) {
                 oppdaterSammensattKontrollsak(sammensattKontrollsak, fritekst);
             } else {
                 opprettSammensattKontrollsak(fritekst);
@@ -74,9 +62,9 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
 
         const mottaRespons = (respons: Ressurs<IRestSammensattKontrollsak | undefined>) => {
             if (respons.status == RessursStatus.SUKSESS) {
-                if (erSammensattKontrollsak(respons.data)) {
+                if (erIRestSammensattKontrollsak(respons.data)) {
                     settSammensattKontrollsak(respons.data);
-                    settVisSammensattKontrollsak(true);
+                    settErSammensattKontrollsak(true);
                 }
             } else if (
                 respons.status === RessursStatus.FEILET ||
@@ -117,7 +105,7 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
 
         const slettSammensattKontrollsak = () => {
             settFeilmelding(undefined);
-            if (erSammensattKontrollsak(sammensattKontrollsak)) {
+            if (erIRestSammensattKontrollsak(sammensattKontrollsak)) {
                 request<IRestSammensattKontrollsak, number>({
                     method: 'DELETE',
                     data: { ...sammensattKontrollsak },
@@ -125,10 +113,10 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
                     påvirkerSystemLaster: true,
                 }).then(() => {
                     settSammensattKontrollsak(undefined);
-                    settVisSammensattKontrollsak(false);
+                    settErSammensattKontrollsak(false);
                 });
             } else {
-                settVisSammensattKontrollsak(false);
+                settErSammensattKontrollsak(false);
             }
         };
 
@@ -137,8 +125,8 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
             slettSammensattKontrollsak,
             feilmelding,
             sammensattKontrollsak,
-            visSammensattKontrollsak,
-            settVisSammensattKontrollsak,
+            erSammensattKontrollsak,
+            settErSammensattKontrollsak,
             skalViseSammensattKontrollsakMenyValg,
         };
     }

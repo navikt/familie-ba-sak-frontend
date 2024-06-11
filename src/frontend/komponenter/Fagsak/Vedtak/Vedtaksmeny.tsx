@@ -48,8 +48,8 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
     const {
-        visSammensattKontrollsak,
-        settVisSammensattKontrollsak,
+        erSammensattKontrollsak,
+        settErSammensattKontrollsak,
         skalViseSammensattKontrollsakMenyValg,
         slettSammensattKontrollsak,
         sammensattKontrollsak,
@@ -102,14 +102,14 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
                             </Dropdown.Menu.List.Item>
                         )}
                     {visSammensattKontrollsakMenyValg &&
-                        (sammensattKontrollsak || visSammensattKontrollsak ? (
+                        (sammensattKontrollsak || erSammensattKontrollsak ? (
                             <Dropdown.Menu.List.Item onClick={slettSammensattKontrollsak}>
                                 <ArrowUndoIcon fontSize={'1.4rem'} />
                                 Angre sammensatt kontrollsak
                             </Dropdown.Menu.List.Item>
                         ) : (
                             <Dropdown.Menu.List.Item
-                                onClick={() => settVisSammensattKontrollsak(true)}
+                                onClick={() => settErSammensattKontrollsak(true)}
                             >
                                 <TasklistStartIcon fontSize={'1.4rem'} />
                                 Sammensatt kontrollsak
