@@ -188,78 +188,60 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         }, [årsak.verdi, bruker.status]);
 
         const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
-            if (bruker.status === RessursStatus.SUKSESS) {
-                const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
+            const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
-                return {
-                    mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
-                    barnIBrev: barnIBrev.map(barn => barn.ident),
-                    mottakerMålform: målform,
-                    mottakerNavn: bruker.data.navn,
-                    brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
-                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-                };
-            } else {
-                throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
-            }
+            return {
+                multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
+                barnIBrev: barnIBrev.map(barn => barn.ident),
+                mottakerMålform: målform,
+                brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
+                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+            };
         };
 
         const hentBarnSøktForSkjemaData = (
             brevmal: Informasjonsbrev,
             målform: Målform
         ): IManueltBrevRequestPåFagsak => {
-            if (bruker.status === RessursStatus.SUKSESS) {
-                const barnIBrev = skjema.felter.barnSøktFor.verdi.filter(barn => barn.merket);
+            const barnIBrev = skjema.felter.barnSøktFor.verdi.filter(barn => barn.merket);
 
-                return {
-                    mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: barnIBrev.map(
-                        barn =>
-                            `Barn født ${isoStringTilFormatertString({
-                                isoString: barn.fødselsdato,
-                                tilFormat: Datoformat.DATO,
-                            })}.`
-                    ),
-                    barnIBrev: barnIBrev.map(barn => barn.ident),
-                    mottakerMålform: målform,
-                    mottakerNavn: bruker.data.navn,
-                    brevmal: brevmal,
-                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-                };
-            } else {
-                throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
-            }
+            return {
+                multiselectVerdier: barnIBrev.map(
+                    barn =>
+                        `Barn født ${isoStringTilFormatertString({
+                            isoString: barn.fødselsdato,
+                            tilFormat: Datoformat.DATO,
+                        })}.`
+                ),
+                barnIBrev: barnIBrev.map(barn => barn.ident),
+                mottakerMålform: målform,
+                brevmal: brevmal,
+                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+            };
         };
 
         const hentKanSøkeSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
-            if (bruker.status === RessursStatus.SUKSESS) {
-                const fritekster = skjema.felter.fritekster.verdi.map(
-                    fritekstFelt => fritekstFelt.verdi.tekst
-                );
+            const fritekster = skjema.felter.fritekster.verdi.map(
+                fritekstFelt => fritekstFelt.verdi.tekst
+            );
 
-                const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
-                    const dokument = opplysningsdokumenter.find(
-                        dokument => dokument.label === dokumentOption
-                    ) as ISelectOptionMedBrevtekst;
-                    if (!dokument.brevtekst) {
-                        throw new Error('Dokumentoptionen mangler brevtekst');
-                    }
-                    return dokument.brevtekst[målform];
-                });
+            const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
+                const dokument = opplysningsdokumenter.find(
+                    dokument => dokument.label === dokumentOption
+                ) as ISelectOptionMedBrevtekst;
+                if (!dokument.brevtekst) {
+                    throw new Error('Dokumentoptionen mangler brevtekst');
+                }
+                return dokument.brevtekst[målform];
+            });
 
-                return {
-                    mottakerIdent: bruker.data.personIdent,
-                    multiselectVerdier: dokumenter.concat(fritekster),
-                    barnIBrev: [],
-                    mottakerMålform: målform,
-                    mottakerNavn: bruker.data.navn,
-                    brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
-                    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-                };
-            } else {
-                throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
-            }
+            return {
+                multiselectVerdier: dokumenter.concat(fritekster),
+                barnIBrev: [],
+                mottakerMålform: målform,
+                brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
+                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+            };
         };
 
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
@@ -271,21 +253,18 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
                     case DokumentÅrsak.FØDSEL_MINDREÅRIG:
                         return hentEnkeltInformasjonsbrevRequest({
-                            bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
                             manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_VERGEMÅL:
                         return hentEnkeltInformasjonsbrevRequest({
-                            bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
                             manuelleBrevmottakerePåFagsak,
                         });
                     case DokumentÅrsak.FØDSEL_GENERELL:
                         return hentEnkeltInformasjonsbrevRequest({
-                            bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
                             manuelleBrevmottakerePåFagsak,
@@ -294,7 +273,6 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
                     case DokumentÅrsak.KAN_SØKE_EØS:
                         return hentEnkeltInformasjonsbrevRequest({
-                            bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
                             manuelleBrevmottakerePåFagsak,

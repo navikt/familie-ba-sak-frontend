@@ -70,19 +70,11 @@ const useHenleggBehandling = (lukkModal: () => void) => {
 
     const institusjon = minimalFagsak?.institusjon;
 
-    const mottakerIdentSomSkalBrukes = institusjon
-        ? minimalFagsak?.institusjon!.orgNummer
-        : minimalFagsak?.søkerFødselsnummer;
-
-    const mottakerNavnSomSkalBrukes = institusjon ? minimalFagsak?.institusjon!.navn : '';
-
     const brevmalSomSkalBrukes = institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
-        mottakerNavn: mottakerNavnSomSkalBrukes,
-        mottakerIdent: mottakerIdentSomSkalBrukes ?? '',
         multiselectVerdier: [],
         brevmal: brevmalSomSkalBrukes,
         barnIBrev: [],

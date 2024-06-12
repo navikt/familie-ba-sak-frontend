@@ -8,7 +8,6 @@ import type {
 import type { IsoDatoString } from '../utils/dato';
 
 interface IManueltBrevRequest {
-    mottakerIdent: string;
     multiselectVerdier: string[];
     barnIBrev: string[];
     datoAvtale?: IsoDatoString;
@@ -21,7 +20,6 @@ export interface IManueltBrevRequestPåBehandling extends IManueltBrevRequest {
     brevmal: Brevmal;
     manuelleBrevmottakere?: never;
     mottakerMålform?: Målform;
-    mottakerNavn?: string;
     mottakerlandSed?: string[];
     fritekstAvsnitt?: string;
 }
@@ -33,7 +31,6 @@ export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
     brevmal: Brevmal | Informasjonsbrev;
     manuelleBrevmottakere: SkjemaBrevmottaker[];
     mottakerMålform: Målform;
-    mottakerNavn: string;
     mottakerlandSed?: never;
 }
 
