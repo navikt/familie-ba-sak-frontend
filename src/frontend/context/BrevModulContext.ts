@@ -391,7 +391,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             );
 
             return {
-                mottakerIdent: skjema.felter.mottakerIdent.verdi,
                 multiselectVerdier: multiselectVerdier,
                 brevmal: skjema.felter.brevmal.verdi as Brevmal,
                 barnIBrev: [],
@@ -400,10 +399,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 behandlingKategori,
                 antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
                 mottakerMålform: mottakersMålform(),
-                mottakerNavn:
-                    mottakerIdent.verdi === institusjon?.orgNummer
-                        ? institusjon.navn
-                        : personer.find(person => person.personIdent === mottakerIdent.verdi)?.navn,
                 mottakerlandSed: mottakerlandSed.verdi,
                 fritekstAvsnitt: skjema.felter.fritekstAvsnitt.verdi,
             };
@@ -414,7 +409,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         const merkedeBarn = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
         return {
-            mottakerIdent: skjema.felter.mottakerIdent.verdi,
             multiselectVerdier: merkedeBarn.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
             barnIBrev: merkedeBarn.map(barn => barn.ident),
             brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
