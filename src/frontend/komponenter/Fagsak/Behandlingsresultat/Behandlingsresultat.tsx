@@ -16,6 +16,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
+import { useOppdaterValutakursOgSimuleringPåBeslutterSteg } from './Valutakurs/useOppdaterValutakursOgSimuleringPåBeslutterSteg';
 import Valutakurser from './Valutakurs/Valutakurser';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
@@ -80,6 +81,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
     } = useTidslinje();
+
+    useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 
     const { request } = useHttp();
 
