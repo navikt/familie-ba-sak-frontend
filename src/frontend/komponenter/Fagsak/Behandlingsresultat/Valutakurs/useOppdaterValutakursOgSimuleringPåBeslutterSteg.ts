@@ -15,8 +15,8 @@ export const useOppdaterValutakursOgSimuleringPåBeslutterSteg = () => {
             behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
         ) {
             request<void, IBehandling>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/oppdater-valutakurser-og-simulering-automatisk`,
+                method: 'PUT',
+                url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandling.behandlingId}/oppdater-valutakurser-og-simulering-automatisk`,
             }).then(behandlingRessurs => {
                 settÅpenBehandling(behandlingRessurs);
             });
