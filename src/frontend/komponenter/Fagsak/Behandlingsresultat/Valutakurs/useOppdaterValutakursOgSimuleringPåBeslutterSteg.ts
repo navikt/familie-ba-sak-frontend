@@ -2,17 +2,25 @@ import { useEffect } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../typer/behandling';
+import {
+    BehandlerRolle,
+    BehandlingStatus,
+    BehandlingSteg,
+    type IBehandling,
+} from '../../../../typer/behandling';
 
 export const useOppdaterValutakursOgSimuleringPåBeslutterSteg = () => {
+    const { hentSaksbehandlerRolle } = useApp();
     const { request } = useHttp();
     const { settÅpenBehandling, behandling } = useBehandling();
 
     useEffect(() => {
         if (
             behandling.status === BehandlingStatus.FATTER_VEDTAK &&
-            behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
+            behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK &&
+            hentSaksbehandlerRolle() === BehandlerRolle.BESLUTTER
         ) {
             request<void, IBehandling>({
                 method: 'PUT',
