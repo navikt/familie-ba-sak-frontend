@@ -90,7 +90,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Pr
         );
 
         automatiskNavigeringTilSideForSteg();
-    }, [behandling]);
+    }, [behandling.id]);
 
     useEffect(() => {
         settForrigeÅpneSide(
