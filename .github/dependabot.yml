@@ -19,7 +19,6 @@ updates:
   groups:
     sentry:
       patterns:
-        - "@sentry/tracing"
         - "@sentry/browser"
     typescript-eslint:
       patterns:
