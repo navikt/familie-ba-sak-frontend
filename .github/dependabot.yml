@@ -17,9 +17,6 @@ updates:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
   groups:
-    sentry:
-      patterns:
-        - "@sentry/browser"
     typescript-eslint:
       patterns:
         - "@typescript-eslint/eslint-plugin"
