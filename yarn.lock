@@ -1852,10 +1852,10 @@
     classnames "^2.5.1"
     react-transition-group "^4.4.5"
 
-"@navikt/familie-form-elements@15.0.0":
-  version "15.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/15.0.0/e57b16e473f85e3bddaf809644c1412be886ed6e#e57b16e473f85e3bddaf809644c1412be886ed6e"
-  integrity sha512-NGcIgqJL4/mARhHMUI2VENh9xyPzJfzzw8gP/7t85I7kAFaWbREZYqIOWXdCb4tr630Jo7Lp0f+HP+qkzI10DQ==
+"@navikt/familie-form-elements@17.1.0":
+  version "17.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/17.1.0/f7d600de677cc47e6c46197bb6a1fb877a564e9a#f7d600de677cc47e6c46197bb6a1fb877a564e9a"
+  integrity sha512-RLlDOIDnaXVK4jXNhS6N0jyn2gmeMMMHphKLqF2NxPI95WXgYZ08eWTshcX92hyLI2Yeb7R1FOU0t7Y3LablxQ==
   dependencies:
     classnames "^2.5.1"
     react-select "^5.8.0"
