@@ -10,7 +10,7 @@ import {
 } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
 import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -218,8 +218,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                 {!erLesevisning && (
                     <Knapperad>
                         <div>
-                            <FamilieKnapp
-                                erLesevisning={erLesevisning}
+                            <Button
                                 onClick={() => sendInnSkjema()}
                                 size="small"
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
@@ -227,16 +226,15 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
                                 Ferdig
-                            </FamilieKnapp>
-                            <FamilieKnapp
+                            </Button>
+                            <Button
                                 style={{ marginLeft: '1rem' }}
-                                erLesevisning={erLesevisning}
                                 onClick={() => toggleForm(false)}
                                 size="small"
                                 variant="tertiary"
                             >
                                 Avbryt
-                            </FamilieKnapp>
+                            </Button>
                         </div>
 
                         {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
