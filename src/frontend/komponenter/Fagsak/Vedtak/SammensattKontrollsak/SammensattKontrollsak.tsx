@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
 
 import { useSammensattKontrollsak } from './useSammensattKontrollsak';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
@@ -13,7 +12,7 @@ const StyledVStack = styled(VStack)`
     margin-bottom: ${ASpacing6};
 `;
 
-const StyledFamilieKnapp = styled(FamilieKnapp)`
+const StyledButton = styled(Button)`
     align-self: start;
 `;
 
@@ -47,15 +46,16 @@ const SammensattKontrollsak: React.FC = () => {
                 </Alert>
             )}
             {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
-            <StyledFamilieKnapp
-                erLesevisning={erLesevisning}
-                onClick={() => opprettEllerOppdaterSammensattKontrollsak(fritekst)}
-                variant="primary"
-                size="small"
-                loading={false}
-            >
-                Lagre
-            </StyledFamilieKnapp>
+            {!erLesevisning && (
+                <StyledButton
+                    onClick={() => opprettEllerOppdaterSammensattKontrollsak(fritekst)}
+                    variant="primary"
+                    size="small"
+                    loading={false}
+                >
+                    Lagre
+                </StyledButton>
+            )}
         </StyledVStack>
     );
 };
