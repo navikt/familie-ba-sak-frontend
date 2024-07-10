@@ -35,9 +35,6 @@ const HentetLabelOgKnappDiv = styled.div`
     display: flex;
     justify-content: left;
     align-items: center;
-    .knapp__spinner {
-        margin: 0 !important;
-    }
     margin-bottom: ${ASpacing2};
 `;
 
