@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
+import { Button, Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -235,29 +234,29 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     }}
                 />
 
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={erLesevisning}
-                            onClick={onClickFerdig}
-                            size="medium"
-                            variant="secondary"
-                            loading={vilkårSubmit === VilkårSubmit.PUT}
-                            disabled={vilkårSubmit === VilkårSubmit.PUT}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={erLesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="medium"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
-                </Knapperad>
+                {!erLesevisning && (
+                    <Knapperad>
+                        <div>
+                            <Button
+                                onClick={onClickFerdig}
+                                size="medium"
+                                variant="secondary"
+                                loading={vilkårSubmit === VilkårSubmit.PUT}
+                                disabled={vilkårSubmit === VilkårSubmit.PUT}
+                            >
+                                Ferdig
+                            </Button>
+                            <Button
+                                style={{ marginLeft: '1rem' }}
+                                onClick={() => toggleForm(false)}
+                                size="medium"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </Button>
+                        </div>
+                    </Knapperad>
+                )}
             </Container>
         </Fieldset>
     );
