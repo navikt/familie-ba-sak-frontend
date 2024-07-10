@@ -9,7 +9,6 @@ import {
     TrashIcon,
 } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -19,6 +18,7 @@ import type { Currency } from '@navikt/land-verktoy';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';

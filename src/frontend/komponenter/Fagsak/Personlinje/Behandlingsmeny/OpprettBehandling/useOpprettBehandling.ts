@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import type { ISelectOption } from '@navikt/familie-form-elements';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -13,6 +12,7 @@ import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behand
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { behandlingstemaer } from '../../../../../typer/behandlingstema';
+import type { OptionType } from '../../../../../typer/common';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
@@ -33,7 +33,7 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
     migreringsdato: Date | undefined;
     søknadMottattDato: Date | undefined;
     kravMottattDato: Date | undefined;
-    valgteBarn: ISelectOption[];
+    valgteBarn: OptionType[];
 }
 
 const useOpprettBehandling = (
@@ -148,7 +148,7 @@ const useOpprettBehandling = (
 
     const valgteBarn = useFelt({
         verdi: [],
-        valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
+        valideringsfunksjon: (felt: FeltState<OptionType[]>) => ok(felt),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;

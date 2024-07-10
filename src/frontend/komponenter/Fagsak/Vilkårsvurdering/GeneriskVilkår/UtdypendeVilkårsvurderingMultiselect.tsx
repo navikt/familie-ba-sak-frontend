@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import type {
     ActionMeta,
     CSSObjectWithLabel,
-    ISelectOption,
     MultiValue,
     SingleValue,
 } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import type { OptionType } from '../../../../typer/common';
 import type { PersonType } from '../../../../typer/person';
 import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
 import {
@@ -74,11 +74,11 @@ const StyledFamilieReactSelect = styled(FamilieReactSelect)`
 
 const mapUtdypendeVilkårsvurderingTilOption = (
     utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering
-): ISelectOption => ({
+): OptionType => ({
     value: utdypendeVilkårsvurdering,
     label: utdypendeVilkårsvurderingTekst[utdypendeVilkårsvurdering],
 });
-const mapOptionTilUtdypendeVilkårsvurdering = (option: ISelectOption): UtdypendeVilkårsvurdering =>
+const mapOptionTilUtdypendeVilkårsvurdering = (option: OptionType): UtdypendeVilkårsvurdering =>
     option.value as UtdypendeVilkårsvurdering;
 
 const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IVilkårResultat => ({
@@ -90,7 +90,7 @@ const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IV
 });
 
 function mapOgLeggTilUtdypendeVilkårsvurdering(
-    action: ActionMeta<ISelectOption>,
+    action: ActionMeta<OptionType>,
     vilkår: IVilkårResultat
 ): IVilkårResultat {
     const { option } = action;
@@ -134,7 +134,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         );
     }, [redigerbartVilkår, utdypendeVilkårsvurderingAvhengigheter]);
 
-    const håndterEndring = (action: ActionMeta<ISelectOption>) => {
+    const håndterEndring = (action: ActionMeta<OptionType>) => {
         switch (action.action) {
             case 'select-option':
                 validerOgSettRedigerbartVilkår({
@@ -195,8 +195,8 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
             erLesevisning={erLesevisning}
             isMulti
             onChange={(
-                _: MultiValue<ISelectOption> | SingleValue<ISelectOption>,
-                action: ActionMeta<ISelectOption>
+                _: MultiValue<OptionType> | SingleValue<OptionType>,
+                action: ActionMeta<OptionType>
             ) => {
                 håndterEndring(action);
             }}

@@ -5,15 +5,12 @@ import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import type {
-    ActionMeta,
-    FormatOptionLabelMeta,
-    ISelectOption,
-} from '@navikt/familie-form-elements';
+import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { OptionType } from '../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
@@ -49,7 +46,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     } = useVedtaksperiodeMedBegrunnelserPanel();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    const [standardbegrunnelser, settStandardbegrunnelser] = useState<ISelectOption[]>([]);
+    const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
@@ -110,7 +107,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     textTransform: 'none',
                 }),
                 multiValue: (provided, props) => {
-                    const currentOption = props.data as ISelectOption;
+                    const currentOption = props.data as OptionType;
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined =
                         finnVedtakBegrunnelseType(
                             vedtaksbegrunnelseTekster,
@@ -143,12 +140,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             creatable={false}
             erLesevisning={skalIkkeEditeres}
             isMulti={true}
-            onChange={(_, action: ActionMeta<ISelectOption>) => {
+            onChange={(_, action: ActionMeta<OptionType>) => {
                 onChangeBegrunnelse(action);
             }}
             formatOptionLabel={(
-                option: ISelectOption,
-                formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
+                option: OptionType,
+                formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
                     vedtaksbegrunnelseTekster,
@@ -167,7 +164,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     return <BodyShort>{option.label}</BodyShort>;
                 }
             }}
-            formatGroupLabel={(group: GroupBase<ISelectOption>) => {
+            formatGroupLabel={(group: GroupBase<OptionType>) => {
                 return (
                     <GroupLabel>
                         <Label>{group.label}</Label>

@@ -14,3 +14,8 @@ export const hentPar = (
 ): string => {
     return Object.values(nøkkelPar).find((par: IPar) => par.id === nøkkel)?.id ?? defaultValue;
 };
+
+export type OptionType = {
+    value: string;
+    label: string;
+};

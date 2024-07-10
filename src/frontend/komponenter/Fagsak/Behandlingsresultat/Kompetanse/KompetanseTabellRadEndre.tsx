@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select } from '@navikt/ds-react';
-import type { MultiValue, OptionType, SingleValue } from '@navikt/familie-form-elements';
+import type { MultiValue, SingleValue } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -13,6 +13,7 @@ import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
