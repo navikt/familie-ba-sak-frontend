@@ -14,7 +14,6 @@ import {
     Tag,
     Textarea,
 } from '@navikt/ds-react';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -228,30 +227,30 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                     {'Legg til fritekst'}
                 </Button>
             )}
-            <Knapperekke>
-                <FamilieKnapp
-                    erLesevisning={erLesevisning}
-                    onClick={() => {
-                        putVedtaksperiodeMedFritekster();
-                    }}
-                    size="small"
-                    variant="secondary"
-                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                >
-                    Lagre
-                </FamilieKnapp>
-                <FamilieKnapp
-                    erLesevisning={erLesevisning}
-                    onClick={() => {
-                        onPanelClose(false);
-                    }}
-                    size="small"
-                    variant="tertiary"
-                >
-                    Avbryt
-                </FamilieKnapp>
-            </Knapperekke>
+            {!erLesevisning && (
+                <Knapperekke>
+                    <Button
+                        onClick={() => {
+                            putVedtaksperiodeMedFritekster();
+                        }}
+                        size="small"
+                        variant="secondary"
+                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    >
+                        Lagre
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            onPanelClose(false);
+                        }}
+                        size="small"
+                        variant="tertiary"
+                    >
+                        Avbryt
+                    </Button>
+                </Knapperekke>
+            )}
         </FritekstContainer>
     );
 };
