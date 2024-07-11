@@ -22,6 +22,7 @@ import {
     kompetanseResultater,
     SøkersAktivitet,
 } from '../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -86,18 +87,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
 
     const onBarnSelected = (optionValue: string, isSelected: boolean) => {
-        if (isSelected) {
-            const nyttBarn = tilgjengeligeBarn.find(barn => barn.value === optionValue);
-            nyttBarn &&
-                skjema.felter.barnIdenter.validerOgSettFelt([
-                    ...skjema.felter.barnIdenter.verdi,
-                    nyttBarn,
-                ]);
-        } else {
-            skjema.felter.barnIdenter.validerOgSettFelt(
-                skjema.felter.barnIdenter.verdi.filter(barn => barn.value !== optionValue)
-            );
-        }
+        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
     };
 
     return (

@@ -3,7 +3,15 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    Fieldset,
+    Select,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
 import {
     ABorderDefault,
     AFontLineHeightLarge,
@@ -11,7 +19,7 @@ import {
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -25,6 +33,7 @@ import {
     UtenlandskPeriodeBeløpIntervall,
 } from '../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -142,6 +151,10 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
+        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
+    };
+
     return (
         <Fieldset
             error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
@@ -155,15 +168,15 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         registreres separat
                     </UtbetaltBeløpText>
                 </UtbetaltBeløpInfo>
-                <FamilieReactSelect
-                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                <UNSAFE_Combobox
+                    isMultiSelect
                     label={'Barn'}
-                    isMulti
                     options={tilgjengeligeBarn}
-                    value={skjema.felter.barnIdenter.verdi}
-                    onChange={options =>
-                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    selectedOptions={skjema.felter.barnIdenter.verdi}
+                    onToggleSelected={onBarnSelected}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
                 <StyledEøsPeriodeSkjema
