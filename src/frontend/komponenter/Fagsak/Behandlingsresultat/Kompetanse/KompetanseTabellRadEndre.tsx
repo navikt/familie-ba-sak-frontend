@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Select } from '@navikt/ds-react';
-import type { MultiValue, OptionType, SingleValue } from '@navikt/familie-form-elements';
-import { FamilieKnapp, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { Alert, Button, Fieldset, Select, UNSAFE_Combobox } from '@navikt/ds-react';
+import type { OptionType } from '@navikt/familie-form-elements';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -30,6 +30,7 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
     `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${
         kompetanse.felter.periode.verdi.fom
     }`;
+
 interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: OptionType[];
@@ -51,10 +52,6 @@ const StyledFamilieLandvelger = styled(FamilieLandvelger)`
 
 const StyledSelect = styled(Select)`
     margin-top: 1.5rem;
-`;
-
-const StyledFamilieReactSelect = styled(FamilieReactSelect)`
-    margin-top: 0.5rem;
 `;
 
 const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
@@ -88,6 +85,21 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 
     const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
 
+    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
+        if (isSelected) {
+            const nyttBarn = tilgjengeligeBarn.find(barn => barn.value === optionValue);
+            nyttBarn &&
+                skjema.felter.barnIdenter.validerOgSettFelt([
+                    ...skjema.felter.barnIdenter.verdi,
+                    nyttBarn,
+                ]);
+        } else {
+            skjema.felter.barnIdenter.validerOgSettFelt(
+                skjema.felter.barnIdenter.verdi.filter(barn => barn.value !== optionValue)
+            );
+        }
+    };
+
     return (
         <Fieldset
             error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
@@ -95,18 +107,17 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             hideLegend
         >
             <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
-                <StyledFamilieReactSelect
-                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                <UNSAFE_Combobox
+                    isMultiSelect
                     label={'Barn'}
-                    isMulti
                     options={tilgjengeligeBarn}
-                    value={skjema.felter.barnIdenter.verdi}
-                    onChange={(options: MultiValue<OptionType> | SingleValue<OptionType>) =>
-                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    selectedOptions={skjema.felter.barnIdenter.verdi}
+                    onToggleSelected={onBarnSelected}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
-
                 <StyledEøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
