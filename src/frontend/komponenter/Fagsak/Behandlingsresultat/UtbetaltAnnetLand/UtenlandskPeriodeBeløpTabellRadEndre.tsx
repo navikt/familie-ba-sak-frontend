@@ -12,14 +12,7 @@ import {
     TextField,
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
-import {
-    ABorderDefault,
-    AFontLineHeightLarge,
-    AFontSizeLarge,
-    ASpacing6,
-} from '@navikt/ds-tokens/dist/tokens';
-import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
+import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -27,6 +20,7 @@ import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import {
     utenlandskPeriodeBeløpIntervaller,
     EøsPeriodeStatus,
@@ -35,7 +29,7 @@ import {
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
-import { FamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
+import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
 
 const UtbetaltBeløpRad = styled.div`
@@ -43,34 +37,6 @@ const UtbetaltBeløpRad = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-`;
-
-export const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEtikett?: boolean }>`
-    gap: 0;
-
-    label {
-        font-size: ${AFontSizeLarge};
-        letter-spacing: 0;
-        font-weight: bold;
-        margin: 0;
-        line-height: ${AFontLineHeightLarge};
-    }
-
-    div.c-countrySelect__select {
-        margin-top: 8px;
-
-        .c-countrySelect__select__control {
-            border: 1px solid ${ABorderDefault};
-        }
-
-        .c-countrySelect__select__value-container {
-            min-height: 46px;
-        }
-    }
-
-    &.navds-select--disabled label {
-        opacity: ${({ dempetEtikett }) => (dempetEtikett ? '0.3' : 'unset')};
-    }
 `;
 
 const UtbetaltBeløpInfo = styled(Alert)`
@@ -244,31 +210,29 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     </UtbetaltBeløpRad>
                 </StyledFieldset>
 
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => sendInnSkjema()}
-                            size="small"
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="small"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
+                {!lesevisning && (
+                    <Knapperad>
+                        <div>
+                            <Button
+                                onClick={() => sendInnSkjema()}
+                                size="small"
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            >
+                                Ferdig
+                            </Button>
+                            <Button
+                                style={{ marginLeft: '1rem' }}
+                                onClick={() => toggleForm(false)}
+                                size="small"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </Button>
+                        </div>
 
-                    {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        !lesevisning && (
+                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
                                 variant={'tertiary'}
                                 onClick={() => slettUtenlandskPeriodeBeløp()}
@@ -283,7 +247,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 {'Fjern'}
                             </Button>
                         )}
-                </Knapperad>
+                    </Knapperad>
+                )}
             </EøsPeriodeSkjemaContainer>
         </Fieldset>
     );

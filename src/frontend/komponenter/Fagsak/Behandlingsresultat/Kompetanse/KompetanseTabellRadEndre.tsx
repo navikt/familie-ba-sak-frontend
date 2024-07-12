@@ -4,8 +4,6 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -13,6 +11,7 @@ import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
@@ -287,31 +286,29 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 )}
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={lesevisning}
-                            onClick={() => sendInnSkjema()}
-                            size="small"
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="small"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
+                {!lesevisning && (
+                    <Knapperad>
+                        <div>
+                            <Button
+                                onClick={() => sendInnSkjema()}
+                                size="small"
+                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            >
+                                Ferdig
+                            </Button>
+                            <Button
+                                style={{ marginLeft: '1rem' }}
+                                onClick={() => toggleForm(false)}
+                                size="small"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </Button>
+                        </div>
 
-                    {skjema.felter.status.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                        !lesevisning && (
+                        {skjema.felter.status.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
                                 variant={'tertiary'}
                                 onClick={() => slettKompetanse()}
@@ -326,7 +323,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 {'Fjern'}
                             </Button>
                         )}
-                </Knapperad>
+                    </Knapperad>
+                )}
             </EøsPeriodeSkjemaContainer>
         </Fieldset>
     );

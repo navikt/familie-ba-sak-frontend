@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
 import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import type { ActionMeta } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -12,6 +12,7 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { OptionType } from '../../../../typer/common';
 import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
@@ -64,7 +65,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
           }))
         : [];
 
-    const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
+    const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
         switch (action.action) {
             case 'select-option':
                 if (action.option) {
@@ -111,7 +112,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
             isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
             erLesevisning={erLesevisning}
             isMulti={true}
-            onChange={(_, action: ActionMeta<ISelectOption>) => {
+            onChange={(_, action: ActionMeta<OptionType>) => {
                 onChangeBegrunnelse(action);
             }}
             options={muligeOptions}

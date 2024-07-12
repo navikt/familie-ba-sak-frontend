@@ -1,11 +1,11 @@
 import { addMonths, endOfMonth, isAfter } from 'date-fns';
 
-import type { OptionType } from '@navikt/familie-form-elements';
 import { feil, ok } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
 import type { IIsoMånedPeriode, IsoMånedString } from './dato';
 import { dagensDato, isoStringTilDate } from './dato';
+import type { OptionType } from '../typer/common';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;

@@ -1,10 +1,10 @@
 import type { GroupBase } from 'react-select';
 
-import type { ISelectOption } from '@navikt/familie-form-elements';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
 import type {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
@@ -87,7 +87,7 @@ export const useVilkårBegrunnelser = ({
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       )
                   )
-                  .reduce((acc: GroupBase<ISelectOption>[], vedtakBegrunnelseType: string) => {
+                  .reduce((acc: GroupBase<OptionType>[], vedtakBegrunnelseType: string) => {
                       return [
                           ...acc,
                           {
@@ -125,7 +125,7 @@ export const useVilkårBegrunnelser = ({
 export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
-): ISelectOption[] => {
+): OptionType[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
         (begrunnelse: IRestVedtaksbegrunnelse) => ({
             value: begrunnelse.standardbegrunnelse.toString(),

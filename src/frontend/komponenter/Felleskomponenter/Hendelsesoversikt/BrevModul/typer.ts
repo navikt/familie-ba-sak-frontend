@@ -1,3 +1,4 @@
+import type { OptionType } from '../../../../typer/common';
 import type { Målform } from '../../../../typer/søknad';
 
 export interface BrevtypeSelect extends HTMLSelectElement {
@@ -70,11 +71,6 @@ export const leggTilValuePåOption = (
     ...option,
     value: option.label.toLocaleLowerCase().replace(' ', '_'),
 });
-
-type OptionType = {
-    value: string;
-    label: string;
-};
 
 export interface ISelectOptionMedBrevtekst extends OptionType {
     value: string;

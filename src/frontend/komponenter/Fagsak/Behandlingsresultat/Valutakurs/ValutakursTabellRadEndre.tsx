@@ -19,8 +19,6 @@ import {
     TextField,
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -29,12 +27,13 @@ import type { Currency } from '@navikt/land-verktoy';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../utils/skjema';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
+import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
-import { StyledFamilieValutavelger } from '../UtbetaltAnnetLand/UtenlandskPeriodeBeløpTabellRadEndre';
 
 const ValutakursRad = styled.div`
     width: 32rem;
@@ -233,8 +232,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                 {!erLesevisning && (
                     <Knapperad>
                         <div>
-                            <FamilieKnapp
-                                erLesevisning={erLesevisning}
+                            <Button
                                 onClick={() => sendInnSkjema()}
                                 size="small"
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
@@ -242,16 +240,15 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
                                 Ferdig
-                            </FamilieKnapp>
-                            <FamilieKnapp
+                            </Button>
+                            <Button
                                 style={{ marginLeft: '1rem' }}
-                                erLesevisning={erLesevisning}
                                 onClick={() => toggleForm(false)}
                                 size="small"
                                 variant="tertiary"
                             >
                                 Avbryt
-                            </FamilieKnapp>
+                            </Button>
                         </div>
 
                         {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&

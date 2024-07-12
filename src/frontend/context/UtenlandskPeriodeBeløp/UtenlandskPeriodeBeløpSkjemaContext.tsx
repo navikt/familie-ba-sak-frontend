@@ -1,6 +1,5 @@
 import React from 'react';
 
-import type { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -8,6 +7,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../typer/behandling';
+import type { OptionType } from '../../typer/common';
 import type {
     EøsPeriodeStatus,
     IRestUtenlandskPeriodeBeløp,

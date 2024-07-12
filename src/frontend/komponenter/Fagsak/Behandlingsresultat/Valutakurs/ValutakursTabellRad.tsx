@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Table } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
 
 import { PeriodeValutakurs } from './PeriodeValutakurs';
 import { StatusOgBarnValutakurs } from './StatusOgBarnValutakurs';
@@ -11,6 +10,7 @@ import {
     valutakursFeilmeldingId,
 } from '../../../../context/Valutakurs/ValutakursSkjemaContext';
 import type { IBehandling } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { lagPersonLabel } from '../../../../utils/formatter';
