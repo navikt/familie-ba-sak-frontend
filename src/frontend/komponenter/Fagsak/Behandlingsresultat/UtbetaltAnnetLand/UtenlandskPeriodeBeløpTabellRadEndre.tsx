@@ -13,7 +13,6 @@ import {
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -39,20 +38,8 @@ const UtbetaltBeløpRad = styled.div`
     gap: 1rem;
 `;
 
-const UtbetaltBeløpInfo = styled(Alert)`
-    margin-bottom: ${ASpacing6};
-`;
-
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
-`;
-
-const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 1.5rem;
 `;
 
 const StyledTextField = styled(TextField)`
@@ -127,13 +114,13 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
-                <UtbetaltBeløpInfo variant="info" inline>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+                <Alert variant="info" inline>
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna
                         registreres separat
                     </UtbetaltBeløpText>
-                </UtbetaltBeløpInfo>
+                </Alert>
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}
@@ -145,14 +132,14 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                         skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
-                <StyledEøsPeriodeSkjema
+                <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
-                <StyledFieldset
+                <Fieldset
                     className={lesevisning ? 'lesevisning' : ''}
                     errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
@@ -208,7 +195,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </UtbetaltBeløpRad>
-                </StyledFieldset>
+                </Fieldset>
 
                 {!lesevisning && (
                     <Knapperad>
