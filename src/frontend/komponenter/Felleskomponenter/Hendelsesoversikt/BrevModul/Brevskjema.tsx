@@ -4,8 +4,16 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Select, Tag, Textarea, TextField } from '@navikt/ds-react';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import {
+    Button,
+    Fieldset,
+    Label,
+    Select,
+    Tag,
+    Textarea,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -14,7 +22,7 @@ import type { Country } from '@navikt/land-verktoy';
 
 import BarnBrevetGjelder from './BarnBrevetGjelder';
 import BrevmottakerListe from './BrevmottakerListe';
-import type { BrevtypeSelect, ISelectOptionMedBrevtekst } from './typer';
+import type { BrevtypeSelect } from './typer';
 import {
     Brevmal,
     brevmaler,
@@ -32,6 +40,7 @@ import type { IPersonInfo } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { onOptionSelected } from '../../../../utils/skjema';
 import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useSamhandlerRequest } from '../../../Fagsak/Institusjon/useSamhandler';
@@ -149,6 +158,10 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 : institusjon.navn;
     }
 
+    const muligeDokumenterÅVelge = institusjon
+        ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
+        : opplysningsdokumenter.map(leggTilValuePåOption);
+
     const onChangeFritekstKulepunkt = (
         event: React.ChangeEvent<HTMLTextAreaElement>,
         fritekstKulepunktId: number
@@ -224,23 +237,23 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 </StyledSelect>
 
                 {skjema.felter.dokumenter.erSynlig && (
-                    <FamilieReactSelect
-                        {...skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                        label={<Label>Velg dokumenter</Label>}
-                        creatable={false}
-                        erLesevisning={erLesevisning}
-                        isMulti={true}
-                        onChange={valgteOptions => {
-                            skjema.felter.dokumenter.onChange(
-                                valgteOptions === null
-                                    ? []
-                                    : (valgteOptions as ISelectOptionMedBrevtekst[])
-                            );
-                        }}
-                        options={
-                            institusjon
-                                ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
-                                : opplysningsdokumenter.map(leggTilValuePåOption)
+                    <UNSAFE_Combobox
+                        label={'Velg dokumenter'}
+                        readOnly={erLesevisning}
+                        isMultiSelect
+                        options={muligeDokumenterÅVelge}
+                        selectedOptions={skjema.felter.dokumenter.verdi}
+                        onToggleSelected={(optionValue: string, isSelected: boolean) =>
+                            onOptionSelected(
+                                optionValue,
+                                isSelected,
+                                skjema.felter.dokumenter,
+                                muligeDokumenterÅVelge
+                            )
+                        }
+                        error={
+                            skjema.felter.dokumenter.hentNavInputProps(skjema.visFeilmeldinger)
+                                .error
                         }
                     />
                 )}
