@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
@@ -42,22 +40,6 @@ interface IProps {
     erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
 }
 
-const StyledAlert = styled(Alert)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFamilieLandvelger = styled(FamilieLandvelger)`
-    margin-top: 1.5rem;
-`;
-
-const StyledSelect = styled(Select)`
-    margin-top: 1.5rem;
-`;
-
-const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
-    margin-top: 1.5rem;
-`;
-
 const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
@@ -95,7 +77,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
             legend="Kompetanseskjema"
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}
@@ -107,7 +89,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
-                <StyledEøsPeriodeSkjema
+                <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
@@ -115,12 +97,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     lesevisning={lesevisning}
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
-                    <StyledAlert variant="info" inline>
+                    <Alert variant="info" inline>
                         Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett
                         i perioden
-                    </StyledAlert>
+                    </Alert>
                 )}
-                <StyledSelect
+                <Select
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     readOnly={lesevisning}
                     label={'Søkers aktivitet'}
@@ -148,8 +130,8 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 </option>
                             );
                         })}
-                </StyledSelect>
-                <StyledSelect
+                </Select>
+                <Select
                     className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
                         skjema.visFeilmeldinger
@@ -175,14 +157,14 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             </option>
                         );
                     })}
-                </StyledSelect>
+                </Select>
                 {skjema.felter.annenForeldersAktivitet.verdi ===
                     AnnenForelderAktivitet.IKKE_AKTUELT && (
-                    <StyledAlert variant="info" size="small" inline>
+                    <Alert variant="info" size="small" inline>
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
-                    </StyledAlert>
+                    </Alert>
                 )}
-                <StyledFamilieLandvelger
+                <FamilieLandvelger
                     erLesevisning={lesevisning}
                     id={'søkersAktivitetsland'}
                     label={'Søkers aktivitetsland'}
@@ -202,6 +184,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
+                    utenMargin
                 />
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
@@ -223,6 +206,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
+                    utenMargin
                 />
                 <FamilieLandvelger
                     erLesevisning={lesevisning}
@@ -244,6 +228,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             ? skjema.felter.barnetsBostedsland?.feilmelding?.toString()
                             : ''
                     }
+                    utenMargin
                 />
                 <Select
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
