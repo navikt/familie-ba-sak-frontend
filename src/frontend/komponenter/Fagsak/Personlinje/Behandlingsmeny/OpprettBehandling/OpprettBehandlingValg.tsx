@@ -3,12 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Select } from '@navikt/ds-react';
-import type {
-    FormatOptionLabelMeta,
-    ISelectOption,
-    MultiValue,
-    SingleValue,
-} from '@navikt/familie-form-elements';
+import type { FormatOptionLabelMeta, MultiValue, SingleValue } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 
@@ -24,6 +19,7 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
@@ -152,7 +148,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     const barn = bruker?.forelderBarnRelasjon
         .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-        .map<ISelectOption>(relasjon => ({
+        .map<OptionType>(relasjon => ({
             value: relasjon.personIdent,
             label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år)`,
         }));
@@ -276,8 +272,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         creatable={false}
                         isMulti={true}
                         formatOptionLabel={(
-                            option: ISelectOption,
-                            formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption>
+                            option: OptionType,
+                            formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>
                         ) => {
                             if (formatOptionLabelMeta.context === 'menu') {
                                 return (
@@ -290,10 +286,10 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                             }
                         }}
                         onChange={(
-                            valgteOptions: MultiValue<ISelectOption> | SingleValue<ISelectOption>
+                            valgteOptions: MultiValue<OptionType> | SingleValue<OptionType>
                         ) => {
                             skjema.felter.valgteBarn.onChange(
-                                valgteOptions === null ? [] : (valgteOptions as ISelectOption[])
+                                valgteOptions === null ? [] : (valgteOptions as OptionType[])
                             );
                         }}
                     />

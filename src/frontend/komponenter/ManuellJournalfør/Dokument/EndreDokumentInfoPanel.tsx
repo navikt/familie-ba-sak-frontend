@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import type { ISelectOption } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
+import type { OptionType } from '../../../typer/common';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
 
@@ -33,7 +33,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
     );
 
-    const hentVedleggList = (): ISelectOption[] => {
+    const hentVedleggList = (): OptionType[] => {
         return dokumentFraSkjema
             ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => {
                   return {

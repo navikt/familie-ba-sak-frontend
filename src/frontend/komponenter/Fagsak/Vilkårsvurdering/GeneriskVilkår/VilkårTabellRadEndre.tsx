@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieKnapp } from '@navikt/familie-form-elements';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -370,30 +369,27 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         });
                     }}
                 />
-                <Knapperad>
-                    <div>
-                        <FamilieKnapp
-                            erLesevisning={lesevisning}
-                            onClick={onClickVilkårFerdig}
-                            size="medium"
-                            variant="secondary"
-                            loading={vilkårSubmit === VilkårSubmit.PUT}
-                            disabled={vilkårSubmit === VilkårSubmit.PUT}
-                        >
-                            Ferdig
-                        </FamilieKnapp>
-                        <FamilieKnapp
-                            style={{ marginLeft: '1rem' }}
-                            erLesevisning={lesevisning}
-                            onClick={() => toggleForm(false)}
-                            size="medium"
-                            variant="tertiary"
-                        >
-                            Avbryt
-                        </FamilieKnapp>
-                    </div>
-
-                    {!lesevisning ? (
+                {!lesevisning && (
+                    <Knapperad>
+                        <div>
+                            <Button
+                                onClick={onClickVilkårFerdig}
+                                size="medium"
+                                variant="secondary"
+                                loading={vilkårSubmit === VilkårSubmit.PUT}
+                                disabled={vilkårSubmit === VilkårSubmit.PUT}
+                            >
+                                Ferdig
+                            </Button>
+                            <Button
+                                style={{ marginLeft: '1rem' }}
+                                onClick={() => toggleForm(false)}
+                                size="medium"
+                                variant="tertiary"
+                            >
+                                Avbryt
+                            </Button>
+                        </div>
                         <Button
                             variant={'tertiary'}
                             onClick={() => {
@@ -411,8 +407,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         >
                             {'Fjern'}
                         </Button>
-                    ) : null}
-                </Knapperad>
+                        )
+                    </Knapperad>
+                )}
             </Container>
         </Fieldset>
     );

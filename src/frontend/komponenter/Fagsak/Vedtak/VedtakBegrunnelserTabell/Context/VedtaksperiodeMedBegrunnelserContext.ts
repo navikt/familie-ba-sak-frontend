@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 import deepEqual from 'deep-equal';
 
-import type { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import type { ActionMeta } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
@@ -18,6 +18,7 @@ import {
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
 import type { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import type {
     IRestPutVedtaksperiodeMedFritekster,
@@ -113,7 +114,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
             }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
-        const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
+        const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
