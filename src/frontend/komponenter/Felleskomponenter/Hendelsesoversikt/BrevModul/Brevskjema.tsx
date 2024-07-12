@@ -14,6 +14,7 @@ import {
     TextField,
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
+import { ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -89,6 +90,10 @@ const StyledTextField = styled(TextField)`
 
 const StyledLandvelger = styled(FamilieMultiLandvelger)`
     margin-top: 1.5rem;
+`;
+
+const StyledCombobox = styled(UNSAFE_Combobox)`
+    margin-bottom: ${ASpacing4};
 `;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
@@ -237,7 +242,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 </StyledSelect>
 
                 {skjema.felter.dokumenter.erSynlig && (
-                    <UNSAFE_Combobox
+                    <StyledCombobox
                         label={'Velg dokumenter'}
                         readOnly={erLesevisning}
                         isMultiSelect
