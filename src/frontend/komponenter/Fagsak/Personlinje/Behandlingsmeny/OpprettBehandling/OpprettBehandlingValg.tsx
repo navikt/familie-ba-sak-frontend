@@ -259,6 +259,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     <UNSAFE_Combobox
                         label={'Legg til juridiske barn for migrering'}
                         isMultiSelect
+                        readOnly={erLesevisning}
                         options={barn}
                         onToggleSelected={(valgtOption: string, isSelected: boolean) =>
                             onOptionSelected(
