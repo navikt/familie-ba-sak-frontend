@@ -19,6 +19,7 @@ import {
     TextField,
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -27,7 +28,6 @@ import type { Currency } from '@navikt/land-verktoy';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../utils/skjema';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
@@ -61,7 +61,7 @@ const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandl
 
 interface IProps {
     skjema: ISkjema<IValutakurs, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;

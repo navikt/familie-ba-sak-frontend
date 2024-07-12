@@ -12,6 +12,7 @@ import {
     TextField,
     UNSAFE_Combobox,
 } from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -20,7 +21,6 @@ import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
 import {
     utenlandskPeriodeBeløpIntervaller,
     EøsPeriodeStatus,
@@ -75,7 +75,7 @@ const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
 
 interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
