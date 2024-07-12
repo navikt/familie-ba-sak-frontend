@@ -1,10 +1,7 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { BodyShort, Select } from '@navikt/ds-react';
-import type { FormatOptionLabelMeta, MultiValue, SingleValue } from '@navikt/familie-form-elements';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
@@ -19,7 +16,6 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../../typer/behandling';
-import type { OptionType } from '../../../../../typer/common';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
@@ -32,22 +28,17 @@ import {
     hentSisteIkkeHenlagteBehandling,
 } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
+import { onOptionSelected } from '../../../../../utils/skjema';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
-
-const StyledFamilieReactSelect = styled(FamilieReactSelect)`
-    label {
-        margin-top: 2rem;
-    }
-    margin-bottom: -1rem;
-`;
 
 const erOpprettBehandlingSkjema = (
     skjema:
         | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
         | ISkjema<ManuellJournalføringSkjemaFelter, string>
-): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> =>
-    Object.hasOwn(skjema, 'valgteBarn');
+): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> => {
+    return Object.hasOwn(skjema.felter, 'valgteBarn');
+};
 
 const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {
     const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
@@ -146,12 +137,13 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
 
-    const barn = bruker?.forelderBarnRelasjon
-        .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-        .map<OptionType>(relasjon => ({
-            value: relasjon.personIdent,
-            label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år)`,
-        }));
+    const barn =
+        bruker?.forelderBarnRelasjon
+            .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
+            .map<ComboboxOption>(relasjon => ({
+                value: relasjon.personIdent,
+                label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år) | ${relasjon.personIdent}`,
+            })) ?? [];
 
     const { behandlingsårsak, behandlingstype, behandlingstema } = skjema.felter;
 
@@ -264,37 +256,25 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             {erHelmanuellMigrering &&
                 erOpprettBehandlingSkjema(skjema) &&
                 skjema.felter.valgteBarn?.erSynlig && (
-                    <StyledFamilieReactSelect
-                        {...skjema.felter.valgteBarn.hentNavInputProps(skjema.visFeilmeldinger)}
+                    <UNSAFE_Combobox
                         label={'Legg til juridiske barn for migrering'}
-                        placeholder={'Velg barn'}
+                        isMultiSelect
                         options={barn}
-                        creatable={false}
-                        isMulti={true}
-                        formatOptionLabel={(
-                            option: OptionType,
-                            formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>
-                        ) => {
-                            if (formatOptionLabelMeta.context === 'menu') {
-                                return (
-                                    <BodyShort>
-                                        <b>{option.label}</b> | {option.value}
-                                    </BodyShort>
-                                );
-                            } else {
-                                return <BodyShort>{option.value}</BodyShort>;
-                            }
-                        }}
-                        onChange={(
-                            valgteOptions: MultiValue<OptionType> | SingleValue<OptionType>
-                        ) => {
-                            skjema.felter.valgteBarn.onChange(
-                                valgteOptions === null ? [] : (valgteOptions as OptionType[])
-                            );
-                        }}
+                        onToggleSelected={(valgtOption: string, isSelected: boolean) =>
+                            onOptionSelected(
+                                valgtOption,
+                                isSelected,
+                                skjema.felter.valgteBarn,
+                                barn
+                            )
+                        }
+                        selectedOptions={skjema.felter.valgteBarn.verdi.map(barn => barn.value)}
+                        error={
+                            skjema.felter.valgteBarn.hentNavInputProps(skjema.visFeilmeldinger)
+                                .error
+                        }
                     />
                 )}
-
             {behandlingstema.erSynlig && (
                 <BehandlingstemaSelect
                     behandlingstema={behandlingstema}
