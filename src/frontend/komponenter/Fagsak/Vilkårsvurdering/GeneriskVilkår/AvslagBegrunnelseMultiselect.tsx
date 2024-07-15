@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Alert, UNSAFE_Combobox } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
+import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
+import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
@@ -9,12 +11,15 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type {
-    IRestVedtakBegrunnelseTilknyttetVilkår,
-    VedtakBegrunnelse,
+import type { OptionType } from '../../../../typer/common';
+import {
+    type IRestVedtakBegrunnelseTilknyttetVilkår,
+    type VedtakBegrunnelse,
+    VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../utils/dato';
+import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
@@ -59,21 +64,29 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
           }))
         : [];
 
-    const onBegrunnelseSelected = (optionValue: string, isSelected: boolean) => {
-        if (isSelected) {
-            const nyttValg = muligeOptions.find(valg => valg.value == optionValue);
-            if (nyttValg) {
-                valgteBegrunnelser.push(nyttValg);
-                onChange(valgteBegrunnelser.map(option => option.value as VedtakBegrunnelse));
-            } else {
-                throw new Error('Klarer ikke legge til begrunnelse');
-            }
-        } else {
-            onChange(
-                valgteBegrunnelser
-                    .filter(option => option.value !== optionValue)
-                    .map(option => option.value as VedtakBegrunnelse)
-            );
+    const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
+        switch (action.action) {
+            case 'select-option':
+                if (action.option) {
+                    valgteBegrunnelser.push(action.option);
+                    onChange(valgteBegrunnelser.map(option => option.value as VedtakBegrunnelse));
+                } else {
+                    throw new Error('Klarer ikke legge til begrunnelse');
+                }
+                break;
+            case 'pop-value':
+            case 'remove-value':
+                onChange(
+                    valgteBegrunnelser
+                        .filter(option => option.value !== action.removedValue?.value)
+                        .map(option => option.value as VedtakBegrunnelse)
+                );
+                break;
+            case 'clear':
+                onChange([]);
+                break;
+            default:
+                throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
         }
     };
 
@@ -89,14 +102,52 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     }
 
     return (
-        <UNSAFE_Combobox
-            selectedOptions={valgteBegrunnelser}
+        <FamilieReactSelect
+            value={valgteBegrunnelser}
             label={'Velg standardtekst i brev'}
+            creatable={false}
+            placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            readOnly={erLesevisning}
-            isMultiSelect
-            onToggleSelected={onBegrunnelseSelected}
+            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+            erLesevisning={erLesevisning}
+            isMulti={true}
+            onChange={(_, action: ActionMeta<OptionType>) => {
+                onChangeBegrunnelse(action);
+            }}
             options={muligeOptions}
+            propSelectStyles={{
+                container: (provided, props) => ({
+                    ...provided,
+                    maxWidth: '25rem',
+                    zIndex: props.isFocused ? AZIndexPopover : 1,
+                }),
+                groupHeading: provided => ({
+                    ...provided,
+                    textTransform: 'none',
+                }),
+                multiValue: provided => {
+                    return {
+                        ...provided,
+                        backgroundColor: hentBakgrunnsfarge(VedtakBegrunnelseType.AVSLAG),
+                        border: `1px solid ${hentBorderfarge(VedtakBegrunnelseType.AVSLAG)}`,
+                        borderRadius: '0.5rem',
+                    };
+                },
+                multiValueLabel: provided => ({
+                    ...provided,
+                    whiteSpace: 'pre-wrap',
+                    textOverflow: 'hidden',
+                    overflow: 'hidden',
+                }),
+                multiValueRemove: provided => ({
+                    ...provided,
+                    ':hover': {
+                        backgroundColor: ASurfaceActionHover,
+                        color: 'white',
+                        borderRadius: '0 .4rem .4rem 0',
+                    },
+                }),
+            }}
         />
     );
 };
