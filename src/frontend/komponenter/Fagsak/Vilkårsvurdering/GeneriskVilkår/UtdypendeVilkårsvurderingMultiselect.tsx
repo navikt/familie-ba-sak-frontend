@@ -105,7 +105,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         utdypendeVilkårsvurderingAvhengigheter
     );
 
-    const muligValgCombobox = muligeUtdypendeVilkårsvurderinger.map(
+    const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(
         mapUtdypendeVilkårsvurderingTilOption
     );
 
@@ -119,7 +119,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
 
     const håndterEndring = (optionValue: string, isSelected: boolean) => {
         if (isSelected) {
-            const nyttValg = muligValgCombobox.find(valg => valg.value === optionValue);
+            const nyttValg = muligeComboboxValg.find(valg => valg.value === optionValue);
             nyttValg &&
                 validerOgSettRedigerbartVilkår({
                     ...redigerbartVilkår,
@@ -152,7 +152,7 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                     ? 'Utdypende vilkårsvurdering (valgfri)'
                     : 'Utdypende vilkårsvurdering'
             }
-            options={muligValgCombobox}
+            options={muligeComboboxValg}
             error={feilhåndtering}
             isMultiSelect
             readOnly={erLesevisning}
