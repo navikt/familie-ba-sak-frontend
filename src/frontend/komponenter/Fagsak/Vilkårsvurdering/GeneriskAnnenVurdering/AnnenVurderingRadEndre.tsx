@@ -159,6 +159,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             <StyledVStack
                 $lesevisning={erLesevisning}
                 $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
+                gap="4"
             >
                 <RadioGroup
                     readOnly={erLesevisning}
