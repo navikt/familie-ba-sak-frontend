@@ -1,7 +1,6 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import styled from 'styled-components';
 
 import { BodyShort, Checkbox, Fieldset } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -20,17 +19,6 @@ interface IProps {
     settVisFeilmeldingerForEttVilkår: (visFeilmeldinger: boolean) => void;
 }
 
-const MarginFieldset = styled(Fieldset)`
-    margin: 1.5rem 0 2.5rem 0 !important;
-    > div:nth-child(2) {
-        margin: 0.5rem 0 0 0;
-        & > div {
-            max-width: 100%;
-            z-index: 999;
-        }
-    }
-`;
-
 const AvslagSkjema: React.FC<IProps> = ({
     redigerbartVilkår,
     settRedigerbartVilkår,
@@ -41,7 +29,7 @@ const AvslagSkjema: React.FC<IProps> = ({
     const erLesevisning = vurderErLesevisning();
 
     return (
-        <MarginFieldset
+        <Fieldset
             error={
                 redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus ===
                     Valideringsstatus.FEIL && visFeilmeldinger
@@ -104,7 +92,7 @@ const AvslagSkjema: React.FC<IProps> = ({
                     />
                 </VedtaksbegrunnelseTeksterProvider>
             )}
-        </MarginFieldset>
+        </Fieldset>
     );
 };
 
