@@ -39,15 +39,6 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const KontrollerteTrinnOverskrift = styled(Label)`
-    margin-bottom: 1rem;
-`;
-
-const SendtTilBeslutterContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
@@ -89,25 +80,22 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
             <VStack gap="4" marginBlock="0 6">
                 <RadioGroup value={beslutning} legend={''}>
                     {egetVedtak ? (
-                        <SendtTilBeslutterContainer>
-                            <BodyShort>
-                                {isoStringTilFormatertString({
-                                    isoString: opprettetTidspunkt,
-                                    tilFormat: Datoformat.DATO_FORLENGET_MED_TID,
-                                    defaultString: 'UKJENT OPPRETTELSESTIDSPUNKT',
-                                })}
-                            </BodyShort>
-                            <BodyShort>{saksbehandler}</BodyShort>
-                            <br />
+                        <VStack gap="4" marginBlock="0 4">
+                            <div>
+                                <BodyShort>
+                                    {isoStringTilFormatertString({
+                                        isoString: opprettetTidspunkt,
+                                        tilFormat: Datoformat.DATO_FORLENGET_MED_TID,
+                                        defaultString: 'UKJENT OPPRETTELSESTIDSPUNKT',
+                                    })}
+                                </BodyShort>
+                                <BodyShort>{saksbehandler}</BodyShort>
+                            </div>
                             <Detail>Vedtaket er sendt til godkjenning</Detail>
-                            <br />
-                        </SendtTilBeslutterContainer>
+                        </VStack>
                     ) : (
                         <>
-                            <KontrollerteTrinnOverskrift>
-                                Kontrollerte trinn
-                            </KontrollerteTrinnOverskrift>
-
+                            <Label spacing>Kontrollerte trinn</Label>
                             {Object.entries(trinnPåBehandling).map(([_, trinn], index) => {
                                 return (
                                     <TrinnStatus
