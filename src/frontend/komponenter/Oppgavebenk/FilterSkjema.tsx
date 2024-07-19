@@ -13,11 +13,6 @@ import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
-const StyledButton = styled(Button)`
-    margin-top: 0.5rem;
-    margin-right: 1.5rem;
-`;
-
 const StyledFieldset = styled(Fieldset)`
     display: flex;
     flex-direction: column;
@@ -104,8 +99,8 @@ const FilterSkjema: React.FunctionComponent = () => {
                     .map(tilOppgaveFeltKomponent)}
             </HStack>
 
-            <div className="filterskjema__actions">
-                <StyledButton
+            <HStack gap="2">
+                <Button
                     variant="primary"
                     onClick={() => {
                         validerSkjema() && hentOppgaver();
@@ -114,12 +109,12 @@ const FilterSkjema: React.FunctionComponent = () => {
                     disabled={oppgaver.status === RessursStatus.HENTER}
                     children={'Hent oppgaver'}
                 />
-                <StyledButton
+                <Button
                     onClick={tilbakestillOppgaveFelter}
                     variant="secondary"
                     children={'Tilbakestill filtrering'}
                 />
-            </div>
+            </HStack>
         </StyledFieldset>
     );
 };
