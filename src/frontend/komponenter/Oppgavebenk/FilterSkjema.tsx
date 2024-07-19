@@ -2,7 +2,7 @@ import React, { type ReactElement } from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Button, Select, HStack } from '@navikt/ds-react';
+import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -93,28 +93,30 @@ const FilterSkjema: React.FunctionComponent = () => {
 
     return (
         <StyledFieldset legend="Oppgavebenken filterskjema" hideLegend>
-            <HStack gap="6">
-                {Object.values(oppgaveFelter)
-                    .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
-                    .map(tilOppgaveFeltKomponent)}
-            </HStack>
+            <VStack gap="4">
+                <HStack gap="6">
+                    {Object.values(oppgaveFelter)
+                        .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
+                        .map(tilOppgaveFeltKomponent)}
+                </HStack>
 
-            <HStack gap="2">
-                <Button
-                    variant="primary"
-                    onClick={() => {
-                        validerSkjema() && hentOppgaver();
-                    }}
-                    loading={oppgaver.status === RessursStatus.HENTER}
-                    disabled={oppgaver.status === RessursStatus.HENTER}
-                    children={'Hent oppgaver'}
-                />
-                <Button
-                    onClick={tilbakestillOppgaveFelter}
-                    variant="secondary"
-                    children={'Tilbakestill filtrering'}
-                />
-            </HStack>
+                <HStack gap="2">
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            validerSkjema() && hentOppgaver();
+                        }}
+                        loading={oppgaver.status === RessursStatus.HENTER}
+                        disabled={oppgaver.status === RessursStatus.HENTER}
+                        children={'Hent oppgaver'}
+                    />
+                    <Button
+                        onClick={tilbakestillOppgaveFelter}
+                        variant="secondary"
+                        children={'Tilbakestill filtrering'}
+                    />
+                </HStack>
+            </VStack>
         </StyledFieldset>
     );
 };
