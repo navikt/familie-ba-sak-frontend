@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Fieldset, Button, Select } from '@navikt/ds-react';
+import { Fieldset, Button, Select, HStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -24,15 +24,6 @@ const StyledFieldset = styled(Fieldset)`
     margin-bottom: 2rem;
 `;
 
-const FilterRad = styled.div`
-    display: flex;
-    margin-top: 1rem;
-
-    & > * {
-        padding-right: 1.5rem;
-    }
-`;
-
 const FilterSkjema: React.FunctionComponent = () => {
     const { innloggetSaksbehandler } = useApp();
     const {
@@ -46,7 +37,7 @@ const FilterSkjema: React.FunctionComponent = () => {
 
     return (
         <StyledFieldset legend="Oppgavebenken filterskjema" hideLegend>
-            <FilterRad>
+            <HStack gap="6">
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
                     .map((oppgaveFelt: IOppgaveFelt) => {
@@ -68,52 +59,58 @@ const FilterSkjema: React.FunctionComponent = () => {
                                 );
                             case 'select':
                                 return (
-                                    <Select
-                                        label={oppgaveFelt.label}
-                                        onChange={event =>
-                                            settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)
-                                        }
-                                        key={oppgaveFelt.nøkkel}
-                                        value={oppgaveFelt.filter.selectedValue}
-                                        error={
-                                            oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
-                                                ? oppgaveFelt.feilmelding
-                                                : undefined
-                                        }
-                                        data-cy={`select-${oppgaveFelt.label}`}
-                                    >
-                                        {oppgaveFelt.filter.nøkkelPar &&
-                                            Object.values(oppgaveFelt.filter.nøkkelPar)
-                                                .filter((par: IPar) =>
-                                                    oppgaveFelt.erSynlig
-                                                        ? oppgaveFelt.erSynlig(
-                                                              par,
-                                                              innloggetSaksbehandler
-                                                          )
-                                                        : true
+                                    <div>
+                                        <Select
+                                            label={oppgaveFelt.label}
+                                            onChange={event =>
+                                                settVerdiPåOppgaveFelt(
+                                                    oppgaveFelt,
+                                                    event.target.value
                                                 )
-                                                .map((par: IPar) => {
-                                                    return (
-                                                        <option
-                                                            aria-selected={
-                                                                oppgaveFelt.filter &&
-                                                                oppgaveFelt.filter.selectedValue ===
-                                                                    par.id
-                                                            }
-                                                            key={par.id}
-                                                            value={par.id}
-                                                        >
-                                                            {par.navn}
-                                                        </option>
-                                                    );
-                                                })}
-                                    </Select>
+                                            }
+                                            key={oppgaveFelt.nøkkel}
+                                            value={oppgaveFelt.filter.selectedValue}
+                                            error={
+                                                oppgaveFelt.valideringsstatus ===
+                                                Valideringsstatus.FEIL
+                                                    ? oppgaveFelt.feilmelding
+                                                    : undefined
+                                            }
+                                            data-cy={`select-${oppgaveFelt.label}`}
+                                        >
+                                            {oppgaveFelt.filter.nøkkelPar &&
+                                                Object.values(oppgaveFelt.filter.nøkkelPar)
+                                                    .filter((par: IPar) =>
+                                                        oppgaveFelt.erSynlig
+                                                            ? oppgaveFelt.erSynlig(
+                                                                  par,
+                                                                  innloggetSaksbehandler
+                                                              )
+                                                            : true
+                                                    )
+                                                    .map((par: IPar) => {
+                                                        return (
+                                                            <option
+                                                                aria-selected={
+                                                                    oppgaveFelt.filter &&
+                                                                    oppgaveFelt.filter
+                                                                        .selectedValue === par.id
+                                                                }
+                                                                key={par.id}
+                                                                value={par.id}
+                                                            >
+                                                                {par.navn}
+                                                            </option>
+                                                        );
+                                                    })}
+                                        </Select>
+                                    </div>
                                 );
                             default:
                                 return null;
                         }
                     })}
-            </FilterRad>
+            </HStack>
 
             <div className="filterskjema__actions">
                 <StyledButton
