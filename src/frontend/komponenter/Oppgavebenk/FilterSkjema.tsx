@@ -1,7 +1,5 @@
 import React, { type ReactElement } from 'react';
 
-import styled from 'styled-components';
-
 import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -12,12 +10,6 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
 import DatovelgerForGammelSkjemaløsning from '../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
-
-const StyledFieldset = styled(Fieldset)`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2rem;
-`;
 
 const FilterSkjema: React.FunctionComponent = () => {
     const { innloggetSaksbehandler } = useApp();
@@ -92,7 +84,7 @@ const FilterSkjema: React.FunctionComponent = () => {
     };
 
     return (
-        <StyledFieldset legend="Oppgavebenken filterskjema" hideLegend>
+        <Fieldset legend="Oppgavebenken filterskjema" hideLegend>
             <VStack gap="4">
                 <HStack gap="6">
                     {Object.values(oppgaveFelter)
@@ -117,7 +109,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     />
                 </HStack>
             </VStack>
-        </StyledFieldset>
+        </Fieldset>
     );
 };
 
