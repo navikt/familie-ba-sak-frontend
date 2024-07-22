@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
+import { VStack } from '@navikt/ds-react';
+
 import OppgaveHeader from './OppgaveHeader';
 import OppgaveList from './OppgaveList';
 import { useAmplitude } from '../../utils/amplitude';
@@ -26,8 +28,10 @@ const Oppgavebenk: React.FunctionComponent = () => {
 
     return (
         <Container>
-            <OppgaveHeader />
-            <OppgaveList />
+            <VStack gap="4">
+                <OppgaveHeader />
+                <OppgaveList />
+            </VStack>
         </Container>
     );
 };
