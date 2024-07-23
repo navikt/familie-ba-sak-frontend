@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Box, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
 import {
-    ABorderSubtle,
     AIconInfo,
     AIconSuccess,
+    ASpacing4,
     ATextDanger,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
@@ -73,13 +73,7 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
 };
 
 const StyledHeading = styled(Heading)`
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-`;
-
-const StyledHr = styled.hr`
-    border: none;
-    border-bottom: 1px solid ${ABorderSubtle};
+    font-size: ${ASpacing4};
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
@@ -104,11 +98,14 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
             borderRadius="medium"
             margin="2"
         >
-            <StyledHeading size={'small'} level={'2'}>
-                {tittel}
-            </StyledHeading>
-            <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
-            <StyledHr />
+            <Box borderWidth="0 0 1 0" borderColor="border-subtle">
+                <VStack gap="1" marginBlock="0 2">
+                    <StyledHeading size={'xsmall'} level={'2'}>
+                        {tittel}
+                    </StyledHeading>
+                    <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
+                </VStack>
+            </Box>
             <Informasjonsbolk
                 informasjon={[
                     {
