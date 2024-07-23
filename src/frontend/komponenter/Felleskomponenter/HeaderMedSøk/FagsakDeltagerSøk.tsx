@@ -19,8 +19,8 @@ import { idnr } from '@navikt/fnrvalidator';
 
 import OpprettFagsakModal from './OpprettFagsakModal';
 import { useApp } from '../../../context/AppContext';
-import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
@@ -95,7 +95,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                                   <KontorIkonGrønn height={'32'} width={'32'} />
                               )
                           ) : (
-                              <IkkeTilgang height={30} width={30} />
+                              <StatusIkon status={Status.FEIL} />
                           ),
                           rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
                               fagsakDeltager.kjønn ?? kjønnType.UKJENT
