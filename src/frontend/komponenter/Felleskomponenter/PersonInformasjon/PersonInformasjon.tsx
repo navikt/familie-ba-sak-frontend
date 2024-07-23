@@ -29,6 +29,17 @@ const HeadingUtenOverflow = styled(Heading)`
     text-overflow: ellipsis;
 `;
 
+const Skillelinje: React.FC<{ erHeading?: boolean }> = ({ erHeading = false }) => {
+    if (erHeading) {
+        return (
+            <Heading level="2" size="medium" as="span">
+                |
+            </Heading>
+        );
+    }
+    return <BodyShort>|</BodyShort>;
+};
+
 const PersonInformasjon: React.FunctionComponent<IProps> = ({
     person,
     somOverskrift = false,
@@ -42,32 +53,23 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
         return (
             <HStack gap="6" wrap={false} align="center">
                 <FamilieIkonVelger alder={alder} kjønn={person.kjønn} />
-                <HStack gap="2" align="center" wrap={false}>
+                <HStack gap="4" align="center" wrap={false}>
                     <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
                         {navnOgAlder}
                     </HeadingUtenOverflow>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
+                    <Skillelinje erHeading />
                     <HStack gap="1" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
                             {formattertIdent}
                         </Heading>
                         <CopyButton size="small" copyText={person.personIdent} />
                     </HStack>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
+                    <Skillelinje erHeading />
                     <Heading level="2" size="medium" as="span">{`${
                         personTypeMap[person.type]
                     } `}</Heading>
                     {person.dødsfallDato?.length && (
-                        <>
-                            <Heading level="2" size="medium" as="span">
-                                &ensp;&ensp;
-                            </Heading>
-                            <DødsfallTag dødsfallDato={person.dødsfallDato} />
-                        </>
+                        <DødsfallTag dødsfallDato={person.dødsfallDato} />
                     )}
                     {!person.dødsfallDato?.length && !erLesevisning && (
                         <Dropdown>
@@ -104,12 +106,12 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
             <BodyShort className={'navn'} title={navnOgAlder}>
                 {navnOgAlder}
             </BodyShort>
-            <BodyShort>&ensp;|&ensp;</BodyShort>
+            <Skillelinje />
             <HStack gap="1" wrap={false} align="center">
                 <BodyShort>{formattertIdent}</BodyShort>
                 <CopyButton size="small" copyText={person.personIdent} />
             </HStack>
-            <BodyShort>&ensp;|&ensp;</BodyShort>
+            <Skillelinje />
             <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>
         </HStack>
     );
