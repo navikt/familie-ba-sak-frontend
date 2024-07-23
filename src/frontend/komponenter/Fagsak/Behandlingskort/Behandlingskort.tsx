@@ -2,13 +2,9 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Heading } from '@navikt/ds-react';
 import {
-    ABorderAction,
-    ABorderDanger,
-    ABorderDefault,
     ABorderSubtle,
-    ABorderSuccess,
     AIconInfo,
     AIconSuccess,
     ATextDanger,
@@ -36,23 +32,23 @@ interface IBehandlingskortProps {
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return ABorderSubtle;
+        return 'border-subtle';
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return ABorderSuccess;
+            return 'border-success';
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return ABorderAction;
+            return 'border-action';
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return ABorderDanger;
+            return 'border-danger';
         case BehandlingResultat.IKKE_VURDERT:
-            return ABorderSubtle;
+            return 'border-subtle';
         default:
-            return ABorderDefault;
+            return 'border-default';
     }
 };
 
@@ -75,15 +71,6 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
             return ATextDefault;
     }
 };
-
-const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
-    border: 1px solid ${ABorderSubtle};
-    border-left: 0.5rem solid ${ABorderSubtle};
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-    margin: 0.5rem;
-    border-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
-`;
 
 const StyledHeading = styled(Heading)`
     font-size: 1rem;
@@ -110,7 +97,13 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
     return (
-        <Container behandlingResultat={åpenBehandling.resultat}>
+        <Box
+            padding="2"
+            borderColor={hentResultatfarge(åpenBehandling.resultat)}
+            borderWidth="1 1 1 5"
+            borderRadius="medium"
+            margin="2"
+        >
             <StyledHeading size={'small'} level={'2'}>
                 {tittel}
             </StyledHeading>
@@ -163,7 +156,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                     },
                 ]}
             />
-        </Container>
+        </Box>
     );
 };
 
