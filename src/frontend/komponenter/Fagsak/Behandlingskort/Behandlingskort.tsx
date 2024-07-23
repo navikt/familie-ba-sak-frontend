@@ -106,53 +106,39 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                     <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
                 </VStack>
             </Box>
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Behandlingsstatus',
-                        tekst: behandlingsstatuser[åpenBehandling.status],
-                    },
-                ]}
-            />
-            <Informasjonsbolk
-                infoTeksFarve={hentResultatfargeTekst(åpenBehandling.resultat)}
-                informasjon={[
-                    {
-                        label: 'Resultat',
-                        tekst: behandlingsresultater[åpenBehandling.resultat],
-                    },
-                ]}
-            />
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Opprettet',
-                        tekst: isoStringTilFormatertString({
+            <VStack gap="4" marginBlock="4">
+                <Informasjonsbolk
+                    label="Behandlingsstatus"
+                    tekst={behandlingsstatuser[åpenBehandling.status]}
+                />
+                <Informasjonsbolk
+                    label="Resultat"
+                    tekst={behandlingsresultater[åpenBehandling.resultat]}
+                    tekstFarge={hentResultatfargeTekst(åpenBehandling.resultat)}
+                />
+                <div>
+                    <Informasjonsbolk
+                        label="Opprettet"
+                        tekst={isoStringTilFormatertString({
                             isoString: åpenBehandling.opprettetTidspunkt,
                             tilFormat: Datoformat.DATO,
-                        }),
-                    },
-                    {
-                        label: 'Vedtaksdato',
-                        tekst: isoStringTilFormatertString({
+                        })}
+                    />
+                    <Informasjonsbolk
+                        label="Vedtaksdato"
+                        tekst={isoStringTilFormatertString({
                             isoString: åpenBehandling.vedtak?.vedtaksdato,
                             tilFormat: Datoformat.DATO,
                             defaultString: 'Ikke satt',
-                        }),
-                    },
-                ]}
-            />
-
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Enhet',
-                        tekst: åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetId,
-                        tekstTitle:
-                            åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn,
-                    },
-                ]}
-            />
+                        })}
+                    />
+                </div>
+                <Informasjonsbolk
+                    label="Enhet"
+                    tekst={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetId}
+                    tekstHover={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn}
+                />
+            </VStack>
         </Box>
     );
 };
