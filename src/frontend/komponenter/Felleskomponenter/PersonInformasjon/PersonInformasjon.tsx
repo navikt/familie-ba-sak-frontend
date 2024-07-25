@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, CopyButton, Dropdown, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, Dropdown, Heading, HStack } from '@navikt/ds-react';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
 import type { IGrunnlagPerson } from '../../../typer/person';
@@ -23,11 +23,22 @@ const StyledDropdownMeny = styled(Dropdown.Menu)`
     width: 20ch;
 `;
 
-const FlexBox = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+const HeadingUtenOverflow = styled(Heading)`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
+
+const Skillelinje: React.FC<{ erHeading?: boolean }> = ({ erHeading = false }) => {
+    if (erHeading) {
+        return (
+            <Heading level="2" size="medium" as="span">
+                |
+            </Heading>
+        );
+    }
+    return <BodyShort>|</BodyShort>;
+};
 
 const PersonInformasjon: React.FunctionComponent<IProps> = ({
     person,
@@ -38,40 +49,27 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
 
-    return (
-        <div className={'personinformasjon'}>
-            {somOverskrift && (
-                <>
-                    <FamilieIkonVelger
-                        className={'familie-ikon'}
-                        alder={alder}
-                        kjønn={person.kjønn}
-                    />
-                    <Heading level="2" size="medium" className={'navn'} title={navnOgAlder}>
+    if (somOverskrift) {
+        return (
+            <HStack gap="6" wrap={false} align="center">
+                <FamilieIkonVelger alder={alder} kjønn={person.kjønn} />
+                <HStack gap="4" align="center" wrap={false}>
+                    <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
                         {navnOgAlder}
-                    </Heading>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
-                    <FlexBox>
+                    </HeadingUtenOverflow>
+                    <Skillelinje erHeading />
+                    <HStack gap="1" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
                             {formattertIdent}
                         </Heading>
                         <CopyButton size="small" copyText={person.personIdent} />
-                    </FlexBox>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
+                    </HStack>
+                    <Skillelinje erHeading />
                     <Heading level="2" size="medium" as="span">{`${
                         personTypeMap[person.type]
                     } `}</Heading>
                     {person.dødsfallDato?.length && (
-                        <>
-                            <Heading level="2" size="medium" as="span">
-                                &ensp;&ensp;
-                            </Heading>
-                            <DødsfallTag dødsfallDato={person.dødsfallDato} />
-                        </>
+                        <DødsfallTag dødsfallDato={person.dødsfallDato} />
                     )}
                     {!person.dødsfallDato?.length && !erLesevisning && (
                         <Dropdown>
@@ -91,31 +89,31 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                             </StyledDropdownMeny>
                         </Dropdown>
                     )}
-                </>
-            )}
+                </HStack>
+            </HStack>
+        );
+    }
 
-            {!somOverskrift && (
-                <>
-                    <FamilieIkonVelger
-                        className={'familie-ikon--for-normaltekst'}
-                        width={24}
-                        height={24}
-                        alder={alder}
-                        kjønn={person.kjønn}
-                    />
-                    <BodyShort className={'navn'} title={navnOgAlder}>
-                        {navnOgAlder}
-                    </BodyShort>
-                    <BodyShort>&ensp;|&ensp;</BodyShort>
-                    <FlexBox>
-                        <BodyShort>{formattertIdent}</BodyShort>
-                        <CopyButton size="small" copyText={person.personIdent} />
-                    </FlexBox>
-                    <BodyShort>&ensp;|&ensp;</BodyShort>
-                    <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>
-                </>
-            )}
-        </div>
+    return (
+        <HStack gap="2" align="center" wrap={false}>
+            <FamilieIkonVelger
+                className={'familie-ikon--for-normaltekst'}
+                width={24}
+                height={24}
+                alder={alder}
+                kjønn={person.kjønn}
+            />
+            <BodyShort className={'navn'} title={navnOgAlder}>
+                {navnOgAlder}
+            </BodyShort>
+            <Skillelinje />
+            <HStack gap="1" wrap={false} align="center">
+                <BodyShort>{formattertIdent}</BodyShort>
+                <CopyButton size="small" copyText={person.personIdent} />
+            </HStack>
+            <Skillelinje />
+            <BodyShort>{`${personTypeMap[person.type]} `}</BodyShort>
+        </HStack>
     );
 };
 

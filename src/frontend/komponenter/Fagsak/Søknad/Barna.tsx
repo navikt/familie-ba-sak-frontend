@@ -3,29 +3,19 @@ import * as React from 'react';
 import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import RødError from '../../../ikoner/RødError';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { isoStringTilDate } from '../../../utils/dato';
 import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
-
-const BarnMedDiskresjonskode = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 0.5rem;
-`;
-
-const StyledRødError = styled(RødError)`
-    margin-right: 1rem;
-`;
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;
@@ -91,16 +81,18 @@ const Barna: React.FunctionComponent = () => {
             {maskerteRelasjoner.map(
                 (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                     return (
-                        <BarnMedDiskresjonskode
+                        <HStack
+                            gap="2"
+                            margin="2"
                             key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
                         >
-                            <StyledRødError height={24} width={24} />
-                            {`Bruker har barn med diskresjonskode ${
+                            <StatusIkon status={Status.FEIL} />
+                            <BodyShort>{`Bruker har barn med diskresjonskode ${
                                 adressebeskyttelsestyper[
                                     forelderBarnRelasjonMaskert.adressebeskyttelseGradering
                                 ] ?? 'ukjent'
-                            }`}
-                        </BarnMedDiskresjonskode>
+                            }`}</BodyShort>
+                        </HStack>
                     );
                 }
             )}
