@@ -14,7 +14,7 @@ const publicUrl = '/assets';
 
 const baseConfig = {
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         fallback: { crypto: false },
     },
     entry: ['./src/frontend/index.tsx'],
@@ -63,7 +63,7 @@ const baseConfig = {
                 },
             },
             {
-                test: /\.(less|css)$/,
+                test: /\.(css)$/,
                 use: [
                     { loader: 'style-loader' },
                     {
@@ -75,7 +75,6 @@ const baseConfig = {
                             importLoaders: 2,
                         },
                     },
-                    { loader: 'less-loader' },
                 ],
             },
         ],
