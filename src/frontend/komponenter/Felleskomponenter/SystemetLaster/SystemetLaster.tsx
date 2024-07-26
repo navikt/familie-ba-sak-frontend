@@ -8,10 +8,10 @@ import { AZIndexTooltip } from '@navikt/ds-tokens/dist/tokens';
 const PosisjonertVStack = styled(VStack)`
     position: fixed;
     width: 100vw;
-    height: 50vh;
+    height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    top: 20%;
     z-index: ${AZIndexTooltip};
 `;
 
