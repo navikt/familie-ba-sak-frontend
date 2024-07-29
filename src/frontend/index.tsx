@@ -1,5 +1,3 @@
-import './index.less';
-
 import React from 'react';
 
 import axe from '@axe-core/react';
