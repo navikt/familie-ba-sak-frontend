@@ -22,7 +22,11 @@ import ValutakursTabellRad from './ValutakursTabellRad';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../../context/Eøs/EøsContext';
-import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
+import {
+    Behandlingstype,
+    type IBehandling,
+    VurderingsstrategiForValutakurser,
+} from '../../../../typer/behandling';
 import {
     EøsPeriodeStatus,
     type IRestValutakurs,
@@ -82,7 +86,8 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
     const kanOppretteAutomatiskeValutakurserPåManuelleSaker =
         toggles[ToggleNavn.kanOppretteAutomatiskeValutakurserPåManuelleSaker];
     const kanOverstyreAutomatiskeValutakurser =
-        toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING &&
+        toggles[ToggleNavn.kanBehandleTekniskEndring];
 
     const erLesevisning = vurderErLesevisning();
 

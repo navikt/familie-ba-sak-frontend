@@ -14,7 +14,6 @@ export enum ToggleNavn {
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     kanOppretteAutomatiskeValutakurserPåManuelleSaker = 'familie-ba-sak.kan-opprette-automatiske-valutakurser-paa-manuelle-saker',
-    kanOverstyreAutomatiskeValutakurser = 'familie-ba-sak.kan-overstyre-automatiske-valutakurser',
 }
 
 export const alleTogglerAv = (): IToggles => {
