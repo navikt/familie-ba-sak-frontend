@@ -13,7 +13,6 @@ export enum ToggleNavn {
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
-    kanOppretteAutomatiskeValutakurserPåManuelleSaker = 'familie-ba-sak.kan-opprette-automatiske-valutakurser-paa-manuelle-saker',
 }
 
 export const alleTogglerAv = (): IToggles => {
