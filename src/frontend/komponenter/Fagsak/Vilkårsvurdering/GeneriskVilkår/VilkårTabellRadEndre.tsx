@@ -4,7 +4,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
+import {
+    Button,
+    Fieldset,
+    Label,
+    Radio,
+    RadioGroup,
+    Select,
+    Textarea,
+    VStack,
+} from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -46,7 +55,7 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-export const Container = styled.div<{ $lesevisning: boolean; $vilkårResultat: Resultat }>`
+export const StyledVStack = styled(VStack)<{ $lesevisning: boolean; $vilkårResultat: Resultat }>`
     max-width: 30rem;
     border-left: 0.125rem solid
         ${props => {
@@ -66,15 +75,6 @@ const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
-`;
-
-const StyledRadioGroup = styled(RadioGroup)`
-    && {
-        margin: 1rem 0;
-        legend {
-            margin-bottom: 0;
-        }
-    }
 `;
 
 const VilkårTabellRadEndre: React.FC<IProps> = ({
@@ -218,9 +218,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             error={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
             errorPropagation={false}
         >
-            <Container
+            <StyledVStack
                 $lesevisning={lesevisning}
                 $vilkårResultat={vilkårResultat.verdi.resultat.verdi}
+                gap="4"
             >
                 {visRegelverkValg() && (
                     <Select
@@ -261,7 +262,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         )}
                     </Select>
                 )}
-                <StyledRadioGroup
+                <RadioGroup
                     readOnly={lesevisning}
                     value={
                         redigerbartVilkår.verdi.resultatBegrunnelse
@@ -313,7 +314,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 Ikke aktuelt
                             </Radio>
                         )}
-                </StyledRadioGroup>
+                </RadioGroup>
                 {!gjelderInstitusjon && (
                     <UtdypendeVilkårsvurderingMultiselect
                         redigerbartVilkår={redigerbartVilkår}
@@ -407,10 +408,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         >
                             {'Fjern'}
                         </Button>
-                        )
                     </Knapperad>
                 )}
-            </Container>
+            </StyledVStack>
         </Fieldset>
     );
 };

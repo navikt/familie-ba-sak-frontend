@@ -32,10 +32,6 @@ const StyledLabel = styled(Label)`
     margin-right: 0.5rem;
 `;
 
-const MarginFieldset = styled(Fieldset)`
-    margin-bottom: 1rem !important;
-`;
-
 const FlexDiv = styled.div`
     display: flex;
     gap: 1.125rem;
@@ -50,7 +46,7 @@ const VelgPeriode: React.FC<IProps> = ({
     const erLesevisning = vurderErLesevisning();
 
     return (
-        <MarginFieldset
+        <Fieldset
             errorId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
             error={
                 redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
@@ -122,7 +118,7 @@ const VelgPeriode: React.FC<IProps> = ({
                     readOnly={erLesevisning}
                 />
             </FlexDiv>
-        </MarginFieldset>
+        </Fieldset>
     );
 };
 

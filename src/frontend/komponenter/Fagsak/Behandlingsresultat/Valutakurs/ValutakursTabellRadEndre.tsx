@@ -8,8 +8,18 @@ import {
     PersonGavelIcon,
     TrashIcon,
 } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField } from '@navikt/ds-react';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import {
+    Alert,
+    Button,
+    Fieldset,
+    Heading,
+    HStack,
+    Label,
+    Link,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -18,8 +28,8 @@ import type { Currency } from '@navikt/land-verktoy';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../utils/skjema';
 import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
@@ -51,7 +61,7 @@ const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandl
 
 interface IProps {
     skjema: ISkjema<IValutakurs, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
@@ -108,6 +118,10 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
+        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
+    };
+
     return (
         <Fieldset
             error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
@@ -130,15 +144,15 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                         <Label>Manuelt registrert valutakurs</Label>
                     </HStack>
                 )}
-                <FamilieReactSelect
-                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
+                <UNSAFE_Combobox
+                    isMultiSelect
                     label={'Barn'}
-                    isMulti
                     options={tilgjengeligeBarn}
-                    value={skjema.felter.barnIdenter.verdi}
-                    onChange={options =>
-                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    selectedOptions={skjema.felter.barnIdenter.verdi}
+                    onToggleSelected={onBarnSelected}
+                    readOnly={erLesevisning}
+                    error={
+                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
                 <EøsPeriodeSkjema
