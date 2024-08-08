@@ -1843,12 +1843,12 @@
     prom-client "^14.2.0"
     redis "^4.6.10"
 
-"@navikt/familie-endringslogg@12.0.0":
-  version "12.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/12.0.0/d3a44bb8bc01c3274505023b094476a9c3659e6f#d3a44bb8bc01c3274505023b094476a9c3659e6f"
-  integrity sha512-Txic80ZM8n3C0pGj2L6V+yeBBniTkXTler8arKf+LHpHUJnY90Zrrb9JzIiE9XumgQrEt3BEgguuxoAplLnwfw==
+"@navikt/familie-endringslogg@13.1.1":
+  version "13.1.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/13.1.1/05f13e2ff432a839f298270c14bbcab0d901a947#05f13e2ff432a839f298270c14bbcab0d901a947"
+  integrity sha512-IbfaZN1iai1S7nTe+SLkGEChyhsA0YTyYjpwEvXRZlnXjNx+RAc2axEMl9o8+KkgWUUN7FBdVNKdSsfnVDbOVw==
   dependencies:
-    "@portabletext/react" "^3.0.11"
+    "@portabletext/react" "^3.1.0"
     classnames "^2.5.1"
     react-transition-group "^4.4.5"
 
@@ -2092,25 +2092,25 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@portabletext/react@^3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-3.0.11.tgz#c5f31d9ea990391a3850ba4dfd685373107d9a21"
-  integrity sha512-LATQQRxvP3TlAnFayjYt7kPJcnpAtWH6XHl4RFU31pKb1G6gZlTWTB+chXXAv0uQG6Be7OEdRzCmsz9XFEVNew==
+"@portabletext/react@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-3.1.0.tgz#95d08b67e74d380705726db6762321bf926796a6"
+  integrity sha512-ZGHlvS+NvId9RSqnflN8xF2KVZgAgD399dK1GaycurnGNZGZYTd5nZmc8by1yL76Ar8n/dbVtouUDJIkO4Tupw==
   dependencies:
-    "@portabletext/toolkit" "^2.0.10"
-    "@portabletext/types" "^2.0.8"
+    "@portabletext/toolkit" "^2.0.15"
+    "@portabletext/types" "^2.0.13"
 
-"@portabletext/toolkit@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-2.0.10.tgz#ddcf88cb76b287ff9d5c94f69a6b370a9c9aba9c"
-  integrity sha512-d+F9JvpnMEx7kd6saZ9OWA4U1Iwuokh6TOht7iqkfWU+0ivh9yM4v+b0Kpu+iiPcElicoabhtXol+yTvWJ1jDw==
+"@portabletext/toolkit@^2.0.15":
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-2.0.15.tgz#f13764efeebfcc92bcb792b1c3724fa0456703fe"
+  integrity sha512-KRNEUAd6eOxE9y591qC0sE24ZG2q27OHXe0dsPclj4IoEzf8aEuDcHR64wfFtB0aHq9Wdx3pIinmhZZcl35/vg==
   dependencies:
-    "@portabletext/types" "^2.0.8"
+    "@portabletext/types" "^2.0.13"
 
-"@portabletext/types@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-2.0.8.tgz#34aec838701482f838bdd0ee07a9e31dc01a9230"
-  integrity sha512-eiq9/kMX2bYezS4/kLFk3xNnruCFjCDdw6aYEv5ECHVKkYROiuLd3/AsP5d7tWF3+kPPy6tB0Wq8aqDG/URHGA==
+"@portabletext/types@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-2.0.13.tgz#7a4bf6dac30713fbe1b4bc01dc572af0af72955d"
+  integrity sha512-5xk5MSyQU9CrDho3Rsguj38jhijhD36Mk8S6mZo3huv6PM+t4M/5kJN2KFIxgvt4ONpvOEs1pVIZAV0cL0Vi+Q==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
