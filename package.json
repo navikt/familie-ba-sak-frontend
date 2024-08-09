@@ -52,7 +52,7 @@
     "@navikt/hoykontrast": "^3.1.0",
     "@navikt/land-verktoy": "3.2.10",
     "@navikt/landvelger": "3.1.5",
-    "@sentry/browser": "^8.24.0",
+    "@sentry/browser": "^8.25.0",
     "@sentry/webpack-plugin": "^2.21.0",
     "amplitude-js": "^8.21.9",
     "axios": "^1.7.2",
