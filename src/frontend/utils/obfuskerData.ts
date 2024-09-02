@@ -2,6 +2,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import type { IBehandling } from '../typer/behandling';
+import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
 import { type ILogg, LoggType } from '../typer/logg';
 import { ForelderBarnRelasjonRolle, type IPersonInfo, PersonType } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
@@ -73,6 +74,20 @@ export const obfuskerFagsak = (personInfo: Ressurs<IPersonInfo>) => {
                 person.navn = 'Barn Barnesen';
             } else {
                 person.navn = 'Søker Søkersen';
+            }
+        });
+    }
+};
+
+export const obfuskerFagsakDeltager = (fagsakDeltager: Ressurs<IFagsakDeltager[]>) => {
+    if (fagsakDeltager.status === RessursStatus.SUKSESS) {
+        fagsakDeltager.data.forEach(fagsakDeltager => {
+            if (fagsakDeltager.rolle == FagsakDeltagerRolle.Barn) {
+                fagsakDeltager.navn = 'Barn';
+            } else if (fagsakDeltager.rolle == FagsakDeltagerRolle.Forelder) {
+                fagsakDeltager.navn = 'Forelder';
+            } else {
+                fagsakDeltager.navn = 'Ukjent rolle';
             }
         });
     }
