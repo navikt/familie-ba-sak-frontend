@@ -9,6 +9,7 @@ export enum ToggleNavn {
     tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
     kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak = 'familie-ba-sak.kan-kjore-autmatisk-valutajustering-behandling-for-enkelt-sak',
     kanOppretteOgEndreSammensatteKontrollsaker = 'familie-ba-sak.kan-opprette-og-endre-sammensatte-kontrollsaker',
+    skalObfuskereData = 'familie-ba-sak.anonymiser-persondata',
 
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',

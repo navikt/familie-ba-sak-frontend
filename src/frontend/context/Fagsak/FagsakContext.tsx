@@ -17,8 +17,10 @@ import type { SkjemaBrevmottaker } from '../../komponenter/Fagsak/Personlinje/Be
 import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
-import type { IPersonInfo } from '../../typer/person';
+import { type IPersonInfo } from '../../typer/person';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
+import { obfuskerFagsak } from '../../utils/obfuskerData';
+import { useApp } from '../AppContext';
 
 const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [minimalFagsak, settMinimalFagsak] =
@@ -35,6 +37,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[]>([]);
 
     const { request } = useHttp();
+    const { skalObfuskereData } = useApp();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
@@ -81,6 +84,9 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
             const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
+            if (skalObfuskereData()) {
+                obfuskerFagsak(brukerEtterTilgangssjekk);
+            }
             settBruker(brukerEtterTilgangssjekk);
             if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {

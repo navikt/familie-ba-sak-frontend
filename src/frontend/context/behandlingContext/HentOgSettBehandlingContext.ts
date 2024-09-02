@@ -5,12 +5,13 @@ import createUseContext from 'constate';
 import { useNavigate } from 'react-router-dom';
 
 import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggTomRessurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
+import { obfuskerBehandling } from '../../utils/obfuskerData';
+import { useApp } from '../AppContext';
 import { useFagsakContext } from '../Fagsak/FagsakContext';
 
 interface Props {
@@ -25,6 +26,7 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
         const [behandlingRessurs, privatSettBehandlingRessurs] =
             useState<Ressurs<IBehandling>>(byggTomRessurs());
         const navigate = useNavigate();
+        const { skalObfuskereData } = useApp();
 
         const erBehandlingDelAvFagsak = fagsak.behandlinger.some(
             visningBehandling => visningBehandling.behandlingId.toString() === behandlingId
@@ -36,6 +38,9 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
 
         const settBehandlingRessurs = (behandling: Ressurs<IBehandling>) => {
             hentMinimalFagsak(fagsak.id, false);
+            if (skalObfuskereData()) {
+                obfuskerBehandling(behandling);
+            }
             privatSettBehandlingRessurs(behandling);
         };
 
@@ -49,6 +54,9 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
                     påvirkerSystemLaster: true,
                 })
                     .then((response: Ressurs<IBehandling>) => {
+                        if (skalObfuskereData()) {
+                            obfuskerBehandling(response);
+                        }
                         privatSettBehandlingRessurs(response);
                     })
                     .catch((_error: AxiosError) => {
