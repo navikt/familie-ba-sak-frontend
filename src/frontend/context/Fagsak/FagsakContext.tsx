@@ -19,7 +19,7 @@ import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
 import { type IPersonInfo } from '../../typer/person';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
-import { obfuskerFagsak } from '../../utils/obfuskerData';
+import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
 import { useApp } from '../AppContext';
 
 const [FagsakProvider, useFagsakContext] = createUseContext(() => {
@@ -50,6 +50,9 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             påvirkerSystemLaster,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
+                if (skalObfuskereData()) {
+                    obfuskerFagsak(hentetFagsak);
+                }
                 settMinimalFagsak(hentetFagsak);
             })
             .catch((_error: AxiosError) => {
@@ -85,7 +88,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
             const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
             if (skalObfuskereData()) {
-                obfuskerFagsak(brukerEtterTilgangssjekk);
+                obfuskerPersonInfo(brukerEtterTilgangssjekk);
             }
             settBruker(brukerEtterTilgangssjekk);
             if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {

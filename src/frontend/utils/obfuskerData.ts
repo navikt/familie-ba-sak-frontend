@@ -2,6 +2,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import type { IBehandling } from '../typer/behandling';
+import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
 import { type ILogg, LoggType } from '../typer/logg';
 import { ForelderBarnRelasjonRolle, type IPersonInfo, PersonType } from '../typer/person';
@@ -37,24 +38,30 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
         behandlingRessurs.data.søknadsgrunnlag?.barnaMedOpplysninger.forEach(barn => {
             barn.navn = 'Barn Barnesen';
         });
-        behandlingRessurs.data.personer.forEach(person => {
-            if (person.type === PersonType.BARN) {
-                person.navn = 'Barn Barnesen';
-            } else {
-                person.navn = 'Søker Søkersen';
-            }
-            person.registerhistorikk?.bostedsadresse.forEach(adresse => {
-                adresse.verdi = 'Adresseveien 1';
-            });
-        });
-        behandlingRessurs.data.utbetalingsperioder.forEach(ubp => {
-            ubp.utbetalingsperiodeDetaljer.forEach(ubpd => {
-                if (ubpd.person.type === PersonType.BARN) {
-                    ubpd.person.navn = 'Barn Barnesen';
+        let index = 1;
+        behandlingRessurs.data.personer
+            .sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
+            .forEach(person => {
+                if (person.type === PersonType.BARN) {
+                    person.navn = 'Barn Barnesen ' + index++;
                 } else {
-                    ubpd.person.navn = 'Søker Søkersen';
+                    person.navn = 'Søker Søkersen';
                 }
+                person.registerhistorikk?.bostedsadresse.forEach(adresse => {
+                    adresse.verdi = 'Adresseveien 1';
+                });
             });
+        behandlingRessurs.data.utbetalingsperioder.forEach(ubp => {
+            let index = 1;
+            ubp.utbetalingsperiodeDetaljer
+                .sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
+                .forEach(ubpd => {
+                    if (ubpd.person.type === PersonType.BARN) {
+                        ubpd.person.navn = 'Barn Barnesen ' + index++;
+                    } else {
+                        ubpd.person.navn = 'Søker Søkersen';
+                    }
+                });
         });
         behandlingRessurs.data.brevmottakere.forEach(brevmottaker => {
             brevmottaker.navn =
@@ -66,15 +73,39 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
     }
 };
 
-export const obfuskerFagsak = (personInfo: Ressurs<IPersonInfo>) => {
+export const obfuskerPersonInfo = (personInfo: Ressurs<IPersonInfo>) => {
     if (personInfo.status === RessursStatus.SUKSESS) {
         personInfo.data.navn = 'Søker Søkersen';
-        personInfo.data.forelderBarnRelasjon.forEach(person => {
-            if (person.relasjonRolle === ForelderBarnRelasjonRolle.BARN) {
-                person.navn = 'Barn Barnesen';
-            } else {
-                person.navn = 'Søker Søkersen';
-            }
+        personInfo.data.bostedsadresse = {
+            adresse: 'Adresseveien 1',
+            postnummer: '0001',
+        };
+        let index = 1;
+        personInfo.data.forelderBarnRelasjon
+            .sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
+            .forEach(person => {
+                if (person.relasjonRolle === ForelderBarnRelasjonRolle.BARN) {
+                    person.navn = 'Barn Barnesen ' + index++;
+                } else {
+                    person.navn = 'Søker Søkersen';
+                }
+            });
+    }
+};
+
+export const obfuskerFagsak = (fagsak: Ressurs<IMinimalFagsak>) => {
+    if (fagsak.status === RessursStatus.SUKSESS) {
+        fagsak.data.gjeldendeUtbetalingsperioder.forEach(gup => {
+            let index = 1;
+            gup.utbetalingsperiodeDetaljer
+                .sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
+                .forEach(upd => {
+                    if (upd.person.type === PersonType.SØKER) {
+                        upd.person.navn = 'Søker Søkersen';
+                    } else {
+                        upd.person.navn = 'Barn Barnesen ' + index++;
+                    }
+                });
         });
     }
 };
