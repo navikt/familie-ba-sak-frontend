@@ -9,7 +9,9 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
+import { useApp } from '../../../context/AppContext';
 import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../../typer/samhandler';
+import { obfuskerSamhandler } from '../../../utils/obfuskerData';
 import { orgnummerValidator } from '../../../utils/validators';
 
 export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: string) => void) => {
@@ -54,9 +56,14 @@ export const useSamhandlerRequest = () => {
     const [samhandlerRessurs, settSamhandlerRessurs] =
         useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
+    const { skalObfuskereData } = useApp();
+
     const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
         hentSamhandler(orgnr).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+            if (skalObfuskereData()) {
+                obfuskerSamhandler(ressurs);
+            }
             settSamhandlerRessurs(ressurs);
         });
     };
