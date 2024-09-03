@@ -13,7 +13,7 @@ export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
         ressurs.data.navn = 'Institusjonen';
         ressurs.data.tssEksternId = '12345678910';
         ressurs.data.orgNummer = '123456789';
-        ressurs.data.adresser.forEach(adresse => {
+        ressurs.data.adresser?.forEach(adresse => {
             if (adresse.adresseType === 'Arbeidsadresse') {
                 adresse.adresselinjer = ['Institusjonsveien 1'];
             } else {
@@ -28,19 +28,23 @@ export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
 export const obfuskerLogg = (logg: Ressurs<ILogg[]>) => {
     if (logg.status === RessursStatus.SUKSESS) {
         logg.data
-            .filter(logg => logg.type === LoggType.BREVMOTTAKER_LAGT_TIL_ELLER_FJERNET)
+            ?.filter(logg => logg.type === LoggType.BREVMOTTAKER_LAGT_TIL_ELLER_FJERNET)
             .forEach(logg => (logg.tekst = ''));
     }
 };
 
 export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
     if (behandlingRessurs.status === RessursStatus.SUKSESS) {
-        behandlingRessurs.data.søknadsgrunnlag?.barnaMedOpplysninger.forEach(barn => {
-            barn.navn = 'Barn Barnesen';
-        });
+        behandlingRessurs.data.søknadsgrunnlag?.barnaMedOpplysninger
+            ?.sort((a, b) =>
+                a.fødselsdato && b.fødselsdato ? b.fødselsdato.localeCompare(a.fødselsdato) : 0
+            )
+            .forEach(barn => {
+                barn.navn = 'Barn Barnesen';
+            });
         let index = 1;
         behandlingRessurs.data.personer
-            .sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
+            ?.sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
             .forEach(person => {
                 if (person.type === PersonType.BARN) {
                     person.navn = 'Barn Barnesen ' + index++;
@@ -54,7 +58,7 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
         behandlingRessurs.data.utbetalingsperioder.forEach(ubp => {
             let index = 1;
             ubp.utbetalingsperiodeDetaljer
-                .sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
+                ?.sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
                 .forEach(ubpd => {
                     if (ubpd.person.type === PersonType.BARN) {
                         ubpd.person.navn = 'Barn Barnesen ' + index++;
@@ -63,7 +67,7 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
                     }
                 });
         });
-        behandlingRessurs.data.brevmottakere.forEach(brevmottaker => {
+        behandlingRessurs.data.brevmottakere?.forEach(brevmottaker => {
             brevmottaker.navn =
                 brevmottaker.type.charAt(0).toUpperCase() +
                 brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' ');
@@ -82,7 +86,7 @@ export const obfuskerPersonInfo = (personInfo: Ressurs<IPersonInfo>) => {
         };
         let index = 1;
         personInfo.data.forelderBarnRelasjon
-            .sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
+            ?.sort((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
             .forEach(person => {
                 if (person.relasjonRolle === ForelderBarnRelasjonRolle.BARN) {
                     person.navn = 'Barn Barnesen ' + index++;
@@ -95,10 +99,10 @@ export const obfuskerPersonInfo = (personInfo: Ressurs<IPersonInfo>) => {
 
 export const obfuskerFagsak = (fagsak: Ressurs<IMinimalFagsak>) => {
     if (fagsak.status === RessursStatus.SUKSESS) {
-        fagsak.data.gjeldendeUtbetalingsperioder.forEach(gup => {
+        fagsak.data.gjeldendeUtbetalingsperioder?.forEach(gup => {
             let index = 1;
             gup.utbetalingsperiodeDetaljer
-                .sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
+                ?.sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
                 .forEach(upd => {
                     if (upd.person.type === PersonType.SØKER) {
                         upd.person.navn = 'Søker Søkersen';
@@ -112,7 +116,7 @@ export const obfuskerFagsak = (fagsak: Ressurs<IMinimalFagsak>) => {
 
 export const obfuskerFagsakDeltager = (fagsakDeltager: Ressurs<IFagsakDeltager[]>) => {
     if (fagsakDeltager.status === RessursStatus.SUKSESS) {
-        fagsakDeltager.data.forEach(fagsakDeltager => {
+        fagsakDeltager.data?.forEach(fagsakDeltager => {
             if (fagsakDeltager.rolle == FagsakDeltagerRolle.Barn) {
                 fagsakDeltager.navn = 'Barn';
             } else if (fagsakDeltager.rolle == FagsakDeltagerRolle.Forelder) {
