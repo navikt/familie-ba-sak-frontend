@@ -7,6 +7,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
@@ -40,6 +41,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();
+    const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
     const {
         vedtaksperioderMedBegrunnelserRessurs,
@@ -64,7 +66,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             (visModal: boolean) => settVisModal(visModal),
             erUlagretNyFeilutbetaltValutaPeriode,
             erUlagretNyRefusjonEøsPeriode,
-            vedtaksperioderMedBegrunnelserRessurs
+            vedtaksperioderMedBegrunnelserRessurs,
+            erSammensattKontrollsak
         );
     };
 
