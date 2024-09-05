@@ -1,5 +1,4 @@
-import type { PropsWithChildren } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { type PropsWithChildren, useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
@@ -95,6 +94,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
+    const [erTogglesHentet, settErTogglesHentet] = useState(false);
 
     const verifiserVersjon = () => {
         request<void, string>({
@@ -158,6 +158,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             } else {
                 settToggles(alleTogglerAv);
             }
+            settErTogglesHentet(true);
         });
     }, []);
 
@@ -236,7 +237,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
-    const skalObfuskereData = () =>
+    const skalObfuskereData =
         toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
     return {
@@ -258,6 +259,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         toggles,
         hentPerson,
         skalObfuskereData,
+        erTogglesHentet,
     };
 });
 

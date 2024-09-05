@@ -50,7 +50,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             påvirkerSystemLaster,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
-                if (skalObfuskereData()) {
+                if (skalObfuskereData) {
                     obfuskerFagsak(hentetFagsak);
                 }
                 settMinimalFagsak(hentetFagsak);
@@ -87,7 +87,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
             const brukerEtterTilgangssjekk = sjekkTilgangTilPerson(hentetPerson);
-            if (skalObfuskereData()) {
+            if (skalObfuskereData) {
                 obfuskerPersonInfo(brukerEtterTilgangssjekk);
             }
             settBruker(brukerEtterTilgangssjekk);

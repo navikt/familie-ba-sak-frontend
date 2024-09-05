@@ -38,7 +38,7 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
 
         const settBehandlingRessurs = (behandling: Ressurs<IBehandling>) => {
             hentMinimalFagsak(fagsak.id, false);
-            if (skalObfuskereData()) {
+            if (skalObfuskereData) {
                 obfuskerBehandling(behandling);
             }
             privatSettBehandlingRessurs(behandling);
@@ -54,7 +54,7 @@ export const [HentOgSettBehandlingProvider, useHentOgSettBehandling] = createUse
                     påvirkerSystemLaster: true,
                 })
                     .then((response: Ressurs<IBehandling>) => {
-                        if (skalObfuskereData()) {
+                        if (skalObfuskereData) {
                             obfuskerBehandling(response);
                         }
                         privatSettBehandlingRessurs(response);

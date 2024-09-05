@@ -60,7 +60,7 @@ const FagsakDeltagerSøk: React.FC = () => {
             })
                 .then((response: Ressurs<IFagsakDeltager[]>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        if (skalObfuskereData()) {
+                        if (skalObfuskereData) {
                             obfuskerFagsakDeltager(response);
                         }
                         settFagsakDeltagere(response);

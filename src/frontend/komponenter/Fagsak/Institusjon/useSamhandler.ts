@@ -61,7 +61,7 @@ export const useSamhandlerRequest = () => {
     const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
         hentSamhandler(orgnr).then((ressurs: Ressurs<ISamhandlerInfo>) => {
-            if (skalObfuskereData()) {
+            if (skalObfuskereData) {
                 obfuskerSamhandler(ressurs);
             }
             settSamhandlerRessurs(ressurs);
@@ -76,10 +76,7 @@ export const useSamhandlerRequest = () => {
                 return ressurs;
             })
             .catch((_error: AxiosError) => {
-                const ressurs: Ressurs<ISamhandlerInfo> = byggFeiletRessurs(
-                    'Ukjent feil ved innhenting av samhandlerinfo'
-                );
-                return ressurs;
+                return byggFeiletRessurs('Ukjent feil ved innhenting av samhandlerinfo');
             });
     };
 
