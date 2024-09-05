@@ -237,7 +237,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
-    const skalObfuskereData = () =>
+    const skalObfuskereData =
         toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
     return {

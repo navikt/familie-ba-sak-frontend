@@ -70,7 +70,7 @@ const useBehandlingApi = (
                 url: `/familie-ba-sak/api/logg/${behandlingId}`,
             })
                 .then((hentetLogg: Ressurs<ILogg[]>) => {
-                    if (skalObfuskereData()) {
+                    if (skalObfuskereData) {
                         obfuskerLogg(hentetLogg);
                     }
                     settLogg(hentetLogg);

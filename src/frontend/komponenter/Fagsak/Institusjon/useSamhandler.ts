@@ -61,7 +61,7 @@ export const useSamhandlerRequest = () => {
     const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
         hentSamhandler(orgnr).then((ressurs: Ressurs<ISamhandlerInfo>) => {
-            if (skalObfuskereData()) {
+            if (skalObfuskereData) {
                 obfuskerSamhandler(ressurs);
             }
             settSamhandlerRessurs(ressurs);
