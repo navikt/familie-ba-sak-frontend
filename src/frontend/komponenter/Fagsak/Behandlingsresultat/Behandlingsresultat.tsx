@@ -177,9 +177,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const harEøs = harKompetanser || harUtenlandskeBeløper || harValutakurser;
 
-    const etterbetalingsperiode = toggles[ToggleNavn.erEtterbetaling3MndGyldigÅrsak]
-        ? 'måneder'
-        : 'år';
+    const gyldigEtterbetalingsperiode = toggles[ToggleNavn.erEtterbetaling3MndGyldigÅrsak]
+        ? 'tre måneder'
+        : 'tre år';
 
     return (
         <Skjemasteg
@@ -202,8 +202,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
                 <StyledAlert variant={'warning'}>
-                    Du har perioder som kan føre til etterbetaling utover 3 {etterbetalingsperiode}{' '}
-                    for person{' '}
+                    Du har perioder som kan føre til etterbetaling utover{' '}
+                    {gyldigEtterbetalingsperiode} for person{' '}
                     {slåSammenListeTilStreng(
                         personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
                     )}
