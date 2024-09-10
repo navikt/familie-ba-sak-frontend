@@ -18,6 +18,7 @@ export enum IEndretUtbetalingAndelÅrsak {
     ENDRE_MOTTAKER = 'ENDRE_MOTTAKER',
     ALLEREDE_UTBETALT = 'ALLEREDE_UTBETALT',
     ETTERBETALING_3ÅR = 'ETTERBETALING_3ÅR',
+    ETTERBETALING_3MND = 'ETTERBETALING_3MND',
 }
 
 export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
@@ -25,6 +26,7 @@ export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
     ENDRE_MOTTAKER: 'Endre mottaker, begge foreldre rett - opphør',
     ALLEREDE_UTBETALT: 'Allerede utbetalt - innvilgelse',
     ETTERBETALING_3ÅR: 'Etterbetaling 3 år',
+    ETTERBETALING_3MND: 'Etterbetaling 3 måneder',
 };
 
 export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbetalingAndelÅrsak).map(

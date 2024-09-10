@@ -18,6 +18,7 @@ import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
 import { useOppdaterValutakursOgSimuleringPåBeslutterSteg } from './Valutakurs/useOppdaterValutakursOgSimuleringPåBeslutterSteg';
 import Valutakurser from './Valutakurs/Valutakurser';
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../context/Eøs/EøsContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
@@ -33,6 +34,7 @@ import type {
     IRestUtenlandskPeriodeBeløp,
     IRestValutakurs,
 } from '../../../typer/eøsPerioder';
+import { ToggleNavn } from '../../../typer/toggles';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import type { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/dato';
@@ -85,6 +87,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 
     const { request } = useHttp();
+    const { toggles } = useApp();
 
     const hentPersonerMedUgyldigEtterbetalingsperiode = () => {
         request<void, string[]>({
@@ -174,6 +177,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const harEøs = harKompetanser || harUtenlandskeBeløper || harValutakurser;
 
+    const gyldigEtterbetalingsperiode = toggles[ToggleNavn.erEtterbetaling3MndGyldigÅrsak]
+        ? 'tre måneder'
+        : 'tre år';
+
     return (
         <Skjemasteg
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
@@ -195,7 +202,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
                 <StyledAlert variant={'warning'}>
-                    Du har perioder som kan føre til etterbetaling utover 3 år for person{' '}
+                    Du har perioder som kan føre til etterbetaling utover{' '}
+                    {gyldigEtterbetalingsperiode} for person{' '}
                     {slåSammenListeTilStreng(
                         personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
                     )}

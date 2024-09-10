@@ -64,9 +64,15 @@ export function erUtbetalingTillattForÅrsak({
 
     switch (utbetaling) {
         case Utbetaling.FULL_UTBETALING:
-            return årsak !== IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR;
+            return (
+                årsak !== IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR &&
+                årsak !== IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND
+            );
         case Utbetaling.DELT_UTBETALING:
-            return årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR;
+            return (
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR ||
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND
+            );
         case Utbetaling.INGEN_UTBETALING:
             return true;
         case undefined:
