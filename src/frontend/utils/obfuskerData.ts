@@ -33,7 +33,11 @@ export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
 export const obfuskerLogg = (logg: Ressurs<ILogg[]>) => {
     if (logg.status === RessursStatus.SUKSESS) {
         logg.data
-            ?.filter(logg => logg.type === LoggType.BREVMOTTAKER_LAGT_TIL_ELLER_FJERNET)
+            ?.filter(
+                logg =>
+                    logg.type === LoggType.BREVMOTTAKER_LAGT_TIL_ELLER_FJERNET ||
+                    logg.type === LoggType.BARN_LAGT_TIL
+            )
             .forEach(logg => (logg.tekst = ''));
     }
 };
