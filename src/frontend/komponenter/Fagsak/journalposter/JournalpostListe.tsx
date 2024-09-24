@@ -10,7 +10,7 @@ import {
 } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
+import type { Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
     byggHenterRessurs,
     byggTomRessurs,
@@ -28,6 +28,7 @@ import {
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
 import useDokument from '../../../hooks/useDokument';
+import type { JournalpostMedTilgang } from '../../../typer/journalpost';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -128,23 +129,23 @@ const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     }
 };
 
-const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
+const JournalpostListe = ({ bruker }: IProps) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] =
-        useState<Ressurs<IJournalpost[]>>(byggTomRessurs());
+        useState<Ressurs<JournalpostMedTilgang[]>>(byggTomRessurs<JournalpostMedTilgang[]>());
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
         useDokument();
-    const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
+    const [utsendingsinfo, settUtsendingsinfo] = useState<undefined | Utsendingsinfo>();
 
     useEffect(() => {
-        settJournalposterRessurs(byggHenterRessurs());
+        settJournalposterRessurs(byggHenterRessurs<JournalpostMedTilgang[]>());
 
         const ident = bruker.personIdent;
 
-        request<{ ident: string }, IJournalpost[]>({
+        request<{ ident: string }, JournalpostMedTilgang[]>({
             method: 'POST',
             data: { ident },
             url: `/familie-ba-sak/api/journalpost/for-bruker`,
@@ -182,12 +183,20 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(journalpost => ({
-            ...journalpost,
-            datoMottatt:
-                journalpost.datoMottatt ||
-                hentDatoRegistrertSendt(journalpost.relevanteDatoer, journalpost.journalposttype),
-        }));
+        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(
+            journalpostMedTilgang => ({
+                journalpost: {
+                    ...journalpostMedTilgang.journalpost,
+                    datoMottatt:
+                        journalpostMedTilgang.journalpost.datoMottatt ||
+                        hentDatoRegistrertSendt(
+                            journalpostMedTilgang.journalpost.relevanteDatoer,
+                            journalpostMedTilgang.journalpost.journalposttype
+                        ),
+                },
+                harTilgang: journalpostMedTilgang.harTilgang,
+            })
+        );
         const sorterteJournalPoster = hentSorterteJournalposter(
             journalposterMedOverstyrtDato,
             sortering
@@ -219,33 +228,43 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {sorterteJournalPoster.map(journalpost => (
-                            <Table.Row key={journalpost.journalpostId}>
+                        {sorterteJournalPoster.map(journalpostMedTilgang => (
+                            <Table.Row key={journalpostMedTilgang.journalpost.journalpostId}>
                                 <StyledDataCell>
                                     <InnUtWrapper>
                                         <IkonWrapper>
                                             {hentIkonForJournalpostType(
-                                                journalpost.journalposttype
+                                                journalpostMedTilgang.journalpost.journalposttype
                                             )}{' '}
                                         </IkonWrapper>
-                                        {journalpost.journalposttype}
+                                        {journalpostMedTilgang.journalpost.journalposttype}
                                     </InnUtWrapper>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {formaterDatoRegistrertSendtMottatt(journalpost.datoMottatt)}
+                                    {formaterDatoRegistrertSendtMottatt(
+                                        journalpostMedTilgang.journalpost.datoMottatt
+                                    )}
                                 </StyledDataCell>
 
                                 <StyledDataCell>
-                                    {journalpost.dokumenter?.length ? (
+                                    {journalpostMedTilgang.journalpost.dokumenter?.length ? (
                                         <Vedleggsliste>
-                                            {journalpost.dokumenter?.map(dokument => (
-                                                <JournalpostDokument
-                                                    dokument={dokument}
-                                                    journalpostId={journalpost.journalpostId}
-                                                    key={dokument.dokumentInfoId}
-                                                    hentForhåndsvisning={hentForhåndsvisning}
-                                                />
-                                            ))}
+                                            {journalpostMedTilgang.journalpost.dokumenter?.map(
+                                                dokument => (
+                                                    <JournalpostDokument
+                                                        dokument={dokument}
+                                                        journalpostId={
+                                                            journalpostMedTilgang.journalpost
+                                                                .journalpostId
+                                                        }
+                                                        key={dokument.dokumentInfoId}
+                                                        hentForhåndsvisning={hentForhåndsvisning}
+                                                        harTilgang={
+                                                            journalpostMedTilgang.harTilgang
+                                                        }
+                                                    />
+                                                )
+                                            )}
                                         </Vedleggsliste>
                                     ) : (
                                         <BodyShort>Ingen dokumenter</BodyShort>
@@ -256,49 +275,71 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     <EllipsisBodyShort
                                         size="small"
                                         title={formaterFagsak(
-                                            journalpost.sak?.fagsaksystem,
-                                            journalpost.sak?.fagsakId
+                                            journalpostMedTilgang.journalpost.sak?.fagsaksystem,
+                                            journalpostMedTilgang.journalpost.sak?.fagsakId
                                         )}
                                     >
                                         {formaterFagsak(
-                                            journalpost.sak?.fagsaksystem,
-                                            journalpost.sak?.fagsakId
+                                            journalpostMedTilgang.journalpost.sak?.fagsaksystem,
+                                            journalpostMedTilgang.journalpost.sak?.fagsakId
                                         )}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {journalpost.utsendingsinfo ? (
+                                    {journalpostMedTilgang.journalpost.utsendingsinfo ? (
                                         <StyledButton
                                             icon={<StyledMagnifyingGlassIcon />}
                                             iconPosition={'right'}
                                             variant={'tertiary'}
                                             size={'xsmall'}
                                             onClick={() =>
-                                                settUtsendingsinfo(journalpost.utsendingsinfo)
+                                                settUtsendingsinfo(
+                                                    journalpostMedTilgang.journalpost.utsendingsinfo
+                                                )
                                             }
                                         >
-                                            {journalpost.avsenderMottaker?.navn}
+                                            {
+                                                journalpostMedTilgang.journalpost.avsenderMottaker
+                                                    ?.navn
+                                            }
                                         </StyledButton>
                                     ) : (
                                         <EllipsisBodyShort
                                             size="small"
-                                            title={journalpost.avsenderMottaker?.navn}
+                                            title={
+                                                journalpostMedTilgang.journalpost.avsenderMottaker
+                                                    ?.navn
+                                            }
                                         >
-                                            {journalpost.avsenderMottaker?.navn}
+                                            {
+                                                journalpostMedTilgang.journalpost.avsenderMottaker
+                                                    ?.navn
+                                            }
                                         </EllipsisBodyShort>
                                     )}
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    <EllipsisBodyShort size="small" title={journalpost.tittel}>
-                                        {journalpost.tittel}
+                                    <EllipsisBodyShort
+                                        size="small"
+                                        title={journalpostMedTilgang.journalpost.tittel}
+                                    >
+                                        {journalpostMedTilgang.journalpost.tittel}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     <EllipsisBodyShort
                                         size="small"
-                                        title={journalpoststatus[journalpost.journalstatus]}
+                                        title={
+                                            journalpoststatus[
+                                                journalpostMedTilgang.journalpost.journalstatus
+                                            ]
+                                        }
                                     >
-                                        {journalpoststatus[journalpost.journalstatus]}
+                                        {
+                                            journalpoststatus[
+                                                journalpostMedTilgang.journalpost.journalstatus
+                                            ]
+                                        }
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                             </Table.Row>

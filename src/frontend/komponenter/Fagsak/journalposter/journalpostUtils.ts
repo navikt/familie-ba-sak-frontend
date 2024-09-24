@@ -1,35 +1,41 @@
 import { isAfter } from 'date-fns';
 
 import { JournalpostDatotype } from '@navikt/familie-typer';
-import type { IJournalpost, IJournalpostRelevantDato } from '@navikt/familie-typer';
+import type { IJournalpostRelevantDato } from '@navikt/familie-typer';
 
+import type { JournalpostMedTilgang } from '../../../typer/journalpost';
 import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
 import { Sorteringsrekkefølge } from '../../../utils/tabell';
 
-const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
-    if (!a.datoMottatt) {
+const sorterJournalposterStigende = (a: JournalpostMedTilgang, b: JournalpostMedTilgang) => {
+    if (!a.journalpost.datoMottatt) {
         return -1;
     }
-    if (!b.datoMottatt) {
+    if (!b.journalpost.datoMottatt) {
         return 1;
     }
-    return isAfter(isoStringTilDate(a.datoMottatt), isoStringTilDate(b.datoMottatt)) ? 1 : -1;
+    return isAfter(
+        isoStringTilDate(a.journalpost.datoMottatt),
+        isoStringTilDate(b.journalpost.datoMottatt)
+    )
+        ? 1
+        : -1;
 };
 
-const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
+const sorterJournalposterSynkende = (a: JournalpostMedTilgang, b: JournalpostMedTilgang) =>
     -1 * sorterJournalposterStigende(a, b);
 
 export const hentSorterteJournalposter = (
-    journalposter: IJournalpost[],
+    journalpostMedTilgang: JournalpostMedTilgang[],
     sortering: Sorteringsrekkefølge
 ) => {
     switch (sortering) {
         case Sorteringsrekkefølge.INGEN_SORTERING:
-            return journalposter;
+            return journalpostMedTilgang;
         case Sorteringsrekkefølge.STIGENDE:
-            return [...journalposter].sort(sorterJournalposterStigende);
+            return [...journalpostMedTilgang].sort(sorterJournalposterStigende);
         case Sorteringsrekkefølge.SYNKENDE:
-            return [...journalposter].sort(sorterJournalposterSynkende);
+            return [...journalpostMedTilgang].sort(sorterJournalposterSynkende);
     }
 };
 

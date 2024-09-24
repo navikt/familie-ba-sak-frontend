@@ -30,12 +30,14 @@ interface IProps {
     dokument: IDokumentInfo;
     journalpostId: string;
     hentForhåndsvisning: <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => void;
+    harTilgang: boolean;
 }
 
 export const JournalpostDokument: React.FC<IProps> = ({
     dokument,
     journalpostId,
     hentForhåndsvisning,
+    harTilgang,
 }) => {
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
@@ -50,20 +52,26 @@ export const JournalpostDokument: React.FC<IProps> = ({
     return (
         <ListeElement>
             <DokumentTittelMedLenkeWrapper>
-                <EllipsisBodyShort size="small" title={dokument.tittel}>
-                    <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
-                        {dokument.tittel}
-                    </Link>
-                </EllipsisBodyShort>
+                {harTilgang ? (
+                    <>
+                        <EllipsisBodyShort size="small" title={dokument.tittel}>
+                            <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
+                                {dokument.tittel}
+                            </Link>
+                        </EllipsisBodyShort>
 
-                <StyledLink
-                    href={`/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`}
-                    target="_blank"
-                    aria-label="Åpne dokument i ny fane"
-                    title="Åpne dokument i ny fane"
-                >
-                    <ExternalLinkIcon fontSize={'1.3rem'} />
-                </StyledLink>
+                        <StyledLink
+                            href={`/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`}
+                            target="_blank"
+                            aria-label="Åpne dokument i ny fane"
+                            title="Åpne dokument i ny fane"
+                        >
+                            <ExternalLinkIcon fontSize={'1.3rem'} />
+                        </StyledLink>
+                    </>
+                ) : (
+                    <>{dokument.tittel}</>
+                )}
             </DokumentTittelMedLenkeWrapper>
 
             <Vedleggsliste>
