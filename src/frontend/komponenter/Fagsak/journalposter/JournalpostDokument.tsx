@@ -2,8 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Link } from '@navikt/ds-react';
+import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
@@ -14,16 +14,6 @@ const ListeElement = styled.li`
     &:last-child {
         margin-bottom: 0;
     }
-`;
-
-const DokumentTittelMedLenkeWrapper = styled.div`
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: flex-start;
-`;
-
-const StyledLink = styled(Link)`
-    margin-left: 0.5rem;
 `;
 
 interface IProps {
@@ -49,41 +39,47 @@ export const JournalpostDokument: React.FC<IProps> = ({
             alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
         }
     };
+
+    const dokumentTittel = dokument.tittel || 'Uten tittel';
+
     return (
         <ListeElement>
-            <DokumentTittelMedLenkeWrapper>
+            <HStack gap="1">
                 {harTilgang ? (
                     <>
                         <EllipsisBodyShort size="small" title={dokument.tittel}>
                             <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
-                                {dokument.tittel}
+                                {dokumentTittel}
                             </Link>
                         </EllipsisBodyShort>
 
-                        <StyledLink
+                        <Link
                             href={`/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`}
                             target="_blank"
                             aria-label="Åpne dokument i ny fane"
                             title="Åpne dokument i ny fane"
                         >
                             <ExternalLinkIcon fontSize={'1.3rem'} />
-                        </StyledLink>
+                        </Link>
                     </>
                 ) : (
-                    <>{dokument.tittel}</>
+                    <>
+                        <BodyShort size="small">{dokumentTittel}</BodyShort>
+                        <PadlockLockedIcon />
+                    </>
                 )}
-            </DokumentTittelMedLenkeWrapper>
-
-            <Vedleggsliste>
-                {dokument.logiskeVedlegg &&
-                    dokument.logiskeVedlegg.map(vedlegg => (
+            </HStack>
+            {dokument.logiskeVedlegg && dokument.logiskeVedlegg.length > 0 && (
+                <Vedleggsliste>
+                    {dokument.logiskeVedlegg.map(vedlegg => (
                         <ListeElement key={vedlegg.logiskVedleggId}>
                             <EllipsisBodyShort size="small" title={vedlegg.tittel}>
                                 {vedlegg.tittel}
                             </EllipsisBodyShort>
                         </ListeElement>
                     ))}
-            </Vedleggsliste>
+                </Vedleggsliste>
+            )}
         </ListeElement>
     );
 };
