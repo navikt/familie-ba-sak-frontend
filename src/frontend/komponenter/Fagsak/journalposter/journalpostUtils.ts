@@ -29,16 +29,16 @@ const sorterJournalposterSynkende = (a: ITilgangsstyrtJournalpost, b: ITilgangss
     -1 * sorterJournalposterStigende(a, b);
 
 export const hentSorterteJournalposter = (
-    journalpostMedTilgang: ITilgangsstyrtJournalpost[],
+    tilgangsstyrtJournalpost: ITilgangsstyrtJournalpost[],
     sortering: Sorteringsrekkefølge
 ) => {
     switch (sortering) {
         case Sorteringsrekkefølge.INGEN_SORTERING:
-            return journalpostMedTilgang;
+            return tilgangsstyrtJournalpost;
         case Sorteringsrekkefølge.STIGENDE:
-            return [...journalpostMedTilgang].sort(sorterJournalposterStigende);
+            return [...tilgangsstyrtJournalpost].sort(sorterJournalposterStigende);
         case Sorteringsrekkefølge.SYNKENDE:
-            return [...journalpostMedTilgang].sort(sorterJournalposterSynkende);
+            return [...tilgangsstyrtJournalpost].sort(sorterJournalposterSynkende);
     }
 };
 

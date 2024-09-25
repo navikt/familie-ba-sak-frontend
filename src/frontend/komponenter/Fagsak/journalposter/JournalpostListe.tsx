@@ -235,35 +235,35 @@ const JournalpostListe = ({ bruker }: IProps) => {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {sorterteJournalPoster.map(journalpostMedTilgang => (
-                            <Table.Row key={journalpostMedTilgang.journalpost.journalpostId}>
+                        {sorterteJournalPoster.map(tilgangsstyrtJournalpost => (
+                            <Table.Row key={tilgangsstyrtJournalpost.journalpost.journalpostId}>
                                 <StyledDataCell>
                                     <InnUtWrapper>
                                         <IkonWrapper>
                                             {hentIkonForJournalpostType(
-                                                journalpostMedTilgang.journalpost.journalposttype
+                                                tilgangsstyrtJournalpost.journalpost.journalposttype
                                             )}{' '}
                                         </IkonWrapper>
-                                        {journalpostMedTilgang.journalpost.journalposttype}
+                                        {tilgangsstyrtJournalpost.journalpost.journalposttype}
                                     </InnUtWrapper>
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     {formaterDatoRegistrertSendtMottatt(
-                                        journalpostMedTilgang.journalpost.datoMottatt
+                                        tilgangsstyrtJournalpost.journalpost.datoMottatt
                                     )}
                                 </StyledDataCell>
 
                                 <StyledDataCell>
-                                    {journalpostMedTilgang.journalpost.dokumenter?.length ? (
+                                    {tilgangsstyrtJournalpost.journalpost.dokumenter?.length ? (
                                         <Vedleggsliste>
-                                            {journalpostMedTilgang.journalpost.dokumenter?.map(
+                                            {tilgangsstyrtJournalpost.journalpost.dokumenter?.map(
                                                 dokument => (
                                                     <JournalpostDokument
                                                         dokument={dokument}
                                                         key={dokument.dokumentInfoId}
                                                         hentForhåndsvisning={hentForhåndsvisning}
-                                                        journalpostMedTilgang={
-                                                            journalpostMedTilgang
+                                                        tilgangsstyrtJournalpost={
+                                                            tilgangsstyrtJournalpost
                                                         }
                                                     />
                                                 )
@@ -278,18 +278,18 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                     <EllipsisBodyShort
                                         size="small"
                                         title={formaterFagsak(
-                                            journalpostMedTilgang.journalpost.sak?.fagsaksystem,
-                                            journalpostMedTilgang.journalpost.sak?.fagsakId
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsaksystem,
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsakId
                                         )}
                                     >
                                         {formaterFagsak(
-                                            journalpostMedTilgang.journalpost.sak?.fagsaksystem,
-                                            journalpostMedTilgang.journalpost.sak?.fagsakId
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsaksystem,
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsakId
                                         )}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {journalpostMedTilgang.journalpost.utsendingsinfo ? (
+                                    {tilgangsstyrtJournalpost.journalpost.utsendingsinfo ? (
                                         <StyledButton
                                             icon={<StyledMagnifyingGlassIcon />}
                                             iconPosition={'right'}
@@ -297,26 +297,27 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                             size={'xsmall'}
                                             onClick={() =>
                                                 settUtsendingsinfo(
-                                                    journalpostMedTilgang.journalpost.utsendingsinfo
+                                                    tilgangsstyrtJournalpost.journalpost
+                                                        .utsendingsinfo
                                                 )
                                             }
                                         >
                                             {
-                                                journalpostMedTilgang.journalpost.avsenderMottaker
-                                                    ?.navn
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
                                             }
                                         </StyledButton>
                                     ) : (
                                         <EllipsisBodyShort
                                             size="small"
                                             title={
-                                                journalpostMedTilgang.journalpost.avsenderMottaker
-                                                    ?.navn
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
                                             }
                                         >
                                             {
-                                                journalpostMedTilgang.journalpost.avsenderMottaker
-                                                    ?.navn
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
                                             }
                                         </EllipsisBodyShort>
                                     )}
@@ -324,9 +325,9 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                 <StyledDataCell>
                                     <EllipsisBodyShort
                                         size="small"
-                                        title={journalpostMedTilgang.journalpost.tittel}
+                                        title={tilgangsstyrtJournalpost.journalpost.tittel}
                                     >
-                                        {journalpostMedTilgang.journalpost.tittel}
+                                        {tilgangsstyrtJournalpost.journalpost.tittel}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
@@ -334,13 +335,13 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                         size="small"
                                         title={
                                             journalpoststatus[
-                                                journalpostMedTilgang.journalpost.journalstatus
+                                                tilgangsstyrtJournalpost.journalpost.journalstatus
                                             ]
                                         }
                                     >
                                         {
                                             journalpoststatus[
-                                                journalpostMedTilgang.journalpost.journalstatus
+                                                tilgangsstyrtJournalpost.journalpost.journalstatus
                                             ]
                                         }
                                     </EllipsisBodyShort>

@@ -21,15 +21,15 @@ const ListeElement = styled.li`
 interface IProps {
     dokument: IDokumentInfo;
     hentForhåndsvisning: <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => void;
-    journalpostMedTilgang: ITilgangsstyrtJournalpost;
+    tilgangsstyrtJournalpost: ITilgangsstyrtJournalpost;
 }
 
 export const JournalpostDokument: React.FC<IProps> = ({
     dokument,
     hentForhåndsvisning,
-    journalpostMedTilgang,
+    tilgangsstyrtJournalpost,
 }) => {
-    const { journalpost, harTilgang, adressebeskyttelsegradering } = journalpostMedTilgang;
+    const { journalpost, harTilgang, adressebeskyttelsegradering } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
