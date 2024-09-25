@@ -28,7 +28,7 @@ import {
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
 import useDokument from '../../../hooks/useDokument';
-import type { JournalpostMedTilgang } from '../../../typer/journalpost';
+import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -132,7 +132,9 @@ const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
 const JournalpostListe = ({ bruker }: IProps) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] =
-        useState<Ressurs<JournalpostMedTilgang[]>>(byggTomRessurs<JournalpostMedTilgang[]>());
+        useState<Ressurs<ITilgangsstyrtJournalpost[]>>(
+            byggTomRessurs<ITilgangsstyrtJournalpost[]>()
+        );
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
@@ -141,11 +143,11 @@ const JournalpostListe = ({ bruker }: IProps) => {
     const [utsendingsinfo, settUtsendingsinfo] = useState<undefined | Utsendingsinfo>();
 
     useEffect(() => {
-        settJournalposterRessurs(byggHenterRessurs<JournalpostMedTilgang[]>());
+        settJournalposterRessurs(byggHenterRessurs<ITilgangsstyrtJournalpost[]>());
 
         const ident = bruker.personIdent;
 
-        request<{ ident: string }, JournalpostMedTilgang[]>({
+        request<{ ident: string }, ITilgangsstyrtJournalpost[]>({
             method: 'POST',
             data: { ident },
             url: `/familie-ba-sak/api/journalpost/for-bruker`,
@@ -195,6 +197,7 @@ const JournalpostListe = ({ bruker }: IProps) => {
                         ),
                 },
                 harTilgang: journalpostMedTilgang.harTilgang,
+                adressebeskyttelsegradering: journalpostMedTilgang.adressebeskyttelsegradering,
             })
         );
         const sorterteJournalPoster = hentSorterteJournalposter(
@@ -253,14 +256,10 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                                 dokument => (
                                                     <JournalpostDokument
                                                         dokument={dokument}
-                                                        journalpostId={
-                                                            journalpostMedTilgang.journalpost
-                                                                .journalpostId
-                                                        }
                                                         key={dokument.dokumentInfoId}
                                                         hentForhåndsvisning={hentForhåndsvisning}
-                                                        harTilgang={
-                                                            journalpostMedTilgang.harTilgang
+                                                        journalpostMedTilgang={
+                                                            journalpostMedTilgang
                                                         }
                                                     />
                                                 )

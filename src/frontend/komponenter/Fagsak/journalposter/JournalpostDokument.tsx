@@ -8,6 +8,8 @@ import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
 import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
+import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
+import { adressebeskyttelsestyper } from '../../../typer/person';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;
@@ -18,22 +20,22 @@ const ListeElement = styled.li`
 
 interface IProps {
     dokument: IDokumentInfo;
-    journalpostId: string;
     hentForhåndsvisning: <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => void;
-    harTilgang: boolean;
+    journalpostMedTilgang: ITilgangsstyrtJournalpost;
 }
 
 export const JournalpostDokument: React.FC<IProps> = ({
     dokument,
-    journalpostId,
     hentForhåndsvisning,
-    harTilgang,
+    journalpostMedTilgang,
 }) => {
+    const { journalpost, harTilgang, adressebeskyttelsegradering } = journalpostMedTilgang;
+
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
             hentForhåndsvisning({
                 method: 'GET',
-                url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`,
+                url: `/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/hent/${dokumentId}`,
             });
         } else {
             alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
@@ -54,7 +56,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
                         </EllipsisBodyShort>
 
                         <Link
-                            href={`/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`}
+                            href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
                             target="_blank"
                             aria-label="Åpne dokument i ny fane"
                             title="Åpne dokument i ny fane"
@@ -65,7 +67,13 @@ export const JournalpostDokument: React.FC<IProps> = ({
                 ) : (
                     <>
                         <BodyShort size="small">{dokumentTittel}</BodyShort>
-                        <PadlockLockedIcon />
+                        <PadlockLockedIcon
+                            title={
+                                adressebeskyttelsegradering
+                                    ? `Dokumentet krever tilgangen ${adressebeskyttelsestyper[adressebeskyttelsegradering]}`
+                                    : 'Dokumentet krever ekstra tilganger'
+                            }
+                        />
                     </>
                 )}
             </HStack>

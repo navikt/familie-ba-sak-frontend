@@ -3,11 +3,14 @@ import { isAfter } from 'date-fns';
 import { JournalpostDatotype } from '@navikt/familie-typer';
 import type { IJournalpostRelevantDato } from '@navikt/familie-typer';
 
-import type { JournalpostMedTilgang } from '../../../typer/journalpost';
+import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../utils/dato';
 import { Sorteringsrekkefølge } from '../../../utils/tabell';
 
-const sorterJournalposterStigende = (a: JournalpostMedTilgang, b: JournalpostMedTilgang) => {
+const sorterJournalposterStigende = (
+    a: ITilgangsstyrtJournalpost,
+    b: ITilgangsstyrtJournalpost
+) => {
     if (!a.journalpost.datoMottatt) {
         return -1;
     }
@@ -22,11 +25,11 @@ const sorterJournalposterStigende = (a: JournalpostMedTilgang, b: JournalpostMed
         : -1;
 };
 
-const sorterJournalposterSynkende = (a: JournalpostMedTilgang, b: JournalpostMedTilgang) =>
+const sorterJournalposterSynkende = (a: ITilgangsstyrtJournalpost, b: ITilgangsstyrtJournalpost) =>
     -1 * sorterJournalposterStigende(a, b);
 
 export const hentSorterteJournalposter = (
-    journalpostMedTilgang: JournalpostMedTilgang[],
+    journalpostMedTilgang: ITilgangsstyrtJournalpost[],
     sortering: Sorteringsrekkefølge
 ) => {
     switch (sortering) {
