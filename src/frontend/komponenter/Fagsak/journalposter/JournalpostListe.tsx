@@ -186,19 +186,23 @@ const JournalpostListe = ({ bruker }: IProps) => {
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
         const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(
-            journalpostMedTilgang => ({
-                journalpost: {
-                    ...journalpostMedTilgang.journalpost,
+            tilgangsstyrtJournalpost => {
+                const { journalpost } = tilgangsstyrtJournalpost;
+                const journalpostMedRiktigDatoMottatt = {
+                    ...journalpost,
                     datoMottatt:
-                        journalpostMedTilgang.journalpost.datoMottatt ||
+                        journalpost.datoMottatt ||
                         hentDatoRegistrertSendt(
-                            journalpostMedTilgang.journalpost.relevanteDatoer,
-                            journalpostMedTilgang.journalpost.journalposttype
+                            journalpost.relevanteDatoer,
+                            journalpost.journalposttype
                         ),
-                },
-                harTilgang: journalpostMedTilgang.harTilgang,
-                adressebeskyttelsegradering: journalpostMedTilgang.adressebeskyttelsegradering,
-            })
+                };
+
+                return {
+                    ...tilgangsstyrtJournalpost,
+                    ...journalpostMedRiktigDatoMottatt,
+                };
+            }
         );
         const sorterteJournalPoster = hentSorterteJournalposter(
             journalposterMedOverstyrtDato,
