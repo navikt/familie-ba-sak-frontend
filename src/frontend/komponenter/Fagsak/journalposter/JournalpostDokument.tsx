@@ -49,7 +49,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
             <HStack gap="1">
                 {harTilgang ? (
                     <>
-                        <EllipsisBodyShort size="small" title={dokument.tittel}>
+                        <EllipsisBodyShort size="small" title={dokumentTittel}>
                             <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
                                 {dokumentTittel}
                             </Link>

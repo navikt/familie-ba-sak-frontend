@@ -132,18 +132,16 @@ const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
 const JournalpostListe = ({ bruker }: IProps) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] =
-        useState<Ressurs<ITilgangsstyrtJournalpost[]>>(
-            byggTomRessurs<ITilgangsstyrtJournalpost[]>()
-        );
+        useState<Ressurs<ITilgangsstyrtJournalpost[]>>(byggTomRessurs());
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
         useDokument();
-    const [utsendingsinfo, settUtsendingsinfo] = useState<undefined | Utsendingsinfo>();
+    const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
 
     useEffect(() => {
-        settJournalposterRessurs(byggHenterRessurs<ITilgangsstyrtJournalpost[]>());
+        settJournalposterRessurs(byggHenterRessurs());
 
         const ident = bruker.personIdent;
 
