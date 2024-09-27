@@ -1860,14 +1860,14 @@
     classnames "^2.5.1"
     react-select "^5.8.0"
 
-"@navikt/familie-header@14.0.0":
-  version "14.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/14.0.0/ffc65218c212b44938a5f04ba9babf9e9d919806#ffc65218c212b44938a5f04ba9babf9e9d919806"
-  integrity sha512-Zwz730wMagg3vxyIGTDobAPbefyQ7FI8jOmSjPA8EqmwaQeVziaOr05xdX+U7QujRFNHLpmLFhEv2dYQfkOsSg==
+"@navikt/familie-header@14.1.0":
+  version "14.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/14.1.0/33e5b67eb7bd41febe20bcd37ab45371da0150e9#33e5b67eb7bd41febe20bcd37ab45371da0150e9"
+  integrity sha512-7Kde/aTP/FVx499IL+s+sJWS6SsJAsY3TIOny9AP22AJXMZUAYk7r2/IT9ZR64F2onSSHIlZd0sO+Im+USsiFA==
   dependencies:
-    "@navikt/familie-ikoner" "^9.0.1"
+    "@navikt/familie-ikoner" "^9.0.2"
     "@navikt/familie-typer" "^8.0.2"
-    "@navikt/fnrvalidator" "^1.3.1"
+    "@navikt/fnrvalidator" "^2.1.0"
 
 "@navikt/familie-http@^7.0.14":
   version "7.0.14"
@@ -1885,10 +1885,10 @@
   dependencies:
     "@navikt/familie-typer" "^8.0.1"
 
-"@navikt/familie-ikoner@^9.0.1":
-  version "9.0.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.1/3bd93f512311ac68dc2ccc6eaae65718e2a6b203#3bd93f512311ac68dc2ccc6eaae65718e2a6b203"
-  integrity sha512-7A6ZlWtmx0MlnIANpJFBvsgxsBoQ9RRMHTrDDjtGTZ/LcxvOQFGlSiea06OplKus/z3GN9slooz/Qpdyt1tReg==
+"@navikt/familie-ikoner@^9.0.1", "@navikt/familie-ikoner@^9.0.2":
+  version "9.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.2/a1f04baa742baceb73f517d5dfd5964f1c73a9c5#a1f04baa742baceb73f517d5dfd5964f1c73a9c5"
+  integrity sha512-k5m0kffVG5rS6PqjpL+sE3VzWrRp1WfXD0f2j4IipBpIIILcAogf3JtfPqv50+cuQTRsZujBqKJ72JfcLIekOg==
   dependencies:
     "@navikt/familie-typer" "^8.0.2"
 
@@ -1939,11 +1939,6 @@
   dependencies:
     svg-country-flags "^1.2.10"
     uuid "^9.0.0"
-
-"@navikt/fnrvalidator@^1.3.1":
-  version "1.3.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/1.3.1/342f97429038c439ad477c4ce7800fe59e8018d1#342f97429038c439ad477c4ce7800fe59e8018d1"
-  integrity sha512-z9iH10PIFiFb88LQt8EcEC0eCiuzTnG9kaZkjjji5eKwK7Fq7MU3D7NgaqdZTakaj1JgXc6fd73tCC+sHXmrPw==
 
 "@navikt/fnrvalidator@^2.1.0":
   version "2.1.0"
