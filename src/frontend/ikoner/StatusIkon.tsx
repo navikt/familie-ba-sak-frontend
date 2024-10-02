@@ -11,6 +11,7 @@ import {
 
 interface IProps {
     status: Status;
+    title?: string;
 }
 
 export enum Status {
@@ -44,16 +45,16 @@ const InfoIkon = styled(InformationSquareFillIcon)`
     min-width: 1.5rem;
 `;
 
-const StatusIkon: React.FC<IProps> = ({ status }) => {
+const StatusIkon: React.FC<IProps> = ({ status, title }) => {
     switch (status) {
         case Status.OK:
-            return <OkIkon />;
+            return <OkIkon title={title} />;
         case Status.FEIL:
-            return <FeilIkon />;
+            return <FeilIkon title={title} />;
         case Status.ADVARSEL:
-            return <AdvarselIkon />;
+            return <AdvarselIkon title={title} />;
         case Status.INFO:
-            return <InfoIkon />;
+            return <InfoIkon title={title} />;
     }
 };
 export default StatusIkon;
