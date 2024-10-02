@@ -168,6 +168,11 @@ export const lagLenkePåType = (
     }
 };
 
+const erKlageFeilregistrertAvKA = (behandling: IKlagebehandling) =>
+    behandling.klageinstansResultat?.some(
+        resultat => resultat.type == KlageinstansEventType.BEHANDLING_FEILREGISTRERT
+    );
+
 const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => {
     const klageBehandlingAvsluttetUtfall = behandling.klageinstansResultat?.find(
         resultat =>
@@ -177,11 +182,14 @@ const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => 
     if (klageBehandlingAvsluttetUtfall) {
         return klageinstansUtfallTilTekst[klageBehandlingAvsluttetUtfall];
     }
+    if (erKlageFeilregistrertAvKA(behandling)) {
+        return 'Feilregistrert (KA)';
+    }
     if (behandling.resultat) {
         return behandlingsresultater[behandling.resultat];
     }
 
-    return '-';
+    return 'Ikke satt';
 };
 
 const ankeHarEksistertPåBehandling = (behandling: IKlagebehandling) => {
@@ -226,25 +234,30 @@ export const lagLenkePåResultat = (
                 </Link>
             );
         case Saksoversiktbehandlingstype.KLAGE: {
-            const LenkeTilKlage = () => (
-                <Link
-                    href={`/redirect/familie-klage/behandling/${behandling.id}`}
-                    onMouseDown={e => e.preventDefault()}
-                    target="_blank"
-                >
-                    <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
-                    <ExternalLinkIcon fontSize={'1.5rem'} />
-                </Link>
-            );
-            return ankeHarEksistertPåBehandling(behandling) ? (
-                <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
-                    <ResultatCelle>
-                        <StatusIkon status={Status.ADVARSEL} />
-                        <LenkeTilKlage />
-                    </ResultatCelle>
-                </Tooltip>
-            ) : (
-                <LenkeTilKlage />
+            return (
+                <ResultatCelle>
+                    <Link
+                        href={`/redirect/familie-klage/behandling/${behandling.id}`}
+                        onMouseDown={e => e.preventDefault()}
+                        target="_blank"
+                    >
+                        <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
+                        <ExternalLinkIcon fontSize={'1.5rem'} />
+                    </Link>
+                    {ankeHarEksistertPåBehandling(behandling) && (
+                        <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
+                            <StatusIkon status={Status.ADVARSEL} />
+                        </Tooltip>
+                    )}
+                    {erKlageFeilregistrertAvKA(behandling) && (
+                        <Tooltip content="Klagen er feilregistrert av NAV klageinstans. Gå inn på klagebehandlingens resultatside for å se detaljer">
+                            <StatusIkon
+                                status={Status.ADVARSEL}
+                                title={'Behandling feilregistrert av NAV klageinstans'}
+                            />
+                        </Tooltip>
+                    )}
+                </ResultatCelle>
             );
         }
     }
