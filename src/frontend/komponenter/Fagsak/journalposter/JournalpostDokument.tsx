@@ -43,6 +43,9 @@ export const JournalpostDokument: React.FC<IProps> = ({
     };
 
     const dokumentTittel = dokument.tittel || 'Uten tittel';
+    const ikontekstVedLesemodus = adressebeskyttelsegradering
+        ? `Dokumentet krever tilgangen ${adressebeskyttelsestyper[adressebeskyttelsegradering]}`
+        : 'Dokumentet krever ekstra tilganger';
 
     return (
         <ListeElement>
@@ -67,13 +70,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
                 ) : (
                     <>
                         <BodyShort size="small">{dokumentTittel}</BodyShort>
-                        <PadlockLockedIcon
-                            title={
-                                adressebeskyttelsegradering
-                                    ? `Dokumentet krever tilgangen ${adressebeskyttelsestyper[adressebeskyttelsegradering]}`
-                                    : 'Dokumentet krever ekstra tilganger'
-                            }
-                        />
+                        <PadlockLockedIcon title={ikontekstVedLesemodus} />
                     </>
                 )}
             </HStack>
