@@ -38,12 +38,16 @@ export enum KlageinstansUtfall {
     STADFESTELSE = 'STADFESTELSE',
     UGUNST = 'UGUNST',
     AVVIST = 'AVVIST',
+    INNSTILLING_STADFESTELSE = 'INNSTILLING_STADFESTELSE',
+    INNSTILLING_AVVIST = 'INNSTILLING_AVVIST',
 }
 
 export enum KlageinstansEventType {
     KLAGEBEHANDLING_AVSLUTTET = 'KLAGEBEHANDLING_AVSLUTTET',
+    BEHANDLING_FEILREGISTRERT = 'BEHANDLING_FEILREGISTRERT',
     ANKEBEHANDLING_OPPRETTET = 'ANKEBEHANDLING_OPPRETTET',
     ANKEBEHANDLING_AVSLUTTET = 'ANKEBEHANDLING_AVSLUTTET',
+    ANKE_I_TRYGDERETTENBEHANDLING_OPPRETTET = 'ANKE_I_TRYGDERETTENBEHANDLING_OPPRETTET',
 }
 
 interface KlageinstansResultat {
@@ -51,6 +55,7 @@ interface KlageinstansResultat {
     utfall?: KlageinstansUtfall;
     mottattEllerAvsluttetTidspunkt: IsoDatoString;
     journalpostReferanser: string[];
+    årsakFeilregistrert?: string;
 }
 
 export enum KlageStatus {
@@ -73,4 +78,6 @@ export const klageinstansUtfallTilTekst: Record<KlageinstansUtfall, string> = {
     STADFESTELSE: 'Stadfestelse KA',
     UGUNST: 'Ugunst (Ugyldig) KA',
     AVVIST: 'Avvist KA',
+    INNSTILLING_STADFESTELSE: 'Innstilling om stadfestelse til trygderetten fra KA',
+    INNSTILLING_AVVIST: 'Innstilling om avist til trygderetten fra KA',
 };
