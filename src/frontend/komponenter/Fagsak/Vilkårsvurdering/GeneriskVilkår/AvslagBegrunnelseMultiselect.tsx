@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
 import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import type { ActionMeta } from '@navikt/familie-form-elements';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
@@ -13,11 +12,11 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { OptionType } from '../../../../typer/common';
-import type {
-    IRestVedtakBegrunnelseTilknyttetVilkår,
-    VedtakBegrunnelse,
+import {
+    type IRestVedtakBegrunnelseTilknyttetVilkår,
+    type VedtakBegrunnelse,
+    VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
-import { VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
