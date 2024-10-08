@@ -9,7 +9,6 @@ import type { IDokumentInfo } from '@navikt/familie-typer';
 import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
 import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
-import { adressebeskyttelsestyper } from '../../../typer/person';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;
@@ -29,7 +28,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
     hentForhåndsvisning,
     tilgangsstyrtJournalpost,
 }) => {
-    const { journalpost, harTilgang, adressebeskyttelsegradering } = tilgangsstyrtJournalpost;
+    const { journalpost, harTilgang } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
@@ -43,9 +42,6 @@ export const JournalpostDokument: React.FC<IProps> = ({
     };
 
     const dokumentTittel = dokument.tittel || 'Uten tittel';
-    const ikontekstVedLesemodus = adressebeskyttelsegradering
-        ? `Dokumentet krever tilgangen ${adressebeskyttelsestyper[adressebeskyttelsegradering]}`
-        : 'Dokumentet krever ekstra tilganger';
 
     return (
         <ListeElement>
@@ -70,7 +66,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
                 ) : (
                     <>
                         <BodyShort size="small">{dokumentTittel}</BodyShort>
-                        <PadlockLockedIcon title={ikontekstVedLesemodus} />
+                        <PadlockLockedIcon title="Dokumentet krever ekstra tilganger" />
                     </>
                 )}
             </HStack>
