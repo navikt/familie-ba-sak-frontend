@@ -52,6 +52,8 @@ spec:
   env:
     - name: APP_VERSION
       value: {{ VERSION }}
+    - name: APP_BRANCH
+      value: {{ BRANCH }}
     - name: ENV
       value: preprod
   redis:

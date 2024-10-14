@@ -34,6 +34,7 @@ CLIENT_ID='$CLIENT_ID'
 CLIENT_SECRET='$CLIENT_SECRET'
 
 APP_VERSION=0.0.1
+APP_BRANCH='lokalt'
 
 # Ønsker du å kjøre mot lokal backend som ikke går mot preprod bruker du disse variablene
 # BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default

@@ -26,6 +26,12 @@ export default (authClient: Client, router: Router) => {
             .end();
     });
 
+    router.get('/branch', (_: Request, res: Response) => {
+        res.status(200)
+            .send({ status: 'SUKSESS', data: envVar('APP_BRANCH') })
+            .end();
+    });
+
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
