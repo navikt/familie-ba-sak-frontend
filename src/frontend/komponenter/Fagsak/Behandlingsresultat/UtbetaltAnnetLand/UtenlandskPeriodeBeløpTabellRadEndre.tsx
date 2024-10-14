@@ -3,9 +3,16 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    Fieldset,
+    Select,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -13,13 +20,13 @@ import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
 import {
     utenlandskPeriodeBeløpIntervaller,
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
 } from '../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
@@ -31,20 +38,8 @@ const UtbetaltBeløpRad = styled.div`
     gap: 1rem;
 `;
 
-const UtbetaltBeløpInfo = styled(Alert)`
-    margin-bottom: ${ASpacing6};
-`;
-
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
-`;
-
-const StyledEøsPeriodeSkjema = styled(EøsPeriodeSkjema)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 1.5rem;
 `;
 
 const StyledTextField = styled(TextField)`
@@ -67,7 +62,7 @@ const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
 
 interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
@@ -109,38 +104,42 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
+        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
+    };
+
     return (
         <Fieldset
             error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status}>
-                <UtbetaltBeløpInfo variant="info" inline>
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+                <Alert variant="info" inline>
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna
                         registreres separat
                     </UtbetaltBeløpText>
-                </UtbetaltBeløpInfo>
-                <FamilieReactSelect
-                    {...skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={lesevisning}
+                </Alert>
+                <UNSAFE_Combobox
+                    isMultiSelect
                     label={'Barn'}
-                    isMulti
                     options={tilgjengeligeBarn}
-                    value={skjema.felter.barnIdenter.verdi}
-                    onChange={options =>
-                        skjema.felter.barnIdenter.validerOgSettFelt(options as OptionType[])
+                    selectedOptions={skjema.felter.barnIdenter.verdi}
+                    onToggleSelected={onBarnSelected}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
                     }
                 />
-                <StyledEøsPeriodeSkjema
+                <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
                     periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     lesevisning={lesevisning}
                 />
-                <StyledFieldset
+                <Fieldset
                     className={lesevisning ? 'lesevisning' : ''}
                     errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
@@ -196,7 +195,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </UtbetaltBeløpRad>
-                </StyledFieldset>
+                </Fieldset>
 
                 {!lesevisning && (
                     <Knapperad>
