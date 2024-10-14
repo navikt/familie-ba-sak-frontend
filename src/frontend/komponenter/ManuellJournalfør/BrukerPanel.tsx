@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { ArrowUndoIcon, Buldings3FillIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
 import {
     Alert,
     Button,
@@ -144,7 +144,7 @@ export const BrukerPanel: React.FC = () => {
                     <DeltagerInfo
                         ikon={
                             erBrukerPåInstitusjon ? (
-                                <Buldings3FillIcon color={ASurfaceAction} width={48} height={48} />
+                                <Buildings3FillIcon color={ASurfaceAction} width={48} height={48} />
                             ) : (
                                 <KontoSirkel filled={åpen} width={48} height={48} />
                             )
