@@ -2,15 +2,11 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
 import {
-    ABorderAction,
-    ABorderDanger,
-    ABorderDefault,
-    ABorderSubtle,
-    ABorderSuccess,
     AIconInfo,
     AIconSuccess,
+    ASpacing4,
     ATextDanger,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
@@ -36,23 +32,23 @@ interface IBehandlingskortProps {
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return ABorderSubtle;
+        return 'border-subtle';
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return ABorderSuccess;
+            return 'border-success';
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return ABorderAction;
+            return 'border-action';
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return ABorderDanger;
+            return 'border-danger';
         case BehandlingResultat.IKKE_VURDERT:
-            return ABorderSubtle;
+            return 'border-subtle';
         default:
-            return ABorderDefault;
+            return 'border-default';
     }
 };
 
@@ -76,23 +72,8 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
     }
 };
 
-const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
-    border: 1px solid ${ABorderSubtle};
-    border-left: 0.5rem solid ${ABorderSubtle};
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-    margin: 0.5rem;
-    border-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
-`;
-
 const StyledHeading = styled(Heading)`
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-`;
-
-const StyledHr = styled.hr`
-    border: none;
-    border-bottom: 1px solid ${ABorderSubtle};
+    font-size: ${ASpacing4};
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
@@ -110,60 +91,55 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
     return (
-        <Container behandlingResultat={åpenBehandling.resultat}>
-            <StyledHeading size={'small'} level={'2'}>
-                {tittel}
-            </StyledHeading>
-            <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
-            <StyledHr />
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Behandlingsstatus',
-                        tekst: behandlingsstatuser[åpenBehandling.status],
-                    },
-                ]}
-            />
-            <Informasjonsbolk
-                infoTeksFarve={hentResultatfargeTekst(åpenBehandling.resultat)}
-                informasjon={[
-                    {
-                        label: 'Resultat',
-                        tekst: behandlingsresultater[åpenBehandling.resultat],
-                    },
-                ]}
-            />
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Opprettet',
-                        tekst: isoStringTilFormatertString({
+        <Box
+            padding="2"
+            borderColor={hentResultatfarge(åpenBehandling.resultat)}
+            borderWidth="1 1 1 5"
+            borderRadius="medium"
+            margin="2"
+        >
+            <Box borderWidth="0 0 1 0" borderColor="border-subtle">
+                <VStack gap="1" marginBlock="0 2">
+                    <StyledHeading size={'xsmall'} level={'2'}>
+                        {tittel}
+                    </StyledHeading>
+                    <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
+                </VStack>
+            </Box>
+            <VStack gap="4" marginBlock="4">
+                <Informasjonsbolk
+                    label="Behandlingsstatus"
+                    tekst={behandlingsstatuser[åpenBehandling.status]}
+                />
+                <Informasjonsbolk
+                    label="Resultat"
+                    tekst={behandlingsresultater[åpenBehandling.resultat]}
+                    tekstFarge={hentResultatfargeTekst(åpenBehandling.resultat)}
+                />
+                <div>
+                    <Informasjonsbolk
+                        label="Opprettet"
+                        tekst={isoStringTilFormatertString({
                             isoString: åpenBehandling.opprettetTidspunkt,
                             tilFormat: Datoformat.DATO,
-                        }),
-                    },
-                    {
-                        label: 'Vedtaksdato',
-                        tekst: isoStringTilFormatertString({
+                        })}
+                    />
+                    <Informasjonsbolk
+                        label="Vedtaksdato"
+                        tekst={isoStringTilFormatertString({
                             isoString: åpenBehandling.vedtak?.vedtaksdato,
                             tilFormat: Datoformat.DATO,
                             defaultString: 'Ikke satt',
-                        }),
-                    },
-                ]}
-            />
-
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Enhet',
-                        tekst: åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetId,
-                        tekstTitle:
-                            åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn,
-                    },
-                ]}
-            />
-        </Container>
+                        })}
+                    />
+                </div>
+                <Informasjonsbolk
+                    label="Enhet"
+                    tekst={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetId}
+                    tekstHover={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn}
+                />
+            </VStack>
+        </Box>
     );
 };
 

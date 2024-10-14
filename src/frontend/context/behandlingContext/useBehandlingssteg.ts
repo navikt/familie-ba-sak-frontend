@@ -98,7 +98,8 @@ const useBehandlingssteg = (
         settVisModal: (visModal: boolean) => void,
         erUlagretNyFeilutbetaltValuta: boolean,
         erUlagretNyRefusjonEøs: boolean,
-        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>
+        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>,
+        erSammensattKontrollsak: boolean
     ) => {
         if (erUlagretNyFeilutbetaltValuta) {
             settSubmitRessurs(
@@ -119,7 +120,10 @@ const useBehandlingssteg = (
                         'Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
                 )
             );
-        } else if (!kanSendeinnVedtak(vedtaksperioderMedBegrunnelserRessurs.data)) {
+        } else if (
+            !kanSendeinnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) &&
+            !erSammensattKontrollsak
+        ) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'

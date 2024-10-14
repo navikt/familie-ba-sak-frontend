@@ -6,6 +6,7 @@ import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { ikoner, Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
+import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
@@ -14,21 +15,22 @@ import {
     kjønnType,
     RessursStatus,
 } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 
 import OpprettFagsakModal from './OpprettFagsakModal';
 import { useApp } from '../../../context/AppContext';
-import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import { FagsakType } from '../../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../../typer/fagsakdeltager';
+import { obfuskerFagsakDeltager } from '../../../utils/obfuskerData';
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
+    const { skalObfuskereData } = useApp();
 
     const [fagsakDeltagere, settFagsakDeltagere] =
         React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
@@ -58,6 +60,9 @@ const FagsakDeltagerSøk: React.FC = () => {
             })
                 .then((response: Ressurs<IFagsakDeltager[]>) => {
                     if (response.status === RessursStatus.SUKSESS) {
+                        if (skalObfuskereData) {
+                            obfuskerFagsakDeltager(response);
+                        }
                         settFagsakDeltagere(response);
                     } else if (
                         response.status === RessursStatus.FEILET ||
@@ -95,7 +100,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                                   <KontorIkonGrønn height={'32'} width={'32'} />
                               )
                           ) : (
-                              <IkkeTilgang height={30} width={30} />
+                              <StatusIkon status={Status.FEIL} />
                           ),
                           rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
                               fagsakDeltager.kjønn ?? kjønnType.UKJENT

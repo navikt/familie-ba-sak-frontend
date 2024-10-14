@@ -1,15 +1,14 @@
-import type { PropsWithChildren } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { type PropsWithChildren, useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
-import { Alert, BodyShort, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import IkkeTilgang from '../ikoner/IkkeTilgang';
+import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
@@ -55,12 +54,14 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     onClose: () => lukkModal(),
     innhold: () => {
         return (
-            <BodyShort>
-                <IkkeTilgang height={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
-                {`Bruker har diskresjonskode ${
-                    adressebeskyttelsestyper[data.adressebeskyttelsegradering]
-                }`}
-            </BodyShort>
+            <HStack gap="4" align="center" marginBlock="2">
+                <StatusIkon status={Status.FEIL} />
+                <BodyShort>
+                    {`Bruker har diskresjonskode ${
+                        adressebeskyttelsestyper[data.adressebeskyttelsegradering]
+                    }`}
+                </BodyShort>
+            </HStack>
         );
     },
     actions: [
@@ -93,6 +94,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
+    const [erTogglesHentet, settErTogglesHentet] = useState(false);
 
     const verifiserVersjon = () => {
         request<void, string>({
@@ -156,6 +158,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             } else {
                 settToggles(alleTogglerAv);
             }
+            settErTogglesHentet(true);
         });
     }, []);
 
@@ -234,6 +237,9 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
+    const skalObfuskereData =
+        toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
+
     return {
         autentisert,
         hentSaksbehandlerRolle,
@@ -252,6 +258,8 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         toasts,
         toggles,
         hentPerson,
+        skalObfuskereData,
+        erTogglesHentet,
     };
 });
 

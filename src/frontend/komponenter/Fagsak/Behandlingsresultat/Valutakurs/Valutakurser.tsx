@@ -22,7 +22,11 @@ import ValutakursTabellRad from './ValutakursTabellRad';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useEøs } from '../../../../context/Eøs/EøsContext';
-import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
+import {
+    Behandlingstype,
+    type IBehandling,
+    VurderingsstrategiForValutakurser,
+} from '../../../../typer/behandling';
 import {
     EøsPeriodeStatus,
     type IRestValutakurs,
@@ -79,10 +83,9 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
         erGjenopprettAutomatiskeValutakurserModalÅpen,
         settErGjenopprettAutomatiskeValutakurserModalÅpen,
     ] = useState(false);
-    const kanOppretteAutomatiskeValutakurserPåManuelleSaker =
-        toggles[ToggleNavn.kanOppretteAutomatiskeValutakurserPåManuelleSaker];
     const kanOverstyreAutomatiskeValutakurser =
-        toggles[ToggleNavn.kanOverstyreAutomatiskeValutakurser];
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING &&
+        toggles[ToggleNavn.kanBehandleTekniskEndring];
 
     const erLesevisning = vurderErLesevisning();
 
@@ -115,8 +118,7 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
         });
     };
 
-    const finnesValutaperioderSomKanSkjules =
-        valutakurser.length > 1 && kanOppretteAutomatiskeValutakurserPåManuelleSaker;
+    const finnesValutaperioderSomKanSkjules = valutakurser.length > 1;
     const [visAlleValutaperioder, setVisAlleValutaperioder] = useState(false);
     const erValutakursSomErVurdertAutomatisk = valutakurser.some(
         restValutakurs => restValutakurs.vurderingsform == Vurderingsform.AUTOMATISK
@@ -199,7 +201,6 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeil
                             (valutakurs, index) =>
                                 index === 0 ||
                                 valutakurs.status !== EøsPeriodeStatus.OK ||
-                                !kanOppretteAutomatiskeValutakurserPåManuelleSaker ||
                                 visAlleValutaperioder
                         )
                         .map(valutakurs => (

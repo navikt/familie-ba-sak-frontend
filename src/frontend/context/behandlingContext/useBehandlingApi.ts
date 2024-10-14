@@ -15,7 +15,9 @@ import {
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../typer/behandling';
-import type { ILogg } from '../../typer/logg';
+import { type ILogg } from '../../typer/logg';
+import { obfuskerLogg } from '../../utils/obfuskerData';
+import { useApp } from '../AppContext';
 
 const useBehandlingApi = (
     oppdaterBehandling: (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak?: boolean) => void
@@ -25,6 +27,8 @@ const useBehandlingApi = (
 
     const navigate = useNavigate();
     const [logg, settLogg] = useState<Ressurs<ILogg[]>>(byggTomRessurs());
+
+    const { skalObfuskereData } = useApp();
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
         return request<IOpprettBehandlingData, IBehandling>({
@@ -66,6 +70,9 @@ const useBehandlingApi = (
                 url: `/familie-ba-sak/api/logg/${behandlingId}`,
             })
                 .then((hentetLogg: Ressurs<ILogg[]>) => {
+                    if (skalObfuskereData) {
+                        obfuskerLogg(hentetLogg);
+                    }
                     settLogg(hentetLogg);
                 })
                 .catch(() => {
