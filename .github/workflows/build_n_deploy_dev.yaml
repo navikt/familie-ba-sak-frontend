@@ -5,7 +5,7 @@ on:
 
 env:
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
-  BRANCH: ${{ github.ref_name }}
+  GITHUB_BRANCH: ${{ github.ref_name }}
 
 jobs:
   build:
@@ -60,4 +60,4 @@ jobs:
         env:
           CLUSTER: dev-gcp
           RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
-          VAR: image=${{ needs.build.outputs.image }},VERSION=${{ env.VERSION }},BRANCH=${{ env.BRANCH }}
+          VAR: image=${{ needs.build.outputs.image }},VERSION=${{ env.VERSION }}

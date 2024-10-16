@@ -26,9 +26,12 @@ export default (authClient: Client, router: Router) => {
             .end();
     });
 
-    router.get('/branch', (_: Request, res: Response) => {
+    router.get('/hent-branch', (_: Request, res: Response) => {
         res.status(200)
-            .send({ status: 'SUKSESS', data: envVar('APP_BRANCH') })
+            .send({
+                status: 'SUKSESS',
+                data: { branch: envVar('GITHUB_BRANCH'), sha: envVar('APP_VERSION') },
+            })
             .end();
     });
 

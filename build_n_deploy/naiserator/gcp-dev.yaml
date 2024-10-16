@@ -52,8 +52,8 @@ spec:
   env:
     - name: APP_VERSION
       value: {{ VERSION }}
-    - name: APP_BRANCH
-      value: {{ BRANCH }}
+    - name: GITHUB_BRANCH
+      value: { { GITHUB_BRANCH } }
     - name: ENV
       value: preprod
   redis:
