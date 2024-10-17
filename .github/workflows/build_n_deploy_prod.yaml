@@ -7,6 +7,7 @@ on:
 
 env:
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
+  GITHUB_BRANCH: ${{ github.ref_name }}
 
 jobs:
   build:
