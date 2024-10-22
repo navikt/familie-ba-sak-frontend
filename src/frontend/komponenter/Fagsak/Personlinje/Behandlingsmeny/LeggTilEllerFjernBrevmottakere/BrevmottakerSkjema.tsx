@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button, Fieldset, Select, TextField } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -21,7 +21,7 @@ import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/Fami
 const PostnummerOgStedContainer = styled.div`
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns: 8rem 24rem;
+    grid-template-columns: 8rem 1fr;
 
     &:has(.navds-text-field--error) {
         .navds-form-field .navds-form-field__error {
@@ -111,12 +111,22 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         skjema.felter.adresselinje2.validerOgSettFelt(event.target.value);
                     }}
                 />
+                {skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
+                    <Alert variant="info">
+                        Ved utenlandsk adresse skal postnummer og postadresse legges i
+                        adresselinjene
+                    </Alert>
+                )}
+
                 <PostnummerOgStedContainer>
                     <TextField
                         {...skjema.felter.postnummer.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
                         readOnly={erLesevisning}
+                        disabled={
+                            skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                        }
                         label={'Postnummer'}
                         onChange={(event): void => {
                             skjema.felter.postnummer.validerOgSettFelt(event.target.value);
@@ -125,6 +135,9 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     <TextField
                         {...skjema.felter.poststed.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         readOnly={erLesevisning}
+                        disabled={
+                            skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                        }
                         label={'Poststed'}
                         onChange={(event): void => {
                             skjema.felter.poststed.validerOgSettFelt(event.target.value);

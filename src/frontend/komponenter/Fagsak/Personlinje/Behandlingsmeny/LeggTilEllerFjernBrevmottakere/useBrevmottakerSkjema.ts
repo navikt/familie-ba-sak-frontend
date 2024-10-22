@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
+import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
@@ -46,8 +46,8 @@ export interface SkjemaBrevmottaker {
     navn: string;
     adresselinje1: string;
     adresselinje2?: string;
-    postnummer: string;
-    poststed: string;
+    postnummer?: string;
+    poststed?: string;
     landkode: string;
 }
 
@@ -140,6 +140,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 ? ok(felt)
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
         },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+        },
+        avhengigheter: { mottaker },
     });
     const poststed = useFelt<string>({
         verdi: '',
@@ -151,6 +155,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 ? ok(felt)
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
         },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+        },
+        avhengigheter: { mottaker },
     });
     const land = useFelt<string>({
         verdi: '',
@@ -185,6 +193,13 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         settNavnErPreutfylt(skalNavnVærePreutfylt);
     }, [mottaker.verdi, land.verdi]);
 
+    useEffect(() => {
+        if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE) {
+            postnummer.nullstill();
+            poststed.nullstill();
+        }
+    }, [mottaker.verdi, postnummer.verdi, poststed.verdi]);
+
     const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
         ILeggTilFjernBrevmottakerSkjemaFelter,
         IBehandling
@@ -214,8 +229,8 @@ export const felterTilSkjemaBrevmottaker = (
             adresselinje1: felter.adresselinje1.verdi,
             adresselinje2:
                 felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
-            postnummer: felter.postnummer.verdi,
-            poststed: felter.poststed.verdi,
+            postnummer: felter.postnummer.verdi !== '' ? felter.postnummer.verdi : undefined,
+            poststed: felter.poststed.verdi !== '' ? felter.poststed.verdi : undefined,
             landkode: felter.land.verdi,
         };
     } else {

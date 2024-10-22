@@ -33,8 +33,9 @@ export const useLagreEllerFjernMottakerPåBehandling = ({ behandlingId }: Props)
                             felter.adresselinje2.verdi !== ''
                                 ? felter.adresselinje2.verdi
                                 : undefined,
-                        postnummer: felter.postnummer.verdi,
-                        poststed: felter.poststed.verdi,
+                        postnummer:
+                            felter.postnummer.verdi !== '' ? felter.postnummer.verdi : undefined,
+                        poststed: felter.poststed.verdi !== '' ? felter.poststed.verdi : undefined,
                         landkode: felter.land.verdi,
                     },
                     url: `/familie-ba-sak/api/brevmottaker/${behandlingId}`,
