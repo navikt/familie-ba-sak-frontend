@@ -15,6 +15,7 @@ export enum ToggleNavn {
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     erEtterbetaling3MndGyldigÅrsak = 'familie-ba-sak.etterbetaling-3-mnd',
+    fjernPostnrOgPoststedISkjemaForUtenlandsadresse = 'familie-ba-sak.fjern-postnr-og-poststed-i-skjema-for-utenlandsadresse',
 }
 
 export const alleTogglerAv = (): IToggles => {

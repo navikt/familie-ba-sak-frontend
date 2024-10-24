@@ -3,12 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
+import { Mottaker, mottakerVisningsnavn } from './useBrevmottakerSkjema';
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 const FlexDiv = styled.div`
     display: flex;
@@ -45,6 +47,7 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     fjernMottaker,
     erLesevisning,
 }: Props<T>) => {
+    const { toggles } = useApp();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (
@@ -72,12 +75,20 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 <dt>Adresselinje 2</dt>
                 <dd>{mottaker.adresselinje2 || '-'}</dd>
                 <dt>Postnummer</dt>
-                <dd>{mottaker.postnummer}</dd>
+                <dd>{mottaker.postnummer || '-'}</dd>
                 <dt>Poststed</dt>
-                <dd>{mottaker.poststed}</dd>
+                <dd>{mottaker.poststed || '-'}</dd>
+
                 <dt>Land</dt>
                 <dd>{land.label}</dd>
             </DefinitionList>
+
+            {toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
+                    <Alert variant="info" inline>
+                        Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
+                    </Alert>
+                )}
         </StyledDiv>
     );
 };
