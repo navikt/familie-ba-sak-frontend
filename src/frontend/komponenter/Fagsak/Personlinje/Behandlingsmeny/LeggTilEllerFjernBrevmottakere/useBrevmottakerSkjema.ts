@@ -133,7 +133,9 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const postnummer = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
-            if (felt.verdi === '') {
+            if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && felt.verdi === '') {
+                return ok(felt);
+            } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
             return felt.verdi.length <= 10
@@ -148,7 +150,9 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const poststed = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
-            if (felt.verdi === '') {
+            if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && felt.verdi === '') {
+                return ok(felt);
+            } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
             return felt.verdi.length <= 50
@@ -229,8 +233,8 @@ export const felterTilSkjemaBrevmottaker = (
             adresselinje1: felter.adresselinje1.verdi,
             adresselinje2:
                 felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
-            postnummer: felter.postnummer.verdi !== '' ? felter.postnummer.verdi : undefined,
-            poststed: felter.poststed.verdi !== '' ? felter.poststed.verdi : undefined,
+            postnummer: felter.postnummer.verdi,
+            poststed: felter.poststed.verdi,
             landkode: felter.land.verdi,
         };
     } else {
