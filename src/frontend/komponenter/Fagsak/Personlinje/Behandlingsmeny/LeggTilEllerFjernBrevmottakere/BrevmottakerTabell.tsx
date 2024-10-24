@@ -82,7 +82,7 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
 
             {mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
                 <Alert variant="info" inline>
-                    Postnummer og poststed legges med i adresselinjene på utenlandske adresser
+                    Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
                 </Alert>
             )}
         </StyledDiv>

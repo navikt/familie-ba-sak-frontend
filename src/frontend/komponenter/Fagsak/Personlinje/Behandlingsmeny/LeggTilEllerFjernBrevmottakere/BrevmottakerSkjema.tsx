@@ -113,8 +113,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 />
                 {skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
                     <Alert variant="info">
-                        Ved utenlandsk adresse skal postnummer og postadresse legges i
-                        adresselinjene
+                        Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
                     </Alert>
                 )}
 
