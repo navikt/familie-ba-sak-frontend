@@ -9,6 +9,8 @@ import CountryData from '@navikt/land-verktoy';
 
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn } from './useBrevmottakerSkjema';
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 const FlexDiv = styled.div`
     display: flex;
@@ -45,6 +47,7 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     fjernMottaker,
     erLesevisning,
 }: Props<T>) => {
+    const { toggles } = useApp();
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (
@@ -80,11 +83,12 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 <dd>{land.label}</dd>
             </DefinitionList>
 
-            {mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
-                <Alert variant="info" inline>
-                    Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
-                </Alert>
-            )}
+            {toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
+                    <Alert variant="info" inline>
+                        Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
+                    </Alert>
+                )}
         </StyledDiv>
     );
 };

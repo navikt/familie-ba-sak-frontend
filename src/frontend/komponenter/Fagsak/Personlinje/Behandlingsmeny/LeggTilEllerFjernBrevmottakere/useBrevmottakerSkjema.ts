@@ -5,8 +5,10 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<
     ILeggTilFjernBrevmottakerSkjemaFelter,
@@ -63,6 +65,7 @@ const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string)
 };
 
 export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
+    const { toggles } = useApp();
     const { bruker } = useFagsakContext();
     const søker = hentDataFraRessurs(bruker);
 
@@ -133,7 +136,11 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const postnummer = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
-            if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && felt.verdi === '') {
+            if (
+                toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === ''
+            ) {
                 return ok(felt);
             } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
@@ -143,14 +150,21 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+            return (
+                toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+            );
         },
         avhengigheter: { mottaker },
     });
     const poststed = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
-            if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && felt.verdi === '') {
+            if (
+                toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === ''
+            ) {
                 return ok(felt);
             } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
@@ -160,7 +174,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+            return (
+                toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+                avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+            );
         },
         avhengigheter: { mottaker },
     });
@@ -198,7 +215,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     }, [mottaker.verdi, land.verdi]);
 
     useEffect(() => {
-        if (mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE) {
+        if (
+            toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
+            mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+        ) {
             postnummer.nullstill();
             poststed.nullstill();
         }
