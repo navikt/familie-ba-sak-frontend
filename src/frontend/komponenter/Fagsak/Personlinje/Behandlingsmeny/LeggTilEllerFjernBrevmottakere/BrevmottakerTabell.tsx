@@ -67,6 +67,8 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
             <DefinitionList>
                 <dt>Navn</dt>
                 <dd>{mottaker.navn}</dd>
+                <dt>Land</dt>
+                <dd>{land.label}</dd>
                 <dt>Adresselinje 1</dt>
                 <dd>{mottaker.adresselinje1}</dd>
                 <dt>Adresselinje 2</dt>
@@ -75,9 +77,6 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 <dd>{mottaker.postnummer || '-'}</dd>
                 <dt>Poststed</dt>
                 <dd>{mottaker.poststed || '-'}</dd>
-
-                <dt>Land</dt>
-                <dd>{land.label}</dd>
             </DefinitionList>
 
             {mottaker.landkode !== 'NO' && (
