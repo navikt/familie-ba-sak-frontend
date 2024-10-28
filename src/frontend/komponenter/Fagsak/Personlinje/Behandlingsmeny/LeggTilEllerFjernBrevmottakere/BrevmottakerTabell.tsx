@@ -8,7 +8,7 @@ import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { Mottaker, mottakerVisningsnavn } from './useBrevmottakerSkjema';
+import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
 import { useApp } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
 
@@ -84,7 +84,7 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
             </DefinitionList>
 
             {toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && (
+                mottaker.landkode !== 'NO' && (
                     <Alert variant="info" inline>
                         Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
                     </Alert>

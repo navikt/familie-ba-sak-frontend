@@ -115,6 +115,21 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
         },
     });
+    const land = useFelt<string>({
+        verdi: '',
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const norgeErUlovligValgt =
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === 'NO';
+            if (norgeErUlovligValgt) {
+                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
+            }
+            return felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        },
+        avhengigheter: { mottaker },
+    });
     const adresselinje1 = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
@@ -138,7 +153,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         valideringsfunksjon: felt => {
             if (
                 toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                land.verdi !== 'NO' &&
                 felt.verdi === ''
             ) {
                 return ok(felt);
@@ -152,17 +167,17 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                avhengigheter?.land.verdi === 'NO'
             );
         },
-        avhengigheter: { mottaker },
+        avhengigheter: { land },
     });
     const poststed = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
             if (
                 toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                land.verdi !== 'NO' &&
                 felt.verdi === ''
             ) {
                 return ok(felt);
@@ -176,25 +191,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                avhengigheter?.mottaker.verdi !== Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+                avhengigheter?.land.verdi === 'NO'
             );
         },
-        avhengigheter: { mottaker },
-    });
-    const land = useFelt<string>({
-        verdi: '',
-        valideringsfunksjon: (felt, avhengigheter) => {
-            const norgeErUlovligValgt =
-                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
-                felt.verdi === 'NO';
-            if (norgeErUlovligValgt) {
-                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
-            }
-            return felt.verdi !== ''
-                ? ok(felt)
-                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
-        },
-        avhengigheter: { mottaker },
+        avhengigheter: { land },
     });
 
     const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
@@ -217,12 +217,12 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     useEffect(() => {
         if (
             toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-            mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+            land.verdi !== 'NO'
         ) {
             postnummer.nullstill();
             poststed.nullstill();
         }
-    }, [mottaker.verdi, postnummer.verdi, poststed.verdi]);
+    }, [land.verdi, postnummer.verdi, poststed.verdi]);
 
     const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
         ILeggTilFjernBrevmottakerSkjemaFelter,
