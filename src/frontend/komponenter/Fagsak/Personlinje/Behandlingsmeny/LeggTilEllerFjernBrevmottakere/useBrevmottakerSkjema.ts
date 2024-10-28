@@ -197,12 +197,14 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         settNavnErPreutfylt(skalNavnVærePreutfylt);
     }, [mottaker.verdi, land.verdi]);
 
-    useEffect(() => {
-        if (land.verdi !== 'NO') {
-            postnummer.nullstill();
-            poststed.nullstill();
-        }
-    }, [land.verdi, postnummer.verdi, poststed.verdi]);
+    // Postnummer og poststed disables og skal sendes med som tom streng når landet ikke er Norge
+    if (land.verdi !== 'NO' && postnummer.verdi !== '') {
+        postnummer.nullstill();
+    }
+
+    if (land.verdi !== 'NO' && poststed.verdi !== '') {
+        poststed.nullstill();
+    }
 
     const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
         ILeggTilFjernBrevmottakerSkjemaFelter,
