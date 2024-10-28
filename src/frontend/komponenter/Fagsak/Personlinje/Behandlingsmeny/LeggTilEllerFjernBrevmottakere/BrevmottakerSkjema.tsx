@@ -14,8 +14,6 @@ import type {
     SkjemaBrevmottaker,
 } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { useApp } from '../../../../../context/AppContext';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
 import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
@@ -56,8 +54,6 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     lagreMottaker,
     erLesevisning,
 }: Props<T>) => {
-    const { toggles } = useApp();
-
     const { verdierFraBrevmottakerUseSkjema, navnErPreutfylt } = useBrevmottakerSkjema({
         eksisterendeMottakere: brevmottakere,
     });
@@ -145,13 +141,12 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                 skjema.felter.adresselinje2.validerOgSettFelt(event.target.value);
                             }}
                         />
-                        {toggles[ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse] &&
-                            skjema.felter.land.verdi !== 'NO' && (
-                                <Alert variant="info">
-                                    Ved utenlandsk adresse skal postnummer og poststed legges i
-                                    adresselinjene.
-                                </Alert>
-                            )}
+                        {skjema.felter.land.verdi !== 'NO' && (
+                            <Alert variant="info">
+                                Ved utenlandsk adresse skal postnummer og poststed legges i
+                                adresselinjene.
+                            </Alert>
+                        )}
 
                         <PostnummerOgStedContainer>
                             <TextField
@@ -159,11 +154,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                     skjema.visFeilmeldinger
                                 )}
                                 readOnly={erLesevisning}
-                                disabled={
-                                    toggles[
-                                        ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse
-                                    ] && skjema.felter.land.verdi !== 'NO'
-                                }
+                                disabled={skjema.felter.land.verdi !== 'NO'}
                                 label={'Postnummer'}
                                 onChange={(event): void => {
                                     skjema.felter.postnummer.validerOgSettFelt(event.target.value);
@@ -174,11 +165,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                     skjema.visFeilmeldinger
                                 )}
                                 readOnly={erLesevisning}
-                                disabled={
-                                    toggles[
-                                        ToggleNavn.fjernPostnrOgPoststedISkjemaForUtenlandsadresse
-                                    ] && skjema.felter.land.verdi !== 'NO'
-                                }
+                                disabled={skjema.felter.land.verdi !== 'NO'}
                                 label={'Poststed'}
                                 onChange={(event): void => {
                                     skjema.felter.poststed.validerOgSettFelt(event.target.value);
