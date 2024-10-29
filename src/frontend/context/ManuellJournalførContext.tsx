@@ -381,7 +381,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         dataForManuellJournalføring.data.journalpost.journalpostId
                     }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
                         innloggetSaksbehandler?.enhet ?? '9999'
-                    }&ferdigstill=true`,
+                    }`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
                         kategori: behandlingstema?.kategori ?? null,
