@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
+import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
@@ -46,8 +46,8 @@ export interface SkjemaBrevmottaker {
     navn: string;
     adresselinje1: string;
     adresselinje2?: string;
-    postnummer: string;
-    poststed: string;
+    postnummer?: string;
+    poststed?: string;
     landkode: string;
 }
 
@@ -112,6 +112,21 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
         },
     });
+    const land = useFelt<string>({
+        verdi: '',
+        valideringsfunksjon: (felt, avhengigheter) => {
+            const norgeErUlovligValgt =
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
+                felt.verdi === 'NO';
+            if (norgeErUlovligValgt) {
+                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
+            }
+            return felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        },
+        avhengigheter: { mottaker },
+    });
     const adresselinje1 = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt => {
@@ -132,40 +147,37 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     });
     const postnummer = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt => {
-            if (felt.verdi === '') {
+        valideringsfunksjon: (felt, avhengigheter) => {
+            if (avhengigheter?.land.verdi !== 'NO' && felt.verdi === '') {
+                return ok(felt);
+            } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
             return felt.verdi.length <= 10
                 ? ok(felt)
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
         },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.land.verdi === 'NO';
+        },
+        avhengigheter: { land },
     });
     const poststed = useFelt<string>({
         verdi: '',
-        valideringsfunksjon: felt => {
-            if (felt.verdi === '') {
+        valideringsfunksjon: (felt, avhengigheter) => {
+            if (avhengigheter?.land.verdi !== 'NO' && felt.verdi === '') {
+                return ok(felt);
+            } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
             return felt.verdi.length <= 50
                 ? ok(felt)
                 : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
         },
-    });
-    const land = useFelt<string>({
-        verdi: '',
-        valideringsfunksjon: (felt, avhengigheter) => {
-            const norgeErUlovligValgt =
-                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
-                felt.verdi === 'NO';
-            if (norgeErUlovligValgt) {
-                return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
-            }
-            return felt.verdi !== ''
-                ? ok(felt)
-                : feil(felt, 'Feltet er påkrevd. Velg Norge dersom brevet skal sendes innenlands.');
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.land.verdi === 'NO';
         },
-        avhengigheter: { mottaker },
+        avhengigheter: { land },
     });
 
     const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
@@ -184,6 +196,15 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         }
         settNavnErPreutfylt(skalNavnVærePreutfylt);
     }, [mottaker.verdi, land.verdi]);
+
+    // Postnummer og poststed disables og skal sendes med som tom streng når landet ikke er Norge
+    if (land.verdi !== 'NO' && postnummer.verdi !== '') {
+        postnummer.nullstill();
+    }
+
+    if (land.verdi !== 'NO' && poststed.verdi !== '') {
+        poststed.nullstill();
+    }
 
     const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
         ILeggTilFjernBrevmottakerSkjemaFelter,
