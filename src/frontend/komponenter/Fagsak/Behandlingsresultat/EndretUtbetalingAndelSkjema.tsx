@@ -11,13 +11,14 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
-import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak, årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
+import type {
+    IRestEndretUtbetalingAndel,
+    IEndretUtbetalingAndelÅrsak,
+} from '../../../typer/utbetalingAndel';
+import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
@@ -68,7 +69,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const { request } = useHttp();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const { toggles } = useApp();
 
     const {
         endretUtbetalingAndel,
@@ -221,17 +221,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         readOnly={erLesevisning}
                     >
                         <option value={undefined}>Velg årsak</option>
-                        {årsaker
-                            .filter(
-                                årsak =>
-                                    toggles[ToggleNavn.erEtterbetaling3MndGyldigÅrsak] ||
-                                    årsak !== IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND
-                            )
-                            .map(årsak => (
-                                <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                                    {årsakTekst[årsak]}
-                                </option>
-                            ))}
+                        {årsaker.map(årsak => (
+                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                {årsakTekst[årsak]}
+                            </option>
+                        ))}
                     </Select>
                 </Feltmargin>
 
