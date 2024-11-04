@@ -80,10 +80,10 @@
   },
   "devDependencies": {
     "@axe-core/react": "^4.10.0",
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.0",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
-    "@babel/preset-typescript": "^7.25.7",
+    "@babel/preset-typescript": "^7.26.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@testing-library/react": "^15.0.2",
     "@types/amplitude-js": "^8.16.5",
