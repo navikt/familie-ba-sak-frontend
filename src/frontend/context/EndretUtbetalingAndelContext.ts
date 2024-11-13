@@ -27,7 +27,7 @@ interface IProps {
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(
     ({ endretUtbetalingAndel }: IProps) => {
         const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
-            verdi: endretUtbetalingAndel.årsak,
+            verdi: undefined,
             valideringsfunksjon: felt =>
                 felt.verdi && Object.values(IEndretUtbetalingAndelÅrsak).includes(felt.verdi)
                     ? ok(felt)
@@ -35,14 +35,14 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         });
 
         const utbetalingFelt = useFelt<Utbetaling | undefined>({
-            verdi: prosentTilUtbetaling(endretUtbetalingAndel.prosent),
+            verdi: undefined,
             valideringsfunksjon: felt =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge utbetaling'),
             avhengigheter: årsakFelt,
             nullstillVedAvhengighetEndring: true,
         });
 
-        const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
+        const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
             {
                 person: string | undefined;
                 fom: IsoDatoString | undefined;
@@ -57,19 +57,19 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         >({
             felter: {
                 person: useFelt<string | undefined>({
-                    verdi: endretUtbetalingAndel.personIdent,
+                    verdi: undefined,
                     valideringsfunksjon: felt =>
                         felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
                 }),
                 fom: useFelt<IsoDatoString | undefined>({
-                    verdi: endretUtbetalingAndel.fom,
+                    verdi: undefined,
                     valideringsfunksjon: felt =>
                         erIsoStringGyldig(felt.verdi)
                             ? ok(felt)
                             : feil(felt, 'Du må velge f.o.m-dato'),
                 }),
                 tom: useFelt<IsoDatoString | undefined>({
-                    verdi: endretUtbetalingAndel.tom,
+                    verdi: undefined,
                 }),
                 utbetaling: utbetalingFelt,
                 årsak: årsakFelt,
@@ -88,7 +88,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     valideringsfunksjon: validerGyldigDato,
                 }),
                 begrunnelse: useFelt<string | undefined>({
-                    verdi: endretUtbetalingAndel.begrunnelse,
+                    verdi: undefined,
                     valideringsfunksjon: felt =>
                         felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
                 }),
@@ -96,7 +96,17 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             skjemanavn: 'Endre utbetalingsperiode',
         });
 
-        const settDatofelterTilDefaultverdier = () => {
+        const settFelterTilDefault = () => {
+            skjema.felter.person.validerOgSettFelt(endretUtbetalingAndel.personIdent);
+            skjema.felter.fom.validerOgSettFelt(endretUtbetalingAndel.fom);
+            skjema.felter.tom.validerOgSettFelt(endretUtbetalingAndel.tom);
+            skjema.felter.utbetaling.validerOgSettFelt(
+                prosentTilUtbetaling(endretUtbetalingAndel.prosent)
+            );
+            skjema.felter.årsak.validerOgSettFelt(endretUtbetalingAndel.årsak);
+
+            skjema.felter.begrunnelse.validerOgSettFelt(endretUtbetalingAndel.begrunnelse);
+
             skjema.felter.søknadstidspunkt.validerOgSettFelt(
                 endretUtbetalingAndel.søknadstidspunkt
                     ? new Date(endretUtbetalingAndel.søknadstidspunkt)
@@ -114,13 +124,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
 
         if (endretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
             settForrigeEndretUtbetalingAndel(endretUtbetalingAndel);
-            settDatofelterTilDefaultverdier();
+            settFelterTilDefault();
         }
-
-        const tilbakestillFelterTilDefault = () => {
-            nullstillSkjema();
-            settDatofelterTilDefaultverdier();
-        };
 
         const hentSkjemaData = () => {
             const {
@@ -154,7 +159,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             kanSendeSkjema,
             onSubmit,
             hentSkjemaData,
-            tilbakestillFelterTilDefault,
+            settFelterTilDefault,
         };
     }
 );
