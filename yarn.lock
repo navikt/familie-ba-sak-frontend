@@ -1351,20 +1351,20 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.2.tgz#d8bae93ac8b815b2bd7a98078cf91e2724ef11e5"
   integrity sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==
 
-"@grafana/faro-core@^1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.10.1.tgz#83d2a8f014b32064ca44001ca0958bbb9c44ab13"
-  integrity sha512-PUnr0MinoSPzlvKMlYlDC9s7SR5JXZZmxTIwd9tosAu2/Xa3aAH3cSpl2HerbK16qQZktkJWtLUCfFiJE9p+Yg==
+"@grafana/faro-core@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.11.0.tgz#43c21a08706bcff939c75c63780cdfcf1a193d11"
+  integrity sha512-IxkH5Ss6mnspF9vzvJ0fVMNQ5uaLjGQ1Sxu7VFaPfDwzYG5Hlre9hPnvtZfQLzOSWZXEWrrV3TIj9CpbsG4z8g==
   dependencies:
     "@opentelemetry/api" "^1.9.0"
     "@opentelemetry/otlp-transformer" "^0.53.0"
 
-"@grafana/faro-web-sdk@^1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.10.1.tgz#85eb5c2e063e242e01759da4bdef89989206261a"
-  integrity sha512-I6htdqzvX0YvQ0zxfKlnA3TIOCue513OiZQFFAwQ+7UanRrkwjEUiJipnPuJSPuwXv5GcvyjZoF4aw19cHkIkw==
+"@grafana/faro-web-sdk@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.11.0.tgz#246e667ce53d50ec61a721f1df84e3b11432fdf7"
+  integrity sha512-L468hk2YF4MS9lJbUjMXKZvTmFzamXPFZZWWoN97ufXw1hKObylqaH3Mb+QsMIBYsEs2g6DyHUWL8j0hDXpyqw==
   dependencies:
-    "@grafana/faro-core" "^1.10.1"
+    "@grafana/faro-core" "^1.11.0"
     ua-parser-js "^1.0.32"
     web-vitals "^4.0.1"
 
