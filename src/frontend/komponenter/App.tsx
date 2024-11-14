@@ -5,11 +5,11 @@ import '@navikt/ds-css';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import Container from './Container';
-import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
 import { useAmplitude } from '../utils/amplitude';
 import { initGrafanaFaro } from '../utils/grafanaFaro';
+import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 
 const App: React.FC = () => {
     const { loggSkjermstørrelse } = useAmplitude();
