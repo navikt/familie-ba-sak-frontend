@@ -18,7 +18,7 @@ const getTelemetryCollectorURL = (): TelemetryCollectorURL => {
 };
 
 export function initGrafanaFaro() {
-    process.env.NODE_ENV !== 'local' &&
+    if (process.env.NODE_ENV !== 'local') {
         initializeFaro({
             isolate: true,
             url: getTelemetryCollectorURL(),
@@ -31,4 +31,5 @@ export function initGrafanaFaro() {
                 }),
             ],
         });
+    }
 }

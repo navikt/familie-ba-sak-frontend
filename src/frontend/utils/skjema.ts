@@ -9,7 +9,7 @@ export const onOptionSelected = (
 ) => {
     if (isSelected) {
         const nyttValg = muligeValg.find(valg => valg.value === optionValue);
-        nyttValg && skjemafelt.validerOgSettFelt([...skjemafelt.verdi, nyttValg]);
+        if (nyttValg) skjemafelt.validerOgSettFelt([...skjemafelt.verdi, nyttValg]);
     } else {
         skjemafelt.validerOgSettFelt(skjemafelt.verdi.filter(valg => valg.value !== optionValue));
     }

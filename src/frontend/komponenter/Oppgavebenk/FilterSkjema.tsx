@@ -96,7 +96,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     <Button
                         variant="primary"
                         onClick={() => {
-                            validerSkjema() && hentOppgaver();
+                            if (validerSkjema()) hentOppgaver();
                         }}
                         loading={oppgaver.status === RessursStatus.HENTER}
                         disabled={oppgaver.status === RessursStatus.HENTER}

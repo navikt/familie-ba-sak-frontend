@@ -120,11 +120,12 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     const håndterEndring = (optionValue: string, isSelected: boolean) => {
         if (isSelected) {
             const nyttValg = muligeComboboxValg.find(valg => valg.value === optionValue);
-            nyttValg &&
+            if (nyttValg) {
                 validerOgSettRedigerbartVilkår({
                     ...redigerbartVilkår,
                     verdi: mapOgLeggTilUtdypendeVilkårsvurdering(nyttValg, redigerbartVilkår.verdi),
                 });
+            }
         } else {
             validerOgSettRedigerbartVilkår({
                 ...redigerbartVilkår,
