@@ -210,7 +210,7 @@ const LeggTilBarn: React.FC<IProps> = ({
                                                 erFolkeregistrert: true,
                                             },
                                         ]);
-                                        onSuccess && onSuccess(hentetPerson.data);
+                                        if (onSuccess) onSuccess(hentetPerson.data);
                                         nullstillRegistrerBarnSkjema();
 
                                         settVisModal(false);

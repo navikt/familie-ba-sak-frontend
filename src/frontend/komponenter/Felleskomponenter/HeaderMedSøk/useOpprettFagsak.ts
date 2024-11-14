@@ -33,12 +33,12 @@ const useOpprettFagsak = () => {
             .then((response: Ressurs<IMinimalFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
-                    onSuccess && onSuccess();
+                    if (onSuccess) onSuccess();
                     const aktivBehandling: VisningBehandling | undefined =
                         hentAktivBehandlingPåMinimalFagsak(response.data);
-                    aktivBehandling
-                        ? navigate(`/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`)
-                        : navigate(`/fagsak/${response.data.id}/saksoversikt`);
+                    if (aktivBehandling)
+                        navigate(`/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`);
+                    else navigate(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||
