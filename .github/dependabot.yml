@@ -17,6 +17,12 @@ updates:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
   groups:
+    minor-and-patch:
+      patterns:
+        - '*'
+      update-types:
+        - 'minor'
+        - 'patch'
     typescript-eslint:
       patterns:
         - "@typescript-eslint/eslint-plugin"
