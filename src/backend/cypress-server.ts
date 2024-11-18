@@ -1,7 +1,6 @@
 import path from 'path';
 
 import type { Express, Request, Response } from 'express';
-// eslint-disable-next-line
 import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
 
