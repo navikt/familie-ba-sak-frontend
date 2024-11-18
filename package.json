@@ -31,7 +31,6 @@
     ]
   },
   "dependencies": {
-    "@eslint/js": "^9.15.0",
     "@grafana/faro-web-sdk": "^1.12.0",
     "@navikt/aksel-icons": "7.5.1",
     "@navikt/ds-css": "7.5.1",
@@ -87,6 +86,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.26.0",
+    "@eslint/js": "^9.15.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@testing-library/react": "^15.0.2",
     "@types/amplitude-js": "^8.16.5",
