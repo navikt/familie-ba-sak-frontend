@@ -21,7 +21,7 @@
     "set-node-options": "NODE_OPTIONS='--import=./backend/backend/register.js --es-module-specifier-resolution=node'",
     "start:cypress": "tsc -p tsconfig.backend.json && yarn set-node-options NODE_ENV=production node backend/backend/cypress-server.js",
     "run:cypress": "cypress run",
-    "cypress": "npm-run-all -p start:cypress -r run:cypress",
+    "cypress": "yarn start:cypress & yarn run:cypress",
     "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck"
   },
   "lint-staged": {
