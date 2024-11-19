@@ -5,6 +5,6 @@
 *.html
 frontend_development/*
 frontend_production/*
-.eslintrc
+.eslint.config.mjs
 .prettierrc
 backend/*

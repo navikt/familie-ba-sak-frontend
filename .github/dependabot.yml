@@ -23,10 +23,6 @@ updates:
       update-types:
         - 'minor'
         - 'patch'
-    typescript-eslint:
-      patterns:
-        - "@typescript-eslint/eslint-plugin"
-        - "@typescript-eslint/parser"
     react:
       patterns:
         - "react"
