@@ -104,8 +104,8 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     utenMargin
                     eksluderLand={
                         skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
-                            ? ['NO']
-                            : undefined
+                            ? ['NO', 'XU']
+                            : ['XU']
                     }
                     feil={
                         skjema.visFeilmeldinger &&
