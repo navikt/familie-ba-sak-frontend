@@ -35,6 +35,7 @@ const baseConfig = {
         }),
         new ESLintWebpackPlugin({
             eslintPath: require.resolve('eslint'),
+            extensions: ['ts', 'tsx'],
             configType: 'flat',
         }),
     ],
