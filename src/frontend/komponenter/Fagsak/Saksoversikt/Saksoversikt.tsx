@@ -26,6 +26,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
+import { TestingContainer } from '../../Felleskomponenter/Testing/TestingContainer';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 
@@ -197,6 +198,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         </>
                     )}
                     <Behandlinger minimalFagsak={minimalFagsak} />
+                    <TestingContainer />
                 </SaksoversiktWrapper>{' '}
             </Tabs.Panel>
             <Tabs.Panel value={infotrygdTab.key}>

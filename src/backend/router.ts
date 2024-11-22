@@ -31,6 +31,10 @@ export default (authClient: Client, router: Router) => {
         res.sendFile('error.html', { root: path.join(`assets/`) });
     });
 
+    router.get('/random-number', (_: Request, res: Response) => {
+        res.status(200).send({ number: Math.random() });
+    });
+
     // Feilhåndtering
     router.post('/logg-feil', (req: Request, res: Response) => {
         logRequest(req, req.body.melding, LOG_LEVEL.ERROR);

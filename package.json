@@ -54,6 +54,7 @@
     "@navikt/landvelger": "3.1.5",
     "@sentry/browser": "^8.38.0",
     "@sentry/webpack-plugin": "^2.22.3",
+    "@tanstack/react-query": "^5.61.0",
     "amplitude-js": "^8.21.9",
     "axios": "^1.7.4",
     "babel-loader": "^9.2.1",
@@ -74,6 +75,7 @@
     "react-router-hash-link": "^2.4.3",
     "rxjs": "^7.8.1",
     "styled-components": "^6.1.1",
+    "swr": "^2.2.5",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "uuid": "^11.0.3"
