@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
@@ -15,7 +15,6 @@ import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/He
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import { useAmplitude } from '../../utils/amplitude';
 
 const HovedInnhold = styled.div`
     height: calc(100vh - 3rem);
@@ -24,11 +23,6 @@ const HovedInnhold = styled.div`
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
-
-    const location = useLocation();
-    const { loggSidevisning } = useAmplitude();
-    const erPåSaksoversikt = location.pathname.includes('saksoversikt');
-    const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
 
     const { bruker: brukerRessurs, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 
@@ -44,16 +38,6 @@ const FagsakContainer: React.FunctionComponent = () => {
             }
         }
     }, [fagsakId]);
-
-    useEffect(() => {
-        if (erPåSaksoversikt) {
-            loggSidevisning('saksoversikt');
-        }
-
-        if (erPåDokumentutsending) {
-            loggSidevisning('dokumentutsending');
-        }
-    }, []);
 
     switch (minimalFagsak.status) {
         case RessursStatus.SUKSESS:
