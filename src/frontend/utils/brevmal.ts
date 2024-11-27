@@ -90,6 +90,8 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
         case Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS:
         case Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER:
             return åpenBehandling.årsak === BehandlingÅrsak.ÅRLIG_KONTROLL;
+        case Brevmal.UTBETALING_ETTER_KA_VEDTAK:
+            return åpenBehandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK;
     }
 };
 

@@ -90,6 +90,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
                     Brevmal.SVARTIDSBREV_INSTITUSJON,
                     Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
+                    Brevmal.UTBETALING_ETTER_KA_VEDTAK,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
@@ -123,6 +124,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
+                    Brevmal.UTBETALING_ETTER_KA_VEDTAK,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
