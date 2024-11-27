@@ -53,7 +53,8 @@ const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
     kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
     kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean,
-    kanManueltKorrigereMedVedtaksbrev: boolean
+    kanManueltKorrigereMedVedtaksbrev: boolean,
+    kanOppretteRevurderingMedÅrsakIverksetteKAVedtak: boolean
 ): BehandlingÅrsak[] =>
     erMigreringFraInfotrygd
         ? Object.values(BehandlingÅrsak).filter(
@@ -77,7 +78,9 @@ const hentTilgjengeligeBehandlingsårsaker = (
                       kanManueltKorrigereMedVedtaksbrev) &&
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
-                  årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING
+                  årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
+                  (årsak !== BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
+                      kanOppretteRevurderingMedÅrsakIverksetteKAVedtak)
           );
 
 interface IProps {
@@ -238,7 +241,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
                         kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev]
+                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev],
+                        toggles[ToggleNavn.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
                     ).map(årsak => {
                         return (
                             <option
