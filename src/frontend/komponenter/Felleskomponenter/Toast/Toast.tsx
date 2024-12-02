@@ -18,15 +18,6 @@ const Container = styled.div`
         box-shadow: 0 0 0 3px @fokusFarge;
         outline: none;
     }
-
-    span {
-        color: black;
-        font-family: 'Source Sans Pro', Arial, sans-serif;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 0.2rem;
-    }
 `;
 
 const Toast: React.FC<{ toastId: string; toast: IToast }> = ({ toastId, toast }) => {

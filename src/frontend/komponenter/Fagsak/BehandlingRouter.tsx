@@ -19,7 +19,6 @@ import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IPersonInfo } from '../../typer/person';
-import { useAmplitude } from '../../utils/amplitude';
 import { hentSideHref } from '../../utils/miljø';
 import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
 import { sider } from '../Felleskomponenter/Venstremeny/sider';
@@ -29,14 +28,12 @@ interface Props {
 }
 
 const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
-    const { loggSidevisning } = useAmplitude();
     const location = useLocation();
     const { behandling, leggTilBesøktSide } = useBehandling();
 
     const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
         if (sidevisning) {
-            loggSidevisning(sidevisning);
             leggTilBesøktSide(
                 Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId
             );
