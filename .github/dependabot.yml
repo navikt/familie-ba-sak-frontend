@@ -17,11 +17,10 @@ updates:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
   groups:
-    minor-and-patch:
+    patch:
       patterns:
         - '*'
       update-types:
-        - 'minor'
         - 'patch'
     react:
       patterns:
