@@ -25,6 +25,7 @@ export enum Brevmal {
     VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER = 'VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER',
     FORLENGET_SVARTIDSBREV = 'FORLENGET_SVARTIDSBREV',
     FORLENGET_SVARTIDSBREV_INSTITUSJON = 'FORLENGET_SVARTIDSBREV_INSTITUSJON',
+    UTBETALING_ETTER_KA_VEDTAK = 'UTBETALING_ETTER_KA_VEDTAK',
 }
 
 export enum Informasjonsbrev {
@@ -64,6 +65,7 @@ export const brevmaler: Record<Brevmal, string> = {
         'Varsel årlig revurdering EØS med innhenting',
     VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT:
         'Varsel annen forelder med selvstendig rett søkt',
+    UTBETALING_ETTER_KA_VEDTAK: 'Utbetaling etter KA-vedtak',
 };
 
 export const leggTilValuePåOption = (
