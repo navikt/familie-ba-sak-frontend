@@ -2430,10 +2430,10 @@
   resolved "https://registry.yarnpkg.com/@types/deep-equal/-/deep-equal-1.0.4.tgz#c0a854be62d6b9fae665137a6639aab53389a147"
   integrity sha512-tqdiS4otQP4KmY0PR3u6KbZ5EWvhNdUoS/jc93UuK23C220lOZ/9TvjfxdPcKvqwwDVtmtSCrnr0p/2dirAxkA==
 
-"@types/eslint-plugin-jsx-a11y@^6.9.0":
-  version "6.9.0"
-  resolved "https://registry.yarnpkg.com/@types/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.9.0.tgz#477a6125401c1524cdbe48d13fe4120f80e3030b"
-  integrity sha512-5nw0sPyYGCsFibwjOXftxends8Nrh/JLgDtBWj6aJVcN14kHwy1yIy0o1MGLKfCcR27pvUFGgYG+hX2HSX16uA==
+"@types/eslint-plugin-jsx-a11y@^6.10.0":
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/@types/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.10.0.tgz#519d411f854e3c639fd0b90d74f978554b93d38d"
+  integrity sha512-TGKmk2gO6DrvTVADNOGQMqn3SzqcFcJILFnXNllQA34us9uClS3/AsL/cERPz6jS9ePI3bx+1q8/d2GZsxPVYw==
   dependencies:
     "@types/eslint" "*"
 
