@@ -20,7 +20,13 @@ interface IFilterknappProps {
     onClick: () => void;
 }
 
-const StyledButton = styled(FamilieBaseKnapp)<IFilterknappProps>`
+interface IStyledButtonProps {
+    $aktiv?: boolean;
+    disabled?: boolean;
+    onClick: () => void;
+}
+
+const StyledButton = styled(FamilieBaseKnapp)<IStyledButtonProps>`
     min-height: 50px;
     width: 7.5rem;
     display: flex;
@@ -29,23 +35,23 @@ const StyledButton = styled(FamilieBaseKnapp)<IFilterknappProps>`
     align-items: center;
     transition: box-shadow 0.1s ease-in-out;
     cursor: ${({ disabled }) => (disabled ? 'initial' : 'pointer')};
-    box-shadow: ${({ aktiv }) => (aktiv ? `inset 0 -5px 0 -1px ${ABorderFocus}` : '')};
+    box-shadow: ${({ $aktiv }) => ($aktiv ? `inset 0 -5px 0 -1px ${ABorderFocus}` : '')};
 
     > * {
         transition: fill 0.1s ease-in-out;
-        fill: ${({ aktiv, disabled }) => {
+        fill: ${({ $aktiv, disabled }) => {
             if (disabled) {
                 return ATextSubtle;
-            } else if (aktiv) {
+            } else if ($aktiv) {
                 return ATextAction;
             } else {
                 return ATextDefault;
             }
         }};
-        color: ${({ aktiv, disabled }) => {
+        color: ${({ $aktiv, disabled }) => {
             if (disabled) {
                 return ATextSubtle;
-            } else if (aktiv) {
+            } else if ($aktiv) {
                 return ATextAction;
             } else {
                 return '';
@@ -65,7 +71,7 @@ const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknap
             id={`filter_${randomUUID()}`}
             onClick={onClick}
             disabled={disabled}
-            aktiv={aktiv}
+            $aktiv={aktiv}
         >
             {children}
         </StyledButton>
