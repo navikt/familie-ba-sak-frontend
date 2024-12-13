@@ -18,19 +18,19 @@ interface IEtikettProp {
     etikett: Etikett;
 }
 
-const EtikettKnapp = styled(FamilieBaseKnapp)<{ disabled: boolean; valgt: boolean }>`
-    padding: 3px 3px 3px ${({ valgt }) => (valgt ? '5px' : '3px')};
+const EtikettKnapp = styled(FamilieBaseKnapp)<{ disabled: boolean; $valgt: boolean }>`
+    padding: 3px 3px 3px ${({ $valgt }) => ($valgt ? '5px' : '3px')};
     width: 90%;
     text-align: left;
     cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-    border-left: ${({ valgt }) => (valgt ? `1px solid ${ABorderSubtle}` : 'none')};
+    border-left: ${({ $valgt }) => ($valgt ? `1px solid ${ABorderSubtle}` : 'none')};
 
     > span {
-        text-decoration: ${({ disabled, valgt }) => (disabled || valgt ? 'none' : 'underline')};
-        font-weight: ${({ valgt }) => (valgt ? 'bold' : 'normal')};
-        color: ${({ disabled, valgt }) => {
+        text-decoration: ${({ disabled, $valgt }) => (disabled || $valgt ? 'none' : 'underline')};
+        font-weight: ${({ $valgt }) => ($valgt ? 'bold' : 'normal')};
+        color: ${({ disabled, $valgt }) => {
             if (disabled) return ATextDefault;
-            else if (valgt) return ATextActionSelected;
+            else if ($valgt) return ATextActionSelected;
             else return ATextAction;
         }};
     }
@@ -78,7 +78,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
         <EtikettKnapp
             aria-label={etikett.label}
             disabled={aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR}
-            valgt={
+            $valgt={
                 !!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString()
             }
             onClick={onEtikettClick}
