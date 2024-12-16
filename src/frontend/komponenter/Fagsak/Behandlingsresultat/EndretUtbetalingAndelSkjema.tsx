@@ -245,7 +245,12 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             )
                             .map(utbetaling => {
                                 return (
-                                    <Radio name={'utbetaling'} value={utbetaling} id={utbetaling}>
+                                    <Radio
+                                        name={'utbetaling'}
+                                        value={utbetaling}
+                                        id={utbetaling}
+                                        key={utbetaling}
+                                    >
                                         {utbetalingTilLabel(utbetaling)}
                                     </Radio>
                                 );
