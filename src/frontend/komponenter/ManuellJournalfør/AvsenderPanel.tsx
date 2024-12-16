@@ -82,7 +82,11 @@ export const AvsenderPanel: React.FC = () => {
                         value={'Avsender er bruker'}
                         checked={brukerErAvsender}
                         onChange={() => {
-                            brukerErAvsender ? tilbakestillAvsender() : settAvsenderLikBruker();
+                            if (brukerErAvsender) {
+                                tilbakestillAvsender();
+                            } else {
+                                settAvsenderLikBruker();
+                            }
                             settBrukerErAvsender(!brukerErAvsender);
                         }}
                     >

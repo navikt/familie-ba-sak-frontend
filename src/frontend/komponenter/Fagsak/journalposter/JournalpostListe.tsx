@@ -28,6 +28,7 @@ import {
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
 import useDokument from '../../../hooks/useDokument';
+import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -128,10 +129,19 @@ const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     }
 };
 
-const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
+const settRiktigDatoMottatForJournalpost = (journalpost: IJournalpost): IJournalpost => {
+    return {
+        ...journalpost,
+        datoMottatt:
+            journalpost.datoMottatt ||
+            hentDatoRegistrertSendt(journalpost.relevanteDatoer, journalpost.journalposttype),
+    };
+};
+
+const JournalpostListe = ({ bruker }: IProps) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] =
-        useState<Ressurs<IJournalpost[]>>(byggTomRessurs());
+        useState<Ressurs<ITilgangsstyrtJournalpost[]>>(byggTomRessurs());
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
@@ -144,7 +154,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
         const ident = bruker.personIdent;
 
-        request<{ ident: string }, IJournalpost[]>({
+        request<{ ident: string }, ITilgangsstyrtJournalpost[]>({
             method: 'POST',
             data: { ident },
             url: `/familie-ba-sak/api/journalpost/for-bruker`,
@@ -182,12 +192,15 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(journalpost => ({
-            ...journalpost,
-            datoMottatt:
-                journalpost.datoMottatt ||
-                hentDatoRegistrertSendt(journalpost.relevanteDatoer, journalpost.journalposttype),
-        }));
+        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(
+            tilgangsstyrtJournalpost => {
+                const { harTilgang, journalpost } = tilgangsstyrtJournalpost;
+                return {
+                    harTilgang,
+                    journalpost: settRiktigDatoMottatForJournalpost(journalpost),
+                };
+            }
+        );
         const sorterteJournalPoster = hentSorterteJournalposter(
             journalposterMedOverstyrtDato,
             sortering
@@ -219,33 +232,39 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {sorterteJournalPoster.map(journalpost => (
-                            <Table.Row key={journalpost.journalpostId}>
+                        {sorterteJournalPoster.map(tilgangsstyrtJournalpost => (
+                            <Table.Row key={tilgangsstyrtJournalpost.journalpost.journalpostId}>
                                 <StyledDataCell>
                                     <InnUtWrapper>
                                         <IkonWrapper>
                                             {hentIkonForJournalpostType(
-                                                journalpost.journalposttype
+                                                tilgangsstyrtJournalpost.journalpost.journalposttype
                                             )}{' '}
                                         </IkonWrapper>
-                                        {journalpost.journalposttype}
+                                        {tilgangsstyrtJournalpost.journalpost.journalposttype}
                                     </InnUtWrapper>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {formaterDatoRegistrertSendtMottatt(journalpost.datoMottatt)}
+                                    {formaterDatoRegistrertSendtMottatt(
+                                        tilgangsstyrtJournalpost.journalpost.datoMottatt
+                                    )}
                                 </StyledDataCell>
 
                                 <StyledDataCell>
-                                    {journalpost.dokumenter?.length ? (
+                                    {tilgangsstyrtJournalpost.journalpost.dokumenter?.length ? (
                                         <Vedleggsliste>
-                                            {journalpost.dokumenter?.map(dokument => (
-                                                <JournalpostDokument
-                                                    dokument={dokument}
-                                                    journalpostId={journalpost.journalpostId}
-                                                    key={dokument.dokumentInfoId}
-                                                    hentForhåndsvisning={hentForhåndsvisning}
-                                                />
-                                            ))}
+                                            {tilgangsstyrtJournalpost.journalpost.dokumenter?.map(
+                                                dokument => (
+                                                    <JournalpostDokument
+                                                        dokument={dokument}
+                                                        key={dokument.dokumentInfoId}
+                                                        hentForhåndsvisning={hentForhåndsvisning}
+                                                        tilgangsstyrtJournalpost={
+                                                            tilgangsstyrtJournalpost
+                                                        }
+                                                    />
+                                                )
+                                            )}
                                         </Vedleggsliste>
                                     ) : (
                                         <BodyShort>Ingen dokumenter</BodyShort>
@@ -256,49 +275,72 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     <EllipsisBodyShort
                                         size="small"
                                         title={formaterFagsak(
-                                            journalpost.sak?.fagsaksystem,
-                                            journalpost.sak?.fagsakId
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsaksystem,
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsakId
                                         )}
                                     >
                                         {formaterFagsak(
-                                            journalpost.sak?.fagsaksystem,
-                                            journalpost.sak?.fagsakId
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsaksystem,
+                                            tilgangsstyrtJournalpost.journalpost.sak?.fagsakId
                                         )}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    {journalpost.utsendingsinfo ? (
+                                    {tilgangsstyrtJournalpost.journalpost.utsendingsinfo ? (
                                         <StyledButton
                                             icon={<StyledMagnifyingGlassIcon />}
                                             iconPosition={'right'}
                                             variant={'tertiary'}
                                             size={'xsmall'}
                                             onClick={() =>
-                                                settUtsendingsinfo(journalpost.utsendingsinfo)
+                                                settUtsendingsinfo(
+                                                    tilgangsstyrtJournalpost.journalpost
+                                                        .utsendingsinfo
+                                                )
                                             }
                                         >
-                                            {journalpost.avsenderMottaker?.navn}
+                                            {
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
+                                            }
                                         </StyledButton>
                                     ) : (
                                         <EllipsisBodyShort
                                             size="small"
-                                            title={journalpost.avsenderMottaker?.navn}
+                                            title={
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
+                                            }
                                         >
-                                            {journalpost.avsenderMottaker?.navn}
+                                            {
+                                                tilgangsstyrtJournalpost.journalpost
+                                                    .avsenderMottaker?.navn
+                                            }
                                         </EllipsisBodyShort>
                                     )}
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    <EllipsisBodyShort size="small" title={journalpost.tittel}>
-                                        {journalpost.tittel}
+                                    <EllipsisBodyShort
+                                        size="small"
+                                        title={tilgangsstyrtJournalpost.journalpost.tittel}
+                                    >
+                                        {tilgangsstyrtJournalpost.journalpost.tittel}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     <EllipsisBodyShort
                                         size="small"
-                                        title={journalpoststatus[journalpost.journalstatus]}
+                                        title={
+                                            journalpoststatus[
+                                                tilgangsstyrtJournalpost.journalpost.journalstatus
+                                            ]
+                                        }
                                     >
-                                        {journalpoststatus[journalpost.journalstatus]}
+                                        {
+                                            journalpoststatus[
+                                                tilgangsstyrtJournalpost.journalpost.journalstatus
+                                            ]
+                                        }
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                             </Table.Row>

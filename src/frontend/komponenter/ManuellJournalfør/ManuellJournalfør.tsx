@@ -58,9 +58,17 @@ const ManuellJournalførContent: React.FC = () => {
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-        case RessursStatus.IKKE_TILGANG:
             return (
                 <Alert variant="error" children={dataForManuellJournalføring.frontendFeilmelding} />
+            );
+        case RessursStatus.IKKE_TILGANG:
+            return (
+                <Alert
+                    variant="error"
+                    children={
+                        'Kan ikke vise journalføringsoppgave. Personer relatert til journalpost har adressebeskyttelse. Krever ekstra tilganger.'
+                    }
+                />
             );
         default:
             return <div />;

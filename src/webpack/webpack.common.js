@@ -32,11 +32,12 @@ const baseConfig = {
             typescript: {
                 configFile: path.join(process.cwd(), 'src/frontend/tsconfig.json'),
             },
-            eslint: {
-                files: './src/**/*.{ts,tsx,js,jsx}',
-            },
         }),
-        new ESLintWebpackPlugin({ eslintPath: require.resolve('eslint') }),
+        new ESLintWebpackPlugin({
+            eslintPath: require.resolve('eslint'),
+            extensions: ['ts', 'tsx'],
+            configType: 'flat',
+        }),
     ],
     devtool: 'inline-source-map',
     module: {

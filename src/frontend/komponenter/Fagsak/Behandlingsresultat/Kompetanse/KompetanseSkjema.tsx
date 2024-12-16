@@ -16,13 +16,6 @@ const KompetanseContainer = styled.div`
 
 const StyledTable = styled(Table)`
     margin-top: 2rem;
-
-    & fieldset.skjemagruppe {
-        margin-bottom: 1.5rem;
-    }
-    & div.skjemaelement:not(.unset-margin-bottom) {
-        margin-bottom: 1.5rem;
-    }
 `;
 
 const StyledHeaderCell = styled(Table.HeaderCell)`

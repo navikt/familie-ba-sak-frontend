@@ -1,15 +1,7 @@
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 
-import styled from 'styled-components';
-
-import type {
-    ActionMeta,
-    CSSObjectWithLabel,
-    MultiValue,
-    SingleValue,
-} from '@navikt/familie-form-elements';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { OptionType } from '../../../../typer/common';
@@ -68,10 +60,6 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
         'Barn bor alene i annet EØS-land',
 };
 
-const StyledFamilieReactSelect = styled(FamilieReactSelect)`
-    margin-top: 0.75rem;
-`;
-
 const mapUtdypendeVilkårsvurderingTilOption = (
     utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering
 ): OptionType => ({
@@ -81,19 +69,10 @@ const mapUtdypendeVilkårsvurderingTilOption = (
 const mapOptionTilUtdypendeVilkårsvurdering = (option: OptionType): UtdypendeVilkårsvurdering =>
     option.value as UtdypendeVilkårsvurdering;
 
-const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IVilkårResultat => ({
-    ...vilkårResultat,
-    utdypendeVilkårsvurderinger: {
-        ...vilkårResultat.utdypendeVilkårsvurderinger,
-        verdi: [],
-    },
-});
-
 function mapOgLeggTilUtdypendeVilkårsvurdering(
-    action: ActionMeta<OptionType>,
+    option: OptionType,
     vilkår: IVilkårResultat
 ): IVilkårResultat {
-    const { option } = action;
     return option
         ? {
               ...vilkår,
@@ -126,6 +105,10 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         utdypendeVilkårsvurderingAvhengigheter
     );
 
+    const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(
+        mapUtdypendeVilkårsvurderingTilOption
+    );
+
     useEffect(() => {
         fjernUmuligeAlternativerFraRedigerbartVilkår(
             validerOgSettRedigerbartVilkår,
@@ -134,39 +117,28 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         );
     }, [redigerbartVilkår, utdypendeVilkårsvurderingAvhengigheter]);
 
-    const håndterEndring = (action: ActionMeta<OptionType>) => {
-        switch (action.action) {
-            case 'select-option':
+    const håndterEndring = (optionValue: string, isSelected: boolean) => {
+        if (isSelected) {
+            const nyttValg = muligeComboboxValg.find(valg => valg.value === optionValue);
+            if (nyttValg) {
                 validerOgSettRedigerbartVilkår({
                     ...redigerbartVilkår,
-                    verdi: mapOgLeggTilUtdypendeVilkårsvurdering(action, redigerbartVilkår.verdi),
+                    verdi: mapOgLeggTilUtdypendeVilkårsvurdering(nyttValg, redigerbartVilkår.verdi),
                 });
-                break;
-            case 'deselect-option':
-            case 'remove-value':
-            case 'pop-value': {
-                validerOgSettRedigerbartVilkår({
-                    ...redigerbartVilkår,
-                    verdi: {
-                        ...redigerbartVilkår.verdi,
-                        utdypendeVilkårsvurderinger: {
-                            ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                            verdi: [
-                                ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                            ].filter(e => e !== action.removedValue?.value),
-                        },
-                    },
-                });
-                break;
             }
-            case 'clear':
-                validerOgSettRedigerbartVilkår({
-                    ...redigerbartVilkår,
-                    verdi: tømUtdypendeVilkårsvurderinger(redigerbartVilkår.verdi),
-                });
-                break;
-            case 'create-option':
-                break;
+        } else {
+            validerOgSettRedigerbartVilkår({
+                ...redigerbartVilkår,
+                verdi: {
+                    ...redigerbartVilkår.verdi,
+                    utdypendeVilkårsvurderinger: {
+                        ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
+                        verdi: [
+                            ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                        ].filter(e => e !== optionValue),
+                    },
+                },
+            });
         }
     };
 
@@ -175,33 +147,20 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     }
 
     return (
-        <StyledFamilieReactSelect
-            id="UtdypendeVilkarsvurderingMultiselect"
+        <UNSAFE_Combobox
             label={
                 redigerbartVilkår.verdi.vurderesEtter === Regelverk.NASJONALE_REGLER
                     ? 'Utdypende vilkårsvurdering (valgfri)'
                     : 'Utdypende vilkårsvurdering'
             }
-            value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
+            options={muligeComboboxValg}
+            error={feilhåndtering}
+            isMultiSelect
+            readOnly={erLesevisning}
+            selectedOptions={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}
-            propSelectStyles={{
-                menu: (provided: CSSObjectWithLabel) => ({
-                    ...provided,
-                    zIndex: 3,
-                }),
-            }}
-            creatable={false}
-            erLesevisning={erLesevisning}
-            isMulti
-            onChange={(
-                _: MultiValue<OptionType> | SingleValue<OptionType>,
-                action: ActionMeta<OptionType>
-            ) => {
-                håndterEndring(action);
-            }}
-            options={muligeUtdypendeVilkårsvurderinger.map(mapUtdypendeVilkårsvurderingTilOption)}
-            feil={feilhåndtering}
+            onToggleSelected={håndterEndring}
         />
     );
 };

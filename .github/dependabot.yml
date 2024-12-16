@@ -17,10 +17,11 @@ updates:
     - dependency-name: "*"
       update-types: ["version-update:semver-patch"]
   groups:
-    typescript-eslint:
+    patch:
       patterns:
-        - "@typescript-eslint/eslint-plugin"
-        - "@typescript-eslint/parser"
+        - '*'
+      update-types:
+        - 'patch'
     react:
       patterns:
         - "react"

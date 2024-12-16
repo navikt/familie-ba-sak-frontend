@@ -14,7 +14,7 @@ export enum ToggleNavn {
     // Release
     kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
-    erEtterbetaling3MndGyldigÅrsak = 'familie-ba-sak.etterbetaling-3-mnd',
+    kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
 }
 
 export const alleTogglerAv = (): IToggles => {

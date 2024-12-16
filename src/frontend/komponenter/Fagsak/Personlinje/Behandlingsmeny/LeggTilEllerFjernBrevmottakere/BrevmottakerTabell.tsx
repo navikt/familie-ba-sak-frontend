@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { AFontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import CountryData from '@navikt/land-verktoy';
 
@@ -67,17 +67,23 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
             <DefinitionList>
                 <dt>Navn</dt>
                 <dd>{mottaker.navn}</dd>
+                <dt>Land</dt>
+                <dd>{land.label}</dd>
                 <dt>Adresselinje 1</dt>
                 <dd>{mottaker.adresselinje1}</dd>
                 <dt>Adresselinje 2</dt>
                 <dd>{mottaker.adresselinje2 || '-'}</dd>
                 <dt>Postnummer</dt>
-                <dd>{mottaker.postnummer}</dd>
+                <dd>{mottaker.postnummer || '-'}</dd>
                 <dt>Poststed</dt>
-                <dd>{mottaker.poststed}</dd>
-                <dt>Land</dt>
-                <dd>{land.label}</dd>
+                <dd>{mottaker.poststed || '-'}</dd>
             </DefinitionList>
+
+            {mottaker.landkode !== 'NO' && (
+                <Alert variant="info" inline>
+                    Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
+                </Alert>
+            )}
         </StyledDiv>
     );
 };

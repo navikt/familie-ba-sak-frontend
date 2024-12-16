@@ -134,9 +134,11 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const [tidligereValutakurs, settTidligereValutakurs] = useState<IRestValutakurs>();
 
     const settDatofelterTilDefault = () => {
-        valutakurs.valutakursdato
-            ? skjema.felter.valutakursdato.validerOgSettFelt(new Date(valutakurs.valutakursdato))
-            : skjema.felter.valutakursdato.nullstill();
+        if (valutakurs.valutakursdato) {
+            skjema.felter.valutakursdato.validerOgSettFelt(new Date(valutakurs.valutakursdato));
+        } else {
+            skjema.felter.valutakursdato.nullstill();
+        }
     };
 
     const tilbakestillFelterTilDefault = () => {

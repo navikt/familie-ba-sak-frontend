@@ -26,7 +26,7 @@ import type {
     IPersonResultat,
 } from '../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../typer/vilkår';
-import { Container } from '../GeneriskVilkår/VilkårTabellRadEndre';
+import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -43,15 +43,6 @@ const Knapperad = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
-`;
-
-const StyledRadioGroup = styled(RadioGroup)`
-    && {
-        margin: 1rem 0;
-        legend {
-            margin-bottom: 0;
-        }
-    }
 `;
 
 const AnnenVurderingRadEndre: React.FC<IProps> = ({
@@ -165,11 +156,12 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             legend={'Skjema for å gjøre vurderingen'}
             hideLegend
         >
-            <Container
+            <StyledVStack
                 $lesevisning={erLesevisning}
                 $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
+                gap="4"
             >
-                <StyledRadioGroup
+                <RadioGroup
                     readOnly={erLesevisning}
                     value={resultater[redigerbartAnnenVurdering.verdi.resultat.verdi]}
                     legend={
@@ -205,7 +197,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     >
                         {'Nei'}
                     </Radio>
-                </StyledRadioGroup>
+                </RadioGroup>
 
                 <Textarea
                     readOnly={erLesevisning}
@@ -257,7 +249,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         </div>
                     </Knapperad>
                 )}
-            </Container>
+            </StyledVStack>
         </Fieldset>
     );
 };

@@ -5,6 +5,5 @@
 *.html
 frontend_development/*
 frontend_production/*
-.eslintrc
 .prettierrc
 backend/*

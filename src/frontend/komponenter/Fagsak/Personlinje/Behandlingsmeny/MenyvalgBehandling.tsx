@@ -26,8 +26,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
         <>
             <HenleggBehandling fagsakId={minimalFagsak.id} />
             <EndreBehandlendeEnhet />
-            {åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD &&
-                minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && <EndreBehandlingstema />}
+            {minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && <EndreBehandlingstema />}
             {!vurderErLesevisning() &&
                 (åpenBehandling.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
                     åpenBehandling.årsak === BehandlingÅrsak.KLAGE ||
