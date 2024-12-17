@@ -10,6 +10,7 @@ import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import TidslinjeVisualisering from './Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './Felleskomponenter/Toast/Toasts';
+import { GithubBranch } from './GithubBranch/GithubBranch';
 import { Infotrygd } from './Infotrygd/Infotrygd';
 import { Samhandler } from './Infotrygd/Samhandler';
 import Internstatistikk from './Internstatistikk';
@@ -79,6 +80,7 @@ const Container: React.FC = () => {
                                     <Route path="/" element={<Navigate to="/oppgaver" />} />
                                 </Routes>
                             </FagsakProvider>
+                            <GithubBranch />
                         </Main>
                     </>
                 )
