@@ -144,9 +144,9 @@ const hentLabelForOption = (
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ) => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
-        ? vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
+        ? (vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
               (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
                   restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
-          )?.navn ?? ''
+          )?.navn ?? '')
         : '';
 };
