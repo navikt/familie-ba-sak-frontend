@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { FeltState } from '@navikt/familie-skjema';
 import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -24,6 +24,10 @@ export const useKorrigerVedtakSkjemaContext = ({
     const { settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
+    const opprinneligVedtaksdato = korrigertVedtak
+        ? new Date(korrigertVedtak.vedtaksdato)
+        : undefined;
+
     const {
         skjema,
         valideringErOk,
@@ -41,7 +45,7 @@ export const useKorrigerVedtakSkjemaContext = ({
     >({
         felter: {
             vedtaksdato: useFelt<Date | undefined>({
-                verdi: undefined,
+                verdi: opprinneligVedtaksdato,
                 valideringsfunksjon: validerGyldigDato,
             }),
             begrunnelse: useFelt<string>({
@@ -51,13 +55,6 @@ export const useKorrigerVedtakSkjemaContext = ({
         },
         skjemanavn: 'korriger-vedtak-skjema',
     });
-
-    useEffect(() => {
-        const opprinneligVedtaksdato = korrigertVedtak
-            ? new Date(korrigertVedtak.vedtaksdato)
-            : undefined;
-        skjema.felter.vedtaksdato.validerOgSettFelt(opprinneligVedtaksdato);
-    }, []);
 
     const korrigertVedtakURL = `/familie-ba-sak/api/korrigertvedtak/behandling/${behandlingId}`;
 
