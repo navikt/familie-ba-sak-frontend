@@ -126,16 +126,16 @@ const OppgaveList: React.FunctionComponent = () => {
                             <Tooltip content={rad.oppgavetype || 'Ukjent'}>
                                 <Table.DataCell>
                                     {rad.oppgavetype
-                                        ? oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
-                                              ?.navn ?? rad.oppgavetype
+                                        ? (oppgaveTypeFilter[rad.oppgavetype as OppgavetypeFilter]
+                                              ?.navn ?? rad.oppgavetype)
                                         : 'Ukjent'}
                                 </Table.DataCell>
                             </Tooltip>
                             <Tooltip content={rad.behandlingstema || 'Ikke satt'}>
                                 <Table.DataCell>
                                     {rad.behandlingstema
-                                        ? gjelderFilter[rad.behandlingstema as GjelderFilter]
-                                              ?.navn ?? rad.behandlingstema
+                                        ? (gjelderFilter[rad.behandlingstema as GjelderFilter]
+                                              ?.navn ?? rad.behandlingstema)
                                         : 'Ikke satt'}
                                 </Table.DataCell>
                             </Tooltip>
