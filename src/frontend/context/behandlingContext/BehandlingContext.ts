@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import { RessursStatus } from '@navikt/familie-typer';
 

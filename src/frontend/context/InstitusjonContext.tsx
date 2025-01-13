@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import createUseContext from 'constate';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';

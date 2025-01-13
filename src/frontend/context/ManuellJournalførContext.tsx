@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { differenceInMilliseconds } from 'date-fns';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';

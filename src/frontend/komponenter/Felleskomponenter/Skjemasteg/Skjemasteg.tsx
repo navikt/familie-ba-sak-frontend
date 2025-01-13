@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import * as React from 'react';
 import { useEffect } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, Button, ErrorMessage, Heading } from '@navikt/ds-react';

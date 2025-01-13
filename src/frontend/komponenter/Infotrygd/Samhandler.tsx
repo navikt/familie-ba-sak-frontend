@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import { Fieldset, TextField, Button, Heading } from '@navikt/ds-react';

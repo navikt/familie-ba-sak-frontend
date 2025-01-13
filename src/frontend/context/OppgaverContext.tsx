@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import type { SortState } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, byggTomRessurs, type Ressurs } from '@navikt/familie-typer';

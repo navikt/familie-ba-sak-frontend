@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';

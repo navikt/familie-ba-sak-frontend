@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { endOfMonth } from 'date-fns';
-import { useMatch } from 'react-router-dom';
+import { useMatch } from 'react-router';
 import styled from 'styled-components';
 
 import { GlobeIcon as Eu, HouseIcon as NorwegianFlag } from '@navikt/aksel-icons';
