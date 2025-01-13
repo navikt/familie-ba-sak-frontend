@@ -38,7 +38,11 @@ const Container: React.FC = () => {
         useApp();
 
     return (
-        <Router>
+        <Router
+            future={{
+                v7_relativeSplatPath: true,
+            }}
+        >
             {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 erTogglesHentet && (
@@ -53,10 +57,9 @@ const Container: React.FC = () => {
                             />
                             <FagsakProvider>
                                 <Routes>
-                                    <Route
-                                        path="/fagsak/:fagsakId/*"
-                                        element={<FagsakContainer />}
-                                    />
+                                    <Route path="/fagsak/:fagsakId">
+                                        <Route path="*" element={<FagsakContainer />} />
+                                    </Route>
                                     <Route
                                         path="/oppgaver/journalfor/:oppgaveId"
                                         element={<ManuellJournalfør />}
