@@ -38,12 +38,7 @@ const Container: React.FC = () => {
         useApp();
 
     return (
-        <Router
-            future={{
-                v7_relativeSplatPath: true,
-                v7_startTransition: true,
-            }}
-        >
+        <Router>
             {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 erTogglesHentet && (
