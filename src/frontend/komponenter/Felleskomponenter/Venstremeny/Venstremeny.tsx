@@ -1,11 +1,13 @@
 import * as React from 'react';
 
+import { NavLink } from 'react-router';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import {
     ABorderFocus,
+    ABorderSelected,
     ABorderWarning,
     AGrayalpha500,
     ASpacing2,
@@ -13,11 +15,11 @@ import {
     ASpacing8,
     ASurfaceDefault,
     ASurfaceHover,
+    ASurfaceNeutralSubtle,
     ASurfaceWarning,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import Link from './Link';
 import type { IUnderside } from './sider';
 import { erSidenAktiv } from './sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -40,7 +42,7 @@ const Meny = styled(VStack)`
     padding: ${ASpacing8} 0;
 `;
 
-const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean }>`
+const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
     text-decoration: none;
     color: ${props => (props.$erLenkenAktiv ? ATextDefault : AGrayalpha500)};
     padding: ${ASpacing2} ${ASpacing8};
@@ -48,6 +50,11 @@ const MenyLenke = styled(Link)<{ $erLenkenAktiv: boolean }>`
     &:focus {
         box-shadow: 0 0 0 3px ${ABorderFocus};
         outline: none;
+    }
+
+    &.active {
+        background-color: ${ASurfaceNeutralSubtle};
+        box-shadow: inset 0.35rem 0 0 0 ${ABorderSelected};
     }
 
     ${props => {
@@ -89,10 +96,10 @@ const Venstremeny: React.FunctionComponent = () => {
                         return (
                             <VStack key={sideId}>
                                 <MenyLenke
-                                    active={erSidenAktiv(side, behandling)}
                                     id={sideId}
                                     to={tilPath}
                                     $erLenkenAktiv={erSidenAktiv(side, behandling)}
+                                    className={({ isActive }) => (isActive ? 'active' : '')}
                                 >
                                     {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
                                 </MenyLenke>
@@ -100,11 +107,11 @@ const Venstremeny: React.FunctionComponent = () => {
                                     const antallAksjonspunkter = underside.antallAksjonspunkter();
                                     return (
                                         <MenyLenke
-                                            active={erSidenAktiv(side, behandling)}
                                             key={`${sideId}_${underside.hash}`}
                                             id={`${sideId}_${underside.hash}`}
                                             to={`${tilPath}#${underside.hash}`}
                                             $erLenkenAktiv={erSidenAktiv(side, behandling)}
+                                            className={({ isActive }) => (isActive ? 'active' : '')}
                                         >
                                             <HStack align="center" gap="1">
                                                 {antallAksjonspunkter > 0 ? (

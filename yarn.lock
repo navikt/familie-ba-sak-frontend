@@ -2470,7 +2470,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/history@*", "@types/history@^4.7.11":
+"@types/history@^4.7.11":
   version "4.7.11"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.11.tgz#56588b17ae8f50c53983a524fc3cc47437969d64"
   integrity sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==
@@ -2599,32 +2599,6 @@
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.0.tgz#0cbc818755d87066ab6ca74fbedb2547d74a82b0"
   integrity sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==
   dependencies:
-    "@types/react" "*"
-
-"@types/react-router-dom@*":
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.3.3.tgz#e9d6b4a66fcdbd651a5f106c2656a30088cc1e83"
-  integrity sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw==
-  dependencies:
-    "@types/history" "^4.7.11"
-    "@types/react" "*"
-    "@types/react-router" "*"
-
-"@types/react-router-hash-link@^2.4.5":
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/@types/react-router-hash-link/-/react-router-hash-link-2.4.5.tgz#41dcb55279351fedc9062115bb35db921d1d69f6"
-  integrity sha512-YsiD8xCWtRBebzPqG6kXjDQCI35LCN9MhV/MbgYF8y0trOp7VSUNmSj8HdIGyH99WCfSOLZB2pIwUMN/IwIDQg==
-  dependencies:
-    "@types/history" "^4.7.11"
-    "@types/react" "*"
-    "@types/react-router-dom" "*"
-
-"@types/react-router@*":
-  version "5.1.16"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.1.16.tgz#f3ba045fb96634e38b21531c482f9aeb37608a99"
-  integrity sha512-8d7nR/fNSqlTFGHti0R3F9WwIertOaaA1UEB8/jr5l5mDMOs4CidEgvvYMw4ivqrBK+vtVLxyTj2P+Pr/dtgzg==
-  dependencies:
-    "@types/history" "*"
     "@types/react" "*"
 
 "@types/react-router@^5.1.20":
@@ -8592,7 +8566,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.6.0, prop-types@^15.6.2:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -8757,13 +8731,6 @@ react-refresh@^0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.16.0.tgz#e7d45625f05c9709466d09348a25d22f79b2ad23"
   integrity sha512-FPvF2XxTSikpJxcr+bHut2H4gJ17+18Uy20D5/F+SKzFap62R3cM5wH6b8WN3LyGSYeQilLEcJcR1fjBSI2S1A==
-
-react-router-hash-link@^2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/react-router-hash-link/-/react-router-hash-link-2.4.3.tgz#570824d53d6c35ce94d73a46c8e98673a127bf08"
-  integrity sha512-NU7GWc265m92xh/aYD79Vr1W+zAIXDWp3L2YZOYP4rCqPnJ6LI6vh3+rKgkidtYijozHclaEQTAHaAaMWPVI4A==
-  dependencies:
-    prop-types "^15.7.2"
 
 react-router@^7.1.1:
   version "7.1.1"
