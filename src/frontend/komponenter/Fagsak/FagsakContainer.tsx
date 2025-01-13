@@ -11,7 +11,7 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { ScrollTilAnker } from './ScrollTilAnker';
+import { useScrollTilAnker } from './useScrollTilAnker';
 import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/HentOgSettBehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
@@ -24,6 +24,7 @@ const HovedInnhold = styled.div`
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
+    useScrollTilAnker();
 
     const { bruker: brukerRessurs, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 
@@ -114,7 +115,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                                     }
                                 />
                             </Routes>
-                            <ScrollTilAnker />
                         </HovedInnhold>
                     );
                 case RessursStatus.FEILET:

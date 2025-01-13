@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { useLocation } from 'react-router';
 
-export function ScrollTilAnker() {
+export function useScrollTilAnker() {
     const location = useLocation();
     const lastHash = useRef('');
 
@@ -32,6 +32,4 @@ export function ScrollTilAnker() {
             scrollTilHash();
         }, 500); // For å gi UIet tid til å rendres før vi finner og scroller til elementet
     }, []);
-
-    return null;
 }
