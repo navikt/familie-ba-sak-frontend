@@ -41,6 +41,7 @@ const Container: React.FC = () => {
         <Router
             future={{
                 v7_relativeSplatPath: true,
+                v7_startTransition: true,
             }}
         >
             {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
