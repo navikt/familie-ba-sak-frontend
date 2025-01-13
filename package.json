@@ -139,6 +139,7 @@
         "tsconfig": "<rootDir>/src/frontend/tsconfig.json"
       }
     },
+    "setupFiles": ["./jest-setup.js"],
     "moduleNameMapper": {
       "\\.(css|svg)$": "<rootDir>/src/mockFile.js"
     },
