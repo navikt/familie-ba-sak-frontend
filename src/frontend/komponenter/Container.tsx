@@ -53,9 +53,10 @@ const Container: React.FC = () => {
                             />
                             <FagsakProvider>
                                 <Routes>
-                                    <Route path="/fagsak/:fagsakId">
-                                        <Route path="*" element={<FagsakContainer />} />
-                                    </Route>
+                                    <Route
+                                        path="/fagsak/:fagsakId/*"
+                                        element={<FagsakContainer />}
+                                    ></Route>
                                     <Route
                                         path="/oppgaver/journalfor/:oppgaveId"
                                         element={<ManuellJournalfør />}
