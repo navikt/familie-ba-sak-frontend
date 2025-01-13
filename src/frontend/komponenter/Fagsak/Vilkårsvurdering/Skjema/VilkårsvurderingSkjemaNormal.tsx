@@ -71,7 +71,8 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling.årsak === BehandlingÅrsak.KLAGE ||
-        behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+        behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO ||
+        behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK;
 
     const personHarIkkevurdertVilkår = (personResultat: IPersonResultat) =>
         personResultat.vilkårResultater.some(

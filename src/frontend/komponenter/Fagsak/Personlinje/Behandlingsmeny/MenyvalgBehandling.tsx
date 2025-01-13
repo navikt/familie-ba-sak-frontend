@@ -32,6 +32,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                     åpenBehandling.årsak === BehandlingÅrsak.KLAGE ||
                     åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                     åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+                    åpenBehandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
                     åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
                     <LeggTilBarnPåBehandling />
                 )}

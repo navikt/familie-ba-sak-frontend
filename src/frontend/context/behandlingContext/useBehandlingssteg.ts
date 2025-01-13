@@ -87,11 +87,12 @@ const useBehandlingssteg = (
         );
     };
 
-    const kanSendeinnVedtak = (vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[]) =>
+    const kanSendeInnVedtak = (vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[]) =>
         minstEnPeriodeharBegrunnelseEllerFritekst(vedtaksperioderMedBegrunnelser) ||
         behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
+        behandling?.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
         behandling?.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const sendTilBeslutterNesteOnClick = (
@@ -121,7 +122,7 @@ const useBehandlingssteg = (
                 )
             );
         } else if (
-            !kanSendeinnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) &&
+            !kanSendeInnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) &&
             !erSammensattKontrollsak
         ) {
             settSubmitRessurs(
