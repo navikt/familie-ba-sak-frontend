@@ -11,7 +11,7 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import ScrollTilAnker from './ScrollTilAnker';
+import { ScrollTilAnker } from './ScrollTilAnker';
 import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/HentOgSettBehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/Fagsak/FagsakContext';

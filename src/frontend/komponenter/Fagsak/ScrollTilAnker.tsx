@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { useLocation } from 'react-router';
 
-function ScrollTilAnker() {
+export function ScrollTilAnker() {
     const location = useLocation();
     const lastHash = useRef('');
 
@@ -35,5 +35,3 @@ function ScrollTilAnker() {
 
     return null;
 }
-
-export default ScrollTilAnker;
