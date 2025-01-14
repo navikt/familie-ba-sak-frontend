@@ -1784,7 +1784,7 @@
   dependencies:
     "@navikt/familie-typer" "^8.0.1"
 
-"@navikt/familie-ikoner@^9.0.1", "@navikt/familie-ikoner@^9.0.3":
+"@navikt/familie-ikoner@^9.0.3":
   version "9.0.3"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.3/a39776fe08f2acb1b6d6474dada0b5fd1770bfa1#a39776fe08f2acb1b6d6474dada0b5fd1770bfa1"
   integrity sha512-WG0H9jFKMWcgwrRXlInZTr66jYAg2Ia81dXCU5YkudOgX8bJwl0ttQHHwp+AuCmdmguAl5xSYVJcb77rN3J8dg==
@@ -1816,25 +1816,25 @@
     deep-equal "^2.2.3"
     hashids "^2.3.0"
 
-"@navikt/familie-tidslinje@10.0.4":
-  version "10.0.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.4/498a4bb2a08ee28ccd3852854965b386138c56e7#498a4bb2a08ee28ccd3852854965b386138c56e7"
-  integrity sha512-lcXkxrC2N02ZXjm1kZO5WwDe2ZCNm0RL0zow8V6eX1AX75u1E0tRmFSC+ijXCX6ZgIIlCxcdvV8mXIvTcy84Fg==
+"@navikt/familie-tidslinje@^10.0.5":
+  version "10.0.5"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.5/029ef6a413df10a6fa4181ce66ecd2c1a1a5e919#029ef6a413df10a6fa4181ce66ecd2c1a1a5e919"
+  integrity sha512-QXBGcw/jUyEMy2zY7FRHXdA0Pld0Ya+2TLUXzo640SwHp0FJPrJmDIYVubrgq9uqQ+0e2GfFKIiGzIHTr28kyQ==
   dependencies:
     classnames "^2.5.1"
-    nanoid "^5.0.7"
+    nanoid "^5.0.9"
 
 "@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.1", "@navikt/familie-typer@^8.0.2":
   version "8.0.2"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.2/21bcc780c35b6a8699d1c52b54e61d83580736f7#21bcc780c35b6a8699d1c52b54e61d83580736f7"
   integrity sha512-pKSpCzryJE6eiN/Ssox1oLLKPW5ezsT+/gTHbhgxOtM/frFSZLguSjwhgiDp2kovckJ84nxhnQurK6igw8GEHw==
 
-"@navikt/familie-visittkort@15.1.0":
-  version "15.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/15.1.0/5b847dba08459495a6b50478297513e2c06a2c08#5b847dba08459495a6b50478297513e2c06a2c08"
-  integrity sha512-M+C1pz8RCYhYdKpVNVt1UEKnRvQSdN0cZEBNwxOBj/S8v2+/hZdijdBA0N9Yud6T+rpkQAmSSHdV+Cui1/iEeQ==
+"@navikt/familie-visittkort@^15.1.3":
+  version "15.1.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/15.1.3/99d2923c1f09930d80453912d49bd9d0b8ea5f56#99d2923c1f09930d80453912d49bd9d0b8ea5f56"
+  integrity sha512-IGLpJjmBxUfo9LHpjA/9Hc93F6/HUWjiTJtdK/mPCYFkHYa6/U5Xw05gcN0tdfZ+inCOTlMgDIRSjjf9xBliwQ==
   dependencies:
-    "@navikt/familie-ikoner" "^9.0.1"
+    "@navikt/familie-ikoner" "^9.0.3"
     "@navikt/familie-typer" "^8.0.2"
     classnames "^2.5.1"
 
@@ -7721,7 +7721,7 @@ nanoid@^3.3.6, nanoid@^3.3.7:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
   integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
 
-nanoid@^5.0.7:
+nanoid@^5.0.9:
   version "5.0.9"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.9.tgz#977dcbaac055430ce7b1e19cf0130cea91a20e50"
   integrity sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==
