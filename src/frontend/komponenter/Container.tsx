@@ -56,7 +56,7 @@ const Container: React.FC = () => {
                                     <Route
                                         path="/fagsak/:fagsakId/*"
                                         element={<FagsakContainer />}
-                                    ></Route>
+                                    />
                                     <Route
                                         path="/oppgaver/journalfor/:oppgaveId"
                                         element={<ManuellJournalfør />}
