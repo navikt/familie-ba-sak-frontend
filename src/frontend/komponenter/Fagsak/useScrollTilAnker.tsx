@@ -12,7 +12,7 @@ export function useScrollTilAnker() {
         }
 
         if (lastHash.current && document.getElementById(lastHash.current)) {
-            setTimeout(() => {
+            return setTimeout(() => {
                 document
                     .getElementById(lastHash.current)
                     ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -23,13 +23,23 @@ export function useScrollTilAnker() {
 
     // Når location endrer seg uten en hard refresh
     useEffect(() => {
-        scrollTilHash();
+        const timeout = scrollTilHash();
+
+        // Clear timeout om komponenten denne effekten brukes i unmountes før timeouten kjøres
+        return () => clearTimeout(timeout);
     }, [location]);
 
     // Når vi kjører en hard refresh
     useEffect(() => {
-        setTimeout(() => {
-            scrollTilHash();
+        let timeout = setTimeout(() => {
+            const scrollTimeout = scrollTilHash();
+
+            if (scrollTimeout) {
+                timeout = scrollTimeout;
+            }
         }, 500); // For å gi UIet tid til å rendres før vi finner og scroller til elementet
+
+        // Clear timeout om komponenten denne effekten brukes i unmountes før timeouten kjøres
+        return () => clearTimeout(timeout);
     }, []);
 }
