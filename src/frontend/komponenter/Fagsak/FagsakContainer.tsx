@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
@@ -15,6 +15,7 @@ import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/He
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 
 const HovedInnhold = styled.div`
     height: calc(100vh - 3rem);
@@ -23,6 +24,7 @@ const HovedInnhold = styled.div`
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
+    useScrollTilAnker();
 
     const { bruker: brukerRessurs, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
 

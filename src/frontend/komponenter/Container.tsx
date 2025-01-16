@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import FagsakContainer from './Fagsak/FagsakContainer';
