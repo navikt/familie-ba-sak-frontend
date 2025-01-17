@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import eslintConfigPrittier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-plugin-prettier';
@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
     js.configs.recommended,
-    eslintConfigPrittier,
+    eslintConfigPrettier,
     jsxA11yPlugin.flatConfigs.recommended,
     importPlugin.flatConfigs.typescript,
     ...tseslint.configs.recommended,
