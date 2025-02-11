@@ -58,7 +58,7 @@ spec:
       value: {{ VERSION }}
     - name: ENV
       value: production
-  redis:
+  valkey:
     - instance: sessions
       access: readwrite
     - instance: lookup
