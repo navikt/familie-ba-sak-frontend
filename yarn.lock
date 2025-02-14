@@ -1785,17 +1785,10 @@
     "@sentry/core" "^8.11.0"
     constate "^3.3.2"
 
-"@navikt/familie-ikoner@9.0.0":
-  version "9.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.0/4cc833bc49ab5b16b2a10e7ae70425a37803f9e2#4cc833bc49ab5b16b2a10e7ae70425a37803f9e2"
-  integrity sha512-AsC+WrVQcG0LJskzQDLizjeWVpvh70E8hQ/A+CBFrWPyGks4FtrCNIUFxWwPmJhznFZdd283THJ1HDcc5f6gsg==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.1"
-
-"@navikt/familie-ikoner@^9.0.3":
-  version "9.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.0.3/a39776fe08f2acb1b6d6474dada0b5fd1770bfa1#a39776fe08f2acb1b6d6474dada0b5fd1770bfa1"
-  integrity sha512-WG0H9jFKMWcgwrRXlInZTr66jYAg2Ia81dXCU5YkudOgX8bJwl0ttQHHwp+AuCmdmguAl5xSYVJcb77rN3J8dg==
+"@navikt/familie-ikoner@9.1.0", "@navikt/familie-ikoner@^9.0.3":
+  version "9.1.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.0/115a0d9b71f60b2692af64cb9681371137a7cf82#115a0d9b71f60b2692af64cb9681371137a7cf82"
+  integrity sha512-pd0YiRNZTJQFAXVDnUSV4zQWe+OKHfgWxwYqh3HwRBcldWgwa0lxhiEW/7jumVoodag6E2x2POcMRzAfSKVRyQ==
   dependencies:
     "@navikt/familie-typer" "^8.0.2"
 
@@ -1832,7 +1825,7 @@
     classnames "^2.5.1"
     nanoid "^5.0.9"
 
-"@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.1", "@navikt/familie-typer@^8.0.2":
+"@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.2":
   version "8.0.2"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.2/21bcc780c35b6a8699d1c52b54e61d83580736f7#21bcc780c35b6a8699d1c52b54e61d83580736f7"
   integrity sha512-pKSpCzryJE6eiN/Ssox1oLLKPW5ezsT+/gTHbhgxOtM/frFSZLguSjwhgiDp2kovckJ84nxhnQurK6igw8GEHw==
