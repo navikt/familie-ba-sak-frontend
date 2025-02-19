@@ -117,6 +117,15 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                     tekstFarge={hentResultatfargeTekst(åpenBehandling.resultat)}
                 />
                 <div>
+                    {åpenBehandling.søknadMottattDato && (
+                        <Informasjonsbolk
+                            label="Søknad mottatt"
+                            tekst={isoStringTilFormatertString({
+                                isoString: åpenBehandling.søknadMottattDato,
+                                tilFormat: Datoformat.DATO,
+                            })}
+                        />
+                    )}
                     <Informasjonsbolk
                         label="Opprettet"
                         tekst={isoStringTilFormatertString({
