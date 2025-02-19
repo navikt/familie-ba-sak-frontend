@@ -82,6 +82,15 @@ const Venstremeny: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } = useBehandling();
 
+    const stansNavigeringDersomSidenIkkeErAktiv = (
+        event: React.MouseEvent,
+        sidenErAktiv: boolean
+    ) => {
+        if (!sidenErAktiv) {
+            event.preventDefault();
+        }
+    };
+
     return (
         <HStack justify="start">
             {åpenVenstremeny && (
@@ -93,13 +102,17 @@ const Venstremeny: React.FunctionComponent = () => {
                             ? side.undersider(behandling)
                             : [];
 
+                        const sidenErAktiv = erSidenAktiv(side, behandling);
+
                         return (
                             <VStack key={sideId}>
                                 <MenyLenke
                                     id={sideId}
                                     to={tilPath}
-                                    $erLenkenAktiv={erSidenAktiv(side, behandling)}
-                                    className={({ isActive }) => (isActive ? 'active' : '')}
+                                    $erLenkenAktiv={sidenErAktiv}
+                                    onClick={event =>
+                                        stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
+                                    }
                                 >
                                     {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
                                 </MenyLenke>
@@ -110,8 +123,13 @@ const Venstremeny: React.FunctionComponent = () => {
                                             key={`${sideId}_${underside.hash}`}
                                             id={`${sideId}_${underside.hash}`}
                                             to={`${tilPath}#${underside.hash}`}
-                                            $erLenkenAktiv={erSidenAktiv(side, behandling)}
-                                            className={({ isActive }) => (isActive ? 'active' : '')}
+                                            $erLenkenAktiv={sidenErAktiv}
+                                            onClick={event =>
+                                                stansNavigeringDersomSidenIkkeErAktiv(
+                                                    event,
+                                                    sidenErAktiv
+                                                )
+                                            }
                                         >
                                             <HStack align="center" gap="1">
                                                 {antallAksjonspunkter > 0 ? (
