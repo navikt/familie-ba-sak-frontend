@@ -46,7 +46,7 @@ const Environment = () => {
         buildPath: 'frontend_production',
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak/api',
-        familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
+        familieTilbakeUrl: 'https://tilbakekreving.intern.nav.no',
         familieKlageUrl: 'https://familie-klage.intern.nav.no',
         endringsloggProxyUrl: 'http://familie-endringslogg',
     };

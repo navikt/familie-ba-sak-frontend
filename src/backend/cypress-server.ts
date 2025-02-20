@@ -27,12 +27,12 @@ app.post('/familie-ba-sak/api/oppgave/hent-oppgaver', (_, res) => {
 });
 
 // Må komme før /familie-ba-sak/api/fagsaker/*
-app.get('/familie-ba-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
+app.get('/familie-ba-sak/api/fagsaker/*splat/hent-klagebehandlinger', (_, res) => {
     const klagebehandlinger: IKlagebehandling[] = [klagebehandlingFixture()];
     res.status(200).send(byggDataRessurs(klagebehandlinger));
 });
 
-app.get('/familie-ba-sak/api/fagsaker/*', (_, res) => {
+app.get('/familie-ba-sak/api/fagsaker/*splat', (_, res) => {
     res.status(200).send(fagsakMock);
 });
 app.get('/familie-ba-sak/api/person', (_, res) => {
@@ -42,11 +42,11 @@ app.get('/user/profile', (_, res) => {
     res.status(200).send(profileMock);
 });
 
-app.get('/familie-ba-sak/api/fagsaker/*/hent-klagebehandlinger', (_, res) => {
+app.get('/familie-ba-sak/api/fagsaker/*splat/hent-klagebehandlinger', (_, res) => {
     res.status(200).send(byggDataRessurs([klagebehandlingFixture()]));
 });
 
-app.get('*', (_: Request, res: Response) => {
+app.get('*splat', (_: Request, res: Response) => {
     res.sendFile('index.html', { root: path.join(process.cwd(), 'frontend_production') });
 });
 

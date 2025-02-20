@@ -39,7 +39,7 @@ export default (authClient: Client, router: Router) => {
 
     // APP
     router.get(
-        '*',
+        '*splat',
         redirectHvisInternUrlIPreprod(),
         ensureAuthenticated(authClient, false),
         (_: Request, res: Response) => {
