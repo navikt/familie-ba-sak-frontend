@@ -32,7 +32,7 @@ import {
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
 
-enum Saksoversiktbehandlingstype {
+export enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
     TILBAKEBETALING = 'TILBAKEBETALING',
     KLAGE = 'KLAGE',
@@ -99,34 +99,6 @@ export const hentBehandlingId = (saksoversiktsbehandling: Saksoversiktsbehandlin
         case Saksoversiktbehandlingstype.KLAGE:
             return saksoversiktsbehandling.id;
     }
-};
-
-export const hentBehandlingerTilSaksoversikten = (
-    minimalFagsak: IMinimalFagsak,
-    klagebehandlinger: IKlagebehandling[]
-): Saksoversiktsbehandling[] => {
-    const barnetrygdBehandlinger: Saksoversiktsbehandling[] = minimalFagsak.behandlinger.map(
-        behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD,
-        })
-    );
-    const tilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
-        minimalFagsak.tilbakekrevingsbehandlinger.map(behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING,
-        }));
-    const saksoversiktKlagebehandlinger: Saksoversiktsbehandling[] = klagebehandlinger.map(
-        behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE,
-        })
-    );
-    return [
-        ...barnetrygdBehandlinger,
-        ...tilbakekrevingsbehandlinger,
-        ...saksoversiktKlagebehandlinger,
-    ];
 };
 
 export const lagLenkePåType = (

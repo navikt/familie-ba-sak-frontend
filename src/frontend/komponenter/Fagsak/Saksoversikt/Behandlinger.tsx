@@ -3,18 +3,28 @@ import React, { useState } from 'react';
 import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
-import { BodyShort, Fieldset, Heading, HStack, Spacer, Switch, Table } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Fieldset,
+    Heading,
+    HStack,
+    Skeleton,
+    Spacer,
+    Switch,
+    Table,
+    VStack,
+} from '@navikt/ds-react';
 
 import { Behandling } from './Behandling';
 import type { Saksoversiktsbehandling } from './utils';
 import {
-    hentBehandlingerTilSaksoversikten,
     hentBehandlingId,
     hentTidspunktforSortering,
     skalVisesNårHenlagtBehandlingerSkjules,
     skalVisesNårMånedligeValutajusteringerSkjules,
 } from './utils';
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
+import { useHentSaksoversiktsbehandlinger } from '../../../hooks/useHentSaksoversiktsbehandlinger';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { isoStringTilDate } from '../../../utils/dato';
 
@@ -48,25 +58,49 @@ interface IBehandlingshistorikkProps {
 }
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const { klagebehandlinger } = useFagsakContext();
+    const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
+    const [visMånedligeValutajusteringer, setVisMånedligeValutajusteringer] = useState(false);
 
-    const behandlinger = hentBehandlingerTilSaksoversikten(minimalFagsak, klagebehandlinger);
+    const { data, isPending, errors } = useHentSaksoversiktsbehandlinger(minimalFagsak);
 
-    const finnesHenlagteBehandlingerSomKanFiltreresBort = behandlinger.some(
+    if (isPending) {
+        return (
+            <VStack gap={'4'}>
+                <StyledHeading level="2" size={'medium'} spacing>
+                    Behandlinger
+                </StyledHeading>
+                <Table size={'large'}>
+                    <Table.Header>
+                        <Table.Row>
+                            <StyledOpprettetKolonne scope="col">Opprettet</StyledOpprettetKolonne>
+                            <Table.HeaderCell scope="col">Årsak</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Behandlingstema</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Status</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Vedtaksdato</Table.HeaderCell>
+                            <StyledResultatKolonne scope="col">Resultat</StyledResultatKolonne>
+                        </Table.Row>
+                    </Table.Header>
+                </Table>
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+            </VStack>
+        );
+    }
+
+    const finnesHenlagteBehandlingerSomKanFiltreresBort = (data ?? []).some(
         (behandling: Saksoversiktsbehandling) =>
             !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
     );
 
-    const finnesMånedligValutajusteringerSomKanFiltreresBort = behandlinger.some(
+    const finnesMånedligValutajusteringerSomKanFiltreresBort = (data ?? []).some(
         (behandling: Saksoversiktsbehandling) =>
             !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
     );
 
-    const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
-    const [visMånedligeValutajusteringer, setVisMånedligeValutajusteringer] = useState(false);
-
     return (
-        <div className={'saksoversikt__behandlingshistorikk'}>
+        <>
             <HStack gap="3" wrap={false}>
                 <StyledHeading level="2" size={'medium'} spacing>
                     Behandlinger
@@ -105,7 +139,19 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                     </StyledFieldSet>
                 </StyledDiv>
             </HStack>
-            {behandlinger.length > 0 ? (
+            <VStack gap={'2'}>
+                {!errors.klagebehandlingerError && (
+                    <Alert variant={'warning'}>
+                        {`Klarte ikke laste inn klagebehandlinger: ${errors.klagebehandlingerError}`}
+                    </Alert>
+                )}
+                {!errors.tilbakekrevingsbehandlingerError && (
+                    <Alert variant={'warning'}>
+                        {`Klarte ikke laste inn tilbakekrevingsbehandlinger: ${errors.tilbakekrevingsbehandlingerError}`}
+                    </Alert>
+                )}
+            </VStack>
+            {data && data.length > 0 ? (
                 <Table size={'large'}>
                     <Table.Header>
                         <Table.Row>
@@ -119,7 +165,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {behandlinger
+                        {data
                             .filter(
                                 behandling =>
                                     skalVisesNårHenlagtBehandlingerSkjules(
@@ -149,7 +195,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
             ) : (
                 <BodyShort children={'Ingen tidligere behandlinger'} />
             )}
-        </div>
+        </>
     );
 };
 
