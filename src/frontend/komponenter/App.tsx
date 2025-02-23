@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import '@navikt/ds-css';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import Container from './Container';
@@ -9,6 +11,8 @@ import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
 import { initGrafanaFaro } from '../utils/grafanaFaro';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
+
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
     const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<
@@ -23,11 +27,13 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
-            <AppProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-                <Container />
-            </AppProvider>
-        </ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+            <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
+                <AppProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+                    <Container />
+                </AppProvider>
+            </ErrorBoundary>
+        </QueryClientProvider>
     );
 };
 

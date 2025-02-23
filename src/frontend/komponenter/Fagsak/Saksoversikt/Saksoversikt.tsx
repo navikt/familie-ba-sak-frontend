@@ -7,7 +7,7 @@ import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Behandlinger from './Behandlinger';
+import { Behandlinger } from './Behandlinger';
 import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';

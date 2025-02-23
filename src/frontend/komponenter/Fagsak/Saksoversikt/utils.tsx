@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
+
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { HStack, Link, Tooltip } from '@navikt/ds-react';
 
@@ -29,8 +31,9 @@ import {
     Behandlingsresultatstype,
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
+import { isoStringTilDate } from '../../../utils/dato';
 
-enum Saksoversiktbehandlingstype {
+export enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
     TILBAKEBETALING = 'TILBAKEBETALING',
     KLAGE = 'KLAGE',
@@ -97,34 +100,6 @@ export const hentBehandlingId = (saksoversiktsbehandling: Saksoversiktsbehandlin
         case Saksoversiktbehandlingstype.KLAGE:
             return saksoversiktsbehandling.id;
     }
-};
-
-export const hentBehandlingerTilSaksoversikten = (
-    minimalFagsak: IMinimalFagsak,
-    klagebehandlinger: IKlagebehandling[]
-): Saksoversiktsbehandling[] => {
-    const barnetrygdBehandlinger: Saksoversiktsbehandling[] = minimalFagsak.behandlinger.map(
-        behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD,
-        })
-    );
-    const tilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
-        minimalFagsak.tilbakekrevingsbehandlinger.map(behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING,
-        }));
-    const saksoversiktKlagebehandlinger: Saksoversiktsbehandling[] = klagebehandlinger.map(
-        behandling => ({
-            ...behandling,
-            saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE,
-        })
-    );
-    return [
-        ...barnetrygdBehandlinger,
-        ...tilbakekrevingsbehandlinger,
-        ...saksoversiktKlagebehandlinger,
-    ];
 };
 
 export const lagLenkePåType = (
@@ -259,3 +234,25 @@ export const hentBehandlingstema = (
             return undefined;
     }
 };
+
+export function filtrerOgSorterSaksoversiktbehandlingerForVisning(
+    saksoversiktbehandlinger: Saksoversiktsbehandling[],
+    visHenlagteBehandlinger: boolean,
+    visMånedligeValutajusteringer: boolean
+) {
+    return saksoversiktbehandlinger
+        .filter(
+            behandling =>
+                skalVisesNårHenlagtBehandlingerSkjules(behandling, visHenlagteBehandlinger) &&
+                skalVisesNårMånedligeValutajusteringerSkjules(
+                    behandling,
+                    visMånedligeValutajusteringer
+                )
+        )
+        .sort((saksoversiktbehandlingA, saksoversiktbehandlingB) =>
+            differenceInMilliseconds(
+                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandlingB)),
+                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandlingA))
+            )
+        );
+}
