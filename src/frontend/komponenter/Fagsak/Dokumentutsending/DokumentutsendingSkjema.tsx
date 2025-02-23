@@ -6,9 +6,9 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import BarnSøktForSkjema from './BarnSøktFor/BarnSøktForSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
+import RelevanteBarnSkjema from './RelevanteBarn/RelevanteBarnSkjema';
 import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
@@ -88,6 +88,8 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
         DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
     ];
+
+    const barnBosattMedSøkerÅrsaker = [DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV];
 
     const { toggles } = useApp();
 
@@ -207,10 +209,20 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     )}
 
                     {årsakVerdi !== undefined && barnSøktForÅrsaker.includes(årsakVerdi) && (
-                        <BarnSøktForSkjema
-                            barnSøktForFelt={skjema.felter.barnSøktFor}
+                        <RelevanteBarnSkjema
+                            relevanteBarnFelt={skjema.felter.relevanteBarn}
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
+                            tittel={'Hvilke barn er søkt for?'}
+                        />
+                    )}
+
+                    {årsakVerdi !== undefined && barnBosattMedSøkerÅrsaker.includes(årsakVerdi) && (
+                        <RelevanteBarnSkjema
+                            relevanteBarnFelt={skjema.felter.relevanteBarn}
+                            visFeilmeldinger={skjema.visFeilmeldinger}
+                            settVisFeilmeldinger={settVisfeilmeldinger}
+                            tittel={'Hvilke barn er bosatt med søker?'}
                         />
                     )}
 
