@@ -59,7 +59,7 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: build_n_deploy/naiserator/app-dev.yaml
+          RESOURCE: .nais/app-dev.yaml
           VAR: image=${{ needs.build.outputs.image }},VERSION=${{ env.VERSION }}
 
   deployProd:
@@ -75,7 +75,7 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
-          RESOURCE: build_n_deploy/naiserator/app-prod.yaml
+          RESOURCE: .nais/app-prod.yaml
           VAR: image=${{ needs.build.outputs.image }},VERSION=${{ env.VERSION }}
 
   loggfeil:

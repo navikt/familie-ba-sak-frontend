@@ -6,5 +6,5 @@ cypress/
 cypress.json
 cypress.config.cjs
 frontend_development
-build_n_deploy
+.nais
 pull_request_template.md
