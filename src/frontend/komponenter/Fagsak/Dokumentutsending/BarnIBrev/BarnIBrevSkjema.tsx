@@ -13,18 +13,18 @@ import { isoStringTilDate } from '../../../../utils/dato';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 
 interface IProps {
-    relevanteBarnFelt: Felt<IBarnMedOpplysninger[]>;
+    barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
     visFeilmeldinger: boolean;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     tittel: string;
 }
 
-const RelevanteBarnSkjema = (props: IProps) => {
+const BarnIBrevSkjema = (props: IProps) => {
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
-    const { relevanteBarnFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
+    const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
-    const sorterteBarn = relevanteBarnFelt.verdi.sort(
+    const sorterteBarn = barnIBrevFelt.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
             if (!a.fødselsdato) {
                 return 1;
@@ -44,8 +44,8 @@ const RelevanteBarnSkjema = (props: IProps) => {
     );
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
-        relevanteBarnFelt.validerOgSettFelt(
-            relevanteBarnFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+        barnIBrevFelt.validerOgSettFelt(
+            barnIBrevFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
                 ...barnMedOpplysninger,
                 merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
             }))
@@ -54,9 +54,9 @@ const RelevanteBarnSkjema = (props: IProps) => {
 
     return (
         <CheckboxGroup
-            {...relevanteBarnFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
+            {...barnIBrevFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={props.tittel}
-            value={relevanteBarnFelt.verdi
+            value={barnIBrevFelt.verdi
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .map((barn: IBarnMedOpplysninger) => barn.ident)}
             onChange={(barnaSomErMerket: string[]) => {
@@ -73,7 +73,7 @@ const RelevanteBarnSkjema = (props: IProps) => {
             ))}
 
             <LeggTilBarn
-                barnaMedOpplysninger={relevanteBarnFelt}
+                barnaMedOpplysninger={barnIBrevFelt}
                 manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
                 vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
             />
@@ -81,4 +81,4 @@ const RelevanteBarnSkjema = (props: IProps) => {
     );
 };
 
-export default RelevanteBarnSkjema;
+export default BarnIBrevSkjema;

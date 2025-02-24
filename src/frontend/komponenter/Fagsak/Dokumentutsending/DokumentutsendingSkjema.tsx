@@ -6,9 +6,9 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
-import RelevanteBarnSkjema from './RelevanteBarn/RelevanteBarnSkjema';
 import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
@@ -144,6 +144,15 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         }
     };
 
+    function hentTittelForBarnIBrevSkjema(årsak: DokumentÅrsak) {
+        if (barnBosattMedSøkerÅrsaker.includes(årsak)) {
+            return 'Hvilke barn er bosatt med søker?';
+        } else if (barnSøktForÅrsaker.includes(årsak)) {
+            return 'Hvilke barn er søkt for?';
+        }
+        throw new Error('Må definere hva slags tittel skjemaet skal ha');
+    }
+
     return (
         <Container>
             <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
@@ -208,23 +217,16 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         />
                     )}
 
-                    {årsakVerdi !== undefined && barnSøktForÅrsaker.includes(årsakVerdi) && (
-                        <RelevanteBarnSkjema
-                            relevanteBarnFelt={skjema.felter.relevanteBarn}
-                            visFeilmeldinger={skjema.visFeilmeldinger}
-                            settVisFeilmeldinger={settVisfeilmeldinger}
-                            tittel={'Hvilke barn er søkt for?'}
-                        />
-                    )}
-
-                    {årsakVerdi !== undefined && barnBosattMedSøkerÅrsaker.includes(årsakVerdi) && (
-                        <RelevanteBarnSkjema
-                            relevanteBarnFelt={skjema.felter.relevanteBarn}
-                            visFeilmeldinger={skjema.visFeilmeldinger}
-                            settVisFeilmeldinger={settVisfeilmeldinger}
-                            tittel={'Hvilke barn er bosatt med søker?'}
-                        />
-                    )}
+                    {årsakVerdi !== undefined &&
+                        (barnSøktForÅrsaker.includes(årsakVerdi) ||
+                            barnBosattMedSøkerÅrsaker.includes(årsakVerdi)) && (
+                            <BarnIBrevSkjema
+                                barnIBrevFelt={skjema.felter.barnIBrev}
+                                visFeilmeldinger={skjema.visFeilmeldinger}
+                                settVisFeilmeldinger={settVisfeilmeldinger}
+                                tittel={hentTittelForBarnIBrevSkjema(årsakVerdi)}
+                            />
+                        )}
 
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>

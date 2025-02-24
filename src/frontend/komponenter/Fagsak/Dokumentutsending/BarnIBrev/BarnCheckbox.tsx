@@ -43,10 +43,10 @@ const FjernBarnKnapp = styled(Button)`
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    relevanteBarnFelt: Felt<IBarnMedOpplysninger[]>;
+    barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
 }
 
-const BarnCheckbox: React.FC<IProps> = ({ barn, relevanteBarnFelt }) => {
+const BarnCheckbox: React.FC<IProps> = ({ barn, barnIBrevFelt }) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
@@ -63,12 +63,12 @@ const BarnCheckbox: React.FC<IProps> = ({ barn, relevanteBarnFelt }) => {
                         id={`fjern__${barn.ident}`}
                         size={'small'}
                         onClick={() => {
-                            relevanteBarnFelt.validerOgSettFelt([
-                                ...relevanteBarnFelt.verdi.filter(
-                                    relevanteBarn =>
-                                        relevanteBarn.ident !== barn.ident ||
-                                        relevanteBarn.navn !== barn.navn ||
-                                        relevanteBarn.fødselsdato !== barn.fødselsdato
+                            barnIBrevFelt.validerOgSettFelt([
+                                ...barnIBrevFelt.verdi.filter(
+                                    barnIBrev =>
+                                        barnIBrev.ident !== barn.ident ||
+                                        barnIBrev.navn !== barn.navn ||
+                                        barnIBrev.fødselsdato !== barn.fødselsdato
                                 ),
                             ]);
                         }}
