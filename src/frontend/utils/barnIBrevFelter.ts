@@ -12,10 +12,10 @@ interface IProps {
     skalFeltetVises?: (avhengigheter: Avhengigheter) => boolean;
 }
 
-export const useBarnSøktForFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
+export const useBarnIBrevFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
     const { bruker: brukerRessurs } = useFagsakContext();
 
-    const barnSøktFor = useFelt<IBarnMedOpplysninger[]>({
+    const barnIBrev = useFelt<IBarnMedOpplysninger[]>({
         verdi: [],
         valideringsfunksjon: felt => {
             return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
@@ -49,12 +49,12 @@ export const useBarnSøktForFelter = ({ avhengigheter, skalFeltetVises }: IProps
         else return [];
     };
 
-    const nullstillBarnSøktFor = () => {
-        barnSøktFor.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
+    const nullstillBarnIBrev = () => {
+        barnIBrev.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
     };
 
     return {
-        barnSøktFor,
-        nullstillBarnSøktFor,
+        barnIBrev,
+        nullstillBarnIBrev,
     };
 };
