@@ -20,7 +20,7 @@ import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import { Distribusjonskanal } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import { Målform } from '../typer/søknad';
-import { useBarnSøktForFelter } from '../utils/barnSøktForFelter';
+import { useBarnIBrevFelter } from '../utils/barnIBrevFelter';
 import type { IsoDatoString } from '../utils/dato';
 import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
 import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
@@ -39,6 +39,7 @@ export enum DokumentÅrsak {
     TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL = 'TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL',
     TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER = 'TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER',
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD = 'TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD',
+    KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV = 'KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -58,6 +59,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
         'Til forelder omfattet norsk lovgivning - henter ikke registeropplysninger',
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
         'Til forelder med selvstendig rett vi har fått F016 - kan søke om barnetrygd',
+    KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV: 'Kan ha rett til pengestøtte fra Nav',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -129,7 +131,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
         });
 
-        const { barnSøktFor, nullstillBarnSøktFor } = useBarnSøktForFelter({
+        const { barnIBrev, nullstillBarnIBrev } = useBarnIBrevFelter({
             avhengigheter: { årsakFelt: årsak },
             skalFeltetVises: avhengigheter =>
                 [
@@ -138,6 +140,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
                     DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
                     DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
+                    DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
                 ].includes(avhengigheter.årsakFelt.verdi),
         });
 
@@ -154,7 +157,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 fritekster: FeltState<IFritekstFelt>[];
                 dokumenter: string[];
                 barnMedDeltBosted: IBarnMedOpplysninger[];
-                barnSøktFor: IBarnMedOpplysninger[];
+                barnIBrev: IBarnMedOpplysninger[];
                 avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
             },
             string
@@ -167,7 +170,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 dokumenter: dokumenter,
 
                 barnMedDeltBosted,
-                barnSøktFor,
+                barnIBrev,
                 avtalerOmDeltBostedPerBarn: avtalerOmDeltBostedPerBarn,
             },
             skjemanavn: 'Dokumentutsending',
@@ -178,13 +181,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.felter.fritekster.nullstill();
             skjema.felter.målform.nullstill();
             nullstillDeltBosted();
-            nullstillBarnSøktFor();
+            nullstillBarnIBrev();
         };
 
         const nullstillSkjema = () => {
             nullstillHeleSkjema();
             nullstillDeltBosted();
-            nullstillBarnSøktFor();
+            nullstillBarnIBrev();
         };
 
         useEffect(() => {
@@ -203,11 +206,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             };
         };
 
-        const hentBarnSøktForSkjemaData = (
+        const hentBarnIBrevSkjemaData = (
             brevmal: Informasjonsbrev,
             målform: Målform
         ): IManueltBrevRequestPåFagsak => {
-            const barnIBrev = skjema.felter.barnSøktFor.verdi.filter(barn => barn.merket);
+            const barnIBrev = skjema.felter.barnIBrev.verdi.filter(barn => barn.merket);
 
             return {
                 multiselectVerdier: barnIBrev.map(
@@ -283,28 +286,33 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         });
 
                     case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-                        return hentBarnSøktForSkjemaData(
+                        return hentBarnIBrevSkjemaData(
                             Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
-                        return hentBarnSøktForSkjemaData(
+                        return hentBarnIBrevSkjemaData(
                             Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
-                        return hentBarnSøktForSkjemaData(
+                        return hentBarnIBrevSkjemaData(
                             Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
-                        return hentBarnSøktForSkjemaData(
+                        return hentBarnIBrevSkjemaData(
                             Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
-                        return hentBarnSøktForSkjemaData(
+                        return hentBarnIBrevSkjemaData(
                             Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
+                            målform.verdi ?? Målform.NB
+                        );
+                    case DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
+                        return hentBarnIBrevSkjemaData(
+                            Informasjonsbrev.INFORMASJONSBREV_KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
                             målform.verdi ?? Målform.NB
                         );
                 }
