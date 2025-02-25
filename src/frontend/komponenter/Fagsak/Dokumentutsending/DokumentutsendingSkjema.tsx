@@ -84,8 +84,6 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
-    const årsakVerdi = skjema.felter.årsak.verdi;
-
     const { toggles } = useApp();
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
@@ -108,7 +106,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         [BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER]: 'Hvilke barn er bosatt med søker?',
     };
 
-    const barnIBrevÅrsak = finnBarnIBrevÅrsak(årsakVerdi);
+    const barnIBrevÅrsak = finnBarnIBrevÅrsak(skjema.felter.årsak.verdi);
 
     useEffect(() => {
         hentDistribusjonskanal(bruker.personIdent);
