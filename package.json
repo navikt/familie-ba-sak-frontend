@@ -40,7 +40,7 @@
     "@navikt/familie-backend": "^10.1.4",
     "@navikt/familie-endringslogg": "14.0.0",
     "@navikt/familie-form-elements": "21.0.0",
-    "@navikt/familie-header": "15.0.0",
+    "@navikt/familie-header": "15.1.1",
     "@navikt/familie-ikoner": "9.1.0",
     "@navikt/familie-logging": "7.0.0",
     "@navikt/familie-skjema": "8.2.7",
