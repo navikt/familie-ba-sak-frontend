@@ -1781,13 +1781,13 @@
     "@navikt/familie-typer" "^8.0.2"
     "@navikt/fnrvalidator" "^2.1.5"
 
-"@navikt/familie-http@^7.0.14":
-  version "7.0.14"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.14/e865fd77e78c408571c5d948c3c4cbe1e4752fd9#e865fd77e78c408571c5d948c3c4cbe1e4752fd9"
-  integrity sha512-aBiHvl47ehs+6EehpGKWH13mvlwJl9nU4iwfNJ+NZwRjf32gmw2o64N0PwvZf/rFqNaDV3c4whMYQ0rIIZzFDw==
+"@navikt/familie-http@^7.0.25":
+  version "7.0.25"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.25/87ab8913b5f71b47678b4172fca9685c8b850e03#87ab8913b5f71b47678b4172fca9685c8b850e03"
+  integrity sha512-TVQu4x4DqcDaZlWGXyXjKuBZAshodppSdADeCp+90JYHZYc+fVX/ivdNdvxkMK1Qf6uidseCdEB0fOEMzZ/Mmg==
   dependencies:
-    "@navikt/familie-typer" "^8.0.2"
-    "@sentry/core" "^8.11.0"
+    "@navikt/familie-typer" "^8.0.3"
+    "@sentry/core" "^8.50.0"
     constate "^3.3.2"
 
 "@navikt/familie-ikoner@9.1.0", "@navikt/familie-ikoner@^9.0.3":
@@ -1816,7 +1816,7 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.7/36529d4bc8f45121ba5a1c7067c8f134dca339aa#36529d4bc8f45121ba5a1c7067c8f134dca339aa"
   integrity sha512-jMyUwaPDafd0Ih+KXyWblQh/8VB7GOAKPozgG9j426QddL3t3HpmX2A3aTD8JIa9QnN6s8segjpP0tW7wtuJtA==
   dependencies:
-    "@navikt/familie-http" "^7.0.14"
+    "@navikt/familie-http" "^7.0.25"
     "@navikt/familie-typer" "^8.0.2"
     "@types/deep-equal" "^1.0.4"
     deep-equal "^2.2.3"
@@ -1830,10 +1830,10 @@
     classnames "^2.5.1"
     nanoid "^5.0.9"
 
-"@navikt/familie-typer@8.0.2", "@navikt/familie-typer@^8.0.2":
-  version "8.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.2/21bcc780c35b6a8699d1c52b54e61d83580736f7#21bcc780c35b6a8699d1c52b54e61d83580736f7"
-  integrity sha512-pKSpCzryJE6eiN/Ssox1oLLKPW5ezsT+/gTHbhgxOtM/frFSZLguSjwhgiDp2kovckJ84nxhnQurK6igw8GEHw==
+"@navikt/familie-typer@8.0.3", "@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3":
+  version "8.0.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.3/af354ab37c1b52c9f09ce690c72ace25f00131df#af354ab37c1b52c9f09ce690c72ace25f00131df"
+  integrity sha512-DoTtJolQm9SvDt7/VkhqiQ0WXbj9584V+gN1GhouPQtecHK8RF7dxkuep4We1mOhfSCxC5mGrHxu2nveCN1AqA==
 
 "@navikt/familie-visittkort@^15.1.3":
   version "15.1.3"
@@ -2224,10 +2224,10 @@
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-9.1.0.tgz#db7438d144b7ea405260c33082971eedab48d7f3"
   integrity sha512-djWEzSBpMgqdF3GQuxO+kXCUX+Mgq42G4Uah/HSUBvPDHKipMmyWlutGRoFyVPPOnCDgpHu3wCt83wbpEyVmDw==
 
-"@sentry/core@^8.11.0":
-  version "8.54.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-8.54.0.tgz#a2ebec965cadcb6de89e116689feeef79d5862a6"
-  integrity sha512-03bWf+D1j28unOocY/5FDB6bUHtYlm6m6ollVejhg45ZmK9iPjdtxNWbrLsjT1WRym0Tjzowu+A3p+eebYEv0Q==
+"@sentry/core@^8.50.0":
+  version "8.55.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-8.55.0.tgz#4964920229fcf649237ef13b1533dfc4b9f6b22e"
+  integrity sha512-6g7jpbefjHYs821Z+EBJ8r4Z7LT5h80YSWRJaylGS4nW5W5Z2KXzpdnyFarv37O7QjauzVC2E+PABmpkw5/JGA==
 
 "@sentry/webpack-plugin@^3.1.2":
   version "3.1.2"
