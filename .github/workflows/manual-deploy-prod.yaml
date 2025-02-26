@@ -1,14 +1,7 @@
-name: Manual deploy
+name: Manual deploy to prod (from main)
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Environment to deploy to"
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
       skip-tests:
         description: 'Skip tests?'
         default: false
@@ -25,9 +18,9 @@ on:
 jobs:
   build:
     name: Build
+    if: github.ref == 'refs/heads/main' # Only deploy to prod from main branch
     permissions:
       contents: read
-      packages: write
       id-token: write
     uses: navikt/familie-baks-gha-workflows/.github/workflows/build-yarn-app.yaml@main
     with:
@@ -45,6 +38,6 @@ jobs:
     uses: navikt/familie-baks-gha-workflows/.github/workflows/deploy.yaml@main
     with:
       image: ${{ needs.build.outputs.image }}
-      cluster: ${{ inputs.environment }}-gcp
-      resource: .nais/app-${{ inputs.environment }}.yaml
+      cluster: prod-gcp
+      resource: .nais/app-prod.yaml
     secrets: inherit
