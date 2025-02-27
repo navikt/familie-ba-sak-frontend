@@ -1,11 +1,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Link, Tooltip } from '@navikt/ds-react';
-import { ASpacing3 } from '@navikt/ds-tokens/dist/tokens';
+import { HStack, Link, Tooltip } from '@navikt/ds-react';
 
 import type { VisningBehandling } from './visningBehandling';
 import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
@@ -20,12 +17,13 @@ import {
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { IKlagebehandling } from '../../../typer/klage';
 import {
-    Klagebehandlingstype,
-    KlageinstansEventType,
-    klageinstansUtfallTilTekst,
+    erKlageFeilregistrertAvKA,
+    harAnkeEksistertPåKlagebehandling,
+    type IKlagebehandling,
+    utledKlagebehandlingResultattekst,
 } from '../../../typer/klage';
+import { Klagebehandlingstype } from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import {
     Behandlingsresultatstype,
@@ -168,43 +166,6 @@ export const lagLenkePåType = (
     }
 };
 
-const erKlageFeilregistrertAvKA = (behandling: IKlagebehandling) =>
-    behandling.klageinstansResultat?.some(
-        resultat => resultat.type == KlageinstansEventType.BEHANDLING_FEILREGISTRERT
-    );
-
-const utledKlageBehandlingsresultatTilTekst = (behandling: IKlagebehandling) => {
-    const klageBehandlingAvsluttetUtfall = behandling.klageinstansResultat?.find(
-        resultat =>
-            resultat.utfall && resultat.type === KlageinstansEventType.KLAGEBEHANDLING_AVSLUTTET
-    )?.utfall;
-
-    if (klageBehandlingAvsluttetUtfall) {
-        return klageinstansUtfallTilTekst[klageBehandlingAvsluttetUtfall];
-    }
-    if (erKlageFeilregistrertAvKA(behandling)) {
-        return 'Feilregistrert (KA)';
-    }
-    if (behandling.resultat) {
-        return behandlingsresultater[behandling.resultat];
-    }
-
-    return 'Ikke satt';
-};
-
-const ankeHarEksistertPåBehandling = (behandling: IKlagebehandling) => {
-    return behandling.klageinstansResultat?.some(
-        resultat =>
-            resultat.type === KlageinstansEventType.ANKEBEHANDLING_OPPRETTET ||
-            resultat.type === KlageinstansEventType.ANKEBEHANDLING_AVSLUTTET
-    );
-};
-
-const ResultatCelle = styled.div`
-    display: flex;
-    gap: ${ASpacing3};
-`;
-
 export const lagLenkePåResultat = (
     minimalFagsak: IMinimalFagsak,
     behandling: Saksoversiktsbehandling
@@ -235,29 +196,39 @@ export const lagLenkePåResultat = (
             );
         case Saksoversiktbehandlingstype.KLAGE: {
             return (
-                <ResultatCelle>
+                <HStack gap={'2'}>
                     <Link
                         href={`/redirect/familie-klage/behandling/${behandling.id}`}
-                        onMouseDown={e => e.preventDefault()}
-                        target="_blank"
+                        onMouseDown={event => event.preventDefault()}
+                        target={'_blank'}
                     >
-                        <span>{utledKlageBehandlingsresultatTilTekst(behandling)}</span>
+                        <span>{utledKlagebehandlingResultattekst(behandling)}</span>
                         <ExternalLinkIcon fontSize={'1.5rem'} />
                     </Link>
-                    {ankeHarEksistertPåBehandling(behandling) && (
-                        <Tooltip content="Det finnes informasjon om anke på denne klagen. Gå inn på klagebehandlingens resultatside for å se detaljer.">
+                    {harAnkeEksistertPåKlagebehandling(behandling) && (
+                        <Tooltip
+                            content={
+                                'Det finnes informasjon om anke på denne klagen. ' +
+                                'Gå inn på klagebehandlingens resultatside for å se detaljer.'
+                            }
+                        >
                             <StatusIkon status={Status.ADVARSEL} />
                         </Tooltip>
                     )}
                     {erKlageFeilregistrertAvKA(behandling) && (
-                        <Tooltip content="Klagen er feilregistrert av NAV klageinstans. Gå inn på klagebehandlingens resultatside for å se detaljer">
+                        <Tooltip
+                            content={
+                                'Klagen er feilregistrert av NAV klageinstans. ' +
+                                'Gå inn på klagebehandlingens resultatside for å se detaljer'
+                            }
+                        >
                             <StatusIkon
                                 status={Status.ADVARSEL}
                                 title={'Behandling feilregistrert av NAV klageinstans'}
                             />
                         </Tooltip>
                     )}
-                </ResultatCelle>
+                </HStack>
             );
         }
     }
