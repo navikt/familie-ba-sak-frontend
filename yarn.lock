@@ -1781,10 +1781,10 @@
     "@navikt/familie-typer" "^8.0.2"
     "@navikt/fnrvalidator" "^2.1.5"
 
-"@navikt/familie-http@^7.0.25":
-  version "7.0.25"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.25/87ab8913b5f71b47678b4172fca9685c8b850e03#87ab8913b5f71b47678b4172fca9685c8b850e03"
-  integrity sha512-TVQu4x4DqcDaZlWGXyXjKuBZAshodppSdADeCp+90JYHZYc+fVX/ivdNdvxkMK1Qf6uidseCdEB0fOEMzZ/Mmg==
+"@navikt/familie-http@^7.0.26":
+  version "7.0.26"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.26/613f6fb6af3f298af1af9d26fe569f501af974b6#613f6fb6af3f298af1af9d26fe569f501af974b6"
+  integrity sha512-dhHFu1++xpqRJgOUx05GLmpfA8rEIJ088oRvTqw6TgO6fVyVRgnUjvTKbqmNFUN5e9kwujCKPqHKGkhpQzPuKQ==
   dependencies:
     "@navikt/familie-typer" "^8.0.3"
     "@sentry/core" "^8.50.0"
@@ -1816,7 +1816,7 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.7/36529d4bc8f45121ba5a1c7067c8f134dca339aa#36529d4bc8f45121ba5a1c7067c8f134dca339aa"
   integrity sha512-jMyUwaPDafd0Ih+KXyWblQh/8VB7GOAKPozgG9j426QddL3t3HpmX2A3aTD8JIa9QnN6s8segjpP0tW7wtuJtA==
   dependencies:
-    "@navikt/familie-http" "^7.0.25"
+    "@navikt/familie-http" "^7.0.14"
     "@navikt/familie-typer" "^8.0.2"
     "@types/deep-equal" "^1.0.4"
     deep-equal "^2.2.3"
