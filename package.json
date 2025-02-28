@@ -15,6 +15,7 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
+    "prettier": "prettier --check './src/**/*.{js,jsx,ts,tsx,json,css}'",
     "prettier-check": "prettier --check './src/**/*.{js,jsx,ts,tsx,json,css}'",
     "prettier-fix": "prettier --write './src/**/*.{js,jsx,ts,tsx,json,css}'",
     "prepare": "husky",
@@ -22,7 +23,8 @@
     "start:cypress": "tsc -p tsconfig.backend.json && yarn set-node-options NODE_ENV=production node backend/backend/cypress-server.js",
     "run:cypress": "cypress run",
     "cypress": "yarn start:cypress & yarn run:cypress",
-    "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck"
+    "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck",
+    "validate": "yarn typecheck && yarn lint && yarn prettier"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
