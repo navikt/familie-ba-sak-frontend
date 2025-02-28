@@ -82,4 +82,4 @@ export function lagKlagebehandling(klagebehandling: Partial<IKlagebehandling>): 
     };
 }
 
-export * as KlageTestdata from './KlageTestdata';
+export * as KlageTestdata from './klageTestdata';
