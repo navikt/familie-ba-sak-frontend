@@ -19,8 +19,8 @@ const AvregningAlert = () => {
             <BodyLong>Du må derfor:</BodyLong>
             <List>
                 <List.Item>
-                    Betale ut etterbetalingen, deretter opprette t-sak om feilutbetalingen («splitte
-                    saken»).
+                    Først gjøre vedtak om etterbetalingen, og deretter gjøre nytt vedtak om
+                    feilutbetalingen og opprette t-sak («splitte saken»).
                 </List.Item>
             </List>
         </StyledAlert>
