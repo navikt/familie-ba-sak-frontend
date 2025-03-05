@@ -91,6 +91,14 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         0
     );
 
+    const erAvregning =
+        simResultat &&
+        simResultat.perioder.some(periode => {
+            const erFeilutbetalingIPeriode = periode.feilutbetaling && periode.feilutbetaling > 0;
+            const erEtterbetalingIPeriode = periode.etterbetaling && periode.etterbetaling > 0;
+            return erFeilutbetalingIPeriode && erEtterbetalingIPeriode;
+        });
+
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
@@ -259,6 +267,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         onSubmit,
         hentFeilTilOppsummering,
         erFeilutbetaling,
+        erAvregning,
         hentSkjemadata,
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
