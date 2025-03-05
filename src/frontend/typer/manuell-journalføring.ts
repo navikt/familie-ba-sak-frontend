@@ -30,7 +30,7 @@ export interface IRestJournalføring {
     journalpostTittel?: string;
     dokumenter?: IRestJournalpostDokument[];
     knyttTilFagsak: boolean;
-    tilknyttedeBehandlingIder: number[];
+    tilknyttedeBehandlingIder: string[];
     opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;
     kategori: BehandlingKategori | null;
