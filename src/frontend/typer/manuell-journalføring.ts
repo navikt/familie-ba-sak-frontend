@@ -3,6 +3,7 @@ import type { IJournalpost } from '@navikt/familie-typer';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IMinimalFagsak } from './fagsak';
 import type { FagsakType } from './fagsak';
+import type { IKlagebehandling } from './klage';
 import type { IOppgave } from './oppgave';
 import type { IPersonInfo } from './person';
 
@@ -11,6 +12,7 @@ export interface IDataForManuellJournalføring {
     oppgave: IOppgave;
     person?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
+    klagebehandlinger: IKlagebehandling[];
 }
 
 export interface IRestJournalpostDokument {
