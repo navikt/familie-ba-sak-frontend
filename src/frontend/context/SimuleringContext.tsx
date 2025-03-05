@@ -92,11 +92,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     );
 
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
-    const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
+    const erEtterbetaling = simResultat && simResultat.etterbetaling > 0;
+    const erEtterbetalingFørMars2023 = totalEtterbetalingFørMars2023 > 0;
 
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterutbetaling;
+    const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterbetalingFørMars2023;
 
     const erMigreringFraInfotrygdMedAvvik =
         erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
@@ -259,8 +260,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         onSubmit,
         hentFeilTilOppsummering,
         erFeilutbetaling,
+        erEtterbetaling,
         hentSkjemadata,
         maksLengdeTekst,
+        harÅpenTilbakekreving,
         harÅpenTilbakekrevingRessurs,
         erMigreringFraInfotrygdMedAvvik,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,

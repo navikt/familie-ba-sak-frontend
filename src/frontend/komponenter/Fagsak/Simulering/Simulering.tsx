@@ -7,15 +7,18 @@ import { Alert } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import AvregningAlert from './AvregningAlert';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg } from '../../../typer/behandling';
 import type { ITilbakekreving } from '../../../typer/simulering';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
@@ -33,6 +36,7 @@ const StyledBeløpsgrenseAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
+    const { toggles } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {
@@ -40,8 +44,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         simuleringsresultat,
         tilbakekrevingSkjema,
+        harÅpenTilbakekreving,
         harÅpenTilbakekrevingRessurs,
         erFeilutbetaling,
+        erEtterbetaling,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
@@ -49,6 +55,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErEndreMigreringsdato,
     } = useSimulering();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+
+    const erAvregning =
+        toggles[ToggleNavn.validerIkkeAvregning] &&
+        erEtterbetaling &&
+        (erFeilutbetaling || harÅpenTilbakekreving);
 
     const nesteOnClick = () => {
         if (vurderErLesevisning()) {
@@ -90,6 +101,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
+            skalDisableNesteKnapp={erAvregning}
         >
             {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
                 <StyledAlert variant={'warning'}>
@@ -149,7 +161,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     to-trinnskontroll.
                                 </StyledBeløpsgrenseAlert>
                             )}
-                        {erFeilutbetaling && (
+                        {erAvregning && <AvregningAlert />}
+                        {erFeilutbetaling && !erAvregning && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
