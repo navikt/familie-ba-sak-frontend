@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
+import { type IDokumentInfo, type Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -25,7 +25,12 @@ import type { IBehandlingstema } from '../typer/behandlingstema';
 import { behandlingstemaer } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
-import type { Klagebehandlingstype } from '../typer/klage';
+import {
+    type Journalpostbehandling,
+    opprettFraBarnetrygdbehandling,
+    opprettFraKlagebehandling,
+} from '../typer/journalpostbehandling';
+import type { IKlagebehandling, Klagebehandlingstype } from '../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -41,6 +46,7 @@ import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../typer/toggles';
 import { isoStringTilDate } from '../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 
@@ -51,13 +57,14 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     avsenderNavn: string;
     avsenderIdent: string;
     knyttTilNyBehandling: boolean;
-    tilknyttedeBehandlingIder: number[];
+    tilknyttedeBehandlingIder: string[];
     fagsakType: FagsakType;
     samhandler: ISamhandlerInfo | undefined;
 }
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler, toggles } = useApp();
+
     const navigate = useNavigate();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -66,6 +73,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
     const [erKlage, settErKlage] = useState<boolean>(false);
+    const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[] | undefined>(
+        undefined
+    );
     const [dataForManuellJournalføring, settDataForManuellJournalføring] =
         useState(byggTomRessurs<IDataForManuellJournalføring>());
     const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<
@@ -172,7 +182,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             knyttTilNyBehandling,
             behandlingstype,
             behandlingsårsak,
-            tilknyttedeBehandlingIder: useFelt<number[]>({
+            tilknyttedeBehandlingIder: useFelt<string[]>({
                 verdi: [],
             }),
             fagsakType: useFelt<FagsakType>({
@@ -212,7 +222,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             if (dataForManuellJournalføring.data.minimalFagsak) {
                 settMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
             }
-
+            settKlagebehandlinger(dataForManuellJournalføring.data.klagebehandlinger);
             settErKlage(erOppgaveJournalførKlage(dataForManuellJournalføring.data.oppgave));
         }
     }, [dataForManuellJournalføring]);
@@ -360,15 +370,26 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return aktivBehandling;
     };
 
-    const hentSorterteBehandlinger = () => {
-        return minimalFagsak?.behandlinger.length
-            ? minimalFagsak.behandlinger.sort((a, b) =>
-                  differenceInMilliseconds(
-                      isoStringTilDate(b.opprettetTidspunkt),
-                      isoStringTilDate(a.opprettetTidspunkt)
-                  )
-              )
-            : [];
+    const hentSorterteJournalpostbehandlinger = (): Journalpostbehandling[] => {
+        const journalpostbehandlingerKlage = (klagebehandlinger ?? []).map(klagebehandling =>
+            opprettFraKlagebehandling(klagebehandling)
+        );
+
+        const journalpostbehandlingerBarnetrygd = (minimalFagsak?.behandlinger ?? []).map(
+            barnetrygdbehandling => opprettFraBarnetrygdbehandling(barnetrygdbehandling)
+        );
+
+        const journalpostbehandlinger = [
+            ...(toggles[ToggleNavn.kanBehandleKlage] ? journalpostbehandlingerKlage : []),
+            ...journalpostbehandlingerBarnetrygd,
+        ];
+
+        return journalpostbehandlinger.sort((behandling1, behandling2) =>
+            differenceInMilliseconds(
+                isoStringTilDate(behandling2.opprettetTidspunkt),
+                isoStringTilDate(behandling1.opprettetTidspunkt)
+            )
+        );
     };
 
     const journalfør = () => {
@@ -538,11 +559,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             innloggetSaksbehandler.navIdent;
 
     const erLesevisning = () => {
+        return false;
+        /*
         return (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             (dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT ||
                 !erTilordnetInnloggetSaksbehandler())
         );
+         */
     };
 
     const kanKnytteJournalpostTilBehandling = () => {
@@ -621,7 +645,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         minimalFagsak,
         hentAktivBehandlingForJournalføring,
         hentFeilTilOppsummering,
-        hentSorterteBehandlinger,
+        hentSorterteJournalpostbehandlinger,
         journalfør,
         knyttTilNyBehandling,
         nullstillSkjema,
@@ -638,6 +662,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         settMinimalFagsakTilNormalFagsakForPerson,
         settMinimalFagsakTilInstitusjonsfagsak,
         erDigitaltInnsendtDokument,
+        klagebehandlinger,
     };
 });
 
