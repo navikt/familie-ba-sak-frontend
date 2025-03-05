@@ -34,10 +34,11 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
     const {
         skjema,
         minimalFagsak,
-        hentSorterteBehandlinger,
+        hentSorterteJournalføringsbehandlinger,
         kanKnytteJournalpostTilBehandling,
         erLesevisning,
     } = useManuellJournalfør();
+
     const åpenBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -46,14 +47,16 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         !erLesevisning() &&
         skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
         !skjema.felter.knyttTilNyBehandling.verdi;
+
+    const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
+
     return (
         <KnyttDiv>
-            {!!minimalFagsak?.behandlinger.length && (
+            {sorterteJournalføringsbehandlinger.length > 0 && (
                 <>
                     <Heading size={'small'} level={'2'}>
                         Knytt til tidligere behandling(er)
                     </Heading>
-
                     <Table>
                         <Table.Header>
                             <Table.Row>
@@ -65,68 +68,57 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {hentSorterteBehandlinger().map((behandling: VisningBehandling) => {
-                                const behandlingId: number | undefined =
-                                    typeof behandling.behandlingId == 'number'
-                                        ? behandling.behandlingId
-                                        : undefined;
-
+                            {sorterteJournalføringsbehandlinger.map(behandling => {
                                 return (
-                                    behandlingId !== undefined && (
-                                        <Table.Row
-                                            key={behandlingId}
-                                            aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                behandlingId
-                                            )}
-                                        >
-                                            <Table.DataCell>
-                                                <Checkbox
-                                                    id={behandlingId.toString()}
-                                                    value={behandlingId.toString()}
-                                                    checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                        behandlingId
-                                                    )}
-                                                    onChange={() => {
-                                                        skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
-                                                            [
-                                                                ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                                    it => it !== behandlingId
-                                                                ),
-                                                                ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                                    behandlingId
-                                                                )
-                                                                    ? []
-                                                                    : [behandlingId]),
-                                                            ]
-                                                        );
-                                                    }}
-                                                    readOnly={!kanKnytteJournalpostTilBehandling()}
-                                                    hideLabel
-                                                >
-                                                    {behandlingId.toString()}
-                                                </Checkbox>
-                                            </Table.DataCell>
-                                            <Table.DataCell>
-                                                {isoStringTilFormatertString({
-                                                    isoString: behandling.opprettetTidspunkt,
-                                                    tilFormat: Datoformat.DATO_FORKORTTET,
-                                                })}
-                                            </Table.DataCell>
-                                            <Table.DataCell>
-                                                {
-                                                    behandlingÅrsak[
-                                                        behandling.årsak as BehandlingÅrsak
-                                                    ]
-                                                }
-                                            </Table.DataCell>
-                                            <Table.DataCell>
-                                                {behandlingstyper[behandling.type].navn}
-                                            </Table.DataCell>
-                                            <Table.DataCell>
-                                                {behandlingsstatuser[behandling.status]}
-                                            </Table.DataCell>
-                                        </Table.Row>
-                                    )
+                                    <Table.Row
+                                        key={behandling.id}
+                                        aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                            behandling.id
+                                        )}
+                                    >
+                                        <Table.DataCell>
+                                            <Checkbox
+                                                id={behandling.id}
+                                                value={behandling.id}
+                                                checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                    behandling.id
+                                                )}
+                                                onChange={() => {
+                                                    skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                        [
+                                                            ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
+                                                                it => it !== behandling.id
+                                                            ),
+                                                            ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                                behandling.id
+                                                            )
+                                                                ? []
+                                                                : [behandling.id]),
+                                                        ]
+                                                    );
+                                                }}
+                                                readOnly={!kanKnytteJournalpostTilBehandling()}
+                                                hideLabel={true}
+                                            >
+                                                {behandling.id}
+                                            </Checkbox>
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {isoStringTilFormatertString({
+                                                isoString: behandling.opprettetTidspunkt,
+                                                tilFormat: Datoformat.DATO_FORKORTTET,
+                                            })}
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {behandlingstyper[behandling.type].navn}
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {behandlingsstatuser[behandling.status]}
+                                        </Table.DataCell>
+                                    </Table.Row>
                                 );
                             })}
                         </Table.Body>
@@ -139,7 +131,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             {visGenerellSakInfoStripe && (
                 <StyledAlert variant="info">
                     <GenerellSakInfoStripeTittel>
-                        {hentSorterteBehandlinger().length > 0
+                        {sorterteJournalføringsbehandlinger.length > 0
                             ? `Du velger å journalføre uten å knytte til behandling(er).`
                             : `Du velger å journalføre uten å knytte til ny behandling.`}
                     </GenerellSakInfoStripeTittel>
