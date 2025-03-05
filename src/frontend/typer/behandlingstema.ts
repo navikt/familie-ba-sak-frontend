@@ -1,5 +1,3 @@
-import type { IOppgave } from './oppgave';
-
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
     EØS = 'EØS',
@@ -22,6 +20,7 @@ export interface IRestEndreBehandlingUnderkategori {
     behandlingKategori: BehandlingKategori;
     behandlingUnderkategori: BehandlingUnderkategori;
 }
+
 export const behandlingKategori: Record<BehandlingKategori, string> = {
     NASJONAL: 'Nasjonal',
     EØS: 'EØS',
@@ -81,23 +80,12 @@ export const tilBehandlingstema = (
     );
 };
 
-const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
+export const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
     ab0180: BehandlingUnderkategori.ORDINÆR,
     ab0096: BehandlingUnderkategori.UTVIDET,
 };
 
-const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = {
+export const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = {
     ae0118: BehandlingKategori.NASJONAL,
     ae0120: BehandlingKategori.EØS,
-};
-
-export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | undefined => {
-    const { behandlingstema: gjelder, behandlingstype } = oppgave;
-    return gjelder in kodeTilBehandlingUnderkategoriMap &&
-        behandlingstype in kodeTilBehandlingKategoriMap
-        ? tilBehandlingstema(
-              kodeTilBehandlingKategoriMap[behandlingstype],
-              kodeTilBehandlingUnderkategoriMap[gjelder]
-          )
-        : undefined;
 };

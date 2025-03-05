@@ -1,6 +1,13 @@
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
+import {
+    type BehandlingKategori,
+    type BehandlingUnderkategori,
+    type IBehandlingstema,
+    kodeTilBehandlingKategoriMap,
+    kodeTilBehandlingUnderkategoriMap,
+    tilBehandlingstema,
+} from './behandlingstema';
 import type { IPar } from './common';
 import type { INavnOgIdent } from './manuell-journalføring';
 
@@ -118,6 +125,7 @@ export enum BehandlingstypeFilter {
     ae0161 = 'ae0161',
     ae0118 = 'ae0118',
     ae0120 = 'ae0120',
+    ae0058 = 'ae0058',
 }
 
 export const behandlingstypeFilter: Record<BehandlingstypeFilter, IPar> = {
@@ -126,6 +134,7 @@ export const behandlingstypeFilter: Record<BehandlingstypeFilter, IPar> = {
     ae0120: { id: 'ae0120', navn: 'EØS' },
     ae0106: { id: 'ae0106', navn: 'Utland' },
     ae0161: { id: 'ae0161', navn: 'Tilbakekreving' },
+    ae0058: { id: 'ae0058', navn: 'Klage' },
 };
 
 export enum OppgavetypeFilter {
@@ -192,4 +201,25 @@ export interface IRestLukkOppgaveOgKnyttJournalpost {
     navIdent: string;
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
+}
+
+export function erOppgaveJournalførKlage(oppgave: IOppgave): boolean {
+    return (
+        oppgave.oppgavetype === OppgavetypeFilter.JFR &&
+        oppgave.behandlingstype === BehandlingstypeFilter.ae0058
+    );
+}
+
+export function finnBehandlingstemaFraOppgave(oppgave: IOppgave): IBehandlingstema | undefined {
+    if (erOppgaveJournalførKlage(oppgave)) {
+        return undefined;
+    }
+    const { behandlingstema: gjelder, behandlingstype } = oppgave;
+    return gjelder in kodeTilBehandlingUnderkategoriMap &&
+        behandlingstype in kodeTilBehandlingKategoriMap
+        ? tilBehandlingstema(
+              kodeTilBehandlingKategoriMap[behandlingstype],
+              kodeTilBehandlingUnderkategoriMap[gjelder]
+          )
+        : undefined;
 }

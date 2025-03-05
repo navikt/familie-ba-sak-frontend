@@ -8,12 +8,11 @@ import { useNavigate, useParams } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { IDokumentInfo, Ressurs } from '@navikt/familie-typer';
+import { type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
-    Journalstatus,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -23,7 +22,7 @@ import type { IOpprettBehandlingSkjemaBase } from '../komponenter/Fagsak/Personl
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import type { IBehandlingstema } from '../typer/behandlingstema';
-import { behandlingstemaer, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
+import { behandlingstemaer } from '../typer/behandlingstema';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakType } from '../typer/fagsak';
 import type { Klagebehandlingstype } from '../typer/klage';
@@ -32,7 +31,11 @@ import type {
     IRestJournalføring,
 } from '../typer/manuell-journalføring';
 import { JournalpostKanal } from '../typer/manuell-journalføring';
-import type { IRestLukkOppgaveOgKnyttJournalpost } from '../typer/oppgave';
+import {
+    type IRestLukkOppgaveOgKnyttJournalpost,
+    finnBehandlingstemaFraOppgave,
+    erOppgaveJournalførKlage,
+} from '../typer/oppgave';
 import { OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
@@ -62,6 +65,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
+    const [erKlage, settErKlage] = useState<boolean>(false);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] =
         useState(byggTomRessurs<IDataForManuellJournalføring>());
     const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<
@@ -134,7 +138,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
                 skalFeltetVises: (avhengigheter: Avhengigheter) =>
                     avhengigheter.knyttTilNyBehandling &&
-                    minimalFagsak?.fagsakType !== FagsakType.INSTITUSJON,
+                    minimalFagsak?.fagsakType !== FagsakType.INSTITUSJON &&
+                    !erKlage,
                 valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
                     felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
@@ -191,7 +196,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             );
 
             skjema.felter.behandlingstema.validerOgSettFelt(
-                utredBehandlingstemaFraOppgave(dataForManuellJournalføring.data.oppgave)
+                finnBehandlingstemaFraOppgave(dataForManuellJournalføring.data.oppgave)
             );
 
             skjema.felter.avsenderNavn.validerOgSettFelt(
@@ -207,6 +212,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             if (dataForManuellJournalføring.data.minimalFagsak) {
                 settMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
             }
+
+            settErKlage(erOppgaveJournalførKlage(dataForManuellJournalføring.data.oppgave));
         }
     }, [dataForManuellJournalføring]);
 
