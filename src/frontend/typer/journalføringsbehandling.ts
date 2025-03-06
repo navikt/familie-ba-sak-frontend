@@ -28,7 +28,7 @@ export function opprettJournalføringsbehandlingFraBarnetrygdbehandling(
     barnetrygdbehandling: VisningBehandling
 ): Journalføringsbehandling {
     return {
-        id: barnetrygdbehandling.behandlingId + '',
+        id: barnetrygdbehandling.behandlingId.toString(),
         opprettetTidspunkt: barnetrygdbehandling.opprettetTidspunkt,
         årsak: barnetrygdbehandling.årsak,
         type: barnetrygdbehandling.type,
