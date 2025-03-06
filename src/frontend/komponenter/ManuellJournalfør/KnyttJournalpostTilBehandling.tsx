@@ -6,6 +6,7 @@ import { Alert, Checkbox, Heading, Table } from '@navikt/ds-react';
 import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
+import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import type { BehandlingÅrsak } from '../../typer/behandling';
 import {
@@ -14,6 +15,7 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../typer/behandling';
+import { ToggleNavn } from '../../typer/toggles';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
@@ -31,6 +33,8 @@ const StyledAlert = styled(Alert)`
 `;
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
+    const { toggles } = useApp();
+
     const {
         skjema,
         minimalFagsak,
@@ -49,6 +53,11 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         !skjema.felter.knyttTilNyBehandling.verdi;
 
     const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
+
+    const skalViseKnyttTilNyBehandling =
+        toggles[ToggleNavn.kanBehandleKlage] || // Skal alltid vises når klage er implementert
+        !åpenBehandling ||
+        åpenBehandling.status === BehandlingStatus.AVSLUTTET;
 
     return (
         <KnyttDiv>
@@ -125,9 +134,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </Table>
                 </>
             )}
-            {(!åpenBehandling || åpenBehandling.status === BehandlingStatus.AVSLUTTET) && (
-                <KnyttTilNyBehandling />
-            )}
+            {skalViseKnyttTilNyBehandling && <KnyttTilNyBehandling />}
             {visGenerellSakInfoStripe && (
                 <StyledAlert variant="info">
                     <GenerellSakInfoStripeTittel>
