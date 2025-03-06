@@ -52,7 +52,7 @@ describe('Journalføringsbehandling', () => {
             expect(journalføringsbehandling.opprettetTidspunkt).toBe(
                 barnetrygdbehandling.opprettetTidspunkt
             );
-            expect(journalføringsbehandling.type).toBe(Behandlingstype.FØRSTEGANGSBEHANDLING);
+            expect(journalføringsbehandling.type).toBe(barnetrygdbehandling.type);
             expect(journalføringsbehandling.status).toBe(barnetrygdbehandling.status);
         });
 
@@ -78,7 +78,7 @@ describe('Journalføringsbehandling', () => {
             expect(journalføringsbehandling.opprettetTidspunkt).toBe(
                 barnetrygdbehandling.opprettetTidspunkt
             );
-            expect(journalføringsbehandling.type).toBe(Behandlingstype.FØRSTEGANGSBEHANDLING);
+            expect(journalføringsbehandling.type).toBe(barnetrygdbehandling.type);
             expect(journalføringsbehandling.status).toBe(barnetrygdbehandling.status);
         });
     });
