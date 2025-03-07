@@ -31,7 +31,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     endretUtbetalingAndel,
     åpenBehandling,
 }) => {
-    const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
+    const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
     );
 
@@ -50,10 +50,10 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         );
 
     const toggleForm = () => {
-        if (erSkjemaForandret() && åpenUtbetalingsAndel) {
+        if (erSkjemaForandret() && erSkjemaEkspandert) {
             alert('Endretutbetalingsandelen har endringer som ikke er lagret!');
         } else {
-            settÅpenUtbetalingsAndel(!åpenUtbetalingsAndel);
+            settErSkjemaEkspandert(!erSkjemaEkspandert);
         }
     };
 
@@ -87,15 +87,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         <>
             <Table.ExpandableRow
                 togglePlacement="right"
-                open={åpenUtbetalingsAndel}
+                open={erSkjemaEkspandert}
                 onOpenChange={() => toggleForm()}
                 content={
                     <EndretUtbetalingAndelSkjema
                         åpenBehandling={åpenBehandling}
                         lukkSkjema={() => {
-                            settÅpenUtbetalingsAndel(false);
+                            settErSkjemaEkspandert(false);
                         }}
-                        key={åpenUtbetalingsAndel ? 'åpen' : 'lukket'}
+                        key={erSkjemaEkspandert ? 'åpen' : 'lukket'}
                     />
                 }
             >
