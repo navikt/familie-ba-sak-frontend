@@ -40,6 +40,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                         <EndretUtbetalingAndelRad
                             lagretEndretUtbetalingAndel={endretUtbetalingAndel}
                             åpenBehandling={åpenBehandling}
+                            key={endretUtbetalingAndel.id}
                         />
                     ))}
                 </Table.Body>
