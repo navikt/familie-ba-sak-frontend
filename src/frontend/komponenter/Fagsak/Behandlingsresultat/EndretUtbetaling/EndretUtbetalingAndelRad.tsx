@@ -88,7 +88,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                     lukkSkjema={() => {
                         settErSkjemaEkspandert(false);
                     }}
-                    key={erSkjemaEkspandert ? 'åpen' : 'lukket'}
                     slettEndretUtbetaling={slettEndretUtbetaling}
                     oppdaterEndretUtbetaling={oppdaterEndretUtbetaling}
                     settFelterTilLagredeVerdier={settFelterTilLagredeVerdier}
