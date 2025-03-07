@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { BodyShort, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
-import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import { useEndretUtbetalingAndel } from '../../../context/useEndretUtbetalingAndel';
 import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';

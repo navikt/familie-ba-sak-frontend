@@ -10,7 +10,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { type IEndretUtbetalingAndelSkjema } from '../../../context/EndretUtbetalingAndelContext';
+import { type IEndretUtbetalingAndelSkjema } from '../../../context/useEndretUtbetalingAndel';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
