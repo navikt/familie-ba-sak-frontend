@@ -18,6 +18,8 @@ import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { useTrackTidsbrukPåSide } from '../../hooks/useTrackTidsbrukPåSide';
+import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import { hentSideHref } from '../../utils/miljø';
 import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
@@ -25,11 +27,13 @@ import { sider } from '../Felleskomponenter/Venstremeny/sider';
 
 interface Props {
     bruker: IPersonInfo;
+    fagsak: IMinimalFagsak;
 }
 
-const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
+const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
     const location = useLocation();
     const { behandling, leggTilBesøktSide } = useBehandling();
+    useTrackTidsbrukPåSide(fagsak, behandling);
 
     const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
