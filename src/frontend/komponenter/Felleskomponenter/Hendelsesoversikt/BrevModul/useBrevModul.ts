@@ -45,7 +45,6 @@ export const useBrevModul = () => {
     const personer = behandling?.personer ?? [];
     const brevmottakere = behandling?.brevmottakere ?? [];
     const institusjon = minimalFagsak?.institusjon;
-    const fagsakType = minimalFagsak?.fagsakType;
 
     const velgMottaker = (): string | undefined => {
         if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && institusjon) {
@@ -286,9 +285,6 @@ export const useBrevModul = () => {
         skjemanavn: 'brevmodul',
     });
 
-    const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] =
-        React.useState<boolean>(false);
-
     const nullstillBarnBrevetGjelder = () => {
         const barn = personer
             .filter(person => person.type === PersonType.BARN)
@@ -423,10 +419,7 @@ export const useBrevModul = () => {
         hentSkjemaData,
         kanSendeSkjema,
         mottakersMålform,
-        navigerTilOpplysningsplikt,
         onSubmit,
-        personer,
-        settNavigerTilOpplysningsplikt,
         leggTilFritekstKulepunkt,
         makslengdeFritekstHvertKulepunkt,
         maksLengdeFritekstAvsnitt,
@@ -435,7 +428,6 @@ export const useBrevModul = () => {
         erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
-        fagsakType,
         visFritekstAvsnittTekstboks,
         settVisFritekstAvsnittTekstboks,
     };
