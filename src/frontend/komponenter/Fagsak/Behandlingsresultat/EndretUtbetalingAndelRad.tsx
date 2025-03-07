@@ -34,7 +34,13 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { skjemaHarEndringerSomIkkeErLagret } = useEndretUtbetalingAndel();
+    const {
+        skjema,
+        skjemaHarEndringerSomIkkeErLagret,
+        settFelterTilDefault,
+        oppdaterEndretUtbetaling,
+        slettEndretUtbetaling,
+    } = useEndretUtbetalingAndel();
 
     const toggleForm = () => {
         if (skjemaHarEndringerSomIkkeErLagret() && erSkjemaEkspandert) {
@@ -78,11 +84,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                 onOpenChange={() => toggleForm()}
                 content={
                     <EndretUtbetalingAndelSkjema
+                        skjema={skjema}
                         åpenBehandling={åpenBehandling}
                         lukkSkjema={() => {
                             settErSkjemaEkspandert(false);
                         }}
                         key={erSkjemaEkspandert ? 'åpen' : 'lukket'}
+                        slettEndretUtbetaling={slettEndretUtbetaling}
+                        oppdaterEndretUtbetaling={oppdaterEndretUtbetaling}
+                        settFelterTilDefault={settFelterTilDefault}
                     />
                 }
             >

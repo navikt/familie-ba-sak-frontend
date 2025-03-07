@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
+import type { ISkjema } from '@navikt/familie-skjema';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import { type IEndretUtbetalingAndelSkjema } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
@@ -54,22 +55,22 @@ const StyledTextarea = styled(Textarea)`
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     lukkSkjema: () => void;
+    skjema: ISkjema<IEndretUtbetalingAndelSkjema, IBehandling>;
+    settFelterTilDefault: () => void;
+    oppdaterEndretUtbetaling: (avbrytEndringAvUtbetalingsperiode: () => void) => void;
+    slettEndretUtbetaling: () => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     lukkSkjema,
+    skjema,
+    settFelterTilDefault,
+    oppdaterEndretUtbetaling,
+    slettEndretUtbetaling,
 }) => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-
-    const {
-        endretUtbetalingAndel,
-        skjema,
-        settFelterTilDefault,
-        oppdaterEndretUtbetaling,
-        slettEndretUtbetaling,
-    } = useEndretUtbetalingAndel();
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
@@ -285,7 +286,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {!erLesevisning ? (
                             <Button
                                 variant={'tertiary'}
-                                id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
                                 size={'small'}
                                 onClick={slettEndretUtbetaling}
                                 icon={<TrashIcon />}

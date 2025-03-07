@@ -29,6 +29,17 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
+export interface IEndretUtbetalingAndelSkjema {
+    person: string | undefined;
+    fom: IsoDatoString | undefined;
+    tom: IsoDatoString | undefined;
+    utbetaling: Utbetaling | undefined;
+    årsak: IEndretUtbetalingAndelÅrsak | undefined;
+    søknadstidspunkt: Date | undefined;
+    avtaletidspunktDeltBosted: Date | undefined;
+    begrunnelse: string | undefined;
+}
+
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(
     ({ endretUtbetalingAndel, åpenBehandling }: IProps) => {
         const { request } = useHttp();
@@ -51,16 +62,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         });
 
         const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
-            {
-                person: string | undefined;
-                fom: IsoDatoString | undefined;
-                tom: IsoDatoString | undefined;
-                utbetaling: Utbetaling | undefined;
-                årsak: IEndretUtbetalingAndelÅrsak | undefined;
-                søknadstidspunkt: Date | undefined;
-                avtaletidspunktDeltBosted: Date | undefined;
-                begrunnelse: string | undefined;
-            },
+            IEndretUtbetalingAndelSkjema,
             IBehandling
         >({
             felter: {
@@ -201,7 +203,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         };
 
         return {
-            endretUtbetalingAndel,
             skjema,
             settFelterTilDefault,
             skjemaHarEndringerSomIkkeErLagret,
