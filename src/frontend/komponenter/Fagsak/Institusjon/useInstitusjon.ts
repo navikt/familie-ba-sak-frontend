@@ -6,14 +6,14 @@ import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './Fagsak/FagsakContext';
-import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../typer/behandling';
-import { BehandlingSteg } from '../typer/behandling';
-import { FagsakType } from '../typer/fagsak';
-import type { IInstitusjon, IRegistrerInstitusjon } from '../typer/institusjon';
-import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg } from '../../../typer/behandling';
+import { FagsakType } from '../../../typer/fagsak';
+import type { IInstitusjon, IRegistrerInstitusjon } from '../../../typer/institusjon';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 
 export const useInstitusjon = (åpenBehandling: IBehandling) => {
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();

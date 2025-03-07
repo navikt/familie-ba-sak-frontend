@@ -6,9 +6,9 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { SamhandlerTabell } from './SamhandlerTabell';
+import { useInstitusjon } from './useInstitusjon';
 import { useSamhandlerRequest } from './useSamhandler';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useInstitusjon } from '../../../context/InstitusjonContext';
 import { BehandlingSteg, type IBehandling } from '../../../typer/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
