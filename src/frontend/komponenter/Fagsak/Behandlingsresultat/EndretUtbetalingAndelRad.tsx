@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
@@ -35,22 +34,10 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { hentSkjemaData } = useEndretUtbetalingAndel();
-
-    const erSkjemaForandret = () =>
-        !deepEqual(
-            {
-                ...endretUtbetalingAndel,
-                prosent:
-                    typeof endretUtbetalingAndel.prosent === 'number'
-                        ? endretUtbetalingAndel.prosent
-                        : 0,
-            },
-            hentSkjemaData()
-        );
+    const { skjemaHarEndringerSomIkkeErLagret } = useEndretUtbetalingAndel();
 
     const toggleForm = () => {
-        if (erSkjemaForandret() && erSkjemaEkspandert) {
+        if (skjemaHarEndringerSomIkkeErLagret() && erSkjemaEkspandert) {
             alert('Endretutbetalingsandelen har endringer som ikke er lagret!');
         } else {
             settErSkjemaEkspandert(!erSkjemaEkspandert);

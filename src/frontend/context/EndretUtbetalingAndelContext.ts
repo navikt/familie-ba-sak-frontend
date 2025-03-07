@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import createUseContext from 'constate';
+import deepEqual from 'deep-equal';
 
 import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -153,6 +154,18 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             };
         };
 
+        const skjemaHarEndringerSomIkkeErLagret = () =>
+            !deepEqual(
+                {
+                    ...endretUtbetalingAndel,
+                    prosent:
+                        typeof endretUtbetalingAndel.prosent === 'number'
+                            ? endretUtbetalingAndel.prosent
+                            : 0,
+                },
+                hentSkjemaData()
+            );
+
         return {
             endretUtbetalingAndel,
             skjema,
@@ -160,6 +173,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             onSubmit,
             hentSkjemaData,
             settFelterTilDefault,
+            skjemaHarEndringerSomIkkeErLagret,
         };
     }
 );
