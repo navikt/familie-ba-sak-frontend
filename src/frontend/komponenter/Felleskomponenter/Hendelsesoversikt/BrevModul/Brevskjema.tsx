@@ -31,8 +31,8 @@ import {
     opplysningsdokumenter,
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
+import { useBrevModul } from './useBrevModul';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useBrevModul } from '../../../../context/BrevModulContext';
 import useDokument from '../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
