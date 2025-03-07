@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 
-import createUseContext from 'constate';
-
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
@@ -30,7 +28,7 @@ import {
     lagInitiellFritekst,
 } from '../utils/fritekstfelter';
 
-const [BrevModulProvider, useBrevModul] = createUseContext(() => {
+export const useBrevModul = () => {
     const { behandling } = useBehandling();
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
@@ -441,6 +439,4 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         visFritekstAvsnittTekstboks,
         settVisFritekstAvsnittTekstboks,
     };
-});
-
-export { BrevModulProvider, useBrevModul };
+};
