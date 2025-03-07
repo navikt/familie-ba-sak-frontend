@@ -38,7 +38,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                 <Table.Body>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
                         <EndretUtbetalingAndelRad
-                            endretUtbetalingAndel={endretUtbetalingAndel}
+                            lagretEndretUtbetalingAndel={endretUtbetalingAndel}
                             åpenBehandling={åpenBehandling}
                         />
                     ))}

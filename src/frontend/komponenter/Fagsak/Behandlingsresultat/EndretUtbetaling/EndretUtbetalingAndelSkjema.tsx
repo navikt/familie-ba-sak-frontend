@@ -56,7 +56,7 @@ interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     lukkSkjema: () => void;
     skjema: ISkjema<IEndretUtbetalingAndelSkjema, IBehandling>;
-    settFelterTilDefault: () => void;
+    settFelterTilLagredeVerdier: () => void;
     oppdaterEndretUtbetaling: (avbrytEndringAvUtbetalingsperiode: () => void) => void;
     slettEndretUtbetaling: () => void;
 }
@@ -65,7 +65,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     åpenBehandling,
     lukkSkjema,
     skjema,
-    settFelterTilDefault,
+    settFelterTilLagredeVerdier,
     oppdaterEndretUtbetaling,
     slettEndretUtbetaling,
 }) => {
@@ -276,7 +276,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => {
-                                    settFelterTilDefault();
+                                    settFelterTilLagredeVerdier();
                                     lukkSkjema();
                                 }}
                             >

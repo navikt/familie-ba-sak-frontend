@@ -32,7 +32,7 @@ export interface IEndretUtbetalingAndelSkjema {
 }
 
 export const useEndretUtbetalingAndel = (
-    endretUtbetalingAndel: IRestEndretUtbetalingAndel,
+    lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel,
     åpenBehandling: IBehandling
 ) => {
     const { request } = useHttp();
@@ -96,25 +96,25 @@ export const useEndretUtbetalingAndel = (
         skjemanavn: 'Endre utbetalingsperiode',
     });
 
-    const settFelterTilDefault = () => {
-        skjema.felter.person.validerOgSettFelt(endretUtbetalingAndel.personIdent);
-        skjema.felter.fom.validerOgSettFelt(endretUtbetalingAndel.fom);
-        skjema.felter.tom.validerOgSettFelt(endretUtbetalingAndel.tom);
+    const settFelterTilLagredeVerdier = () => {
+        skjema.felter.person.validerOgSettFelt(lagretEndretUtbetalingAndel.personIdent);
+        skjema.felter.fom.validerOgSettFelt(lagretEndretUtbetalingAndel.fom);
+        skjema.felter.tom.validerOgSettFelt(lagretEndretUtbetalingAndel.tom);
         skjema.felter.utbetaling.validerOgSettFelt(
-            prosentTilUtbetaling(endretUtbetalingAndel.prosent)
+            prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent)
         );
-        skjema.felter.årsak.validerOgSettFelt(endretUtbetalingAndel.årsak);
+        skjema.felter.årsak.validerOgSettFelt(lagretEndretUtbetalingAndel.årsak);
 
-        skjema.felter.begrunnelse.validerOgSettFelt(endretUtbetalingAndel.begrunnelse);
+        skjema.felter.begrunnelse.validerOgSettFelt(lagretEndretUtbetalingAndel.begrunnelse);
 
         skjema.felter.søknadstidspunkt.validerOgSettFelt(
-            endretUtbetalingAndel.søknadstidspunkt
-                ? new Date(endretUtbetalingAndel.søknadstidspunkt)
+            lagretEndretUtbetalingAndel.søknadstidspunkt
+                ? new Date(lagretEndretUtbetalingAndel.søknadstidspunkt)
                 : undefined
         );
         skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
-            endretUtbetalingAndel.avtaletidspunktDeltBosted
-                ? new Date(endretUtbetalingAndel.avtaletidspunktDeltBosted)
+            lagretEndretUtbetalingAndel.avtaletidspunktDeltBosted
+                ? new Date(lagretEndretUtbetalingAndel.avtaletidspunktDeltBosted)
                 : undefined
         );
     };
@@ -122,9 +122,9 @@ export const useEndretUtbetalingAndel = (
     const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] =
         useState<IRestEndretUtbetalingAndel>();
 
-    if (endretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
-        settForrigeEndretUtbetalingAndel(endretUtbetalingAndel);
-        settFelterTilDefault();
+    if (lagretEndretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
+        settForrigeEndretUtbetalingAndel(lagretEndretUtbetalingAndel);
+        settFelterTilLagredeVerdier();
     }
 
     const hentSkjemaData = () => {
@@ -138,7 +138,7 @@ export const useEndretUtbetalingAndel = (
             avtaletidspunktDeltBosted,
         } = skjema.felter;
         return {
-            id: endretUtbetalingAndel.id,
+            id: lagretEndretUtbetalingAndel.id,
             personIdent: person && person.verdi,
             prosent: utbetalingTilProsent(skjema.felter.utbetaling.verdi),
             fom: fom && fom.verdi,
@@ -149,17 +149,17 @@ export const useEndretUtbetalingAndel = (
             avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(
                 avtaletidspunktDeltBosted.verdi
             ),
-            erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
+            erTilknyttetAndeler: lagretEndretUtbetalingAndel.erTilknyttetAndeler,
         };
     };
 
     const skjemaHarEndringerSomIkkeErLagret = () =>
         !deepEqual(
             {
-                ...endretUtbetalingAndel,
+                ...lagretEndretUtbetalingAndel,
                 prosent:
-                    typeof endretUtbetalingAndel.prosent === 'number'
-                        ? endretUtbetalingAndel.prosent
+                    typeof lagretEndretUtbetalingAndel.prosent === 'number'
+                        ? lagretEndretUtbetalingAndel.prosent
                         : 0,
             },
             hentSkjemaData()
@@ -170,7 +170,7 @@ export const useEndretUtbetalingAndel = (
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${lagretEndretUtbetalingAndel.id}`,
                     påvirkerSystemLaster: true,
                     data: hentSkjemaData(),
                 },
@@ -187,14 +187,14 @@ export const useEndretUtbetalingAndel = (
     const slettEndretUtbetaling = () => {
         request<undefined, IBehandling>({
             method: 'DELETE',
-            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${lagretEndretUtbetalingAndel.id}`,
             påvirkerSystemLaster: true,
         }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
     };
 
     return {
         skjema,
-        settFelterTilDefault,
+        settFelterTilLagredeVerdier,
         skjemaHarEndringerSomIkkeErLagret,
         oppdaterEndretUtbetaling,
         slettEndretUtbetaling,
