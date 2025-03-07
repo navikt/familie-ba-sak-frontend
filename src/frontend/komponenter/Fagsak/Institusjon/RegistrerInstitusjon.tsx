@@ -25,14 +25,14 @@ interface IProps {
 }
 
 const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
-    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
+    const { institusjon, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
         useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
-    if (skjema.felter.institusjon.verdi && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentOgSettSamhandler(skjema.felter.institusjon.verdi.orgNummer);
+    if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+        hentOgSettSamhandler(institusjon.orgNummer);
     }
 
     return (
