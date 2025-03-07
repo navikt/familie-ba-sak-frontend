@@ -9,7 +9,7 @@ import { SamhandlerTabell } from './SamhandlerTabell';
 import { useSamhandlerRequest } from './useSamhandler';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useInstitusjon } from '../../../context/InstitusjonContext';
-import { BehandlingSteg } from '../../../typer/behandling';
+import { BehandlingSteg, type IBehandling } from '../../../typer/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
@@ -20,8 +20,13 @@ const StyledAlert = styled(Alert)`
     margin: 2rem;
 `;
 
-const RegistrerInstitusjon: React.FC = () => {
-    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } = useInstitusjon();
+interface IProps {
+    åpenBehandling: IBehandling;
+}
+
+const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
+    const { fagsakFeilmelding, onSubmitMottaker, submitFeilmelding, skjema } =
+        useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
