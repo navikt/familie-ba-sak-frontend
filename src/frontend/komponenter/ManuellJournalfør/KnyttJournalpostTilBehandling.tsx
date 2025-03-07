@@ -8,7 +8,6 @@ import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import type { BehandlingÅrsak } from '../../typer/behandling';
 import {
     behandlingsstatuser,
     BehandlingStatus,
@@ -119,7 +118,9 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             })}
                                         </Table.DataCell>
                                         <Table.DataCell>
-                                            {behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}
+                                            {behandling.årsak
+                                                ? behandlingÅrsak[behandling.årsak]
+                                                : '-'}
                                         </Table.DataCell>
                                         <Table.DataCell>
                                             {behandlingstyper[behandling.type].navn}

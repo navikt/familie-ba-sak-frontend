@@ -6,13 +6,15 @@ import { differenceInMilliseconds } from 'date-fns';
 import { useNavigate, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    type IDokumentInfo,
+    Journalstatus,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
@@ -30,18 +32,18 @@ import {
     opprettJournalføringsbehandlingFraBarnetrygdbehandling,
     opprettJournalføringsbehandlingFraKlagebehandling,
 } from '../typer/journalføringsbehandling';
-import type { IKlagebehandling, Klagebehandlingstype } from '../typer/klage';
+import { type IKlagebehandling, type Klagebehandlingstype } from '../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
 } from '../typer/manuell-journalføring';
 import { JournalpostKanal } from '../typer/manuell-journalføring';
 import {
-    type IRestLukkOppgaveOgKnyttJournalpost,
-    finnBehandlingstemaFraOppgave,
     erOppgaveJournalførKlage,
+    finnBehandlingstemaFraOppgave,
+    type IRestLukkOppgaveOgKnyttJournalpost,
+    OppgavetypeFilter,
 } from '../typer/oppgave';
-import { OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
 import { Adressebeskyttelsegradering } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
@@ -60,6 +62,48 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     tilknyttedeBehandlingIder: string[];
     fagsakType: FagsakType;
     samhandler: ISamhandlerInfo | undefined;
+}
+
+function finnNyBehandlingstype(
+    skjema: ISkjema<ManuellJournalføringSkjemaFelter, string>,
+    kanBehandleKlage: boolean
+): Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | undefined {
+    const behandlingstype = skjema.felter.behandlingstype.verdi;
+    const knyttTilNyBehandling = skjema.felter.knyttTilNyBehandling.verdi;
+    if (!kanBehandleKlage) {
+        return behandlingstype === '' ? Behandlingstype.FØRSTEGANGSBEHANDLING : behandlingstype;
+    }
+    if (!knyttTilNyBehandling || behandlingstype === '') {
+        return undefined;
+    }
+    return behandlingstype;
+}
+
+function finnNyBehandlingsårsak(
+    nyBehandlingstype:
+        | Behandlingstype
+        | Tilbakekrevingsbehandlingstype
+        | Klagebehandlingstype
+        | undefined,
+    skjema: ISkjema<ManuellJournalføringSkjemaFelter, string>,
+    kanBehandleKlage: boolean
+): BehandlingÅrsak | undefined {
+    const behandlingsårsak = skjema.felter.behandlingsårsak.verdi;
+    const knyttTilNyBehandling = skjema.felter.knyttTilNyBehandling.verdi;
+    if (!kanBehandleKlage) {
+        if (
+            nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+            behandlingsårsak === '' ||
+            nyBehandlingstype === undefined
+        ) {
+            return BehandlingÅrsak.SØKNAD;
+        }
+        return behandlingsårsak;
+    }
+    if (!knyttTilNyBehandling || behandlingsårsak === '') {
+        return undefined;
+    }
+    return behandlingsårsak;
 }
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
@@ -398,9 +442,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             const erDigitalKanal =
                 dataForManuellJournalføring.data.journalpost.kanal === JournalpostKanal.NAV_NO;
 
-            const nyBehandlingstype = skjema.felter.behandlingstype.verdi;
-            const nyBehandlingsårsak = skjema.felter.behandlingsårsak.verdi;
-            const { verdi: behandlingstema } = skjema.felter.behandlingstema;
+            const kanBehandleKlage = toggles[ToggleNavn.kanBehandleKlage];
+            const nyBehandlingstype = finnNyBehandlingstype(skjema, kanBehandleKlage);
+            const nyBehandlingsårsak = finnNyBehandlingsårsak(
+                nyBehandlingstype,
+                skjema,
+                kanBehandleKlage
+            );
 
             //SKAN_IM-kanalen benytter logiske vedlegg, NAV_NO-kanalen gjør ikke. For sistnevnte må titlene konkateneres.
             onSubmit<IRestJournalføring>(
@@ -413,8 +461,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
-                        kategori: behandlingstema?.kategori ?? null,
-                        underkategori: behandlingstema?.underkategori ?? null,
+                        kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
+                        underkategori: skjema.felter.behandlingstema.verdi?.underkategori ?? null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',
@@ -453,19 +501,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             skjema.felter.knyttTilNyBehandling.verdi,
                         tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlingIder.verdi,
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
-
-                        // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
-                        nyBehandlingstype:
-                            nyBehandlingstype === ''
-                                ? Behandlingstype.FØRSTEGANGSBEHANDLING
-                                : nyBehandlingstype,
-                        nyBehandlingsårsak:
-                            nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
-                                ? BehandlingÅrsak.SØKNAD
-                                : nyBehandlingsårsak === ''
-                                  ? BehandlingÅrsak.SØKNAD
-                                  : nyBehandlingsårsak,
-
+                        nyBehandlingstype: nyBehandlingstype,
+                        nyBehandlingsårsak: nyBehandlingsårsak,
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                         fagsakType: skjema.felter.fagsakType.verdi,
                         institusjon:

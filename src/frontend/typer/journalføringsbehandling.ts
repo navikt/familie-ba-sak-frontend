@@ -1,7 +1,6 @@
 import type { BehandlingStatus } from './behandling';
 import { Behandlingstype, type BehandlingÅrsak } from './behandling';
-import type { KlageStatus } from './klage';
-import { type IKlagebehandling } from './klage';
+import type { KlageStatus, IKlagebehandling } from './klage';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import type { IsoDatoString } from '../utils/dato';
 
