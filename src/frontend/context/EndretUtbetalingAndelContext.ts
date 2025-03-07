@@ -3,8 +3,10 @@ import { useState } from 'react';
 import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
+import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import type { Utbetaling } from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
 import {
@@ -20,13 +22,18 @@ import {
     erIsoStringGyldig,
     validerGyldigDato,
 } from '../utils/dato';
+import { useBehandling } from './behandlingContext/BehandlingContext';
 
 interface IProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
+    åpenBehandling: IBehandling;
 }
 
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(
-    ({ endretUtbetalingAndel }: IProps) => {
+    ({ endretUtbetalingAndel, åpenBehandling }: IProps) => {
+        const { request } = useHttp();
+        const { settÅpenBehandling } = useBehandling();
+
         const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
             verdi: undefined,
             valideringsfunksjon: felt =>
@@ -166,14 +173,40 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 hentSkjemaData()
             );
 
+        const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
+            if (kanSendeSkjema()) {
+                onSubmit<IRestEndretUtbetalingAndel>(
+                    {
+                        method: 'PUT',
+                        url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+                        påvirkerSystemLaster: true,
+                        data: hentSkjemaData(),
+                    },
+                    (behandling: Ressurs<IBehandling>) => {
+                        if (behandling.status === RessursStatus.SUKSESS) {
+                            avbrytEndringAvUtbetalingsperiode();
+                            settÅpenBehandling(behandling);
+                        }
+                    }
+                );
+            }
+        };
+
+        const slettEndretUtbetaling = () => {
+            request<undefined, IBehandling>({
+                method: 'DELETE',
+                url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+                påvirkerSystemLaster: true,
+            }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
+        };
+
         return {
             endretUtbetalingAndel,
             skjema,
-            kanSendeSkjema,
-            onSubmit,
-            hentSkjemaData,
             settFelterTilDefault,
             skjemaHarEndringerSomIkkeErLagret,
+            oppdaterEndretUtbetaling,
+            slettEndretUtbetaling,
         };
     }
 );

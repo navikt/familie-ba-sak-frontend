@@ -6,18 +6,12 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
-import type {
-    IRestEndretUtbetalingAndel,
-    IEndretUtbetalingAndelÅrsak,
-} from '../../../typer/utbetalingAndel';
+import type { IEndretUtbetalingAndelÅrsak } from '../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../utils/dato';
 import { lagPersonLabel } from '../../../utils/formatter';
@@ -66,45 +60,16 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     åpenBehandling,
     lukkSkjema,
 }) => {
-    const { request } = useHttp();
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
 
     const {
         endretUtbetalingAndel,
         skjema,
-        kanSendeSkjema,
-        onSubmit,
-        hentSkjemaData,
         settFelterTilDefault,
+        oppdaterEndretUtbetaling,
+        slettEndretUtbetaling,
     } = useEndretUtbetalingAndel();
-
-    const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        if (kanSendeSkjema()) {
-            onSubmit<IRestEndretUtbetalingAndel>(
-                {
-                    method: 'PUT',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-                    påvirkerSystemLaster: true,
-                    data: hentSkjemaData(),
-                },
-                (behandling: Ressurs<IBehandling>) => {
-                    if (behandling.status === RessursStatus.SUKSESS) {
-                        avbrytEndringAvUtbetalingsperiode();
-                        settÅpenBehandling(behandling);
-                    }
-                }
-            );
-        }
-    };
-
-    const slettEndretUtbetaling = () => {
-        request<undefined, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-            påvirkerSystemLaster: true,
-        }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
-    };
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
