@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Heading, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
-import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
 import type { IBehandling } from '../../../typer/behandling';
 
 interface IEndretUtbetalingAndelTabellProps {
@@ -38,16 +37,10 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                 </Table.Header>
                 <Table.Body>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
-                        <EndretUtbetalingAndelProvider
+                        <EndretUtbetalingAndelRad
                             endretUtbetalingAndel={endretUtbetalingAndel}
                             åpenBehandling={åpenBehandling}
-                            key={endretUtbetalingAndel.id}
-                        >
-                            <EndretUtbetalingAndelRad
-                                endretUtbetalingAndel={endretUtbetalingAndel}
-                                åpenBehandling={åpenBehandling}
-                            />
-                        </EndretUtbetalingAndelProvider>
+                        />
                     ))}
                 </Table.Body>
             </Table>

@@ -40,7 +40,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         settFelterTilDefault,
         oppdaterEndretUtbetaling,
         slettEndretUtbetaling,
-    } = useEndretUtbetalingAndel();
+    } = useEndretUtbetalingAndel(endretUtbetalingAndel, åpenBehandling);
 
     const toggleForm = () => {
         if (skjemaHarEndringerSomIkkeErLagret() && erSkjemaEkspandert) {

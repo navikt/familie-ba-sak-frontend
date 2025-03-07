@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
@@ -24,11 +23,6 @@ import {
 } from '../utils/dato';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
-interface IProps {
-    endretUtbetalingAndel: IRestEndretUtbetalingAndel;
-    åpenBehandling: IBehandling;
-}
-
 export interface IEndretUtbetalingAndelSkjema {
     person: string | undefined;
     fom: IsoDatoString | undefined;
@@ -40,176 +34,172 @@ export interface IEndretUtbetalingAndelSkjema {
     begrunnelse: string | undefined;
 }
 
-const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(
-    ({ endretUtbetalingAndel, åpenBehandling }: IProps) => {
-        const { request } = useHttp();
-        const { settÅpenBehandling } = useBehandling();
+export const useEndretUtbetalingAndel = (
+    endretUtbetalingAndel: IRestEndretUtbetalingAndel,
+    åpenBehandling: IBehandling
+) => {
+    const { request } = useHttp();
+    const { settÅpenBehandling } = useBehandling();
 
-        const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
-            verdi: undefined,
-            valideringsfunksjon: felt =>
-                felt.verdi && Object.values(IEndretUtbetalingAndelÅrsak).includes(felt.verdi)
-                    ? ok(felt)
-                    : feil(felt, 'Du må velge en årsak'),
-        });
+    const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: felt =>
+            felt.verdi && Object.values(IEndretUtbetalingAndelÅrsak).includes(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en årsak'),
+    });
 
-        const utbetalingFelt = useFelt<Utbetaling | undefined>({
-            verdi: undefined,
-            valideringsfunksjon: felt =>
-                felt.verdi ? ok(felt) : feil(felt, 'Du må velge utbetaling'),
-            avhengigheter: årsakFelt,
-            nullstillVedAvhengighetEndring: true,
-        });
+    const utbetalingFelt = useFelt<Utbetaling | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: felt => (felt.verdi ? ok(felt) : feil(felt, 'Du må velge utbetaling')),
+        avhengigheter: årsakFelt,
+        nullstillVedAvhengighetEndring: true,
+    });
 
-        const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
-            IEndretUtbetalingAndelSkjema,
-            IBehandling
-        >({
-            felter: {
-                person: useFelt<string | undefined>({
-                    verdi: undefined,
-                    valideringsfunksjon: felt =>
-                        felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
-                }),
-                fom: useFelt<IsoDatoString | undefined>({
-                    verdi: undefined,
-                    valideringsfunksjon: felt =>
-                        erIsoStringGyldig(felt.verdi)
-                            ? ok(felt)
-                            : feil(felt, 'Du må velge f.o.m-dato'),
-                }),
-                tom: useFelt<IsoDatoString | undefined>({
-                    verdi: undefined,
-                }),
-                utbetaling: utbetalingFelt,
-                årsak: årsakFelt,
-                søknadstidspunkt: useFelt<Date | undefined>({
-                    verdi: undefined,
-                    valideringsfunksjon: validerGyldigDato,
-                }),
-                avtaletidspunktDeltBosted: useFelt<Date | undefined>({
-                    verdi: undefined,
-                    avhengigheter: {
-                        årsak: årsakFelt,
-                    },
-                    nullstillVedAvhengighetEndring: false,
-                    skalFeltetVises: (avhengigheter: Avhengigheter) =>
-                        avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                    valideringsfunksjon: validerGyldigDato,
-                }),
-                begrunnelse: useFelt<string | undefined>({
-                    verdi: undefined,
-                    valideringsfunksjon: felt =>
-                        felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
-                }),
-            },
-            skjemanavn: 'Endre utbetalingsperiode',
-        });
-
-        const settFelterTilDefault = () => {
-            skjema.felter.person.validerOgSettFelt(endretUtbetalingAndel.personIdent);
-            skjema.felter.fom.validerOgSettFelt(endretUtbetalingAndel.fom);
-            skjema.felter.tom.validerOgSettFelt(endretUtbetalingAndel.tom);
-            skjema.felter.utbetaling.validerOgSettFelt(
-                prosentTilUtbetaling(endretUtbetalingAndel.prosent)
-            );
-            skjema.felter.årsak.validerOgSettFelt(endretUtbetalingAndel.årsak);
-
-            skjema.felter.begrunnelse.validerOgSettFelt(endretUtbetalingAndel.begrunnelse);
-
-            skjema.felter.søknadstidspunkt.validerOgSettFelt(
-                endretUtbetalingAndel.søknadstidspunkt
-                    ? new Date(endretUtbetalingAndel.søknadstidspunkt)
-                    : undefined
-            );
-            skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
-                endretUtbetalingAndel.avtaletidspunktDeltBosted
-                    ? new Date(endretUtbetalingAndel.avtaletidspunktDeltBosted)
-                    : undefined
-            );
-        };
-
-        const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] =
-            useState<IRestEndretUtbetalingAndel>();
-
-        if (endretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
-            settForrigeEndretUtbetalingAndel(endretUtbetalingAndel);
-            settFelterTilDefault();
-        }
-
-        const hentSkjemaData = () => {
-            const {
-                person,
-                fom,
-                tom,
-                årsak,
-                begrunnelse,
-                søknadstidspunkt,
-                avtaletidspunktDeltBosted,
-            } = skjema.felter;
-            return {
-                id: endretUtbetalingAndel.id,
-                personIdent: person && person.verdi,
-                prosent: utbetalingTilProsent(skjema.felter.utbetaling.verdi),
-                fom: fom && fom.verdi,
-                tom: tom && tom.verdi,
-                årsak: årsak && årsak.verdi,
-                begrunnelse: begrunnelse.verdi,
-                søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(søknadstidspunkt.verdi),
-                avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(
-                    avtaletidspunktDeltBosted.verdi
-                ),
-                erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
-            };
-        };
-
-        const skjemaHarEndringerSomIkkeErLagret = () =>
-            !deepEqual(
-                {
-                    ...endretUtbetalingAndel,
-                    prosent:
-                        typeof endretUtbetalingAndel.prosent === 'number'
-                            ? endretUtbetalingAndel.prosent
-                            : 0,
+    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
+        IEndretUtbetalingAndelSkjema,
+        IBehandling
+    >({
+        felter: {
+            person: useFelt<string | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
+            }),
+            fom: useFelt<IsoDatoString | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
+            }),
+            tom: useFelt<IsoDatoString | undefined>({
+                verdi: undefined,
+            }),
+            utbetaling: utbetalingFelt,
+            årsak: årsakFelt,
+            søknadstidspunkt: useFelt<Date | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: validerGyldigDato,
+            }),
+            avtaletidspunktDeltBosted: useFelt<Date | undefined>({
+                verdi: undefined,
+                avhengigheter: {
+                    årsak: årsakFelt,
                 },
-                hentSkjemaData()
-            );
+                nullstillVedAvhengighetEndring: false,
+                skalFeltetVises: (avhengigheter: Avhengigheter) =>
+                    avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
+                valideringsfunksjon: validerGyldigDato,
+            }),
+            begrunnelse: useFelt<string | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
+            }),
+        },
+        skjemanavn: 'Endre utbetalingsperiode',
+    });
 
-        const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-            if (kanSendeSkjema()) {
-                onSubmit<IRestEndretUtbetalingAndel>(
-                    {
-                        method: 'PUT',
-                        url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-                        påvirkerSystemLaster: true,
-                        data: hentSkjemaData(),
-                    },
-                    (behandling: Ressurs<IBehandling>) => {
-                        if (behandling.status === RessursStatus.SUKSESS) {
-                            avbrytEndringAvUtbetalingsperiode();
-                            settÅpenBehandling(behandling);
-                        }
-                    }
-                );
-            }
-        };
+    const settFelterTilDefault = () => {
+        skjema.felter.person.validerOgSettFelt(endretUtbetalingAndel.personIdent);
+        skjema.felter.fom.validerOgSettFelt(endretUtbetalingAndel.fom);
+        skjema.felter.tom.validerOgSettFelt(endretUtbetalingAndel.tom);
+        skjema.felter.utbetaling.validerOgSettFelt(
+            prosentTilUtbetaling(endretUtbetalingAndel.prosent)
+        );
+        skjema.felter.årsak.validerOgSettFelt(endretUtbetalingAndel.årsak);
 
-        const slettEndretUtbetaling = () => {
-            request<undefined, IBehandling>({
-                method: 'DELETE',
-                url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-                påvirkerSystemLaster: true,
-            }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
-        };
+        skjema.felter.begrunnelse.validerOgSettFelt(endretUtbetalingAndel.begrunnelse);
 
-        return {
-            skjema,
-            settFelterTilDefault,
-            skjemaHarEndringerSomIkkeErLagret,
-            oppdaterEndretUtbetaling,
-            slettEndretUtbetaling,
-        };
+        skjema.felter.søknadstidspunkt.validerOgSettFelt(
+            endretUtbetalingAndel.søknadstidspunkt
+                ? new Date(endretUtbetalingAndel.søknadstidspunkt)
+                : undefined
+        );
+        skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
+            endretUtbetalingAndel.avtaletidspunktDeltBosted
+                ? new Date(endretUtbetalingAndel.avtaletidspunktDeltBosted)
+                : undefined
+        );
+    };
+
+    const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] =
+        useState<IRestEndretUtbetalingAndel>();
+
+    if (endretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
+        settForrigeEndretUtbetalingAndel(endretUtbetalingAndel);
+        settFelterTilDefault();
     }
-);
 
-export { EndretUtbetalingAndelProvider, useEndretUtbetalingAndel };
+    const hentSkjemaData = () => {
+        const {
+            person,
+            fom,
+            tom,
+            årsak,
+            begrunnelse,
+            søknadstidspunkt,
+            avtaletidspunktDeltBosted,
+        } = skjema.felter;
+        return {
+            id: endretUtbetalingAndel.id,
+            personIdent: person && person.verdi,
+            prosent: utbetalingTilProsent(skjema.felter.utbetaling.verdi),
+            fom: fom && fom.verdi,
+            tom: tom && tom.verdi,
+            årsak: årsak && årsak.verdi,
+            begrunnelse: begrunnelse.verdi,
+            søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(søknadstidspunkt.verdi),
+            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(
+                avtaletidspunktDeltBosted.verdi
+            ),
+            erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
+        };
+    };
+
+    const skjemaHarEndringerSomIkkeErLagret = () =>
+        !deepEqual(
+            {
+                ...endretUtbetalingAndel,
+                prosent:
+                    typeof endretUtbetalingAndel.prosent === 'number'
+                        ? endretUtbetalingAndel.prosent
+                        : 0,
+            },
+            hentSkjemaData()
+        );
+
+    const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
+        if (kanSendeSkjema()) {
+            onSubmit<IRestEndretUtbetalingAndel>(
+                {
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+                    påvirkerSystemLaster: true,
+                    data: hentSkjemaData(),
+                },
+                (behandling: Ressurs<IBehandling>) => {
+                    if (behandling.status === RessursStatus.SUKSESS) {
+                        avbrytEndringAvUtbetalingsperiode();
+                        settÅpenBehandling(behandling);
+                    }
+                }
+            );
+        }
+    };
+
+    const slettEndretUtbetaling = () => {
+        request<undefined, IBehandling>({
+            method: 'DELETE',
+            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
+            påvirkerSystemLaster: true,
+        }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
+    };
+
+    return {
+        skjema,
+        settFelterTilDefault,
+        skjemaHarEndringerSomIkkeErLagret,
+        oppdaterEndretUtbetaling,
+        slettEndretUtbetaling,
+    };
+};
