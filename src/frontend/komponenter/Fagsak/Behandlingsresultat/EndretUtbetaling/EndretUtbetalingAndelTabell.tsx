@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Heading, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
-import type { IBehandling } from '../../../typer/behandling';
+import type { IBehandling } from '../../../../typer/behandling';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;

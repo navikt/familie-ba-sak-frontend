@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import { BodyShort, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
-import { useEndretUtbetalingAndel } from '../../../context/useEndretUtbetalingAndel';
-import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
-import type { IBehandling } from '../../../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../typer/utbetalingAndel';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../utils/dato';
-import { lagPersonLabel } from '../../../utils/formatter';
+import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
+import StatusIkon, { Status } from '../../../../ikoner/StatusIkon';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '../../../../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../../typer/utbetalingAndel';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../utils/dato';
+import { lagPersonLabel } from '../../../../utils/formatter';
 
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;

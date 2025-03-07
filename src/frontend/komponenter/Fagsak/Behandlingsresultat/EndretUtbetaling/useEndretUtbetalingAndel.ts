@@ -7,21 +7,18 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
-import type { Utbetaling } from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
-import {
-    prosentTilUtbetaling,
-    utbetalingTilProsent,
-} from '../komponenter/Fagsak/Behandlingsresultat/Utbetaling';
-import type { IBehandling } from '../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
-import type { IsoDatoString } from '../utils/dato';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '../../../../typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak } from '../../../../typer/utbetalingAndel';
+import type { IsoDatoString } from '../../../../utils/dato';
 import {
     dateTilIsoDatoStringEllerUndefined,
     erIsoStringGyldig,
     validerGyldigDato,
-} from '../utils/dato';
-import { useBehandling } from './behandlingContext/BehandlingContext';
+} from '../../../../utils/dato';
+import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
+import type { Utbetaling } from '../Utbetaling';
 
 export interface IEndretUtbetalingAndelSkjema {
     person: string | undefined;
