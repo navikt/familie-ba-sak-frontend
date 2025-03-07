@@ -61,7 +61,6 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
 
     return {
         fagsakFeilmelding,
-        fagsakType,
         onSubmitMottaker,
         institusjon,
         submitFeilmelding,
