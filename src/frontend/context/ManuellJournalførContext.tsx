@@ -454,7 +454,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             skjema.felter.knyttTilNyBehandling.verdi,
                         tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                         tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlinger.verdi.map(
-                            i => i.behandlingId
+                            tilknyttetBehandling => tilknyttetBehandling.behandlingId
                         ),
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
 
@@ -526,7 +526,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                             tilknyttedeBehandlingIder:
                                 skjema.felter.tilknyttedeBehandlinger.verdi.map(
-                                    i => i.behandlingId
+                                    tilknyttetBehandling => tilknyttetBehandling.behandlingId
                                 ),
                             kategori: behandlingstema?.kategori ?? null,
                             underkategori: behandlingstema?.underkategori ?? null,
