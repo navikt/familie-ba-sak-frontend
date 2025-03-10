@@ -6,25 +6,20 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import type { ISkjema } from '@navikt/familie-skjema';
 
-import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from './Utbetaling';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
-import type { IBehandling } from '../../../typer/behandling';
-import type {
-    IRestEndretUtbetalingAndel,
-    IEndretUtbetalingAndelÅrsak,
-} from '../../../typer/utbetalingAndel';
-import { årsaker, årsakTekst } from '../../../typer/utbetalingAndel';
-import type { IsoMånedString } from '../../../utils/dato';
-import { lagPersonLabel } from '../../../utils/formatter';
-import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
-import Knapperekke from '../../Felleskomponenter/Knapperekke';
-import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
+import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { IEndretUtbetalingAndelÅrsak } from '../../../../typer/utbetalingAndel';
+import { årsaker, årsakTekst } from '../../../../typer/utbetalingAndel';
+import type { IsoMånedString } from '../../../../utils/dato';
+import { lagPersonLabel } from '../../../../utils/formatter';
+import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../Felleskomponenter/Knapperekke';
+import MånedÅrVelger from '../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
+import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../Utbetaling';
 
 const KnapperekkeVenstre = styled.div`
     display: flex;
@@ -60,51 +55,22 @@ const StyledTextarea = styled(Textarea)`
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     lukkSkjema: () => void;
+    skjema: ISkjema<IEndretUtbetalingAndelSkjema, IBehandling>;
+    settFelterTilLagredeVerdier: () => void;
+    oppdaterEndretUtbetaling: (onSuccess: () => void) => void;
+    slettEndretUtbetaling: () => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     lukkSkjema,
+    skjema,
+    settFelterTilLagredeVerdier,
+    oppdaterEndretUtbetaling,
+    slettEndretUtbetaling,
 }) => {
-    const { request } = useHttp();
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-
-    const {
-        endretUtbetalingAndel,
-        skjema,
-        kanSendeSkjema,
-        onSubmit,
-        hentSkjemaData,
-        settFelterTilDefault,
-    } = useEndretUtbetalingAndel();
-
-    const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        if (kanSendeSkjema()) {
-            onSubmit<IRestEndretUtbetalingAndel>(
-                {
-                    method: 'PUT',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-                    påvirkerSystemLaster: true,
-                    data: hentSkjemaData(),
-                },
-                (behandling: Ressurs<IBehandling>) => {
-                    if (behandling.status === RessursStatus.SUKSESS) {
-                        avbrytEndringAvUtbetalingsperiode();
-                        settÅpenBehandling(behandling);
-                    }
-                }
-            );
-        }
-    };
-
-    const slettEndretUtbetaling = () => {
-        request<undefined, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-            påvirkerSystemLaster: true,
-        }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
-    };
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
@@ -310,7 +276,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => {
-                                    settFelterTilDefault();
+                                    settFelterTilLagredeVerdier();
                                     lukkSkjema();
                                 }}
                             >
@@ -320,7 +286,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {!erLesevisning ? (
                             <Button
                                 variant={'tertiary'}
-                                id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
                                 size={'small'}
                                 onClick={slettEndretUtbetaling}
                                 icon={<TrashIcon />}
