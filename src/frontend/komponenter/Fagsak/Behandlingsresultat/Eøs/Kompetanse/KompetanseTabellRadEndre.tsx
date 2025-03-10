@@ -20,9 +20,9 @@ import {
     SøkersAktivitet,
 } from '../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../utils/skjema';
-import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
-import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
-import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
+import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
+import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
     `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${

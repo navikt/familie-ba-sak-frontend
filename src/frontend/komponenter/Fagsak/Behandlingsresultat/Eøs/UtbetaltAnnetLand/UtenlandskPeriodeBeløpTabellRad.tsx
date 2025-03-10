@@ -11,7 +11,7 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import type { OptionType } from '../../../../../typer/common';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../../utils/formatter';
-import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
+import { StatusBarnCelleOgPeriodeCelle } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
 interface IProps {
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;

@@ -27,9 +27,9 @@ import {
 } from '../../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../utils/skjema';
-import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
-import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
-import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';
+import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
+import { StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const UtbetaltBeløpRad = styled.div`
     width: 32rem;
