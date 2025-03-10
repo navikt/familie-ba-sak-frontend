@@ -20,7 +20,7 @@ import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
-import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/KompetanseSkjemaContext';
+import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/useKompetansePeriodeSkjema';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { utenlandskPeriodeBeløpFeilmeldingId } from '../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
 import { valutakursFeilmeldingId } from '../../../context/Valutakurs/ValutakursSkjemaContext';

@@ -6,7 +6,7 @@ import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 import {
     kompetanseFeilmeldingId,
     useKompetansePeriodeSkjema,
-} from '../../../../../context/Kompetanse/KompetanseSkjemaContext';
+} from '../../../../../context/Kompetanse/useKompetansePeriodeSkjema';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { OptionType } from '../../../../../typer/common';
 import type { IRestKompetanse } from '../../../../../typer/eøsPerioder';
