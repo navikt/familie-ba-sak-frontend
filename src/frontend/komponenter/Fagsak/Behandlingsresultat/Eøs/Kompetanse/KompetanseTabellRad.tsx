@@ -3,10 +3,7 @@ import React from 'react';
 import { BodyShort, Table } from '@navikt/ds-react';
 
 import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
-import {
-    kompetanseFeilmeldingId,
-    useKompetansePeriodeSkjema,
-} from '../../../../../context/Kompetanse/useKompetansePeriodeSkjema';
+import { kompetanseFeilmeldingId, useKompetansePeriodeSkjema } from './useKompetansePeriodeSkjema';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { OptionType } from '../../../../../typer/common';
 import type { IRestKompetanse } from '../../../../../typer/eøsPerioder';
