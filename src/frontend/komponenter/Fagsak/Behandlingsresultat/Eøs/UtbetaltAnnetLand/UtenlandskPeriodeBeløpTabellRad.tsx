@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { Table } from '@navikt/ds-react';
 
-import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 import {
     useUtenlandskPeriodeBeløpSkjema,
     utenlandskPeriodeBeløpFeilmeldingId,
-} from '../../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
+} from './useUtenlandskPeriodeBeløpSkjema';
+import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { OptionType } from '../../../../../typer/common';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../typer/eøsPerioder';

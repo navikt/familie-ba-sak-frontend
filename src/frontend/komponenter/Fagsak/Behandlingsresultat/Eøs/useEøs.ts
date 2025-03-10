@@ -1,5 +1,5 @@
-import { useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
-import { useUtenlandskPeriodeBeløp } from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
+import { useKompetanse } from './Kompetanse/useKompetanse';
+import { useUtenlandskPeriodeBeløp } from './UtbetaltAnnetLand/useUtenlandskPeriodeBeløp';
 import { useValutakurs } from '../../../../context/Valutakurs/ValutakursContext';
 import type { IBehandling } from '../../../../typer/behandling';
 
