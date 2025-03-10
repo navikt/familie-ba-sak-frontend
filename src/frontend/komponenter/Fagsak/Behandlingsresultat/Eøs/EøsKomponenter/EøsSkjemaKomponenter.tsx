@@ -16,8 +16,8 @@ import { EøsPeriodeStatus, Vurderingsform } from '../../../../../typer/eøsPeri
 import type { IGrunnlagPerson } from '../../../../../typer/person';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../utils/dato';
 import type { IIsoMånedPeriode } from '../../../../../utils/dato';
+import { mapEøsPeriodeStatusTilStatus } from '../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../utils/formatter';
-import { mapEøsPeriodeStatusTilStatus } from '../useEøs';
 
 interface IEøsPeriodeSkjemaContainerProps {
     $lesevisning: boolean;

@@ -12,8 +12,8 @@ import {
     VurderingsstrategiForValutakurser,
 } from '../../../../../typer/behandling';
 import { type IRestValutakurs, Vurderingsform } from '../../../../../typer/eøsPerioder';
+import { mapEøsPeriodeStatusTilStatus } from '../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../utils/formatter';
-import { mapEøsPeriodeStatusTilStatus } from '../useEøs';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     min-width: 1.5rem;

@@ -8,10 +8,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import {
-    konverterDesimalverdiTilSkjemaVisning,
-    konverterSkjemaverdiTilDesimal,
-} from '../../komponenter/Fagsak/Behandlingsresultat/Eøs/useEøs';
 import type { IBehandling } from '../../typer/behandling';
 import type { OptionType } from '../../typer/common';
 import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../typer/eøsPerioder';
@@ -22,6 +18,10 @@ import {
     nyIsoMånedPeriode,
     validerGyldigDato,
 } from '../../utils/dato';
+import {
+    konverterDesimalverdiTilSkjemaVisning,
+    konverterSkjemaverdiTilDesimal,
+} from '../../utils/eøs';
 import {
     erBarnGyldig,
     erEøsPeriodeGyldig,
