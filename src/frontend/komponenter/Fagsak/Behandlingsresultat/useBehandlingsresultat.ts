@@ -12,7 +12,8 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
     const { settÅpenBehandling } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
-    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = useState('');
+    const [opprettEndretUtbetalingFeilmelding, settOpprettEndretUtbetalingFeilmelding] =
+        useState('');
     const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
         useState<string[]>([]);
 
@@ -31,7 +32,7 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
                 response.status === RessursStatus.FEILET
             ) {
                 settVisFeilmeldinger(true);
-                settOpprettelseFeilmelding(response.frontendFeilmelding);
+                settOpprettEndretUtbetalingFeilmelding(response.frontendFeilmelding);
             }
         });
     };
@@ -49,7 +50,7 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
 
     return {
         opprettEndretUtbetaling,
-        opprettelseFeilmelding,
+        opprettEndretUtbetalingFeilmelding,
         visFeilmeldinger,
         settVisFeilmeldinger,
         hentPersonerMedUgyldigEtterbetalingsperiode,
