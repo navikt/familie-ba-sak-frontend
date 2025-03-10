@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Alert, Heading, Table } from '@navikt/ds-react';
 
 import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
-import { useEøs } from '../../../../context/Eøs/EøsContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
 
@@ -38,17 +37,17 @@ const TabellHeader = styled(Table.HeaderCell)`
 
 interface IProps {
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
+    erUtbetaltAnnetLandBeløpGyldige: () => boolean;
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
 const UtbetaltAnnetLand: React.FC<IProps> = ({
     utbetaltAnnetLandBeløp,
+    erUtbetaltAnnetLandBeløpGyldige,
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const { erUtbetaltAnnetLandBeløpGyldige } = useEøs();
-
     return (
         <UtenlandskPeriodeBeløperContainer>
             <Heading spacing size="medium" level="3">

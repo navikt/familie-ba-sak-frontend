@@ -103,13 +103,16 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         behandlingsstegSubmitressurs,
         settÅpenBehandling,
     } = useBehandling();
+
     const {
         erEøsInformasjonGyldig,
         kompetanser,
         hentKompetanserMedFeil,
         utbetaltAnnetLandBeløp,
+        erUtbetaltAnnetLandBeløpGyldige,
         hentUtbetaltAnnetLandBeløpMedFeil,
         valutakurser,
+        erValutakurserGyldige,
         hentValutakurserMedFeil,
     } = useEøs();
 
@@ -250,6 +253,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             {harUtenlandskeBeløper && (
                 <UtbetaltAnnetLand
                     utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
+                    erUtbetaltAnnetLandBeløpGyldige={erUtbetaltAnnetLandBeløpGyldige}
                     visFeilmeldinger={visFeilmeldinger}
                     åpenBehandling={åpenBehandling}
                 />
@@ -257,6 +261,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             {harValutakurser && (
                 <Valutakurser
                     valutakurser={valutakurser}
+                    erValutakurserGyldige={erValutakurserGyldige}
                     visFeilmeldinger={visFeilmeldinger}
                     åpenBehandling={åpenBehandling}
                 />
