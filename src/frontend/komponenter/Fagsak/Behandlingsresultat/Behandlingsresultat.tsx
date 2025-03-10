@@ -10,7 +10,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
+import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Kompetanse/KompetanseSkjema';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
