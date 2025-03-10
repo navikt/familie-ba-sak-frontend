@@ -1,4 +1,3 @@
-import constate from 'constate';
 import { isBefore, isSameMonth } from 'date-fns';
 
 import { Status } from '../../ikoner/StatusIkon';
@@ -69,11 +68,7 @@ export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined)
 export const konverterSkjemaverdiTilDesimal = (verdi: string | undefined) =>
     verdi ? verdi.toString().replace(/\s+/g, '').replace(',', '.') : undefined;
 
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
-const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
+export const useEøs = (åpenBehandling: IBehandling) => {
     const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse({
         åpenBehandling,
     });
@@ -107,6 +102,4 @@ const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
         erValutakurserGyldige,
         hentValutakurserMedFeil,
     };
-});
-
-export { EøsProvider, useEøs };
+};
