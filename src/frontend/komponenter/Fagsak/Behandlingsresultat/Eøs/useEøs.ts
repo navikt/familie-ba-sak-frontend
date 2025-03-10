@@ -1,6 +1,6 @@
 import { useKompetanse } from './Kompetanse/useKompetanse';
 import { useUtenlandskPeriodeBeløp } from './UtbetaltAnnetLand/useUtenlandskPeriodeBeløp';
-import { useValutakurs } from '../../../../context/Valutakurs/ValutakursContext';
+import { useValutakurs } from './Valutakurs/useValutakurs';
 import type { IBehandling } from '../../../../typer/behandling';
 
 export const useEøs = (åpenBehandling: IBehandling) => {
