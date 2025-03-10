@@ -31,11 +31,10 @@ import {
     opplysningsdokumenter,
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
+import { useBrevModul } from './useBrevModul';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useBrevModul } from '../../../../context/BrevModulContext';
 import useDokument from '../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
@@ -107,7 +106,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         kanSendeSkjema,
         mottakersMålform,
         onSubmit,
-        settNavigerTilOpplysningsplikt,
         hentMuligeBrevMaler,
         makslengdeFritekstHvertKulepunkt,
         maksLengdeFritekstAvsnitt,
@@ -511,13 +509,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
-                        const harRegistrertSøknad =
-                            hentStegNummer(behandling.steg) >
-                            hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
-                        settNavigerTilOpplysningsplikt(
-                            harRegistrertSøknad &&
-                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
-                        );
                         onSubmit<IManueltBrevRequestPåBehandling>(
                             {
                                 method: 'POST',
