@@ -37,7 +37,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
         if (
             steg &&
             hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK) &&
-            innloggetSaksbehandler?.displayName !== behandling?.totrinnskontroll?.saksbehandler
+            innloggetSaksbehandler?.navIdent !== behandling?.totrinnskontroll?.saksbehandlerId
         ) {
             return false;
         } else {
