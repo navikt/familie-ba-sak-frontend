@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
+import { sorterEøsPerioder } from '../../komponenter/Fagsak/Behandlingsresultat/Eøs/useEøs';
 import type { IBehandling } from '../../typer/behandling';
 import { EøsPeriodeStatus } from '../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../typer/eøsPerioder';
-import { sorterEøsPerioder } from '../Eøs/EøsContext';
 
 interface IProps {
     åpenBehandling: IBehandling;

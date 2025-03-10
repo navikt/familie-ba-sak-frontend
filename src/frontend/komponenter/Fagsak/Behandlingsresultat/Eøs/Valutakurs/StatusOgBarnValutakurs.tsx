@@ -6,7 +6,6 @@ import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { mapEøsPeriodeStatusTilStatus } from '../../../../../context/Eøs/EøsContext';
 import StatusIkon from '../../../../../ikoner/StatusIkon';
 import {
     type IBehandling,
@@ -14,6 +13,7 @@ import {
 } from '../../../../../typer/behandling';
 import { type IRestValutakurs, Vurderingsform } from '../../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../../utils/formatter';
+import { mapEøsPeriodeStatusTilStatus } from '../useEøs';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     min-width: 1.5rem;

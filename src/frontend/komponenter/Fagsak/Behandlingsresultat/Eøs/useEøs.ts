@@ -1,13 +1,13 @@
 import { isBefore, isSameMonth } from 'date-fns';
 
-import { Status } from '../../ikoner/StatusIkon';
-import type { IBehandling } from '../../typer/behandling';
-import type { EøsPeriodeStatus, IRestEøsPeriode } from '../../typer/eøsPerioder';
-import type { IGrunnlagPerson } from '../../typer/person';
-import { sorterPåDato } from '../../utils/formatter';
-import { useKompetanse } from '../Kompetanse/KompetanseContext';
-import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
-import { useValutakurs } from '../Valutakurs/ValutakursContext';
+import { useKompetanse } from '../../../../context/Kompetanse/KompetanseContext';
+import { useUtenlandskPeriodeBeløp } from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
+import { useValutakurs } from '../../../../context/Valutakurs/ValutakursContext';
+import { Status } from '../../../../ikoner/StatusIkon';
+import type { IBehandling } from '../../../../typer/behandling';
+import type { EøsPeriodeStatus, IRestEøsPeriode } from '../../../../typer/eøsPerioder';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { sorterPåDato } from '../../../../utils/formatter';
 
 export const mapEøsPeriodeStatusTilStatus: Record<EøsPeriodeStatus, Status> = {
     IKKE_UTFYLT: Status.ADVARSEL,

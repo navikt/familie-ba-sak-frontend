@@ -9,16 +9,16 @@ import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-rea
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
-import KompetanseSkjema from './Kompetanse/KompetanseSkjema';
+import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
+import { useEøs } from './Eøs/useEøs';
+import UtbetaltAnnetLand from './Eøs/UtbetaltAnnetLand/UtbetaltAnnetLand';
+import { useOppdaterValutakursOgSimuleringPåBeslutterSteg } from './Eøs/Valutakurs/useOppdaterValutakursOgSimuleringPåBeslutterSteg';
+import Valutakurser from './Eøs/Valutakurs/Valutakurser';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import UtbetaltAnnetLand from './UtbetaltAnnetLand/UtbetaltAnnetLand';
-import { useOppdaterValutakursOgSimuleringPåBeslutterSteg } from './Valutakurs/useOppdaterValutakursOgSimuleringPåBeslutterSteg';
-import Valutakurser from './Valutakurs/Valutakurser';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useEøs } from '../../../context/Eøs/EøsContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import { kompetanseFeilmeldingId } from '../../../context/Kompetanse/KompetanseSkjemaContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -99,7 +99,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         valutakurser,
         erValutakurserGyldige,
         hentValutakurserMedFeil,
-    } = useEøs();
+    } = useEøs(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
 
