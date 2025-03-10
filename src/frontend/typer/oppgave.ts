@@ -9,7 +9,7 @@ import {
     tilBehandlingstema,
 } from './behandlingstema';
 import type { IPar } from './common';
-import type { INavnOgIdent } from './manuell-journalføring';
+import type { INavnOgIdent, TilknyttetBehandling } from './manuell-journalføring';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
@@ -194,7 +194,7 @@ export enum PrioritetFilter {
 
 export interface IRestLukkOppgaveOgKnyttJournalpost {
     journalpostId: string;
-    tilknyttedeBehandlingIder: string[];
+    tilknyttedeBehandlinger: TilknyttetBehandling[];
     opprettOgKnyttTilNyBehandling: boolean;
     bruker?: INavnOgIdent;
     datoMottatt?: string;

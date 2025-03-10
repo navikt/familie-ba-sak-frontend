@@ -49,7 +49,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
 
     const visGenerellSakInfoStripe =
         !erLesevisning() &&
-        skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
+        skjema.felter.tilknyttedeBehandlinger.verdi.length === 0 &&
         !skjema.felter.knyttTilNyBehandling.verdi;
 
     const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
@@ -81,28 +81,39 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                 return (
                                     <Table.Row
                                         key={behandling.id}
-                                        aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                            behandling.id
+                                        aria-selected={skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                            it => it.behandlingId === behandling.id
                                         )}
                                     >
                                         <Table.DataCell>
                                             <Checkbox
                                                 id={behandling.id}
                                                 value={behandling.id}
-                                                checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                    behandling.id
+                                                checked={skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                                    it => it.behandlingId === behandling.id
                                                 )}
                                                 onChange={() => {
-                                                    skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                    skjema.felter.tilknyttedeBehandlinger.validerOgSettFelt(
                                                         [
-                                                            ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                                it => it !== behandling.id
+                                                            ...skjema.felter.tilknyttedeBehandlinger.verdi.filter(
+                                                                it =>
+                                                                    it.behandlingId !==
+                                                                    behandling.id
                                                             ),
-                                                            ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                                behandling.id
+                                                            ...(skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                                                it =>
+                                                                    it.behandlingId ===
+                                                                    behandling.id
                                                             )
                                                                 ? []
-                                                                : [behandling.id]),
+                                                                : [
+                                                                      {
+                                                                          behandlingstype:
+                                                                              behandling.type,
+                                                                          behandlingId:
+                                                                              behandling.id,
+                                                                      },
+                                                                  ]),
                                                         ]
                                                     );
                                                 }}

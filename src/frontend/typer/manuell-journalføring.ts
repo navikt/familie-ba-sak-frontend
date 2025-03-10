@@ -1,5 +1,6 @@
 import type { IJournalpost } from '@navikt/familie-typer';
 
+import type { Behandlingstype } from './behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IMinimalFagsak } from './fagsak';
 import type { FagsakType } from './fagsak';
@@ -30,7 +31,7 @@ export interface IRestJournalføring {
     journalpostTittel?: string;
     dokumenter?: IRestJournalpostDokument[];
     knyttTilFagsak: boolean;
-    tilknyttedeBehandlingIder: string[];
+    tilknyttedeBehandlinger: TilknyttetBehandling[];
     opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;
     kategori: BehandlingKategori | null;
@@ -103,3 +104,5 @@ export enum JournalpostKanal {
     NAV_NO = 'NAV_NO',
     SCAN_IM = 'SCAN_IM',
 }
+
+export type TilknyttetBehandling = { behandlingstype: Behandlingstype; behandlingId: string };
