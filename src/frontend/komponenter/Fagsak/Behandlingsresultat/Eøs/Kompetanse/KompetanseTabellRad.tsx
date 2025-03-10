@@ -6,12 +6,12 @@ import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
 import {
     kompetanseFeilmeldingId,
     useKompetansePeriodeSkjema,
-} from '../../../../context/Kompetanse/KompetanseSkjemaContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
-import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
-import { KompetanseResultat } from '../../../../typer/eøsPerioder';
-import { lagPersonLabel } from '../../../../utils/formatter';
+} from '../../../../../context/Kompetanse/KompetanseSkjemaContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
+import type { IRestKompetanse } from '../../../../../typer/eøsPerioder';
+import { KompetanseResultat } from '../../../../../typer/eøsPerioder';
+import { lagPersonLabel } from '../../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 
 interface IProps {

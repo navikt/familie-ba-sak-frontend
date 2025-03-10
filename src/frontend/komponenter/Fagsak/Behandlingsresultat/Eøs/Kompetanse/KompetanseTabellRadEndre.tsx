@@ -8,9 +8,9 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IKompetanse, KompetanseAktivitet } from '../../../../typer/eøsPerioder';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IKompetanse, KompetanseAktivitet } from '../../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
     EøsPeriodeStatus,
@@ -18,8 +18,8 @@ import {
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,
-} from '../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../utils/skjema';
+} from '../../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { FamilieLandvelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';

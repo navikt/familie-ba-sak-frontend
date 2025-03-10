@@ -25,12 +25,16 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import { VurderingsstrategiForValutakurser } from '../../../../typer/behandling';
-import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../utils/skjema';
-import Datovelger from '../../../Felleskomponenter/Datovelger/Datovelger';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { VurderingsstrategiForValutakurser } from '../../../../../typer/behandling';
+import {
+    EøsPeriodeStatus,
+    type IValutakurs,
+    Vurderingsform,
+} from '../../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../../utils/skjema';
+import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';

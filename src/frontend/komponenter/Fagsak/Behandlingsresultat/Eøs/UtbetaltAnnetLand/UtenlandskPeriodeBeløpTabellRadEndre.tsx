@@ -18,15 +18,15 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
 import {
     utenlandskPeriodeBeløpIntervaller,
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
-} from '../../../../typer/eøsPerioder';
-import type { IUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../utils/skjema';
+} from '../../../../../typer/eøsPerioder';
+import type { IUtenlandskPeriodeBeløp } from '../../../../../typer/eøsPerioder';
+import { onOptionSelected } from '../../../../../utils/skjema';
 import EøsPeriodeSkjema from '../EøsPeriode/EøsPeriodeSkjema';
 import { StyledFamilieValutavelger } from '../EøsPeriode/FamilieLandvelger';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsPeriode/fellesKomponenter';

@@ -6,11 +6,11 @@ import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabe
 import {
     useUtenlandskPeriodeBeløpSkjema,
     utenlandskPeriodeBeløpFeilmeldingId,
-} from '../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
-import type { IRestUtenlandskPeriodeBeløp } from '../../../../typer/eøsPerioder';
-import { lagPersonLabel } from '../../../../utils/formatter';
+} from '../../../../../context/UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpSkjemaContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
+import type { IRestUtenlandskPeriodeBeløp } from '../../../../../typer/eøsPerioder';
+import { lagPersonLabel } from '../../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsPeriode/fellesKomponenter';
 
 interface IProps {
