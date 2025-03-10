@@ -122,10 +122,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         hentPersonerMedUgyldigEtterbetalingsperiode();
     }, [åpenBehandling]);
 
-    const forrigeOnClick = () => {
-        navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
-    };
-
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
     ): Utbetalingsperiode | undefined => {
@@ -182,7 +178,9 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
-            forrigeOnClick={forrigeOnClick}
+            forrigeOnClick={() =>
+                navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)
+            }
             nesteOnClick={() => {
                 if (erLesevisning) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
