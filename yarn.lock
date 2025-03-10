@@ -1857,11 +1857,6 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5#e33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
   integrity sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw==
 
-"@navikt/hoykontrast@^3.1.0":
-  version "3.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.1.0/a57192249058e44959c3004e3551cfd8cde30c56aae5e9789602dce37459ecd2#ed7182afd5158872c8d87d6dbe87316f51e99388"
-  integrity sha512-ZO7kPvFYucgriMoryT8dJ5gBpusAO4dvfop5J8e/TnpKW3qtjj8VVFmFxBVxEWLGDm8AyZXeI6n9FG7i7/etmQ==
-
 "@navikt/land-verktoy@^9.0.9":
   version "9.0.9"
   resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/9.0.9/91d439ae2de95893895c8ad3d245ec6d5571a1c3#91d439ae2de95893895c8ad3d245ec6d5571a1c3"
