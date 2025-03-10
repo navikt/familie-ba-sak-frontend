@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
@@ -71,14 +69,13 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
-    const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
-        useState<string[]>([]);
-
     const {
         opprettEndretUtbetaling,
         opprettelseFeilmelding,
         visFeilmeldinger,
         settVisFeilmeldinger,
+        hentPersonerMedUgyldigEtterbetalingsperiode,
+        personerMedUgyldigEtterbetalingsperiode,
     } = useBehandlingsresultat(åpenBehandling);
 
     const {
@@ -88,19 +85,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     } = useTidslinje();
 
     useOppdaterValutakursOgSimuleringPåBeslutterSteg();
-
-    const { request } = useHttp();
-
-    const hentPersonerMedUgyldigEtterbetalingsperiode = () => {
-        request<void, string[]>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/personer-med-ugyldig-etterbetalingsperiode`,
-        }).then((erGyldigEtterbetalingsperiode: Ressurs<string[]>) => {
-            if (erGyldigEtterbetalingsperiode.status === RessursStatus.SUKSESS) {
-                settPersonerMedUgyldigEtterbetalingsperiode(erGyldigEtterbetalingsperiode.data);
-            }
-        });
-    };
 
     const { vurderErLesevisning, behandlingresultatNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandling();

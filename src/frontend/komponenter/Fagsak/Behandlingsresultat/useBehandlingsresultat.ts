@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
@@ -9,8 +11,10 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
-    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
-    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
+    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = useState('');
+    const [personerMedUgyldigEtterbetalingsperiode, settPersonerMedUgyldigEtterbetalingsperiode] =
+        useState<string[]>([]);
 
     const opprettEndretUtbetaling = () => {
         request<IRestEndretUtbetalingAndel, IBehandling>({
@@ -32,10 +36,23 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
         });
     };
 
+    const hentPersonerMedUgyldigEtterbetalingsperiode = () => {
+        request<void, string[]>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/personer-med-ugyldig-etterbetalingsperiode`,
+        }).then((erGyldigEtterbetalingsperiode: Ressurs<string[]>) => {
+            if (erGyldigEtterbetalingsperiode.status === RessursStatus.SUKSESS) {
+                settPersonerMedUgyldigEtterbetalingsperiode(erGyldigEtterbetalingsperiode.data);
+            }
+        });
+    };
+
     return {
         opprettEndretUtbetaling,
         opprettelseFeilmelding,
         visFeilmeldinger,
         settVisFeilmeldinger,
+        hentPersonerMedUgyldigEtterbetalingsperiode,
+        personerMedUgyldigEtterbetalingsperiode,
     };
 };
