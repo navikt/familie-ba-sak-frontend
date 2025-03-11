@@ -11,7 +11,6 @@ import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingSteg } from '../../../typer/behandling';
-import { FagsakType } from '../../../typer/fagsak';
 import type { IRegistrerInstitusjon } from '../../../typer/institusjon';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 
@@ -28,7 +27,6 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
         minimalFagsak.status !== RessursStatus.SUKSESS
             ? hentFrontendFeilmelding(minimalFagsak) || 'Ukjent feil ved henting av fagsak'
             : '';
-    const fagsakType = fagsak?.fagsakType;
     const institusjon = fagsak?.institusjon;
 
     const onSubmitMottaker = () => {
@@ -39,7 +37,7 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
             navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
         } else {
             request<IRegistrerInstitusjon | undefined, IBehandling>({
-                data: fagsakType === FagsakType.INSTITUSJON ? institusjon : undefined,
+                data: institusjon,
                 method: 'POST',
                 url: `/familie-ba-sak/api/behandlinger/${åpenBehandling?.behandlingId}/steg/registrer-institusjon`,
             })
