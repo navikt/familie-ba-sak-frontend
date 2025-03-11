@@ -479,6 +479,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                       tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
                                   }
                                 : null,
+                        fagsakId: minimalFagsak?.id,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
@@ -546,6 +547,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                       ? BehandlingÅrsak.SØKNAD
                                       : nyBehandlingsårsak,
                             navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                            fagsakId: minimalFagsak?.id,
                         },
                     },
                     (fagsakId: Ressurs<string>) => {
