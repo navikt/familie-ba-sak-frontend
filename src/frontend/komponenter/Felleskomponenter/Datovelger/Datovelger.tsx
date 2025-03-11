@@ -61,7 +61,7 @@ const Datovelger = ({
             felt.nullstill();
         }
     };
-    const { datepickerProps, inputProps } = useDatepicker({
+    const { datepickerProps, inputProps, selectedDay, setSelected } = useDatepicker({
         defaultSelected: felt.verdi,
         onDateChange: (dato?: Date) => {
             felt.validerOgSettFelt(dato);
@@ -86,6 +86,16 @@ const Datovelger = ({
             }
         },
     });
+
+    const [forrigeFeltVerdi, settForrigeFeltVerdi] = React.useState<Date | undefined>();
+
+    // Oppdaterer verdien til datovelgeren hvis feltet har endret seg uten at det er datovelgeren som har trigget endringen
+    if (felt.verdi != forrigeFeltVerdi) {
+        settForrigeFeltVerdi(felt.verdi);
+        if (felt.verdi != selectedDay) {
+            setSelected(felt.verdi);
+        }
+    }
 
     const feilmeldingForDatoFørMinDato = () => {
         if (kanKunVelgeFremtid) {
