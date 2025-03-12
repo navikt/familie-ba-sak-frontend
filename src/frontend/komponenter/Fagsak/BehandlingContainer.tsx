@@ -59,7 +59,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                             <Venstremeny />
                         </VenstremenyContainer>
                         <HovedinnholdContainer>
-                            <BehandlingRouter bruker={bruker} />
+                            <BehandlingRouter bruker={bruker} fagsak={fagsak} />
                         </HovedinnholdContainer>
                         <HøyremenyContainer>
                             <Høyremeny bruker={bruker} />

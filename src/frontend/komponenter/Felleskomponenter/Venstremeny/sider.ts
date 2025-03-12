@@ -156,11 +156,12 @@ export const hentTrinnForBehandling = (
     return Object.entries(sider)
         .filter(([_, side]) => visSide(side))
         .reduce((acc, [sideId, side]) => {
-            return {
-                ...acc,
-                [sideId]: side,
-            };
+            return { ...acc, [sideId]: side };
         }, {});
+};
+
+export const hentSideFraUrl = (url: string) => {
+    return Object.entries(sider).find(([_, side]) => side.href === url)?.[0] as SideId;
 };
 
 export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | undefined => {
