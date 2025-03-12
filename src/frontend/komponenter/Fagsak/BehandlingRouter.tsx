@@ -12,7 +12,6 @@ import { SammensattKontrollsakProvider } from './Vedtak/SammensattKontrollsak/us
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../context/behandlingContext/useVedtakSteg';
-import { InstitusjonProvider } from '../../context/InstitusjonContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -43,11 +42,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
         <Routes>
             <Route
                 path="/registrer-institusjon"
-                element={
-                    <InstitusjonProvider åpenBehandling={behandling}>
-                        <RegistrerInstitusjon />
-                    </InstitusjonProvider>
-                }
+                element={<RegistrerInstitusjon åpenBehandling={behandling} />}
             />
             <Route
                 path="/registrer-soknad"

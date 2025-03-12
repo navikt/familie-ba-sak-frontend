@@ -11,7 +11,6 @@ import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
 import type { Hendelse } from './typer';
 import { Tabs } from './typer';
 import { useApp } from '../../../context/AppContext';
-import { BrevModulProvider } from '../../../context/BrevModulContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
 import type { IPersonInfo } from '../../../typer/person';
@@ -53,24 +52,22 @@ const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesove
 
     return (
         <div>
-            <BrevModulProvider>
-                <Header
-                    aktivTab={aktivTab}
-                    settAktivTab={settAktivTab}
-                    skalViseTotrinnskontroll={skalViseTotrinnskontroll}
-                />
-                {aktivTab === Tabs.Totrinnskontroll && (
-                    <Totrinnskontroll åpenBehandling={åpenBehandling} />
-                )}
-                {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
-                    <HistorikkTab>
-                        <HistorikkListe>{hendelser?.map(tilHendelseItem)}</HistorikkListe>
-                    </HistorikkTab>
-                )}
-                {aktivTab === Tabs.Meldinger && (
-                    <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />
-                )}
-            </BrevModulProvider>
+            <Header
+                aktivTab={aktivTab}
+                settAktivTab={settAktivTab}
+                skalViseTotrinnskontroll={skalViseTotrinnskontroll}
+            />
+            {aktivTab === Tabs.Totrinnskontroll && (
+                <Totrinnskontroll åpenBehandling={åpenBehandling} />
+            )}
+            {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
+                <HistorikkTab>
+                    <HistorikkListe>{hendelser?.map(tilHendelseItem)}</HistorikkListe>
+                </HistorikkTab>
+            )}
+            {aktivTab === Tabs.Meldinger && (
+                <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />
+            )}
         </div>
     );
 };

@@ -1,36 +1,34 @@
 import React, { useEffect } from 'react';
 
-import createUseContext from 'constate';
-
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './Fagsak/FagsakContext';
-import type { ISelectOptionMedBrevtekst } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import type { IBehandling } from '../typer/behandling';
-import { BehandlingKategori } from '../typer/behandlingstema';
-import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
-import { FagsakType } from '../typer/fagsak';
-import type { IGrunnlagPerson } from '../typer/person';
-import { PersonType } from '../typer/person';
-import type { IBarnMedOpplysninger, Målform } from '../typer/søknad';
+import type { ISelectOptionMedBrevtekst } from './typer';
+import { Brevmal } from './typer';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingKategori } from '../../../../typer/behandlingstema';
+import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
+import { FagsakType } from '../../../../typer/fagsak';
+import type { IGrunnlagPerson } from '../../../../typer/person';
+import { PersonType } from '../../../../typer/person';
+import type { IBarnMedOpplysninger, Målform } from '../../../../typer/søknad';
 import {
     hentMuligeBrevmalerImplementering,
     mottakersMålformImplementering,
-} from '../utils/brevmal';
-import type { IsoDatoString } from '../utils/dato';
-import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../utils/dato';
-import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import type { IFritekstFelt } from '../utils/fritekstfelter';
+} from '../../../../utils/brevmal';
+import type { IsoDatoString } from '../../../../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../../../../utils/dato';
+import { useDeltBostedFelter } from '../../../../utils/deltBostedSkjemaFelter';
+import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
-} from '../utils/fritekstfelter';
+} from '../../../../utils/fritekstfelter';
 
-const [BrevModulProvider, useBrevModul] = createUseContext(() => {
+export const useBrevModul = () => {
     const { behandling } = useBehandling();
     const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
 
@@ -47,7 +45,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const personer = behandling?.personer ?? [];
     const brevmottakere = behandling?.brevmottakere ?? [];
     const institusjon = minimalFagsak?.institusjon;
-    const fagsakType = minimalFagsak?.fagsakType;
 
     const velgMottaker = (): string | undefined => {
         if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && institusjon) {
@@ -288,9 +285,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjemanavn: 'brevmodul',
     });
 
-    const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] =
-        React.useState<boolean>(false);
-
     const nullstillBarnBrevetGjelder = () => {
         const barn = personer
             .filter(person => person.type === PersonType.BARN)
@@ -425,10 +419,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         hentSkjemaData,
         kanSendeSkjema,
         mottakersMålform,
-        navigerTilOpplysningsplikt,
         onSubmit,
-        personer,
-        settNavigerTilOpplysningsplikt,
         leggTilFritekstKulepunkt,
         makslengdeFritekstHvertKulepunkt,
         maksLengdeFritekstAvsnitt,
@@ -437,10 +428,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
-        fagsakType,
         visFritekstAvsnittTekstboks,
         settVisFritekstAvsnittTekstboks,
     };
-});
-
-export { BrevModulProvider, useBrevModul };
+};
