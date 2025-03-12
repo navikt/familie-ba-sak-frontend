@@ -1,10 +1,10 @@
 import type { IJournalpost } from '@navikt/familie-typer';
 
-import type { Behandlingstype } from './behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IMinimalFagsak } from './fagsak';
 import type { FagsakType } from './fagsak';
-import type { IKlagebehandling } from './klage';
+import type { Journalføringsbehandlingstype } from './journalføringsbehandling';
+import { type IKlagebehandling } from './klage';
 import type { IOppgave } from './oppgave';
 import type { IPersonInfo } from './person';
 
@@ -105,4 +105,7 @@ export enum JournalpostKanal {
     SCAN_IM = 'SCAN_IM',
 }
 
-export type TilknyttetBehandling = { behandlingstype: Behandlingstype; behandlingId: string };
+export type TilknyttetBehandling = {
+    behandlingstype: Journalføringsbehandlingstype;
+    behandlingId: string;
+};

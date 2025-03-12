@@ -1,17 +1,36 @@
-import type { BehandlingStatus } from './behandling';
-import { Behandlingstype, type BehandlingÅrsak } from './behandling';
-import type { KlageStatus } from './klage';
+import {
+    type BehandlingStatus,
+    type Behandlingstype,
+    type BehandlingÅrsak,
+    behandlingÅrsak,
+} from './behandling';
+import { Klagebehandlingstype, type KlageStatus, type KlageÅrsak } from './klage';
 import { type IKlagebehandling } from './klage';
 import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import type { IsoDatoString } from '../utils/dato';
 
+export type Journalføringsbehandlingstype = Behandlingstype | Klagebehandlingstype;
+
+export type Journalføringsbehandlingsstatus = BehandlingStatus | KlageStatus;
+
+export type Journalføringsbehandlingsårsak = BehandlingÅrsak | KlageÅrsak;
+
 export type Journalføringsbehandling = {
     id: string;
     opprettetTidspunkt: IsoDatoString;
-    årsak?: BehandlingÅrsak;
-    type: Behandlingstype;
-    status: BehandlingStatus | KlageStatus;
+    årsak?: Journalføringsbehandlingsårsak;
+    type: Journalføringsbehandlingstype;
+    status: Journalføringsbehandlingsstatus;
 };
+
+export function finnVisningstekstForJournalføringsbehandlingsårsak(
+    journalføringsbehandlingsårsak?: Journalføringsbehandlingsårsak
+) {
+    if (!journalføringsbehandlingsårsak) {
+        return '-';
+    }
+    return behandlingÅrsak[journalføringsbehandlingsårsak];
+}
 
 export function opprettJournalføringsbehandlingFraKlagebehandling(
     klagebehandling: IKlagebehandling
@@ -19,7 +38,8 @@ export function opprettJournalføringsbehandlingFraKlagebehandling(
     return {
         id: klagebehandling.id,
         opprettetTidspunkt: klagebehandling.opprettet,
-        type: Behandlingstype.KLAGE,
+        type: Klagebehandlingstype.KLAGE,
+        årsak: klagebehandling.årsak,
         status: klagebehandling.status,
     };
 }
