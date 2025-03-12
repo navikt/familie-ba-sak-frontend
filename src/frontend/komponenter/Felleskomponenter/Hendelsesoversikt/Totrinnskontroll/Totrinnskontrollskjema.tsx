@@ -59,7 +59,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     const saksbehandler = totrinnskontroll?.saksbehandler ?? 'UKJENT SAKSBEHANDLER';
     const opprettetTidspunkt = totrinnskontroll?.opprettetTidspunkt ?? undefined;
 
-    const egetVedtak = totrinnskontroll?.saksbehandler === innloggetSaksbehandler?.displayName;
+    const egetVedtak = totrinnskontroll?.saksbehandlerId === innloggetSaksbehandler?.navIdent;
 
     return (
         <Fieldset
