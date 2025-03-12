@@ -20,10 +20,10 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import type { IUnderside } from './sider';
-import { erSidenAktiv } from './sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
+import type { IUnderside } from '../../Fagsak/Behandling/Sider/sider';
+import { erSidenAktiv } from '../../Fagsak/Behandling/Sider/sider';
 
 const ToggleVisningVenstremeny = styled(Button)<{ $åpenvenstremeny: boolean }>`
     position: fixed;

@@ -1,16 +1,16 @@
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import type { IBehandling } from '../../../typer/behandling';
+import { mapFraRestPersonResultatTilPersonResultat } from '../../../../context/Vilkårsvurdering/vilkårsvurdering';
+import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingSteg,
     BehandlingStegStatus,
     BehandlingÅrsak,
     hentStegNummer,
-} from '../../../typer/behandling';
-import type { IPersonResultat, IVilkårResultat } from '../../../typer/vilkår';
-import { Resultat } from '../../../typer/vilkår';
-import { formaterIdent } from '../../../utils/formatter';
+} from '../../../../typer/behandling';
+import type { IPersonResultat, IVilkårResultat } from '../../../../typer/vilkår';
+import { Resultat } from '../../../../typer/vilkår';
+import { formaterIdent } from '../../../../utils/formatter';
 
 export interface ISide {
     href: string;

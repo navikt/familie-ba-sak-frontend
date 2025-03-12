@@ -18,8 +18,8 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { behandlingErEtterSteg } from '../../../utils/steg';
-import type { ISide } from '../Venstremeny/sider';
-import { sider } from '../Venstremeny/sider';
+import type { ISide } from '../../Fagsak/Behandling/Sider/sider';
+import { sider } from '../../Fagsak/Behandling/Sider/sider';
 
 interface IProps extends PropsWithChildren {
     className?: string;

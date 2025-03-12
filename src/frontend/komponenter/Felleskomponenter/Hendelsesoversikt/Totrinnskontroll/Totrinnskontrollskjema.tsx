@@ -27,7 +27,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { KontrollertStatus } from '../../Venstremeny/sider';
+import { KontrollertStatus } from '../../../Fagsak/Behandling/Sider/sider';
 
 interface IProps {
     innsendtVedtak: Ressurs<IBehandling>;

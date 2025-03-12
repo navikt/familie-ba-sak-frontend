@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import { sider } from './Sider/sider';
+import type { SideId } from './Sider/sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
 import { EøsProvider } from '../../../context/Eøs/EøsContext';
@@ -11,8 +13,6 @@ import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
-import type { SideId } from '../../Felleskomponenter/Venstremeny/sider';
-import { sider } from '../../Felleskomponenter/Venstremeny/sider';
 import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from '../Filtreringsregler/Filtreringsregler';
 import RegistrerInstitusjon from '../Institusjon/RegistrerInstitusjon';
