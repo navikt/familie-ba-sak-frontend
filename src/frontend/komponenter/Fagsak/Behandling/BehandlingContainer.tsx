@@ -7,13 +7,13 @@ import { ABorderDivider } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingRouter from './BehandlingRouter';
-import Høyremeny from './Høyremeny/Høyremeny';
-import Personlinje from './Personlinje/Personlinje';
-import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
-import { useHentOgSettBehandling } from '../../context/behandlingContext/HentOgSettBehandlingContext';
-import type { IMinimalFagsak } from '../../typer/fagsak';
-import type { IPersonInfo } from '../../typer/person';
-import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
+import { BehandlingProvider } from '../../../context/behandlingContext/BehandlingContext';
+import { useHentOgSettBehandling } from '../../../context/behandlingContext/HentOgSettBehandlingContext';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IPersonInfo } from '../../../typer/person';
+import Venstremeny from '../../Felleskomponenter/Venstremeny/Venstremeny';
+import Høyremeny from '../Høyremeny/Høyremeny';
+import Personlinje from '../Personlinje/Personlinje';
 
 interface Props {
     bruker: IPersonInfo;

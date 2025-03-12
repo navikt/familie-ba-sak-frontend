@@ -2,25 +2,25 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
-import Behandlingsresultat from './Behandlingsresultat/Behandlingsresultat';
-import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
-import RegistrerInstitusjon from './Institusjon/RegistrerInstitusjon';
-import Simulering from './Simulering/Simulering';
-import RegistrerSøknad from './Søknad/RegistrerSøknad';
-import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
-import { SammensattKontrollsakProvider } from './Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
-import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
-import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
-import { VedtakStegProvider } from '../../context/behandlingContext/useVedtakSteg';
-import { EøsProvider } from '../../context/Eøs/EøsContext';
-import { SimuleringProvider } from '../../context/SimuleringContext';
-import { SøknadProvider } from '../../context/SøknadContext';
-import { TidslinjeProvider } from '../../context/TidslinjeContext';
-import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type { IPersonInfo } from '../../typer/person';
-import { hentSideHref } from '../../utils/miljø';
-import type { SideId } from '../Felleskomponenter/Venstremeny/sider';
-import { sider } from '../Felleskomponenter/Venstremeny/sider';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
+import { EøsProvider } from '../../../context/Eøs/EøsContext';
+import { SimuleringProvider } from '../../../context/SimuleringContext';
+import { SøknadProvider } from '../../../context/SøknadContext';
+import { TidslinjeProvider } from '../../../context/TidslinjeContext';
+import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IPersonInfo } from '../../../typer/person';
+import { hentSideHref } from '../../../utils/miljø';
+import type { SideId } from '../../Felleskomponenter/Venstremeny/sider';
+import { sider } from '../../Felleskomponenter/Venstremeny/sider';
+import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
+import Filtreringsregler from '../Filtreringsregler/Filtreringsregler';
+import RegistrerInstitusjon from '../Institusjon/RegistrerInstitusjon';
+import Simulering from '../Simulering/Simulering';
+import RegistrerSøknad from '../Søknad/RegistrerSøknad';
+import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
+import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
+import Vilkårsvurdering from '../Vilkårsvurdering/Vilkårsvurdering';
 
 interface Props {
     bruker: IPersonInfo;
