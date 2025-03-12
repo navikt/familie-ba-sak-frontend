@@ -12,8 +12,8 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
-import type { IBehandling } from '../../../typer/behandling';
+import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
+import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,
     behandlingsresultater,
@@ -21,10 +21,10 @@ import {
     behandlingstyper,
     behandlingÅrsak,
     erBehandlingHenlagt,
-} from '../../../typer/behandling';
-import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { sakstype } from '../Saksoversikt/Saksoversikt';
+} from '../../../../typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import Informasjonsbolk from '../../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { sakstype } from '../../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
     åpenBehandling: IBehandling;
