@@ -15,12 +15,12 @@ import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
 import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from '../Filtreringsregler/Filtreringsregler';
-import RegistrerInstitusjon from '../Institusjon/RegistrerInstitusjon';
 import Simulering from '../Simulering/Simulering';
 import RegistrerSøknad from '../Søknad/RegistrerSøknad';
 import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
 import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vilkårsvurdering from '../Vilkårsvurdering/Vilkårsvurdering';
+import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 
 interface Props {
     bruker: IPersonInfo;

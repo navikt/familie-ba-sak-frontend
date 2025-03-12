@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { SamhandlerTabell } from './SamhandlerTabell';
 import { useInstitusjon } from './useInstitusjon';
-import { useSamhandlerRequest } from './useSamhandler';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { BehandlingSteg, type IBehandling } from '../../../typer/behandling';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
+import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { SamhandlerTabell } from '../../../Institusjon/SamhandlerTabell';
+import { useSamhandlerRequest } from '../../../Institusjon/useSamhandler';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;
