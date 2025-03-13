@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
-import { opplysningsdokumenter } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { opplysningsdokumenter } from '../../../Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 
 const Container = styled.div`
     margin-bottom: 1rem;
