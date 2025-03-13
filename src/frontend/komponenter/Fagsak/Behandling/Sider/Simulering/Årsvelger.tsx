@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
 
-import { NavigeringsRetning } from '../../../context/TidslinjeContext';
-import TidslinjeNavigering from '../Behandling/Sider/Behandlingsresultat/TidslinjeNavigering';
+import { NavigeringsRetning } from '../../../../../context/TidslinjeContext';
+import TidslinjeNavigering from '../Behandlingsresultat/TidslinjeNavigering';
 
 const FlexColumn = styled.div`
     display: flex;

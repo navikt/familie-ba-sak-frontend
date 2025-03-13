@@ -23,18 +23,18 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
-import { useSimulering } from '../../../context/SimuleringContext';
-import useDokument from '../../../hooks/useDokument';
-import type { IBehandling } from '../../../typer/behandling';
-import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../typer/simulering';
-import type { Målform } from '../../../typer/søknad';
-import { målform } from '../../../typer/søknad';
-import type { BrevmottakereAlertBehandlingProps } from '../../Felleskomponenter/BrevmottakereAlert';
-import { BrevmottakereAlert } from '../../Felleskomponenter/BrevmottakereAlert';
-import HelpText from '../../Felleskomponenter/HelpText';
-import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
+import { useSimulering } from '../../../../../context/SimuleringContext';
+import useDokument from '../../../../../hooks/useDokument';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
+import type { Målform } from '../../../../../typer/søknad';
+import { målform } from '../../../../../typer/søknad';
+import type { BrevmottakereAlertBehandlingProps } from '../../../../Felleskomponenter/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../Felleskomponenter/BrevmottakereAlert';
+import HelpText from '../../../../Felleskomponenter/HelpText';
+import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
     display: flex;

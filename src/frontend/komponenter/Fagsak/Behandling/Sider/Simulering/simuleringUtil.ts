@@ -1,4 +1,4 @@
-import { formaterBeløp } from '../../../utils/formatter';
+import { formaterBeløp } from '../../../../../utils/formatter';
 
 export const kapitaliserTekst = (tekst: string): string => {
     return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();

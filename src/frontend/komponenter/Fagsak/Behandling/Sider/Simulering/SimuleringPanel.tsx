@@ -13,9 +13,13 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../utils/dato';
-import { formaterBeløp } from '../../../utils/formatter';
+import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
+import {
+    isoStringTilFormatertString,
+    isoStringTilDate,
+    Datoformat,
+} from '../../../../../utils/dato';
+import { formaterBeløp } from '../../../../../utils/formatter';
 
 const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
     color: ${props => (props.$farge ? props.$farge : ATextDefault)};

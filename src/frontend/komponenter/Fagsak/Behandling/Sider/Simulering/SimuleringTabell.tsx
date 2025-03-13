@@ -17,14 +17,17 @@ import {
 
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
 import { Årsvelger } from './Årsvelger';
-import type { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
+import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
 import {
     Datoformat,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDate,
     isoStringTilFormatertString,
-} from '../../../utils/dato';
-import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
+} from '../../../../../utils/dato';
+import {
+    hentPeriodelisteMedTommePerioder,
+    hentÅrISimuleringen,
+} from '../../../../../utils/simulering';
 
 const IkkeFullBreddeTabell = styled(Table)`
     width: unset;

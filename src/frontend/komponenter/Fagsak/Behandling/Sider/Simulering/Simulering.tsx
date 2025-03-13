@@ -10,14 +10,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useSimulering } from '../../../context/SimuleringContext';
-import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../typer/behandling';
-import { BehandlingSteg } from '../../../typer/behandling';
-import type { ITilbakekreving } from '../../../typer/simulering';
-import { hentSøkersMålform } from '../../../utils/behandling';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useSimulering } from '../../../../../context/SimuleringContext';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingSteg } from '../../../../../typer/behandling';
+import type { ITilbakekreving } from '../../../../../typer/simulering';
+import { hentSøkersMålform } from '../../../../../utils/behandling';
+import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
