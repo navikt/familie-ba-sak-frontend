@@ -34,6 +34,7 @@ import type { IKlagebehandling, Klagebehandlingstype } from '../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
+    TilknyttetBehandling,
 } from '../typer/manuell-journalføring';
 import { JournalpostKanal } from '../typer/manuell-journalføring';
 import {
@@ -57,7 +58,7 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     avsenderNavn: string;
     avsenderIdent: string;
     knyttTilNyBehandling: boolean;
-    tilknyttedeBehandlingIder: string[];
+    tilknyttedeBehandlinger: TilknyttetBehandling[];
     fagsakType: FagsakType;
     samhandler: ISamhandlerInfo | undefined;
 }
@@ -182,7 +183,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             knyttTilNyBehandling,
             behandlingstype,
             behandlingsårsak,
-            tilknyttedeBehandlingIder: useFelt<string[]>({
+            tilknyttedeBehandlinger: useFelt<TilknyttetBehandling[]>({
                 verdi: [],
             }),
             fagsakType: useFelt<FagsakType>({
@@ -449,9 +450,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             };
                         }),
                         knyttTilFagsak:
-                            skjema.felter.tilknyttedeBehandlingIder.verdi.length > 0 ||
+                            skjema.felter.tilknyttedeBehandlinger.verdi.length > 0 ||
                             skjema.felter.knyttTilNyBehandling.verdi,
-                        tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlingIder.verdi,
+                        tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
+                        tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlinger.verdi.map(
+                            tilknyttetBehandling => tilknyttetBehandling.behandlingId
+                        ),
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
 
                         // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
@@ -475,6 +479,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                       tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
                                   }
                                 : null,
+                        fagsakId: minimalFagsak?.id,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
@@ -495,7 +500,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             const { verdi: behandlingstema } = skjema.felter.behandlingstema;
 
             const knyttJournalpostTilFagsak =
-                skjema.felter.tilknyttedeBehandlingIder.verdi.length > 0 ||
+                skjema.felter.tilknyttedeBehandlinger.verdi.length > 0 ||
                 skjema.felter.knyttTilNyBehandling.verdi;
 
             if (!knyttJournalpostTilFagsak) {
@@ -519,8 +524,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             journalpostId:
                                 dataForManuellJournalføring.data.journalpost.journalpostId,
                             opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
+                            tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                             tilknyttedeBehandlingIder:
-                                skjema.felter.tilknyttedeBehandlingIder.verdi,
+                                skjema.felter.tilknyttedeBehandlinger.verdi.map(
+                                    tilknyttetBehandling => tilknyttetBehandling.behandlingId
+                                ),
                             kategori: behandlingstema?.kategori ?? null,
                             underkategori: behandlingstema?.underkategori ?? null,
                             bruker: {
@@ -539,6 +547,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                       ? BehandlingÅrsak.SØKNAD
                                       : nyBehandlingsårsak,
                             navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                            fagsakId: minimalFagsak?.id,
                         },
                     },
                     (fagsakId: Ressurs<string>) => {

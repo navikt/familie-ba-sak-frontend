@@ -8,13 +8,8 @@ import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import type { BehandlingÅrsak } from '../../typer/behandling';
-import {
-    behandlingsstatuser,
-    BehandlingStatus,
-    behandlingstyper,
-    behandlingÅrsak,
-} from '../../typer/behandling';
+import { behandlingsstatuser, BehandlingStatus, behandlingstyper } from '../../typer/behandling';
+import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../typer/journalføringsbehandling';
 import { ToggleNavn } from '../../typer/toggles';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
@@ -49,7 +44,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
 
     const visGenerellSakInfoStripe =
         !erLesevisning() &&
-        skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
+        skjema.felter.tilknyttedeBehandlinger.verdi.length === 0 &&
         !skjema.felter.knyttTilNyBehandling.verdi;
 
     const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
@@ -81,28 +76,39 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                 return (
                                     <Table.Row
                                         key={behandling.id}
-                                        aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                            behandling.id
+                                        aria-selected={skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                            it => it.behandlingId === behandling.id
                                         )}
                                     >
                                         <Table.DataCell>
                                             <Checkbox
                                                 id={behandling.id}
                                                 value={behandling.id}
-                                                checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                    behandling.id
+                                                checked={skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                                    it => it.behandlingId === behandling.id
                                                 )}
                                                 onChange={() => {
-                                                    skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                    skjema.felter.tilknyttedeBehandlinger.validerOgSettFelt(
                                                         [
-                                                            ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                                it => it !== behandling.id
+                                                            ...skjema.felter.tilknyttedeBehandlinger.verdi.filter(
+                                                                it =>
+                                                                    it.behandlingId !==
+                                                                    behandling.id
                                                             ),
-                                                            ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                                behandling.id
+                                                            ...(skjema.felter.tilknyttedeBehandlinger.verdi.some(
+                                                                it =>
+                                                                    it.behandlingId ===
+                                                                    behandling.id
                                                             )
                                                                 ? []
-                                                                : [behandling.id]),
+                                                                : [
+                                                                      {
+                                                                          behandlingstype:
+                                                                              behandling.type,
+                                                                          behandlingId:
+                                                                              behandling.id,
+                                                                      },
+                                                                  ]),
                                                         ]
                                                     );
                                                 }}
@@ -119,7 +125,9 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             })}
                                         </Table.DataCell>
                                         <Table.DataCell>
-                                            {behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}
+                                            {finnVisningstekstForJournalføringsbehandlingsårsak(
+                                                behandling.årsak
+                                            )}
                                         </Table.DataCell>
                                         <Table.DataCell>
                                             {behandlingstyper[behandling.type].navn}
