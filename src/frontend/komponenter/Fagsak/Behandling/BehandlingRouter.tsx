@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -16,11 +17,10 @@ import { hentSideHref } from '../../../utils/miljø';
 import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from '../Filtreringsregler/Filtreringsregler';
 import Simulering from '../Simulering/Simulering';
-import RegistrerSøknad from '../Søknad/RegistrerSøknad';
 import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
+import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
 import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vilkårsvurdering from '../Vilkårsvurdering/Vilkårsvurdering';
-import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 
 interface Props {
     bruker: IPersonInfo;

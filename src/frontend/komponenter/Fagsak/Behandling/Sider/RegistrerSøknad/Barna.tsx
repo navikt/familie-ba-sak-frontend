@@ -7,15 +7,15 @@ import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
-import { useSøknad } from '../../../context/SøknadContext';
-import StatusIkon, { Status } from '../../../ikoner/StatusIkon';
-import type { IForelderBarnRelasjonMaskert } from '../../../typer/person';
-import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../typer/person';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { isoStringTilDate } from '../../../utils/dato';
-import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
+import { useSøknad } from '../../../../../context/SøknadContext';
+import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
+import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
+import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
+import { isoStringTilDate } from '../../../../../utils/dato';
+import LeggTilBarn from '../../../../Felleskomponenter/LeggTilBarn';
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;
