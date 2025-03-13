@@ -16,17 +16,17 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import HelpText from './HelpText';
-import type { IPersonInfo, IRestTilgang } from '../../typer/person';
-import { adressebeskyttelsestyper } from '../../typer/person';
-import type { IBarnMedOpplysninger } from '../../typer/søknad';
-import { dateTilIsoDatoStringEllerUndefined } from '../../utils/dato';
-import { identValidator } from '../../utils/validators';
+import LeggTilUregistrertBarn from './LeggTilUregistrertBarn';
+import type { IPersonInfo, IRestTilgang } from '../../../typer/person';
+import { adressebeskyttelsestyper } from '../../../typer/person';
+import type { IBarnMedOpplysninger } from '../../../typer/søknad';
+import { dateTilIsoDatoStringEllerUndefined } from '../../../utils/dato';
+import { identValidator } from '../../../utils/validators';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
-} from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
+} from '../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import HelpText from '../HelpText';
 
 const StyledHeading = styled(Heading)`
     display: flex;

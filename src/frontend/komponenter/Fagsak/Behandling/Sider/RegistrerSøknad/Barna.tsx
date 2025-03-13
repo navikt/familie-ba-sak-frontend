@@ -15,7 +15,7 @@ import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../../utils/dato';
-import LeggTilBarn from '../../../../Felleskomponenter/LeggTilBarn';
+import LeggTilBarn from '../../../../Felleskomponenter/LeggTilBarn/LeggTilBarn';
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;

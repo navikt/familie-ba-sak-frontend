@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { BodyShort, Checkbox, CheckboxGroup, Heading, TextField } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import type { IRegistrerBarnSkjema } from './LeggTilBarn';
 import type { IPersonInfo } from '../../../typer/person';
-import Datovelger from '../../Felleskomponenter/Datovelger/Datovelger';
-import type { IRegistrerBarnSkjema } from '../../Felleskomponenter/LeggTilBarn';
+import Datovelger from '../Datovelger/Datovelger';
 
 interface IProps {
     registrerBarnSkjema: ISkjema<IRegistrerBarnSkjema, IPersonInfo>;

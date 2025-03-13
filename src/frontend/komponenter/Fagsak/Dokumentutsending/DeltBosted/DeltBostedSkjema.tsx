@@ -9,7 +9,7 @@ import BarnCheckbox from './BarnCheckbox';
 import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
-import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
+import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn/LeggTilBarn';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
