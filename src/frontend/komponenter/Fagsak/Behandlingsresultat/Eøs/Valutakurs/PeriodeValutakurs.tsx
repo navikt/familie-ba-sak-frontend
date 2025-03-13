@@ -2,8 +2,8 @@ import React from 'react';
 
 import { BodyShort } from '@navikt/ds-react';
 
-import { type IRestValutakurs } from '../../../../typer/eøsPerioder';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../utils/dato';
+import { type IRestValutakurs } from '../../../../../typer/eøsPerioder';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../utils/dato';
 
 interface IStatusBarnCelleOgPeriodeCelleProps {
     valutakurs: IRestValutakurs;

@@ -12,7 +12,6 @@ import { SammensattKontrollsakProvider } from './Vedtak/SammensattKontrollsak/us
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../context/behandlingContext/useVedtakSteg';
-import { EøsProvider } from '../../context/Eøs/EøsContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -73,9 +72,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                 path="/tilkjent-ytelse"
                 element={
                     <TidslinjeProvider>
-                        <EøsProvider åpenBehandling={behandling}>
-                            <Behandlingsresultat åpenBehandling={behandling} />
-                        </EøsProvider>
+                        <Behandlingsresultat åpenBehandling={behandling} />
                     </TidslinjeProvider>
                 }
             />

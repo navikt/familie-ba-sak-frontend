@@ -19,20 +19,19 @@ import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
-import { useApp } from '../../../../context/AppContext';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useEøs } from '../../../../context/Eøs/EøsContext';
+import { useApp } from '../../../../../context/AppContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import {
     Behandlingstype,
     type IBehandling,
     VurderingsstrategiForValutakurser,
-} from '../../../../typer/behandling';
+} from '../../../../../typer/behandling';
 import {
     EøsPeriodeStatus,
     type IRestValutakurs,
     Vurderingsform,
-} from '../../../../typer/eøsPerioder';
-import { ToggleNavn } from '../../../../typer/toggles';
+} from '../../../../../typer/eøsPerioder';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 const ValutakurserContainer = styled.div`
     margin-top: 5rem;
@@ -70,12 +69,17 @@ const StyledHeaderCell = styled(Table.HeaderCell)`
 
 interface IProps {
     valutakurser: IRestValutakurs[];
+    erValutakurserGyldige: () => boolean;
     åpenBehandling: IBehandling;
     visFeilmeldinger: boolean;
 }
 
-const Valutakurser: React.FC<IProps> = ({ valutakurser, åpenBehandling, visFeilmeldinger }) => {
-    const { erValutakurserGyldige } = useEøs();
+const Valutakurser: React.FC<IProps> = ({
+    valutakurser,
+    erValutakurserGyldige,
+    åpenBehandling,
+    visFeilmeldinger,
+}) => {
     const { toggles } = useApp();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandling();
     const { request } = useHttp();
