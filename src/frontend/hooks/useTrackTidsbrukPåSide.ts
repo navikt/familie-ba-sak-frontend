@@ -43,7 +43,7 @@ export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBeh
                 intervallISekunder: intervallISekunder,
             };
 
-            sendTilUmami('stegnavigasjon_v1', data);
+            sendTilUmami('sidevisning_i_behandling', data);
         };
     }, [sidevisning]);
 };
