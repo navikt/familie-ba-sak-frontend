@@ -6,7 +6,7 @@ import { BodyShort, Button, Fieldset, Modal, Select } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { hentAlleÅrsaker } from './settPåVentUtils';
+import { hentVelgbareÅrsaker } from './settPåVentUtils';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
@@ -29,7 +29,7 @@ interface IProps {
 }
 
 export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal, behandling }) => {
-    const årsaker = hentAlleÅrsaker();
+    const årsaker = hentVelgbareÅrsaker();
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(behandling.aktivSettPåVent);
     const { settÅpenBehandling } = useBehandling();
 
