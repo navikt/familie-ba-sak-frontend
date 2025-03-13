@@ -20,7 +20,7 @@ import {
 import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
-import { useVedtaksbegrunnelseTekster } from '../../../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
     vilkårType: VilkårType;
