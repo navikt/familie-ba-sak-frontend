@@ -5,9 +5,9 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
-import { FagsakType } from '../../../../typer/fagsak';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakContext } from '../../../../../../context/Fagsak/FagsakContext';
+import { FagsakType } from '../../../../../../typer/fagsak';
 
 interface IProps {
     visFeilmeldinger: boolean;

@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import type { OptionType } from '../../../../typer/common';
-import type { PersonType } from '../../../../typer/person';
-import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
+import type { OptionType } from '../../../../../../typer/common';
+import type { PersonType } from '../../../../../../typer/person';
+import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../../../typer/vilkår';
 import {
     Regelverk,
     UtdypendeVilkårsvurderingDeltBosted,
@@ -15,12 +15,12 @@ import {
     UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
-} from '../../../../typer/vilkår';
-import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../utils/utdypendeVilkårsvurderinger';
+} from '../../../../../../typer/vilkår';
+import type { UtdypendeVilkårsvurderingAvhengigheter } from '../../../../../../utils/utdypendeVilkårsvurderinger';
 import {
     bestemMuligeUtdypendeVilkårsvurderinger,
     fjernUmuligeAlternativerFraRedigerbartVilkår,
-} from '../../../../utils/utdypendeVilkårsvurderinger';
+} from '../../../../../../utils/utdypendeVilkårsvurderinger';
 
 interface Props {
     redigerbartVilkår: FeltState<IVilkårResultat>;

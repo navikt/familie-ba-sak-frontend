@@ -15,9 +15,9 @@ import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
-import type { IRestRegisterhistorikk } from '../../../../typer/person';
-import { Registeropplysning } from '../../../../typer/registeropplysning';
-import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
+import { Registeropplysning } from '../../../../../../typer/registeropplysning';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 
 const Container = styled.div`
     width: 32rem;

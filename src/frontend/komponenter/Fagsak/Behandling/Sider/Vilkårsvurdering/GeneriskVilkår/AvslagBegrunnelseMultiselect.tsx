@@ -6,21 +6,21 @@ import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elemen
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
-} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type { OptionType } from '../../../../typer/common';
+} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { OptionType } from '../../../../../../typer/common';
 import {
     type IRestVedtakBegrunnelseTilknyttetVilkår,
     type VedtakBegrunnelse,
     VedtakBegrunnelseType,
-} from '../../../../typer/vedtak';
-import type { Regelverk, VilkårType } from '../../../../typer/vilkår';
-import type { IIsoDatoPeriode } from '../../../../utils/dato';
-import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
-import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+} from '../../../../../../typer/vedtak';
+import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
+import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
+import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
+import { useVedtaksbegrunnelseTekster } from '../../../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {
     vilkårType: VilkårType;

@@ -28,19 +28,28 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
-} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../typer/person';
-import { PersonType } from '../../../../typer/person';
-import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../typer/vilkår';
-import { alleRegelverk } from '../../../../utils/vilkår';
+} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../../../typer/person';
+import { PersonType } from '../../../../../../typer/person';
+import type {
+    IPersonResultat,
+    IVilkårConfig,
+    IVilkårResultat,
+} from '../../../../../../typer/vilkår';
+import {
+    Regelverk,
+    Resultat,
+    ResultatBegrunnelse,
+    VilkårType,
+} from '../../../../../../typer/vilkår';
+import { alleRegelverk } from '../../../../../../utils/vilkår';
 
 interface IProps {
     person: IGrunnlagPerson;

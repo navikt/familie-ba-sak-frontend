@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
 import { sider } from './Sider/sider';
@@ -19,8 +20,7 @@ import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
 import Simulering from '../Simulering/Simulering';
 import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
 import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
-import Vilkårsvurdering from '../Vilkårsvurdering/Vilkårsvurdering';
-import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
+import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 
 interface Props {
     bruker: IPersonInfo;

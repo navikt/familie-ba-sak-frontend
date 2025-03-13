@@ -7,15 +7,15 @@ import styled from 'styled-components';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Table } from '@navikt/ds-react';
 
-import type { IRestRegisteropplysning } from '../../../../typer/person';
-import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
+import type { IRestRegisteropplysning } from '../../../../../../typer/person';
+import { Registeropplysning, registeropplysning } from '../../../../../../typer/registeropplysning';
 import {
     Datoformat,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDateMedFallback,
     isoStringTilFormatertString,
     tidenesMorgen,
-} from '../../../../utils/dato';
+} from '../../../../../../utils/dato';
 
 const Container = styled.div`
     display: flex;

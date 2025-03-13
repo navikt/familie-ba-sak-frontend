@@ -7,8 +7,8 @@ import { ASpacing16, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import AnnenVurderingTabell from './AnnenVurderingTabell';
-import type { IGrunnlagPerson } from '../../../../typer/person';
-import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
+import type { IGrunnlagPerson } from '../../../../../../typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../../../typer/vilkår';
 
 interface IProps {
     person: IGrunnlagPerson;

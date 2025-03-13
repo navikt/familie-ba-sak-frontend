@@ -9,11 +9,11 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
-import type { IGrunnlagPerson } from '../../../../typer/person';
-import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
-import { Resultat, resultatVisningsnavn } from '../../../../typer/vilkår';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
+import type { IGrunnlagPerson } from '../../../../../../typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../../../typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '../../../../../../typer/vilkår';
 
 interface IProps {
     person: IGrunnlagPerson;

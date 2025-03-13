@@ -15,17 +15,17 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../typer/behandling';
-import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
-import type { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
-import { annenVurderingConfig, vilkårConfig } from '../../../typer/vilkår';
-import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
-import { erProd } from '../../../utils/miljø';
-import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useVilkårsvurdering } from '../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
+import type { IAnnenVurdering, IVilkårResultat } from '../../../../../typer/vilkår';
+import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkår';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { erProd } from '../../../../../utils/miljø';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;

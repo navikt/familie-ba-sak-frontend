@@ -12,20 +12,20 @@ import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,
 } from './AnnenVurderingTabell';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { validerAnnenVurdering } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
-} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../typer/person';
+} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type {
     IAnnenVurdering,
     IAnnenVurderingConfig,
     IPersonResultat,
-} from '../../../../typer/vilkår';
-import { Resultat, resultater } from '../../../../typer/vilkår';
+} from '../../../../../../typer/vilkår';
+import { Resultat, resultater } from '../../../../../../typer/vilkår';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 
 interface IProps {
