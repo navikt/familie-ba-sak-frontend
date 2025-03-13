@@ -7,6 +7,7 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 import Container from './Container';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { AppProvider } from '../context/AppContext';
+import { useStartUmami } from '../hooks/useStartUmami';
 import { initGrafanaFaro } from '../utils/grafanaFaro';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 
@@ -14,6 +15,7 @@ const App: React.FC = () => {
     const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<
         ISaksbehandler | undefined
     >(undefined);
+    useStartUmami();
 
     React.useEffect(() => {
         initGrafanaFaro();

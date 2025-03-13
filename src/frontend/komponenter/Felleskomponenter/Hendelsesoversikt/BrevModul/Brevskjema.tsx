@@ -41,7 +41,7 @@ import { målform } from '../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../utils/skjema';
-import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import { FamilieMultiLandvelger } from '../../../Fagsak/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useSamhandlerRequest } from '../../../Fagsak/Institusjon/useSamhandler';
 import Datovelger from '../../Datovelger/Datovelger';

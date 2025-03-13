@@ -4,16 +4,13 @@ import { Table } from '@navikt/ds-react';
 
 import { PeriodeValutakurs } from './PeriodeValutakurs';
 import { StatusOgBarnValutakurs } from './StatusOgBarnValutakurs';
+import { useValutakursSkjema, valutakursFeilmeldingId } from './useValutakursSkjema';
 import ValutakursTabellRadEndre from './ValutakursTabellRadEndre';
-import {
-    useValutakursSkjema,
-    valutakursFeilmeldingId,
-} from '../../../../context/Valutakurs/ValutakursSkjemaContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
-import type { IRestValutakurs } from '../../../../typer/eøsPerioder';
-import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import { lagPersonLabel } from '../../../../utils/formatter';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
+import type { IRestValutakurs } from '../../../../../typer/eøsPerioder';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { lagPersonLabel } from '../../../../../utils/formatter';
 
 interface IProps {
     valutakurs: IRestValutakurs;

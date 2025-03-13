@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { Alert, Heading, Table } from '@navikt/ds-react';
 
 import KompetanseTabellRad from './KompetanseTabellRad';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IRestKompetanse } from '../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../typer/eøsPerioder';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../../../typer/behandling';
+import type { IRestKompetanse } from '../../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../../typer/eøsPerioder';
 
 const KompetanseContainer = styled.div`
     margin-top: 5rem;

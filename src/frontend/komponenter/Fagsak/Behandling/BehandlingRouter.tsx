@@ -9,11 +9,11 @@ import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
-import { EøsProvider } from '../../../context/Eøs/EøsContext';
 import { SimuleringProvider } from '../../../context/SimuleringContext';
 import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
 import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
@@ -21,14 +21,17 @@ import Simulering from '../Simulering/Simulering';
 import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
 import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
 
 interface Props {
     bruker: IPersonInfo;
+    fagsak: IMinimalFagsak;
 }
 
-const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
+const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
     const location = useLocation();
     const { behandling, leggTilBesøktSide } = useBehandling();
+    useTrackTidsbrukPåSide(fagsak, behandling);
 
     const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
@@ -69,9 +72,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker }) => {
                 path="/tilkjent-ytelse"
                 element={
                     <TidslinjeProvider>
-                        <EøsProvider åpenBehandling={behandling}>
-                            <Behandlingsresultat åpenBehandling={behandling} />
-                        </EøsProvider>
+                        <Behandlingsresultat åpenBehandling={behandling} />
                     </TidslinjeProvider>
                 }
             />

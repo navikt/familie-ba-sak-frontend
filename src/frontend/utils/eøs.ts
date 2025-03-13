@@ -1,14 +1,9 @@
-import constate from 'constate';
 import { isBefore, isSameMonth } from 'date-fns';
 
-import { Status } from '../../ikoner/StatusIkon';
-import type { IBehandling } from '../../typer/behandling';
-import type { EøsPeriodeStatus, IRestEøsPeriode } from '../../typer/eøsPerioder';
-import type { IGrunnlagPerson } from '../../typer/person';
-import { sorterPåDato } from '../../utils/formatter';
-import { useKompetanse } from '../Kompetanse/KompetanseContext';
-import { useUtenlandskPeriodeBeløp } from '../UtenlandskPeriodeBeløp/UtenlandskPeriodeBeløpContext';
-import { useValutakurs } from '../Valutakurs/ValutakursContext';
+import { sorterPåDato } from './formatter';
+import { Status } from '../ikoner/StatusIkon';
+import type { EøsPeriodeStatus, IRestEøsPeriode } from '../typer/eøsPerioder';
+import type { IGrunnlagPerson } from '../typer/person';
 
 export const mapEøsPeriodeStatusTilStatus: Record<EøsPeriodeStatus, Status> = {
     IKKE_UTFYLT: Status.ADVARSEL,
@@ -68,45 +63,3 @@ export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined)
 
 export const konverterSkjemaverdiTilDesimal = (verdi: string | undefined) =>
     verdi ? verdi.toString().replace(/\s+/g, '').replace(',', '.') : undefined;
-
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
-const [EøsProvider, useEøs] = constate(({ åpenBehandling }: IProps) => {
-    const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse({
-        åpenBehandling,
-    });
-
-    const {
-        utbetaltAnnetLandBeløp,
-        erUtbetaltAnnetLandBeløpGyldige,
-        hentUtbetaltAnnetLandBeløpMedFeil,
-    } = useUtenlandskPeriodeBeløp({
-        åpenBehandling,
-    });
-
-    const { valutakurser, erValutakurserGyldige, hentValutakurserMedFeil } = useValutakurs({
-        åpenBehandling,
-    });
-
-    const erEøsInformasjonGyldig = () => {
-        return (
-            erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige() && erValutakurserGyldige()
-        );
-    };
-
-    return {
-        erEøsInformasjonGyldig,
-        kompetanser,
-        hentKompetanserMedFeil,
-        utbetaltAnnetLandBeløp,
-        erUtbetaltAnnetLandBeløpGyldige,
-        hentUtbetaltAnnetLandBeløpMedFeil,
-        valutakurser,
-        erValutakurserGyldige,
-        hentValutakurserMedFeil,
-    };
-});
-
-export { EøsProvider, useEøs };
