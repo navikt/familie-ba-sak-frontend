@@ -7,17 +7,17 @@ import styled from 'styled-components';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 
-import type { IBehandling } from '../../typer/behandling';
-import type { IPersonInfo } from '../../typer/person';
-import { hentSideHref } from '../../utils/miljø';
-import BrevmottakerListe from '../Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/BrevmottakerListe';
-import { sider } from '../Fagsak/Behandling/Sider/sider';
-import { LeggTilBrevmottakerModalBehandling } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-import { LeggTilBrevmottakerModalFagsak } from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
+import BrevmottakerListe from './BrevmottakerListe';
+import type { IBehandling } from '../../../typer/behandling';
+import type { IPersonInfo } from '../../../typer/person';
+import { hentSideHref } from '../../../utils/miljø';
+import { sider } from '../../Fagsak/Behandling/Sider/sider';
+import { LeggTilBrevmottakerModalBehandling } from '../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { LeggTilBrevmottakerModalFagsak } from '../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
-} from '../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface Props {
     bruker: IPersonInfo;

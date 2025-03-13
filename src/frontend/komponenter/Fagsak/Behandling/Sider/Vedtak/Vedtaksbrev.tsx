@@ -25,7 +25,7 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
-import { BrevmottakereAlert } from '../../../../Felleskomponenter/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface Props {

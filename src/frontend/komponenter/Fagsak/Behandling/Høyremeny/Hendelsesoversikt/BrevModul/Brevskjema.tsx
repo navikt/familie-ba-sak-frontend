@@ -22,7 +22,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import BarnBrevetGjelder from './BarnBrevetGjelder';
-import BrevmottakerListe from './BrevmottakerListe';
 import type { BrevtypeSelect } from './typer';
 import {
     Brevmal,
@@ -43,6 +42,7 @@ import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../../../utils/skjema';
 import { FamilieMultiLandvelger } from '../../../../../Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 import DeltBostedSkjema from '../../../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import BrevmottakerListe from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../Felleskomponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../Felleskomponenter/Knapperekke';
 import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';

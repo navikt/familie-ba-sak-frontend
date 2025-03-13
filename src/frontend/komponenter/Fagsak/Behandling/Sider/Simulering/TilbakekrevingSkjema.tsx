@@ -31,8 +31,8 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
 import { målform } from '../../../../../typer/søknad';
-import type { BrevmottakereAlertBehandlingProps } from '../../../../Felleskomponenter/BrevmottakereAlert';
-import { BrevmottakereAlert } from '../../../../Felleskomponenter/BrevmottakereAlert';
+import type { BrevmottakereAlertBehandlingProps } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../Felleskomponenter/HelpText';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
