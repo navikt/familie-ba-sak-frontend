@@ -5,12 +5,12 @@ import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
 
-import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
-import type { IBehandling } from '../../../typer/behandling';
-import { BehandlingSteg } from '../../../typer/behandling';
-import { Filtreringsregel, filtreringsregler } from '../../../typer/fødselshendelser';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingSteg } from '../../../../../typer/behandling';
+import { Filtreringsregel, filtreringsregler } from '../../../../../typer/fødselshendelser';
+import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IProps {
     åpenBehandling: IBehandling;
