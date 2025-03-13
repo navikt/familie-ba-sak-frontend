@@ -14,12 +14,12 @@ import {
     ASpacing8,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
-import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
-import { behandlingErEtterSteg } from '../../../utils/steg';
-import type { ISide } from '../../Fagsak/Behandling/Sider/sider';
-import { sider } from '../../Fagsak/Behandling/Sider/sider';
+import type { ISide } from './sider';
+import { sider } from './sider';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { BehandlingSteg, settPåVentÅrsaker } from '../../../../typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { behandlingErEtterSteg } from '../../../../utils/steg';
 
 interface IProps extends PropsWithChildren {
     className?: string;

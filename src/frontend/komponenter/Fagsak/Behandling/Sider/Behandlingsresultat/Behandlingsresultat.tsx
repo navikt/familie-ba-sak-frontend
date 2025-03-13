@@ -36,7 +36,7 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;

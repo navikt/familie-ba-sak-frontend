@@ -25,7 +25,7 @@ import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkå
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;

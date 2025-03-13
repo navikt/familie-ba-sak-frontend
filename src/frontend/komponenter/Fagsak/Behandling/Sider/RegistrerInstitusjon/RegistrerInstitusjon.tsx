@@ -10,7 +10,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import { SamhandlerTabell } from '../../../../Felleskomponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '../../../../Felleskomponenter/Samhandler/useSamhandler';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;

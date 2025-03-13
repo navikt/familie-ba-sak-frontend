@@ -10,7 +10,7 @@ import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import { Filtreringsregel, filtreringsregler } from '../../../../../typer/fødselshendelser';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 interface IProps {
     åpenBehandling: IBehandling;

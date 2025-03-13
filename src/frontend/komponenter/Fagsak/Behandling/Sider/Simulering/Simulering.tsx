@@ -17,7 +17,7 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;

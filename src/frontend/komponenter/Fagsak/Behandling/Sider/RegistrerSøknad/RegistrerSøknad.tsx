@@ -12,7 +12,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useSøknad } from '../../../../../context/SøknadContext';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import MålformVelger from '../../../../Felleskomponenter/MålformVelger';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 const FjernVilkårAdvarsel = styled(BodyShort)`
     white-space: pre-wrap;

@@ -20,7 +20,7 @@ import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../.
 import type { IPersonInfo } from '../../../../../typer/person';
 import { erBehandlingMedVedtaksbrevutsending } from '../../../../../utils/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Skjemasteg from '../Skjemasteg';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
