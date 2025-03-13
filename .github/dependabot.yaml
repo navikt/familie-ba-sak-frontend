@@ -35,8 +35,6 @@ updates:
       patterns:
         - "@navikt/aksel-icons"
         - "@navikt/ds-*"
-      exclude-patterns:
-        - "@navikt/ds-icons"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
