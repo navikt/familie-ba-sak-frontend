@@ -13,19 +13,19 @@ import {
     erSøkersAktivitetGyldig,
     erSøkersAktivitetslandGyldig,
 } from './valideringKompetanse';
-import type { IBehandling } from '../../typer/behandling';
-import type { OptionType } from '../../typer/common';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { OptionType } from '../../../../../typer/common';
 import type {
     EøsPeriodeStatus,
     IKompetanse,
     IRestKompetanse,
     KompetanseAktivitet,
     KompetanseResultat,
-} from '../../typer/eøsPerioder';
-import type { IIsoMånedPeriode } from '../../utils/dato';
-import { nyIsoMånedPeriode } from '../../utils/dato';
-import { erBarnGyldig, erEøsPeriodeGyldig } from '../../utils/eøsValidators';
-import { useBehandling } from '../behandlingContext/BehandlingContext';
+} from '../../../../../typer/eøsPerioder';
+import type { IIsoMånedPeriode } from '../../../../../utils/dato';
+import { nyIsoMånedPeriode } from '../../../../../utils/dato';
+import { erBarnGyldig, erEøsPeriodeGyldig } from '../../../../../utils/eøsValidators';
 
 export const kompetanseFeilmeldingId = (kompetanse: IRestKompetanse): string =>
     `kompetanse_${kompetanse.barnIdenter.map(barn => `${barn}-`)}_${kompetanse.fom}`;

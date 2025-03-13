@@ -16,7 +16,7 @@ import type {
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { ModalKnapperad } from '../../../../Felleskomponenter/Modal/ModalKnapperad';
-import { FamilieLandvelger } from '../../../Behandlingsresultat/EøsPeriode/FamilieLandvelger';
+import { FamilieLandvelger } from '../../../Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 const PostnummerOgStedContainer = styled.div`
     display: grid;
