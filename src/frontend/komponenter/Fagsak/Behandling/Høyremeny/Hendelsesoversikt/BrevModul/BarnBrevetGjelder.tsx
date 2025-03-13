@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import { Alert, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
-import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../utils/dato';
-import { lagBarnLabel } from '../../../../utils/formatter';
+import { BehandlingSteg, hentStegNummer } from '../../../../../../typer/behandling';
+import type { IBarnMedOpplysninger } from '../../../../../../typer/søknad';
+import { isoStringTilDate } from '../../../../../../utils/dato';
+import { lagBarnLabel } from '../../../../../../utils/formatter';
 
 const StyledCheckbox = styled(Checkbox)`
     margin-left: 1rem;

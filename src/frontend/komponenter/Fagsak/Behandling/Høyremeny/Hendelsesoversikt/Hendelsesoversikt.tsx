@@ -10,10 +10,10 @@ import HendelseItem from './komponenter/HendelseItem';
 import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
 import type { Hendelse } from './typer';
 import { Tabs } from './typer';
-import { useApp } from '../../../context/AppContext';
-import type { IBehandling } from '../../../typer/behandling';
-import { BehandlerRolle, BehandlingStatus } from '../../../typer/behandling';
-import type { IPersonInfo } from '../../../typer/person';
+import { useApp } from '../../../../../context/AppContext';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlerRolle, BehandlingStatus } from '../../../../../typer/behandling';
+import type { IPersonInfo } from '../../../../../typer/person';
 
 interface IHendelsesoversiktProps {
     hendelser: Hendelse[];

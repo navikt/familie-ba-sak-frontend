@@ -1,4 +1,4 @@
-import type { BehandlerRolle } from '../../../typer/behandling';
+import type { BehandlerRolle } from '../../../../../typer/behandling';
 
 export enum Tabs {
     Totrinnskontroll,

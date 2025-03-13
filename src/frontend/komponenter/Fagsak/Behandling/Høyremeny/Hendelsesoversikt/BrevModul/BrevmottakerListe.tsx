@@ -2,12 +2,12 @@ import React from 'react';
 
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
-import { FagsakType } from '../../../../typer/fagsak';
-import type { IPersonInfo } from '../../../../typer/person';
-import { formaterIdent, lagBrukerLabel } from '../../../../utils/formatter';
-import type { SkjemaBrevmottaker } from '../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import { Mottaker } from '../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { useFagsakContext } from '../../../../../../context/Fagsak/FagsakContext';
+import { FagsakType } from '../../../../../../typer/fagsak';
+import type { IPersonInfo } from '../../../../../../typer/person';
+import { formaterIdent, lagBrukerLabel } from '../../../../../../utils/formatter';
+import type { SkjemaBrevmottaker } from '../../../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { Mottaker } from '../../../../../Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     bruker: IPersonInfo;

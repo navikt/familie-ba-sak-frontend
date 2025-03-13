@@ -17,14 +17,14 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingStatus } from '../../../../typer/behandling';
-import type { ITotrinnskontrollData } from '../../../../typer/totrinnskontroll';
-import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
-import type { ITrinn } from '../../../Fagsak/Behandling/Sider/sider';
-import { KontrollertStatus } from '../../../Fagsak/Behandling/Sider/sider';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import { BehandlingStatus } from '../../../../../../typer/behandling';
+import type { ITotrinnskontrollData } from '../../../../../../typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
+import type { ITrinn } from '../../../../../Fagsak/Behandling/Sider/sider';
+import { KontrollertStatus } from '../../../../../Fagsak/Behandling/Sider/sider';
 
 interface IProps {
     åpenBehandling: IBehandling;

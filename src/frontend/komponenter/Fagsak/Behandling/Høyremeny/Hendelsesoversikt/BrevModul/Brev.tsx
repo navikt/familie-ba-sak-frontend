@@ -7,8 +7,8 @@ import { Button, Modal } from '@navikt/ds-react';
 import { ASpacing4, ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 
 import Brevskjema from './Brevskjema';
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type { IPersonInfo } from '../../../../typer/person';
+import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
+import type { IPersonInfo } from '../../../../../../typer/person';
 
 interface IProps {
     onIModalClick: () => void;

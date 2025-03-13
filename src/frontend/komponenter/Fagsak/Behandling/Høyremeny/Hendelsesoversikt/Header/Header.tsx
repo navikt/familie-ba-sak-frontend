@@ -6,8 +6,8 @@ import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
 import Meldingerknapp from './Meldingerknapp';
 import TotrinnskontrollKnapp from './TotrinnskontrollKnapp';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { Behandlingstype } from '../../../../typer/behandling';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { Behandlingstype } from '../../../../../../typer/behandling';
 import { Tabs } from '../typer';
 
 interface IProps {

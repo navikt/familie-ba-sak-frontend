@@ -11,7 +11,7 @@ import {
     ASpacing6,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import { BehandlerRolle, behandlerRoller } from '../../../../typer/behandling';
+import { BehandlerRolle, behandlerRoller } from '../../../../../../typer/behandling';
 import type { Hendelse } from '../typer';
 
 interface IHendelseItemProps {

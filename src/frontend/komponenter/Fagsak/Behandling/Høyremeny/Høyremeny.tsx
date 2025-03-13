@@ -8,12 +8,12 @@ import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import Behandlingskort from './Behandlingskort';
+import Hendelsesoversikt from './Hendelsesoversikt/Hendelsesoversikt';
+import type { Hendelse } from './Hendelsesoversikt/typer';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../../typer/logg';
 import type { IPersonInfo } from '../../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import Hendelsesoversikt from '../../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
-import type { Hendelse } from '../../../Felleskomponenter/Hendelsesoversikt/typer';
 
 interface Props {
     bruker: IPersonInfo;

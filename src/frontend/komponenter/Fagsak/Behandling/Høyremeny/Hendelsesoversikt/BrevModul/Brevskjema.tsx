@@ -32,21 +32,21 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import useDokument from '../../../../hooks/useDokument';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
-import type { IPersonInfo } from '../../../../typer/person';
-import { målform } from '../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { onOptionSelected } from '../../../../utils/skjema';
-import { FamilieMultiLandvelger } from '../../../Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
-import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import Datovelger from '../../Datovelger/Datovelger';
-import Knapperekke from '../../Knapperekke';
-import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import { useSamhandlerRequest } from '../../Samhandler/useSamhandler';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import useDokument from '../../../../../../hooks/useDokument';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
+import type { IPersonInfo } from '../../../../../../typer/person';
+import { målform } from '../../../../../../typer/søknad';
+import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { onOptionSelected } from '../../../../../../utils/skjema';
+import { FamilieMultiLandvelger } from '../../../../../Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
+import DeltBostedSkjema from '../../../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import Datovelger from '../../../../../Felleskomponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../../../Felleskomponenter/Knapperekke';
+import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
 
 interface IProps {
     onSubmitSuccess: () => void;
