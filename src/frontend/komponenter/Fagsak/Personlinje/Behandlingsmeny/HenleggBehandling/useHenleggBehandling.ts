@@ -9,7 +9,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
-import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../../../../Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);

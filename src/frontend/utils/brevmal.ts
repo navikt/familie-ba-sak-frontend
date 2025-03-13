@@ -1,7 +1,7 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { erOrgNr } from './formatter';
-import { Brevmal } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../komponenter/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { BehandlingKategori } from '../typer/behandlingstema';

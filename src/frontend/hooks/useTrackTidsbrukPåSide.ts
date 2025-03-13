@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useApp } from '../context/AppContext';
-import { hentSideFraUrl } from '../komponenter/Felleskomponenter/Venstremeny/sider';
+import { hentSideFraUrl } from '../komponenter/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { hentSideHref } from '../utils/miljø';
