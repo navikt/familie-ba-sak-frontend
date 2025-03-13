@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
@@ -16,7 +17,6 @@ import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/Vi
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
-import Behandlingsresultat from '../Behandlingsresultat/Behandlingsresultat';
 import Simulering from '../Simulering/Simulering';
 import OppsummeringVedtak from '../Vedtak/OppsummeringVedtak';
 import { SammensattKontrollsakProvider } from '../Vedtak/SammensattKontrollsak/useSammensattKontrollsak';

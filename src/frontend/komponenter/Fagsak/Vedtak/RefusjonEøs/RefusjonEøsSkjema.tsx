@@ -12,7 +12,7 @@ import type { IBehandling } from '../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../utils/commons';
 import Månedvelger, { DagIMåneden } from '../../../Felleskomponenter/Datovelger/Månedvelger';
-import { FamilieLandvelger } from '../../Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
+import { FamilieLandvelger } from '../../Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IRefusjonEøsSkjemaProps {
     skjema: ISkjema<IRefusjonEøsSkjemaFelter, IBehandling>;
