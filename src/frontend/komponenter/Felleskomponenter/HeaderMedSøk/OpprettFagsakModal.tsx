@@ -22,8 +22,8 @@ import { FagsakType } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import type { ISamhandlerInfo } from '../../../typer/samhandler';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../../utils/formatter';
-import { SamhandlerTabell } from '../../Fagsak/Institusjon/SamhandlerTabell';
-import { useSamhandlerSkjema } from '../../Fagsak/Institusjon/useSamhandler';
+import { SamhandlerTabell } from '../Samhandler/SamhandlerTabell';
+import { useSamhandlerSkjema } from '../Samhandler/useSamhandler';
 
 interface IOpprettFagsakModal {
     lukkModal: () => void;

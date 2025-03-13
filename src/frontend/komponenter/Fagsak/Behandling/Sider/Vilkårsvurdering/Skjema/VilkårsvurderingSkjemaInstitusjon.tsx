@@ -16,8 +16,8 @@ import {
     vilkårConfigInstitusjon,
 } from '../../../../../../typer/vilkår';
 import PersonInformasjon from '../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import SamhandlerInformasjon from '../../../../../Felleskomponenter/SamhandlerInformasjon/SamhandlerInformasjon';
-import { useSamhandlerRequest } from '../../../../Institusjon/useSamhandler';
+import SamhandlerInformasjon from '../../../../../Felleskomponenter/Samhandler/SamhandlerInformasjon';
+import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

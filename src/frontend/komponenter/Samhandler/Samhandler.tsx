@@ -7,7 +7,7 @@ import { Fieldset, TextField, Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-import { useSamhandlerSkjema } from '../Fagsak/Institusjon/useSamhandler';
+import { useSamhandlerSkjema } from '../Felleskomponenter/Samhandler/useSamhandler';
 
 const SamhandlerContainer = styled.div`
     padding: 1rem;

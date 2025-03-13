@@ -8,9 +8,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useInstitusjon } from './useInstitusjon';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
+import { SamhandlerTabell } from '../../../../Felleskomponenter/Samhandler/SamhandlerTabell';
+import { useSamhandlerRequest } from '../../../../Felleskomponenter/Samhandler/useSamhandler';
 import Skjemasteg from '../../../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { SamhandlerTabell } from '../../../Institusjon/SamhandlerTabell';
-import { useSamhandlerRequest } from '../../../Institusjon/useSamhandler';
 
 const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;

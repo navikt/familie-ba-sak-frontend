@@ -43,10 +43,10 @@ import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../utils/skjema';
 import { FamilieMultiLandvelger } from '../../../Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 import DeltBostedSkjema from '../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import { useSamhandlerRequest } from '../../../Fagsak/Institusjon/useSamhandler';
 import Datovelger from '../../Datovelger/Datovelger';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
+import { useSamhandlerRequest } from '../../Samhandler/useSamhandler';
 
 interface IProps {
     onSubmitSuccess: () => void;
