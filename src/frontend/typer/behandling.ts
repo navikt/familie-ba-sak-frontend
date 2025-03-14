@@ -117,6 +117,7 @@ export const behandlingÅrsak: Record<
     FEIL_I_LOVANDVENDELSE: 'Feil i lovanvendelse',
     FEIL_PROSESSUELL: 'Prosessuell feil',
     FEIL_REGELVERKSFORSTÅELSE: 'Feil regelverksforståelse',
+    IKKE_UTREDET_NOK: 'Ikke utredet nok',
     KØET_BEHANDLING: 'Køet behandling',
 };
 
