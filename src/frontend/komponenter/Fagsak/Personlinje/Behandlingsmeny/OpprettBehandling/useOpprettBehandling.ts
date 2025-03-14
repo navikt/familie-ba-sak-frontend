@@ -198,12 +198,12 @@ const useOpprettBehandling = (
     };
 
     const opprettKlagebehandling = () => {
-        onSubmit<{ kravMottattDato: IsoDatoString }>(
+        onSubmit<{ klageMottattDato: IsoDatoString }>(
             {
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: {
-                    kravMottattDato: dateTilIsoDatoString(klageMottattDato.verdi),
+                    klageMottattDato: dateTilIsoDatoString(klageMottattDato.verdi),
                 },
                 påvirkerSystemLaster: true,
             },
