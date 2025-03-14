@@ -32,7 +32,7 @@ export interface IOpprettBehandlingSkjemaBase {
 export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     migreringsdato: Date | undefined;
     søknadMottattDato: Date | undefined;
-    kravMottattDato: Date | undefined;
+    klageMottattDato: Date | undefined;
     valgteBarn: OptionType[];
 }
 
@@ -138,7 +138,7 @@ const useOpprettBehandling = (
         },
     });
 
-    const kravMottattDato = useFelt<Date | undefined>({
+    const klageMottattDato = useFelt<Date | undefined>({
         verdi: undefined,
         valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype },
@@ -168,7 +168,7 @@ const useOpprettBehandling = (
                 behandlingstema,
                 migreringsdato,
                 søknadMottattDato,
-                kravMottattDato,
+                klageMottattDato,
                 valgteBarn,
             },
             skjemanavn: 'Opprett behandling modal',
@@ -203,7 +203,7 @@ const useOpprettBehandling = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
                 data: {
-                    kravMottattDato: dateTilIsoDatoString(kravMottattDato.verdi),
+                    kravMottattDato: dateTilIsoDatoString(klageMottattDato.verdi),
                 },
                 påvirkerSystemLaster: true,
             },
