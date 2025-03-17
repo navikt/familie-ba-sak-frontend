@@ -5,6 +5,7 @@ import { Alert } from '@navikt/ds-react';
 import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import PersonInformasjon from '../../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
 import {
@@ -13,7 +14,6 @@ import {
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
-import PersonInformasjon from '../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

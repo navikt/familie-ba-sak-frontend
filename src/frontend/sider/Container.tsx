@@ -4,20 +4,20 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import FagsakContainer from './Fagsak/FagsakContainer';
+import Internstatistikk from './Internstatistikk';
 import { useApp } from '../context/AppContext';
 import { Oppgaver } from '../context/OppgaverContext';
 import { TidslinjeProvider } from '../context/TidslinjeContext';
-import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
-import AppInfoModal from './Felleskomponenter/Modal/AppInfoModal';
-import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
-import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
-import TidslinjeVisualisering from './Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
-import Toasts from './Felleskomponenter/Toast/Toasts';
 import { Infotrygd } from './Infotrygd/Infotrygd';
-import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 import { Samhandler } from './Samhandler/Samhandler';
 import { FagsakProvider } from '../context/Fagsak/FagsakContext';
+import { HeaderMedSøk } from '../Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
+import AppInfoModal from '../Felleskomponenter/Modal/AppInfoModal';
+import UgyldigSesjon from '../Felleskomponenter/Modal/SesjonUtløpt';
+import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
+import TidslinjeVisualisering from '../Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
+import Toasts from '../Felleskomponenter/Toast/Toasts';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;

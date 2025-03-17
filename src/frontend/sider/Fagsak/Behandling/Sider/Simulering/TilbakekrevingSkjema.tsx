@@ -26,15 +26,15 @@ import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { useSimulering } from '../../../../../context/SimuleringContext';
+import type { BrevmottakereAlertBehandlingProps } from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
+import HelpText from '../../../../../Felleskomponenter/HelpText';
+import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useDokument from '../../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
 import { målform } from '../../../../../typer/søknad';
-import type { BrevmottakereAlertBehandlingProps } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
-import { BrevmottakereAlert } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
-import HelpText from '../../../../Felleskomponenter/HelpText';
-import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
     display: flex;

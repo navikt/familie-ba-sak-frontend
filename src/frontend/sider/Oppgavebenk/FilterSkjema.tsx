@@ -7,9 +7,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
+import DatovelgerForGammelSkjemaløsning from '../../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
-import DatovelgerForGammelSkjemaløsning from '../Felleskomponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 const FilterSkjema: React.FunctionComponent = () => {
     const { innloggetSaksbehandler } = useApp();

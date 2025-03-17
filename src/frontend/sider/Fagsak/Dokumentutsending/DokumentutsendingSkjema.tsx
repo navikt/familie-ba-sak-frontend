@@ -16,11 +16,11 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
+import { BrevmottakereAlert } from '../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
+import MålformVelger from '../../../Felleskomponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
-import { BrevmottakereAlert } from '../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
-import MålformVelger from '../../Felleskomponenter/MålformVelger';
 
 interface Props {
     bruker: IPersonInfo;

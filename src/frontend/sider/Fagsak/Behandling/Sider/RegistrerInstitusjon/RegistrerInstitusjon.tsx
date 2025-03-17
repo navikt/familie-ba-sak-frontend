@@ -7,9 +7,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useInstitusjon } from './useInstitusjon';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { SamhandlerTabell } from '../../../../../Felleskomponenter/Samhandler/SamhandlerTabell';
+import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
-import { SamhandlerTabell } from '../../../../Felleskomponenter/Samhandler/SamhandlerTabell';
-import { useSamhandlerRequest } from '../../../../Felleskomponenter/Samhandler/useSamhandler';
 import Skjemasteg from '../Skjemasteg';
 
 const StyledSkjemasteg = styled(Skjemasteg)`

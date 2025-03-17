@@ -26,6 +26,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import Datovelger from '../../../../../../../Felleskomponenter/Datovelger/Datovelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import {
@@ -34,7 +35,6 @@ import {
     Vurderingsform,
 } from '../../../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
-import Datovelger from '../../../../../../Felleskomponenter/Datovelger/Datovelger';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 import { StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';

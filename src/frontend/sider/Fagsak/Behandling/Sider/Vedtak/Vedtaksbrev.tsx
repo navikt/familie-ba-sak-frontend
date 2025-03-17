@@ -14,6 +14,8 @@ import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/Vedtakspe
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
+import { BrevmottakereAlert } from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
+import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import {
@@ -25,8 +27,6 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
-import { BrevmottakereAlert } from '../../../../Felleskomponenter/Brevmottaker/BrevmottakereAlert';
-import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface Props {
     åpenBehandling: IBehandling;

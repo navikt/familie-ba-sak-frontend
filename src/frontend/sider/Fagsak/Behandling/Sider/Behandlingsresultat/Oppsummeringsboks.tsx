@@ -18,6 +18,7 @@ import {
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
+import { AlertType, ToastTyper } from '../../../../../Felleskomponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import { ytelsetype } from '../../../../../typer/beregning';
@@ -37,7 +38,6 @@ import {
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../../../utils/formatter';
-import { AlertType, ToastTyper } from '../../../../Felleskomponenter/Toast/typer';
 
 const AlertWithBottomMargin = styled(Alert)`
     margin-bottom: 1.5rem;

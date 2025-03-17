@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { Fieldset } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
+import MånedÅrVelger from '../../../../../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import type { IIsoMånedPeriode } from '../../../../../../../utils/dato';
-import MånedÅrVelger from '../../../../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 
 const FlexDiv = styled.div`
     width: 32rem;

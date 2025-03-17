@@ -8,6 +8,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import PersonInformasjon from '../../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import SamhandlerInformasjon from '../../../../../../Felleskomponenter/Samhandler/SamhandlerInformasjon';
+import { useSamhandlerRequest } from '../../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
 import {
@@ -15,9 +18,6 @@ import {
     AnnenVurderingType,
     vilkårConfigInstitusjon,
 } from '../../../../../../typer/vilkår';
-import PersonInformasjon from '../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import SamhandlerInformasjon from '../../../../../Felleskomponenter/Samhandler/SamhandlerInformasjon';
-import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

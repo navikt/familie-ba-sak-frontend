@@ -32,6 +32,11 @@ import {
 } from './typer';
 import { useBrevModul } from './useBrevModul';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import BrevmottakerListe from '../../../../../../Felleskomponenter/Brevmottaker/BrevmottakerListe';
+import Datovelger from '../../../../../../Felleskomponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../../../../Felleskomponenter/Knapperekke';
+import PdfVisningModal from '../../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import { useSamhandlerRequest } from '../../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import useDokument from '../../../../../../hooks/useDokument';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
@@ -40,11 +45,6 @@ import { målform } from '../../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../../../utils/skjema';
-import BrevmottakerListe from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakerListe';
-import Datovelger from '../../../../../Felleskomponenter/Datovelger/Datovelger';
-import Knapperekke from '../../../../../Felleskomponenter/Knapperekke';
-import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import DeltBostedSkjema from '../../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { FamilieMultiLandvelger } from '../../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 

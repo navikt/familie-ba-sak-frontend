@@ -10,12 +10,12 @@ import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
+import LeggTilBarn from '../../../../../Felleskomponenter/LeggTilBarn/LeggTilBarn';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../../utils/dato';
-import LeggTilBarn from '../../../../Felleskomponenter/LeggTilBarn/LeggTilBarn';
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;
