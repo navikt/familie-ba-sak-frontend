@@ -6,7 +6,7 @@ import {
 } from './behandling';
 import { Klagebehandlingstype, type KlageStatus, type KlageÅrsak } from './klage';
 import { type IKlagebehandling } from './klage';
-import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 import type { IsoDatoString } from '../utils/dato';
 
 export type Journalføringsbehandlingstype = Behandlingstype | Klagebehandlingstype;

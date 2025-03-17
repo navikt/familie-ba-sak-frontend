@@ -23,8 +23,8 @@ import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingStatus } from '../../../../../../typer/behandling';
 import type { ITotrinnskontrollData } from '../../../../../../typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
-import type { ITrinn } from '../../../../../Fagsak/Behandling/Sider/sider';
-import { KontrollertStatus } from '../../../../../Fagsak/Behandling/Sider/sider';
+import type { ITrinn } from '../../../Sider/sider';
+import { KontrollertStatus } from '../../../Sider/sider';
 
 interface IProps {
     åpenBehandling: IBehandling;

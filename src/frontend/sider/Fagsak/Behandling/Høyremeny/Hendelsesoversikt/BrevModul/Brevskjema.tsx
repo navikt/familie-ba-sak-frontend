@@ -40,13 +40,13 @@ import { målform } from '../../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../../../utils/skjema';
-import { FamilieMultiLandvelger } from '../../../../../Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
-import DeltBostedSkjema from '../../../../../Fagsak/Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import BrevmottakerListe from '../../../../../Felleskomponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../Felleskomponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../Felleskomponenter/Knapperekke';
 import PdfVisningModal from '../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import { useSamhandlerRequest } from '../../../../../Felleskomponenter/Samhandler/useSamhandler';
+import DeltBostedSkjema from '../../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { FamilieMultiLandvelger } from '../../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IProps {
     onSubmitSuccess: () => void;

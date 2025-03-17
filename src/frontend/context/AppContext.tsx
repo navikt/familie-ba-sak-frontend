@@ -9,7 +9,7 @@ import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
-import type { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
+import type { IToast, ToastTyper } from '../sider/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';

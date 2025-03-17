@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
+import AnnenVurderingTabellRad from './AnnenVurderingTabellRad';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../../../typer/vilkår';
-import AnnenVurderingTabellRad from '../GeneriskAnnenVurdering/AnnenVurderingTabellRad';
 
 export const annenVurderingFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
     `annen-vurdering_${annenVurdering.type}_${annenVurdering.id}`;
