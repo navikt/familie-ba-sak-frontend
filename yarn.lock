@@ -1716,11 +1716,6 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/7.14.1/bc6e8c656547a8ee11a49638ace30659d55bf4c2#bc6e8c656547a8ee11a49638ace30659d55bf4c2"
   integrity sha512-z9Fy9ZiMH3Zt+/53eBLhDWc4IZOTSfMz1rnbjgg7c+5Dy/8b1UoK1GMtG3z9tWEngsMPwCjLamjJktNWcWZmzQ==
 
-"@navikt/ds-icons@1.3.27":
-  version "1.3.27"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.27/7260508181259885d994ed5874ddb975ac03ff74#7260508181259885d994ed5874ddb975ac03ff74"
-  integrity sha512-VfFIZaDW7o4oXqxcyKrshSnGVH6WnhQonRk7U50N4n7FT5TCkm6X5BFzA9j3EQ4rNmxXaNVH7re1S3E6yecHGg==
-
 "@navikt/ds-react@7.14.1":
   version "7.14.1"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-react/7.14.1/97ccabc95a5f5ab1b3fc6c7619ae2bd52c10a322#97ccabc95a5f5ab1b3fc6c7619ae2bd52c10a322"
@@ -1849,10 +1844,10 @@
     "@navikt/familie-typer" "^8.0.2"
     classnames "^2.5.1"
 
-"@navikt/flagg-ikoner@3.2.7":
-  version "3.2.7"
-  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/3.2.7/14809a69ed573ebe9ae05666b25b23a70bd9286c#14809a69ed573ebe9ae05666b25b23a70bd9286c"
-  integrity sha512-ENe/LokFTw1/ihJ+trQeb0ta0b+plj9I4kjIAR7Pd9tyNMtOHd/X+H0S2tQxDznwzyM6nd6uPh09sSQgxB1bLg==
+"@navikt/flagg-ikoner@^9.0.8":
+  version "9.0.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/9.0.8/98219b05f023ef73aba5b3b40075b9d9f2378594#98219b05f023ef73aba5b3b40075b9d9f2378594"
+  integrity sha512-nJDbdwq1QaAPPtBJGGEpWMs6KvHHk0Fm63Yu+nBqoL/+lfj0A99Pz8lRFbieUQIFhhycPKwHK5DH/oXTdYSXAA==
   dependencies:
     svg-country-flags "^1.2.10"
     uuid "^9.0.0"
@@ -1862,24 +1857,19 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5#e33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
   integrity sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw==
 
-"@navikt/hoykontrast@^3.1.0":
-  version "3.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/hoykontrast/3.1.0/a57192249058e44959c3004e3551cfd8cde30c56aae5e9789602dce37459ecd2#ed7182afd5158872c8d87d6dbe87316f51e99388"
-  integrity sha512-ZO7kPvFYucgriMoryT8dJ5gBpusAO4dvfop5J8e/TnpKW3qtjj8VVFmFxBVxEWLGDm8AyZXeI6n9FG7i7/etmQ==
-
-"@navikt/land-verktoy@3.2.10":
-  version "3.2.10"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/3.2.10/e77121939d18b82cb96a4eca7f208e4a37d714b5#e77121939d18b82cb96a4eca7f208e4a37d714b5"
-  integrity sha512-NsWuQLO0FxpMH6ElOx+SU9szWA2aA1twxmhry6oUttItuY4t4tC7XKzBll0fVuB/+5Rmv8h50adcLjWPUywPZQ==
+"@navikt/land-verktoy@^9.0.9":
+  version "9.0.9"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/9.0.9/91d439ae2de95893895c8ad3d245ec6d5571a1c3#91d439ae2de95893895c8ad3d245ec6d5571a1c3"
+  integrity sha512-HVpV29qKoVSNy9pM1BQcA1/SvVgCrPdrcmQoRKzbVogb6IqnaT3YUrY+744zkRHgLACCaZvBYK23mgY24LLsvw==
   dependencies:
     "@piotrgorecki/i18n-currency-name" "^1.3.0"
     country-data-list "^1.2.2"
     i18n-iso-countries "^7.5.0"
 
-"@navikt/landvelger@3.1.5":
-  version "3.1.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/3.1.5/4ffd24c5cd50cc60f9140f29027ecd7643e5d088#4ffd24c5cd50cc60f9140f29027ecd7643e5d088"
-  integrity sha512-Ij4NzV7ZPUxWfwTEbnkpSsBPrmYW93lYluYNfdaS+CKcE999YC/MQvpiVs3keO751+VXREqb80pONSEJYmdzsQ==
+"@navikt/landvelger@^9.0.7":
+  version "9.0.7"
+  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/9.0.7/0760620fc9aee090e0ec390971c0c338bb00c390#0760620fc9aee090e0ec390971c0c338bb00c390"
+  integrity sha512-Y3UymYPFx4FdrWFl8qyscQhVwVOQUovQNcYekTVM4ExsYYy/HoddQlvTgOTGb5bsrmHD+gnWUDZlFYzXG+b7ig==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -7527,11 +7517,6 @@ lodash.once@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
-
-lodash.throttle@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
-  integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
