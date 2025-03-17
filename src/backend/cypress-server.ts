@@ -35,7 +35,7 @@ app.get('/familie-ba-sak/api/fagsaker/*splat/hent-klagebehandlinger', (_, res) =
 app.get('/familie-ba-sak/api/fagsaker/*splat', (_, res) => {
     res.status(200).send(fagsakMock);
 });
-app.get('/familie-ba-sak/api/person', (_, res) => {
+app.post('/familie-ba-sak/api/person', (_, res) => {
     res.status(200).send(personMock);
 });
 app.get('/user/profile', (_, res) => {
