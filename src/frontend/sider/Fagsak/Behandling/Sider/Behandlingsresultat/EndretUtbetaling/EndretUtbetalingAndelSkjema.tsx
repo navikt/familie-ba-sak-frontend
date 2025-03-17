@@ -10,9 +10,9 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import Datovelger from '../../../../../../Felleskomponenter/Datovelger/Datovelger';
-import Knapperekke from '../../../../../../Felleskomponenter/Knapperekke';
-import MånedÅrVelger from '../../../../../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
+import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../../../../komponenter/Knapperekke';
+import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';

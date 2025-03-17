@@ -9,7 +9,7 @@ import {
     erÅrsakForKorrigeringGyldig,
     erEtterbetalingsbeløpGyldig,
 } from './ValideringKorrigertEtterbetaling';
-import { ToastTyper, AlertType } from '../../Felleskomponenter/Toast/typer';
+import { ToastTyper, AlertType } from '../../komponenter/Toast/typer';
 import type { IBehandling } from '../../typer/behandling';
 import type { OptionType } from '../../typer/common';
 import type { IRestKorrigertEtterbetaling } from '../../typer/vedtak';

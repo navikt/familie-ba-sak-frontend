@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Fieldset, TextField, Button, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useSamhandlerSkjema } from '../../Felleskomponenter/Samhandler/useSamhandler';
+import { useSamhandlerSkjema } from '../../komponenter/Samhandler/useSamhandler';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 
 const SamhandlerContainer = styled.div`

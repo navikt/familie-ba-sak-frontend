@@ -13,7 +13,7 @@ import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import Knapperekke from '../../Felleskomponenter/Knapperekke';
+import Knapperekke from '../../komponenter/Knapperekke';
 import { FagsakType } from '../../typer/fagsak';
 import type { OppgavetypeFilter } from '../../typer/oppgave';
 import { oppgaveTypeFilter } from '../../typer/oppgave';

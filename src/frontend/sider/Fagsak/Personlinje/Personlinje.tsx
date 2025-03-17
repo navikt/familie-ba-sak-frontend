@@ -6,8 +6,8 @@ import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useApp } from '../../../context/AppContext';
-import DødsfallTag from '../../../Felleskomponenter/DødsfallTag';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import DødsfallTag from '../../../komponenter/DødsfallTag';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';

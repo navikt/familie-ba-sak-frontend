@@ -15,7 +15,7 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import PersonInformasjon from '../../../../../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../typer/person';

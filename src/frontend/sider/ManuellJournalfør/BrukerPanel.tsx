@@ -19,9 +19,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { SamhandlerTabell } from '../../Felleskomponenter/Samhandler/SamhandlerTabell';
-import { useSamhandlerRequest } from '../../Felleskomponenter/Samhandler/useSamhandler';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { SamhandlerTabell } from '../../komponenter/Samhandler/SamhandlerTabell';
+import { useSamhandlerRequest } from '../../komponenter/Samhandler/useSamhandler';
 import { fagsakStatus, FagsakType } from '../../typer/fagsak';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { formaterIdent } from '../../utils/formatter';

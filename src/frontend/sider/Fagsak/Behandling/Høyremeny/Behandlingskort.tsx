@@ -13,7 +13,7 @@ import {
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
-import Informasjonsbolk from '../../../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import Informasjonsbolk from '../../../../komponenter/Informasjonsbolk/Informasjonsbolk';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,

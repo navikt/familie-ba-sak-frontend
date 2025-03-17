@@ -6,7 +6,7 @@ import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
-import { BehandlingstemaSelect } from '../../../../../Felleskomponenter/BehandlingstemaSelect';
+import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 const EndreBehandlingstema: React.FC = () => {

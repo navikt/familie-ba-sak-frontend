@@ -5,7 +5,7 @@ import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { AlertType, ToastTyper } from '../../../../../Felleskomponenter/Toast/typer';
+import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 
 interface Props {

@@ -12,7 +12,7 @@ import {
 import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { TidslinjeVindu, useTidslinje } from '../../../../../context/TidslinjeContext';
-import FamilieBaseKnapp from '../../../../../Felleskomponenter/FamilieBaseKnapp';
+import FamilieBaseKnapp from '../../../../../komponenter/FamilieBaseKnapp';
 
 interface IEtikettProp {
     etikett: Etikett;

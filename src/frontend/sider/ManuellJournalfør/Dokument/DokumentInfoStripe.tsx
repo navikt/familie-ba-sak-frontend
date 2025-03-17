@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { BodyShort } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import FamilieBaseKnapp from '../../../Felleskomponenter/FamilieBaseKnapp';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
+import FamilieBaseKnapp from '../../../komponenter/FamilieBaseKnapp';
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;

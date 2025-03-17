@@ -5,9 +5,7 @@ import styled from 'styled-components';
 import { Label, TextField } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
-import Månedvelger, {
-    DagIMåneden,
-} from '../../../../../../Felleskomponenter/Datovelger/Månedvelger';
+import Månedvelger, { DagIMåneden } from '../../../../../../komponenter/Datovelger/Månedvelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IFeilutbetaltValutaSkjemaFelter } from '../../../../../../typer/eøs-feilutbetalt-valuta';
 

@@ -14,7 +14,7 @@ import type {
     SkjemaBrevmottaker,
 } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { ModalKnapperad } from '../../../../../Felleskomponenter/Modal/ModalKnapperad';
+import { ModalKnapperad } from '../../../../../komponenter/Modal/ModalKnapperad';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieLandvelger } from '../../../Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 

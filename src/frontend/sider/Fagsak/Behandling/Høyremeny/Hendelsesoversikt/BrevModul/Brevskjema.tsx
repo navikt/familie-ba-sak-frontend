@@ -32,12 +32,12 @@ import {
 } from './typer';
 import { useBrevModul } from './useBrevModul';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import BrevmottakerListe from '../../../../../../Felleskomponenter/Brevmottaker/BrevmottakerListe';
-import Datovelger from '../../../../../../Felleskomponenter/Datovelger/Datovelger';
-import Knapperekke from '../../../../../../Felleskomponenter/Knapperekke';
-import PdfVisningModal from '../../../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import { useSamhandlerRequest } from '../../../../../../Felleskomponenter/Samhandler/useSamhandler';
 import useDokument from '../../../../../../hooks/useDokument';
+import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
+import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../../../../komponenter/Knapperekke';
+import PdfVisningModal from '../../../../../../komponenter/PdfVisningModal/PdfVisningModal';
+import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../../../typer/person';

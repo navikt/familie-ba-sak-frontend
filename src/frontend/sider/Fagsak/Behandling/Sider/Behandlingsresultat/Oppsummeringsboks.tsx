@@ -18,7 +18,7 @@ import {
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
-import { AlertType, ToastTyper } from '../../../../../Felleskomponenter/Toast/typer';
+import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import { ytelsetype } from '../../../../../typer/beregning';

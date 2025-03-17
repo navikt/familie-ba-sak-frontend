@@ -7,7 +7,7 @@ import { BodyLong, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useKorrigerVedtakSkjemaContext } from '../../../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
-import Datovelger from '../../../../../../Felleskomponenter/Datovelger/Datovelger';
+import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 
 const AngreKnapp = styled(Button)`

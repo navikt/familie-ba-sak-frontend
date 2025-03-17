@@ -7,7 +7,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../../context/ManuellJournalførContext';
-import { BehandlingstemaSelect } from '../../../../../Felleskomponenter/BehandlingstemaSelect';
+import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import type { IBehandling } from '../../../../../typer/behandling';
 import {
     BehandlingResultat,

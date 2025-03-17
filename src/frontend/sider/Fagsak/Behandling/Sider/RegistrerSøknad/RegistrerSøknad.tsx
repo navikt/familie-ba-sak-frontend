@@ -10,7 +10,7 @@ import Barna from './Barna';
 import SøknadType from './SøknadType';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
-import MålformVelger from '../../../../../Felleskomponenter/MålformVelger';
+import MålformVelger from '../../../../../komponenter/MålformVelger';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import Skjemasteg from '../Skjemasteg';
 

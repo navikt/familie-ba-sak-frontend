@@ -10,7 +10,7 @@ import {
     ATextSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import FamilieBaseKnapp from '../../../../../../Felleskomponenter/FamilieBaseKnapp';
+import FamilieBaseKnapp from '../../../../../../komponenter/FamilieBaseKnapp';
 import { randomUUID } from '../../../../../../utils/commons';
 
 interface IFilterknappProps {

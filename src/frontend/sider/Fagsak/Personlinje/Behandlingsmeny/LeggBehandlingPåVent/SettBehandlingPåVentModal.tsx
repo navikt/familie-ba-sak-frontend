@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { hentAlleÅrsaker } from './settPåVentUtils';
 import { useSettPåVentSkjema } from './useSettPåVentSkjema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import Datovelger from '../../../../../Felleskomponenter/Datovelger/Datovelger';
+import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
 import type { IBehandling, ISettPåVent } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { dateTilIsoDatoString } from '../../../../../utils/dato';

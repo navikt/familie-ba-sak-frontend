@@ -12,12 +12,12 @@ import { Infotrygd } from './Infotrygd/Infotrygd';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 import { Samhandler } from './Samhandler/Samhandler';
 import { FagsakProvider } from '../context/Fagsak/FagsakContext';
-import { HeaderMedSøk } from '../Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
-import AppInfoModal from '../Felleskomponenter/Modal/AppInfoModal';
-import UgyldigSesjon from '../Felleskomponenter/Modal/SesjonUtløpt';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
-import TidslinjeVisualisering from '../Felleskomponenter/TidslinjeVisualisering/TidslinjeVisualisering';
-import Toasts from '../Felleskomponenter/Toast/Toasts';
+import { HeaderMedSøk } from '../komponenter/HeaderMedSøk/HeaderMedSøk';
+import AppInfoModal from '../komponenter/Modal/AppInfoModal';
+import UgyldigSesjon from '../komponenter/Modal/SesjonUtløpt';
+import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
+import TidslinjeVisualisering from '../komponenter/TidslinjeVisualisering/TidslinjeVisualisering';
+import Toasts from '../komponenter/Toast/Toasts';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;

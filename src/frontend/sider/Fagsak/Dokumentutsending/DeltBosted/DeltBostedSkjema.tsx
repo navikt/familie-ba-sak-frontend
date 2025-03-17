@@ -6,7 +6,7 @@ import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
-import LeggTilBarn from '../../../../Felleskomponenter/LeggTilBarn/LeggTilBarn';
+import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
