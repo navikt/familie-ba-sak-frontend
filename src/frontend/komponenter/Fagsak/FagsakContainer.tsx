@@ -125,7 +125,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                     return <div />;
             }
         case RessursStatus.IKKE_TILGANG:
-            return <Alert children={minimalFagsak.frontendFeilmelding} variant="error" />;
+            return (
+                <Alert
+                    children={minimalFagsak.frontendFeilmelding}
+                    variant="error"
+                    contentMaxWidth={false}
+                />
+            );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
             return <Alert children={minimalFagsak.frontendFeilmelding} variant="error" />;
