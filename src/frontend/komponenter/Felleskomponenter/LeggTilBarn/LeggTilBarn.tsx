@@ -174,11 +174,11 @@ const LeggTilBarn: React.FC<IProps> = ({
                 }).then((ressurs: Ressurs<IRestTilgang>) => {
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         if (ressurs.data.saksbehandlerHarTilgang) {
-                            request<void, IPersonInfo>({
-                                method: 'GET',
+                            request<{ ident: string }, IPersonInfo>({
+                                method: 'POST',
                                 url: '/familie-ba-sak/api/person/enkel',
-                                headers: {
-                                    personIdent: registrerBarnSkjema.felter.ident.verdi,
+                                data: {
+                                    ident: registrerBarnSkjema.felter.ident.verdi,
                                 },
                             }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                                 settSubmitRessurs(hentetPerson);

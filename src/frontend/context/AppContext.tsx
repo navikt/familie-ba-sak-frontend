@@ -167,11 +167,11 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     };
 
     const hentPerson = async (brukerIdent: string): Promise<Ressurs<IPersonInfo>> => {
-        return request<{ brukerIdent: string }, IPersonInfo>({
-            method: 'GET',
+        return request<{ ident: string }, IPersonInfo>({
+            method: 'POST',
             url: '/familie-ba-sak/api/person/enkel',
-            headers: {
-                personIdent: brukerIdent,
+            data: {
+                ident: brukerIdent,
             },
         }).then((ressurs: Ressurs<IPersonInfo>) => {
             if ('data' in ressurs && ressurs.data.harTilgang === false) {
