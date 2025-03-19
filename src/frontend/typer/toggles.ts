@@ -18,6 +18,7 @@ export enum ToggleNavn {
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     innhenteOpplysningerKlageBrev = 'familie-ba-sak.innhente-opplysninger-klage-brev',
     brukReactQueryPaaSaksoversiktsiden = 'familie-ba-sak.bruk-react-query-paa-saksoversiktsiden',
+    oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
 }
 
 export const alleTogglerAv = (): IToggles => {
