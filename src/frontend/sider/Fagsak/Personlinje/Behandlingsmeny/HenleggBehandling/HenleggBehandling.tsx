@@ -11,7 +11,7 @@ import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
-import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
+import PdfVisningModal from '../../../../../komponenter/PdfVisningModal';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';

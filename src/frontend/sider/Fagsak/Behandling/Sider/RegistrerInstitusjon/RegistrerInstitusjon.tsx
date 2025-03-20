@@ -7,8 +7,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useInstitusjon } from './useInstitusjon';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { SamhandlerTabell } from '../../../../../komponenter/Samhandler/SamhandlerTabell';
-import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
+import { SamhandlerTabell } from '../../../../../komponenter/samhandler/SamhandlerTabell';
+import { useSamhandlerRequest } from '../../../../../komponenter/samhandler/useSamhandler';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import Skjemasteg from '../Skjemasteg';
 

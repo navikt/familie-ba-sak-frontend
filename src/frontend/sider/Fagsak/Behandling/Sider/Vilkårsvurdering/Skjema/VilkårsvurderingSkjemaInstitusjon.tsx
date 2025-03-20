@@ -9,8 +9,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
-import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
+import SamhandlerInformasjon from '../../../../../../komponenter/samhandler/SamhandlerInformasjon';
+import { useSamhandlerRequest } from '../../../../../../komponenter/samhandler/useSamhandler';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
 import {

@@ -30,7 +30,7 @@ import useDokument from '../../../../../hooks/useDokument';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../../komponenter/HelpText';
-import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
+import PdfVisningModal from '../../../../../komponenter/PdfVisningModal';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';

@@ -28,7 +28,7 @@ import {
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
 import useDokument from '../../../hooks/useDokument';
-import PdfVisningModal from '../../../komponenter/PdfVisningModal/PdfVisningModal';
+import PdfVisningModal from '../../../komponenter/PdfVisningModal';
 import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSortState, Sorteringsrekkefølge } from '../../../utils/tabell';

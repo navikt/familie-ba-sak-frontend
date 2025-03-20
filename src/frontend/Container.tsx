@@ -10,7 +10,7 @@ import { TidslinjeProvider } from './context/TidslinjeContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
-import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
+import SystemetLaster from './komponenter/SystemetLaster';
 import TidslinjeVisualisering from './komponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './komponenter/Toast/Toasts';
 import FagsakContainer from './sider/Fagsak/FagsakContainer';
