@@ -17,7 +17,6 @@ import {
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 
-import OpprettFagsakModal from './OpprettFagsakModal';
 import { useApp } from '../../context/AppContext';
 import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
 import StatusIkon, { Status } from '../../ikoner/StatusIkon';
@@ -25,6 +24,7 @@ import { FagsakType } from '../../typer/fagsak';
 import type { IFagsakDeltager, ISøkParam } from '../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../typer/fagsakdeltager';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
+import OpprettFagsakModal from '../OpprettFagsakModal/OpprettFagsakModal';
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
