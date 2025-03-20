@@ -1,7 +1,7 @@
 import { differenceInMilliseconds, isAfter } from 'date-fns';
 
 import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
-import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';

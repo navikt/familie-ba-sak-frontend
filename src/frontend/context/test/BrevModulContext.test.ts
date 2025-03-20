@@ -4,7 +4,7 @@
 
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
-import { Brevmal } from '../../komponenter/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import {
