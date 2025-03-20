@@ -13,7 +13,7 @@ import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
+import KorrigerEtterbetaling from './korrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './korrigerVedtak/KorrigerVedtak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
