@@ -5,10 +5,7 @@ import { useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
-import {
-    erÅrsakForKorrigeringGyldig,
-    erEtterbetalingsbeløpGyldig,
-} from './ValideringKorrigertEtterbetaling';
+import { erÅrsakForKorrigeringGyldig, erEtterbetalingsbeløpGyldig } from './validering';
 import { useApp } from '../../../../../../context/AppContext';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { ToastTyper, AlertType } from '../../../../../../komponenter/Toast/typer';
