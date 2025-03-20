@@ -11,13 +11,13 @@ import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import SystemetLaster from './komponenter/SystemetLaster';
-import TidslinjeVisualisering from './komponenter/TidslinjeVisualisering/TidslinjeVisualisering';
 import Toasts from './komponenter/Toast/Toasts';
 import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/Internstatistikk';
 import ManuellJournalfør from './sider/ManuellJournalfør/ManuellJournalfør';
 import { Samhandler } from './sider/Samhandler/Samhandler';
+import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;
