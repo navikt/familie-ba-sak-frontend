@@ -3,8 +3,8 @@ import type { Målform } from './søknad';
 import type {
     Brevmal,
     Informasjonsbrev,
-} from '../komponenter/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import type { SkjemaBrevmottaker } from '../komponenter/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import type { SkjemaBrevmottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IsoDatoString } from '../utils/dato';
 
 interface IManueltBrevRequest {
