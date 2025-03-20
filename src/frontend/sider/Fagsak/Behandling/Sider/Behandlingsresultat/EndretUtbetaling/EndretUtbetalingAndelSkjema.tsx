@@ -12,7 +12,7 @@ import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import Datovelger from '../../../../../../komponenter/datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
+import MånedÅrVelger from '../../../../../../komponenter/MånedÅrVelger/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
