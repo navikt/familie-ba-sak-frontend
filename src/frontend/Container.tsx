@@ -14,7 +14,7 @@ import SystemetLaster from './komponenter/SystemetLaster';
 import Toasts from './komponenter/Toast/Toasts';
 import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
-import Internstatistikk from './sider/Internstatistikk';
+import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalfør from './sider/ManuellJournalfør/ManuellJournalfør';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
