@@ -8,7 +8,7 @@ import { Dropdown } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useKorrigerEtterbetalingSkjema } from '../../../../../../context/KorrigertEtterbetaling/useKorrigerEtterbetalingSkjema';
+import { useKorrigerEtterbetalingSkjema } from './useKorrigerEtterbetalingSkjema';
 import type { IRestKorrigertEtterbetaling } from '../../../../../../typer/vedtak';
 
 interface IKorrigerEtterbetaling {

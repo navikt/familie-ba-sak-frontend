@@ -1,9 +1,9 @@
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok } from '@navikt/familie-skjema';
 
-import { KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
-import { isEmpty } from '../../utils/eøsValidators';
-import { erLik0, erPositivtHeltall } from '../../utils/validators';
+import { KorrigertEtterbetalingÅrsak } from '../../../../../../typer/vedtak';
+import { isEmpty } from '../../../../../../utils/eøsValidators';
+import { erLik0, erPositivtHeltall } from '../../../../../../utils/validators';
 
 export const erÅrsakForKorrigeringGyldig = (felt: FeltState<string>) => {
     if (isEmpty(felt.verdi)) {

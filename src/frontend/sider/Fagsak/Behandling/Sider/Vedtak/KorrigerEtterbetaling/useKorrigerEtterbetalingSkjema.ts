@@ -9,13 +9,13 @@ import {
     erÅrsakForKorrigeringGyldig,
     erEtterbetalingsbeløpGyldig,
 } from './ValideringKorrigertEtterbetaling';
-import { ToastTyper, AlertType } from '../../komponenter/Toast/typer';
-import type { IBehandling } from '../../typer/behandling';
-import type { OptionType } from '../../typer/common';
-import type { IRestKorrigertEtterbetaling } from '../../typer/vedtak';
-import { KorrigertEtterbetalingÅrsak } from '../../typer/vedtak';
-import { useApp } from '../AppContext';
-import { useBehandling } from '../behandlingContext/BehandlingContext';
+import { useApp } from '../../../../../../context/AppContext';
+import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { ToastTyper, AlertType } from '../../../../../../komponenter/Toast/typer';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import type { OptionType } from '../../../../../../typer/common';
+import type { IRestKorrigertEtterbetaling } from '../../../../../../typer/vedtak';
+import { KorrigertEtterbetalingÅrsak } from '../../../../../../typer/vedtak';
 
 interface IKorrigerEtterbetalingSkjema {
     årsak: string;
