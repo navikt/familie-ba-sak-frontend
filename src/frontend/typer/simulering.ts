@@ -25,8 +25,8 @@ export interface ISimuleringPeriode {
 export interface IAvregningsperiode {
     fom: string;
     tom: string;
-    etterbetaling: number;
-    feilutbetaling: number;
+    totalEtterbetaling: number;
+    totalFeilutbetaling: number;
 }
 
 export enum Tilbakekrevingsvalg {
