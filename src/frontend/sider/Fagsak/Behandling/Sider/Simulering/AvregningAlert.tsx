@@ -1,15 +1,32 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyLong, List } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Link, List } from '@navikt/ds-react';
+
+import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { erProd } from '../../../../../utils/miljø';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;
     width: fit-content;
 `;
 
+const StyledLink = styled(Link)`
+    margin-top: 1rem;
+`;
+
 const AvregningAlert = () => {
+    const [visModal, settVisModal] = useState(false);
+    const { behandling, vurderErLesevisning } = useBehandling();
+    const erLesevisning = vurderErLesevisning();
+
+    const modiaPersonoversiktUrl = erProd()
+        ? 'https://modiapersonoversikt.intern.nav.no'
+        : 'https://modiapersonoversikt.intern.dev.nav.no';
+
     return (
         <StyledAlert variant="warning">
             <BodyLong spacing>
@@ -28,6 +45,23 @@ const AvregningAlert = () => {
                     tilbake, må du splitte saken.
                 </List.Item>
             </List>
+            {!erLesevisning && (
+                <StyledLink
+                    href={modiaPersonoversiktUrl}
+                    target={'_blank'}
+                    style={{ textDecoration: 'none' }}
+                >
+                    <Button variant={'secondary-neutral'} onClick={() => settVisModal(true)}>
+                        Be om samtykke fra bruker
+                    </Button>
+                </StyledLink>
+            )}
+            {visModal && (
+                <SettBehandlingPåVentModalMotregning
+                    lukkModal={() => settVisModal(false)}
+                    behandling={behandling}
+                />
+            )}
         </StyledAlert>
     );
 };
