@@ -264,12 +264,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const endreBrukerOgSettNormalFagsak = async (personId: string) => {
-        const hentetPerson = await request<void, IPersonInfo>({
-            method: 'GET',
+    const endreBrukerOgSettNormalFagsak = async (personIdent: string) => {
+        const hentetPerson = await request<{ ident: string }, IPersonInfo>({
+            method: 'POST',
             url: '/familie-ba-sak/api/person',
-            headers: {
-                personIdent: personId,
+            data: {
+                ident: personIdent,
             },
         });
 
