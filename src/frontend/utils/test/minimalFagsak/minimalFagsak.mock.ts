@@ -1,4 +1,4 @@
-import type { VisningBehandling } from '../../../sider/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../../../sider/fagsak/Saksoversikt/visningBehandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';

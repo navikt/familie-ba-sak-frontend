@@ -6,7 +6,7 @@ import { Checkbox, Fieldset, Heading } from '@navikt/ds-react';
 import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import OpprettBehandlingValg from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
+import OpprettBehandlingValg from '../fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
 
 const StyledFieldset = styled(Fieldset)`
     margin-top: ${ASpacing8};

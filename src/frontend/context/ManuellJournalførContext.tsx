@@ -18,8 +18,8 @@ import {
 
 import { useApp } from './AppContext';
 import useDokument from '../hooks/useDokument';
-import type { IOpprettBehandlingSkjemaBase } from '../sider/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
-import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
+import type { IOpprettBehandlingSkjemaBase } from '../sider/fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
+import type { VisningBehandling } from '../sider/fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import type { IBehandlingstema } from '../typer/behandlingstema';
 import { behandlingstemaer } from '../typer/behandlingstema';

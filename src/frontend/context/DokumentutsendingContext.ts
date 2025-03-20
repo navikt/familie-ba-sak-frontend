@@ -12,10 +12,10 @@ import useDokument from '../hooks/useDokument';
 import {
     Informasjonsbrev,
     opplysningsdokumenter,
-} from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import type { ISelectOptionMedBrevtekst } from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import { hentEnkeltInformasjonsbrevRequest } from '../sider/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import { Mottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../sider/fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import type { ISelectOptionMedBrevtekst } from '../sider/fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { hentEnkeltInformasjonsbrevRequest } from '../sider/fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
+import { Mottaker } from '../sider/fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import { Distribusjonskanal } from '../typer/dokument';
 import type { IBarnMedOpplysninger } from '../typer/søknad';

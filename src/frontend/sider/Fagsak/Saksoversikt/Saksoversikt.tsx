@@ -26,8 +26,8 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
-import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
+import { Infotrygdtabeller } from '../../infotrygd/Infotrygdtabeller';
+import { useInfotrygdRequest } from '../../infotrygd/useInfotrygd';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;

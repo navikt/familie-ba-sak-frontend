@@ -13,7 +13,7 @@ import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../type
 import { ToggleNavn } from '../../typer/toggles';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../fagsak/Saksoversikt/visningBehandling';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;

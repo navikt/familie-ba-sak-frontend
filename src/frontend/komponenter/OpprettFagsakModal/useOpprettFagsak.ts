@@ -6,7 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import type { VisningBehandling } from '../../sider/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../../sider/fagsak/Saksoversikt/visningBehandling';
 import type { FagsakType, IMinimalFagsak } from '../../typer/fagsak';
 import type { IInstitusjon } from '../../typer/institusjon';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';

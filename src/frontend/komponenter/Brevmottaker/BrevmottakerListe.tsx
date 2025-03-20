@@ -3,8 +3,8 @@ import React from 'react';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
-import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import { Mottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { SkjemaBrevmottaker } from '../../sider/fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { Mottaker } from '../../sider/fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { FagsakType } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import { formaterIdent, lagBrukerLabel } from '../../utils/formatter';
