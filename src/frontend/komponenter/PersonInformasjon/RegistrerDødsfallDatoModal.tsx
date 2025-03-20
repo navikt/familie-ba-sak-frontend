@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useRegistrerDødsfallDatoSkjemaContext } from '../../context/RegistrerDødsfallDato/RegistrerDødsfallDatoSkjemaContext';
+import { useRegistrerDødsfallDatoSkjema } from '../../context/RegistrerDødsfallDato/useRegistrerDødsfallDatoSkjema';
 import type { IGrunnlagPerson } from '../../typer/person';
 import Datovelger from '../Datovelger/Datovelger';
 
@@ -15,7 +15,7 @@ interface IProps {
 
 const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProps) => {
     const { skjema, valideringErOk, registrerManuellDødsfall, restFeil } =
-        useRegistrerDødsfallDatoSkjemaContext({
+        useRegistrerDødsfallDatoSkjema({
             lukkModal,
             person,
         });

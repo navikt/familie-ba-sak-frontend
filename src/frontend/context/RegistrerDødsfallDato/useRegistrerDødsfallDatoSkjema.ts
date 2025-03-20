@@ -22,7 +22,7 @@ const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
         ? ok(felt)
         : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
-export const useRegistrerDødsfallDatoSkjemaContext = ({ person, lukkModal }: IProps) => {
+export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
