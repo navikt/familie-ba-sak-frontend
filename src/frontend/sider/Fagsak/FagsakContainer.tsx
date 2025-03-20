@@ -126,7 +126,11 @@ const FagsakContainer: React.FunctionComponent = () => {
             }
         case RessursStatus.IKKE_TILGANG:
             return (
-                <Alert children={`Du har ikke tilgang til å se denne saken.`} variant="warning" />
+                <Alert
+                    children={minimalFagsak.frontendFeilmelding}
+                    variant="error"
+                    contentMaxWidth={false}
+                />
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
