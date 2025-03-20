@@ -16,11 +16,7 @@ interface IProps {
     korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-export const useKorrigerVedtakSkjemaContext = ({
-    behandlingId,
-    korrigertVedtak,
-    lukkModal,
-}: IProps) => {
+export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkModal }: IProps) => {
     const { settÅpenBehandling } = useBehandling();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
