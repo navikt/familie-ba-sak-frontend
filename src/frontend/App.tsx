@@ -4,12 +4,12 @@ import '@navikt/ds-css';
 
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
+import { hentInnloggetBruker } from './api/saksbehandler';
 import Container from './Container';
-import { hentInnloggetBruker } from '../api/saksbehandler';
-import { AppProvider } from '../context/AppContext';
-import { useStartUmami } from '../hooks/useStartUmami';
-import ErrorBoundary from '../komponenter/ErrorBoundary/ErrorBoundary';
-import { initGrafanaFaro } from '../utils/grafanaFaro';
+import { AppProvider } from './context/AppContext';
+import { useStartUmami } from './hooks/useStartUmami';
+import ErrorBoundary from './komponenter/ErrorBoundary/ErrorBoundary';
+import { initGrafanaFaro } from './utils/grafanaFaro';
 
 const App: React.FC = () => {
     const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<

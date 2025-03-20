@@ -7,7 +7,7 @@ import { nb } from 'date-fns/locale';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
-import App from './sider/App';
+import App from './App';
 
 // eslint-disable-next-line
 const packageConfig = require('../../package.json');

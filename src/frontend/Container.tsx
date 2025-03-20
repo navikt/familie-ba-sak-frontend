@@ -3,21 +3,21 @@ import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
-import FagsakContainer from './Fagsak/FagsakContainer';
-import Internstatistikk from './Internstatistikk';
-import { useApp } from '../context/AppContext';
-import { Oppgaver } from '../context/OppgaverContext';
-import { TidslinjeProvider } from '../context/TidslinjeContext';
-import { Infotrygd } from './Infotrygd/Infotrygd';
-import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
-import { Samhandler } from './Samhandler/Samhandler';
-import { FagsakProvider } from '../context/Fagsak/FagsakContext';
-import { HeaderMedSøk } from '../komponenter/HeaderMedSøk/HeaderMedSøk';
-import AppInfoModal from '../komponenter/Modal/AppInfoModal';
-import UgyldigSesjon from '../komponenter/Modal/SesjonUtløpt';
-import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
-import TidslinjeVisualisering from '../komponenter/TidslinjeVisualisering/TidslinjeVisualisering';
-import Toasts from '../komponenter/Toast/Toasts';
+import { useApp } from './context/AppContext';
+import { FagsakProvider } from './context/Fagsak/FagsakContext';
+import { Oppgaver } from './context/OppgaverContext';
+import { TidslinjeProvider } from './context/TidslinjeContext';
+import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
+import AppInfoModal from './komponenter/Modal/AppInfoModal';
+import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
+import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
+import TidslinjeVisualisering from './komponenter/TidslinjeVisualisering/TidslinjeVisualisering';
+import Toasts from './komponenter/Toast/Toasts';
+import FagsakContainer from './sider/Fagsak/FagsakContainer';
+import { Infotrygd } from './sider/Infotrygd/Infotrygd';
+import Internstatistikk from './sider/Internstatistikk';
+import ManuellJournalfør from './sider/ManuellJournalfør/ManuellJournalfør';
+import { Samhandler } from './sider/Samhandler/Samhandler';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;
