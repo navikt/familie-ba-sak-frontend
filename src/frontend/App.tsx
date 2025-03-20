@@ -7,8 +7,8 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 import { hentInnloggetBruker } from './api/saksbehandler';
 import Container from './Container';
 import { AppProvider } from './context/AppContext';
+import ErrorBoundary from './ErrorBoundary';
 import { useStartUmami } from './hooks/useStartUmami';
-import ErrorBoundary from './komponenter/ErrorBoundary/ErrorBoundary';
 import { initGrafanaFaro } from './utils/grafanaFaro';
 
 const App: React.FC = () => {
