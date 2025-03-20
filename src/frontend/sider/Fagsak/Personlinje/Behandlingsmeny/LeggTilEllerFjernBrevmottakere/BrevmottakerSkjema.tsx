@@ -14,7 +14,6 @@ import type {
     SkjemaBrevmottaker,
 } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { ModalKnapperad } from '../../../../../komponenter/Modal/ModalKnapperad';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { FamilieLandvelger } from '../../../Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
@@ -39,6 +38,13 @@ const StyledFieldset = styled(Fieldset)`
 
 const MottakerSelect = styled(Select)`
     max-width: 19rem;
+`;
+
+const ModalKnapperad = styled.div`
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
 `;
 
 interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
