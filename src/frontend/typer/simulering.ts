@@ -7,6 +7,7 @@ export interface ISimuleringDTO {
     tidSimuleringHentet?: string;
     tomDatoNestePeriode?: string;
     tomSisteUtbetaling?: string;
+    avregningsperioder: IAvregningsperiode[];
 }
 
 export interface ISimuleringPeriode {
@@ -19,6 +20,13 @@ export interface ISimuleringPeriode {
     etterbetaling?: number;
     feilutbetaling?: number;
     manuellPostering?: number;
+}
+
+export interface IAvregningsperiode {
+    fom: string;
+    tom: string;
+    totalEtterbetaling: number;
+    totalFeilutbetaling: number;
 }
 
 export enum Tilbakekrevingsvalg {

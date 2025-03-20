@@ -91,6 +91,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         0
     );
 
+    const erAvregning = simResultat && simResultat.avregningsperioder.length > 0;
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
@@ -259,6 +260,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         onSubmit,
         hentFeilTilOppsummering,
         erFeilutbetaling,
+        erAvregning,
         hentSkjemadata,
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,

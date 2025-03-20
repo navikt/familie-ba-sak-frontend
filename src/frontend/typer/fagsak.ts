@@ -4,7 +4,7 @@ import type { INøkkelPar } from './common';
 import type { IInstitusjon } from './institusjon';
 import type { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import type { Utbetalingsperiode } from './vedtaksperiode';
-import type { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 
 // Enum
 export enum FagsakStatus {
