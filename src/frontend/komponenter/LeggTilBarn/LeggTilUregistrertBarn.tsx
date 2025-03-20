@@ -8,7 +8,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IRegistrerBarnSkjema } from './LeggTilBarn';
 import type { IPersonInfo } from '../../typer/person';
-import Datovelger from '../Datovelger/Datovelger';
+import Datovelger from '../datovelger/Datovelger';
 
 interface IProps {
     registrerBarnSkjema: ISkjema<IRegistrerBarnSkjema, IPersonInfo>;

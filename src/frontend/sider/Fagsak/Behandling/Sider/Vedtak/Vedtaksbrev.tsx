@@ -16,7 +16,7 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../../komponenter/brevmottaker/BrevmottakereAlert';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import {
     BehandlerRolle,

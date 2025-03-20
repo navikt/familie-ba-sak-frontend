@@ -26,7 +26,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
-import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
+import Datovelger from '../../../../../../../komponenter/datovelger/Datovelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import {

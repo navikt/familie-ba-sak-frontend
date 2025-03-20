@@ -33,8 +33,8 @@ import {
 import { useBrevModul } from './useBrevModul';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../../hooks/useDokument';
-import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
-import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
+import BrevmottakerListe from '../../../../../../komponenter/brevmottaker/BrevmottakerListe';
+import Datovelger from '../../../../../../komponenter/datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import PdfVisningModal from '../../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';

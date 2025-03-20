@@ -8,7 +8,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import Månedvelger, { DagIMåneden } from '../../../../../../komponenter/Datovelger/Månedvelger';
+import Månedvelger, { DagIMåneden } from '../../../../../../komponenter/datovelger/Månedvelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../../../utils/commons';

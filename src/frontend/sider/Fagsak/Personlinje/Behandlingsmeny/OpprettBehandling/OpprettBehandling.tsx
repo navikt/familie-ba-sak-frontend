@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
-import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
+import Datovelger from '../../../../../komponenter/datovelger/Datovelger';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { dagensDato } from '../../../../../utils/dato';

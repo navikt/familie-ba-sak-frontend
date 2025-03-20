@@ -27,8 +27,8 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { useSimulering } from '../../../../../context/SimuleringContext';
 import useDokument from '../../../../../hooks/useDokument';
-import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
-import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
+import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/brevmottaker/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../../../komponenter/brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../../komponenter/HelpText';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import type { IBehandling } from '../../../../../typer/behandling';

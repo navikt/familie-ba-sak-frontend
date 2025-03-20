@@ -6,7 +6,7 @@ import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import DatovelgerForGammelSkjemaløsning from '../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
+import DatovelgerForGammelSkjemaløsning from '../../../../komponenter/datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import type { IsoDatoString } from '../../../../utils/dato';
 import { erIsoStringGyldig } from '../../../../utils/dato';

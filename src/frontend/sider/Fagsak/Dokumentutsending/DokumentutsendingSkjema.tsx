@@ -16,7 +16,7 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
-import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereAlert } from '../../../komponenter/brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
