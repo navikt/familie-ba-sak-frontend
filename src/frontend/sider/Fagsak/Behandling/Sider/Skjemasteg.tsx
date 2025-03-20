@@ -30,6 +30,7 @@ interface IProps extends PropsWithChildren {
     senderInn: boolean;
     tittel: string | React.ReactNode;
     maxWidthStyle?: string;
+    skalDisableNesteKnapp?: boolean;
     skalViseNesteKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;
     feilmelding?: string;
@@ -72,6 +73,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     tittel,
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
+    skalDisableNesteKnapp = false,
     skalViseForrigeKnapp = true,
     feilmelding = '',
 }) => {
@@ -136,7 +138,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         (!vurderErLesevisning() || kanGåVidereILesevisning) && (
                             <Button
                                 loading={senderInn}
-                                disabled={senderInn}
+                                disabled={senderInn || skalDisableNesteKnapp}
                                 onClick={() => {
                                     if (!senderInn) {
                                         nesteOnClick();
