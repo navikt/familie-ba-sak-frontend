@@ -24,7 +24,8 @@ const AvregningAlert = () => {
                 </List.Item>
                 <List.Item>
                     Be bruker om samtykke til å holde på etterbetalingen mens Nav vurderer t-sak
-                    («ulovfestet motregning»).
+                    («ulovfestet motregning»). Hvis det ikke er åpenbart at hele beløpet skal kreves
+                    tilbake, må du splitte saken.
                 </List.Item>
             </List>
         </StyledAlert>
