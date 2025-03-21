@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { useApp } from './context/AppContext';
-import { FagsakProvider } from './context/Fagsak/FagsakContext';
 import { Oppgaver } from './context/OppgaverContext';
 import { TidslinjeProvider } from './context/TidslinjeContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
@@ -51,34 +50,26 @@ const Container: React.FC = () => {
                                 brukerNavn={innloggetSaksbehandler?.displayName}
                                 brukerEnhet={innloggetSaksbehandler?.enhet}
                             />
-                            <FagsakProvider>
-                                <Routes>
-                                    <Route
-                                        path="/fagsak/:fagsakId/*"
-                                        element={<FagsakContainer />}
-                                    />
-                                    <Route
-                                        path="/oppgaver/journalfor/:oppgaveId"
-                                        element={<ManuellJournalfør />}
-                                    />
-                                    <Route
-                                        path="/tidslinjer/:behandlingId"
-                                        element={
-                                            <TidslinjeProvider>
-                                                <TidslinjeVisualisering />
-                                            </TidslinjeProvider>
-                                        }
-                                    />
-                                    <Route
-                                        path="/internstatistikk"
-                                        element={<Internstatistikk />}
-                                    />
-                                    <Route path="/infotrygd" element={<Infotrygd />} />
-                                    <Route path="/samhandler" element={<Samhandler />} />
-                                    <Route path="/oppgaver" element={<Oppgaver />} />
-                                    <Route path="/" element={<Navigate to="/oppgaver" />} />
-                                </Routes>
-                            </FagsakProvider>
+                            <Routes>
+                                <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
+                                <Route
+                                    path="/oppgaver/journalfor/:oppgaveId"
+                                    element={<ManuellJournalfør />}
+                                />
+                                <Route
+                                    path="/tidslinjer/:behandlingId"
+                                    element={
+                                        <TidslinjeProvider>
+                                            <TidslinjeVisualisering />
+                                        </TidslinjeProvider>
+                                    }
+                                />
+                                <Route path="/internstatistikk" element={<Internstatistikk />} />
+                                <Route path="/infotrygd" element={<Infotrygd />} />
+                                <Route path="/samhandler" element={<Samhandler />} />
+                                <Route path="/oppgaver" element={<Oppgaver />} />
+                                <Route path="/" element={<Navigate to="/oppgaver" />} />
+                            </Routes>
                         </Main>
                     </>
                 )

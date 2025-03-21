@@ -13,7 +13,7 @@ import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/HentOgSettBehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
-import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
+import { FagsakProvider, useFagsakContext } from '../../context/Fagsak/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 
@@ -22,7 +22,7 @@ const HovedInnhold = styled.div`
     overflow: auto;
 `;
 
-const FagsakContainer: React.FunctionComponent = () => {
+const FagsakContainerInnhold: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
     useScrollTilAnker();
 
@@ -138,6 +138,14 @@ const FagsakContainer: React.FunctionComponent = () => {
         default:
             return <div />;
     }
+};
+
+const FagsakContainer: React.FC = () => {
+    return (
+        <FagsakProvider>
+            <FagsakContainerInnhold />
+        </FagsakProvider>
+    );
 };
 
 export default FagsakContainer;
