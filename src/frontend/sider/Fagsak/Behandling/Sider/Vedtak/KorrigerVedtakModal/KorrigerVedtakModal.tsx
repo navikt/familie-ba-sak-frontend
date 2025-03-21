@@ -6,7 +6,7 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useKorrigerVedtakSkjema } from '../../../../../../context/KorrigerVedtak/useKorrigerVedtakSkjema';
+import { useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 
