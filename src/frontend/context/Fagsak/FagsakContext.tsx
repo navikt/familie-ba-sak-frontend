@@ -13,6 +13,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useFagsakApi } from '../../api/useFagsakApi';
 import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
@@ -36,6 +37,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     const { request } = useHttp();
     const { skalObfuskereData } = useApp();
+    const { hentFagsakerForPerson } = useFagsakApi();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
@@ -98,18 +100,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         });
     };
 
-    const hentFagsakerForPerson = async (personId: string) => {
-        return request<{ personIdent: string }, IMinimalFagsak[]>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
-            return fagsaker;
-        });
-    };
-
     const oppdaterKlagebehandlingerPåFagsak = () => {
         const fagsakId = hentDataFraRessurs(minimalFagsak)?.id;
 
@@ -146,7 +136,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         hentMinimalFagsak,
         minimalFagsak,
         settMinimalFagsak,
-        hentFagsakerForPerson,
         klagebehandlinger,
         oppdaterKlagebehandlingerPåFagsak,
         manuelleBrevmottakerePåFagsak,
