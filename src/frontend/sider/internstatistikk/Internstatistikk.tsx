@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { BodyShort, Heading, Table } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../context/Fagsak/FagsakContext';
-import { behandlingÅrsak } from '../typer/behandling';
+import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
+import { behandlingÅrsak } from '../../typer/behandling';
 
 const Container = styled.div`
     padding: 5rem;
