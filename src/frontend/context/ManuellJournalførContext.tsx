@@ -30,7 +30,8 @@ import {
     opprettJournalføringsbehandlingFraBarnetrygdbehandling,
     opprettJournalføringsbehandlingFraKlagebehandling,
 } from '../typer/journalføringsbehandling';
-import type { IKlagebehandling, Klagebehandlingstype } from '../typer/klage';
+import type { IKlagebehandling } from '../typer/klage';
+import { Klagebehandlingstype } from '../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -40,7 +41,6 @@ import { JournalpostKanal } from '../typer/manuell-journalføring';
 import {
     type IRestLukkOppgaveOgKnyttJournalpost,
     finnBehandlingstemaFraOppgave,
-    erOppgaveJournalførKlage,
 } from '../typer/oppgave';
 import { OppgavetypeFilter } from '../typer/oppgave';
 import type { IPersonInfo } from '../typer/person';
@@ -73,7 +73,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
-    const [erKlage, settErKlage] = useState<boolean>(false);
     const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[] | undefined>(
         undefined
     );
@@ -146,11 +145,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
                         ? behandlingstemaer.NASJONAL_INSTITUSJON
                         : undefined,
-                avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
+                avhengigheter: {
+                    knyttTilNyBehandling: knyttTilNyBehandling.verdi,
+                    behandlingstype: behandlingstype.verdi,
+                },
                 skalFeltetVises: (avhengigheter: Avhengigheter) =>
                     avhengigheter.knyttTilNyBehandling &&
                     minimalFagsak?.fagsakType !== FagsakType.INSTITUSJON &&
-                    !erKlage,
+                    avhengigheter.behandlingstype !== Klagebehandlingstype.KLAGE,
                 valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
                     felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
@@ -224,7 +226,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 settMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
             }
             settKlagebehandlinger(dataForManuellJournalføring.data.klagebehandlinger);
-            settErKlage(erOppgaveJournalførKlage(dataForManuellJournalføring.data.oppgave));
         }
     }, [dataForManuellJournalføring]);
 

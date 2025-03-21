@@ -203,17 +203,7 @@ export interface IRestLukkOppgaveOgKnyttJournalpost {
     underkategori: BehandlingUnderkategori | null;
 }
 
-export function erOppgaveJournalførKlage(oppgave: IOppgave): boolean {
-    return (
-        oppgave.oppgavetype === OppgavetypeFilter.JFR &&
-        oppgave.behandlingstype === BehandlingstypeFilter.ae0058
-    );
-}
-
 export function finnBehandlingstemaFraOppgave(oppgave: IOppgave): IBehandlingstema | undefined {
-    if (erOppgaveJournalførKlage(oppgave)) {
-        return undefined;
-    }
     const { behandlingstema: gjelder, behandlingstype } = oppgave;
     return gjelder in kodeTilBehandlingUnderkategoriMap &&
         behandlingstype in kodeTilBehandlingKategoriMap
