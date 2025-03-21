@@ -29,7 +29,7 @@ interface IProps {
     behandlingId: number;
 }
 
-export const useKorrigerEtterbetalingSkjemaContext = ({
+export const useKorrigerEtterbetalingSkjema = ({
     onSuccess,
     korrigertEtterbetaling,
     behandlingId,

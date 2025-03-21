@@ -8,7 +8,7 @@ import { Dropdown } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useKorrigerEtterbetalingSkjemaContext } from '../../../../../../context/KorrigertEtterbetaling/KorrigerEtterbetalingModalSkjemaContext';
+import { useKorrigerEtterbetalingSkjema } from '../../../../../../context/KorrigertEtterbetaling/useKorrigerEtterbetalingSkjema';
 import type { IRestKorrigertEtterbetaling } from '../../../../../../typer/vedtak';
 
 interface IKorrigerEtterbetaling {
@@ -55,7 +55,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({
         settRestFeil,
         restFeil,
         nullstillSkjema,
-    } = useKorrigerEtterbetalingSkjemaContext({
+    } = useKorrigerEtterbetalingSkjema({
         onSuccess: () => settVisModal(false),
         korrigertEtterbetaling,
         behandlingId,
