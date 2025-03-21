@@ -14,7 +14,7 @@ import {
 } from '@navikt/familie-typer';
 
 import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
+import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
 import { type IPersonInfo } from '../../typer/person';
@@ -28,8 +28,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
-    const [internstatistikk, settInternstatistikk] =
-        React.useState<Ressurs<IInternstatistikk>>(byggTomRessurs());
     const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<
         SkjemaBrevmottaker[]
     >([]);
@@ -100,20 +98,6 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         });
     };
 
-    const hentInternstatistikk = (): void => {
-        settInternstatistikk(byggHenterRessurs());
-        request<void, IInternstatistikk>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/internstatistikk`,
-        })
-            .then((hentetInternstatistikk: Ressurs<IInternstatistikk>) => {
-                settInternstatistikk(hentetInternstatistikk);
-            })
-            .catch(() => {
-                settInternstatistikk(byggFeiletRessurs('Feil ved lasting av internstatistikk'));
-            });
-    };
-
     const hentFagsakerForPerson = async (personId: string) => {
         return request<{ personIdent: string }, IMinimalFagsak[]>({
             method: 'POST',
@@ -159,9 +143,7 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
     return {
         bruker,
         fagsakerPåBruker,
-        hentInternstatistikk,
         hentMinimalFagsak,
-        internstatistikk,
         minimalFagsak,
         settMinimalFagsak,
         hentFagsakerForPerson,
