@@ -2,7 +2,7 @@ import React from 'react';
 
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../context/Fagsak/FagsakContext';
+import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { Mottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { FagsakType } from '../../typer/fagsak';

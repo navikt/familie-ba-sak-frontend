@@ -7,7 +7,6 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
@@ -30,6 +29,7 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
+import { useFagsakContext } from '../../../../FagsakContext';
 
 export const useBrevModul = () => {
     const { behandling } = useBehandling();

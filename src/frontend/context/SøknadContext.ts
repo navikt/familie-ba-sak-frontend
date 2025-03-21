@@ -9,9 +9,9 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './Fagsak/FagsakContext';
 import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
 import type { IForelderBarnRelasjon } from '../typer/person';

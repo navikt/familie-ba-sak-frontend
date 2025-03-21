@@ -14,9 +14,9 @@ import {
     skalVisesNårHenlagtBehandlingerSkjules,
     skalVisesNårMånedligeValutajusteringerSkjules,
 } from './utils';
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { isoStringTilDate } from '../../../utils/dato';
+import { useFagsakContext } from '../FagsakContext';
 
 const StyledSwitch = styled(Switch)`
     margin-right: 0.275rem;

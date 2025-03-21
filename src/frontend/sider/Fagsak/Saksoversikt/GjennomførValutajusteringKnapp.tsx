@@ -6,8 +6,8 @@ import { Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
-import { useFagsakContext } from '../../../context/Fagsak/FagsakContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
+import { useFagsakContext } from '../FagsakContext';
 
 interface Props {
     fagsakId: number;

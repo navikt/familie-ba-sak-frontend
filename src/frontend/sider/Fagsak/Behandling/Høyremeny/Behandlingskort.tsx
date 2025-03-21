@@ -13,7 +13,6 @@ import {
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import Informasjonsbolk from './Informasjonsbolk';
-import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,
@@ -24,6 +23,7 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { useFagsakContext } from '../../FagsakContext';
 import { sakstype } from '../../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
