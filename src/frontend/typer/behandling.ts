@@ -437,8 +437,11 @@ export interface ISettPåVent {
 
 export enum SettPåVentÅrsak {
     AVVENTER_DOKUMENTASJON = 'AVVENTER_DOKUMENTASJON',
+    AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING = 'AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING',
 }
 
 export const settPåVentÅrsaker: Record<SettPåVentÅrsak, string> = {
     AVVENTER_DOKUMENTASJON: 'Avventer dokumentasjon',
+    AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING:
+        'Avventer samtykke om ulovfestet motregning etter unntaksregel',
 };
