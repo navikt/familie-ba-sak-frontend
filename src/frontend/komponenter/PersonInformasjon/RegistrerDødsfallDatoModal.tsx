@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useRegistrerDødsfallDatoSkjema } from '../../context/RegistrerDødsfallDato/useRegistrerDødsfallDatoSkjema';
+import { useRegistrerDødsfallDatoSkjema } from './useRegistrerDødsfallDatoSkjema';
 import type { IGrunnlagPerson } from '../../typer/person';
 import Datovelger from '../Datovelger/Datovelger';
 

@@ -5,12 +5,12 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../typer/behandling';
 import type { IManuellDødsfall } from '../../typer/dødsfall';
 import type { IGrunnlagPerson } from '../../typer/person';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../utils/dato';
 import { isEmpty } from '../../utils/eøsValidators';
-import { useBehandling } from '../behandlingContext/BehandlingContext';
 
 interface IProps {
     lukkModal: () => void;
