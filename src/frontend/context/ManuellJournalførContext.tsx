@@ -8,7 +8,12 @@ import { useNavigate, useParams } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
+import {
+    byggSuksessRessurs,
+    type IDokumentInfo,
+    Journalstatus,
+    type Ressurs,
+} from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -18,6 +23,7 @@ import {
 
 import { useApp } from './AppContext';
 import useDokument from '../hooks/useDokument';
+import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import type { IOpprettBehandlingSkjemaBase } from '../sider/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
@@ -72,7 +78,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const { hentForhåndsvisning, nullstillDokument, hentetDokument } = useDokument();
 
-    const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
+    const { minimalFagsak, settMinimalFagsakRessurs } = useFagsakContext();
+
     const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[] | undefined>(
         undefined
     );
@@ -223,7 +230,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             skjema.felter.bruker.validerOgSettFelt(dataForManuellJournalføring.data.person);
 
             if (dataForManuellJournalføring.data.minimalFagsak) {
-                settMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
+                settMinimalFagsakRessurs(
+                    byggSuksessRessurs(dataForManuellJournalføring.data.minimalFagsak)
+                );
             }
             settKlagebehandlinger(dataForManuellJournalføring.data.klagebehandlinger);
         }
@@ -248,19 +257,23 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             const institusjonsfagsak = institusjonsfagsaker.data.find(
                 fagsak => fagsak.institusjon?.orgNummer === orgNummer
             );
-            settMinimalFagsak(institusjonsfagsak);
-        } else settMinimalFagsak(undefined);
+            if (institusjonsfagsak) {
+                settMinimalFagsakRessurs(byggSuksessRessurs(institusjonsfagsak));
+            } else {
+                settMinimalFagsakRessurs(byggTomRessurs());
+            }
+        } else settMinimalFagsakRessurs(byggTomRessurs());
     };
 
     const settMinimalFagsakTilNormalFagsakForPerson = async (personIdent?: string) => {
         if (personIdent === undefined) {
-            settMinimalFagsak(undefined);
+            settMinimalFagsakRessurs(byggTomRessurs());
         } else {
             const restFagsak = await hentNormalFagsakForPerson(personIdent);
             if (restFagsak.status === RessursStatus.SUKSESS && restFagsak.data) {
-                settMinimalFagsak(restFagsak.data);
+                settMinimalFagsakRessurs(byggSuksessRessurs(restFagsak.data));
             } else {
-                settMinimalFagsak(undefined);
+                settMinimalFagsakRessurs(byggTomRessurs());
             }
         }
     };

@@ -34,6 +34,7 @@ interface IFagsakContext {
     hentMinimalFagsak: (fagsakId: string | number, påvirkerSystemLaster?: boolean) => void;
     minimalFagsakRessurs: Ressurs<IMinimalFagsak>;
     settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
+    minimalFagsak: IMinimalFagsak | undefined;
     klagebehandlinger: IKlagebehandling[];
     oppdaterKlagebehandlingerPåFagsak: () => void;
     manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
@@ -157,6 +158,7 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 hentMinimalFagsak,
                 minimalFagsakRessurs,
                 settMinimalFagsakRessurs,
+                minimalFagsak: hentDataFraRessurs(minimalFagsakRessurs),
                 klagebehandlinger,
                 oppdaterKlagebehandlingerPåFagsak,
                 manuelleBrevmottakerePåFagsak,
