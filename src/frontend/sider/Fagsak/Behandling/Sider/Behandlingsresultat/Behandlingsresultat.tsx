@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
@@ -65,9 +65,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsakRessurs } = useFagsakContext();
-
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
 
     const {
         opprettEndretUtbetaling,

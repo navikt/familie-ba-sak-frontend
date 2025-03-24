@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { hentDataFraRessurs } from '@navikt/familie-typer';
-
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { Mottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -15,8 +13,7 @@ interface IProps {
 }
 
 const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
-    const { minimalFagsakRessurs } = useFagsakContext();
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
     const institusjon = minimalFagsak?.institusjon;
     const fagsakType = minimalFagsak?.fagsakType;
 

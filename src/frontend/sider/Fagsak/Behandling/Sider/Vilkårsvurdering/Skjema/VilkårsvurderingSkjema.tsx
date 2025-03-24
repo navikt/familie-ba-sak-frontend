@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { hentDataFraRessurs } from '@navikt/familie-typer';
-
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
@@ -14,8 +12,7 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { minimalFagsakRessurs } = useFagsakContext();
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
 
     const { samhandlerOrgnr } = useBehandling();
 

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
@@ -33,15 +32,13 @@ import { useFagsakContext } from '../../../../FagsakContext';
 
 export const useBrevModul = () => {
     const { behandling } = useBehandling();
-    const { minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
     const maksLengdeFritekstAvsnitt = 1000;
 
     const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = React.useState(false);
-
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const behandlingKategori = behandling?.kategori;
 

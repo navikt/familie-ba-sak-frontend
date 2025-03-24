@@ -11,7 +11,6 @@ import {
 } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
@@ -45,7 +44,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
-    const { minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsak } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
     const {
         erSammensattKontrollsak,
@@ -59,7 +58,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 
     const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
     const fagsakType = minimalFagsak?.fagsakType;
 
     return (
