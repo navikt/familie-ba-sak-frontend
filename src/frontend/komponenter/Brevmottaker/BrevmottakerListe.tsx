@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
     const institusjon = minimalFagsak?.institusjon;
     const fagsakType = minimalFagsak?.fagsakType;

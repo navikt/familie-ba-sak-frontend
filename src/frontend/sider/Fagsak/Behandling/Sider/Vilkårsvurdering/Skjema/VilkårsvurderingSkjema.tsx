@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const { samhandlerOrgnr } = useBehandling();

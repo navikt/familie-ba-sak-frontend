@@ -41,7 +41,7 @@ interface Props {
 
 const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsak } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
     const { settBehandlingRessurs } = useHentOgSettBehandling();
     const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
     const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
@@ -199,15 +199,15 @@ const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Pr
     const erBehandlingAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;
 
     const gjelderInstitusjon =
-        minimalFagsak.status === RessursStatus.SUKSESS &&
-        minimalFagsak.data.fagsakType === FagsakType.INSTITUSJON;
+        minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
+        minimalFagsakRessurs.data.fagsakType === FagsakType.INSTITUSJON;
 
     const gjelderEnsligMindreårig =
-        minimalFagsak.status === RessursStatus.SUKSESS &&
-        minimalFagsak.data.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+        minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
+        minimalFagsakRessurs.data.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 
     const samhandlerOrgnr = gjelderInstitusjon
-        ? minimalFagsak.data.institusjon?.orgNummer
+        ? minimalFagsakRessurs.data.institusjon?.orgNummer
         : undefined;
 
     return {

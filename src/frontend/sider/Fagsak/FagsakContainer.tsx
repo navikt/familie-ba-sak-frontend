@@ -26,22 +26,22 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
     useScrollTilAnker();
 
-    const { bruker: brukerRessurs, minimalFagsak, hentMinimalFagsak } = useFagsakContext();
+    const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
 
     useEffect(() => {
         if (fagsakId !== undefined) {
-            if (minimalFagsak.status !== RessursStatus.SUKSESS) {
+            if (minimalFagsakRessurs.status !== RessursStatus.SUKSESS) {
                 hentMinimalFagsak(fagsakId);
             } else if (
-                minimalFagsak.status === RessursStatus.SUKSESS &&
-                minimalFagsak.data.id !== parseInt(fagsakId, 10)
+                minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
+                minimalFagsakRessurs.data.id !== parseInt(fagsakId, 10)
             ) {
                 hentMinimalFagsak(fagsakId);
             }
         }
     }, [fagsakId]);
 
-    switch (minimalFagsak.status) {
+    switch (minimalFagsakRessurs.status) {
         case RessursStatus.SUKSESS:
             switch (brukerRessurs.status) {
                 case RessursStatus.SUKSESS:
@@ -54,9 +54,11 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         <>
                                             <Personlinje
                                                 bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsak.data}
+                                                minimalFagsak={minimalFagsakRessurs.data}
                                             />
-                                            <Saksoversikt minimalFagsak={minimalFagsak.data} />
+                                            <Saksoversikt
+                                                minimalFagsak={minimalFagsakRessurs.data}
+                                            />
                                         </>
                                     }
                                 />
@@ -67,10 +69,10 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         <>
                                             <Personlinje
                                                 bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsak.data}
+                                                minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                             <DokumentutsendingProvider
-                                                fagsakId={minimalFagsak.data.id}
+                                                fagsakId={minimalFagsakRessurs.data.id}
                                             >
                                                 <Dokumentutsending bruker={brukerRessurs.data} />
                                             </DokumentutsendingProvider>
@@ -84,7 +86,7 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         <>
                                             <Personlinje
                                                 bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsak.data}
+                                                minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                             <JournalpostListe bruker={brukerRessurs.data} />
                                         </>
@@ -94,10 +96,12 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                 <Route
                                     path="/:behandlingId/*"
                                     element={
-                                        <HentOgSettBehandlingProvider fagsak={minimalFagsak.data}>
+                                        <HentOgSettBehandlingProvider
+                                            fagsak={minimalFagsakRessurs.data}
+                                        >
                                             <BehandlingContainer
                                                 bruker={brukerRessurs.data}
-                                                fagsak={minimalFagsak.data}
+                                                fagsak={minimalFagsakRessurs.data}
                                             />
                                         </HentOgSettBehandlingProvider>
                                     }
@@ -108,7 +112,7 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         <>
                                             <Personlinje
                                                 bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsak.data}
+                                                minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                             <Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />
                                         </>
@@ -127,14 +131,14 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
         case RessursStatus.IKKE_TILGANG:
             return (
                 <Alert
-                    children={minimalFagsak.frontendFeilmelding}
+                    children={minimalFagsakRessurs.frontendFeilmelding}
                     variant="error"
                     contentMaxWidth={false}
                 />
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <Alert children={minimalFagsak.frontendFeilmelding} variant="error" />;
+            return <Alert children={minimalFagsakRessurs.frontendFeilmelding} variant="error" />;
         default:
             return <div />;
     }

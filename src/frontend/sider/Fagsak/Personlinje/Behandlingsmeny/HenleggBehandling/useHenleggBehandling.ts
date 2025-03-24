@@ -17,7 +17,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
 
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<

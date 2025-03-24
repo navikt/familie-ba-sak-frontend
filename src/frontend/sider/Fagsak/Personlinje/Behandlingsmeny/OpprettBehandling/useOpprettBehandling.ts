@@ -41,11 +41,7 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const {
-        bruker: brukerRessurs,
-        minimalFagsak: minimalFagsakRessurs,
-        hentMinimalFagsak,
-    } = useFagsakContext();
+    const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
     const { innloggetSaksbehandler } = useApp();
     const navigate = useNavigate();
     const { oppdaterKlagebehandlingerPåFagsak } = useFagsakContext();

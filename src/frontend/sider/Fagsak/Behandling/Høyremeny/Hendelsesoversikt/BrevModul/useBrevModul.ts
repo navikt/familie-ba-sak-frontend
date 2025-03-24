@@ -33,7 +33,7 @@ import { useFagsakContext } from '../../../../FagsakContext';
 
 export const useBrevModul = () => {
     const { behandling } = useBehandling();
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;

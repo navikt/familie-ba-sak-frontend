@@ -15,7 +15,7 @@ const EndreBehandlingstema: React.FC = () => {
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
 
     const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
 

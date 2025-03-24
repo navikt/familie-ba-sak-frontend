@@ -19,7 +19,7 @@ const StyledButton = styled(Button)`
 
 export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = ({ fagsakId }) => {
     const { request } = useHttp();
-    const { settMinimalFagsak } = useFagsakContext();
+    const { settMinimalFagsakRessurs } = useFagsakContext();
     const [visFeilmelidng, settVisFeilmelding] = useState(false);
 
     const gjenomførValutajustering = () => {
@@ -31,7 +31,7 @@ export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = (
             påvirkerSystemLaster: true,
         }).then(response => {
             if (response.status === RessursStatus.SUKSESS) {
-                settMinimalFagsak(response);
+                settMinimalFagsakRessurs(response);
             } else {
                 settVisFeilmelding(true);
             }

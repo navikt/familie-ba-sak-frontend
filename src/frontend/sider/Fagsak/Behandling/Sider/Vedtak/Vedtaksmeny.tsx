@@ -45,7 +45,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsakRessurs } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
     const {
         erSammensattKontrollsak,
