@@ -27,7 +27,7 @@
     "validate": "yarn typecheck && yarn lint && yarn prettier"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css}": [
+    "src/**/*.{js,jsx,ts,tsx,css}": [
       "prettier --check",
       "eslint --max-warnings=0"
     ]
