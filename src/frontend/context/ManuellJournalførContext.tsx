@@ -384,7 +384,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const hentSorterteJournalføringsbehandlinger = (): Journalføringsbehandling[] => {
-        console.log(klagebehandlinger);
         const journalføringsbehandlingerKlage = (hentDataFraRessurs(klagebehandlinger) ?? []).map(
             klagebehandling => opprettJournalføringsbehandlingFraKlagebehandling(klagebehandling)
         );
