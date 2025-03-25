@@ -682,6 +682,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         settMinimalFagsakTilNormalFagsakForPerson,
         settMinimalFagsakTilInstitusjonsfagsak,
         erDigitaltInnsendtDokument,
+        klageStatus: klagebehandlinger.status,
     };
 });
 
