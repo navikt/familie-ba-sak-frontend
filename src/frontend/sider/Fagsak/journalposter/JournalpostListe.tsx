@@ -192,15 +192,14 @@ const JournalpostListe = ({ bruker }: IProps) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposterMedOverstyrtDato = journalposterRessurs.data?.map(
-            tilgangsstyrtJournalpost => {
-                const { harTilgang, journalpost } = tilgangsstyrtJournalpost;
+        const journalposterMedOverstyrtDato: ITilgangsstyrtJournalpost[] =
+            journalposterRessurs.data?.map(tilgangsstyrtJournalpost => {
+                const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
                 return {
-                    harTilgang,
+                    journalpostTilgang,
                     journalpost: settRiktigDatoMottatForJournalpost(journalpost),
                 };
-            }
-        );
+            });
         const sorterteJournalPoster = hentSorterteJournalposter(
             journalposterMedOverstyrtDato,
             sortering
