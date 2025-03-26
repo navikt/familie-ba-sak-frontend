@@ -8,6 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import InnhenteOpplysningerKlage from './InnhenteOpplysninger/InnhenteOpplysningerKlage';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { useApp } from '../../../context/AppContext';
 import {
@@ -233,6 +234,9 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     )}
 
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
+                    {skjema.felter.årsak.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE && (
+                        <InnhenteOpplysningerKlage />
+                    )}
                 </ÅrsakSkjema>
 
                 <MålformVelger
