@@ -106,6 +106,19 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             },
         });
 
+        const fritekstAvsnitt = useFelt({
+            verdi: '',
+            valideringsfunksjon: (felt: FeltState<string>) => {
+                return felt.valideringsstatus === Valideringsstatus.FEIL || felt.verdi.length === 0
+                    ? feil(felt, 'Fritekst avsnitt mangler.')
+                    : ok(felt);
+            },
+            avhengigheter: { årsakFelt: årsak },
+            skalFeltetVises: avhengigheter => {
+                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE;
+            },
+        });
+
         const dokumenter = useFelt({
             verdi: [],
             valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
@@ -157,6 +170,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 årsak: DokumentÅrsak | undefined;
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
+                fritekstAvsnitt: string;
                 dokumenter: string[];
                 barnMedDeltBosted: IBarnMedOpplysninger[];
                 barnIBrev: IBarnMedOpplysninger[];
@@ -169,6 +183,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 målform: målform,
 
                 fritekster: fritekster,
+                fritekstAvsnitt: fritekstAvsnitt,
                 dokumenter: dokumenter,
 
                 barnMedDeltBosted,
@@ -182,6 +197,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.felter.dokumenter.nullstill();
             skjema.felter.fritekster.nullstill();
             skjema.felter.målform.nullstill();
+            skjema.felter.fritekstAvsnitt.nullstill();
             nullstillDeltBosted();
             nullstillBarnIBrev();
         };
