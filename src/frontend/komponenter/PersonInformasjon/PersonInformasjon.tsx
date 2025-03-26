@@ -10,7 +10,7 @@ import type { IGrunnlagPerson } from '../../typer/person';
 import { personTypeMap } from '../../typer/person';
 import { formaterIdent, hentAlder } from '../../utils/formatter';
 import DødsfallTag from '../DødsfallTag';
-import RegistrerDødsfallDato from '../RegistrerDødsfallDato/RegistrerDødsfallDato';
+import RegistrerDødsfallDato from './RegistrerDødsfallDato';
 
 interface IProps {
     person: IGrunnlagPerson;

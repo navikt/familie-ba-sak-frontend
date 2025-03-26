@@ -16,9 +16,9 @@ import {
 } from '@navikt/familie-typer';
 
 import { useApp } from './AppContext';
-import { useFagsakContext } from './Fagsak/FagsakContext';
 import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
 import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
+import { useFagsakApi } from '../api/useFagsakApi';
 import { AlertType, ToastTyper } from '../komponenter/Toast/typer';
 import Oppgavebenk from '../sider/Oppgavebenk/Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from '../sider/Oppgavebenk/oppgavefelter';
@@ -188,7 +188,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
     };
 
-    const { hentFagsakerForPerson } = useFagsakContext();
+    const { hentFagsakerForPerson } = useFagsakApi();
 
     const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
         const fagsaker = await hentFagsakerForPerson(personident);

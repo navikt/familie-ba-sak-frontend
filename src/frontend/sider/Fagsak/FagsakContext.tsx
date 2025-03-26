@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type PropsWithChildren,
+} from 'react';
 
 import type { AxiosError } from 'axios';
-import createUseContext from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -13,23 +18,37 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IBaseFagsak, IInternstatistikk, IMinimalFagsak } from '../../typer/fagsak';
+import { useFagsakApi } from '../../api/useFagsakApi';
+import { useApp } from '../../context/AppContext';
+import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
 import { type IPersonInfo } from '../../typer/person';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
 import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
-import { useApp } from '../AppContext';
+import type { SkjemaBrevmottaker } from './Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
-const [FagsakProvider, useFagsakContext] = createUseContext(() => {
-    const [minimalFagsak, settMinimalFagsak] =
+interface IFagsakContext {
+    bruker: Ressurs<IPersonInfo>;
+    fagsakerPåBruker: IBaseFagsak[] | undefined;
+    hentMinimalFagsak: (fagsakId: string | number, påvirkerSystemLaster?: boolean) => void;
+    minimalFagsakRessurs: Ressurs<IMinimalFagsak>;
+    settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
+    minimalFagsak: IMinimalFagsak | undefined;
+    klagebehandlinger: IKlagebehandling[];
+    oppdaterKlagebehandlingerPåFagsak: () => void;
+    manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
+    settManuelleBrevmottakerePåFagsak: (brevmottakere: SkjemaBrevmottaker[]) => void;
+}
+
+const FagsakContext = createContext<IFagsakContext | undefined>(undefined);
+
+export const FagsakProvider = (props: PropsWithChildren) => {
+    const [minimalFagsakRessurs, settMinimalFagsakRessurs] =
         React.useState<Ressurs<IMinimalFagsak>>(byggTomRessurs());
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
-    const [internstatistikk, settInternstatistikk] =
-        React.useState<Ressurs<IInternstatistikk>>(byggTomRessurs());
     const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<
         SkjemaBrevmottaker[]
     >([]);
@@ -38,10 +57,11 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     const { request } = useHttp();
     const { skalObfuskereData } = useApp();
+    const { hentFagsakerForPerson } = useFagsakApi();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
-            settMinimalFagsak(byggHenterRessurs());
+            settMinimalFagsakRessurs(byggHenterRessurs());
         }
 
         request<void, IMinimalFagsak>({
@@ -53,10 +73,10 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
                 if (skalObfuskereData) {
                     obfuskerFagsak(hentetFagsak);
                 }
-                settMinimalFagsak(hentetFagsak);
+                settMinimalFagsakRessurs(hentetFagsak);
             })
             .catch((_error: AxiosError) => {
-                settMinimalFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
+                settMinimalFagsakRessurs(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
             });
     };
 
@@ -100,34 +120,8 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
         });
     };
 
-    const hentInternstatistikk = (): void => {
-        settInternstatistikk(byggHenterRessurs());
-        request<void, IInternstatistikk>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/internstatistikk`,
-        })
-            .then((hentetInternstatistikk: Ressurs<IInternstatistikk>) => {
-                settInternstatistikk(hentetInternstatistikk);
-            })
-            .catch(() => {
-                settInternstatistikk(byggFeiletRessurs('Feil ved lasting av internstatistikk'));
-            });
-    };
-
-    const hentFagsakerForPerson = async (personId: string) => {
-        return request<{ personIdent: string }, IMinimalFagsak[]>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
-            return fagsaker;
-        });
-    };
-
     const oppdaterKlagebehandlingerPåFagsak = () => {
-        const fagsakId = hentDataFraRessurs(minimalFagsak)?.id;
+        const fagsakId = hentDataFraRessurs(minimalFagsakRessurs)?.id;
 
         if (fagsakId) {
             request<void, IKlagebehandling[]>({
@@ -142,34 +136,46 @@ const [FagsakProvider, useFagsakContext] = createUseContext(() => {
 
     useEffect(() => {
         if (
-            minimalFagsak.status !== RessursStatus.SUKSESS &&
-            minimalFagsak.status !== RessursStatus.HENTER
+            minimalFagsakRessurs.status !== RessursStatus.SUKSESS &&
+            minimalFagsakRessurs.status !== RessursStatus.HENTER
         ) {
             settBruker(byggTomRessurs());
         } else {
             oppdaterBrukerHvisFagsakEndres(
                 bruker,
-                hentDataFraRessurs(minimalFagsak)?.søkerFødselsnummer
+                hentDataFraRessurs(minimalFagsakRessurs)?.søkerFødselsnummer
             );
         }
         oppdaterKlagebehandlingerPåFagsak();
         settManuelleBrevmottakerePåFagsak([]);
-    }, [minimalFagsak]);
+    }, [minimalFagsakRessurs]);
 
-    return {
-        bruker,
-        fagsakerPåBruker,
-        hentInternstatistikk,
-        hentMinimalFagsak,
-        internstatistikk,
-        minimalFagsak,
-        settMinimalFagsak,
-        hentFagsakerForPerson,
-        klagebehandlinger,
-        oppdaterKlagebehandlingerPåFagsak,
-        manuelleBrevmottakerePåFagsak,
-        settManuelleBrevmottakerePåFagsak,
-    };
-});
+    return (
+        <FagsakContext.Provider
+            value={{
+                bruker,
+                fagsakerPåBruker,
+                hentMinimalFagsak,
+                minimalFagsakRessurs,
+                settMinimalFagsakRessurs,
+                minimalFagsak: hentDataFraRessurs(minimalFagsakRessurs),
+                klagebehandlinger,
+                oppdaterKlagebehandlingerPåFagsak,
+                manuelleBrevmottakerePåFagsak,
+                settManuelleBrevmottakerePåFagsak,
+            }}
+        >
+            {props.children}
+        </FagsakContext.Provider>
+    );
+};
 
-export { FagsakProvider, useFagsakContext };
+export const useFagsakContext = () => {
+    const context = useContext(FagsakContext);
+
+    if (context === undefined) {
+        throw new Error('useFagsakContext må brukes innenfor en FagsakProvider');
+    }
+
+    return context;
+};

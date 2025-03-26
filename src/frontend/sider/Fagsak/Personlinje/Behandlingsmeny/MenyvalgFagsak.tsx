@@ -8,11 +8,11 @@ import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 import { useApp } from '../../../../context/AppContext';
-import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
 import { BehandlerRolle } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
+import { useFagsakContext } from '../../FagsakContext';
 
 interface IProps {
     bruker?: IPersonInfo;

@@ -6,7 +6,7 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useKorrigerVedtakSkjemaContext } from '../../../../../../context/KorrigerVedtak/KorrigerVedtakSkjemaContext';
+import { useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 
@@ -28,7 +28,7 @@ const KorrigerVedtakModal = ({
     erLesevisning,
 }: IProps) => {
     const { skjema, valideringErOk, lagreKorrigertVedtak, angreKorrigering, restFeil } =
-        useKorrigerVedtakSkjemaContext({
+        useKorrigerVedtakSkjema({
             lukkModal,
             korrigertVedtak,
             behandlingId,
