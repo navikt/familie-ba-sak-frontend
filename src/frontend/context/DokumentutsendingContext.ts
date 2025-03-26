@@ -40,6 +40,7 @@ export enum DokumentÅrsak {
     TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER = 'TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER',
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD = 'TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV = 'KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV',
+    INNHENTE_OPPLYSNINGER_KLAGE = 'INNHENTE_OPPLYSNINGER_KLAGE',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -60,6 +61,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
         'Til forelder med selvstendig rett vi har fått F016 - kan søke om barnetrygd',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV: 'Kan ha rett til pengestøtte fra Nav',
+    INNHENTE_OPPLYSNINGER_KLAGE: 'Innhente opplysninger klage',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -315,6 +317,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             Informasjonsbrev.INFORMASJONSBREV_KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
                             målform.verdi ?? Målform.NB
                         );
+                    case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
+                        return hentInnhenteOpplysningerKlage(målform.verdi ?? Målform.NB);
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
