@@ -269,6 +269,18 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             };
         };
 
+        const hentInnhenteOpplysningerKlage = (målform: Målform): IManueltBrevRequestPåFagsak => {
+            return {
+                multiselectVerdier: [],
+                barnIBrev: [],
+                mottakerMålform: målform,
+                brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
+                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+                fritekstAvsnitt:
+                    fritekstAvsnitt.verdi === '' ? '<PLACEHOLDER>' : fritekstAvsnitt.verdi,
+            };
+        };
+
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
             const dokumentÅrsak = skjema.felter.årsak.verdi;
             if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
