@@ -28,7 +28,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
     hentForhåndsvisning,
     tilgangsstyrtJournalpost,
 }) => {
-    const { journalpost, harTilgang } = tilgangsstyrtJournalpost;
+    const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {
         if (dokumentId !== undefined) {
@@ -46,7 +46,7 @@ export const JournalpostDokument: React.FC<IProps> = ({
     return (
         <ListeElement>
             <HStack gap="1">
-                {harTilgang ? (
+                {journalpostTilgang.harTilgang ? (
                     <>
                         <EllipsisBodyShort size="small" title={dokumentTittel}>
                             <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
@@ -66,7 +66,9 @@ export const JournalpostDokument: React.FC<IProps> = ({
                 ) : (
                     <>
                         <BodyShort size="small">{dokumentTittel}</BodyShort>
-                        <PadlockLockedIcon title="Dokumentet krever ekstra tilganger" />
+                        <PadlockLockedIcon
+                            title={`Dokumentet krever ekstra tilganger. ${journalpostTilgang.begrunnelse}`}
+                        />
                     </>
                 )}
             </HStack>
