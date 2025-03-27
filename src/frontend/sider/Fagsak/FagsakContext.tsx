@@ -42,6 +42,7 @@ interface IFagsakContext {
     klageStatus: RessursStatus;
     oppdaterKlagebehandlingerPåFagsak: () => void;
     tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
+    tilbakekrevingStatus: RessursStatus;
     manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
     settManuelleBrevmottakerePåFagsak: (brevmottakere: SkjemaBrevmottaker[]) => void;
 }
@@ -174,6 +175,7 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 klageStatus: klagebehandlinger.status,
                 oppdaterKlagebehandlingerPåFagsak,
                 tilbakekrevingsbehandlinger: hentDataFraRessurs(tilbakekrevingsbehandlinger) ?? [],
+                tilbakekrevingStatus: tilbakekrevingsbehandlinger.status,
                 manuelleBrevmottakerePåFagsak,
                 settManuelleBrevmottakerePåFagsak,
             }}
