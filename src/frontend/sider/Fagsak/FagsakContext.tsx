@@ -19,6 +19,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { useFagsakApi } from '../../api/useFagsakApi';
+import { useKlageApi } from '../../api/useKlageApi';
 import { useApp } from '../../context/AppContext';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
@@ -36,6 +37,7 @@ interface IFagsakContext {
     settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
     minimalFagsak: IMinimalFagsak | undefined;
     klagebehandlinger: IKlagebehandling[];
+    klageStatus: RessursStatus;
     oppdaterKlagebehandlingerPåFagsak: () => void;
     manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
     settManuelleBrevmottakerePåFagsak: (brevmottakere: SkjemaBrevmottaker[]) => void;
@@ -53,11 +55,13 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         SkjemaBrevmottaker[]
     >([]);
 
-    const [klagebehandlinger, settKlagebehandlinger] = useState<IKlagebehandling[]>([]);
+    const [klagebehandlinger, settKlagebehandlinger] =
+        useState<Ressurs<IKlagebehandling[]>>(byggTomRessurs());
 
     const { request } = useHttp();
     const { skalObfuskereData } = useApp();
     const { hentFagsakerForPerson } = useFagsakApi();
+    const { hentKlagebehandlingerPåFagsak } = useKlageApi();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
@@ -122,16 +126,9 @@ export const FagsakProvider = (props: PropsWithChildren) => {
 
     const oppdaterKlagebehandlingerPåFagsak = () => {
         const fagsakId = hentDataFraRessurs(minimalFagsakRessurs)?.id;
-
-        if (fagsakId) {
-            request<void, IKlagebehandling[]>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/hent-klagebehandlinger`,
-                påvirkerSystemLaster: true,
-            }).then(klagebehandlingerRessurs =>
-                settKlagebehandlinger(hentDataFraRessurs(klagebehandlingerRessurs) ?? [])
-            );
-        }
+        hentKlagebehandlingerPåFagsak(fagsakId).then(klagebehandlingerRessurs =>
+            settKlagebehandlinger(klagebehandlingerRessurs)
+        );
     };
 
     useEffect(() => {
@@ -159,7 +156,8 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 minimalFagsakRessurs,
                 settMinimalFagsakRessurs,
                 minimalFagsak: hentDataFraRessurs(minimalFagsakRessurs),
-                klagebehandlinger,
+                klagebehandlinger: hentDataFraRessurs(klagebehandlinger) ?? [],
+                klageStatus: klagebehandlinger.status,
                 oppdaterKlagebehandlingerPåFagsak,
                 manuelleBrevmottakerePåFagsak,
                 settManuelleBrevmottakerePåFagsak,

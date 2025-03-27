@@ -7,7 +7,7 @@ export const useKlageApi = () => {
     const { request } = useHttp();
 
     const hentKlagebehandlingerPåFagsak = (
-        fagsakId?: number
+        fagsakId: number | undefined
     ): Promise<Ressurs<IKlagebehandling[]>> => {
         if (!fagsakId) {
             return Promise.resolve(byggTomRessurs());
