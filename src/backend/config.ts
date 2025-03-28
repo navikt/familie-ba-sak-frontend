@@ -18,7 +18,7 @@ const Environment = () => {
             buildPath: 'frontend_development',
             namespace: 'local',
             proxyUrl: 'https://familie-ba-sak.intern.dev.nav.no/api',
-            familieTilbakeUrl: 'https://tilbakekreving.intern.dev.nav.no',
+            familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
         };
@@ -36,7 +36,7 @@ const Environment = () => {
             buildPath: 'frontend_production',
             namespace: 'preprod',
             proxyUrl: 'http://familie-ba-sak/api',
-            familieTilbakeUrl: 'https://tilbakekreving.intern.dev.nav.no',
+            familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             endringsloggProxyUrl: 'http://familie-endringslogg',
         };

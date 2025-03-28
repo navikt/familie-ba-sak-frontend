@@ -10,10 +10,8 @@ import {
     ATextDanger,
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../../context/Fagsak/FagsakContext';
-import Informasjonsbolk from '../../../../komponenter/Informasjonsbolk/Informasjonsbolk';
+import Informasjonsbolk from './Informasjonsbolk';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,
@@ -24,6 +22,7 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { useFagsakContext } from '../../FagsakContext';
 import { sakstype } from '../../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
@@ -77,7 +76,7 @@ const StyledHeading = styled(Heading)`
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
-    const minimalFagsak = hentDataFraRessurs(useFagsakContext().minimalFagsak);
+    const { minimalFagsak } = useFagsakContext();
     const behandlinger = minimalFagsak?.behandlinger ?? [];
 
     const antallBehandlinger = behandlinger.length;

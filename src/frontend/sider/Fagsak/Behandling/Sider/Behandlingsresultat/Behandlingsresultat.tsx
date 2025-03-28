@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
@@ -22,7 +22,6 @@ import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -36,6 +35,7 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useFagsakContext } from '../../../FagsakContext';
 import Skjemasteg from '../Skjemasteg';
 
 const EndretUtbetalingAndel = styled.div`
@@ -65,9 +65,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
-
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
 
     const {
         opprettEndretUtbetaling,

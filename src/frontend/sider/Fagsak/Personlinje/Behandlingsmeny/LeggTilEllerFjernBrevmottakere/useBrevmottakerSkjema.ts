@@ -5,8 +5,8 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import type { IBehandling } from '../../../../../typer/behandling';
+import { useFagsakContext } from '../../../FagsakContext';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<
     ILeggTilFjernBrevmottakerSkjemaFelter,

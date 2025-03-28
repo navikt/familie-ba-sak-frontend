@@ -41,10 +41,6 @@ const SaksoversiktWrapper = styled.div`
     margin: 2.5rem 4rem;
 `;
 
-const StyledHeading = styled(Heading)`
-    margin-top: 3.75rem;
-`;
-
 const StyledAlert = styled(Alert)`
     width: ${SaksoversiktPanelBredde};
 `;
@@ -187,16 +183,18 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                             <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
                         )}
 
-                    <FagsakLenkepanel minimalFagsak={minimalFagsak} />
-                    {minimalFagsak.status === FagsakStatus.LØPENDE && (
-                        <>
-                            <StyledHeading size={'medium'} level={'2'} spacing>
-                                Løpende månedlig utbetaling
-                            </StyledHeading>
-                            {løpendeMånedligUtbetaling()}
-                        </>
-                    )}
-                    <Behandlinger minimalFagsak={minimalFagsak} />
+                    <VStack gap="14">
+                        <FagsakLenkepanel minimalFagsak={minimalFagsak} />
+                        {minimalFagsak.status === FagsakStatus.LØPENDE && (
+                            <>
+                                <Heading size={'medium'} level={'2'} spacing>
+                                    Løpende månedlig utbetaling
+                                </Heading>
+                                {løpendeMånedligUtbetaling()}
+                            </>
+                        )}
+                        <Behandlinger minimalFagsak={minimalFagsak} />
+                    </VStack>
                 </SaksoversiktWrapper>{' '}
             </Tabs.Panel>
             <Tabs.Panel value={infotrygdTab.key}>

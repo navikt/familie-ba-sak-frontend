@@ -7,7 +7,6 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakContext } from './Fagsak/FagsakContext';
 import useDokument from '../hooks/useDokument';
 import {
     Informasjonsbrev,
@@ -15,6 +14,7 @@ import {
 } from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import type { ISelectOptionMedBrevtekst } from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { hentEnkeltInformasjonsbrevRequest } from '../sider/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
+import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import { Mottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
 import { Distribusjonskanal } from '../typer/dokument';

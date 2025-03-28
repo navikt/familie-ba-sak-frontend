@@ -12,6 +12,7 @@ import {
     useManuellJournalfør,
 } from '../../context/ManuellJournalførContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
+import { FagsakProvider } from '../Fagsak/FagsakContext';
 import Personlinje from '../Fagsak/Personlinje/Personlinje';
 
 const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
@@ -77,9 +78,11 @@ const ManuellJournalførContent: React.FC = () => {
 
 const ManuellJournalfør: React.FC = () => {
     return (
-        <ManuellJournalførProvider>
-            <ManuellJournalførContent />
-        </ManuellJournalførProvider>
+        <FagsakProvider>
+            <ManuellJournalførProvider>
+                <ManuellJournalførContent />
+            </ManuellJournalførProvider>
+        </FagsakProvider>
     );
 };
 

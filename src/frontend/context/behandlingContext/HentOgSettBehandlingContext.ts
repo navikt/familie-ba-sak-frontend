@@ -8,11 +8,11 @@ import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { obfuskerBehandling } from '../../utils/obfuskerData';
 import { useApp } from '../AppContext';
-import { useFagsakContext } from '../Fagsak/FagsakContext';
 
 interface Props {
     fagsak: IMinimalFagsak;

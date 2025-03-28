@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 import { Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useFagsakContext } from '../../../FagsakContext';
 
 const EndreBehandlingstema: React.FC = () => {
     const { behandling } = useBehandling();
@@ -15,9 +15,7 @@ const EndreBehandlingstema: React.FC = () => {
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
-
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
 
     const { vurderErLesevisning } = useBehandling();
 

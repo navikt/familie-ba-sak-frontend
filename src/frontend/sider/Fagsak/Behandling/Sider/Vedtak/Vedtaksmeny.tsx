@@ -11,18 +11,17 @@ import {
 } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { vedtakHarFortsattUtbetaling } from '../../../../../utils/vedtakUtils';
+import { useFagsakContext } from '../../../FagsakContext';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
@@ -45,7 +44,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
+    const { minimalFagsak } = useFagsakContext();
     const { vurderErLesevisning } = useBehandling();
     const {
         erSammensattKontrollsak,
@@ -59,7 +58,6 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 
     const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
     const fagsakType = minimalFagsak?.fagsakType;
 
     return (

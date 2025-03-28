@@ -3,13 +3,12 @@ import { useState } from 'react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakContext } from '../../../../../context/Fagsak/FagsakContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useFagsakContext } from '../../../FagsakContext';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
@@ -17,8 +16,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandling();
 
-    const { minimalFagsak: minimalFagsakRessurs } = useFagsakContext();
-    const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+    const { minimalFagsak } = useFagsakContext();
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {

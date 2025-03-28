@@ -9,9 +9,9 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from './behandlingContext/BehandlingContext';
-import { useFagsakContext } from './Fagsak/FagsakContext';
 import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';
 import type { IForelderBarnRelasjon } from '../typer/person';
@@ -34,12 +34,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
         } = useBehandling();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
-        const { bruker, minimalFagsak } = useFagsakContext();
+        const { bruker, minimalFagsakRessurs } = useFagsakContext();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
         const barnMedLøpendeUtbetaling =
-            minimalFagsak.status === RessursStatus.SUKSESS
-                ? hentBarnMedLøpendeUtbetaling(minimalFagsak.data)
+            minimalFagsakRessurs.status === RessursStatus.SUKSESS
+                ? hentBarnMedLøpendeUtbetaling(minimalFagsakRessurs.data)
                 : new Set();
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
