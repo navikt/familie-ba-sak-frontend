@@ -15,7 +15,7 @@ export const useTilbakekrevingApi = () => {
 
         return request<void, ITilbakekrevingsbehandling[]>({
             method: 'GET',
-            url: `/familie-ba-sak/api/tilbakekreving/${fagsakId}/hent-tilbakekrevingsbehandlinger`,
+            url: `/familie-ba-sak/api/tilbakekreving/fagsak/${fagsakId}`,
             påvirkerSystemLaster: true,
         });
     };
