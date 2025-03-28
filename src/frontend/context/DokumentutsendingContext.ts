@@ -269,15 +269,16 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             };
         };
 
-        const hentInnhenteOpplysningerKlage = (målform: Målform): IManueltBrevRequestPåFagsak => {
+        const hentInnhenteOpplysningerKlageSkjemaData = (
+            målform: Målform
+        ): IManueltBrevRequestPåFagsak => {
             return {
                 multiselectVerdier: [],
                 barnIBrev: [],
                 mottakerMålform: målform,
                 brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
                 manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-                fritekstAvsnitt:
-                    fritekstAvsnitt.verdi === '' ? '<PLACEHOLDER>' : fritekstAvsnitt.verdi,
+                fritekstAvsnitt: fritekstAvsnitt.verdi,
             };
         };
 
@@ -346,7 +347,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
-                        return hentInnhenteOpplysningerKlage(målform.verdi ?? Målform.NB);
+                        return hentInnhenteOpplysningerKlageSkjemaData(målform.verdi ?? Målform.NB);
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
