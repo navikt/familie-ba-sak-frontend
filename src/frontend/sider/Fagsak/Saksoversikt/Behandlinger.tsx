@@ -55,9 +55,14 @@ interface IBehandlingshistorikkProps {
 }
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const { klagebehandlinger, klageStatus } = useFagsakContext();
+    const { klagebehandlinger, klageStatus, tilbakekrevingsbehandlinger, tilbakekrevingStatus } =
+        useFagsakContext();
 
-    const behandlinger = hentBehandlingerTilSaksoversikten(minimalFagsak, klagebehandlinger);
+    const behandlinger = hentBehandlingerTilSaksoversikten(
+        minimalFagsak,
+        klagebehandlinger,
+        tilbakekrevingsbehandlinger
+    );
 
     const finnesHenlagteBehandlingerSomKanFiltreresBort = behandlinger.some(
         (behandling: Saksoversiktsbehandling) =>
@@ -77,6 +82,11 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
             {ressursHarFeilet(klageStatus) && (
                 <Alert variant="warning">
                     <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
+                </Alert>
+            )}
+            {ressursHarFeilet(tilbakekrevingStatus) && (
+                <Alert variant="warning">
+                    <BodyShort>Tilbakekreving er ikke tilgjengelig for øyeblikket.</BodyShort>
                 </Alert>
             )}
             <div>
