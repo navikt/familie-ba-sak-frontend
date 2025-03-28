@@ -190,13 +190,18 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                 >
                     <option value="">Velg</option>
                     {Object.values(DokumentÅrsak)
-                        //TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
-                        .filter(
-                            årsak =>
-                                årsak !==
-                                    DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD ||
-                                toggles[ToggleNavn.selvstendigRettInfobrev]
-                        )
+                        .filter(årsak => {
+                            switch (årsak) {
+                                // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
+                                case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
+                                    return toggles[ToggleNavn.selvstendigRettInfobrev];
+                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE: {
+                                    return toggles[ToggleNavn.innhenteOpplysningerKlageBrev];
+                                }
+                                default:
+                                    return true;
+                            }
+                        })
                         .map(årsak => {
                             return (
                                 <option
