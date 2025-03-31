@@ -7,7 +7,7 @@ import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 import type { OptionType } from '../../../typer/common';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
-import { useManuellJournalførContext } from '../ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalførContext';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
     return {
@@ -27,7 +27,7 @@ interface IProps {
 }
 
 export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
-    const { skjema, erLesevisning } = useManuellJournalførContext();
+    const { skjema, erLesevisning } = useManuellJournalføringContext();
 
     const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId

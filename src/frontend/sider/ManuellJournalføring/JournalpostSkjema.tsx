@@ -12,7 +12,7 @@ import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
-import { useManuellJournalførContext } from './ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalførContext';
 import Knapperekke from '../../komponenter/Knapperekke';
 import { FagsakType } from '../../typer/fagsak';
 import type { OppgavetypeFilter } from '../../typer/oppgave';
@@ -36,7 +36,7 @@ export const JournalpostSkjema: React.FC = () => {
         erLesevisning,
         lukkOppgaveOgKnyttJournalpostTilBehandling,
         kanKnytteJournalpostTilBehandling,
-    } = useManuellJournalførContext();
+    } = useManuellJournalføringContext();
 
     const navigate = useNavigate();
     const [valideringsfeilmelding, settValideringsfeilmelding] = useState<string>('');

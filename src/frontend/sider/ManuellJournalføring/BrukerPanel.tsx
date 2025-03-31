@@ -18,7 +18,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { DeltagerInfo } from './DeltagerInfo';
-import { useManuellJournalførContext } from './ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { SamhandlerTabell } from '../../komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '../../komponenter/Samhandler/useSamhandler';
@@ -72,7 +72,7 @@ export const BrukerPanel: React.FC = () => {
         settMinimalFagsakTilInstitusjonsfagsak,
         settMinimalFagsakTilNormalFagsakForPerson,
         kanKnyttesTilInstitusjonsfagsak,
-    } = useManuellJournalførContext();
+    } = useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);

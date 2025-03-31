@@ -80,7 +80,7 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     samhandler: ISamhandlerInfo | undefined;
 }
 
-interface IManuellJournalførContext {
+interface IManuellJournalføringContext {
     dataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>;
     hentetDokument: Ressurs<string>;
     endreBrukerOgSettNormalFagsak: (personIdent: string) => Promise<string | void>;
@@ -108,9 +108,11 @@ interface IManuellJournalførContext {
     klageStatus: RessursStatus;
 }
 
-const ManuellJournalførContext = createContext<IManuellJournalførContext | undefined>(undefined);
+const ManuellJournalføringContext = createContext<IManuellJournalføringContext | undefined>(
+    undefined
+);
 
-export const ManuellJournalførProvider = (props: PropsWithChildren) => {
+export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     const { innloggetSaksbehandler, toggles } = useApp();
 
     const navigate = useNavigate();
@@ -698,7 +700,7 @@ export const ManuellJournalførProvider = (props: PropsWithChildren) => {
     };
 
     return (
-        <ManuellJournalførContext.Provider
+        <ManuellJournalføringContext.Provider
             value={{
                 dataForManuellJournalføring,
                 hentetDokument,
@@ -728,12 +730,12 @@ export const ManuellJournalførProvider = (props: PropsWithChildren) => {
             }}
         >
             {props.children}
-        </ManuellJournalførContext.Provider>
+        </ManuellJournalføringContext.Provider>
     );
 };
 
-export const useManuellJournalførContext = () => {
-    const context = useContext(ManuellJournalførContext);
+export const useManuellJournalføringContext = () => {
+    const context = useContext(ManuellJournalføringContext);
 
     if (context === undefined) {
         throw new Error(
