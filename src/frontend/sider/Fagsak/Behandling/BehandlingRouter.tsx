@@ -9,19 +9,19 @@ import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
 import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
+import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
+import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
-import { SimuleringProvider } from '../../../context/SimuleringContext';
 import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
+import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
-import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
-import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 
 interface Props {
     bruker: IPersonInfo;

@@ -8,13 +8,21 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../typer/behandling';
-import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import { PersonType } from '../typer/person';
-import type { ISimuleringDTO, ISimuleringPeriode, ITilbakekreving } from '../typer/simulering';
-import { Tilbakekrevingsvalg } from '../typer/simulering';
-import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '../utils/dato';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
+import { PersonType } from '../../../../../typer/person';
+import type {
+    ISimuleringDTO,
+    ISimuleringPeriode,
+    ITilbakekreving,
+} from '../../../../../typer/simulering';
+import { Tilbakekrevingsvalg } from '../../../../../typer/simulering';
+import {
+    isoStringTilDate,
+    isoStringTilDateMedFallback,
+    tidenesMorgen,
+} from '../../../../../utils/dato';
 
 interface IProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;

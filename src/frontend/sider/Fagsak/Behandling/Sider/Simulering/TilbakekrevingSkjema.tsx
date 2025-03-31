@@ -23,8 +23,8 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useSimuleringContext } from './SimuleringContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSimuleringContext } from '../../../../../context/SimuleringContext';
 import useDokument from '../../../../../hooks/useDokument';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
