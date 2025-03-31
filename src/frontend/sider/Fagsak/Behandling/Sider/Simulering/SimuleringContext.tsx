@@ -28,7 +28,7 @@ interface IProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
-interface ITilbakekrevingsskjema {
+interface Tilbakekrevingsskjema {
     tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
     fritekstVarsel: string;
     begrunnelse: string;
@@ -36,7 +36,7 @@ interface ITilbakekrevingsskjema {
 
 interface SimuleringContextValue {
     simuleringsresultat: Ressurs<ISimuleringDTO>;
-    tilbakekrevingSkjema: ISkjema<ITilbakekrevingsskjema, IBehandling>;
+    tilbakekrevingSkjema: ISkjema<Tilbakekrevingsskjema, IBehandling>;
     onSubmit: <SkjemaData>(
         requestConfig: FamilieRequestConfig<SkjemaData>,
         onSuccess: (ressurs: Ressurs<IBehandling>) => void,
@@ -240,7 +240,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         skjema: tilbakekrevingSkjema,
         hentFeilTilOppsummering,
         onSubmit,
-    } = useSkjema<ITilbakekrevingsskjema, IBehandling>({
+    } = useSkjema<Tilbakekrevingsskjema, IBehandling>({
         felter: { tilbakekrevingsvalg, fritekstVarsel, begrunnelse },
         skjemanavn: 'Opprett tilbakekreving',
     });
