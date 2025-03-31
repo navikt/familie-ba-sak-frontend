@@ -13,13 +13,13 @@ import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
-import { useSimulering } from '../../../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { erBehandlingMedVedtaksbrevutsending } from '../../../../../utils/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
 
 interface IVedtakProps {
@@ -51,7 +51,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         erUlagretNyRefusjonEøsPeriode,
     } = useVedtakSteg();
 
-    const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimulering();
+    const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 
     const erLesevisning = vurderErLesevisning();
 
