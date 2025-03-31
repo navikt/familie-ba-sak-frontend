@@ -80,7 +80,7 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     samhandler: ISamhandlerInfo | undefined;
 }
 
-interface IManuellJournalføringContext {
+interface ManuellJournalføringContextValue {
     dataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>;
     hentetDokument: Ressurs<string>;
     endreBrukerOgSettNormalFagsak: (personIdent: string) => Promise<string | void>;
@@ -108,7 +108,7 @@ interface IManuellJournalføringContext {
     klageStatus: RessursStatus;
 }
 
-const ManuellJournalføringContext = createContext<IManuellJournalføringContext | undefined>(
+const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(
     undefined
 );
 
