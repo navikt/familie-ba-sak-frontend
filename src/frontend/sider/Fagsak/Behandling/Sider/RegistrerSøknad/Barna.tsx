@@ -7,8 +7,8 @@ import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
+import { useSøknadContext } from './SøknadContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSøknadContext } from '../../../../../context/SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';

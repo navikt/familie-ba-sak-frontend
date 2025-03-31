@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
+import { useSøknadContext } from './SøknadContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSøknadContext } from '../../../../../context/SøknadContext';
 import {
     behandlingUnderkategori,
     BehandlingUnderkategori,

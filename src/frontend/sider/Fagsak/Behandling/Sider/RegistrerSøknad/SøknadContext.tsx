@@ -7,21 +7,21 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from './behandlingContext/BehandlingContext';
-import useDeepEffect from '../hooks/useDeepEffect';
-import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
-import type { IBehandling } from '../typer/behandling';
-import { BehandlingUnderkategori } from '../typer/behandlingstema';
-import type { IForelderBarnRelasjon } from '../typer/person';
-import { ForelderBarnRelasjonRolle } from '../typer/person';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import useDeepEffect from '../../../../../hooks/useDeepEffect';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
+import type { IForelderBarnRelasjon } from '../../../../../typer/person';
+import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type {
     IBarnMedOpplysninger,
     IBarnMedOpplysningerBackend,
     IRestRegistrerSøknad,
     Målform,
-} from '../typer/søknad';
-import { hentBarnMedLøpendeUtbetaling } from '../utils/fagsak';
+} from '../../../../../typer/søknad';
+import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
+import { useFagsakContext } from '../../../FagsakContext';
 
 interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
