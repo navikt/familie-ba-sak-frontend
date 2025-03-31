@@ -7,7 +7,7 @@ import { BodyShort, Checkbox, ExpansionCard, TextField } from '@navikt/ds-react'
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { DeltagerInfo } from './DeltagerInfo';
-import { useManuellJournalføringContext } from './ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
 import { formaterIdent } from '../../utils/formatter';
 

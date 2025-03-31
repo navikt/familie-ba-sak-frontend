@@ -8,7 +8,7 @@ import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
-import { useManuellJournalføringContext } from '../ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;

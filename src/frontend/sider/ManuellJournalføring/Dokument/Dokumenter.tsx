@@ -4,7 +4,7 @@ import { Alert, ErrorMessage } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { DokumentVelger } from './DokumentVelger';
-import { useManuellJournalføringContext } from '../ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 export const Dokumenter: React.FC = () => {
     const { skjema } = useManuellJournalføringContext();

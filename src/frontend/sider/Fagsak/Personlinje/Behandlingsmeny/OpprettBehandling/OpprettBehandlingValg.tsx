@@ -29,7 +29,7 @@ import {
 } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
 import { onOptionSelected } from '../../../../../utils/skjema';
-import type { ManuellJournalføringSkjemaFelter } from '../../../../ManuellJournalføring/ManuellJournalførContext';
+import type { ManuellJournalføringSkjemaFelter } from '../../../../ManuellJournalføring/ManuellJournalføringContext';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
 const erOpprettBehandlingSkjema = (

@@ -7,7 +7,7 @@ import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 import type { OptionType } from '../../../typer/common';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
-import { useManuellJournalføringContext } from '../ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
     return {

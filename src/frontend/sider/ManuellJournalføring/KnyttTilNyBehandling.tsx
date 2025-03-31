@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Checkbox, Fieldset, Heading } from '@navikt/ds-react';
 import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useManuellJournalføringContext } from './ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import OpprettBehandlingValg from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
 
 const StyledFieldset = styled(Fieldset)`

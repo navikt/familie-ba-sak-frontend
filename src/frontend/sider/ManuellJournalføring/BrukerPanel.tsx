@@ -18,7 +18,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { DeltagerInfo } from './DeltagerInfo';
-import { useManuellJournalføringContext } from './ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { SamhandlerTabell } from '../../komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '../../komponenter/Samhandler/useSamhandler';

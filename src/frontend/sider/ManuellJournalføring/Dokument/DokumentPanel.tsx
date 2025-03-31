@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringContext } from '../ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 const DokumentDiv = styled.div`
     width: 100%;
