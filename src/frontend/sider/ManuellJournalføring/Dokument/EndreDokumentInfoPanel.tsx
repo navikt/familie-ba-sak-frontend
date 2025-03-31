@@ -4,10 +4,10 @@ import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import type { OptionType } from '../../../typer/common';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
     return {
@@ -27,7 +27,7 @@ interface IProps {
 }
 
 export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
-    const { skjema, erLesevisning } = useManuellJournalfør();
+    const { skjema, erLesevisning } = useManuellJournalføringContext();
 
     const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId

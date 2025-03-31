@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 const DokumentDiv = styled.div`
     width: 100%;
@@ -18,7 +18,7 @@ const DokumentDataAlert = styled(Alert)`
 `;
 
 export const DokumentPanel: React.FC = () => {
-    const { hentetDokument } = useManuellJournalfør();
+    const { hentetDokument } = useManuellJournalføringContext();
     return (
         <DokumentDiv>
             {hentetDokument.status === RessursStatus.SUKSESS && (

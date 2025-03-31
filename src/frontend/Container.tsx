@@ -14,7 +14,7 @@ import Toasts from './komponenter/Toast/Toasts';
 import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
-import ManuellJournalfør from './sider/ManuellJournalfør/ManuellJournalfør';
+import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
@@ -54,7 +54,7 @@ const Container: React.FC = () => {
                                 <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
                                 <Route
                                     path="/oppgaver/journalfor/:oppgaveId"
-                                    element={<ManuellJournalfør />}
+                                    element={<ManuellJournalføring />}
                                 />
                                 <Route
                                     path="/tidslinjer/:behandlingId"

@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type PropsWithChildren,
+} from 'react';
 
 import type { AxiosError } from 'axios';
-import createUseContext from 'constate';
 import { differenceInMilliseconds } from 'date-fns';
 import { useNavigate, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import type {
+    Avhengigheter,
+    FeiloppsummeringFeil,
+    Felt,
+    FeltState,
+    ISkjema,
+} from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
     hentDataFraRessurs,
@@ -21,41 +32,41 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from './AppContext';
-import { useKlageApi } from '../api/useKlageApi';
-import useDokument from '../hooks/useDokument';
-import type { IOpprettBehandlingSkjemaBase } from '../sider/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
-import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
-import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import type { IBehandlingstema } from '../typer/behandlingstema';
-import { behandlingstemaer } from '../typer/behandlingstema';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakType } from '../typer/fagsak';
+import { useKlageApi } from '../../api/useKlageApi';
+import { useApp } from '../../context/AppContext';
+import useDokument from '../../hooks/useDokument';
+import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
+import type { IBehandlingstema } from '../../typer/behandlingstema';
+import { behandlingstemaer } from '../../typer/behandlingstema';
+import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakType } from '../../typer/fagsak';
 import {
     type Journalføringsbehandling,
     opprettJournalføringsbehandlingFraBarnetrygdbehandling,
     opprettJournalføringsbehandlingFraKlagebehandling,
-} from '../typer/journalføringsbehandling';
-import type { IKlagebehandling } from '../typer/klage';
-import { Klagebehandlingstype } from '../typer/klage';
+} from '../../typer/journalføringsbehandling';
+import type { IKlagebehandling } from '../../typer/klage';
+import { Klagebehandlingstype } from '../../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
     TilknyttetBehandling,
-} from '../typer/manuell-journalføring';
-import { JournalpostKanal } from '../typer/manuell-journalføring';
+} from '../../typer/manuell-journalføring';
+import { JournalpostKanal } from '../../typer/manuell-journalføring';
 import {
     type IRestLukkOppgaveOgKnyttJournalpost,
     finnBehandlingstemaFraOppgave,
-} from '../typer/oppgave';
-import { OppgavetypeFilter } from '../typer/oppgave';
-import type { IPersonInfo } from '../typer/person';
-import { Adressebeskyttelsegradering } from '../typer/person';
-import type { ISamhandlerInfo } from '../typer/samhandler';
-import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../typer/toggles';
-import { isoStringTilDate } from '../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
+} from '../../typer/oppgave';
+import { OppgavetypeFilter } from '../../typer/oppgave';
+import type { IPersonInfo } from '../../typer/person';
+import { Adressebeskyttelsegradering } from '../../typer/person';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
+import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../../typer/toggles';
+import { isoStringTilDate } from '../../utils/dato';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
+import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
+import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;
@@ -69,7 +80,39 @@ export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkj
     samhandler: ISamhandlerInfo | undefined;
 }
 
-const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
+interface ManuellJournalføringContextValue {
+    dataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>;
+    hentetDokument: Ressurs<string>;
+    endreBrukerOgSettNormalFagsak: (personIdent: string) => Promise<string | void>;
+    erLesevisning: () => boolean;
+    minimalFagsak: IMinimalFagsak | undefined;
+    hentAktivBehandlingForJournalføring: () => VisningBehandling | undefined;
+    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
+    hentSorterteJournalføringsbehandlinger: () => Journalføringsbehandling[];
+    journalfør: () => void;
+    knyttTilNyBehandling: Felt<boolean>;
+    nullstillSkjema: () => void;
+    skjema: ISkjema<ManuellJournalføringSkjemaFelter, string>;
+    tilbakestillData: () => void;
+    valgtDokumentId: string | undefined;
+    velgOgHentDokumentData: (dokumentInfoId: string) => void;
+    settAvsenderLikBruker: () => void;
+    tilbakestillAvsender: () => void;
+    lukkOppgaveOgKnyttJournalpostTilBehandling: () => void;
+    kanKnytteJournalpostTilBehandling: () => boolean;
+    kanKnyttesTilInstitusjonsfagsak: () => boolean;
+    institusjonsfagsaker: Ressurs<IMinimalFagsak[]>;
+    settMinimalFagsakTilNormalFagsakForPerson: (personIdent?: string) => void;
+    settMinimalFagsakTilInstitusjonsfagsak: (orgNummer: string) => void;
+    erDigitaltInnsendtDokument: boolean | undefined;
+    klageStatus: RessursStatus;
+}
+
+const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(
+    undefined
+);
+
+export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     const { innloggetSaksbehandler, toggles } = useApp();
 
     const navigate = useNavigate();
@@ -656,33 +699,49 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         });
     };
 
-    return {
-        dataForManuellJournalføring,
-        hentetDokument,
-        endreBrukerOgSettNormalFagsak,
-        erLesevisning,
-        minimalFagsak,
-        hentAktivBehandlingForJournalføring,
-        hentFeilTilOppsummering,
-        hentSorterteJournalføringsbehandlinger,
-        journalfør,
-        knyttTilNyBehandling,
-        nullstillSkjema,
-        skjema,
-        tilbakestillData,
-        valgtDokumentId,
-        velgOgHentDokumentData,
-        settAvsenderLikBruker,
-        tilbakestillAvsender,
-        lukkOppgaveOgKnyttJournalpostTilBehandling,
-        kanKnytteJournalpostTilBehandling,
-        kanKnyttesTilInstitusjonsfagsak,
-        institusjonsfagsaker,
-        settMinimalFagsakTilNormalFagsakForPerson,
-        settMinimalFagsakTilInstitusjonsfagsak,
-        erDigitaltInnsendtDokument,
-        klageStatus: klagebehandlinger.status,
-    };
-});
+    return (
+        <ManuellJournalføringContext.Provider
+            value={{
+                dataForManuellJournalføring,
+                hentetDokument,
+                endreBrukerOgSettNormalFagsak,
+                erLesevisning,
+                minimalFagsak,
+                hentAktivBehandlingForJournalføring,
+                hentFeilTilOppsummering,
+                hentSorterteJournalføringsbehandlinger,
+                journalfør,
+                knyttTilNyBehandling,
+                nullstillSkjema,
+                skjema,
+                tilbakestillData,
+                valgtDokumentId,
+                velgOgHentDokumentData,
+                settAvsenderLikBruker,
+                tilbakestillAvsender,
+                lukkOppgaveOgKnyttJournalpostTilBehandling,
+                kanKnytteJournalpostTilBehandling,
+                kanKnyttesTilInstitusjonsfagsak,
+                institusjonsfagsaker,
+                settMinimalFagsakTilNormalFagsakForPerson,
+                settMinimalFagsakTilInstitusjonsfagsak,
+                erDigitaltInnsendtDokument,
+                klageStatus: klagebehandlinger.status,
+            }}
+        >
+            {props.children}
+        </ManuellJournalføringContext.Provider>
+    );
+};
 
-export { ManuellJournalførProvider, useManuellJournalfør };
+export const useManuellJournalføringContext = () => {
+    const context = useContext(ManuellJournalføringContext);
+
+    if (context === undefined) {
+        throw new Error(
+            'useManuellJournalførContext må brukes innenfor en ManuellJournalførProvider'
+        );
+    }
+
+    return context;
+};

@@ -7,7 +7,7 @@ import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 
@@ -24,7 +24,7 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const EndreJournalpost: React.FC = () => {
-    const { skjema, erLesevisning } = useManuellJournalfør();
+    const { skjema, erLesevisning } = useManuellJournalføringContext();
 
     return (
         <FamilieReactSelect
@@ -62,7 +62,7 @@ const EndreJournalpost: React.FC = () => {
 };
 
 const Journalpost: React.FC = () => {
-    const { dataForManuellJournalføring, skjema } = useManuellJournalfør();
+    const { dataForManuellJournalføring, skjema } = useManuellJournalføringContext();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
