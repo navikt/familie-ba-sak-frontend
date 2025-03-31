@@ -249,7 +249,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         {utbetalingsperiode.utbetalingsperiodeDetaljer
                             .sort(sorterUtbetaling)
                             .map(detalj => (
-                                <UtbetalingsbeløpRad key={detalj.person.navn}>
+                                <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
                                     <BodyShort>{`${detalj.person.navn} (${hentAlderSomString(
                                         detalj.person.fødselsdato
                                     )}) | ${formaterIdent(detalj.person.personIdent)}`}</BodyShort>
