@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSøknad } from '../../../../../context/SøknadContext';
+import { useSøknadContext } from '../../../../../context/SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
@@ -35,7 +35,7 @@ const Barna: React.FunctionComponent = () => {
     const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
-    const { skjema } = useSøknad();
+    const { skjema } = useSøknadContext();
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {

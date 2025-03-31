@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSøknad } from '../../../../../context/SøknadContext';
+import { useSøknadContext } from '../../../../../context/SøknadContext';
 import {
     behandlingUnderkategori,
     BehandlingUnderkategori,
@@ -22,7 +22,7 @@ const StyledRadio = styled(Radio)`
 const SøknadType: React.FunctionComponent = () => {
     const { vurderErLesevisning } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const { skjema } = useSøknad();
+    const { skjema } = useSøknadContext();
 
     const radioOnChange = (underKategori: BehandlingUnderkategori) => {
         skjema.felter.underkategori.validerOgSettFelt(underKategori);
