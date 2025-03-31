@@ -101,7 +101,8 @@ export const hentBehandlingId = (saksoversiktsbehandling: Saksoversiktsbehandlin
 
 export const hentBehandlingerTilSaksoversikten = (
     minimalFagsak: IMinimalFagsak,
-    klagebehandlinger: IKlagebehandling[]
+    klagebehandlinger: IKlagebehandling[],
+    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[]
 ): Saksoversiktsbehandling[] => {
     const barnetrygdBehandlinger: Saksoversiktsbehandling[] = minimalFagsak.behandlinger.map(
         behandling => ({
@@ -109,8 +110,8 @@ export const hentBehandlingerTilSaksoversikten = (
             saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD,
         })
     );
-    const tilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
-        minimalFagsak.tilbakekrevingsbehandlinger.map(behandling => ({
+    const saksoversiktTilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
+        tilbakekrevingsbehandlinger.map(behandling => ({
             ...behandling,
             saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING,
         }));
@@ -122,7 +123,7 @@ export const hentBehandlingerTilSaksoversikten = (
     );
     return [
         ...barnetrygdBehandlinger,
-        ...tilbakekrevingsbehandlinger,
+        ...saksoversiktTilbakekrevingsbehandlinger,
         ...saksoversiktKlagebehandlinger,
     ];
 };
