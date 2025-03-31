@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Checkbox, Fieldset, Heading } from '@navikt/ds-react';
 import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { useManuellJournalførContext } from '../../context/ManuellJournalførContext';
 import OpprettBehandlingValg from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
 
 const StyledFieldset = styled(Fieldset)`
@@ -18,7 +18,8 @@ const StyledFieldset = styled(Fieldset)`
  * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
  */
 export const KnyttTilNyBehandling: React.FC = () => {
-    const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } = useManuellJournalfør();
+    const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } =
+        useManuellJournalførContext();
     const { knyttTilNyBehandling, behandlingstype } = skjema.felter;
     return (
         <StyledFieldset legend="Knytt til ny behandling" hideLegend>

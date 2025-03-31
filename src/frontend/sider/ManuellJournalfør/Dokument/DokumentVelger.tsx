@@ -8,7 +8,7 @@ import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
-import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
+import { useManuellJournalførContext } from '../../../context/ManuellJournalførContext';
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
@@ -22,7 +22,7 @@ const StyledExpansionCard = styled(ExpansionCard)`
 
 export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
     const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } =
-        useManuellJournalfør();
+        useManuellJournalførContext();
     const [åpen, settÅpen] = useState(false);
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;

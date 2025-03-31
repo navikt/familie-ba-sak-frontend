@@ -9,7 +9,7 @@ import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
 import {
     ManuellJournalførProvider,
-    useManuellJournalfør,
+    useManuellJournalførContext,
 } from '../../context/ManuellJournalførContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import { FagsakProvider } from '../Fagsak/FagsakContext';
@@ -26,7 +26,7 @@ const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
 `;
 
 const ManuellJournalførContent: React.FC = () => {
-    const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalfør();
+    const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalførContext();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
