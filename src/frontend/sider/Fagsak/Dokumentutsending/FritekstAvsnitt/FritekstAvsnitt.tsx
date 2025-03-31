@@ -1,21 +1,15 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { Textarea } from '@navikt/ds-react';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 
-const StyledTextArea = styled(Textarea)`
-    margin: 1rem 0;
-`;
-
 const maksLengdeFritekstAvsnitt = 1000;
-const InnhenteOpplysningerKlage = () => {
+const FritekstAvsnitt = () => {
     const { skjema } = useDokumentutsending();
 
     return (
-        <StyledTextArea
+        <Textarea
             label="Skriv inn fritekst avsnitt"
             value={skjema.felter.fritekstAvsnitt.verdi}
             maxLength={maksLengdeFritekstAvsnitt}
@@ -30,4 +24,4 @@ const InnhenteOpplysningerKlage = () => {
     );
 };
 
-export default InnhenteOpplysningerKlage;
+export default FritekstAvsnitt;
