@@ -7,10 +7,7 @@ import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
-import {
-    ManuellJournalførProvider,
-    useManuellJournalførContext,
-} from '../../context/ManuellJournalførContext';
+import { ManuellJournalførProvider, useManuellJournalførContext } from './ManuellJournalførContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import { FagsakProvider } from '../Fagsak/FagsakContext';
 import Personlinje from '../Fagsak/Personlinje/Personlinje';

@@ -4,10 +4,10 @@ import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
-import { useManuellJournalførContext } from '../../../context/ManuellJournalførContext';
 import type { OptionType } from '../../../typer/common';
 import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
+import { useManuellJournalførContext } from '../ManuellJournalførContext';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
     return {

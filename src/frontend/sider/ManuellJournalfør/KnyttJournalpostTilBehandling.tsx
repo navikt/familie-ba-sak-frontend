@@ -6,8 +6,8 @@ import { Alert, BodyShort, Checkbox, Heading, Table, VStack } from '@navikt/ds-r
 import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
+import { useManuellJournalførContext } from './ManuellJournalførContext';
 import { useApp } from '../../context/AppContext';
-import { useManuellJournalførContext } from '../../context/ManuellJournalførContext';
 import { behandlingsstatuser, BehandlingStatus, behandlingstyper } from '../../typer/behandling';
 import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../typer/journalføringsbehandling';
 import { ToggleNavn } from '../../typer/toggles';

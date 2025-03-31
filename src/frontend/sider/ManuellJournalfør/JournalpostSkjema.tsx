@@ -12,7 +12,7 @@ import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
-import { useManuellJournalførContext } from '../../context/ManuellJournalførContext';
+import { useManuellJournalførContext } from './ManuellJournalførContext';
 import Knapperekke from '../../komponenter/Knapperekke';
 import { FagsakType } from '../../typer/fagsak';
 import type { OppgavetypeFilter } from '../../typer/oppgave';

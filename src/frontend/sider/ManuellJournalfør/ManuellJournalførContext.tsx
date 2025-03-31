@@ -32,41 +32,41 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from './AppContext';
-import { useKlageApi } from '../api/useKlageApi';
-import useDokument from '../hooks/useDokument';
-import type { IOpprettBehandlingSkjemaBase } from '../sider/Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
-import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
-import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import type { IBehandlingstema } from '../typer/behandlingstema';
-import { behandlingstemaer } from '../typer/behandlingstema';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakType } from '../typer/fagsak';
+import { useKlageApi } from '../../api/useKlageApi';
+import { useApp } from '../../context/AppContext';
+import useDokument from '../../hooks/useDokument';
+import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
+import type { IBehandlingstema } from '../../typer/behandlingstema';
+import { behandlingstemaer } from '../../typer/behandlingstema';
+import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakType } from '../../typer/fagsak';
 import {
     type Journalføringsbehandling,
     opprettJournalføringsbehandlingFraBarnetrygdbehandling,
     opprettJournalføringsbehandlingFraKlagebehandling,
-} from '../typer/journalføringsbehandling';
-import type { IKlagebehandling } from '../typer/klage';
-import { Klagebehandlingstype } from '../typer/klage';
+} from '../../typer/journalføringsbehandling';
+import type { IKlagebehandling } from '../../typer/klage';
+import { Klagebehandlingstype } from '../../typer/klage';
 import type {
     IDataForManuellJournalføring,
     IRestJournalføring,
     TilknyttetBehandling,
-} from '../typer/manuell-journalføring';
-import { JournalpostKanal } from '../typer/manuell-journalføring';
+} from '../../typer/manuell-journalføring';
+import { JournalpostKanal } from '../../typer/manuell-journalføring';
 import {
     type IRestLukkOppgaveOgKnyttJournalpost,
     finnBehandlingstemaFraOppgave,
-} from '../typer/oppgave';
-import { OppgavetypeFilter } from '../typer/oppgave';
-import type { IPersonInfo } from '../typer/person';
-import { Adressebeskyttelsegradering } from '../typer/person';
-import type { ISamhandlerInfo } from '../typer/samhandler';
-import type { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../typer/toggles';
-import { isoStringTilDate } from '../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
+} from '../../typer/oppgave';
+import { OppgavetypeFilter } from '../../typer/oppgave';
+import type { IPersonInfo } from '../../typer/person';
+import { Adressebeskyttelsegradering } from '../../typer/person';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
+import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../../typer/toggles';
+import { isoStringTilDate } from '../../utils/dato';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
+import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
+import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
     journalpostTittel: string;
