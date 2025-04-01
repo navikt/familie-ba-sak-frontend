@@ -11,12 +11,12 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../typer/behandling';
-import { BehandlingResultat, Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
-import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
-import { useApp } from '../AppContext';
+import { useApp } from '../../../../context/AppContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../typer/behandling';
+import { BehandlingResultat, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
+import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
 
 const useBehandlingssteg = (
     oppdaterBehandling: (behandling: Ressurs<IBehandling>) => void,

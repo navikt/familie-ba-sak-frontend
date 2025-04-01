@@ -5,9 +5,9 @@ import { useLocation, useNavigate } from 'react-router';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
+import useBehandlingApi from './useBehandlingApi';
+import useBehandlingssteg from './useBehandlingssteg';
 import { useApp } from '../../../../context/AppContext';
-import useBehandlingApi from '../../../../context/behandlingContext/useBehandlingApi';
-import useBehandlingssteg from '../../../../context/behandlingContext/useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from '../../../../context/behandlingContext/util';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type {
