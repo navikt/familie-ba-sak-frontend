@@ -1,9 +1,14 @@
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import type { IPar } from '../typer/common';
-import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '../typer/oppgave';
-import { behandlingstypeFilter, enhetFilter } from '../typer/oppgave';
-import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
+import type { IPar } from '../../typer/common';
+import type {
+    BehandlingstypeFilter,
+    EnhetFilter,
+    IOppgave,
+    IOppgaveIdent,
+} from '../../typer/oppgave';
+import { behandlingstypeFilter, enhetFilter } from '../../typer/oppgave';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 export enum Sorteringsnøkkel {
     OPPRETTET_TIDSPUNKT = 'opprettetTidspunkt',

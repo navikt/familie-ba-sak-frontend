@@ -23,14 +23,10 @@ import {
 
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
+import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
+import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useApp } from '../../context/AppContext';
-import {
-    type IOppgaveRad,
-    Sorteringsnøkkel,
-    sorterEtterNøkkel,
-} from '../../context/OppgaverContextUtils';
-import { mapIOppgaverTilOppgaveRad } from '../../context/OppgaverContextUtils';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { FagsakStatus } from '../../typer/fagsak';
