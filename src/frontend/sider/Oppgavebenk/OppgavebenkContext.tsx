@@ -23,8 +23,8 @@ import {
 
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
-import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
-import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
+import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
+import { mapIOppgaverTilOppgaveRad } from './utils';
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useApp } from '../../context/AppContext';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';

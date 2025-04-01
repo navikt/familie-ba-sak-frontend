@@ -9,7 +9,7 @@ import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { intDatoTilNorskDato, Sorteringsnøkkel } from './OppgaverContextUtils';
+import { intDatoTilNorskDato, Sorteringsnøkkel } from './utils';
 import {
     type GjelderFilter,
     gjelderFilter,
