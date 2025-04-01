@@ -21,7 +21,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import Oppgavebenk from './Oppgavebenk';
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
 import { useFagsakApi } from '../../api/useFagsakApi';
@@ -77,7 +76,7 @@ interface OppgaverContextValue {
 
 const OppgaverContext = createContext<OppgaverContextValue | undefined>(undefined);
 
-const OppgaverProvider = (props: PropsWithChildren) => {
+export const OppgaverProvider = (props: PropsWithChildren) => {
     const navigate = useNavigate();
     const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
@@ -493,12 +492,4 @@ export const useOppgaverContext = () => {
         throw new Error('useOppgaverContext må brukes innenfor en OppgaverProvider');
     }
     return context;
-};
-
-export const Oppgaver: React.FC = () => {
-    return (
-        <OppgaverProvider>
-            <Oppgavebenk />
-        </OppgaverProvider>
-    );
 };

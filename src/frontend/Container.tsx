@@ -14,7 +14,7 @@ import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
-import { Oppgaver } from './sider/Oppgavebenk/OppgaverContext';
+import { Oppgaver } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
