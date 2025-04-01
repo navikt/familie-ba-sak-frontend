@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 import { Button, Loader } from '@navikt/ds-react';
 
-import { useOppgaverContext } from './OppgaverContext';
+import { useOppgavebenkContext } from './OppgaverContext';
 import { useApp } from '../../context/AppContext';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IOppgave } from '../../typer/oppgave';
@@ -17,7 +17,7 @@ interface IOppgaveDirektelenke {
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useApp();
-    const { gåTilFagsakEllerVisFeilmelding } = useOppgaverContext();
+    const { gåTilFagsakEllerVisFeilmelding } = useOppgavebenkContext();
     const { sjekkTilgang } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
     const navigate = useNavigate();

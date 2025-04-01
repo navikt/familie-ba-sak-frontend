@@ -56,7 +56,7 @@ export const oppgaveSideLimit = 15;
 
 const maksAntallOppgaver = 150;
 
-interface OppgaverContextValue {
+interface OppgavebenkContextValue {
     oppgaverader: IOppgaveRad[];
     fordelOppgave: (oppgave: IOppgave, saksbehandler: string) => void;
     hentOppgaver: () => void;
@@ -74,9 +74,9 @@ interface OppgaverContextValue {
     sorterteOppgaverader: IOppgaveRad[];
 }
 
-const OppgaverContext = createContext<OppgaverContextValue | undefined>(undefined);
+const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(undefined);
 
-export const OppgaverProvider = (props: PropsWithChildren) => {
+export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const navigate = useNavigate();
     const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
@@ -462,7 +462,7 @@ export const OppgaverProvider = (props: PropsWithChildren) => {
     };
 
     return (
-        <OppgaverContext.Provider
+        <OppgavebenkContext.Provider
             value={{
                 oppgaverader,
                 fordelOppgave,
@@ -482,12 +482,12 @@ export const OppgaverProvider = (props: PropsWithChildren) => {
             }}
         >
             {props.children}
-        </OppgaverContext.Provider>
+        </OppgavebenkContext.Provider>
     );
 };
 
-export const useOppgaverContext = () => {
-    const context = useContext(OppgaverContext);
+export const useOppgavebenkContext = () => {
+    const context = useContext(OppgavebenkContext);
     if (context === undefined) {
         throw new Error('useOppgaverContext må brukes innenfor en OppgaverProvider');
     }

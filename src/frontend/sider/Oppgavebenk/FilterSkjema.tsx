@@ -5,7 +5,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IOppgaveFelt } from './oppgavefelter';
-import { useOppgaverContext } from './OppgaverContext';
+import { useOppgavebenkContext } from './OppgaverContext';
 import { useApp } from '../../context/AppContext';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
@@ -20,7 +20,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         settVerdiPåOppgaveFelt,
         tilbakestillOppgaveFelter,
         validerSkjema,
-    } = useOppgaverContext();
+    } = useOppgavebenkContext();
 
     const tilOppgaveFeltKomponent = (oppgaveFelt: IOppgaveFelt): ReactElement | null => {
         switch (oppgaveFelt.filter?.type) {
