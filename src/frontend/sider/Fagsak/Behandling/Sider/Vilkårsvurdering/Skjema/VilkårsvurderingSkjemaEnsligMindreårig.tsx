@@ -4,7 +4,7 @@ import { Alert } from '@navikt/ds-react';
 
 import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { useVilkårsvurderingContext } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
@@ -24,7 +24,7 @@ interface IProps {
 
 const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
     const { vurderErLesevisning } = useBehandling();
-    const { vilkårsvurdering } = useVilkårsvurdering();
+    const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const personResultat = vilkårsvurdering.find(
         (value: IPersonResultat) => value.person.type === PersonType.BARN

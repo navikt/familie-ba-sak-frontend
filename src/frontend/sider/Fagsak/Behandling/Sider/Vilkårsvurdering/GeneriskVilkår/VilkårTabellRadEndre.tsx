@@ -31,7 +31,7 @@ import {
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
-    useVilkårsvurdering,
+    useVilkårsvurderingContext,
     VilkårSubmit,
 } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -99,7 +99,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     lesevisning,
 }) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurdering();
+        useVilkårsvurderingContext();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
         useBehandling();

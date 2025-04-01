@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
-    useVilkårsvurdering,
+    useVilkårsvurderingContext,
     VilkårSubmit,
 } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { OptionType } from '../../../../../../typer/common';
@@ -44,7 +44,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
     const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
-    const { vilkårSubmit } = useVilkårsvurdering();
+    const { vilkårSubmit } = useVilkårsvurderingContext();
 
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
         vilkårType,

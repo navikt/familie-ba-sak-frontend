@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import constate from 'constate';
-
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 import type { IBehandling } from '../../typer/behandling';
@@ -18,7 +17,7 @@ import type {
     VilkårType,
 } from '../../typer/vilkår';
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
@@ -29,7 +28,30 @@ export enum VilkårSubmit {
     NONE,
 }
 
-const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehandling }: IProps) => {
+interface VilkårsvurderingContextValue {
+    settVilkårsvurdering: React.Dispatch<React.SetStateAction<IPersonResultat[]>>;
+    vilkårsvurdering: IPersonResultat[];
+    vilkårSubmit: VilkårSubmit;
+    settVilkårSubmit: React.Dispatch<React.SetStateAction<VilkårSubmit>>;
+    putVilkår: (
+        vilkårsvurderingForPerson: IPersonResultat,
+        redigerbartVilkår: FeltState<IVilkårResultat>
+    ) => Promise<Ressurs<IBehandling>>;
+    putAnnenVurdering: (
+        redigerbartAnnenVurdering: FeltState<IAnnenVurdering>
+    ) => Promise<Ressurs<IBehandling>>;
+    deleteVilkår: (personIdent: string, vilkårId: number) => Promise<Ressurs<IBehandling>>;
+    postVilkår: (personIdent: string, vilkårType: VilkårType) => Promise<Ressurs<IBehandling>>;
+    erVilkårsvurderingenGyldig: () => boolean;
+    hentVilkårMedFeil: () => IVilkårResultat[];
+    hentAndreVurderingerMedFeil: () => IAnnenVurdering[];
+}
+
+const VilkårsvurderingContext = React.createContext<VilkårsvurderingContextValue | undefined>(
+    undefined
+);
+
+export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps) => {
     const { request } = useHttp();
     const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
@@ -181,19 +203,34 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         );
     };
 
-    return {
-        deleteVilkår,
-        postVilkår,
-        erVilkårsvurderingenGyldig,
-        hentVilkårMedFeil,
-        hentAndreVurderingerMedFeil,
-        vilkårSubmit,
-        putVilkår,
-        putAnnenVurdering,
-        settVilkårSubmit,
-        settVilkårsvurdering,
-        vilkårsvurdering,
-    };
-});
+    return (
+        <VilkårsvurderingContext.Provider
+            value={{
+                deleteVilkår,
+                postVilkår,
+                erVilkårsvurderingenGyldig,
+                hentVilkårMedFeil,
+                hentAndreVurderingerMedFeil,
+                vilkårSubmit,
+                putVilkår,
+                putAnnenVurdering,
+                settVilkårSubmit,
+                settVilkårsvurdering,
+                vilkårsvurdering,
+            }}
+        >
+            {children}
+        </VilkårsvurderingContext.Provider>
+    );
+};
 
-export { VilkårsvurderingProvider, useVilkårsvurdering };
+export const useVilkårsvurderingContext = () => {
+    const context = React.useContext(VilkårsvurderingContext);
+
+    if (context === undefined) {
+        throw new Error(
+            'useVilkårsvurderingContext må brukes innenfor en VilkårsvurderingProvider'
+        );
+    }
+    return context;
+};

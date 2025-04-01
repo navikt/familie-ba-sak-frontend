@@ -15,7 +15,7 @@ import {
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
-    useVilkårsvurdering,
+    useVilkårsvurderingContext,
     VilkårSubmit,
 } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -55,7 +55,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     settEkspandertAnnenVurdering,
 }) => {
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurdering();
+        useVilkårsvurderingContext();
 
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();

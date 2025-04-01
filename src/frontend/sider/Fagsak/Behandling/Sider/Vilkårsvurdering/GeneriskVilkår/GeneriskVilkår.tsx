@@ -13,7 +13,7 @@ import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
-    useVilkårsvurdering,
+    useVilkårsvurderingContext,
     VilkårSubmit,
 } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -50,7 +50,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 }) => {
     const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();
-    const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
+    const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
