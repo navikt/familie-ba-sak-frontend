@@ -1,4 +1,4 @@
-import { BehandlingSteg, hentStegNummer } from '../../typer/behandling';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 
 export const saksbehandlerHarKunLesevisning = (
     innloggetSaksbehandlerSkrivetilgang: boolean,

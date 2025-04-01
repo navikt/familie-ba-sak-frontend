@@ -7,8 +7,8 @@ import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
+import { saksbehandlerHarKunLesevisning } from './utils';
 import { useApp } from '../../../../context/AppContext';
-import { saksbehandlerHarKunLesevisning } from '../../../../context/behandlingContext/util';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type {
     BehandlingSteg,
