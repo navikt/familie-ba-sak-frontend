@@ -53,7 +53,6 @@ export const oppgaveSideLimit = 15;
 const maksAntallOppgaver = 150;
 
 interface OppgavebenkContextValue {
-    oppgaverader: IOppgaveRad[];
     fordelOppgave: (oppgave: IOppgave, saksbehandler: string) => void;
     hentOppgaver: () => void;
     oppgaveFelter: IOppgaveFelter;
@@ -460,7 +459,6 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
     return (
         <OppgavebenkContext.Provider
             value={{
-                oppgaverader,
                 fordelOppgave,
                 hentOppgaver,
                 oppgaveFelter,
