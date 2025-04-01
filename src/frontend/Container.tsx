@@ -14,7 +14,7 @@ import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
-import { Oppgaver } from './sider/Oppgavebenk/Oppgavebenk';
+import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
@@ -67,7 +67,7 @@ const Container: React.FC = () => {
                                 <Route path="/internstatistikk" element={<Internstatistikk />} />
                                 <Route path="/infotrygd" element={<Infotrygd />} />
                                 <Route path="/samhandler" element={<Samhandler />} />
-                                <Route path="/oppgaver" element={<Oppgaver />} />
+                                <Route path="/oppgaver" element={<Oppgavebenk />} />
                                 <Route path="/" element={<Navigate to="/oppgaver" />} />
                             </Routes>
                         </Main>

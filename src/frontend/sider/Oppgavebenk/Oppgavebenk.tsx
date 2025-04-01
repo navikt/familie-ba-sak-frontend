@@ -19,7 +19,7 @@ const Container = styled.article`
     }
 `;
 
-const Oppgavebenk: React.FunctionComponent = () => {
+const OppgavebenkInnhold: React.FunctionComponent = () => {
     return (
         <Container>
             <VStack gap="4">
@@ -30,10 +30,10 @@ const Oppgavebenk: React.FunctionComponent = () => {
     );
 };
 
-export const Oppgaver: React.FC = () => {
+export const Oppgavebenk: React.FC = () => {
     return (
         <OppgaverProvider>
-            <Oppgavebenk />
+            <OppgavebenkInnhold />
         </OppgaverProvider>
     );
 };
