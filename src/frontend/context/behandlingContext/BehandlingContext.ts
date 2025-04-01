@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useHentOgSettBehandling } from './HentOgSettBehandlingContext';
+import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './util';
@@ -42,7 +42,7 @@ interface Props {
 const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { minimalFagsakRessurs } = useFagsakContext();
-    const { settBehandlingRessurs } = useHentOgSettBehandling();
+    const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
     const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
     const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
 
