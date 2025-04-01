@@ -3,11 +3,7 @@ import { differenceInMilliseconds } from 'date-fns';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import {
-    kjørValidering,
-    validerAnnenVurdering,
-    validerVilkår,
-} from '../../../../../context/Vilkårsvurdering/validering';
+import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 import type { IGrunnlagPerson } from '../../../../../typer/person';
 import { PersonTypeVisningsRangering } from '../../../../../typer/person';
 import type {

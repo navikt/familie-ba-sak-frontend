@@ -4,9 +4,12 @@
 
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
-import { genererPerson, genererPersonresultat } from './TestData';
-import { mapFraRestPersonResultatTilPersonResultat } from '../../../sider/Fagsak/Behandling/Sider/Vilkårsvurdering/utils';
-import { kjørValidering } from '../validering';
+import { mapFraRestPersonResultatTilPersonResultat } from './utils';
+import { kjørValidering } from './validering';
+import {
+    genererPerson,
+    genererPersonresultat,
+} from '../../../../../testdata/vilkårsvurderingTestdata';
 
 describe('vilkårsvurdering/validering', () => {
     describe('validering', () => {

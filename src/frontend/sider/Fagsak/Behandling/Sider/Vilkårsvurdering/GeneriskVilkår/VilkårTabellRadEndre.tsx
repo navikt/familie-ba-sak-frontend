@@ -29,7 +29,6 @@ import {
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
@@ -46,6 +45,7 @@ import {
     VilkårType,
 } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
+import { validerVilkår } from '../validering';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
