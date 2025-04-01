@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 
 import { Button, Loader } from '@navikt/ds-react';
 
+import { useOppgaverContext } from './OppgaverContext';
 import { useApp } from '../../context/AppContext';
-import { useOppgaverContext } from '../../context/OppgaverContext';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IOppgave } from '../../typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';

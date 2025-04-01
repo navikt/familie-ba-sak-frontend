@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from 'react';
 import { Alert, BodyShort, Button, HGrid } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
+import { useOppgaverContext } from './OppgaverContext';
 import { useApp } from '../../context/AppContext';
-import { useOppgaverContext } from '../../context/OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';

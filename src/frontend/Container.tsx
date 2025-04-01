@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { useApp } from './context/AppContext';
-import { Oppgaver } from './context/OppgaverContext';
 import { TidslinjeProvider } from './context/TidslinjeContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
@@ -15,6 +14,7 @@ import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
+import { Oppgaver } from './sider/Oppgavebenk/OppgaverContext';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 

@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { oppgaveSideLimit, useOppgaverContext } from '../../context/OppgaverContext';
+import { oppgaveSideLimit, useOppgaverContext } from './OppgaverContext';
 import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
 import {
     type GjelderFilter,

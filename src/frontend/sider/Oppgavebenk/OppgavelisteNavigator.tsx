@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { oppgaveSideLimit, useOppgaverContext } from '../../context/OppgaverContext';
+import { oppgaveSideLimit, useOppgaverContext } from './OppgaverContext';
 import type { IOppgave } from '../../typer/oppgave';
 
 const StyledSpan = styled.span`

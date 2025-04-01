@@ -21,31 +21,35 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from './AppContext';
-import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
-import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
-import { useFagsakApi } from '../api/useFagsakApi';
-import { AlertType, ToastTyper } from '../komponenter/Toast/typer';
-import Oppgavebenk from '../sider/Oppgavebenk/Oppgavebenk';
-import type { IOppgaveFelt, IOppgaveFelter } from '../sider/Oppgavebenk/oppgavefelter';
-import { initialOppgaveFelter } from '../sider/Oppgavebenk/oppgavefelter';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakStatus } from '../typer/fagsak';
-import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
+import Oppgavebenk from './Oppgavebenk';
+import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
+import { initialOppgaveFelter } from './oppgavefelter';
+import { useFagsakApi } from '../../api/useFagsakApi';
+import { useApp } from '../../context/AppContext';
+import {
+    type IOppgaveRad,
+    Sorteringsnøkkel,
+    sorterEtterNøkkel,
+} from '../../context/OppgaverContextUtils';
+import { mapIOppgaverTilOppgaveRad } from '../../context/OppgaverContextUtils';
+import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
+import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakStatus } from '../../typer/fagsak';
+import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../../typer/oppgave';
 import {
     BehandlingstypeFilter,
     EnhetFilter,
     OppgavetypeFilter,
     SaksbehandlerFilter,
-} from '../typer/oppgave';
-import { erIsoStringGyldig } from '../utils/dato';
-import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
-import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+} from '../../typer/oppgave';
+import { erIsoStringGyldig } from '../../utils/dato';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import {
     Sorteringsrekkefølge,
     hentSortState,
     hentNesteSorteringsrekkefølge,
-} from '../utils/tabell';
+} from '../../utils/tabell';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
