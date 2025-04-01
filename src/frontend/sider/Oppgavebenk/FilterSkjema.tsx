@@ -4,8 +4,8 @@ import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
-import { useOppgavebenkContext } from './OppgaverContext';
 import { useApp } from '../../context/AppContext';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';

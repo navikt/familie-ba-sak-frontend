@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 import { Button, Loader } from '@navikt/ds-react';
 
-import { useOppgavebenkContext } from './OppgaverContext';
+import { useOppgavebenkContext } from './OppgavebenkContext';
 import { useApp } from '../../context/AppContext';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IOppgave } from '../../typer/oppgave';

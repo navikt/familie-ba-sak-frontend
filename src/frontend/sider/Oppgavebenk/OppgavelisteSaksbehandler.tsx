@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { Alert, BodyShort, Button, HGrid } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import { useOppgavebenkContext } from './OppgaverContext';
+import { useOppgavebenkContext } from './OppgavebenkContext';
 import { useApp } from '../../context/AppContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';

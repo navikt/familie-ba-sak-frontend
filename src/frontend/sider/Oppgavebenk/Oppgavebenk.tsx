@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { VStack } from '@navikt/ds-react';
 
+import { OppgavebenkProvider } from './OppgavebenkContext';
 import OppgaveHeader from './OppgaveHeader';
 import OppgaveList from './OppgaveList';
-import { OppgavebenkProvider } from './OppgaverContext';
 
 const Container = styled.article`
     padding: 0.5rem;

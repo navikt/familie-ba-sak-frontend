@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { oppgaveSideLimit, useOppgavebenkContext } from './OppgaverContext';
 import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
 import {
     type GjelderFilter,
