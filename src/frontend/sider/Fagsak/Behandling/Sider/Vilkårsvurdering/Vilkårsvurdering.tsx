@@ -15,8 +15,8 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
+import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurderingContext } from '../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';

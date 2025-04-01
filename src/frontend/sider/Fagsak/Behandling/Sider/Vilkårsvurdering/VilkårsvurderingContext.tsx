@@ -5,8 +5,8 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
-import type { IBehandling } from '../../typer/behandling';
+import { mapFraRestVilkårsvurderingTilUi } from '../../../../../context/Vilkårsvurdering/vilkårsvurdering';
+import type { IBehandling } from '../../../../../typer/behandling';
 import type {
     IAnnenVurdering,
     IPersonResultat,
@@ -15,7 +15,7 @@ import type {
     IRestPersonResultat,
     IVilkårResultat,
     VilkårType,
-} from '../../typer/vilkår';
+} from '../../../../../typer/vilkår';
 
 interface IProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;

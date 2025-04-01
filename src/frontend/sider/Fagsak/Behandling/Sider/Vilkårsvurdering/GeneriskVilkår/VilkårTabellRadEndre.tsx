@@ -30,10 +30,6 @@ import {
 } from './VilkårTabell';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
-import {
-    useVilkårsvurderingContext,
-    VilkårSubmit,
-} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
@@ -50,6 +46,7 @@ import {
     VilkårType,
 } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
     person: IGrunnlagPerson;

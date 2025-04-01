@@ -4,7 +4,6 @@ import { Alert } from '@navikt/ds-react';
 
 import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurderingContext } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
@@ -17,6 +16,7 @@ import {
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
+import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 
 interface IProps {
     visFeilmeldinger: boolean;

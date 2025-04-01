@@ -17,7 +17,7 @@ import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtak
 import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
-import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
