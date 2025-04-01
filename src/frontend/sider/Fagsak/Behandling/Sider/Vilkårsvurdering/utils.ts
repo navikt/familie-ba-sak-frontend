@@ -3,23 +3,27 @@ import { differenceInMilliseconds } from 'date-fns';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
-import type { IGrunnlagPerson } from '../../typer/person';
-import { PersonTypeVisningsRangering } from '../../typer/person';
+import {
+    kjørValidering,
+    validerAnnenVurdering,
+    validerVilkår,
+} from '../../../../../context/Vilkårsvurdering/validering';
+import type { IGrunnlagPerson } from '../../../../../typer/person';
+import { PersonTypeVisningsRangering } from '../../../../../typer/person';
 import type {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
-} from '../../typer/vilkår';
-import { Resultat } from '../../typer/vilkår';
-import type { IIsoDatoPeriode } from '../../utils/dato';
+} from '../../../../../typer/vilkår';
+import { Resultat } from '../../../../../typer/vilkår';
+import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import {
     isoStringTilDate,
     isoStringTilDateMedFallback,
     nyIsoDatoPeriode,
     tidenesEnde,
-} from '../../utils/dato';
+} from '../../../../../utils/dato';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -28,7 +32,7 @@ import {
     erUtdypendeVilkårsvurderingerGyldig,
     ikkeValider,
     lagInitiellFelt,
-} from '../../utils/validators';
+} from '../../../../../utils/validators';
 
 const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     if (!periodeA.fom && !periodeA.tom) {

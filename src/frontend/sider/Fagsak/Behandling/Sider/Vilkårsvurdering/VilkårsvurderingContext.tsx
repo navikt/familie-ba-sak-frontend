@@ -5,7 +5,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { mapFraRestVilkårsvurderingTilUi } from '../../../../../context/Vilkårsvurdering/vilkårsvurdering';
+import { mapFraRestVilkårsvurderingTilUi } from './utils';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type {
     IAnnenVurdering,
