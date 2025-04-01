@@ -12,7 +12,6 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
@@ -27,6 +26,7 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface Props {
     åpenBehandling: IBehandling;

@@ -8,9 +8,9 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from './behandlingContext/BehandlingContext';
 import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
+import { useBehandlingContext } from '../sider/Fagsak/Behandling/context/BehandlingContext';
 import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import type { IBehandling } from '../typer/behandling';
 import { BehandlingUnderkategori } from '../typer/behandlingstema';

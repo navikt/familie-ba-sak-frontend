@@ -12,7 +12,6 @@ import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,
 } from './AnnenVurderingTabell';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
@@ -26,6 +25,7 @@ import type {
     IPersonResultat,
 } from '../../../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 
 interface IProps {

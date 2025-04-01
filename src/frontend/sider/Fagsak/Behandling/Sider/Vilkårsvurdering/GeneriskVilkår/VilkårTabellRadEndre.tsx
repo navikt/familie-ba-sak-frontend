@@ -28,7 +28,6 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
@@ -50,6 +49,7 @@ import {
     VilkårType,
 } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     person: IGrunnlagPerson;

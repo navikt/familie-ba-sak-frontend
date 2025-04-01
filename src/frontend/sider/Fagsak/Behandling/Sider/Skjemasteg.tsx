@@ -16,10 +16,10 @@ import {
 
 import type { ISide } from './sider';
 import { sider } from './sider';
-import { useBehandlingContext } from '../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { behandlingErEtterSteg } from '../../../../utils/steg';
+import { useBehandlingContext } from '../context/BehandlingContext';
 
 interface IProps extends PropsWithChildren {
     className?: string;

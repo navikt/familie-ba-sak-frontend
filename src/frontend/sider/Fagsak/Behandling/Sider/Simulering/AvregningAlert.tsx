@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Alert, BodyLong, Button, Link, List } from '@navikt/ds-react';
 
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { erProd } from '../../../../../utils/miljø';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;

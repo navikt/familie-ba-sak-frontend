@@ -9,7 +9,6 @@ import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-ele
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { OptionType } from '../../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../../typer/vedtak';
@@ -19,6 +18,7 @@ import {
     hentBakgrunnsfarge,
     hentBorderfarge,
 } from '../../../../../../../utils/vedtakUtils';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';

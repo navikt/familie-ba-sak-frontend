@@ -13,13 +13,13 @@ import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 interface ISimuleringProps {

@@ -18,7 +18,6 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import {
     utenlandskPeriodeBeløpIntervaller,
@@ -27,6 +26,7 @@ import {
 } from '../../../../../../../typer/eøsPerioder';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 import { StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';

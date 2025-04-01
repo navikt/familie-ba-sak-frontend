@@ -6,7 +6,6 @@ import { Alert } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
@@ -18,6 +17,7 @@ import {
     AnnenVurderingType,
     vilkårConfigInstitusjon,
 } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

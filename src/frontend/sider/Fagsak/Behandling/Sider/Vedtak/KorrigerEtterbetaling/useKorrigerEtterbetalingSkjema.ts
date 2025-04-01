@@ -7,12 +7,12 @@ import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import { erÅrsakForKorrigeringGyldig, erEtterbetalingsbeløpGyldig } from './validering';
 import { useApp } from '../../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { ToastTyper, AlertType } from '../../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IRestKorrigertEtterbetaling } from '../../../../../../typer/vedtak';
 import { KorrigertEtterbetalingÅrsak } from '../../../../../../typer/vedtak';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IKorrigerEtterbetalingSkjema {
     årsak: string;

@@ -9,13 +9,13 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '../../../../../../typer/vilkår';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     person: IGrunnlagPerson;

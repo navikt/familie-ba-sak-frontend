@@ -11,7 +11,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -21,6 +20,7 @@ import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     person: IGrunnlagPerson;

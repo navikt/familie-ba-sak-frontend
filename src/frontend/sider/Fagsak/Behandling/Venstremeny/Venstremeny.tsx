@@ -20,8 +20,8 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useBehandlingContext } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import { useBehandlingContext } from '../context/BehandlingContext';
 import type { IUnderside } from '../Sider/sider';
 import { erSidenAktiv } from '../Sider/sider';
 

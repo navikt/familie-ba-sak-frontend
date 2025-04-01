@@ -8,9 +8,9 @@ import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { summerBeløpForPerioder } from '../utils';
 
 interface IRefusjonEøs {

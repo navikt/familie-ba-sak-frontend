@@ -3,9 +3,9 @@ import React from 'react';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { FagsakType } from '../../../../../../typer/fagsak';
 import { useFagsakContext } from '../../../../FagsakContext';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     visFeilmeldinger: boolean;

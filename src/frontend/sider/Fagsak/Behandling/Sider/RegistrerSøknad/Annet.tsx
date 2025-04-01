@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { Heading, Textarea } from '@navikt/ds-react';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const AnnetWrapper = styled.div`
     margin: 2rem 0;

@@ -8,12 +8,12 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import DatovelgerForGammelSkjemaløsning from '../../../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat } from '../../../../../../typer/vilkår';
 import type { IsoDatoString } from '../../../../../../utils/dato';
 import { dagensDato, nyIsoDatoPeriode } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;

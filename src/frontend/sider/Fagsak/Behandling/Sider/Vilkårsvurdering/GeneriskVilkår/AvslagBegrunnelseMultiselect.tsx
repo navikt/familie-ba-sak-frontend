@@ -6,7 +6,6 @@ import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elemen
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -20,6 +19,7 @@ import {
 import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 interface IProps {

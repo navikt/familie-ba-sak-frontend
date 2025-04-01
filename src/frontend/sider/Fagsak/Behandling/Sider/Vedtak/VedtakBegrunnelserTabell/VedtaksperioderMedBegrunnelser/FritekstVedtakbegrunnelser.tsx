@@ -17,11 +17,11 @@ import {
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import Knapperekke from '../../../../../../../komponenter/Knapperekke';
 import { målform } from '../../../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const FritekstContainer = styled.div`

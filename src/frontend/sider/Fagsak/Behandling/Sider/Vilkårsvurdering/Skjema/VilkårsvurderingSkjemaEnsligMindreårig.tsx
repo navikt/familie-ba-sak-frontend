@@ -3,7 +3,6 @@ import React from 'react';
 import { Alert } from '@navikt/ds-react';
 
 import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
@@ -14,6 +13,7 @@ import {
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

@@ -6,10 +6,10 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useInstitusjon } from './useInstitusjon';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { SamhandlerTabell } from '../../../../../komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 const StyledSkjemasteg = styled(Skjemasteg)`

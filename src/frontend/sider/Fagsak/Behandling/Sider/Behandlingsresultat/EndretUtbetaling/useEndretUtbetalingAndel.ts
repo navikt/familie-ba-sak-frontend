@@ -7,7 +7,6 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
@@ -17,6 +16,7 @@ import {
     erIsoStringGyldig,
     validerGyldigDato,
 } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
 import type { Utbetaling } from '../Utbetaling';
 

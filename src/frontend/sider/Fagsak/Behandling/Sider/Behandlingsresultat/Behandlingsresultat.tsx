@@ -21,7 +21,6 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -36,6 +35,7 @@ import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 const EndretUtbetalingAndel = styled.div`

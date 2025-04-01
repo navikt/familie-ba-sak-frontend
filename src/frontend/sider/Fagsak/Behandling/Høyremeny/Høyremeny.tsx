@@ -10,10 +10,10 @@ import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 import Behandlingskort from './Behandlingskort';
 import Hendelsesoversikt from './Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from './Hendelsesoversikt/typer';
-import { useBehandlingContext } from '../../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../../typer/logg';
 import type { IPersonInfo } from '../../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { useBehandlingContext } from '../context/BehandlingContext';
 
 interface Props {
     bruker: IPersonInfo;

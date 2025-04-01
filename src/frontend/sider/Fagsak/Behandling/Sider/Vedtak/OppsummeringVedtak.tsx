@@ -11,7 +11,6 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -19,6 +18,7 @@ import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../.
 import type { IPersonInfo } from '../../../../../typer/person';
 import { erBehandlingMedVedtaksbrevutsending } from '../../../../../utils/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
 

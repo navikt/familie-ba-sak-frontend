@@ -7,9 +7,9 @@ import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
 import { useRefusjonEøs } from './useRefusjonEøs';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IRefusjonEøsPeriode {
     refusjonEøs: IRestRefusjonEøs;

@@ -17,12 +17,12 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingStatus } from '../../../../../../typer/behandling';
 import type { ITotrinnskontrollData } from '../../../../../../typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import type { ITrinn } from '../../../Sider/sider';
 import { KontrollertStatus } from '../../../Sider/sider';
 

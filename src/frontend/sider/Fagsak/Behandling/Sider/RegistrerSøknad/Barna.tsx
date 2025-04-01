@@ -7,7 +7,6 @@ import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
@@ -16,6 +15,7 @@ import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../..
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../../utils/dato';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;

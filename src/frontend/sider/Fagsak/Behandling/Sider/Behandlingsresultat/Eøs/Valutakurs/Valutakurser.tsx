@@ -20,7 +20,6 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
 import { useApp } from '../../../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import {
     Behandlingstype,
     type IBehandling,
@@ -32,6 +31,7 @@ import {
     Vurderingsform,
 } from '../../../../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../../../../typer/toggles';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const ValutakurserContainer = styled.div`
     margin-top: 5rem;

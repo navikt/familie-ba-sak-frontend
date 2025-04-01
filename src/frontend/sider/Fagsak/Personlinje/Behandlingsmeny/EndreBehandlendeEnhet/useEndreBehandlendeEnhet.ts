@@ -9,9 +9,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IRestEndreBehandlendeEnhet } from '../../../../../typer/enhet';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
     const { request } = useHttp();

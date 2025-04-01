@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 import { useHttp } from '@navikt/familie-http';
 
 import { useApp } from '../../../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
     type IBehandling,
 } from '../../../../../../../typer/behandling';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 export const useOppdaterValutakursOgSimuleringPåBeslutterSteg = () => {
     const { hentSaksbehandlerRolle } = useApp();

@@ -5,10 +5,10 @@ import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     lukkModal: () => void;

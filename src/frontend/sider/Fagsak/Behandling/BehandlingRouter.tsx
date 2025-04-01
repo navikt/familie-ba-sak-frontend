@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import { useBehandlingContext } from './context/BehandlingContext';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
@@ -12,7 +13,6 @@ import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
-import { useBehandlingContext } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
 import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';

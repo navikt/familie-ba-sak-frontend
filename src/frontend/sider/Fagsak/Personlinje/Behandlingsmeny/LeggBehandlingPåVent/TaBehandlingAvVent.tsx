@@ -12,11 +12,11 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const StyledBodyShort = styled(BodyShort)`
     padding-bottom: 1rem;

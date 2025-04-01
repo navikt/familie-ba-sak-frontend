@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const SettEllerOppdaterVenting: React.FC = () => {
     const { behandling } = useBehandlingContext();

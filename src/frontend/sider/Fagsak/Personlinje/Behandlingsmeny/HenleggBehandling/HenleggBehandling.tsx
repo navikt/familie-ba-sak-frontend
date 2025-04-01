@@ -9,12 +9,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 interface IProps {
     fagsakId: number;

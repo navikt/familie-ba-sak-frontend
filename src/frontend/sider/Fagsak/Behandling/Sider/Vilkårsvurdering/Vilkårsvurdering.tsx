@@ -15,7 +15,6 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -25,6 +24,7 @@ import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkå
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 const UregistrerteBarnListe = styled.ol`

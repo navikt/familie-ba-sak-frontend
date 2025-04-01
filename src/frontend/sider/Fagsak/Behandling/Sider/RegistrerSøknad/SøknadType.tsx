@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
 import {
     behandlingUnderkategori,
     BehandlingUnderkategori,
 } from '../../../../../typer/behandlingstema';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const StyledRadioGroup = styled(RadioGroup)`
     margin: 2rem 0;

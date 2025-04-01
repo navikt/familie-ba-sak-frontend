@@ -6,7 +6,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
 import type {
@@ -27,6 +26,7 @@ import {
     isEmpty,
     isNumeric,
 } from '../../../../../../../utils/eøsValidators';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const erBeløpGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> => {
     if (!felt.verdi || isEmpty(felt.verdi) || typeof felt.verdi != 'string') {

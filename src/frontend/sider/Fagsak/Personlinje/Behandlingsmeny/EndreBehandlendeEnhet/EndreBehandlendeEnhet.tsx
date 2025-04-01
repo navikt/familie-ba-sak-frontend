@@ -5,11 +5,11 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
 import type { IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
 import { behandendeEnheter } from '../../../../../typer/enhet';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const EndreBehandlendeEnhet: React.FC = () => {
     const { behandling, vurderErLesevisning, erBehandleneEnhetMidlertidig } =

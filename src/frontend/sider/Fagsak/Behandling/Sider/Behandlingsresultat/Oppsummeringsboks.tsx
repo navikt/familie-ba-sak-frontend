@@ -16,7 +16,6 @@ import {
     kanLeggeSmåbarnstilleggTilPeriode,
 } from './OppsummeringsboksUtils';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -38,6 +37,7 @@ import {
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../../../utils/formatter';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const AlertWithBottomMargin = styled(Alert)`
     margin-bottom: 1.5rem;

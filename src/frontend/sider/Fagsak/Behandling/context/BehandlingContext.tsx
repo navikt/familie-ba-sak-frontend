@@ -5,11 +5,32 @@ import { useLocation, useNavigate } from 'react-router';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
-import useBehandlingApi from './useBehandlingApi';
-import useBehandlingssteg from './useBehandlingssteg';
-import { saksbehandlerHarKunLesevisning } from './util';
-import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import type { ISide, ITrinn, SideId } from '../../sider/Fagsak/Behandling/Sider/sider';
+import { useApp } from '../../../../context/AppContext';
+import useBehandlingApi from '../../../../context/behandlingContext/useBehandlingApi';
+import useBehandlingssteg from '../../../../context/behandlingContext/useBehandlingssteg';
+import { saksbehandlerHarKunLesevisning } from '../../../../context/behandlingContext/util';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import type {
+    BehandlingSteg,
+    IBehandling,
+    IOpprettBehandlingData,
+    ISettPåVent,
+} from '../../../../typer/behandling';
+import {
+    BehandlerRolle,
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingÅrsak,
+} from '../../../../typer/behandling';
+import { harTilgangTilEnhet } from '../../../../typer/enhet';
+import { FagsakType } from '../../../../typer/fagsak';
+import type { ILogg } from '../../../../typer/logg';
+import { PersonType } from '../../../../typer/person';
+import { Målform } from '../../../../typer/søknad';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../../../utils/behandling';
+import { hentSideHref } from '../../../../utils/miljø';
+import { useFagsakContext } from '../../FagsakContext';
 import {
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
@@ -17,29 +38,8 @@ import {
     hentTrinnForBehandling,
     KontrollertStatus,
     sider,
-} from '../../sider/Fagsak/Behandling/Sider/sider';
-import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
-import type {
-    BehandlingSteg,
-    IBehandling,
-    IOpprettBehandlingData,
-    ISettPåVent,
-} from '../../typer/behandling';
-import {
-    BehandlerRolle,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-} from '../../typer/behandling';
-import { harTilgangTilEnhet } from '../../typer/enhet';
-import { FagsakType } from '../../typer/fagsak';
-import type { ILogg } from '../../typer/logg';
-import { PersonType } from '../../typer/person';
-import { Målform } from '../../typer/søknad';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
-import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
-import { hentSideHref } from '../../utils/miljø';
-import { useApp } from '../AppContext';
+} from '../Sider/sider';
+import type { ISide, ITrinn, SideId } from '../Sider/sider';
 
 interface Props extends React.PropsWithChildren {
     behandling: IBehandling;

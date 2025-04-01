@@ -5,7 +5,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type {
     IFeilutbetaltValutaSkjemaFelter,
@@ -14,6 +13,7 @@ import type {
 } from '../../../../../../typer/eøs-feilutbetalt-valuta';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../utils/dato';
 import { erPositivtHeltall } from '../../../../../../utils/validators';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     behandlingId: number;

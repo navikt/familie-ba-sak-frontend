@@ -6,7 +6,7 @@ import { Alert, Button, ErrorMessage, Textarea, VStack } from '@navikt/ds-react'
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useSammensattKontrollsak } from './useSammensattKontrollsak';
-import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const StyledVStack = styled(VStack)`
     margin-bottom: ${ASpacing6};

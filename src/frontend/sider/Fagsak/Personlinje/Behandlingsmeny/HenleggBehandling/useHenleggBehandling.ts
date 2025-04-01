@@ -4,9 +4,9 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../../../FagsakContext';
 

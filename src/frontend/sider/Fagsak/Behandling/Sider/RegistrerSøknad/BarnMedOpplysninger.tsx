@@ -5,11 +5,11 @@ import styled from 'styled-components';
 
 import { BodyShort, Button, Checkbox } from '@navikt/ds-react';
 
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
 import Slett from '../../../../../ikoner/Slett';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../../../utils/formatter';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface IProps {
     barn: IBarnMedOpplysninger;

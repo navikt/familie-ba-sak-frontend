@@ -16,12 +16,12 @@ import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
-import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { vedtakHarFortsattUtbetaling } from '../../../../../utils/vedtakUtils';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface IVedtakmenyProps {
     åpenBehandling: IBehandling;
