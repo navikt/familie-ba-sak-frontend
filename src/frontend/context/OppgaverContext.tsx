@@ -1,7 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type PropsWithChildren,
+} from 'react';
 
 import type { AxiosError } from 'axios';
-import createUseContext from 'constate';
 import { useNavigate } from 'react-router';
 
 import type { SortState } from '@navikt/ds-react';
@@ -47,7 +53,27 @@ export const oppgaveSideLimit = 15;
 
 const maksAntallOppgaver = 150;
 
-const [OppgaverProvider, useOppgaver] = createUseContext(() => {
+interface OppgaverContextValue {
+    oppgaverader: IOppgaveRad[];
+    fordelOppgave: (oppgave: IOppgave, saksbehandler: string) => void;
+    hentOppgaver: () => void;
+    oppgaveFelter: IOppgaveFelter;
+    oppgaver: Ressurs<IHentOppgaveDto>;
+    side: number;
+    settSide: (side: number) => void;
+    settVerdiPåOppgaveFelt: (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => void;
+    tilbakestillFordelingPåOppgave: (oppgave: IOppgave) => void;
+    tilbakestillOppgaveFelter: () => void;
+    validerSkjema: () => boolean;
+    gåTilFagsakEllerVisFeilmelding: (personident: string) => Promise<void>;
+    sortering: SortState | undefined;
+    settOgLagreSortering: (sorteringsnøkkel: Sorteringsnøkkel) => void;
+    sorterteOppgaverader: IOppgaveRad[];
+}
+
+const OppgaverContext = createContext<OppgaverContextValue | undefined>(undefined);
+
+const OppgaverProvider = (props: PropsWithChildren) => {
     const navigate = useNavigate();
     const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
@@ -432,30 +458,43 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
-    return {
-        oppgaverader,
-        fordelOppgave,
-        hentOppgaver,
-        oppgaveFelter,
-        oppgaver,
-        side,
-        settSide,
-        settVerdiPåOppgaveFelt,
-        tilbakestillFordelingPåOppgave,
-        tilbakestillOppgaveFelter,
-        validerSkjema,
-        gåTilFagsakEllerVisFeilmelding,
-        sortering,
-        settOgLagreSortering,
-        sorterteOppgaverader,
-    };
-});
-const Oppgaver: React.FC = () => {
+    return (
+        <OppgaverContext.Provider
+            value={{
+                oppgaverader,
+                fordelOppgave,
+                hentOppgaver,
+                oppgaveFelter,
+                oppgaver,
+                side,
+                settSide,
+                settVerdiPåOppgaveFelt,
+                tilbakestillFordelingPåOppgave,
+                tilbakestillOppgaveFelter,
+                validerSkjema,
+                gåTilFagsakEllerVisFeilmelding,
+                sortering,
+                settOgLagreSortering,
+                sorterteOppgaverader,
+            }}
+        >
+            {props.children}
+        </OppgaverContext.Provider>
+    );
+};
+
+export const useOppgaverContext = () => {
+    const context = useContext(OppgaverContext);
+    if (context === undefined) {
+        throw new Error('useOppgaverContext må brukes innenfor en OppgaverProvider');
+    }
+    return context;
+};
+
+export const Oppgaver: React.FC = () => {
     return (
         <OppgaverProvider>
             <Oppgavebenk />
         </OppgaverProvider>
     );
 };
-
-export { Oppgaver, useOppgaver };

@@ -6,7 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
-import { useOppgaver } from '../../context/OppgaverContext';
+import { useOppgaverContext } from '../../context/OppgaverContext';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
@@ -20,7 +20,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         settVerdiPåOppgaveFelt,
         tilbakestillOppgaveFelter,
         validerSkjema,
-    } = useOppgaver();
+    } = useOppgaverContext();
 
     const tilOppgaveFeltKomponent = (oppgaveFelt: IOppgaveFelt): ReactElement | null => {
         switch (oppgaveFelt.filter?.type) {
