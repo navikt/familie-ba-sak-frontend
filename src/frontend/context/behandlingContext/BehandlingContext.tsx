@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import createUseContext from 'constate';
 import { useLocation, useNavigate } from 'react-router';
 
-import { RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
@@ -20,7 +19,12 @@ import {
     sider,
 } from '../../sider/Fagsak/Behandling/Sider/sider';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
-import type { BehandlingSteg, IBehandling } from '../../typer/behandling';
+import type {
+    BehandlingSteg,
+    IBehandling,
+    IOpprettBehandlingData,
+    ISettPåVent,
+} from '../../typer/behandling';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -29,17 +33,61 @@ import {
 } from '../../typer/behandling';
 import { harTilgangTilEnhet } from '../../typer/enhet';
 import { FagsakType } from '../../typer/fagsak';
+import type { ILogg } from '../../typer/logg';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
 
-interface Props {
+interface Props extends React.PropsWithChildren {
     behandling: IBehandling;
 }
 
-const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Props) => {
+interface BehandlingContextValue {
+    vurderErLesevisning: (
+        sjekkTilgangTilEnhet?: boolean,
+        skalIgnorereOmEnhetErMidlertidig?: boolean
+    ) => boolean;
+    forrigeÅpneSide: ISide | undefined;
+    hentStegPåÅpenBehandling: () => BehandlingSteg | undefined;
+    leggTilBesøktSide: (besøktSide: SideId) => void;
+    settIkkeKontrollerteSiderTilManglerKontroll: () => void;
+    søkersMålform: Målform;
+    trinnPåBehandling: { [sideId: string]: ITrinn };
+    behandling: IBehandling;
+    opprettBehandling: (data: IOpprettBehandlingData) => Promise<void | Ressurs<IBehandling>>;
+    logg: Ressurs<ILogg[]>;
+    hentLogg: () => void;
+    behandlingsstegSubmitressurs: Ressurs<IBehandling>;
+    vilkårsvurderingNesteOnClick: () => void;
+    behandlingresultatNesteOnClick: () => void;
+    oppdaterRegisteropplysninger: () => Promise<Ressurs<IBehandling>>;
+    sendTilBeslutterNesteOnClick: (
+        settVisModal: (visModal: boolean) => void,
+        erUlagretNyFeilutbetaltValuta: boolean,
+        erUlagretNyRefusjonEøs: boolean,
+        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>,
+        erSammensattKontrollsak: boolean
+    ) => void;
+    erMigreringsbehandling: boolean;
+    aktivSettPåVent?: ISettPåVent | undefined;
+    erBehandleneEnhetMidlertidig?: boolean;
+    åpenHøyremeny: boolean;
+    settÅpenHøyremeny: (åpenHøyremeny: boolean) => void;
+    åpenVenstremeny: boolean;
+    settÅpenVenstremeny: (åpenVenstremeny: boolean) => void;
+    erBehandlingAvsluttet: boolean;
+    gjelderInstitusjon: boolean;
+    samhandlerOrgnr: string | undefined;
+    gjelderEnsligMindreårig: boolean;
+    settÅpenBehandling: (behandling: Ressurs<IBehandling>) => void;
+}
+
+const BehandlingContext = createContext<BehandlingContextValue | undefined>(undefined);
+
+export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { minimalFagsakRessurs } = useFagsakContext();
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
@@ -210,36 +258,50 @@ const [BehandlingProvider, useBehandling] = createUseContext(({ behandling }: Pr
         ? minimalFagsakRessurs.data.institusjon?.orgNummer
         : undefined;
 
-    return {
-        vurderErLesevisning,
-        forrigeÅpneSide,
-        hentStegPåÅpenBehandling,
-        leggTilBesøktSide,
-        settIkkeKontrollerteSiderTilManglerKontroll,
-        søkersMålform,
-        trinnPåBehandling,
-        behandling: behandling,
-        opprettBehandling,
-        logg,
-        hentLogg,
-        behandlingsstegSubmitressurs,
-        vilkårsvurderingNesteOnClick,
-        behandlingresultatNesteOnClick,
-        oppdaterRegisteropplysninger,
-        sendTilBeslutterNesteOnClick,
-        erMigreringsbehandling,
-        aktivSettPåVent: behandling?.aktivSettPåVent,
-        erBehandleneEnhetMidlertidig,
-        åpenHøyremeny,
-        settÅpenHøyremeny,
-        åpenVenstremeny,
-        settÅpenVenstremeny,
-        erBehandlingAvsluttet,
-        gjelderInstitusjon,
-        samhandlerOrgnr,
-        gjelderEnsligMindreårig,
-        settÅpenBehandling: settBehandlingRessurs,
-    };
-});
+    return (
+        <BehandlingContext.Provider
+            value={{
+                vurderErLesevisning,
+                forrigeÅpneSide,
+                hentStegPåÅpenBehandling,
+                leggTilBesøktSide,
+                settIkkeKontrollerteSiderTilManglerKontroll,
+                søkersMålform,
+                trinnPåBehandling,
+                behandling: behandling,
+                opprettBehandling,
+                logg,
+                hentLogg,
+                behandlingsstegSubmitressurs,
+                vilkårsvurderingNesteOnClick,
+                behandlingresultatNesteOnClick,
+                oppdaterRegisteropplysninger,
+                sendTilBeslutterNesteOnClick,
+                erMigreringsbehandling,
+                aktivSettPåVent: behandling?.aktivSettPåVent,
+                erBehandleneEnhetMidlertidig,
+                åpenHøyremeny,
+                settÅpenHøyremeny,
+                åpenVenstremeny,
+                settÅpenVenstremeny,
+                erBehandlingAvsluttet,
+                gjelderInstitusjon,
+                samhandlerOrgnr,
+                gjelderEnsligMindreårig,
+                settÅpenBehandling: settBehandlingRessurs,
+            }}
+        >
+            {children}
+        </BehandlingContext.Provider>
+    );
+};
 
-export { BehandlingProvider, useBehandling };
+export const useBehandlingContext = () => {
+    const context = useContext(BehandlingContext);
+
+    if (context === undefined) {
+        throw new Error('useBehandlingContext må brukes innenfor en BehandlingProvider');
+    }
+
+    return context;
+};

@@ -6,7 +6,7 @@ import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
 import Meldingerknapp from './Meldingerknapp';
 import TotrinnskontrollKnapp from './TotrinnskontrollKnapp';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import { Tabs } from '../typer';
 
@@ -23,7 +23,7 @@ const StyledHeader = styled.header`
 `;
 
 const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) => {
-    const { vurderErLesevisning, behandling } = useBehandling();
+    const { vurderErLesevisning, behandling } = useBehandlingContext();
 
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 

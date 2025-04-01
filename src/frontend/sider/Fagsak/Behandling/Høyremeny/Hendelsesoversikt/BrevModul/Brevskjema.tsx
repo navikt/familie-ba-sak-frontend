@@ -31,7 +31,7 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../../hooks/useDokument';
 import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
@@ -96,7 +96,8 @@ const StyledCombobox = styled(UNSAFE_Combobox)`
 `;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
+    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } =
+        useBehandlingContext();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 

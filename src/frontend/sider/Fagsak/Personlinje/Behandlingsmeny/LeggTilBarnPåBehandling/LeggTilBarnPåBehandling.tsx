@@ -22,7 +22,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../../../../../typer/person';
 import { adressebeskyttelsestyper } from '../../../../../typer/person';
@@ -36,7 +36,7 @@ const LeggTilBarnLegend = styled.div`
 
 const LeggTilBarnPåBehandling: React.FC = () => {
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling } = useBehandling();
+    const { settÅpenBehandling, behandling } = useBehandlingContext();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 

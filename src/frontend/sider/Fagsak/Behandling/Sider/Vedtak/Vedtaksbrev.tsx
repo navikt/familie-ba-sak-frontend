@@ -12,7 +12,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
@@ -36,7 +36,7 @@ interface Props {
 export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
     const {
         hentForhåndsvisning,

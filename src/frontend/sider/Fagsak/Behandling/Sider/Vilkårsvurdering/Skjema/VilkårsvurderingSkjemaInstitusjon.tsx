@@ -6,7 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
@@ -50,7 +50,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     visFeilmeldinger,
     orgNummer,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurdering();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 

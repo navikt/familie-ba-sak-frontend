@@ -6,7 +6,7 @@ import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elemen
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -41,7 +41,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
     regelverk,
 }) => {
-    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();

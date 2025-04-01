@@ -5,7 +5,7 @@ import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../utils/dato';
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkModal }: IProps) => {
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandlingContext();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
     const opprinneligVedtaksdato = korrigertVedtak

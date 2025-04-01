@@ -12,7 +12,7 @@ import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
 import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
@@ -30,7 +30,7 @@ interface Props {
 
 const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
     const location = useLocation();
-    const { behandling, leggTilBesøktSide } = useBehandling();
+    const { behandling, leggTilBesøktSide } = useBehandlingContext();
     useTrackTidsbrukPåSide(fagsak, behandling);
 
     const sidevisning = hentSideHref(location.pathname);

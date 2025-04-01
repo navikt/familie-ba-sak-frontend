@@ -28,7 +28,7 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
@@ -102,7 +102,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         useVilkårsvurdering();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
-        useBehandling();
+        useBehandlingContext();
     const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);

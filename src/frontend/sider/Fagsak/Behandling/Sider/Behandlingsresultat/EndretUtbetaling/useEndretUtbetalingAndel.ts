@@ -7,7 +7,7 @@ import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
@@ -36,7 +36,7 @@ export const useEndretUtbetalingAndel = (
     åpenBehandling: IBehandling
 ) => {
     const { request } = useHttp();
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
         verdi: undefined,

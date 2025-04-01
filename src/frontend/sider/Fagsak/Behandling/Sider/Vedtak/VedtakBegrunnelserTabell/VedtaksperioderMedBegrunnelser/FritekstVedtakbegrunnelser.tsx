@@ -17,7 +17,7 @@ import {
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import Knapperekke from '../../../../../../../komponenter/Knapperekke';
 import { målform } from '../../../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../../../utils/fritekstfelter';
@@ -77,7 +77,7 @@ const ItalicText = styled(BodyLong)`
 `;
 
 const FritekstVedtakbegrunnelser: React.FC = () => {
-    const { vurderErLesevisning, søkersMålform } = useBehandling();
+    const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const {
         skjema,

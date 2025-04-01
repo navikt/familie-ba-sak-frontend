@@ -16,7 +16,7 @@ import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
@@ -45,7 +45,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visRefusjonEøs,
 }) => {
     const { minimalFagsak } = useFagsakContext();
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const {
         erSammensattKontrollsak,
         settErSammensattKontrollsak,

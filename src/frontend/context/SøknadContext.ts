@@ -8,7 +8,7 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from './behandlingContext/BehandlingContext';
+import { useBehandlingContext } from './behandlingContext/BehandlingContext';
 import useDeepEffect from '../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
@@ -31,7 +31,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             settÅpenBehandling,
             gjelderInstitusjon,
             gjelderEnsligMindreårig,
-        } = useBehandling();
+        } = useBehandlingContext();
         const { fagsakId } = useSakOgBehandlingParams();
         const navigate = useNavigate();
         const { bruker, minimalFagsakRessurs } = useFagsakContext();

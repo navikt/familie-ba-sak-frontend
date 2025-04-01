@@ -10,7 +10,7 @@ import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 import Behandlingskort from './Behandlingskort';
 import Hendelsesoversikt from './Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from './Hendelsesoversikt/typer';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../context/behandlingContext/BehandlingContext';
 import type { ILogg } from '../../../../typer/logg';
 import type { IPersonInfo } from '../../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
@@ -38,7 +38,7 @@ const Container = styled.div<{ $erÅpen: boolean }>`
 `;
 
 const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
-    const { behandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandling();
+    const { behandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandlingContext();
 
     React.useEffect(() => {
         hentLogg();

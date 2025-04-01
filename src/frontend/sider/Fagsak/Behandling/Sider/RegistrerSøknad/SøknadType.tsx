@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
 import {
     behandlingUnderkategori,
@@ -20,7 +20,7 @@ const StyledRadio = styled(Radio)`
 `;
 
 const SøknadType: React.FunctionComponent = () => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { skjema } = useSøknad();
 

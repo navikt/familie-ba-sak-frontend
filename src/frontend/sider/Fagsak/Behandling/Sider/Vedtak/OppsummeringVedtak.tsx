@@ -11,7 +11,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -40,7 +40,7 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandling();
+        useBehandlingContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
     const {

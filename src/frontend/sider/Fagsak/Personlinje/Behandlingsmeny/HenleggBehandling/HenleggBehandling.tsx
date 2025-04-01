@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useHenleggBehandling from './useHenleggBehandling';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
@@ -33,7 +33,7 @@ const StyledLenke = styled(Link)`
 `;
 
 const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
-    const { behandling } = useBehandling();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
 
     const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
@@ -44,7 +44,6 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
         hentetDokument,
         settVisDokumentModal,
     } = useDokument();
-    const { vurderErLesevisning } = useBehandling();
     const { toggles } = useApp();
 
     const {

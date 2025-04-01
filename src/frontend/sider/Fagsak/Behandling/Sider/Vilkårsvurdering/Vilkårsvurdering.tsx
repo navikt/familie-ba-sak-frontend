@@ -15,7 +15,7 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -56,7 +56,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         oppdaterRegisteropplysninger,
         vilkårsvurderingNesteOnClick,
         behandlingsstegSubmitressurs,
-    } = useBehandling();
+    } = useBehandlingContext();
 
     const erLesevisning = vurderErLesevisning();
 

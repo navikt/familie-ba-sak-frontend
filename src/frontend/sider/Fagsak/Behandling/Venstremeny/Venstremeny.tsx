@@ -20,7 +20,7 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IUnderside } from '../Sider/sider';
 import { erSidenAktiv } from '../Sider/sider';
@@ -80,7 +80,8 @@ const UndersideSirkel = styled.span`
 
 const Venstremeny: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } = useBehandling();
+    const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } =
+        useBehandlingContext();
 
     const stansNavigeringDersomSidenIkkeErAktiv = (
         event: React.MouseEvent,

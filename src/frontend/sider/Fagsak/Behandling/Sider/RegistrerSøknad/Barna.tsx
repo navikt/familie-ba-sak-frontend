@@ -7,7 +7,7 @@ import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../../../context/SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
@@ -31,7 +31,7 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 
 const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, behandling } =
-        useBehandling();
+        useBehandlingContext();
     const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();

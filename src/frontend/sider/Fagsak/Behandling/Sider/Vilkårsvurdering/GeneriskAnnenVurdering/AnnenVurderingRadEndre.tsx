@@ -12,7 +12,7 @@ import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,
 } from './AnnenVurderingTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { validerAnnenVurdering } from '../../../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
@@ -57,7 +57,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);

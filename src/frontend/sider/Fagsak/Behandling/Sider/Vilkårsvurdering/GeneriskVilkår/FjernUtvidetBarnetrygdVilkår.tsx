@@ -9,7 +9,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { VilkårType } from '../../../../../../typer/vilkår';
 
@@ -24,7 +24,7 @@ interface IProps {
 
 const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVilkårId }) => {
     const { request } = useHttp();
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const [visModal, settVisModal] = useState<boolean>(false);
     const [disabled, settDisabled] = useState<boolean>(false);
     const [visFrontendFeilmelding, settVisFrontendFeilmelding] = useState<boolean>(false);

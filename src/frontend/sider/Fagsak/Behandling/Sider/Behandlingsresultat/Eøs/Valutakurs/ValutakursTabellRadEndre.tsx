@@ -25,7 +25,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
@@ -90,7 +90,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     erManuellInputAvKurs,
     åpenBehandling,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
         åpenBehandling.vurderingsstrategiForValutakurser ===

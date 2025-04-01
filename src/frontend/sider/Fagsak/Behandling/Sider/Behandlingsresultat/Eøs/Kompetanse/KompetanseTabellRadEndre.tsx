@@ -8,7 +8,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../../../../typer/eøsPerioder';
 import {
@@ -50,7 +50,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     slettKompetanse,
     erAnnenForelderOmfattetAvNorskLovgivning,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const lesevisning = vurderErLesevisning(true);
 
     const visSubmitFeilmelding = () => {

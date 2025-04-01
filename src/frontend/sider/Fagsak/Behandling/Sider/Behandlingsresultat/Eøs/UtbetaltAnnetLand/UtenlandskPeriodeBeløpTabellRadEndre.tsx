@@ -18,7 +18,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import {
     utenlandskPeriodeBeløpIntervaller,
@@ -79,7 +79,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     toggleForm,
     slettUtenlandskPeriodeBeløp,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const lesevisning = vurderErLesevisning(true);
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {

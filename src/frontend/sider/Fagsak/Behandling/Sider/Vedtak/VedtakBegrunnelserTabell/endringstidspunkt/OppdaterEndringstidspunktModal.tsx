@@ -15,7 +15,7 @@ import {
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './useEndringstidspunkt';
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
 import { dateTilFormatertString, Datoformat } from '../../../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../../../utils/ressursUtils';
@@ -35,7 +35,7 @@ interface IProps {
 }
 
 export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, behandlingId }) => {
-    const erLesevisning = useBehandling().vurderErLesevisning();
+    const erLesevisning = useBehandlingContext().vurderErLesevisning();
     const { endringstidspunktRessurs, endringstidspunkt, skjema, oppdaterEndringstidspunkt } =
         useEndringstidspunkt({ behandlingId, lukkModal });
 

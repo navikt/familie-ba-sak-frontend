@@ -6,7 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useInstitusjon } from './useInstitusjon';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { SamhandlerTabell } from '../../../../../komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
@@ -28,7 +28,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     const { institusjon, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
         useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
-    const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandling();
+    const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {

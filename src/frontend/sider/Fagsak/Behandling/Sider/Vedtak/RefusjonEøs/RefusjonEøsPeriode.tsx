@@ -7,7 +7,7 @@ import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
 import { useRefusjonEøs } from './useRefusjonEøs';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 
@@ -29,7 +29,7 @@ const FlexRowDiv = styled.div`
 `;
 
 const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, behandlingId }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);

@@ -10,7 +10,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -72,7 +72,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         settÅpenBehandling,
         aktivSettPåVent,
         behandling,
-    } = useBehandling();
+    } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const kanLeggeTilUtvidetVilkår =

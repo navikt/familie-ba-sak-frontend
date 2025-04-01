@@ -28,7 +28,7 @@ const useBehandlingssteg = (
 
     const navigate = useNavigate();
 
-    const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
+    const [submitRessurs, settSubmitRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
 
     const vilkårsvurderingNesteOnClick = () => {
         settSubmitRessurs(byggHenterRessurs());

@@ -4,7 +4,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
@@ -14,7 +14,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const { minimalFagsak } = useFagsakContext();
 

@@ -9,7 +9,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
@@ -78,7 +78,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     settFokusPåKnapp,
 }) => {
-    const { vurderErLesevisning, behandling, aktivSettPåVent } = useBehandling();
+    const { vurderErLesevisning, behandling, aktivSettPåVent } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;

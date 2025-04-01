@@ -13,7 +13,7 @@ import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
@@ -53,7 +53,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
 
     const erAvregningOgToggleErPå =
         erAvregning && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];

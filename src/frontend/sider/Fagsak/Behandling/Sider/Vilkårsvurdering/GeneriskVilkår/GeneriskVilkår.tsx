@@ -11,7 +11,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -48,7 +48,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
     generiskVilkårKey,
 }) => {
-    const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
+    const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } =
+        useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 

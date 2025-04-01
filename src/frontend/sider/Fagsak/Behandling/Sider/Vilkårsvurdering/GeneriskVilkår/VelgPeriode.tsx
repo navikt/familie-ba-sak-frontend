@@ -8,7 +8,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import DatovelgerForGammelSkjemaløsning from '../../../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat } from '../../../../../../typer/vilkår';
@@ -42,7 +42,7 @@ const VelgPeriode: React.FC<IProps> = ({
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     return (

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useHttp } from '@navikt/familie-http';
 
 import { useApp } from '../../../../../../../context/AppContext';
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -14,7 +14,7 @@ import {
 export const useOppdaterValutakursOgSimuleringPåBeslutterSteg = () => {
     const { hentSaksbehandlerRolle } = useApp();
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling } = useBehandling();
+    const { settÅpenBehandling, behandling } = useBehandlingContext();
 
     useEffect(() => {
         if (

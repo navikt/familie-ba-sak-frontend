@@ -9,7 +9,7 @@ import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-ele
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { OptionType } from '../../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../../typer/vedtak';
@@ -32,7 +32,7 @@ const GroupLabel = styled.div`
 `;
 
 const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const skalIkkeEditeres =
         vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 

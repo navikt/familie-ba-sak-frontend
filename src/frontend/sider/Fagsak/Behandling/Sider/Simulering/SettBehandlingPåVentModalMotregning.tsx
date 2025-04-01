@@ -20,7 +20,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import {
     type IBehandling,
     type ISettPåVent,
@@ -48,7 +48,7 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
     lukkModal,
     behandling,
 }) => {
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const { request } = useHttp();
 

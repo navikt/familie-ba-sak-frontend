@@ -9,7 +9,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../../../typer/vilkår';
@@ -56,7 +56,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     annenVurdering,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
         vurderErLesevisning() || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT

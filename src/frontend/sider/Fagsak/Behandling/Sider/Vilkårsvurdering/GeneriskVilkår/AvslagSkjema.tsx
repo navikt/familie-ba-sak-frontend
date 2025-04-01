@@ -7,7 +7,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
 import type { IVilkårResultat } from '../../../../../../typer/vilkår';
 import { VedtaksbegrunnelseTeksterProvider } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
@@ -25,7 +25,7 @@ const AvslagSkjema: React.FC<IProps> = ({
     visFeilmeldinger,
     settVisFeilmeldingerForEttVilkår,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     return (

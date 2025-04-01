@@ -21,7 +21,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -85,7 +85,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 
     const { vurderErLesevisning, behandlingresultatNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandling();
+        useBehandlingContext();
 
     const {
         erEøsInformasjonGyldig,

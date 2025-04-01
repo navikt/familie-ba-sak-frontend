@@ -13,7 +13,7 @@ import {
     erSøkersAktivitetGyldig,
     erSøkersAktivitetslandGyldig,
 } from './valideringKompetanse';
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
 import type {
@@ -37,7 +37,7 @@ interface IProps {
 
 const useKompetansePeriodeSkjema = ({ barnIKompetanse, kompetanse }: IProps) => {
     const [erKompetanseEkspandert, settErKompetanseEkspandert] = React.useState<boolean>(false);
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { request } = useHttp();
 
     const initelFom = useFelt<string>({ verdi: kompetanse.fom });
