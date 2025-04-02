@@ -13,7 +13,7 @@ import type { SideId } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
-import OppsummeringVedtak from './Sider/Vedtak/Vedtak';
+import Vedtak from './Sider/Vedtak/Vedtak';
 import { VedtakStegProvider } from './Sider/Vedtak/VedtakStegContext';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
@@ -90,7 +90,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                     <SimuleringProvider åpenBehandling={behandling}>
                         <VedtakStegProvider åpenBehandling={behandling}>
                             <SammensattKontrollsakProvider åpenBehandling={behandling}>
-                                <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
+                                <Vedtak åpenBehandling={behandling} bruker={bruker} />
                             </SammensattKontrollsakProvider>
                         </VedtakStegProvider>
                     </SimuleringProvider>
