@@ -11,8 +11,8 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import { useVedtakStegContext } from './VedtakStegContext';
 import { useApp } from '../../../../../context/AppContext';
-import { useVedtakStegContext } from '../../../../../context/behandlingContext/VedtakStegContext';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';

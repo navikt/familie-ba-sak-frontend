@@ -4,9 +4,9 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../typer/behandling';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 
 interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;

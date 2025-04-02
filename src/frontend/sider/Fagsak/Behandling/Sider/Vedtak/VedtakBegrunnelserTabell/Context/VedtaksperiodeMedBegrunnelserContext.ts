@@ -15,7 +15,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useVedtakStegContext } from '../../../../../../../context/behandlingContext/VedtakStegContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
@@ -30,6 +29,7 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../../utils/fritekstfelter';
+import { useVedtakStegContext } from '../../VedtakStegContext';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
