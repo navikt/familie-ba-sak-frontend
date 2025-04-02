@@ -15,7 +15,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useVedtakStegContext } from '../../../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../../../context/behandlingContext/VedtakStegContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';

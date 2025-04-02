@@ -12,7 +12,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../../../context/AppContext';
-import { useVedtakStegContext } from '../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../context/behandlingContext/VedtakStegContext';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';

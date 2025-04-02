@@ -11,7 +11,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useVedtakStegContext } from '../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../context/behandlingContext/VedtakStegContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
