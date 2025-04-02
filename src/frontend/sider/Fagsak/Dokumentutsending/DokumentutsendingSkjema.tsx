@@ -195,7 +195,8 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                                 // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
                                 case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
                                     return toggles[ToggleNavn.selvstendigRettInfobrev];
-                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE: {
+                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
+                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: {
                                     return toggles[ToggleNavn.innhenteOpplysningerKlageBrev];
                                 }
                                 default:
@@ -239,7 +240,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     )}
 
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
-                    {skjema.felter.årsak.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE && (
+                    {skjema.felter.fritekstAvsnitt.erSynlig && (
                         <Box paddingBlock={'space-4 0'}>
                             <FritekstAvsnitt />
                         </Box>

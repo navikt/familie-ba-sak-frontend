@@ -41,6 +41,7 @@ export enum DokumentÅrsak {
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD = 'TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV = 'KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV',
     INNHENTE_OPPLYSNINGER_KLAGE = 'INNHENTE_OPPLYSNINGER_KLAGE',
+    INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON = 'INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -62,6 +63,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
         'Til forelder med selvstendig rett vi har fått F016 - kan søke om barnetrygd',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV: 'Kan ha rett til pengestøtte fra Nav',
     INNHENTE_OPPLYSNINGER_KLAGE: 'Innhente opplysninger klage',
+    INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: 'Innhente opplysninger klage TEMP: institusjon',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -115,7 +117,10 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             },
             avhengigheter: { årsakFelt: årsak },
             skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE;
+                return [
+                    DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE,
+                    DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON,
+                ].includes(avhengigheter.årsakFelt.verdi);
             },
         });
 
@@ -270,13 +275,14 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         };
 
         const hentInnhenteOpplysningerKlageSkjemaData = (
+            brevmal: Informasjonsbrev,
             målform: Målform
         ): IManueltBrevRequestPåFagsak => {
             return {
                 multiselectVerdier: [],
                 barnIBrev: [],
                 mottakerMålform: målform,
-                brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
+                brevmal: brevmal,
                 manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
                 fritekstAvsnitt: fritekstAvsnitt.verdi,
             };
@@ -347,7 +353,15 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             målform.verdi ?? Målform.NB
                         );
                     case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
-                        return hentInnhenteOpplysningerKlageSkjemaData(målform.verdi ?? Målform.NB);
+                        return hentInnhenteOpplysningerKlageSkjemaData(
+                            Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
+                            målform.verdi ?? Målform.NB
+                        );
+                    case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON:
+                        return hentInnhenteOpplysningerKlageSkjemaData(
+                            Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON,
+                            målform.verdi ?? Målform.NB
+                        );
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
