@@ -32,6 +32,7 @@ export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
     manuelleBrevmottakere: SkjemaBrevmottaker[];
     mottakerMålform: Målform;
     mottakerlandSed?: never;
+    fritekstAvsnitt?: string;
 }
 
 export enum Distribusjonskanal {

@@ -3,11 +3,12 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { useApp } from '../../../context/AppContext';
 import {
@@ -189,13 +190,18 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                 >
                     <option value="">Velg</option>
                     {Object.values(DokumentÅrsak)
-                        //TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
-                        .filter(
-                            årsak =>
-                                årsak !==
-                                    DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD ||
-                                toggles[ToggleNavn.selvstendigRettInfobrev]
-                        )
+                        .filter(årsak => {
+                            switch (årsak) {
+                                // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
+                                case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
+                                    return toggles[ToggleNavn.selvstendigRettInfobrev];
+                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE: {
+                                    return toggles[ToggleNavn.innhenteOpplysningerKlageBrev];
+                                }
+                                default:
+                                    return true;
+                            }
+                        })
                         .map(årsak => {
                             return (
                                 <option
@@ -233,6 +239,11 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     )}
 
                     {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
+                    {skjema.felter.årsak.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE && (
+                        <Box paddingBlock={'space-4 0'}>
+                            <FritekstAvsnitt />
+                        </Box>
+                    )}
                 </ÅrsakSkjema>
 
                 <MålformVelger
