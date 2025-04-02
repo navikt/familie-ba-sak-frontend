@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
+import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgave } from '../../typer/oppgave';
 
 const StyledSpan = styled.span`
@@ -20,7 +20,7 @@ const beregnAntallSider = (oppgaver: IOppgave[]): number =>
     Math.ceil(oppgaver.length / oppgaveSideLimit);
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
-    const { oppgaver, side, settSide } = useOppgaver();
+    const { oppgaver, side, settSide } = useOppgavebenkContext();
 
     if (oppgaver.status !== RessursStatus.SUKSESS) {
         return null;

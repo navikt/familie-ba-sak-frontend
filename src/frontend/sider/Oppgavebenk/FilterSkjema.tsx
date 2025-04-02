@@ -4,9 +4,9 @@ import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
 import { useApp } from '../../context/AppContext';
-import { useOppgaver } from '../../context/OppgaverContext';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
@@ -20,7 +20,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         settVerdiPåOppgaveFelt,
         tilbakestillOppgaveFelter,
         validerSkjema,
-    } = useOppgaver();
+    } = useOppgavebenkContext();
 
     const tilOppgaveFeltKomponent = (oppgaveFelt: IOppgaveFelt): ReactElement | null => {
         switch (oppgaveFelt.filter?.type) {

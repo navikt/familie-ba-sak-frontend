@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { useApp } from './context/AppContext';
-import { Oppgaver } from './context/OppgaverContext';
 import { TidslinjeProvider } from './context/TidslinjeContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
@@ -15,6 +14,7 @@ import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
+import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
@@ -67,7 +67,7 @@ const Container: React.FC = () => {
                                 <Route path="/internstatistikk" element={<Internstatistikk />} />
                                 <Route path="/infotrygd" element={<Infotrygd />} />
                                 <Route path="/samhandler" element={<Samhandler />} />
-                                <Route path="/oppgaver" element={<Oppgaver />} />
+                                <Route path="/oppgaver" element={<Oppgavebenk />} />
                                 <Route path="/" element={<Navigate to="/oppgaver" />} />
                             </Routes>
                         </Main>
