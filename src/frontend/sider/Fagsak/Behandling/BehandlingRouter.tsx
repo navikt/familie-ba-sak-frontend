@@ -6,6 +6,7 @@ import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
 import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
+import { SøknadProvider } from './Sider/RegistrerSøknad/SøknadContext';
 import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
@@ -14,7 +15,6 @@ import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
-import { SøknadProvider } from '../../../context/SøknadContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import { VilkårsvurderingProvider } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';

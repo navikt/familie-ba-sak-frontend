@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { Heading, Textarea } from '@navikt/ds-react';
 
+import { useSøknadContext } from './SøknadContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useSøknad } from '../../../../../context/SøknadContext';
 
 const AnnetWrapper = styled.div`
     margin: 2rem 0;
@@ -13,7 +13,7 @@ const AnnetWrapper = styled.div`
 
 const Annet: React.FunctionComponent = () => {
     const { vurderErLesevisning } = useBehandling();
-    const { skjema } = useSøknad();
+    const { skjema } = useSøknadContext();
     const lesevisning = vurderErLesevisning();
 
     return (
