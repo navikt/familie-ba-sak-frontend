@@ -483,7 +483,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
 export const useOppgavebenkContext = () => {
     const context = useContext(OppgavebenkContext);
     if (context === undefined) {
-        throw new Error('useOppgaverContext må brukes innenfor en OppgaverProvider');
+        throw new Error('useOppgavebenkContext må brukes innenfor en OppgavebenkProvider');
     }
     return context;
 };
