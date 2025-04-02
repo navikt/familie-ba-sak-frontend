@@ -9,7 +9,7 @@ import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../../../../../../utils/dato';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../../utils/dato';
-import { useVedtakContext } from '../../VedtakStegContext';
+import { useVedtakContext } from '../../VedtakContext';
 
 interface IProps {
     lukkModal: () => void;

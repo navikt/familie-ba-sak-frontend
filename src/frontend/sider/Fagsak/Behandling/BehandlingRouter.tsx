@@ -14,7 +14,7 @@ import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vedtak from './Sider/Vedtak/Vedtak';
-import { VedtakProvider } from './Sider/Vedtak/VedtakStegContext';
+import { VedtakProvider } from './Sider/Vedtak/VedtakContext';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';

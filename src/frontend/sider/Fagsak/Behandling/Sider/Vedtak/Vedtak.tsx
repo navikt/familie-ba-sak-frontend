@@ -8,10 +8,10 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useVedtakContext } from './VedtakStegContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';

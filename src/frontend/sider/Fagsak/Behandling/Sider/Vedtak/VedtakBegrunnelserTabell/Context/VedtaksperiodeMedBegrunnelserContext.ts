@@ -29,7 +29,7 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../../utils/fritekstfelter';
-import { useVedtakContext } from '../../VedtakStegContext';
+import { useVedtakContext } from '../../VedtakContext';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
