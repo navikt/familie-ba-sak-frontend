@@ -11,7 +11,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { Vedtaksalert } from './Vedtaksalert';
 import { Vedtaksbrev } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
@@ -49,7 +49,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisFeilutbetaltValuta,
         erUlagretNyFeilutbetaltValutaPeriode,
         erUlagretNyRefusjonEøsPeriode,
-    } = useVedtakSteg();
+    } = useVedtakStegContext();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 

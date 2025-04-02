@@ -15,7 +15,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useVedtakSteg } from '../../../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../../../context/behandlingContext/useVedtakSteg';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
@@ -48,7 +48,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
         const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] =
             useState<Ressurs<string[]>>(byggTomRessurs());
-        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
+        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakStegContext();
 
         const maksAntallKulepunkter = 3;
         const makslengdeFritekst = 350;

@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-import * as React from 'react';
-
-import constate from 'constate';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -11,28 +8,42 @@ import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../typer/vedtaksperiode';
 
-interface Props {
+interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
 }
+interface VedtakStegContextValue {
+    vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
+    settVedtaksperioderMedBegrunnelserRessurs: React.Dispatch<
+        React.SetStateAction<Ressurs<IVedtaksperiodeMedBegrunnelser[]>>
+    >;
+    hentVedtaksperioder: () => void;
+    visFeilutbetaltValuta: boolean;
+    settVisFeilutbetaltValuta: React.Dispatch<React.SetStateAction<boolean>>;
+    visRefusjonEøs: boolean;
+    settVisRefusjonEøs: React.Dispatch<React.SetStateAction<boolean>>;
+    erUlagretNyFeilutbetaltValutaPeriode: boolean;
+    settErUlagretNyFeilutbetaltValutaPeriode: React.Dispatch<React.SetStateAction<boolean>>;
+    erUlagretNyRefusjonEøsPeriode: boolean;
+    settErUlagretNyRefusjonEøsPeriode: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export const [VedtakStegProvider, useVedtakSteg] = constate(({ åpenBehandling }: Props) => {
+const VedtakStegContext = React.createContext<VedtakStegContextValue | undefined>(undefined);
+
+export const VedtakStegProvider = ({ åpenBehandling, children }: Props) => {
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
 
-    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = React.useState(
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = useState(
         åpenBehandling.feilutbetaltValuta.length > 0
     );
-    const [visRefusjonEøs, settVisRefusjonEøs] = React.useState(
-        åpenBehandling.refusjonEøs.length > 0
-    );
+    const [visRefusjonEøs, settVisRefusjonEøs] = useState(åpenBehandling.refusjonEøs.length > 0);
 
     const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
-        React.useState(false);
+        useState(false);
 
-    const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] =
-        React.useState(false);
+    const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] = useState(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
         settVisRefusjonEøs(åpenBehandling.refusjonEøs.length > 0);
     }, [åpenBehandling]);
@@ -54,17 +65,33 @@ export const [VedtakStegProvider, useVedtakSteg] = constate(({ åpenBehandling }
     const [vedtaksperioderMedBegrunnelserRessurs, settVedtaksperioderMedBegrunnelserRessurs] =
         useState<Ressurs<IVedtaksperiodeMedBegrunnelser[]>>(byggTomRessurs());
 
-    return {
-        vedtaksperioderMedBegrunnelserRessurs,
-        settVedtaksperioderMedBegrunnelserRessurs,
-        hentVedtaksperioder,
-        visFeilutbetaltValuta,
-        settVisFeilutbetaltValuta,
-        visRefusjonEøs,
-        settVisRefusjonEøs,
-        erUlagretNyFeilutbetaltValutaPeriode,
-        settErUlagretNyFeilutbetaltValutaPeriode,
-        erUlagretNyRefusjonEøsPeriode,
-        settErUlagretNyRefusjonEøsPeriode,
-    };
-});
+    return (
+        <VedtakStegContext.Provider
+            value={{
+                vedtaksperioderMedBegrunnelserRessurs,
+                settVedtaksperioderMedBegrunnelserRessurs,
+                hentVedtaksperioder,
+                visFeilutbetaltValuta,
+                settVisFeilutbetaltValuta,
+                visRefusjonEøs,
+                settVisRefusjonEøs,
+                erUlagretNyFeilutbetaltValutaPeriode,
+                settErUlagretNyFeilutbetaltValutaPeriode,
+                erUlagretNyRefusjonEøsPeriode,
+                settErUlagretNyRefusjonEøsPeriode,
+            }}
+        >
+            {children}
+        </VedtakStegContext.Provider>
+    );
+};
+
+export const useVedtakStegContext = () => {
+    const context = useContext(VedtakStegContext);
+
+    if (!context) {
+        throw new Error('useVedtakStegContext må brukes innenfor en VedtakStegProvider');
+    }
+
+    return context;
+};

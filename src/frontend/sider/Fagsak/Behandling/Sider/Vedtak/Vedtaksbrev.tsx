@@ -12,7 +12,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../../../context/AppContext';
-import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
+import { useVedtakStegContext } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
@@ -37,7 +37,6 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
     const { vurderErLesevisning } = useBehandlingContext();
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
     const {
         hentForhåndsvisning,
         nullstillDokument,
@@ -52,7 +51,8 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settVisFeilutbetaltValuta,
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
-    } = useVedtakSteg();
+        vedtaksperioderMedBegrunnelserRessurs,
+    } = useVedtakStegContext();
 
     const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
