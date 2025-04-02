@@ -1,5 +1,5 @@
-import type { IGrunnlagPerson } from '../../../typer/person';
-import type { IRestPersonResultat } from '../../../typer/vilkår';
+import type { IGrunnlagPerson } from '../typer/person';
+import type { IRestPersonResultat } from '../typer/vilkår';
 
 export const genererPersonresultat = (
     annenVurderingEnResultat: string,

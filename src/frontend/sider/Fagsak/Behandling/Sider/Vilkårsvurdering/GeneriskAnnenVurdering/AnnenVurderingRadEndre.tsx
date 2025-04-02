@@ -13,11 +13,6 @@ import {
     annenVurderingResultatFeilmeldingId,
 } from './AnnenVurderingTabell';
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { validerAnnenVurdering } from '../../../../../../context/Vilkårsvurdering/validering';
-import {
-    useVilkårsvurdering,
-    VilkårSubmit,
-} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type {
@@ -27,6 +22,8 @@ import type {
 } from '../../../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../../../typer/vilkår';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
+import { validerAnnenVurdering } from '../validering';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -55,7 +52,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     settEkspandertAnnenVurdering,
 }) => {
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurdering();
+        useVilkårsvurderingContext();
 
     const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
     const erLesevisning = vurderErLesevisning();

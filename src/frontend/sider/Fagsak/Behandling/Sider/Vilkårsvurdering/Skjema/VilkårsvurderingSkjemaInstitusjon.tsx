@@ -7,7 +7,6 @@ import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurdering } from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
 import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
@@ -21,6 +20,7 @@ import {
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
+import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 
 const AktørLinje = styled.div`
     display: flex;
@@ -51,7 +51,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     orgNummer,
 }) => {
     const { vurderErLesevisning } = useBehandling();
-    const { vilkårsvurdering } = useVilkårsvurdering();
+    const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     if (samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {

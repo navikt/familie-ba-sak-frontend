@@ -11,10 +11,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
-import {
-    useVilkårsvurdering,
-    VilkårSubmit,
-} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
@@ -33,6 +29,7 @@ import {
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
@@ -65,7 +62,7 @@ const VilkårDiv = styled.div`
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
-    const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
+    const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const {
         vurderErLesevisning,
         erMigreringsbehandling,
