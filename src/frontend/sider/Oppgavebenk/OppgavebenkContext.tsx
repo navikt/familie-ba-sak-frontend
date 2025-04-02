@@ -1,7 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type PropsWithChildren,
+} from 'react';
 
 import type { AxiosError } from 'axios';
-import createUseContext from 'constate';
 import { useNavigate } from 'react-router';
 
 import type { SortState } from '@navikt/ds-react';
@@ -15,31 +21,30 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from './AppContext';
-import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './OppgaverContextUtils';
-import { mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
-import { useFagsakApi } from '../api/useFagsakApi';
-import { AlertType, ToastTyper } from '../komponenter/Toast/typer';
-import Oppgavebenk from '../sider/Oppgavebenk/Oppgavebenk';
-import type { IOppgaveFelt, IOppgaveFelter } from '../sider/Oppgavebenk/oppgavefelter';
-import { initialOppgaveFelter } from '../sider/Oppgavebenk/oppgavefelter';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { FagsakStatus } from '../typer/fagsak';
-import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../typer/oppgave';
+import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
+import { initialOppgaveFelter } from './oppgavefelter';
+import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
+import { mapIOppgaverTilOppgaveRad } from './utils';
+import { useFagsakApi } from '../../api/useFagsakApi';
+import { useApp } from '../../context/AppContext';
+import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
+import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakStatus } from '../../typer/fagsak';
+import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '../../typer/oppgave';
 import {
     BehandlingstypeFilter,
     EnhetFilter,
     OppgavetypeFilter,
     SaksbehandlerFilter,
-} from '../typer/oppgave';
-import { erIsoStringGyldig } from '../utils/dato';
-import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
-import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+} from '../../typer/oppgave';
+import { erIsoStringGyldig } from '../../utils/dato';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import {
     Sorteringsrekkefølge,
     hentSortState,
     hentNesteSorteringsrekkefølge,
-} from '../utils/tabell';
+} from '../../utils/tabell';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
@@ -47,7 +52,26 @@ export const oppgaveSideLimit = 15;
 
 const maksAntallOppgaver = 150;
 
-const [OppgaverProvider, useOppgaver] = createUseContext(() => {
+interface OppgavebenkContextValue {
+    fordelOppgave: (oppgave: IOppgave, saksbehandler: string) => void;
+    hentOppgaver: () => void;
+    oppgaveFelter: IOppgaveFelter;
+    oppgaver: Ressurs<IHentOppgaveDto>;
+    side: number;
+    settSide: (side: number) => void;
+    settVerdiPåOppgaveFelt: (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => void;
+    tilbakestillFordelingPåOppgave: (oppgave: IOppgave) => void;
+    tilbakestillOppgaveFelter: () => void;
+    validerSkjema: () => boolean;
+    gåTilFagsakEllerVisFeilmelding: (personident: string) => Promise<void>;
+    sortering: SortState | undefined;
+    settOgLagreSortering: (sorteringsnøkkel: Sorteringsnøkkel) => void;
+    sorterteOppgaverader: IOppgaveRad[];
+}
+
+const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(undefined);
+
+export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const navigate = useNavigate();
     const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
@@ -432,30 +456,34 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
-    return {
-        oppgaverader,
-        fordelOppgave,
-        hentOppgaver,
-        oppgaveFelter,
-        oppgaver,
-        side,
-        settSide,
-        settVerdiPåOppgaveFelt,
-        tilbakestillFordelingPåOppgave,
-        tilbakestillOppgaveFelter,
-        validerSkjema,
-        gåTilFagsakEllerVisFeilmelding,
-        sortering,
-        settOgLagreSortering,
-        sorterteOppgaverader,
-    };
-});
-const Oppgaver: React.FC = () => {
     return (
-        <OppgaverProvider>
-            <Oppgavebenk />
-        </OppgaverProvider>
+        <OppgavebenkContext.Provider
+            value={{
+                fordelOppgave,
+                hentOppgaver,
+                oppgaveFelter,
+                oppgaver,
+                side,
+                settSide,
+                settVerdiPåOppgaveFelt,
+                tilbakestillFordelingPåOppgave,
+                tilbakestillOppgaveFelter,
+                validerSkjema,
+                gåTilFagsakEllerVisFeilmelding,
+                sortering,
+                settOgLagreSortering,
+                sorterteOppgaverader,
+            }}
+        >
+            {props.children}
+        </OppgavebenkContext.Provider>
     );
 };
 
-export { Oppgaver, useOppgaver };
+export const useOppgavebenkContext = () => {
+    const context = useContext(OppgavebenkContext);
+    if (context === undefined) {
+        throw new Error('useOppgavebenkContext må brukes innenfor en OppgavebenkProvider');
+    }
+    return context;
+};

@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
-import { intDatoTilNorskDato, Sorteringsnøkkel } from '../../context/OppgaverContextUtils';
+import { intDatoTilNorskDato, Sorteringsnøkkel } from './utils';
 import {
     type GjelderFilter,
     gjelderFilter,
@@ -47,7 +47,8 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
 `;
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgaver();
+    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } =
+        useOppgavebenkContext();
 
     const oppgaverPåDenneSiden = sorterteOppgaverader.slice(
         (side - 1) * oppgaveSideLimit,

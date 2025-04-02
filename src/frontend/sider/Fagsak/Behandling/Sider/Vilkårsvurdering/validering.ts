@@ -1,16 +1,16 @@
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
-import type { VedtakBegrunnelse } from '../../typer/vedtak';
+import type { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import type {
     IAnnenVurdering,
     IPersonResultat,
     IVilkårResultat,
     Resultat,
     UtdypendeVilkårsvurdering,
-} from '../../typer/vilkår';
-import { VilkårType } from '../../typer/vilkår';
-import type { IIsoDatoPeriode } from '../../utils/dato';
+} from '../../../../../typer/vilkår';
+import { VilkårType } from '../../../../../typer/vilkår';
+import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,

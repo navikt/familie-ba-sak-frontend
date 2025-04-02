@@ -11,16 +11,13 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
-import {
-    useVilkårsvurdering,
-    VilkårSubmit,
-} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -51,7 +48,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } =
         useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
-    const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
+    const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');

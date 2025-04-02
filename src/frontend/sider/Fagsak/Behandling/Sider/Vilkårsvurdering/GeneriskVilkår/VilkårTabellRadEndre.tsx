@@ -28,11 +28,6 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
-import { validerVilkår } from '../../../../../../context/Vilkårsvurdering/validering';
-import {
-    useVilkårsvurdering,
-    VilkårSubmit,
-} from '../../../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
@@ -50,6 +45,8 @@ import {
 } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { validerVilkår } from '../validering';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -99,7 +96,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     lesevisning,
 }) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurdering();
+        useVilkårsvurderingContext();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
         useBehandlingContext();

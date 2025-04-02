@@ -37,7 +37,7 @@ export const hentSisteIkkeHenlagteBehandling = (
     }
 };
 
-export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
+export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak): Set<string> =>
     minimalFagsak.gjeldendeUtbetalingsperioder
         .filter(utbetalingsperiode =>
             isAfter(
@@ -48,7 +48,7 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
                 dagensDato
             )
         )
-        .reduce((acc, utbetalingsperiode) => {
+        .reduce((acc: Set<string>, utbetalingsperiode) => {
             utbetalingsperiode.utbetalingsperiodeDetaljer
                 .filter(
                     utbetalingsperiodeDetalj =>
@@ -60,4 +60,4 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
                 );
 
             return acc;
-        }, new Set());
+        }, new Set<string>());
