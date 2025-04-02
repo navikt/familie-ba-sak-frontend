@@ -5,10 +5,10 @@ import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useApp } from '../../../../../context/AppContext';

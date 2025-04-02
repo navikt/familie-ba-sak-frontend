@@ -12,7 +12,7 @@ import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
-import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
+import OppsummeringVedtak from './Sider/Vedtak/Vedtak';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VedtakStegProvider } from '../../../context/behandlingContext/VedtakStegContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
