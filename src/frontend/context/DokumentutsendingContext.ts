@@ -40,6 +40,7 @@ export enum DokumentÅrsak {
     TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER = 'TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER',
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD = 'TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV = 'KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV',
+    INNHENTE_OPPLYSNINGER_KLAGE = 'INNHENTE_OPPLYSNINGER_KLAGE',
 }
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
@@ -60,6 +61,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
         'Til forelder med selvstendig rett vi har fått F016 - kan søke om barnetrygd',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV: 'Kan ha rett til pengestøtte fra Nav',
+    INNHENTE_OPPLYSNINGER_KLAGE: 'Innhente opplysninger klage',
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
@@ -101,6 +103,19 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             avhengigheter: { årsakFelt: årsak },
             skalFeltetVises: avhengigheter => {
                 return avhengigheter.årsakFelt.verdi === DokumentÅrsak.KAN_SØKE;
+            },
+        });
+
+        const fritekstAvsnitt = useFelt({
+            verdi: '',
+            valideringsfunksjon: (felt: FeltState<string>) => {
+                return felt.valideringsstatus === Valideringsstatus.FEIL || felt.verdi.length === 0
+                    ? feil(felt, 'Fritekst avsnitt mangler.')
+                    : ok(felt);
+            },
+            avhengigheter: { årsakFelt: årsak },
+            skalFeltetVises: avhengigheter => {
+                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE;
             },
         });
 
@@ -155,6 +170,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 årsak: DokumentÅrsak | undefined;
                 målform: Målform | undefined;
                 fritekster: FeltState<IFritekstFelt>[];
+                fritekstAvsnitt: string;
                 dokumenter: string[];
                 barnMedDeltBosted: IBarnMedOpplysninger[];
                 barnIBrev: IBarnMedOpplysninger[];
@@ -167,6 +183,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                 målform: målform,
 
                 fritekster: fritekster,
+                fritekstAvsnitt: fritekstAvsnitt,
                 dokumenter: dokumenter,
 
                 barnMedDeltBosted,
@@ -180,6 +197,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             skjema.felter.dokumenter.nullstill();
             skjema.felter.fritekster.nullstill();
             skjema.felter.målform.nullstill();
+            skjema.felter.fritekstAvsnitt.nullstill();
             nullstillDeltBosted();
             nullstillBarnIBrev();
         };
@@ -251,6 +269,19 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             };
         };
 
+        const hentInnhenteOpplysningerKlageSkjemaData = (
+            målform: Målform
+        ): IManueltBrevRequestPåFagsak => {
+            return {
+                multiselectVerdier: [],
+                barnIBrev: [],
+                mottakerMålform: målform,
+                brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
+                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+                fritekstAvsnitt: fritekstAvsnitt.verdi,
+            };
+        };
+
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
             const dokumentÅrsak = skjema.felter.årsak.verdi;
             if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
@@ -315,6 +346,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             Informasjonsbrev.INFORMASJONSBREV_KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
                             målform.verdi ?? Målform.NB
                         );
+                    case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
+                        return hentInnhenteOpplysningerKlageSkjemaData(målform.verdi ?? Målform.NB);
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
