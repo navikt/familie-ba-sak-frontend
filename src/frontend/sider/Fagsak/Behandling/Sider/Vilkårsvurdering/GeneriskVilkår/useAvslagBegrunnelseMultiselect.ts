@@ -1,40 +1,57 @@
-import { RessursStatus } from '@navikt/familie-typer';
+import { useEffect, useState } from 'react';
 
+import { byggTomRessurs, RessursStatus, type Ressurs } from '@navikt/familie-typer';
+
+import { useBegrunnelseApi } from '../../../../../../api/useBegrunnelseApi';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { VilkårType } from '../../../../../../typer/vilkår';
+import type { VedtaksbegrunnelseTekster, VilkårType } from '../../../../../../typer/vilkår';
 import { Regelverk } from '../../../../../../typer/vilkår';
-import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 const useAvslagBegrunnelseMultiselect = (
     vilkårType: VilkårType,
     regelverk: Regelverk | null,
     gjelderInstitusjon: boolean
 ) => {
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
+    const { hentAlleBegrunnelser } = useBegrunnelseApi();
 
-    if (vedtaksbegrunnelseTekster.status !== RessursStatus.SUKSESS) {
-        return { avslagBegrunnelseTeksterForGjeldendeVilkår: [] };
-    }
+    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] =
+        useState<Ressurs<VedtaksbegrunnelseTekster>>(byggTomRessurs());
 
-    let begrunnelsestypeGyldigForBehandling;
+    useEffect(() => {
+        hentAlleBegrunnelser().then((data: Ressurs<VedtaksbegrunnelseTekster>) => {
+            settVedtaksbegrunnelseTekster(data);
+        });
+    }, []);
 
-    if (regelverk === Regelverk.EØS_FORORDNINGEN) {
-        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.EØS_AVSLAG;
-    } else if (gjelderInstitusjon) {
-        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.INSTITUSJON_AVSLAG;
-    } else {
-        begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.AVSLAG;
-    }
+    const finnAvslagsbegrunnelserForGjeldendeVilkår = () => {
+        if (vedtaksbegrunnelseTekster.status !== RessursStatus.SUKSESS) {
+            return [];
+        }
 
-    const avslagBegrunnelseTeksterForGjeldendeVilkår = vedtaksbegrunnelseTekster.data[
-        begrunnelsestypeGyldigForBehandling
-    ].filter(
-        (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType
-    );
+        let begrunnelsestypeGyldigForBehandling;
+
+        if (regelverk === Regelverk.EØS_FORORDNINGEN) {
+            begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.EØS_AVSLAG;
+        } else if (gjelderInstitusjon) {
+            begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.INSTITUSJON_AVSLAG;
+        } else {
+            begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.AVSLAG;
+        }
+
+        const avslagBegrunnelseTeksterForGjeldendeVilkår = vedtaksbegrunnelseTekster.data[
+            begrunnelsestypeGyldigForBehandling
+        ].filter(
+            (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                begrunnelse.vilkår === vilkårType
+        );
+
+        return avslagBegrunnelseTeksterForGjeldendeVilkår;
+    };
 
     return {
-        avslagBegrunnelseTeksterForGjeldendeVilkår,
+        avslagsbegrunnelserForGjeldendeVilkår: finnAvslagsbegrunnelserForGjeldendeVilkår(),
+        begrunnelserStatus: vedtaksbegrunnelseTekster.status,
     };
 };
 
