@@ -11,7 +11,7 @@ import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattK
 import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
-import { useVedtakStegContext } from './VedtakStegContext';
+import { useVedtakContext } from './VedtakStegContext';
 import { useApp } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
@@ -52,7 +52,7 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
         vedtaksperioderMedBegrunnelserRessurs,
-    } = useVedtakStegContext();
+    } = useVedtakContext();
 
     const { erSammensattKontrollsak } = useSammensattKontrollsak();
 

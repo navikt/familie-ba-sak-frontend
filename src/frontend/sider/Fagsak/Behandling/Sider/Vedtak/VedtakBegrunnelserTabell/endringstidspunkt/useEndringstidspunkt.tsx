@@ -9,7 +9,7 @@ import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../../../../../../utils/dato';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../../utils/dato';
-import { useVedtakStegContext } from '../../VedtakStegContext';
+import { useVedtakContext } from '../../VedtakStegContext';
 
 interface IProps {
     lukkModal: () => void;
@@ -48,7 +48,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
         skjemanavn: 'Oppdater første endringstidspunkt',
     });
 
-    const { hentVedtaksperioder } = useVedtakStegContext();
+    const { hentVedtaksperioder } = useVedtakContext();
 
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {

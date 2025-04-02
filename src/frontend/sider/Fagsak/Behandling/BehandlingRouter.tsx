@@ -14,7 +14,7 @@ import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
 import Vedtak from './Sider/Vedtak/Vedtak';
-import { VedtakStegProvider } from './Sider/Vedtak/VedtakStegContext';
+import { VedtakProvider } from './Sider/Vedtak/VedtakStegContext';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { TidslinjeProvider } from '../../../context/TidslinjeContext';
@@ -88,11 +88,11 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                 path="/vedtak"
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
-                        <VedtakStegProvider åpenBehandling={behandling}>
+                        <VedtakProvider åpenBehandling={behandling}>
                             <SammensattKontrollsakProvider åpenBehandling={behandling}>
                                 <Vedtak åpenBehandling={behandling} bruker={bruker} />
                             </SammensattKontrollsakProvider>
-                        </VedtakStegProvider>
+                        </VedtakProvider>
                     </SimuleringProvider>
                 }
             />

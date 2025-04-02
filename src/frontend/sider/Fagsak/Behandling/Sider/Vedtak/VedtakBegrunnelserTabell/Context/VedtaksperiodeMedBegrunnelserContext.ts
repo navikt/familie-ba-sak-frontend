@@ -29,7 +29,7 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../../utils/fritekstfelter';
-import { useVedtakStegContext } from '../../VedtakStegContext';
+import { useVedtakContext } from '../../VedtakStegContext';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
@@ -48,7 +48,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
         const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] =
             useState<Ressurs<string[]>>(byggTomRessurs());
-        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakStegContext();
+        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
 
         const maksAntallKulepunkter = 3;
         const makslengdeFritekst = 350;
