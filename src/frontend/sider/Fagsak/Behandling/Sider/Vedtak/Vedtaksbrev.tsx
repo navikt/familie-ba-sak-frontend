@@ -33,7 +33,7 @@ interface Props {
     bruker: IPersonInfo;
 }
 
-export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
+export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
     const { vurderErLesevisning } = useBehandlingContext();

@@ -10,7 +10,7 @@ import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTot
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
-import { Vedtaksbrev } from './Vedtaksbrev';
+import { VedtaksbrevBygger } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -100,7 +100,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
                         visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
                         visRefusjonEøs={() => settVisRefusjonEøs(true)}
                     />
-                    <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
+                    <VedtaksbrevBygger åpenBehandling={åpenBehandling} bruker={bruker} />
                 </>
             ) : (
                 <Vedtaksalert åpenBehandling={åpenBehandling} />
