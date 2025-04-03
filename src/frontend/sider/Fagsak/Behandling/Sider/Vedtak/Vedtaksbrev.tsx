@@ -5,15 +5,14 @@ import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import { BehandlingKorrigertAlert } from './OppsummeringVedtak';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import { useVedtakContext } from './VedtakContext';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
@@ -27,17 +26,17 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface Props {
     åpenBehandling: IBehandling;
     bruker: IPersonInfo;
 }
 
-export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
+export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useApp();
-    const { vurderErLesevisning } = useBehandling();
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
+    const { vurderErLesevisning } = useBehandlingContext();
     const {
         hentForhåndsvisning,
         nullstillDokument,
@@ -52,7 +51,8 @@ export const Vedtaksbrev: React.FunctionComponent<Props> = ({ åpenBehandling, b
         settVisFeilutbetaltValuta,
         settErUlagretNyRefusjonEøsPeriode,
         settErUlagretNyFeilutbetaltValutaPeriode,
-    } = useVedtakSteg();
+        vedtaksperioderMedBegrunnelserRessurs,
+    } = useVedtakContext();
 
     const { erSammensattKontrollsak } = useSammensattKontrollsak();
 

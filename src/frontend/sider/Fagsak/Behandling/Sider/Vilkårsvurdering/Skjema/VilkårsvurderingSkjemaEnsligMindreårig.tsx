@@ -3,7 +3,6 @@ import React from 'react';
 import { Alert } from '@navikt/ds-react';
 
 import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
@@ -13,6 +12,7 @@ import {
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
@@ -23,7 +23,7 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const personResultat = vilkårsvurdering.find(

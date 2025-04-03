@@ -12,11 +12,11 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const StyledBodyShort = styled(BodyShort)`
     padding-bottom: 1rem;
@@ -27,7 +27,7 @@ const StyledAlert = styled(Alert)`
 
 const TaBehandlingAvVent: React.FC = () => {
     const { request } = useHttp();
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());

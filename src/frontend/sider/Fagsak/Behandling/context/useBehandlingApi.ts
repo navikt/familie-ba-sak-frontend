@@ -12,12 +12,12 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import type { IBehandling, IOpprettBehandlingData } from '../../typer/behandling';
-import { BehandlingSteg, BehandlingÅrsak } from '../../typer/behandling';
-import { type ILogg } from '../../typer/logg';
-import { obfuskerLogg } from '../../utils/obfuskerData';
-import { useApp } from '../AppContext';
+import { useApp } from '../../../../context/AppContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import type { IBehandling, IOpprettBehandlingData } from '../../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak } from '../../../../typer/behandling';
+import { type ILogg } from '../../../../typer/logg';
+import { obfuskerLogg } from '../../../../utils/obfuskerData';
 
 const useBehandlingApi = (
     oppdaterBehandling: (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak?: boolean) => void
@@ -30,7 +30,9 @@ const useBehandlingApi = (
 
     const { skalObfuskereData } = useApp();
 
-    const opprettBehandling = (data: IOpprettBehandlingData) => {
+    const opprettBehandling = (
+        data: IOpprettBehandlingData
+    ): Promise<void | Ressurs<IBehandling>> => {
         return request<IOpprettBehandlingData, IBehandling>({
             data,
             method: 'POST',

@@ -5,7 +5,7 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IBehandling } from '../../typer/behandling';
 import type { IManuellDødsfall } from '../../typer/dødsfall';
 import type { IGrunnlagPerson } from '../../typer/person';
@@ -23,7 +23,7 @@ const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
         : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
 export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) => {
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
     const {

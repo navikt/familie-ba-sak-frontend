@@ -31,7 +31,6 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../../hooks/useDokument';
 import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
@@ -46,6 +45,7 @@ import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../../../utils/skjema';
 import DeltBostedSkjema from '../../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { FamilieMultiLandvelger } from '../../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IProps {
@@ -96,7 +96,8 @@ const StyledCombobox = styled(UNSAFE_Combobox)`
 `;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandling();
+    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } =
+        useBehandlingContext();
     const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 

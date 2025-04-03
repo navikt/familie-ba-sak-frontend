@@ -16,7 +16,6 @@ import {
     kanLeggeSmåbarnstilleggTilPeriode,
 } from './OppsummeringsboksUtils';
 import { useApp } from '../../../../../context/AppContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../../../context/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -38,6 +37,7 @@ import {
     hentAlderSomString,
     sorterUtbetaling,
 } from '../../../../../utils/formatter';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const AlertWithBottomMargin = styled(Alert)`
     margin-bottom: 1.5rem;
@@ -134,7 +134,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     valutakurser,
 }) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandling();
+    const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { settToast } = useApp();
     const { settAktivEtikett } = useTidslinje();

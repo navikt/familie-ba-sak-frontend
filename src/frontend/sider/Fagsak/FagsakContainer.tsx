@@ -7,12 +7,12 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingContainer from './Behandling/BehandlingContainer';
+import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { FagsakProvider, useFagsakContext } from './FagsakContext';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { HentOgSettBehandlingProvider } from '../../context/behandlingContext/HentOgSettBehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';

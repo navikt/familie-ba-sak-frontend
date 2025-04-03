@@ -6,7 +6,6 @@ import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elemen
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { OptionType } from '../../../../../../typer/common';
 import {
     type IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -16,6 +15,7 @@ import {
 import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
@@ -38,7 +38,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
     regelverk,
 }) => {
-    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurderingContext();

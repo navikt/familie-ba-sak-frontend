@@ -6,17 +6,17 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type {
     IBehandlingstema,
     IRestEndreBehandlingUnderkategori,
 } from '../../../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../../../typer/behandlingstema';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const useEndreBehandling = (lukkModal: () => void) => {
     const { request } = useHttp();
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const [ressurs, settRessurs] = useState(byggTomRessurs());
 

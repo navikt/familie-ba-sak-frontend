@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Alert, BodyLong, Button, Link, List } from '@navikt/ds-react';
 
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { erProd } from '../../../../../utils/miljø';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const StyledAlert = styled(Alert)`
     margin-top: 2rem;
@@ -20,7 +20,7 @@ const StyledLink = styled(Link)`
 
 const AvregningAlert = () => {
     const [visModal, settVisModal] = useState(false);
-    const { behandling, vurderErLesevisning } = useBehandling();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const modiaPersonoversiktUrl = erProd()
