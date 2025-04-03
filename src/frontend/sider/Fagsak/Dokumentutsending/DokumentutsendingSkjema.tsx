@@ -13,8 +13,10 @@ import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
-    DokumentÅrsak,
+    DokumentÅrsakPerson,
+    DokumentÅrsakInstitusjon,
     useDokumentutsending,
+    type DokumentÅrsak,
 } from '../../../context/DokumentutsendingContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
@@ -80,6 +82,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
+        dokumentÅrsaker,
     } = useDokumentutsending();
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
 
@@ -89,13 +92,13 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
         switch (årsak) {
-            case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-            case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
-            case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
-            case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
-            case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
+            case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
+            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
+            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
+            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
+            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
                 return BarnIBrevÅrsak.BARN_SØKT_FOR;
-            case DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
+            case DokumentÅrsakPerson.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
                 return BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER;
             default:
                 return undefined;
@@ -184,19 +187,19 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     label={'Velg årsak'}
                     value={skjema.felter.årsak.verdi || ''}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        skjema.felter.årsak.onChange(event.target.value as DokumentÅrsak);
+                        skjema.felter.årsak.onChange(event.target.value as DokumentÅrsakPerson);
                     }}
                     size={'medium'}
                 >
                     <option value="">Velg</option>
-                    {Object.values(DokumentÅrsak)
+                    {dokumentÅrsaker
                         .filter(årsak => {
                             switch (årsak) {
                                 // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
-                                case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
+                                case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
                                     return toggles[ToggleNavn.selvstendigRettInfobrev];
-                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
-                                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: {
+                                case DokumentÅrsakPerson.INNHENTE_OPPLYSNINGER_KLAGE:
+                                case DokumentÅrsakInstitusjon.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: {
                                     return toggles[ToggleNavn.innhenteOpplysningerKlageBrev];
                                 }
                                 default:
@@ -217,7 +220,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                 </Select>
 
                 <ÅrsakSkjema>
-                    {skjema.felter.årsak.verdi === DokumentÅrsak.DELT_BOSTED && (
+                    {skjema.felter.årsak.verdi === DokumentÅrsakPerson.DELT_BOSTED && (
                         <DeltBostedSkjema
                             avtalerOmDeltBostedPerBarnFelt={
                                 skjema.felter.avtalerOmDeltBostedPerBarn
@@ -239,7 +242,9 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         />
                     )}
 
-                    {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
+                    {skjema.felter.årsak.verdi === DokumentÅrsakPerson.KAN_SØKE && (
+                        <KanSøkeSkjema />
+                    )}
                     {skjema.felter.fritekstAvsnitt.erSynlig && (
                         <Box paddingBlock={'space-4 0'}>
                             <FritekstAvsnitt />
