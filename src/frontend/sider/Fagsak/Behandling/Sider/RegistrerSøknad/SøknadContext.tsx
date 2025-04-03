@@ -7,7 +7,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -22,6 +21,7 @@ import type {
 } from '../../../../../typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
@@ -48,7 +48,7 @@ const SøknadContext = createContext<SøknadContextValue | undefined>(undefined)
 
 export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     const { vurderErLesevisning, settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig } =
-        useBehandling();
+        useBehandlingContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const { bruker, minimalFagsakRessurs } = useFagsakContext();

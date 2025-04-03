@@ -8,7 +8,6 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
 import type {
@@ -35,6 +34,7 @@ import {
     isNumeric,
     tellAntallDesimaler,
 } from '../../../../../../../utils/eøsValidators';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const erValutakursGyldig = (
     felt: FeltState<string | undefined>,
@@ -74,7 +74,7 @@ interface IProps {
 const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
     const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
     const [sletterValutakurs, settSletterValutakurs] = React.useState<boolean>(false);
-    const { behandling, settÅpenBehandling } = useBehandling();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const initelFom = useFelt<string>({ verdi: valutakurs.fom });
     const { request } = useHttp();
 

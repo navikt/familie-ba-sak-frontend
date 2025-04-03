@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { Heading, Textarea } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const AnnetWrapper = styled.div`
     margin: 2rem 0;
 `;
 
 const Annet: React.FunctionComponent = () => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const { skjema } = useSøknadContext();
     const lesevisning = vurderErLesevisning();
 

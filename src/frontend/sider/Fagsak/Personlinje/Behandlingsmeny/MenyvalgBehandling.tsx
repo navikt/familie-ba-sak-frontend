@@ -7,11 +7,11 @@ import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterV
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
+import { useBehandlingContext } from '../../Behandling/context/BehandlingContext';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     return (

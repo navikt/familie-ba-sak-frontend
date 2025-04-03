@@ -6,17 +6,17 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import type { IRegistrerInstitusjon } from '../../../../../typer/institusjon';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const useInstitusjon = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const { minimalFagsakRessurs } = useFagsakContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();

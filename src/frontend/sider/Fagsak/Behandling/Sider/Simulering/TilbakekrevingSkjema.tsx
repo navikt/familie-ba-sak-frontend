@@ -24,7 +24,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useDokument from '../../../../../hooks/useDokument';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
@@ -35,6 +34,7 @@ import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../type
 import type { Målform } from '../../../../../typer/søknad';
 import { målform } from '../../../../../typer/søknad';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
     display: flex;
@@ -97,7 +97,7 @@ const TilbakekrevingSkjema: React.FC<{
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
     åpenBehandling: IBehandling;
 }> = ({ søkerMålform, harÅpenTilbakekrevingRessurs, åpenBehandling }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } =
         useSimuleringContext();
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =

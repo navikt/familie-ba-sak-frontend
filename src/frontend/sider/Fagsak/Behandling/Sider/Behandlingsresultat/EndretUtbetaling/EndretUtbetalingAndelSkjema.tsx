@@ -9,7 +9,6 @@ import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
@@ -19,6 +18,7 @@ import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../Utbetaling';
 
 const KnapperekkeVenstre = styled.div`
@@ -69,7 +69,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     oppdaterEndretUtbetaling,
     slettEndretUtbetaling,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const finnÅrTilbakeTilStønadFra = (): number => {

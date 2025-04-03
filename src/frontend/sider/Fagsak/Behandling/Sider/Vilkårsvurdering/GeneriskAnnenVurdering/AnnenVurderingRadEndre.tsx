@@ -12,7 +12,6 @@ import {
     annenVurderingBegrunnelseFeilmeldingId,
     annenVurderingResultatFeilmeldingId,
 } from './AnnenVurderingTabell';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import type {
@@ -21,6 +20,7 @@ import type {
     IPersonResultat,
 } from '../../../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 import { validerAnnenVurdering } from '../validering';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
@@ -54,7 +54,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurderingContext();
 
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandling();
+    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);

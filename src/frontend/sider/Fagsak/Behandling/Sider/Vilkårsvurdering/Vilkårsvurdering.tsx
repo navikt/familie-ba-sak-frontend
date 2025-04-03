@@ -16,7 +16,6 @@ import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
@@ -25,6 +24,7 @@ import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkå
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 const UregistrerteBarnListe = styled.ol`
@@ -56,7 +56,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         oppdaterRegisteropplysninger,
         vilkårsvurderingNesteOnClick,
         behandlingsstegSubmitressurs,
-    } = useBehandling();
+    } = useBehandlingContext();
 
     const erLesevisning = vurderErLesevisning();
 

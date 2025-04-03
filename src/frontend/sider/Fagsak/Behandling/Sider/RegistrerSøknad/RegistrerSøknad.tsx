@@ -9,9 +9,9 @@ import Annet from './Annet';
 import Barna from './Barna';
 import { useSøknadContext } from './SøknadContext';
 import SøknadType from './SøknadType';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import MålformVelger from '../../../../../komponenter/MålformVelger';
 import { BehandlingSteg } from '../../../../../typer/behandling';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
 const FjernVilkårAdvarsel = styled(BodyShort)`
@@ -23,7 +23,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 `;
 
 const RegistrerSøknad: React.FC = () => {
-    const { vurderErLesevisning, gjelderInstitusjon } = useBehandling();
+    const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const {

@@ -15,7 +15,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useVedtakSteg } from '../../../../../../../context/behandlingContext/useVedtakSteg';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
@@ -30,6 +29,7 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../../utils/fritekstfelter';
+import { useVedtakContext } from '../../VedtakContext';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
@@ -48,7 +48,7 @@ const [VedtaksperiodeMedBegrunnelserPanelProvider, useVedtaksperiodeMedBegrunnel
         const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
         const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] =
             useState<Ressurs<string[]>>(byggTomRessurs());
-        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakSteg();
+        const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
 
         const maksAntallKulepunkter = 3;
         const makslengdeFritekst = 350;

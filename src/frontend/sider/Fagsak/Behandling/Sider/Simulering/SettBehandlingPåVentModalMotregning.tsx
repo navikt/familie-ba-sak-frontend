@@ -20,7 +20,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import {
     type IBehandling,
     type ISettPåVent,
@@ -29,6 +28,7 @@ import {
 } from '../../../../../typer/behandling';
 import { dagensDato, dateTilIsoDatoString } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const Feltmargin = styled.div`
     margin-bottom: 2rem;
@@ -48,7 +48,7 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
     lukkModal,
     behandling,
 }) => {
-    const { settÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const { request } = useHttp();
 
