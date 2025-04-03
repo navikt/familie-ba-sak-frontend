@@ -9,7 +9,6 @@ import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { BehandlingKorrigertAlert } from './Vedtak';
-import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useVedtakContext } from './VedtakContext';
 import { useApp } from '../../../../../context/AppContext';
@@ -131,14 +130,12 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                             <SammensattKontrollsak />
                         ) : (
                             <>
-                                <VedtaksbegrunnelseTeksterProvider>
-                                    <VedtaksperioderMedBegrunnelser
-                                        åpenBehandling={åpenBehandling}
-                                        vedtaksperioderMedBegrunnelserRessurs={
-                                            vedtaksperioderMedBegrunnelserRessurs
-                                        }
-                                    />
-                                </VedtaksbegrunnelseTeksterProvider>
+                                <VedtaksperioderMedBegrunnelser
+                                    åpenBehandling={åpenBehandling}
+                                    vedtaksperioderMedBegrunnelserRessurs={
+                                        vedtaksperioderMedBegrunnelserRessurs
+                                    }
+                                />
                                 {visFeilutbetaltValuta && (
                                     <FeilutbetaltValuta
                                         feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}

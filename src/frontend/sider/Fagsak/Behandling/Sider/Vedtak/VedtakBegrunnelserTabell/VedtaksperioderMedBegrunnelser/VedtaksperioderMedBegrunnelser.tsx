@@ -12,7 +12,7 @@ import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../../../utils/commons';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../../../utils/vedtakUtils';
-import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
+import { useVedtakContext } from '../../VedtakContext';
 import { VedtaksperiodeMedBegrunnelserPanelProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const StyledHeading = styled(Heading)`
@@ -33,7 +33,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
     vedtaksperioderMedBegrunnelserRessurs,
 }) => {
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
+    const { vedtaksbegrunnelseTekster } = useVedtakContext();
 
     if (
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||

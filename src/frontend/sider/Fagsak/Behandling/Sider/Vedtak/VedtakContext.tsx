@@ -4,9 +4,11 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer';
 
+import { useBegrunnelseApi } from '../../../../../api/useBegrunnelseApi';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
 
 interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
@@ -25,6 +27,7 @@ interface VedtakContextValue {
     settErUlagretNyFeilutbetaltValutaPeriode: React.Dispatch<React.SetStateAction<boolean>>;
     erUlagretNyRefusjonEøsPeriode: boolean;
     settErUlagretNyRefusjonEøsPeriode: React.Dispatch<React.SetStateAction<boolean>>;
+    vedtaksbegrunnelseTekster: Ressurs<VedtaksbegrunnelseTekster>;
 }
 
 const VedtakContext = React.createContext<VedtakContextValue | undefined>(undefined);
@@ -32,6 +35,10 @@ const VedtakContext = React.createContext<VedtakContextValue | undefined>(undefi
 export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
     const { behandlingId } = useSakOgBehandlingParams();
     const { request } = useHttp();
+    const { hentAlleBegrunnelser } = useBegrunnelseApi();
+
+    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] =
+        useState<Ressurs<VedtaksbegrunnelseTekster>>(byggTomRessurs());
 
     const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = useState(
         åpenBehandling.feilutbetaltValuta.length > 0
@@ -42,6 +49,12 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
         useState(false);
 
     const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] = useState(false);
+
+    useEffect(() => {
+        hentAlleBegrunnelser().then((data: Ressurs<VedtaksbegrunnelseTekster>) => {
+            settVedtaksbegrunnelseTekster(data);
+        });
+    }, []);
 
     useEffect(() => {
         settVisFeilutbetaltValuta(åpenBehandling.feilutbetaltValuta.length > 0);
@@ -79,6 +92,7 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
                 settErUlagretNyFeilutbetaltValutaPeriode,
                 erUlagretNyRefusjonEøsPeriode,
                 settErUlagretNyRefusjonEøsPeriode,
+                vedtaksbegrunnelseTekster,
             }}
         >
             {children}

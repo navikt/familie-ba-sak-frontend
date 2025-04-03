@@ -17,7 +17,7 @@ import type {
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
 import type { VedtaksbegrunnelseTekster } from '../../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../../utils/dato';
-import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
+import { useVedtakContext } from '../../VedtakContext';
 
 export const useVilkårBegrunnelser = ({
     vedtaksperiodeMedBegrunnelser,
@@ -26,7 +26,7 @@ export const useVilkårBegrunnelser = ({
     periode: IIsoDatoPeriode;
     åpenBehandling: IBehandling;
 }) => {
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
+    const { vedtaksbegrunnelseTekster } = useVedtakContext();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiodeMedBegrunnelser.type) {
