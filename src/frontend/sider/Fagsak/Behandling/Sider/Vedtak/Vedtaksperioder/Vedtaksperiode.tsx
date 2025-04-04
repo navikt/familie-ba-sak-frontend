@@ -6,11 +6,11 @@ import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
 import EkspanderbarVedtaksperiode from './EkspanderbarVedtaksperiode';
 import FritekstBegrunnelser from './FritekstBegrunnelser';
-import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeContext';
-import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
+import Utbetalingsresultat from './Utbetalingsresultat';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 
 interface IProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;

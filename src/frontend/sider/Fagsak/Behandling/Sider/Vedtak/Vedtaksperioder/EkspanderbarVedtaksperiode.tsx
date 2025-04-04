@@ -10,14 +10,14 @@ import {
     hentVedtaksperiodeTittel,
     Vedtaksperiodetype,
     type IVedtaksperiodeMedBegrunnelser,
-} from '../../../../../../../typer/vedtaksperiode';
+} from '../../../../../../typer/vedtaksperiode';
 import {
     dagensDato,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDateMedFallback,
     tidenesEnde,
-} from '../../../../../../../utils/dato';
-import { formaterBeløp, summer } from '../../../../../../../utils/formatter';
+} from '../../../../../../utils/dato';
+import { formaterBeløp, summer } from '../../../../../../utils/formatter';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;

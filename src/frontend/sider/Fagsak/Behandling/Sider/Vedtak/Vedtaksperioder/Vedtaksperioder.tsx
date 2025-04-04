@@ -7,13 +7,13 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import Vedtaksperiode from './Vedtaksperiode';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { partition } from '../../../../../../../utils/commons';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../../../utils/vedtakUtils';
-import { useVedtakContext } from '../../VedtakContext';
-import { VedtaksperiodeProvider } from '../Context/VedtaksperiodeContext';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
+import { partition } from '../../../../../../utils/commons';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../../utils/vedtakUtils';
+import { useVedtakContext } from '../VedtakContext';
+import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
 
 const StyledHeading = styled(Heading)`
     display: flex;

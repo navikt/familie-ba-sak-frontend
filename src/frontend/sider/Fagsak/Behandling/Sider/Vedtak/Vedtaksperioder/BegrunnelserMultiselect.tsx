@@ -9,19 +9,19 @@ import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-ele
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { OptionType } from '../../../../../../../typer/common';
-import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
-import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../../typer/vedtak';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
+import type { OptionType } from '../../../../../../typer/common';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
+import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
     hentBorderfarge,
-} from '../../../../../../../utils/vedtakUtils';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
-import { useVedtakContext } from '../../VedtakContext';
-import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeContext';
-import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';
+} from '../../../../../../utils/vedtakUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useVedtakContext } from '../VedtakContext';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { mapBegrunnelserTilSelectOptions } from '../VedtakBegrunnelserTabell/Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;

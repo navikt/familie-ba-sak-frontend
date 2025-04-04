@@ -20,22 +20,22 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import { Behandlingstype } from '../../../../../../../typer/behandling';
-import type { OptionType } from '../../../../../../../typer/common';
-import type { VedtakBegrunnelse } from '../../../../../../../typer/vedtak';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import { Behandlingstype } from '../../../../../../typer/behandling';
+import type { OptionType } from '../../../../../../typer/common';
+import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
 import type {
     IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
-} from '../../../../../../../typer/vedtaksperiode';
-import type { IIsoDatoPeriode } from '../../../../../../../utils/dato';
-import type { IFritekstFelt } from '../../../../../../../utils/fritekstfelter';
+} from '../../../../../../typer/vedtaksperiode';
+import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
+import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
-} from '../../../../../../../utils/fritekstfelter';
-import { useVedtakContext } from '../../VedtakContext';
-import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
+} from '../../../../../../utils/fritekstfelter';
+import { useVilkårBegrunnelser } from '../VedtakBegrunnelserTabell/Hooks/useVedtaksbegrunnelser';
+import { useVedtakContext } from '../VedtakContext';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
