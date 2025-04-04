@@ -4,7 +4,7 @@ import { CalendarIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
 
 import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
-import type { IBehandling } from '../../../../../../../typer/behandling';
+import type { IBehandling } from '../../../../../../typer/behandling';
 
 interface Props {
     åpenBehandling: IBehandling;
