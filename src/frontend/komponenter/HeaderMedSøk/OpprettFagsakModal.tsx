@@ -16,7 +16,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useOpprettFagsak from './useOpprettFagsak';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import type { IBaseFagsak } from '../../typer/fagsak';
 import { FagsakType } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
@@ -81,7 +81,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [bruker, settBruker] = useState(personInfo);
     const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
         useOpprettFagsak();
-    const { hentPerson } = useApp();
+    const { hentPerson } = useAppContext();
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
         fagsak => fagsak.fagsakType === FagsakType.NORMAL

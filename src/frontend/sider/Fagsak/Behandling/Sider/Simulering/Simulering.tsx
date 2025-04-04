@@ -12,7 +12,7 @@ import { useSimuleringContext } from './SimuleringContext';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
@@ -36,7 +36,7 @@ const StyledBeløpsgrenseAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {

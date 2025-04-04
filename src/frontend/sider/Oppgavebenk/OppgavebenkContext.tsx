@@ -26,7 +26,7 @@ import { initialOppgaveFelter } from './oppgavefelter';
 import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
 import { mapIOppgaverTilOppgaveRad } from './utils';
 import { useFagsakApi } from '../../api/useFagsakApi';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { FagsakStatus } from '../../typer/fagsak';
@@ -73,7 +73,7 @@ const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(un
 
 export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const navigate = useNavigate();
-    const { innloggetSaksbehandler, settToast } = useApp();
+    const { innloggetSaksbehandler, settToast } = useAppContext();
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);

@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Button, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import DokumentutsendingSkjema from './DokumentutsendingSkjema';
-import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
 import type { IPersonInfo } from '../../../typer/person';
 import { fagsakHeaderHøydeRem } from '../../../typer/styling';
 
@@ -26,7 +26,7 @@ const Dokumentutsending: React.FC<Props> = ({ bruker }) => {
     const navigate = useNavigate();
 
     const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =
-        useDokumentutsending();
+        useDokumentutsendingContext();
 
     return (
         <Container>

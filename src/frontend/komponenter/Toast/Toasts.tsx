@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Toast from './Toast';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 const Container = styled.div`
     position: fixed;
@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const Toasts: React.FC = () => {
-    const { toasts } = useApp();
+    const { toasts } = useAppContext();
 
     return (
         <Container>

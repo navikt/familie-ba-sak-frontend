@@ -19,7 +19,7 @@ import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
-import { useApp } from '../../../../../../../context/AppContext';
+import { useAppContext } from '../../../../../../../context/AppContext';
 import {
     Behandlingstype,
     type IBehandling,
@@ -80,7 +80,7 @@ const Valutakurser: React.FC<IProps> = ({
     åpenBehandling,
     visFeilmeldinger,
 }) => {
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { request } = useHttp();
     const [

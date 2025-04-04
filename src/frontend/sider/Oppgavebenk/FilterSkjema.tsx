@@ -6,13 +6,13 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
 
 const FilterSkjema: React.FunctionComponent = () => {
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useAppContext();
     const {
         hentOppgaver,
         oppgaver,

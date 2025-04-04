@@ -21,7 +21,7 @@ import {
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useKlageApi } from '../../api/useKlageApi';
 import { useTilbakekrevingApi } from '../../api/useTilbakekrevingApi';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
@@ -65,7 +65,7 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         useState<Ressurs<ITilbakekrevingsbehandling[]>>(byggTomRessurs());
 
     const { request } = useHttp();
-    const { skalObfuskereData } = useApp();
+    const { skalObfuskereData } = useAppContext();
     const { hentFagsakerForPerson } = useFagsakApi();
     const { hentKlagebehandlingerPåFagsak } = useKlageApi();
     const { hentTilbakekrevingsbehandlinger } = useTilbakekrevingApi();

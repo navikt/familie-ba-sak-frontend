@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 
 import type { IToast } from './typer';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 const Container = styled.div`
     grid-column: 3;
@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const Toast: React.FC<{ toastId: string; toast: IToast }> = ({ toastId, toast }) => {
-    const { toasts, settToasts } = useApp();
+    const { toasts, settToasts } = useAppContext();
     const toastRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

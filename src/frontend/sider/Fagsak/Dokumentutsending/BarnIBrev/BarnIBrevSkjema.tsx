@@ -6,7 +6,7 @@ import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
@@ -22,7 +22,7 @@ interface IProps {
 const BarnIBrevSkjema = (props: IProps) => {
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
     const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
     const sorterteBarn = barnIBrevFelt.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {

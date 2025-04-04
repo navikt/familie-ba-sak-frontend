@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
-import { NavigeringsRetning } from '../../../../../context/TidslinjeContext';
+import { NavigeringsRetning } from './TidslinjeContext';
 
 interface IProps extends PropsWithChildren {
     naviger: (retning: NavigeringsRetning) => void;

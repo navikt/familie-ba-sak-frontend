@@ -3,7 +3,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
@@ -14,7 +14,7 @@ interface Props {
 
 export const useLagreEllerFjernMottakerPåBehandling = ({ behandlingId }: Props) => {
     const { settÅpenBehandling } = useBehandlingContext();
-    const { settToast } = useApp();
+    const { settToast } = useAppContext();
     const { request } = useHttp();
 
     const lagreMottaker = (verdierFraBrevmottakerUseSkjema: BrevmottakerUseSkjema) => {

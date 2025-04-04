@@ -8,14 +8,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
-import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
-import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
-    useDokumentutsending,
-} from '../../../context/DokumentutsendingContext';
+    useDokumentutsendingContext,
+} from './DokumentutsendingContext';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
+import { useAppContext } from '../../../context/AppContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
@@ -80,12 +80,12 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
-    } = useDokumentutsending();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    } = useDokumentutsendingContext();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
         switch (årsak) {

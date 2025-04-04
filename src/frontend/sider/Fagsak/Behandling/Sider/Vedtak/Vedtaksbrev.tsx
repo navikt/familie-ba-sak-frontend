@@ -7,12 +7,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
-import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useVedtakContext } from './VedtakContext';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
@@ -35,7 +35,7 @@ interface Props {
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentSaksbehandlerRolle } = useApp();
+    const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const {
         hentForhåndsvisning,
@@ -54,7 +54,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
         vedtaksperioderMedBegrunnelserRessurs,
     } = useVedtakContext();
 
-    const { erSammensattKontrollsak } = useSammensattKontrollsak();
+    const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const erLesevisning = vurderErLesevisning();
 

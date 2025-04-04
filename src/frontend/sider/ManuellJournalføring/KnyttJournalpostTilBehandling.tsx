@@ -7,7 +7,7 @@ import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { behandlingsstatuser, BehandlingStatus, behandlingstyper } from '../../typer/behandling';
 import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../typer/journalføringsbehandling';
 import { ToggleNavn } from '../../typer/toggles';
@@ -29,7 +29,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
 
     const {
         skjema,

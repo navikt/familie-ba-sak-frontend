@@ -6,7 +6,7 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
@@ -42,7 +42,7 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const { oppdaterKlagebehandlingerPåFagsak } = useFagsakContext();
 

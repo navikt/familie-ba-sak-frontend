@@ -11,8 +11,8 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Etikett } from '@navikt/familie-tidslinje';
 
-import { TidslinjeVindu, useTidslinje } from '../../../../../context/TidslinjeContext';
-import FamilieBaseKnapp from '../../../../../komponenter/FamilieBaseKnapp';
+import { TidslinjeVindu, useTidslinjeContext } from './TidslinjeContext';
+import FamilieBaseKnapp from '../FamilieBaseKnapp';
 
 interface IEtikettProp {
     etikett: Etikett;
@@ -57,7 +57,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
         aktivtTidslinjeVindu,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-    } = useTidslinje();
+    } = useTidslinjeContext();
 
     const onEtikettClick = () => {
         settAktivEtikett(etikett);
