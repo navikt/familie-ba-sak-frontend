@@ -1,7 +1,6 @@
 import React, { createContext, type PropsWithChildren, useEffect, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
-import createUseContext from 'constate';
 
 import { Alert, BodyShort, Button, HStack } from '@navikt/ds-react';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
@@ -97,7 +96,27 @@ const useAuthContext = () => {
     return context;
 };
 
-const [AppContentProvider, useApp] = createUseContext(() => {
+interface AppContentContextValue {
+    autentisert: boolean;
+    hentSaksbehandlerRolle: () => BehandlerRolle;
+    innloggetSaksbehandler: ISaksbehandler | undefined;
+    harInnloggetSaksbehandlerSkrivetilgang: () => boolean;
+    harInnloggetSaksbehandlerSuperbrukerTilgang: () => boolean | undefined;
+    appInfoModal: IModal;
+    settToast: (toastId: ToastTyper, toast: IToast) => void;
+    settToasts: React.Dispatch<React.SetStateAction<{ [toastId: string]: IToast }>>;
+    sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
+    systemetLaster: () => boolean;
+    toasts: { [toastId: string]: IToast };
+    toggles: IToggles;
+    hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
+    skalObfuskereData: boolean;
+    erTogglesHentet: boolean;
+}
+
+const AppContentContext = createContext<AppContentContextValue | undefined>(undefined);
+
+const AppContentProvider = (props: PropsWithChildren) => {
     const { autentisert, innloggetSaksbehandler } = useAuthContext();
     const { request, systemetLaster } = useHttp();
 
@@ -252,28 +271,42 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const skalObfuskereData =
         toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
-    return {
-        autentisert,
-        hentSaksbehandlerRolle,
-        innloggetSaksbehandler,
-        harInnloggetSaksbehandlerSkrivetilgang,
-        harInnloggetSaksbehandlerSuperbrukerTilgang,
-        appInfoModal,
-        settToast: (toastId: ToastTyper, toast: IToast) =>
-            settToasts({
-                ...toasts,
-                [toastId]: toast,
-            }),
-        settToasts,
-        sjekkTilgang,
-        systemetLaster,
-        toasts,
-        toggles,
-        hentPerson,
-        skalObfuskereData,
-        erTogglesHentet,
-    };
-});
+    return (
+        <AppContentContext.Provider
+            value={{
+                autentisert,
+                hentSaksbehandlerRolle,
+                innloggetSaksbehandler,
+                harInnloggetSaksbehandlerSkrivetilgang,
+                harInnloggetSaksbehandlerSuperbrukerTilgang,
+                appInfoModal,
+                settToast: (toastId: ToastTyper, toast: IToast) =>
+                    settToasts({
+                        ...toasts,
+                        [toastId]: toast,
+                    }),
+                settToasts,
+                sjekkTilgang,
+                systemetLaster,
+                toasts,
+                toggles,
+                hentPerson,
+                skalObfuskereData,
+                erTogglesHentet,
+            }}
+        >
+            {props.children}
+        </AppContentContext.Provider>
+    );
+};
+
+const useAppContext = () => {
+    const context = React.useContext(AppContentContext);
+    if (!context) {
+        throw new Error('useAppContext må brukes innenfor AppContentProvider');
+    }
+    return context;
+};
 
 const AuthOgHttpProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const { innloggetSaksbehandler, settAutentisert } = useAuthContext();
@@ -296,4 +329,4 @@ const AppProvider: React.FC<IProps> = ({ autentisertSaksbehandler, children }) =
     );
 };
 
-export { AppProvider, useApp };
+export { AppProvider, useAppContext };

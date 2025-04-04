@@ -12,7 +12,7 @@ import { BehandlingKorrigertAlert } from './Vedtak';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useVedtakContext } from './VedtakContext';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
@@ -35,7 +35,7 @@ interface Props {
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentSaksbehandlerRolle } = useApp();
+    const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const {
         hentForhåndsvisning,

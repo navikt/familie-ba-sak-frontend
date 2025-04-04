@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
@@ -33,7 +33,7 @@ export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
     const [behandlingRessurs, privatSettBehandlingRessurs] =
         useState<Ressurs<IBehandling>>(byggTomRessurs());
     const navigate = useNavigate();
-    const { skalObfuskereData } = useApp();
+    const { skalObfuskereData } = useAppContext();
 
     const erBehandlingDelAvFagsak = fagsak.behandlinger.some(
         visningBehandling => visningBehandling.behandlingId.toString() === behandlingId

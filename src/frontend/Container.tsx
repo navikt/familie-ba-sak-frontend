@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
-import { useApp } from './context/AppContext';
+import { useAppContext } from './context/AppContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
@@ -34,7 +34,7 @@ const Main = styled.main<{ $systemetLaster: boolean }>`
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal, erTogglesHentet } =
-        useApp();
+        useAppContext();
 
     return (
         <Router>

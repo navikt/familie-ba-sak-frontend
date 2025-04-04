@@ -5,7 +5,7 @@ import createUseContext from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../../context/AppContext';
+import { useAppContext } from '../../../../../../context/AppContext';
 import {
     Behandlingstype,
     erBehandlingAvslått,
@@ -26,7 +26,7 @@ export const [SammensattKontrollsakProvider, useSammensattKontrollsak] = createU
     ({ åpenBehandling }: ISammensattKontrollsakProps) => {
         const { behandlingId, resultat, type } = åpenBehandling;
         const { request } = useHttp();
-        const { toggles } = useApp();
+        const { toggles } = useAppContext();
         const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
         const [erSammensattKontrollsak, settErSammensattKontrollsak] = useState<boolean>(false);
         const [sammensattKontrollsak, settSammensattKontrollsak] =

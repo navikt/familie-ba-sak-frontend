@@ -5,7 +5,7 @@ import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import type { IBehandling } from '../../../../../typer/behandling';
 import {
@@ -109,7 +109,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;

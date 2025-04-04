@@ -4,7 +4,7 @@ import { Alert, BodyShort, Button, HGrid } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import type { IOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
@@ -19,7 +19,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgavebenkContext();
-    const { sjekkTilgang } = useApp();
+    const { sjekkTilgang } = useAppContext();
     const oppgaveRef = useRef<IOppgave | null>(null);
 
     useEffect(() => {

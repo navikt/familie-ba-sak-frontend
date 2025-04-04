@@ -7,7 +7,7 @@ import { Dropdown } from '@navikt/ds-react';
 import { LeggTilEllerFjernBrevmottakere } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakere';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import { BehandlerRolle } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
@@ -21,7 +21,7 @@ interface IProps {
 
 const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const navigate = useNavigate();
-    const { hentSaksbehandlerRolle } = useApp();
+    const { hentSaksbehandlerRolle } = useAppContext();
 
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();

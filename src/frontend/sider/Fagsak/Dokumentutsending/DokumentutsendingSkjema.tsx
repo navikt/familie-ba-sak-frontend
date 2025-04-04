@@ -10,7 +10,7 @@ import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
-import { useApp } from '../../../context/AppContext';
+import { useAppContext } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
@@ -81,11 +81,11 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
     } = useDokumentutsending();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
 
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
         switch (årsak) {

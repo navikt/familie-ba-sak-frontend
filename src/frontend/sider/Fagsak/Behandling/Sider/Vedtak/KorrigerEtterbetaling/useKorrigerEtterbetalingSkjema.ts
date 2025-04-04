@@ -6,7 +6,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
 
 import { erÅrsakForKorrigeringGyldig, erEtterbetalingsbeløpGyldig } from './validering';
-import { useApp } from '../../../../../../context/AppContext';
+import { useAppContext } from '../../../../../../context/AppContext';
 import { ToastTyper, AlertType } from '../../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
@@ -32,7 +32,7 @@ export const useKorrigerEtterbetalingSkjema = ({
     behandlingId,
 }: IProps) => {
     const { settÅpenBehandling } = useBehandlingContext();
-    const { settToast } = useApp();
+    const { settToast } = useAppContext();
     const { request } = useHttp();
 
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);

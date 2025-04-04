@@ -8,7 +8,7 @@ import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type {
     BehandlingSteg,
@@ -109,7 +109,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         harInnloggetSaksbehandlerSuperbrukerTilgang,
         innloggetSaksbehandler,
         hentSaksbehandlerRolle,
-    } = useApp();
+    } = useAppContext();
 
     const navigate = useNavigate();
     const location = useLocation();
