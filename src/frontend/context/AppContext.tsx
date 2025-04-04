@@ -7,6 +7,7 @@ import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { AuthProvider, useAuthContext } from './AuthContext';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
@@ -41,12 +42,6 @@ interface IProps extends PropsWithChildren {
     autentisertSaksbehandler: ISaksbehandler | undefined;
 }
 
-interface AuthProviderExports {
-    autentisert: boolean;
-    settAutentisert: (autentisert: boolean) => void;
-    innloggetSaksbehandler: ISaksbehandler | undefined;
-}
-
 const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     tittel: 'Diskresjonskode',
     visModal: !data.saksbehandlerHarTilgang,
@@ -67,34 +62,6 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
         <Button key="lukk" variant="primary" size="small" onClick={lukkModal} children="Lukk" />,
     ],
 });
-
-const AuthContext = createContext<AuthProviderExports | undefined>(undefined);
-
-const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
-    const [autentisert, settAutentisert] = React.useState(true);
-    const [innloggetSaksbehandler, settInnloggetSaksbehandler] =
-        React.useState(autentisertSaksbehandler);
-
-    useEffect(() => {
-        if (autentisertSaksbehandler) {
-            settInnloggetSaksbehandler(autentisertSaksbehandler);
-        }
-    }, [autentisertSaksbehandler]);
-
-    return (
-        <AuthContext.Provider value={{ autentisert, settAutentisert, innloggetSaksbehandler }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-const useAuthContext = () => {
-    const context = React.useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth må brukes innenfor AuthProvider');
-    }
-    return context;
-};
 
 interface AppContentContextValue {
     autentisert: boolean;
