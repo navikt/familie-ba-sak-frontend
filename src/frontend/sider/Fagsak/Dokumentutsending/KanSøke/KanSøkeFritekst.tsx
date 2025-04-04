@@ -6,13 +6,13 @@ import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;

@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Button, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import DokumentutsendingSkjema from './DokumentutsendingSkjema';
-import { useDokumentutsendingContext } from '../../../context/DokumentutsendingContext';
 import type { IPersonInfo } from '../../../typer/person';
 import { fagsakHeaderHøydeRem } from '../../../typer/styling';
 

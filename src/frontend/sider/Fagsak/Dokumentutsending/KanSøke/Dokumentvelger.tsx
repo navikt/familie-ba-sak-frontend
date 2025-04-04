@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
 import { opplysningsdokumenter } from '../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
 const Container = styled.div`
     margin-bottom: 1rem;

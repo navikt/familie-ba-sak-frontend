@@ -8,14 +8,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
-import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
-import { useAppContext } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
     useDokumentutsendingContext,
-} from '../../../context/DokumentutsendingContext';
+} from './DokumentutsendingContext';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
+import { useAppContext } from '../../../context/AppContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';

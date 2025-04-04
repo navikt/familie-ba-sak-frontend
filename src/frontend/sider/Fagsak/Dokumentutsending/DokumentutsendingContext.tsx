@@ -6,25 +6,25 @@ import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
-import useDokument from '../hooks/useDokument';
+import { hentEnkeltInformasjonsbrevRequest } from './Informasjonsbrev/enkeltInformasjonsbrevUtils';
+import useDokument from '../../../hooks/useDokument';
+import type { IManueltBrevRequestPåFagsak } from '../../../typer/dokument';
+import { Distribusjonskanal } from '../../../typer/dokument';
+import type { IBarnMedOpplysninger } from '../../../typer/søknad';
+import { Målform } from '../../../typer/søknad';
+import { useBarnIBrevFelter } from '../../../utils/barnIBrevFelter';
+import type { IsoDatoString } from '../../../utils/dato';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
+import { useDeltBostedFelter } from '../../../utils/deltBostedSkjemaFelter';
+import type { IFritekstFelt } from '../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import type { ISelectOptionMedBrevtekst } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import {
     Informasjonsbrev,
     opplysningsdokumenter,
-} from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import type { ISelectOptionMedBrevtekst } from '../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import { hentEnkeltInformasjonsbrevRequest } from '../sider/Fagsak/Dokumentutsending/Informasjonsbrev/enkeltInformasjonsbrevUtils';
-import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
-import { Mottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IManueltBrevRequestPåFagsak } from '../typer/dokument';
-import { Distribusjonskanal } from '../typer/dokument';
-import type { IBarnMedOpplysninger } from '../typer/søknad';
-import { Målform } from '../typer/søknad';
-import { useBarnIBrevFelter } from '../utils/barnIBrevFelter';
-import type { IsoDatoString } from '../utils/dato';
-import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
-import { useDeltBostedFelter } from '../utils/deltBostedSkjemaFelter';
-import type { IFritekstFelt } from '../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../utils/ressursUtils';
+} from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useFagsakContext } from '../FagsakContext';
+import { Mottaker } from '../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',

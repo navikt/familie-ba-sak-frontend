@@ -9,11 +9,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 import BehandlingContainer from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
+import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider, useFagsakContext } from './FagsakContext';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 

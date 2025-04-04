@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Dokumentvelger } from './Dokumentvelger';
 import KanSøkeFritekst from './KanSøkeFritekst';
-import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
+import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
 const KanSøkeSkjema = () => {
     const { skjema } = useDokumentutsendingContext();
