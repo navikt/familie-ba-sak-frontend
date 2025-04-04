@@ -7,7 +7,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useSammensattKontrollsak } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './Vedtaksbrev';
