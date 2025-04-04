@@ -11,8 +11,8 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Etikett } from '@navikt/familie-tidslinje';
 
-import { TidslinjeVindu, useTidslinje } from '../../../../../context/TidslinjeContext';
-import FamilieBaseKnapp from '../../../../../komponenter/FamilieBaseKnapp';
+import { TidslinjeVindu, useTidslinje } from './TidslinjeContext';
+import FamilieBaseKnapp from '../FamilieBaseKnapp';
 
 interface IEtikettProp {
     etikett: Etikett;

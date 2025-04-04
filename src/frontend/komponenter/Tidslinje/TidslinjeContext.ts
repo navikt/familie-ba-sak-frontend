@@ -5,13 +5,13 @@ import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
 import type { Etikett, Periode } from '@navikt/familie-tidslinje';
 
-import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
-import { YtelseType } from '../typer/beregning';
-import { FagsakType } from '../typer/fagsak';
-import type { IGrunnlagPerson } from '../typer/person';
-import { dagensDato, isoStringTilDate } from '../utils/dato';
-import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
-import { splittYtelseVedEndringerPåAnnenYtelse } from '../utils/tidslinje';
+import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../../typer/beregning';
+import { YtelseType } from '../../typer/beregning';
+import { FagsakType } from '../../typer/fagsak';
+import type { IGrunnlagPerson } from '../../typer/person';
+import { dagensDato, isoStringTilDate } from '../../utils/dato';
+import { sorterPersonTypeOgFødselsdato } from '../../utils/formatter';
+import { splittYtelseVedEndringerPåAnnenYtelse } from '../../utils/tidslinje';
 
 interface ITidslinjeVindu {
     id: number;

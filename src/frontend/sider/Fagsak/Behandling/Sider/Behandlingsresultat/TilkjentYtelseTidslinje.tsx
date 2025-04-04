@@ -7,10 +7,10 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import { Tidslinje } from '@navikt/familie-tidslinje';
 
-import TidslinjeEtikett from './TidslinjeEtikett';
-import TidslinjeNavigering from './TidslinjeNavigering';
-import Vinduvelger from './VinduVelger';
-import { useTidslinje } from '../../../../../context/TidslinjeContext';
+import { useTidslinje } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
+import TidslinjeEtikett from '../../../../../komponenter/Tidslinje/TidslinjeEtikett';
+import TidslinjeNavigering from '../../../../../komponenter/Tidslinje/TidslinjeNavigering';
+import Vinduvelger from '../../../../../komponenter/Tidslinje/VinduVelger';
 import type { IPersonMedAndelerTilkjentYtelse } from '../../../../../typer/beregning';
 import type { FagsakType } from '../../../../../typer/fagsak';
 import type { IGrunnlagPerson } from '../../../../../typer/person';

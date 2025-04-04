@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ToggleGroup } from '@navikt/ds-react';
 
-import { useTidslinje } from '../../../../../context/TidslinjeContext';
+import { useTidslinje } from './TidslinjeContext';
 
 const Vinduvelger: React.FunctionComponent = () => {
     const { tidslinjeVinduer, endreTidslinjeVindu, aktivtTidslinjeVindu } = useTidslinje();

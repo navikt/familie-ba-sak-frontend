@@ -16,7 +16,7 @@ import {
     kanLeggeSmåbarnstilleggTilPeriode,
 } from './OppsummeringsboksUtils';
 import { useApp } from '../../../../../context/AppContext';
-import { useTidslinje } from '../../../../../context/TidslinjeContext';
+import { useTidslinje } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
