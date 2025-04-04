@@ -7,6 +7,7 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 import { hentInnloggetBruker } from './api/saksbehandler';
 import Container from './Container';
 import { AppProvider } from './context/AppContext';
+import { AuthOgHttpProvider } from './context/AuthContext';
 import { useStartUmami } from './hooks/useStartUmami';
 import ErrorBoundary from './komponenter/ErrorBoundary/ErrorBoundary';
 import { initGrafanaFaro } from './utils/grafanaFaro';
@@ -26,9 +27,11 @@ const App: React.FC = () => {
 
     return (
         <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
-            <AppProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-                <Container />
-            </AppProvider>
+            <AuthOgHttpProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+                <AppProvider>
+                    <Container />
+                </AppProvider>
+            </AuthOgHttpProvider>
         </ErrorBoundary>
     );
 };

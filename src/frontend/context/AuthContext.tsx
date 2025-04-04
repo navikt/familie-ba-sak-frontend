@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, type PropsWithChildren } from 'react';
 
+import { HttpProvider } from '@navikt/familie-http';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 interface IProps extends PropsWithChildren {
@@ -14,7 +15,7 @@ interface AuthProviderExports {
 
 const AuthContext = createContext<AuthProviderExports | undefined>(undefined);
 
-export const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
+const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
     const [innloggetSaksbehandler, settInnloggetSaksbehandler] =
         React.useState(autentisertSaksbehandler);
@@ -38,4 +39,25 @@ export const useAuthContext = () => {
         throw new Error('useAuth må brukes innenfor AuthProvider');
     }
     return context;
+};
+
+const HttpProviderWrapper = ({ children }: PropsWithChildren) => {
+    const { innloggetSaksbehandler, settAutentisert } = useAuthContext();
+
+    return (
+        <HttpProvider
+            innloggetSaksbehandler={innloggetSaksbehandler}
+            settAutentisert={settAutentisert}
+        >
+            {children}
+        </HttpProvider>
+    );
+};
+
+export const AuthOgHttpProvider: React.FC<IProps> = ({ children, autentisertSaksbehandler }) => {
+    return (
+        <AuthProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+            <HttpProviderWrapper>{children}</HttpProviderWrapper>
+        </AuthProvider>
+    );
 };
