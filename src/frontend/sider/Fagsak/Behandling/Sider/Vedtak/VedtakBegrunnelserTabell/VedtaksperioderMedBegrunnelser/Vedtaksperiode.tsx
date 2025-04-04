@@ -9,7 +9,7 @@ import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
 
 interface IProps {
@@ -18,7 +18,7 @@ interface IProps {
 
 const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
     const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
-        useVedtaksperiodeMedBegrunnelserPanel();
+        useVedtaksperiodeContext();
 
     const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
         Standardbegrunnelse.REDUKSJON_SATSENDRING,

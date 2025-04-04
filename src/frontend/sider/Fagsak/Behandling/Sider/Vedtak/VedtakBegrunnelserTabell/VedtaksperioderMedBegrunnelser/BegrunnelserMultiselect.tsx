@@ -20,7 +20,7 @@ import {
 } from '../../../../../../../utils/vedtakUtils';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useVedtakContext } from '../../VedtakContext';
-import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
@@ -43,7 +43,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         standardBegrunnelserPut,
         vedtaksperiodeMedBegrunnelser,
         genererteBrevbegrunnelser,
-    } = useVedtaksperiodeMedBegrunnelserPanel();
+    } = useVedtaksperiodeContext();
     const { vedtaksbegrunnelseTekster } = useVedtakContext();
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
