@@ -17,12 +17,12 @@ import {
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Knapperekke from '../../../../../../../komponenter/Knapperekke';
-import { målform } from '../../../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../../../utils/ressursUtils';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
-import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import Knapperekke from '../../../../../../komponenter/Knapperekke';
+import { målform } from '../../../../../../typer/søknad';
+import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const FritekstContainer = styled.div`
     padding: 1rem;
@@ -76,7 +76,7 @@ const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
-const FritekstVedtakbegrunnelser: React.FC = () => {
+const FritekstBegrunnelser: React.FC = () => {
     const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const {
@@ -87,7 +87,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         onPanelClose,
         putVedtaksperiodeMedFritekster,
         vedtaksperiodeMedBegrunnelser,
-    } = useVedtaksperiodeMedBegrunnelserPanel();
+    } = useVedtaksperiodeContext();
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
@@ -255,4 +255,4 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
     );
 };
 
-export default FritekstVedtakbegrunnelser;
+export default FritekstBegrunnelser;

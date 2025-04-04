@@ -4,12 +4,8 @@ import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 
-import type { IUtbetalingsperiodeDetalj } from '../../../../../../../typer/vedtaksperiode';
-import {
-    formaterIdent,
-    formaterBeløp,
-    sorterUtbetaling,
-} from '../../../../../../../utils/formatter';
+import type { IUtbetalingsperiodeDetalj } from '../../../../../../typer/vedtaksperiode';
+import { formaterIdent, formaterBeløp, sorterUtbetaling } from '../../../../../../utils/formatter';
 
 interface IProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];

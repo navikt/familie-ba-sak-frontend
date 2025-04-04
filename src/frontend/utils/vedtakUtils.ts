@@ -1,5 +1,3 @@
-import { addMonths, isBefore, startOfMonth } from 'date-fns';
-
 import {
     ABorderDanger,
     ABorderDefault,
@@ -15,38 +13,10 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from './dato';
-import { BehandlingResultat, BehandlingStatus } from '../typer/behandling';
+import { BehandlingResultat } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
 import { VedtakBegrunnelseType } from '../typer/vedtak';
-import type { IVedtaksperiodeMedBegrunnelser } from '../typer/vedtaksperiode';
 import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
-
-export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
-    vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
-    behandlingStatus: BehandlingStatus
-): IVedtaksperiodeMedBegrunnelser[] => {
-    return vedtaksperioder.slice().filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-        if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
-            return harPeriodeBegrunnelse(vedtaksperiode);
-        } else {
-            return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
-        }
-    });
-};
-
-const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-    const periodeFom = isoStringTilDateMedFallback({
-        isoString: vedtaksperiode.fom,
-        fallbackDate: tidenesMorgen,
-    });
-    const toMånederFremITid = addMonths(startOfMonth(dagensDato), 2);
-    return isBefore(periodeFom, toMånederFremITid);
-};
-
-const harPeriodeBegrunnelse = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-    return !!vedtaksperiode.begrunnelser.length || !!vedtaksperiode.fritekster.length;
-};
 
 export const finnVedtakBegrunnelseType = (
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>,

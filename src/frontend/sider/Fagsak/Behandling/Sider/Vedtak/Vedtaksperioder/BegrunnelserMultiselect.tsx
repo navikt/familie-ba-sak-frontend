@@ -9,19 +9,19 @@ import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-ele
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { OptionType } from '../../../../../../../typer/common';
-import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
-import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../../typer/vedtak';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
+import { mapBegrunnelserTilSelectOptions } from './utils';
+import type { OptionType } from '../../../../../../typer/common';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
+import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
     hentBorderfarge,
-} from '../../../../../../../utils/vedtakUtils';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
-import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
-import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';
+} from '../../../../../../utils/vedtakUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useVedtakContext } from '../VedtakContext';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;
@@ -43,8 +43,8 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         standardBegrunnelserPut,
         vedtaksperiodeMedBegrunnelser,
         genererteBrevbegrunnelser,
-    } = useVedtaksperiodeMedBegrunnelserPanel();
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
+    } = useVedtaksperiodeContext();
+    const { vedtaksbegrunnelseTekster } = useVedtakContext();
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
