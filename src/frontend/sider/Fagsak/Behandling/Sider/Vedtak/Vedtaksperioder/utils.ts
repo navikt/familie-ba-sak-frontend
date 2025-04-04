@@ -1,6 +1,9 @@
+import { addMonths, isBefore, startOfMonth } from 'date-fns';
+
 import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
+import { BehandlingStatus } from '../../../../../../typer/behandling';
 import {
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
@@ -13,6 +16,11 @@ import {
     type IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../../typer/vedtaksperiode';
 import type { VedtaksbegrunnelseTekster } from '../../../../../../typer/vilkår';
+import {
+    dagensDato,
+    isoStringTilDateMedFallback,
+    tidenesMorgen,
+} from '../../../../../../utils/dato';
 
 const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
@@ -142,4 +150,30 @@ const hentLabelForOption = (
                   restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
           )?.navn ?? '')
         : '';
+};
+
+export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
+    vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
+    behandlingStatus: BehandlingStatus
+): IVedtaksperiodeMedBegrunnelser[] => {
+    return vedtaksperioder.slice().filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+        if (behandlingStatus === BehandlingStatus.AVSLUTTET) {
+            return harPeriodeBegrunnelse(vedtaksperiode);
+        } else {
+            return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
+        }
+    });
+};
+
+const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+    const periodeFom = isoStringTilDateMedFallback({
+        isoString: vedtaksperiode.fom,
+        fallbackDate: tidenesMorgen,
+    });
+    const toMånederFremITid = addMonths(startOfMonth(dagensDato), 2);
+    return isBefore(periodeFom, toMånederFremITid);
+};
+
+const harPeriodeBegrunnelse = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+    return !!vedtaksperiode.begrunnelser.length || !!vedtaksperiode.fritekster.length;
 };

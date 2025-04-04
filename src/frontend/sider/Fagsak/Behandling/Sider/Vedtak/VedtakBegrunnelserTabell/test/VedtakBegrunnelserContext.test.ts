@@ -12,7 +12,7 @@ import {
     mockOpphørsperiode,
     mockUtbetalingsperiode,
 } from '../../../../../../../utils/test/vedtak/vedtaksperiode.mock';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../../../utils/vedtakUtils';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../Vedtaksperioder/utils';
 
 describe('VedtakBegrunnelserContext', () => {
     describe('Test filtrerOgSorterPerioderMedBegrunnelseBehov', () => {
