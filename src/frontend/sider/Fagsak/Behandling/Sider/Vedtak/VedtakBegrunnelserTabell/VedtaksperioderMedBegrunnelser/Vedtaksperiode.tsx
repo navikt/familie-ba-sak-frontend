@@ -5,7 +5,7 @@ import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
 import EkspanderbartVedtaksbegrunnelsePanel from './EkspanderbartVedtaksbegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import FritekstBegrunnelser from './FritekstBegrunnelser';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
@@ -85,7 +85,7 @@ const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => 
                     <ErrorMessage>{genererteBrevbegrunnelser.frontendFeilmelding}</ErrorMessage>
                 </>
             )}
-            {visFritekster() && <FritekstVedtakbegrunnelser />}
+            {visFritekster() && <FritekstBegrunnelser />}
         </EkspanderbartVedtaksbegrunnelsePanel>
     );
 };
