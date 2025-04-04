@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type PropsWithChildren,
+} from 'react';
 
 import deepEqual from 'deep-equal';
 

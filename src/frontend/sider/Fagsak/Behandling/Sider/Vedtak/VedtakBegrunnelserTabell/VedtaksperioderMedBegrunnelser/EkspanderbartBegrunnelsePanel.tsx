@@ -6,14 +6,18 @@ import styled from 'styled-components';
 
 import { BodyShort, Label, ExpansionCard } from '@navikt/ds-react';
 
-import type { IIsoMånedPeriode } from '../../../../../../../utils/dato';
+import {
+    hentVedtaksperiodeTittel,
+    Vedtaksperiodetype,
+    type IVedtaksperiodeMedBegrunnelser,
+} from '../../../../../../../typer/vedtaksperiode';
 import {
     dagensDato,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDateMedFallback,
     tidenesEnde,
 } from '../../../../../../../utils/dato';
-import { formaterBeløp } from '../../../../../../../utils/formatter';
+import { formaterBeløp, summer } from '../../../../../../../utils/formatter';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-bottom: 1rem;
@@ -32,12 +36,9 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps extends PropsWithChildren {
+    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: () => void;
-    periode: IIsoMånedPeriode;
-    skalViseSum: boolean;
-    summer: () => number;
-    tittel: string;
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
@@ -47,14 +48,29 @@ const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     );
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
+    vedtaksperiodeMedBegrunnelser,
     åpen,
     onClick,
     children,
-    periode,
-    skalViseSum,
-    summer,
-    tittel,
 }) => {
+    const periode = {
+        fom: vedtaksperiodeMedBegrunnelser.fom,
+        tom: vedtaksperiodeMedBegrunnelser.tom,
+    };
+    const skalViseSum =
+        (vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
+            vedtaksperiodeMedBegrunnelser.type ===
+                Vedtaksperiodetype.UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING) &&
+        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0;
+
+    const sum = summer(
+        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.map(
+            utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.utbetaltPerMnd
+        )
+    );
+
+    const tittel = hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser);
+
     return (
         <StyledExpansionCard open={åpen} onToggle={onClick} size="small" aria-label="Begrunnelser">
             <StyledExpansionHeader>
@@ -70,7 +86,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                         </Label>
                     )}
                     <BodyShort>{tittel}</BodyShort>
-                    {skalViseSum && <BodyShort>{formaterBeløp(summer())}</BodyShort>}
+                    {skalViseSum && <BodyShort>{formaterBeløp(sum)}</BodyShort>}
                 </StyledExpansionTitle>
             </StyledExpansionHeader>
             <ExpansionCard.Content>{children}</ExpansionCard.Content>
