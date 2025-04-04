@@ -6,7 +6,7 @@ import { Alert, Heading } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Vedtaksperiode from './VedtaksperiodeMedBegrunnelserPanel';
+import Vedtaksperiode from './Vedtaksperiode';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
