@@ -24,12 +24,12 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
-interface IVedtakBegrunnelserTabell {
+interface VedtaksperioderProps {
     åpenBehandling: IBehandling;
     vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
-const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
+const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({
     åpenBehandling,
     vedtaksperioderMedBegrunnelserRessurs,
 }) => {
@@ -72,12 +72,12 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
     return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
-            <VedtaksperiodeListe
+            <GrupperteVedtaksperioder
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 åpenBehandling={åpenBehandling}
             />
-            <VedtaksperiodeListe
+            <GrupperteVedtaksperioder
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Generelle avslagsbegrunnelser'}
                 åpenBehandling={åpenBehandling}
@@ -88,7 +88,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     );
 };
 
-const VedtaksperiodeListe: React.FC<{
+const GrupperteVedtaksperioder: React.FC<{
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     åpenBehandling: IBehandling;
@@ -119,4 +119,4 @@ const VedtaksperiodeListe: React.FC<{
     );
 };
 
-export default VedtaksperioderMedBegrunnelser;
+export default Vedtaksperioder;

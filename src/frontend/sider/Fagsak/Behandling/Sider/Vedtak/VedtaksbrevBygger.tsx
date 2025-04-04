@@ -9,7 +9,7 @@ import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
 import { BehandlingKorrigertAlert } from './Vedtak';
-import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
+import Vedtaksperioder from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 import { useVedtakContext } from './VedtakContext';
 import { useApp } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
@@ -130,7 +130,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                             <SammensattKontrollsak />
                         ) : (
                             <>
-                                <VedtaksperioderMedBegrunnelser
+                                <Vedtaksperioder
                                     åpenBehandling={åpenBehandling}
                                     vedtaksperioderMedBegrunnelserRessurs={
                                         vedtaksperioderMedBegrunnelserRessurs
