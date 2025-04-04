@@ -35,7 +35,7 @@ import {
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
 import { useVedtakContext } from '../VedtakContext';
-import { grupperBegrunnelser } from './begrunnelserUtils';
+import { grupperBegrunnelser } from './utils';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
