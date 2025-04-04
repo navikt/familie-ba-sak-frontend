@@ -4,15 +4,15 @@
 
 import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 
-import { BehandlingStatus } from '../../../../../../../typer/behandling';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { dagensDato, dateTilIsoDatoString } from '../../../../../../../utils/dato';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
+import { BehandlingStatus } from '../../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
+import { dagensDato, dateTilIsoDatoString } from '../../../../../../utils/dato';
 import {
     mockOpphørsperiode,
     mockUtbetalingsperiode,
-} from '../../../../../../../utils/test/vedtak/vedtaksperiode.mock';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../Vedtaksperioder/utils';
+} from '../../../../../../utils/test/vedtak/vedtaksperiode.mock';
 
 describe('VedtakBegrunnelserContext', () => {
     describe('Test filtrerOgSorterPerioderMedBegrunnelseBehov', () => {
