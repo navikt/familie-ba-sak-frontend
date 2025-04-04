@@ -6,7 +6,7 @@ import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import {
     genererIdBasertPåAndreFritekstKulepunkter,
@@ -38,7 +38,7 @@ const KanSøkeFritekst = ({
     makslengdeFritekst: number;
 }) => {
     const skjemaGruppeId = 'Fritekster-brev';
-    const { skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsendingContext();
     const friteksterFelt = skjema.felter.fritekster;
 
     const leggTilFritekst = () => {

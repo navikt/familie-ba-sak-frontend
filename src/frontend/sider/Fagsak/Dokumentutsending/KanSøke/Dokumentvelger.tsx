@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
 import { opplysningsdokumenter } from '../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 
 const Container = styled.div`
@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 
 export const Dokumentvelger = () => {
-    const { skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsendingContext();
 
     const dokumenter = skjema.felter.dokumenter;
     const { error } = dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger);

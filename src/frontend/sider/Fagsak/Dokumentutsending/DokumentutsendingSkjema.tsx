@@ -14,7 +14,7 @@ import { useAppContext } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsak,
-    useDokumentutsending,
+    useDokumentutsendingContext,
 } from '../../../context/DokumentutsendingContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
@@ -80,7 +80,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
-    } = useDokumentutsending();
+    } = useDokumentutsendingContext();
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();

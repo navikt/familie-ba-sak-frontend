@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Dokumentvelger } from './Dokumentvelger';
 import KanSøkeFritekst from './KanSøkeFritekst';
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import { useDokumentutsendingContext } from '../../../../context/DokumentutsendingContext';
 
 const KanSøkeSkjema = () => {
-    const { skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsendingContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;

@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import createUseContext from 'constate';
 import deepEqual from 'deep-equal';
 
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import useDokument from '../hooks/useDokument';
 import {
@@ -64,362 +63,402 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     INNHENTE_OPPLYSNINGER_KLAGE: 'Innhente opplysninger klage',
 };
 
-export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
-    ({ fagsakId }: { fagsakId: number }) => {
-        const { bruker, manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
-            useFagsakContext();
-        const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-        const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
-            useDokument();
+interface Props extends React.PropsWithChildren {
+    fagsakId: number;
+}
 
-        const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
-            IManueltBrevRequestPåFagsak | undefined
-        >(undefined);
+interface DokumentutsendingSkjema {
+    årsak: DokumentÅrsak | undefined;
+    målform: Målform | undefined;
+    fritekster: FeltState<IFritekstFelt>[];
+    fritekstAvsnitt: string;
+    dokumenter: string[];
+    barnMedDeltBosted: IBarnMedOpplysninger[];
+    barnIBrev: IBarnMedOpplysninger[];
+    avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
+}
 
-        const målform = useFelt<Målform | undefined>({
-            verdi: undefined,
-            valideringsfunksjon: (felt: FeltState<Målform | undefined>) =>
-                felt.verdi ? ok(felt) : feil(felt, 'Målform er ikke valgt'),
-        });
+interface DokumentutsendingContextValue {
+    fagsakId: number;
+    hentForhåndsvisningPåFagsak: () => void;
+    hentSkjemaFeilmelding: () => string | undefined;
+    hentetDokument: Ressurs<string>;
+    sendBrevPåFagsak: () => void;
+    senderBrev: () => boolean;
+    settVisInnsendtBrevModal: (vis: boolean) => void;
+    settVisfeilmeldinger: (vis: boolean) => void;
+    skjemaErLåst: () => boolean;
+    visForhåndsvisningBeskjed: () => boolean;
+    visInnsendtBrevModal: boolean;
+    skjema: ISkjema<DokumentutsendingSkjema, string>;
+    nullstillSkjema: () => void;
+    distribusjonskanal: Ressurs<Distribusjonskanal>;
+    brukerHarUtenlandskAdresse: boolean;
+    brukerHarUkjentAdresse: () => boolean;
+    hentDistribusjonskanal: (personIdent: string) => void;
+}
 
-        const årsak = useFelt<DokumentÅrsak | undefined>({
-            verdi: undefined,
-            valideringsfunksjon: (felt: FeltState<DokumentÅrsak | undefined>) => {
-                return felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak');
-            },
-        });
+const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(
+    undefined
+);
 
-        const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
-                return felt.verdi.some(
-                    fritekst =>
-                        fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                        fritekst.verdi.tekst.length === 0
-                )
-                    ? feil(felt, '')
-                    : ok(felt);
-            },
-            avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.KAN_SØKE;
-            },
-        });
+export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
+    const { bruker, manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
+        useFagsakContext();
+    const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
+    const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
+        useDokument();
 
-        const fritekstAvsnitt = useFelt({
-            verdi: '',
-            valideringsfunksjon: (felt: FeltState<string>) => {
-                return felt.valideringsstatus === Valideringsstatus.FEIL || felt.verdi.length === 0
-                    ? feil(felt, 'Fritekst avsnitt mangler.')
-                    : ok(felt);
-            },
-            avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE;
-            },
-        });
+    const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
+        IManueltBrevRequestPåFagsak | undefined
+    >(undefined);
 
-        const dokumenter = useFelt({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
-                if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
-                    return feil(felt, 'Du må velge minst ett dokument');
-                } else {
-                    return ok(felt);
-                }
-            },
-            avhengigheter: { årsakFelt: årsak, fritekster: fritekster },
-            skalFeltetVises: avhengigheter => {
-                return avhengigheter.årsakFelt.verdi === DokumentÅrsak.KAN_SØKE;
-            },
-            nullstillVedAvhengighetEndring: false,
-        });
+    const målform = useFelt<Målform | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<Målform | undefined>) =>
+            felt.verdi ? ok(felt) : feil(felt, 'Målform er ikke valgt'),
+    });
 
-        const {
-            barnMedDeltBosted,
-            avtalerOmDeltBostedPerBarn,
-            nullstillDeltBosted,
-            hentDeltBostedMulitiselectVerdierForBarn,
-        } = useDeltBostedFelter({
-            avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter =>
-                avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
-        });
+    const årsak = useFelt<DokumentÅrsak | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<DokumentÅrsak | undefined>) => {
+            return felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak');
+        },
+    });
 
-        const { barnIBrev, nullstillBarnIBrev } = useBarnIBrevFelter({
-            avhengigheter: { årsakFelt: årsak },
-            skalFeltetVises: avhengigheter =>
-                [
-                    DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
-                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
-                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
-                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
-                    DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
-                    DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
-                ].includes(avhengigheter.årsakFelt.verdi),
-        });
+    const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
+            return felt.verdi.some(
+                fritekst =>
+                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
+                    fritekst.verdi.tekst.length === 0
+            )
+                ? feil(felt, '')
+                : ok(felt);
+        },
+        avhengigheter: { årsakFelt: årsak },
+        skalFeltetVises: avhengigheter => {
+            return avhengigheter.årsakFelt.verdi === DokumentÅrsak.KAN_SØKE;
+        },
+    });
 
-        const {
-            skjema,
-            onSubmit,
-            nullstillSkjema: nullstillHeleSkjema,
-            settVisfeilmeldinger,
-            kanSendeSkjema,
-        } = useSkjema<
-            {
-                årsak: DokumentÅrsak | undefined;
-                målform: Målform | undefined;
-                fritekster: FeltState<IFritekstFelt>[];
-                fritekstAvsnitt: string;
-                dokumenter: string[];
-                barnMedDeltBosted: IBarnMedOpplysninger[];
-                barnIBrev: IBarnMedOpplysninger[];
-                avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
-            },
-            string
-        >({
-            felter: {
-                årsak: årsak,
-                målform: målform,
+    const fritekstAvsnitt = useFelt({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<string>) => {
+            return felt.valideringsstatus === Valideringsstatus.FEIL || felt.verdi.length === 0
+                ? feil(felt, 'Fritekst avsnitt mangler.')
+                : ok(felt);
+        },
+        avhengigheter: { årsakFelt: årsak },
+        skalFeltetVises: avhengigheter => {
+            return avhengigheter.årsakFelt.verdi === DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE;
+        },
+    });
 
-                fritekster: fritekster,
-                fritekstAvsnitt: fritekstAvsnitt,
-                dokumenter: dokumenter,
-
-                barnMedDeltBosted,
-                barnIBrev,
-                avtalerOmDeltBostedPerBarn: avtalerOmDeltBostedPerBarn,
-            },
-            skjemanavn: 'Dokumentutsending',
-        });
-
-        const nullstillSkjemaUtenomÅrsak = () => {
-            skjema.felter.dokumenter.nullstill();
-            skjema.felter.fritekster.nullstill();
-            skjema.felter.målform.nullstill();
-            skjema.felter.fritekstAvsnitt.nullstill();
-            nullstillDeltBosted();
-            nullstillBarnIBrev();
-        };
-
-        const nullstillSkjema = () => {
-            nullstillHeleSkjema();
-            nullstillDeltBosted();
-            nullstillBarnIBrev();
-        };
-
-        useEffect(() => {
-            nullstillSkjemaUtenomÅrsak();
-        }, [årsak.verdi, bruker.status]);
-
-        const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
-            const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
-
-            return {
-                multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
-                barnIBrev: barnIBrev.map(barn => barn.ident),
-                mottakerMålform: målform,
-                brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
-                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-            };
-        };
-
-        const hentBarnIBrevSkjemaData = (
-            brevmal: Informasjonsbrev,
-            målform: Målform
-        ): IManueltBrevRequestPåFagsak => {
-            const barnIBrev = skjema.felter.barnIBrev.verdi.filter(barn => barn.merket);
-
-            return {
-                multiselectVerdier: barnIBrev.map(
-                    barn =>
-                        `Barn født ${isoStringTilFormatertString({
-                            isoString: barn.fødselsdato,
-                            tilFormat: Datoformat.DATO,
-                        })}.`
-                ),
-                barnIBrev: barnIBrev.map(barn => barn.ident),
-                mottakerMålform: målform,
-                brevmal: brevmal,
-                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-            };
-        };
-
-        const hentKanSøkeSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
-            const fritekster = skjema.felter.fritekster.verdi.map(
-                fritekstFelt => fritekstFelt.verdi.tekst
-            );
-
-            const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
-                const dokument = opplysningsdokumenter.find(
-                    dokument => dokument.label === dokumentOption
-                ) as ISelectOptionMedBrevtekst;
-                if (!dokument.brevtekst) {
-                    throw new Error('Dokumentoptionen mangler brevtekst');
-                }
-                return dokument.brevtekst[målform];
-            });
-
-            return {
-                multiselectVerdier: dokumenter.concat(fritekster),
-                barnIBrev: [],
-                mottakerMålform: målform,
-                brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
-                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-            };
-        };
-
-        const hentInnhenteOpplysningerKlageSkjemaData = (
-            målform: Målform
-        ): IManueltBrevRequestPåFagsak => {
-            return {
-                multiselectVerdier: [],
-                barnIBrev: [],
-                mottakerMålform: målform,
-                brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
-                manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
-                fritekstAvsnitt: fritekstAvsnitt.verdi,
-            };
-        };
-
-        const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
-            const dokumentÅrsak = skjema.felter.årsak.verdi;
-            if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
-                switch (dokumentÅrsak) {
-                    case DokumentÅrsak.DELT_BOSTED:
-                        return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);
-
-                    case DokumentÅrsak.FØDSEL_MINDREÅRIG:
-                        return hentEnkeltInformasjonsbrevRequest({
-                            målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
-                            manuelleBrevmottakerePåFagsak,
-                        });
-                    case DokumentÅrsak.FØDSEL_VERGEMÅL:
-                        return hentEnkeltInformasjonsbrevRequest({
-                            målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
-                            manuelleBrevmottakerePåFagsak,
-                        });
-                    case DokumentÅrsak.FØDSEL_GENERELL:
-                        return hentEnkeltInformasjonsbrevRequest({
-                            målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
-                            manuelleBrevmottakerePåFagsak,
-                        });
-                    case DokumentÅrsak.KAN_SØKE:
-                        return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
-                    case DokumentÅrsak.KAN_SØKE_EØS:
-                        return hentEnkeltInformasjonsbrevRequest({
-                            målform: målform.verdi ?? Målform.NB,
-                            brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
-                            manuelleBrevmottakerePåFagsak,
-                        });
-
-                    case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
-                        return hentBarnIBrevSkjemaData(
-                            Informasjonsbrev.INFORMASJONSBREV_KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
-                            målform.verdi ?? Målform.NB
-                        );
-                    case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
-                        return hentInnhenteOpplysningerKlageSkjemaData(målform.verdi ?? Målform.NB);
-                }
+    const dokumenter = useFelt({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
+            if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
+                return feil(felt, 'Du må velge minst ett dokument');
             } else {
-                throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
+                return ok(felt);
             }
-        };
+        },
+        avhengigheter: { årsakFelt: årsak, fritekster: fritekster },
+        skalFeltetVises: avhengigheter => {
+            return avhengigheter.årsakFelt.verdi === DokumentÅrsak.KAN_SØKE;
+        },
+        nullstillVedAvhengighetEndring: false,
+    });
 
-        const skjemaErLåst = () =>
-            skjema.submitRessurs.status === RessursStatus.HENTER ||
-            hentetDokument.status === RessursStatus.HENTER;
+    const {
+        barnMedDeltBosted,
+        avtalerOmDeltBostedPerBarn,
+        nullstillDeltBosted,
+        hentDeltBostedMulitiselectVerdierForBarn,
+    } = useDeltBostedFelter({
+        avhengigheter: { årsakFelt: årsak },
+        skalFeltetVises: avhengigheter =>
+            avhengigheter.årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED,
+    });
 
-        const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
-            mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
-        );
+    const { barnIBrev, nullstillBarnIBrev } = useBarnIBrevFelter({
+        avhengigheter: { årsakFelt: årsak },
+        skalFeltetVises: avhengigheter =>
+            [
+                DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
+                DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
+                DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
+                DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
+                DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
+                DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
+            ].includes(avhengigheter.årsakFelt.verdi),
+    });
 
-        const brukerHarUkjentAdresse = () =>
-            !brukerHarUtenlandskAdresse &&
-            (distribusjonskanal.status !== RessursStatus.SUKSESS ||
-                distribusjonskanal.data === Distribusjonskanal.UKJENT ||
-                distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
+    const {
+        skjema,
+        onSubmit,
+        nullstillSkjema: nullstillHeleSkjema,
+        settVisfeilmeldinger,
+        kanSendeSkjema,
+    } = useSkjema<DokumentutsendingSkjema, string>({
+        felter: {
+            årsak: årsak,
+            målform: målform,
 
-        const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
+            fritekster: fritekster,
+            fritekstAvsnitt: fritekstAvsnitt,
+            dokumenter: dokumenter,
 
-        const hentForhåndsvisningPåFagsak = () => {
-            const skjemaData = hentSkjemaData();
-            settSistBrukteDataVedForhåndsvisning(skjemaData);
-            hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
-                method: 'POST',
-                data: skjemaData,
-                url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/forhaandsvis-brev`,
-            });
-        };
+            barnMedDeltBosted,
+            barnIBrev,
+            avtalerOmDeltBostedPerBarn: avtalerOmDeltBostedPerBarn,
+        },
+        skjemanavn: 'Dokumentutsending',
+    });
 
-        const sendBrevPåFagsak = () => {
-            if (kanSendeSkjema()) {
-                onSubmit(
-                    {
-                        method: 'POST',
-                        data: hentSkjemaData(),
-                        url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
-                    },
-                    () => {
-                        settVisInnsendtBrevModal(true);
-                        settManuelleBrevmottakerePåFagsak([]);
-                        nullstillSkjema();
-                    }
-                );
-            }
-        };
+    const nullstillSkjemaUtenomÅrsak = () => {
+        skjema.felter.dokumenter.nullstill();
+        skjema.felter.fritekster.nullstill();
+        skjema.felter.målform.nullstill();
+        skjema.felter.fritekstAvsnitt.nullstill();
+        nullstillDeltBosted();
+        nullstillBarnIBrev();
+    };
 
-        const hentSkjemaFeilmelding = () =>
-            hentFrontendFeilmelding(hentetDokument) ||
-            hentFrontendFeilmelding(skjema.submitRessurs);
+    const nullstillSkjema = () => {
+        nullstillHeleSkjema();
+        nullstillDeltBosted();
+        nullstillBarnIBrev();
+    };
+
+    useEffect(() => {
+        nullstillSkjemaUtenomÅrsak();
+    }, [årsak.verdi, bruker.status]);
+
+    const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
+        const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
 
         return {
-            fagsakId,
-            hentForhåndsvisningPåFagsak,
-            hentSkjemaFeilmelding,
-            hentetDokument,
-            sendBrevPåFagsak,
-            senderBrev,
-            settVisInnsendtBrevModal,
-            settVisfeilmeldinger,
-            skjemaErLåst,
-            visForhåndsvisningBeskjed: () =>
-                !deepEqual(hentSkjemaData(), sistBrukteDataVedForhåndsvisning),
-            visInnsendtBrevModal,
-            skjema,
-            nullstillSkjema,
-            distribusjonskanal,
-            brukerHarUtenlandskAdresse,
-            brukerHarUkjentAdresse,
-            hentDistribusjonskanal,
+            multiselectVerdier: barnIBrev.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
+            barnIBrev: barnIBrev.map(barn => barn.ident),
+            mottakerMålform: målform,
+            brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
+            manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
         };
+    };
+
+    const hentBarnIBrevSkjemaData = (
+        brevmal: Informasjonsbrev,
+        målform: Målform
+    ): IManueltBrevRequestPåFagsak => {
+        const barnIBrev = skjema.felter.barnIBrev.verdi.filter(barn => barn.merket);
+
+        return {
+            multiselectVerdier: barnIBrev.map(
+                barn =>
+                    `Barn født ${isoStringTilFormatertString({
+                        isoString: barn.fødselsdato,
+                        tilFormat: Datoformat.DATO,
+                    })}.`
+            ),
+            barnIBrev: barnIBrev.map(barn => barn.ident),
+            mottakerMålform: målform,
+            brevmal: brevmal,
+            manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+        };
+    };
+
+    const hentKanSøkeSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
+        const fritekster = skjema.felter.fritekster.verdi.map(
+            fritekstFelt => fritekstFelt.verdi.tekst
+        );
+
+        const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
+            const dokument = opplysningsdokumenter.find(
+                dokument => dokument.label === dokumentOption
+            ) as ISelectOptionMedBrevtekst;
+            if (!dokument.brevtekst) {
+                throw new Error('Dokumentoptionen mangler brevtekst');
+            }
+            return dokument.brevtekst[målform];
+        });
+
+        return {
+            multiselectVerdier: dokumenter.concat(fritekster),
+            barnIBrev: [],
+            mottakerMålform: målform,
+            brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
+            manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+        };
+    };
+
+    const hentInnhenteOpplysningerKlageSkjemaData = (
+        målform: Målform
+    ): IManueltBrevRequestPåFagsak => {
+        return {
+            multiselectVerdier: [],
+            barnIBrev: [],
+            mottakerMålform: målform,
+            brevmal: Informasjonsbrev.INFORMASJONSBREV_INNHENTE_OPPLYSNINGER_KLAGE,
+            manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+            fritekstAvsnitt: fritekstAvsnitt.verdi,
+        };
+    };
+
+    const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
+        const dokumentÅrsak = skjema.felter.årsak.verdi;
+        if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
+            switch (dokumentÅrsak) {
+                case DokumentÅrsak.DELT_BOSTED:
+                    return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);
+
+                case DokumentÅrsak.FØDSEL_MINDREÅRIG:
+                    return hentEnkeltInformasjonsbrevRequest({
+                        målform: målform.verdi ?? Målform.NB,
+                        brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_MINDREÅRIG,
+                        manuelleBrevmottakerePåFagsak,
+                    });
+                case DokumentÅrsak.FØDSEL_VERGEMÅL:
+                    return hentEnkeltInformasjonsbrevRequest({
+                        målform: målform.verdi ?? Målform.NB,
+                        brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_VERGEMÅL,
+                        manuelleBrevmottakerePåFagsak,
+                    });
+                case DokumentÅrsak.FØDSEL_GENERELL:
+                    return hentEnkeltInformasjonsbrevRequest({
+                        målform: målform.verdi ?? Målform.NB,
+                        brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
+                        manuelleBrevmottakerePåFagsak,
+                    });
+                case DokumentÅrsak.KAN_SØKE:
+                    return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
+                case DokumentÅrsak.KAN_SØKE_EØS:
+                    return hentEnkeltInformasjonsbrevRequest({
+                        målform: målform.verdi ?? Målform.NB,
+                        brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE_EØS,
+                        manuelleBrevmottakerePåFagsak,
+                    });
+
+                case DokumentÅrsak.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
+                    return hentBarnIBrevSkjemaData(
+                        Informasjonsbrev.INFORMASJONSBREV_KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV,
+                        målform.verdi ?? Målform.NB
+                    );
+                case DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE:
+                    return hentInnhenteOpplysningerKlageSkjemaData(målform.verdi ?? Målform.NB);
+            }
+        } else {
+            throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
+        }
+    };
+
+    const skjemaErLåst = () =>
+        skjema.submitRessurs.status === RessursStatus.HENTER ||
+        hentetDokument.status === RessursStatus.HENTER;
+
+    const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
+        mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+    );
+
+    const brukerHarUkjentAdresse = () =>
+        !brukerHarUtenlandskAdresse &&
+        (distribusjonskanal.status !== RessursStatus.SUKSESS ||
+            distribusjonskanal.data === Distribusjonskanal.UKJENT ||
+            distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
+
+    const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
+
+    const hentForhåndsvisningPåFagsak = () => {
+        const skjemaData = hentSkjemaData();
+        settSistBrukteDataVedForhåndsvisning(skjemaData);
+        hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
+            method: 'POST',
+            data: skjemaData,
+            url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/forhaandsvis-brev`,
+        });
+    };
+
+    const sendBrevPåFagsak = () => {
+        if (kanSendeSkjema()) {
+            onSubmit(
+                {
+                    method: 'POST',
+                    data: hentSkjemaData(),
+                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
+                },
+                () => {
+                    settVisInnsendtBrevModal(true);
+                    settManuelleBrevmottakerePåFagsak([]);
+                    nullstillSkjema();
+                }
+            );
+        }
+    };
+
+    const hentSkjemaFeilmelding = () =>
+        hentFrontendFeilmelding(hentetDokument) || hentFrontendFeilmelding(skjema.submitRessurs);
+
+    return (
+        <DokumentutsendingContext.Provider
+            value={{
+                fagsakId,
+                hentForhåndsvisningPåFagsak,
+                hentSkjemaFeilmelding,
+                hentetDokument,
+                sendBrevPåFagsak,
+                senderBrev,
+                settVisInnsendtBrevModal,
+                settVisfeilmeldinger,
+                skjemaErLåst,
+                visForhåndsvisningBeskjed: () =>
+                    !deepEqual(hentSkjemaData(), sistBrukteDataVedForhåndsvisning),
+                visInnsendtBrevModal,
+                skjema,
+                nullstillSkjema,
+                distribusjonskanal,
+                brukerHarUtenlandskAdresse,
+                brukerHarUkjentAdresse,
+                hentDistribusjonskanal,
+            }}
+        >
+            {children}
+        </DokumentutsendingContext.Provider>
+    );
+};
+
+export const useDokumentutsendingContext = () => {
+    const context = useContext(DokumentutsendingContext);
+    if (context === undefined) {
+        throw new Error(
+            'useDokumentutsendingContext må brukes innenfor en DokumentutsendingProvider'
+        );
     }
-);
+    return context;
+};
