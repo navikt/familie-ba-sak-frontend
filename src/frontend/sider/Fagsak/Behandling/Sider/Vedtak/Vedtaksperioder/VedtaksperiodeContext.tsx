@@ -34,8 +34,8 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
-import { useVilkårBegrunnelser } from '../VedtakBegrunnelserTabell/Hooks/useVedtaksbegrunnelser';
 import { useVedtakContext } from '../VedtakContext';
+import { grupperBegrunnelser } from './begrunnelserUtils';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -73,6 +73,9 @@ export const VedtaksperiodeProvider = ({
     children,
 }: IProps) => {
     const { request } = useHttp();
+    const { vedtaksbegrunnelseTekster } = useVedtakContext();
+    const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
             vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
@@ -82,7 +85,6 @@ export const VedtaksperiodeProvider = ({
         useState<Ressurs<string>>(byggTomRessurs());
     const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] =
         useState<Ressurs<string[]>>(byggTomRessurs());
-    const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
 
     const maksAntallKulepunkter = 3;
     const makslengdeFritekst = 350;
@@ -116,12 +118,6 @@ export const VedtaksperiodeProvider = ({
             fritekster,
         },
         skjemanavn: 'Begrunnelser for vedtaksperiode',
-    });
-
-    const { grupperteBegrunnelser, vedtaksbegrunnelseTekster } = useVilkårBegrunnelser({
-        åpenBehandling,
-        vedtaksperiodeMedBegrunnelser,
-        periode: skjema.felter.periode.verdi,
     });
 
     const populerSkjemaFraBackend = () => {
@@ -289,7 +285,10 @@ export const VedtaksperiodeProvider = ({
         <VedtaksperiodeContext.Provider
             value={{
                 erPanelEkspandert,
-                grupperteBegrunnelser,
+                grupperteBegrunnelser: grupperBegrunnelser(
+                    vedtaksperiodeMedBegrunnelser,
+                    vedtaksbegrunnelseTekster
+                ),
                 hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,
