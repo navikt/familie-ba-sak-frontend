@@ -14,7 +14,7 @@ import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
-import { useSammensattKontrollsak } from './SammensattKontrollsak/SammensattKontrollsakContext';
+import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
@@ -52,7 +52,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
         skalViseSammensattKontrollsakMenyValg,
         slettSammensattKontrollsak,
         sammensattKontrollsak,
-    } = useSammensattKontrollsak();
+    } = useSammensattKontrollsakContext();
 
     const erLesevisning = vurderErLesevisning();
 

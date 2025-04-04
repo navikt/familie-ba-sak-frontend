@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Alert, Button, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
-import { useSammensattKontrollsak } from './SammensattKontrollsakContext';
+import { useSammensattKontrollsakContext } from './SammensattKontrollsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const StyledVStack = styled(VStack)`
@@ -19,7 +19,7 @@ const StyledButton = styled(Button)`
 const SammensattKontrollsak: React.FC = () => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { sammensattKontrollsak, opprettEllerOppdaterSammensattKontrollsak, feilmelding } =
-        useSammensattKontrollsak();
+        useSammensattKontrollsakContext();
 
     const [fritekst, settFritekst] = useState<string>(sammensattKontrollsak?.fritekst ?? '');
 
