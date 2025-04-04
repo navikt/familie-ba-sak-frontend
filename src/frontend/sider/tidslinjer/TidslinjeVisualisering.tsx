@@ -12,7 +12,7 @@ import type { Periode, Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useTidslinje } from '../../komponenter/Tidslinje/TidslinjeContext';
+import { useTidslinjeContext } from '../../komponenter/Tidslinje/TidslinjeContext';
 import TidslinjeEtikett from '../../komponenter/Tidslinje/TidslinjeEtikett';
 import TidslinjeNavigering from '../../komponenter/Tidslinje/TidslinjeNavigering';
 import Vinduvelger from '../../komponenter/Tidslinje/VinduVelger';
@@ -95,7 +95,8 @@ const TidslinjeVisualisering: React.FC = () => {
     const matchBehandlingId = useMatch('/tidslinjer/:behandlingId');
     const behandlingId = matchBehandlingId?.params.behandlingId;
 
-    const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } = useTidslinje();
+    const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } =
+        useTidslinjeContext();
 
     const [tidslinjerRessurs, settTidslinjerRessurs] =
         useState<Ressurs<ITidslinjer>>(byggTomRessurs());

@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import React, { createContext, useContext, useState, type PropsWithChildren } from 'react';
 
-import createUseContext from 'constate';
 import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
 import type { Etikett, Periode } from '@navikt/familie-tidslinje';
@@ -30,7 +29,37 @@ export enum NavigeringsRetning {
     HØYRE = 'HØYRE',
 }
 
-const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
+interface TidslinjeContextValue {
+    aktivEtikett: Etikett | undefined;
+    settAktivEtikett: (aktivEtikett: Etikett | undefined) => void;
+    genererFormatertÅrstall: () => string | number;
+    tidslinjeVinduer: ITidslinjeVindu[];
+    aktivtTidslinjeVindu: {
+        vindu: ITidslinjeVindu;
+        startDato: Date;
+        sluttDato: Date;
+    };
+    naviger: (retning: NavigeringsRetning) => void;
+    endreTidslinjeVindu: (vindu: ITidslinjeVindu) => void;
+    genererRader: (
+        fagsakType?: FagsakType,
+        personerMedAndelerTilkjentYtelse?: IPersonMedAndelerTilkjentYtelse[]
+    ) => Periode[][];
+    initiellAktivEtikettErSatt: boolean;
+    setInitiellAktivEtikettErSatt: (initiellAktivEtikettErSatt: boolean) => void;
+    filterOgSorterGrunnlagPersonerMedAndeler: (
+        personer: IGrunnlagPerson[],
+        personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
+    ) => IGrunnlagPerson[];
+    filterOgSorterAndelPersonerIGrunnlag: (
+        personer: IGrunnlagPerson[],
+        personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
+    ) => IPersonMedAndelerTilkjentYtelse[];
+}
+
+const TidslinjeContext = createContext<TidslinjeContextValue | undefined>(undefined);
+
+export const TidslinjeProvider = (props: PropsWithChildren) => {
     const tidslinjeVinduer: ITidslinjeVindu[] = [
         { id: TidslinjeVindu.HALVT_ÅR, label: '6 mnd', måneder: 6 },
         { id: TidslinjeVindu.ETT_ÅR, label: '1 år', måneder: 12 },
@@ -201,20 +230,33 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             }, []);
     };
 
-    return {
-        aktivEtikett,
-        settAktivEtikett,
-        genererFormatertÅrstall,
-        tidslinjeVinduer,
-        aktivtTidslinjeVindu,
-        naviger,
-        endreTidslinjeVindu,
-        genererRader,
-        initiellAktivEtikettErSatt,
-        setInitiellAktivEtikettErSatt,
-        filterOgSorterGrunnlagPersonerMedAndeler,
-        filterOgSorterAndelPersonerIGrunnlag,
-    };
-});
+    return (
+        <TidslinjeContext.Provider
+            value={{
+                aktivEtikett,
+                settAktivEtikett,
+                genererFormatertÅrstall,
+                tidslinjeVinduer,
+                aktivtTidslinjeVindu,
+                naviger,
+                endreTidslinjeVindu,
+                genererRader,
+                initiellAktivEtikettErSatt,
+                setInitiellAktivEtikettErSatt,
+                filterOgSorterGrunnlagPersonerMedAndeler,
+                filterOgSorterAndelPersonerIGrunnlag,
+            }}
+        >
+            {props.children}
+        </TidslinjeContext.Provider>
+    );
+};
 
-export { TidslinjeProvider, useTidslinje };
+export const useTidslinjeContext = () => {
+    const context = useContext(TidslinjeContext);
+
+    if (context === undefined) {
+        throw new Error('useTidslinjeContext må brukes innenfor en TidslinjeProvider');
+    }
+    return context;
+};

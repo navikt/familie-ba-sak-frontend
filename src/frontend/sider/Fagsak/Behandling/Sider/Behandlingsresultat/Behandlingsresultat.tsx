@@ -22,7 +22,7 @@ import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import { useTidslinje } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
+import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import type {
@@ -80,7 +80,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         aktivEtikett,
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
-    } = useTidslinje();
+    } = useTidslinjeContext();
 
     useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 

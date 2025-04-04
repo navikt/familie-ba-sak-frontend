@@ -16,7 +16,7 @@ import {
     kanLeggeSmåbarnstilleggTilPeriode,
 } from './OppsummeringsboksUtils';
 import { useApp } from '../../../../../context/AppContext';
-import { useTidslinje } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
+import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../typer/behandling';
@@ -137,7 +137,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { settToast } = useApp();
-    const { settAktivEtikett } = useTidslinje();
+    const { settAktivEtikett } = useTidslinjeContext();
 
     const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(
         new Map<string, boolean>()
