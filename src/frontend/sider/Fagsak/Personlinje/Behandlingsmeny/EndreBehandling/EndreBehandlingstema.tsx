@@ -4,20 +4,18 @@ import { Button, Dropdown, Fieldset, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlingstema from './useEndreBehandlingstema';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { useFagsakContext } from '../../../FagsakContext';
 
 const EndreBehandlingstema: React.FC = () => {
-    const { behandling } = useBehandling();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
     const { minimalFagsak } = useFagsakContext();
-
-    const { vurderErLesevisning } = useBehandling();
 
     const lukkEndreBehandlingModal = () => {
         nullstillSkjema();

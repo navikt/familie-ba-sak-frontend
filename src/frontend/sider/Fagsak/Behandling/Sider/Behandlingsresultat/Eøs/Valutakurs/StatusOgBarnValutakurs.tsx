@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
 
-import { useBehandling } from '../../../../../../../context/behandlingContext/BehandlingContext';
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
 import {
     type IBehandling,
@@ -14,6 +13,7 @@ import {
 import { type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { mapEøsPeriodeStatusTilStatus } from '../../../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     min-width: 1.5rem;
@@ -42,7 +42,7 @@ const PeriodeStatus: React.FC<StatusProps> = ({
     valutakurs,
     vurderingsstrategiForValutakurser,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {

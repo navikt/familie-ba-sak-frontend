@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import { useBehandlingContext } from './context/BehandlingContext';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
@@ -11,13 +12,12 @@ import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
-import OppsummeringVedtak from './Sider/Vedtak/OppsummeringVedtak';
-import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { VedtakStegProvider } from '../../../context/behandlingContext/useVedtakSteg';
-import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/useSammensattKontrollsak';
+import Vedtak from './Sider/Vedtak/Vedtak';
+import { VedtakProvider } from './Sider/Vedtak/VedtakContext';
+import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
+import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
@@ -30,7 +30,7 @@ interface Props {
 
 const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
     const location = useLocation();
-    const { behandling, leggTilBesøktSide } = useBehandling();
+    const { behandling, leggTilBesøktSide } = useBehandlingContext();
     useTrackTidsbrukPåSide(fagsak, behandling);
 
     const sidevisning = hentSideHref(location.pathname);
@@ -88,11 +88,11 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                 path="/vedtak"
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
-                        <VedtakStegProvider åpenBehandling={behandling}>
+                        <VedtakProvider åpenBehandling={behandling}>
                             <SammensattKontrollsakProvider åpenBehandling={behandling}>
-                                <OppsummeringVedtak åpenBehandling={behandling} bruker={bruker} />
+                                <Vedtak åpenBehandling={behandling} bruker={bruker} />
                             </SammensattKontrollsakProvider>
-                        </VedtakStegProvider>
+                        </VedtakProvider>
                     </SimuleringProvider>
                 }
             />

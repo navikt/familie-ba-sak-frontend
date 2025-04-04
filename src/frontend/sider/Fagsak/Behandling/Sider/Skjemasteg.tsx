@@ -16,10 +16,10 @@ import {
 
 import type { ISide } from './sider';
 import { sider } from './sider';
-import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingSteg, settPåVentÅrsaker } from '../../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { behandlingErEtterSteg } from '../../../../utils/steg';
+import { useBehandlingContext } from '../context/BehandlingContext';
 
 interface IProps extends PropsWithChildren {
     className?: string;
@@ -84,7 +84,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
         vurderErLesevisning,
         erBehandleneEnhetMidlertidig,
         erBehandlingAvsluttet,
-    } = useBehandling();
+    } = useBehandlingContext();
     const erBehandlingSattPåVent = behandling.aktivSettPåVent;
 
     useEffect(() => {

@@ -22,12 +22,12 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../../../../../typer/person';
 import { adressebeskyttelsestyper } from '../../../../../typer/person';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { identValidator } from '../../../../../utils/validators';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const LeggTilBarnLegend = styled.div`
     margin-top: 1rem;
@@ -36,7 +36,7 @@ const LeggTilBarnLegend = styled.div`
 
 const LeggTilBarnPåBehandling: React.FC = () => {
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling } = useBehandling();
+    const { settÅpenBehandling, behandling } = useBehandlingContext();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 

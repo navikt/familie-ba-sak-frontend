@@ -8,7 +8,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
@@ -16,6 +15,7 @@ import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../..
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../../utils/dato';
 import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const BarnaWrapper = styled.div`
     margin: 1rem 0;
@@ -31,7 +31,7 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 
 const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, behandling } =
-        useBehandling();
+        useBehandlingContext();
     const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();

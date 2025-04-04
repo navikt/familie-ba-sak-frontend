@@ -19,7 +19,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../../context/AppContext';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import ØyeGrå from '../../../../../../ikoner/ØyeGrå';
 import ØyeGrønn from '../../../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../../../ikoner/ØyeRød';
@@ -27,6 +26,7 @@ import type { IBehandling } from '../../../../../../typer/behandling';
 import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { KontrollertStatus } from '../../../Sider/sider';
 
 interface IProps {
@@ -44,7 +44,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     sendInnVedtak,
     åpenBehandling,
 }) => {
-    const { trinnPåBehandling } = useBehandling();
+    const { trinnPåBehandling } = useBehandlingContext();
     const { innloggetSaksbehandler } = useApp();
 
     const [beslutning, settBeslutning] = React.useState<TotrinnskontrollBeslutning>(

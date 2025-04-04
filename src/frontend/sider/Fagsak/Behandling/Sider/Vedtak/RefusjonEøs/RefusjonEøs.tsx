@@ -8,9 +8,9 @@ import { ATextAction } from '@navikt/ds-tokens/dist/tokens';
 
 import NyRefusjonEøsPeriode from './NyRefusjonEøsPeriode';
 import RefusjonEøsPeriode from './RefusjonEøsPeriode';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { summerBeløpForPerioder } from '../utils';
 
 interface IRefusjonEøs {
@@ -47,7 +47,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     behandlingId,
     fagsakId,
 }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(

@@ -5,7 +5,6 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
@@ -29,9 +28,10 @@ import {
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
 import { useFagsakContext } from '../../../../FagsakContext';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export const useBrevModul = () => {
-    const { behandling } = useBehandling();
+    const { behandling } = useBehandlingContext();
     const { minimalFagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;

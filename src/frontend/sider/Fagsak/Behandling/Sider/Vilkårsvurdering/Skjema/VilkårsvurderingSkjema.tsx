@@ -3,9 +3,9 @@ import React from 'react';
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
 import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import { FagsakType } from '../../../../../../typer/fagsak';
 import { useFagsakContext } from '../../../../FagsakContext';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -14,7 +14,7 @@ interface IProps {
 const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
     const { minimalFagsak } = useFagsakContext();
 
-    const { samhandlerOrgnr } = useBehandling();
+    const { samhandlerOrgnr } = useBehandlingContext();
 
     if (minimalFagsak?.fagsakType === FagsakType.NORMAL) {
         return <VilkårsvurderingSkjemaNormal visFeilmeldinger={visFeilmeldinger} />;

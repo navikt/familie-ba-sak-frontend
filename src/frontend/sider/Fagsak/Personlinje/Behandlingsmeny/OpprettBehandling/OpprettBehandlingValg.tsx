@@ -80,7 +80,8 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
                   (årsak !== BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
-                      kanOppretteRevurderingMedÅrsakIverksetteKAVedtak)
+                      kanOppretteRevurderingMedÅrsakIverksetteKAVedtak) &&
+                  årsak !== BehandlingÅrsak.KLAGE
           );
 
 interface IProps {

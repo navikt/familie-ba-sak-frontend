@@ -7,10 +7,10 @@ import { ABorderDivider } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingRouter from './BehandlingRouter';
+import { BehandlingProvider } from './context/BehandlingContext';
+import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
-import { BehandlingProvider } from '../../../context/behandlingContext/BehandlingContext';
-import { useHentOgSettBehandling } from '../../../context/behandlingContext/HentOgSettBehandlingContext';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import Personlinje from '../Personlinje/Personlinje';
@@ -43,7 +43,7 @@ const HøyremenyContainer = styled.div`
 `;
 
 const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
-    const { behandlingRessurs } = useHentOgSettBehandling();
+    const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     switch (behandlingRessurs.status) {
         case RessursStatus.SUKSESS:

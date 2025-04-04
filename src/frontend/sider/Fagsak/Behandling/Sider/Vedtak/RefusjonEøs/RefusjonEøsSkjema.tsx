@@ -7,11 +7,11 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Country } from '@navikt/land-verktoy';
 
-import { useBehandling } from '../../../../../../context/behandlingContext/BehandlingContext';
 import Månedvelger, { DagIMåneden } from '../../../../../../komponenter/Datovelger/Månedvelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRefusjonEøsSkjemaFelter } from '../../../../../../typer/refusjon-eøs';
 import { randomUUID } from '../../../../../../utils/commons';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { FamilieLandvelger } from '../../Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IRefusjonEøsSkjemaProps {
@@ -36,7 +36,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({ skjema }) => {
-    const { vurderErLesevisning } = useBehandling();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const inputUuid = randomUUID();

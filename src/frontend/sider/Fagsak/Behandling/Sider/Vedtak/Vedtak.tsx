@@ -8,17 +8,17 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
-import { Vedtaksbrev } from './Vedtaksbrev';
+import { VedtaksbrevBygger } from './Vedtaksbrev';
 import Vedtaksmeny from './Vedtaksmeny';
-import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useVedtakSteg } from '../../../../../context/behandlingContext/useVedtakSteg';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { erBehandlingMedVedtaksbrevutsending } from '../../../../../utils/behandling';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -37,10 +37,10 @@ export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
+const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandling();
+        useBehandlingContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsak();
 
     const {
@@ -49,7 +49,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         settVisFeilutbetaltValuta,
         erUlagretNyFeilutbetaltValutaPeriode,
         erUlagretNyRefusjonEøsPeriode,
-    } = useVedtakSteg();
+    } = useVedtakContext();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 
@@ -100,7 +100,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
                         visRefusjonEøs={() => settVisRefusjonEøs(true)}
                     />
-                    <Vedtaksbrev åpenBehandling={åpenBehandling} bruker={bruker} />
+                    <VedtaksbrevBygger åpenBehandling={åpenBehandling} bruker={bruker} />
                 </>
             ) : (
                 <Vedtaksalert åpenBehandling={åpenBehandling} />
@@ -111,4 +111,4 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
     );
 };
 
-export default OppsummeringVedtak;
+export default Vedtak;
