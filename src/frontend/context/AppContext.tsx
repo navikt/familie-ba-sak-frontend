@@ -266,7 +266,7 @@ const AppProvider = (props: PropsWithChildren) => {
 const useAppContext = () => {
     const context = React.useContext(AppContext);
     if (!context) {
-        throw new Error('useAppContext må brukes innenfor AppContentProvider');
+        throw new Error('useAppContext må brukes innenfor AppProvider');
     }
     return context;
 };
