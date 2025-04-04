@@ -20,7 +20,7 @@ import {
 } from '../../../../../../../utils/vedtakUtils';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useVedtakContext } from '../../VedtakContext';
-import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeContext';
 import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {

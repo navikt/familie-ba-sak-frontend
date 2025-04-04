@@ -9,7 +9,7 @@ import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeContext } from '../Context/VedtaksperiodeContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
 
 interface IProps {
