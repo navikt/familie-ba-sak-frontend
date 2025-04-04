@@ -35,7 +35,7 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
     margin-left: 0;
 `;
 
-interface IEkspanderbartBegrunnelsePanelProps extends PropsWithChildren {
+interface EkspanderbarVedtaksperiodeProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
     onClick?: () => void;
@@ -47,7 +47,7 @@ const slutterSenereEnnInneværendeMåned = (tom?: string) =>
         endOfMonth(dagensDato)
     );
 
-const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
+const EkspanderbarVedtaksperiode: React.FC<EkspanderbarVedtaksperiodeProps> = ({
     vedtaksperiodeMedBegrunnelser,
     åpen,
     onClick,
@@ -94,4 +94,4 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     );
 };
 
-export default EkspanderbartBegrunnelsePanel;
+export default EkspanderbarVedtaksperiode;
