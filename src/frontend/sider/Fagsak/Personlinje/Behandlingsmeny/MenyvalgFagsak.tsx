@@ -10,7 +10,7 @@ import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
 import { useApp } from '../../../../context/AppContext';
 import { BehandlerRolle } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
-import { FagsakType } from '../../../../typer/fagsak';
+// import { FagsakType } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 import { useFagsakContext } from '../../FagsakContext';
 
@@ -26,7 +26,6 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
     const erSaksbehandlerEllerHøyere = hentSaksbehandlerRolle() >= BehandlerRolle.SAKSBEHANDLER;
-    const erFagsakTypeInstitusjon = minimalFagsak.fagsakType === FagsakType.INSTITUSJON;
 
     return (
         <>
@@ -38,7 +37,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
                     brevmottakere={manuelleBrevmottakerePåFagsak}
                 />
             )}
-            {!erPåDokumentutsending && !erFagsakTypeInstitusjon && erSaksbehandlerEllerHøyere && (
+            {!erPåDokumentutsending && erSaksbehandlerEllerHøyere && (
                 <Dropdown.Menu.List.Item
                     onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
                 >
