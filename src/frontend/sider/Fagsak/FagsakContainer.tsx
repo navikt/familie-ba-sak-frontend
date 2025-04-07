@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingContainer from './Behandling/BehandlingContainer';
@@ -13,6 +13,7 @@ import { FagsakProvider, useFagsakContext } from './FagsakContext';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { useTestApi } from '../../api/useTestApi';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
@@ -41,6 +42,8 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
         }
     }, [fagsakId]);
 
+    const { opprettRevurderingKlage } = useTestApi();
+
     switch (minimalFagsakRessurs.status) {
         case RessursStatus.SUKSESS:
             switch (brukerRessurs.status) {
@@ -59,6 +62,15 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                             <Saksoversikt
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
+                                            <Button
+                                                onClick={() =>
+                                                    opprettRevurderingKlage(
+                                                        minimalFagsakRessurs.data.id
+                                                    )
+                                                }
+                                            >
+                                                Thomas sin prøveknapp
+                                            </Button>
                                         </>
                                     }
                                 />
