@@ -4,23 +4,21 @@ import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
-import EkspanderbartVedtaksbegrunnelsePanel from './EkspanderbartVedtaksbegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
-import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../../typer/vedtak';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { useVedtaksperiodeMedBegrunnelserPanel } from '../Context/VedtaksperiodeMedBegrunnelserContext';
-import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
+import EkspanderbarVedtaksperiode from './EkspanderbarVedtaksperiode';
+import FritekstBegrunnelser from './FritekstBegrunnelser';
+import Utbetalingsresultat from './Utbetalingsresultat';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 
 interface IProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
 }
 
-const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
-    vedtaksperiodeMedBegrunnelser,
-}) => {
+const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
     const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
-        useVedtaksperiodeMedBegrunnelserPanel();
+        useVedtaksperiodeContext();
 
     const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
         Standardbegrunnelse.REDUKSJON_SATSENDRING,
@@ -54,7 +52,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         ).length > 0;
 
     return (
-        <EkspanderbartVedtaksbegrunnelsePanel
+        <EkspanderbarVedtaksperiode
             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(true)}
@@ -87,8 +85,8 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                     <ErrorMessage>{genererteBrevbegrunnelser.frontendFeilmelding}</ErrorMessage>
                 </>
             )}
-            {visFritekster() && <FritekstVedtakbegrunnelser />}
-        </EkspanderbartVedtaksbegrunnelsePanel>
+            {visFritekster() && <FritekstBegrunnelser />}
+        </EkspanderbarVedtaksperiode>
     );
 };
-export default VedtaksperiodeMedBegrunnelserPanel;
+export default Vedtaksperiode;
