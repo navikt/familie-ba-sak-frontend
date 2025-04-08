@@ -12,10 +12,10 @@ import {
 import { Button, Dropdown } from '@navikt/ds-react';
 import { ASpacing10 } from '@navikt/ds-tokens/dist/tokens';
 
+import EndreEndringstidspunkt from './endringstidspunkt/EndreEndringstidspunkt';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
-import EndreEndringstidspunkt from './VedtakBegrunnelserTabell/endringstidspunkt/EndreEndringstidspunkt';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';

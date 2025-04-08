@@ -136,7 +136,7 @@ export interface IRestStegTilstand {
     behandlingStegStatus: BehandlingStegStatus;
 }
 
-export type VedtaksbegrunnelseTekster = {
+export type AlleBegrunnelser = {
     [key in VedtakBegrunnelseType]: IRestVedtakBegrunnelseTilknyttetVilkår[];
 };
 

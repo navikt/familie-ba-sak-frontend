@@ -6,14 +6,14 @@ import { Alert, Heading } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../../typer/vedtaksperiode';
-import { partition } from '../../../../../../../utils/commons';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../../../utils/vedtakUtils';
-import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
-import { VedtaksperiodeMedBegrunnelserPanelProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
+import Vedtaksperiode from './Vedtaksperiode';
+import type { IBehandling } from '../../../../../../typer/behandling';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
+import { partition } from '../../../../../../utils/commons';
+import { useVedtakContext } from '../VedtakContext';
+import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
 
 const StyledHeading = styled(Heading)`
     display: flex;
@@ -24,20 +24,20 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
-interface IVedtakBegrunnelserTabell {
+interface VedtaksperioderProps {
     åpenBehandling: IBehandling;
     vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
-const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
+const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({
     åpenBehandling,
     vedtaksperioderMedBegrunnelserRessurs,
 }) => {
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
+    const { alleBegrunnelserRessurs } = useVedtakContext();
 
     if (
-        vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
-        vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
+        alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
+        alleBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
         return (
             <StyledAlert variant="error">
@@ -72,12 +72,12 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
     return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
-            <VedtaksperiodeListe
+            <GrupperteVedtaksperioder
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 åpenBehandling={åpenBehandling}
             />
-            <VedtaksperiodeListe
+            <GrupperteVedtaksperioder
                 vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
                 overskrift={'Generelle avslagsbegrunnelser'}
                 åpenBehandling={åpenBehandling}
@@ -88,7 +88,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     );
 };
 
-const VedtaksperiodeListe: React.FC<{
+const GrupperteVedtaksperioder: React.FC<{
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     åpenBehandling: IBehandling;
@@ -104,19 +104,19 @@ const VedtaksperiodeListe: React.FC<{
             </StyledHeading>
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                    <VedtaksperiodeMedBegrunnelserPanelProvider
+                    <VedtaksperiodeProvider
                         key={vedtaksperiodeMedBegrunnelser.id}
                         åpenBehandling={åpenBehandling}
                         vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                     >
-                        <VedtaksperiodeMedBegrunnelserPanel
+                        <Vedtaksperiode
                             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                         />
-                    </VedtaksperiodeMedBegrunnelserPanelProvider>
+                    </VedtaksperiodeProvider>
                 )
             )}
         </>
     );
 };
 
-export default VedtaksperioderMedBegrunnelser;
+export default Vedtaksperioder;

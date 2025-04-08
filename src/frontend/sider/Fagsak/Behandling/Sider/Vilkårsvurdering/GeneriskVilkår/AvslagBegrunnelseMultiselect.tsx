@@ -16,7 +16,6 @@ import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
@@ -40,20 +39,16 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
 }) => {
     const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
-    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurderingContext();
 
-    const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
-        vilkårType,
-        regelverk,
-        gjelderInstitusjon
-    );
+    const { avslagsbegrunnelserForGjeldendeVilkår, begrunnelserStatus } =
+        useAvslagBegrunnelseMultiselect(vilkårType, regelverk, gjelderInstitusjon);
 
     const valgteBegrunnelser = begrunnelser
         ? begrunnelser.map((valgtBegrunnelse: VedtakBegrunnelse) => ({
               value: valgtBegrunnelse?.toString() ?? '',
               label:
-                  avslagBegrunnelseTeksterForGjeldendeVilkår.find(
+                  avslagsbegrunnelserForGjeldendeVilkår.find(
                       (
                           restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                       ) => restVedtakBegrunnelseTilknyttetVilkår.id === valgtBegrunnelse
@@ -87,14 +82,14 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
         }
     };
 
-    const muligeOptions: IOptionType[] = avslagBegrunnelseTeksterForGjeldendeVilkår.map(
+    const muligeOptions: IOptionType[] = avslagsbegrunnelserForGjeldendeVilkår.map(
         (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => ({
             value: begrunnelse.id,
             label: begrunnelse.navn,
         })
     );
 
-    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
+    if (begrunnelserStatus === RessursStatus.FEILET) {
         return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vilkår.</Alert>;
     }
 

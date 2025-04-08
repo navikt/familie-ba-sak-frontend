@@ -10,7 +10,7 @@ import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTot
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
-import { VedtaksbrevBygger } from './Vedtaksbrev';
+import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import Vedtaksmeny from './Vedtaksmeny';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
