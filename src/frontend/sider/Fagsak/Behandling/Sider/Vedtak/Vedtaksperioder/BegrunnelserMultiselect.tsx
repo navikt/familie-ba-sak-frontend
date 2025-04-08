@@ -61,7 +61,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             settStandardbegrunnelser(
                 mapBegrunnelserTilSelectOptions(
                     vedtaksperiodeMedBegrunnelser,
-                    alleBegrunnelserRessurs
+                    alleBegrunnelserRessurs.data
                 )
             );
         }

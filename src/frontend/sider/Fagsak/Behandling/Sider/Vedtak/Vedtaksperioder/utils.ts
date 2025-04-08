@@ -125,7 +125,7 @@ export const grupperBegrunnelser = (
 
 export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    vilkårBegrunnelser: Ressurs<AlleBegrunnelser>
+    alleBegrunnelser: AlleBegrunnelser
 ): OptionType[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
         (begrunnelse: IRestVedtaksbegrunnelse) => ({
@@ -133,7 +133,7 @@ export const mapBegrunnelserTilSelectOptions = (
             label: hentLabelForOption(
                 begrunnelse.vedtakBegrunnelseType,
                 begrunnelse.standardbegrunnelse,
-                vilkårBegrunnelser
+                alleBegrunnelser
             ),
         })
     );
@@ -142,14 +142,14 @@ export const mapBegrunnelserTilSelectOptions = (
 const hentLabelForOption = (
     vedtakBegrunnelseType: VedtakBegrunnelseType,
     standardbegrunnelse: VedtakBegrunnelse,
-    vilkårBegrunnelser: Ressurs<AlleBegrunnelser>
+    alleBegrunnelser: AlleBegrunnelser
 ) => {
-    return vilkårBegrunnelser.status === RessursStatus.SUKSESS
-        ? (vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
-              (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                  restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
-          )?.navn ?? '')
-        : '';
+    return (
+        alleBegrunnelser[vedtakBegrunnelseType].find(
+            (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                restVedtakBegrunnelseTilknyttetVilkår.id === standardbegrunnelse
+        )?.navn ?? ''
+    );
 };
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
