@@ -82,7 +82,6 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         brukerHarUkjentAdresse,
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
-        dokumentÅrsaker,
     } = useDokumentutsendingContext();
     const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useAppContext();
 
