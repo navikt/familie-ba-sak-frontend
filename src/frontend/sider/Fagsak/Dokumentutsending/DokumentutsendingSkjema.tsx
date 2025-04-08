@@ -8,22 +8,22 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
-import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
-import { useApp } from '../../../context/AppContext';
 import {
     dokumentÅrsak,
     DokumentÅrsakPerson,
     DokumentÅrsakInstitusjon,
-    useDokumentutsending,
+    useDokumentutsendingContext,
     type DokumentÅrsak,
-} from '../../../context/DokumentutsendingContext';
+} from './DokumentutsendingContext';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
+import { useAppContext } from '../../../context/AppContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { useFagsakContext } from '../FagsakContext';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 
 interface Props {
     bruker: IPersonInfo;
@@ -83,12 +83,10 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
         hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
-    } = useDokumentutsending();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    } = useDokumentutsendingContext();
+    const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useAppContext();
 
     const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
-
-    const { toggles } = useApp();
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
         switch (årsak) {

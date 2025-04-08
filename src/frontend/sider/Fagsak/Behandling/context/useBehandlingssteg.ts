@@ -11,7 +11,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingResultat, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
@@ -23,7 +23,7 @@ const useBehandlingssteg = (
     behandling?: IBehandling
 ) => {
     const { request } = useHttp();
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useAppContext();
     const { fagsakId, behandlingId } = useSakOgBehandlingParams();
 
     const navigate = useNavigate();

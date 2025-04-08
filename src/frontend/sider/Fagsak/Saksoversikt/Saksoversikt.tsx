@@ -12,7 +12,7 @@ import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useApp } from '../../../context/AppContext';
+import { useAppContext } from '../../../context/AppContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import {
@@ -47,7 +47,7 @@ const StyledAlert = styled(Alert)`
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>

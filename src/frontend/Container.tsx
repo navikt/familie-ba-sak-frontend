@@ -3,12 +3,12 @@ import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
-import { useApp } from './context/AppContext';
-import { TidslinjeProvider } from './context/TidslinjeContext';
+import { useAppContext } from './context/AppContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
+import { TidslinjeProvider } from './komponenter/Tidslinje/TidslinjeContext';
 import Toasts from './komponenter/Toast/Toasts';
 import FagsakContainer from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
@@ -34,7 +34,7 @@ const Main = styled.main<{ $systemetLaster: boolean }>`
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal, erTogglesHentet } =
-        useApp();
+        useAppContext();
 
     return (
         <Router>

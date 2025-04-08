@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import { opplysningsdokumenter } from '../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
 const Container = styled.div`
     margin-bottom: 1rem;
 `;
 
 export const Dokumentvelger = () => {
-    const { skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsendingContext();
 
     const dokumenter = skjema.felter.dokumenter;
     const { error } = dokumenter.hentNavBaseSkjemaProps(skjema.visFeilmeldinger);

@@ -9,7 +9,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
-import { useApp } from '../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../typer/samhandler';
 import { obfuskerSamhandler } from '../../utils/obfuskerData';
 import { orgnummerValidator } from '../../utils/validators';
@@ -56,7 +56,7 @@ export const useSamhandlerRequest = () => {
     const [samhandlerRessurs, settSamhandlerRessurs] =
         useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
-    const { skalObfuskereData } = useApp();
+    const { skalObfuskereData } = useAppContext();
 
     const hentOgSettSamhandler = (orgnr: string) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());

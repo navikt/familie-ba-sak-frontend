@@ -7,7 +7,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import { useSammensattKontrollsak } from './SammensattKontrollsak/useSammensattKontrollsak';
+import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
@@ -41,7 +41,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandlingContext();
-    const { erSammensattKontrollsak } = useSammensattKontrollsak();
+    const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const {
         vedtaksperioderMedBegrunnelserRessurs,

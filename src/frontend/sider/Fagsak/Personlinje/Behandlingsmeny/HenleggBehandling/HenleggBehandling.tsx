@@ -8,7 +8,7 @@ import { Dropdown } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useHenleggBehandling from './useHenleggBehandling';
-import { useApp } from '../../../../../context/AppContext';
+import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { BehandlingSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
@@ -44,7 +44,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
         hentetDokument,
         settVisDokumentModal,
     } = useDokument();
-    const { toggles } = useApp();
+    const { toggles } = useAppContext();
 
     const {
         skjema,

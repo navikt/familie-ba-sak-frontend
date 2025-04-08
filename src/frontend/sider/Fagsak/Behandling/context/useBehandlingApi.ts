@@ -12,7 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling, IOpprettBehandlingData } from '../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../typer/behandling';
@@ -28,7 +28,7 @@ const useBehandlingApi = (
     const navigate = useNavigate();
     const [logg, settLogg] = useState<Ressurs<ILogg[]>>(byggTomRessurs());
 
-    const { skalObfuskereData } = useApp();
+    const { skalObfuskereData } = useAppContext();
 
     const opprettBehandling = (
         data: IOpprettBehandlingData
