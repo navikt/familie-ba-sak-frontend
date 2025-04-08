@@ -12,17 +12,16 @@ import {
     lagLenkePåType,
 } from './utils';
 import { behandlingsstatuser } from '../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 
 interface IBehandlingshistorikkProps {
-    minimalFagsak: IMinimalFagsak;
+    fagsakId: number;
     saksoversiktsbehandling: Saksoversiktsbehandling;
 }
 
 export const Behandling: React.FC<IBehandlingshistorikkProps> = ({
+    fagsakId,
     saksoversiktsbehandling,
-    minimalFagsak,
 }) => (
     <Table.Row key={hentBehandlingId(saksoversiktsbehandling)}>
         <Table.DataCell
@@ -32,7 +31,7 @@ export const Behandling: React.FC<IBehandlingshistorikkProps> = ({
             })}`}
         />
         <Table.DataCell>{finnÅrsak(saksoversiktsbehandling)}</Table.DataCell>
-        <Table.DataCell>{lagLenkePåType(minimalFagsak.id, saksoversiktsbehandling)}</Table.DataCell>
+        <Table.DataCell>{lagLenkePåType(fagsakId, saksoversiktsbehandling)}</Table.DataCell>
         <Table.DataCell>{hentBehandlingstema(saksoversiktsbehandling)?.navn ?? '-'}</Table.DataCell>
         <Table.DataCell>{behandlingsstatuser[saksoversiktsbehandling.status]}</Table.DataCell>
         <Table.DataCell
@@ -42,8 +41,6 @@ export const Behandling: React.FC<IBehandlingshistorikkProps> = ({
                 defaultString: '-',
             })}
         />
-        <Table.DataCell>
-            {lagLenkePåResultat(minimalFagsak, saksoversiktsbehandling)}
-        </Table.DataCell>
+        <Table.DataCell>{lagLenkePåResultat(fagsakId, saksoversiktsbehandling)}</Table.DataCell>
     </Table.Row>
 );
