@@ -33,11 +33,11 @@ const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({
     åpenBehandling,
     vedtaksperioderMedBegrunnelserRessurs,
 }) => {
-    const { vedtaksbegrunnelseTekster } = useVedtakContext();
+    const { alleBegrunnelserRessurs } = useVedtakContext();
 
     if (
-        vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
-        vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
+        alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
+        alleBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
         return (
             <StyledAlert variant="error">

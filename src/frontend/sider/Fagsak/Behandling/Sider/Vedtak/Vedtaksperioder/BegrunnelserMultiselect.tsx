@@ -44,7 +44,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         vedtaksperiodeMedBegrunnelser,
         genererteBrevbegrunnelser,
     } = useVedtaksperiodeContext();
-    const { vedtaksbegrunnelseTekster } = useVedtakContext();
+    const { alleBegrunnelserRessurs } = useVedtakContext();
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
@@ -57,22 +57,22 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     ];
 
     useEffect(() => {
-        if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
+        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
             settStandardbegrunnelser(
                 mapBegrunnelserTilSelectOptions(
                     vedtaksperiodeMedBegrunnelser,
-                    vedtaksbegrunnelseTekster
+                    alleBegrunnelserRessurs
                 )
             );
         }
-    }, [vedtaksperiodeMedBegrunnelser, vedtaksbegrunnelseTekster]);
+    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs]);
 
     useEffect(() => {
         if (!skalAutomatiskUtfylle.current) {
             return;
         }
         if (
-            vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS &&
+            alleBegrunnelserRessurs.status === RessursStatus.SUKSESS &&
             genererteBrevbegrunnelser.status === RessursStatus.SUKSESS
         ) {
             const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
@@ -90,7 +90,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             return;
         }
         skalAutomatiskUtfylle.current = false;
-    }, [genererteBrevbegrunnelser, grupperteBegrunnelser, vedtaksbegrunnelseTekster]);
+    }, [genererteBrevbegrunnelser, grupperteBegrunnelser, alleBegrunnelserRessurs]);
 
     return (
         <FamilieReactSelect
@@ -110,7 +110,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     const currentOption = props.data as OptionType;
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined =
                         finnVedtakBegrunnelseType(
-                            vedtaksbegrunnelseTekster,
+                            alleBegrunnelserRessurs,
                             currentOption.value as VedtakBegrunnelse
                         );
 
@@ -148,7 +148,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    vedtaksbegrunnelseTekster,
+                    alleBegrunnelserRessurs,
                     option.value as VedtakBegrunnelse
                 );
 

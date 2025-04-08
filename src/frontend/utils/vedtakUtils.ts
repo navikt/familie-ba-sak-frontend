@@ -16,16 +16,16 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { BehandlingResultat } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
 import { VedtakBegrunnelseType } from '../typer/vedtak';
-import type { VedtaksbegrunnelseTekster } from '../typer/vilkår';
+import type { AlleBegrunnelser } from '../typer/vilkår';
 
 export const finnVedtakBegrunnelseType = (
-    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>,
+    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>,
     vedtakBegrunnelse: VedtakBegrunnelse
 ): VedtakBegrunnelseType | undefined => {
-    return vilkårBegrunnelser.status === RessursStatus.SUKSESS
-        ? (Object.keys(vilkårBegrunnelser.data).find(vedtakBegrunnelseType => {
+    return alleBegrunnelserRessurs.status === RessursStatus.SUKSESS
+        ? (Object.keys(alleBegrunnelserRessurs.data).find(vedtakBegrunnelseType => {
               return (
-                  vilkårBegrunnelser.data[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
+                  alleBegrunnelserRessurs.data[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
                       (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
                           vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
                   ) !== undefined

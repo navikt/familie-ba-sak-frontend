@@ -5,7 +5,7 @@ import { byggTomRessurs, RessursStatus, type Ressurs } from '@navikt/familie-typ
 import { useBegrunnelseApi } from '../../../../../../api/useBegrunnelseApi';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { VedtaksbegrunnelseTekster, VilkårType } from '../../../../../../typer/vilkår';
+import type { AlleBegrunnelser, VilkårType } from '../../../../../../typer/vilkår';
 import { Regelverk } from '../../../../../../typer/vilkår';
 
 const useAvslagBegrunnelseMultiselect = (
@@ -15,17 +15,17 @@ const useAvslagBegrunnelseMultiselect = (
 ) => {
     const { hentAlleBegrunnelser } = useBegrunnelseApi();
 
-    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] =
-        useState<Ressurs<VedtaksbegrunnelseTekster>>(byggTomRessurs());
+    const [alleBegrunnelserRessurs, settAlleBegrunnelserRessurs] =
+        useState<Ressurs<AlleBegrunnelser>>(byggTomRessurs());
 
     useEffect(() => {
-        hentAlleBegrunnelser().then((data: Ressurs<VedtaksbegrunnelseTekster>) => {
-            settVedtaksbegrunnelseTekster(data);
+        hentAlleBegrunnelser().then((data: Ressurs<AlleBegrunnelser>) => {
+            settAlleBegrunnelserRessurs(data);
         });
     }, []);
 
     const finnAvslagsbegrunnelserForGjeldendeVilkår = () => {
-        if (vedtaksbegrunnelseTekster.status !== RessursStatus.SUKSESS) {
+        if (alleBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
             return [];
         }
 
@@ -39,7 +39,7 @@ const useAvslagBegrunnelseMultiselect = (
             begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.AVSLAG;
         }
 
-        const avslagBegrunnelseTeksterForGjeldendeVilkår = vedtaksbegrunnelseTekster.data[
+        const avslagBegrunnelseTeksterForGjeldendeVilkår = alleBegrunnelserRessurs.data[
             begrunnelsestypeGyldigForBehandling
         ].filter(
             (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
@@ -51,7 +51,7 @@ const useAvslagBegrunnelseMultiselect = (
 
     return {
         avslagsbegrunnelserForGjeldendeVilkår: finnAvslagsbegrunnelserForGjeldendeVilkår(),
-        begrunnelserStatus: vedtaksbegrunnelseTekster.status,
+        begrunnelserStatus: alleBegrunnelserRessurs.status,
     };
 };
 

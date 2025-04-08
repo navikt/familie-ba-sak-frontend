@@ -73,7 +73,7 @@ export const VedtaksperiodeProvider = ({
     children,
 }: IProps) => {
     const { request } = useHttp();
-    const { vedtaksbegrunnelseTekster } = useVedtakContext();
+    const { alleBegrunnelserRessurs } = useVedtakContext();
     const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
@@ -135,11 +135,11 @@ export const VedtaksperiodeProvider = ({
     };
 
     useEffect(() => {
-        if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
+        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
             populerSkjemaFraBackend();
             genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
         }
-    }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
+    }, [alleBegrunnelserRessurs, vedtaksperiodeMedBegrunnelser]);
 
     const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
         switch (action.action) {
@@ -287,7 +287,7 @@ export const VedtaksperiodeProvider = ({
                 erPanelEkspandert,
                 grupperteBegrunnelser: grupperBegrunnelser(
                     vedtaksperiodeMedBegrunnelser,
-                    vedtaksbegrunnelseTekster
+                    alleBegrunnelserRessurs
                 ),
                 hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,

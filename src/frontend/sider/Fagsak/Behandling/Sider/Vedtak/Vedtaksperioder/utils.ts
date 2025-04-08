@@ -15,7 +15,7 @@ import {
     type IRestVedtaksbegrunnelse,
     type IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../../typer/vedtaksperiode';
-import type { VedtaksbegrunnelseTekster } from '../../../../../../typer/vilkår';
+import type { AlleBegrunnelser } from '../../../../../../typer/vilkår';
 import {
     dagensDato,
     isoStringTilDateMedFallback,
@@ -74,7 +74,7 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
 
 export const grupperBegrunnelser = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    alleBegrunnelserRessurs: Ressurs<VedtaksbegrunnelseTekster>
+    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>
 ): GroupBase<OptionType>[] => {
     const begrunnelseTyperKnyttetTilVedtaksperioden = vedtaksperiodeTilMuligeVedtakBegrunnelseTyper(
         vedtaksperiodeMedBegrunnelser
@@ -125,7 +125,7 @@ export const grupperBegrunnelser = (
 
 export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
+    vilkårBegrunnelser: Ressurs<AlleBegrunnelser>
 ): OptionType[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
         (begrunnelse: IRestVedtaksbegrunnelse) => ({
@@ -142,7 +142,7 @@ export const mapBegrunnelserTilSelectOptions = (
 const hentLabelForOption = (
     vedtakBegrunnelseType: VedtakBegrunnelseType,
     standardbegrunnelse: VedtakBegrunnelse,
-    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
+    vilkårBegrunnelser: Ressurs<AlleBegrunnelser>
 ) => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
         ? (vilkårBegrunnelser.data[vedtakBegrunnelseType].find(

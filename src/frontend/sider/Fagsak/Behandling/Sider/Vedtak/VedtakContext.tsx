@@ -8,7 +8,7 @@ import { useBegrunnelseApi } from '../../../../../api/useBegrunnelseApi';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import type { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
+import type { AlleBegrunnelser } from '../../../../../typer/vilkår';
 
 interface Props extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
@@ -27,7 +27,7 @@ interface VedtakContextValue {
     settErUlagretNyFeilutbetaltValutaPeriode: React.Dispatch<React.SetStateAction<boolean>>;
     erUlagretNyRefusjonEøsPeriode: boolean;
     settErUlagretNyRefusjonEøsPeriode: React.Dispatch<React.SetStateAction<boolean>>;
-    vedtaksbegrunnelseTekster: Ressurs<VedtaksbegrunnelseTekster>;
+    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>;
 }
 
 const VedtakContext = React.createContext<VedtakContextValue | undefined>(undefined);
@@ -37,8 +37,8 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
     const { request } = useHttp();
     const { hentAlleBegrunnelser } = useBegrunnelseApi();
 
-    const [vedtaksbegrunnelseTekster, settVedtaksbegrunnelseTekster] =
-        useState<Ressurs<VedtaksbegrunnelseTekster>>(byggTomRessurs());
+    const [alleBegrunnelserRessurs, settAlleBegrunnelserRessurs] =
+        useState<Ressurs<AlleBegrunnelser>>(byggTomRessurs());
 
     const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = useState(
         åpenBehandling.feilutbetaltValuta.length > 0
@@ -51,8 +51,8 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
     const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] = useState(false);
 
     useEffect(() => {
-        hentAlleBegrunnelser().then((data: Ressurs<VedtaksbegrunnelseTekster>) => {
-            settVedtaksbegrunnelseTekster(data);
+        hentAlleBegrunnelser().then((data: Ressurs<AlleBegrunnelser>) => {
+            settAlleBegrunnelserRessurs(data);
         });
     }, []);
 
@@ -92,7 +92,7 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
                 settErUlagretNyFeilutbetaltValutaPeriode,
                 erUlagretNyRefusjonEøsPeriode,
                 settErUlagretNyRefusjonEøsPeriode,
-                vedtaksbegrunnelseTekster,
+                alleBegrunnelserRessurs,
             }}
         >
             {children}
