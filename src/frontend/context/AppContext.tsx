@@ -4,10 +4,12 @@ import type { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
 import { Alert, BodyShort, Button, HStack } from '@navikt/ds-react';
+import { preferredAxios } from '@navikt/familie-http';
 import { HttpProvider, loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
@@ -24,6 +26,21 @@ export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;
     påvirkerSystemLaster?: boolean;
 };
+
+// berik header med fagsakId og behandlingId der hvor vi har det tilgjengelig
+preferredAxios.interceptors.request.use(
+    config => {
+        const { fagsakId, behandlingId } = useSakOgBehandlingParams();
+        if (fagsakId) {
+            config.headers['fagsakId'] = `${fagsakId}`;
+        }
+        if (behandlingId) {
+            config.headers['behandlingId'] = `${behandlingId}`;
+        }
+        return config;
+    },
+    error => Promise.reject(error)
+);
 
 export interface IModal {
     actions?: JSX.Element[] | JSX.Element;
