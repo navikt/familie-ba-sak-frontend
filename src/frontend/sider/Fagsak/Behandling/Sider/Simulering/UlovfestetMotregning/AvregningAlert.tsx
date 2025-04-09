@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Alert, BodyLong, Button, Link, List } from '@navikt/ds-react';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
 import { erProd } from '../../../../../../utils/miljø';
@@ -18,7 +19,11 @@ const StyledLink = styled(Link)`
     margin-top: 1rem;
 `;
 
-const AvregningAlert = () => {
+interface AvregningAlertProps {
+    harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
+}
+
+const AvregningAlert = ({ harÅpenTilbakekrevingRessurs }: AvregningAlertProps) => {
     const [visModal, settVisModal] = useState(false);
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
@@ -36,8 +41,10 @@ const AvregningAlert = () => {
             <BodyLong>Du må derfor velge 1 eller 2:</BodyLong>
             <List as={'ol'}>
                 <List.Item>
-                    Først gjøre vedtak om etterbetalingen, og deretter gjøre nytt vedtak om
-                    feilutbetalingen og opprette t-sak («splitte saken»).
+                    {harÅpenTilbakekrevingRessurs.status == RessursStatus.SUKSESS &&
+                    harÅpenTilbakekrevingRessurs.data
+                        ? 'Ferdigstille t-saken, og deretter gjøre nytt vedtak om etterbetaling'
+                        : 'Først gjøre vedtak om etterbetalingen, og deretter gjøre nytt vedtak om feilutbetalingen og opprette t-sak («splitte saken»).'}
                 </List.Item>
                 <List.Item>
                     Be bruker om samtykke til å holde på etterbetalingen mens Nav vurderer t-sak

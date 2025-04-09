@@ -134,7 +134,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
                         {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
                             forenkletTilbakekrevingsvedtak.data === null &&
-                            erAvregningOgToggleErPå && <AvregningAlert />}
+                            erAvregningOgToggleErPå && (
+                                <AvregningAlert
+                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                />
+                            )}
 
                         {!erLesevisning &&
                             forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
