@@ -4,13 +4,10 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import AvregningAlert from './AvregningAlert';
+import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
-import SimuleringPanel from './SimuleringPanel';
-import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
@@ -21,6 +18,11 @@ import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
+import SimuleringPanel from './SimuleringPanel';
+import SimuleringTabell from './SimuleringTabell';
+import AvregningAlert from './UlovfestetMotregning/AvregningAlert';
+import { ForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/ForenkletTilbakekrevingsvedtak';
+import { useForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -28,11 +30,6 @@ interface ISimuleringProps {
 
 const StyledAlert = styled(Alert)`
     margin-bottom: 2rem;
-`;
-
-const StyledBeløpsgrenseAlert = styled(Alert)`
-    margin-top: 2rem;
-    width: fit-content;
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
@@ -54,12 +51,21 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
+    const erLesevisning = vurderErLesevisning();
+
+    const {
+        forenkletTilbakekrevingsvedtak,
+        slettForenkletTilbakekrevingsvedtak,
+        oppdaterForenkletTilbakekrevingSamtykke,
+        heleBeløpetSkalKrevesTilbake,
+        settHeleBeløpetSkalKrevesTilbake,
+    } = useForenkletTilbakekrevingsvedtak(åpenBehandling);
 
     const erAvregningOgToggleErPå =
         erAvregning && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
 
     const nesteOnClick = () => {
-        if (vurderErLesevisning()) {
+        if (erLesevisning) {
             navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
         } else {
             onSubmit<ITilbakekreving | undefined>(
@@ -98,16 +104,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
-            skalDisableNesteKnapp={erAvregningOgToggleErPå}
+            skalDisableNesteKnapp={erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake}
         >
-            {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
-                <StyledAlert variant={'warning'}>
-                    Migrering av denne saken gir ingen utbetaling for periodene etter
-                    migreringsdato. Når behandlingsresultatet blir 0 kr i alle perioder, får vi ikke
-                    simulert mot økonomi for å se eventuelle avvik. Det er derfor viktig at du selv
-                    sjekker at det ikke har vært noen utbetalinger fra Infotrygd i disse periodene.
-                </StyledAlert>
-            )}
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
                     <StyledAlert variant="info">
@@ -117,55 +115,55 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {behandlingErEndreMigreringsdato &&
-                            (behandlingErMigreringMedAvvikUtenforBeløpsgrenser ||
-                                behandlingErMigreringMedAvvikUtenforBeløpsgrenser) && (
-                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                    Simuleringen viser en feilutbetaling eller etterbetaling. Du
-                                    trenger ikke sende oppgave til NØS, da beløpet ikke sendes til
-                                    oppdrag. Hvis bruker skal ha en etterbetaling eller
-                                    feilutbetaling må dette behandles i en egen
-                                    revurderingsbehandling med vedtaksbrev til bruker.
-                                </StyledBeløpsgrenseAlert>
-                            )}
-                        {!behandlingErEndreMigreringsdato &&
-                            behandlingErMigreringMedAvvikInnenforBeløpsgrenser && (
-                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                    Behandlingen medfører avvik i simulering. Ved avvik på mindre
-                                    enn totalt 100 kroner, kan du gå videre i behandlingen uten
-                                    totrinnskontroll. Du må huske å sende oppgave til NØS om at det
-                                    ikke skal etterbetales / opprettes kravgrunnlag.
-                                </StyledBeløpsgrenseAlert>
-                            )}
-                        {!behandlingErEndreMigreringsdato &&
-                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser && (
-                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                    Simuleringen viser en feilutbetaling eller etterbetaling. Hvis
-                                    du velger å gå videre i behandlingen kreves det
-                                    to-trinnskontroll. Det må sendes manuell oppgave til NØS for å
-                                    sikre at det ikke går ut etterbetaling eller blir opprettet
-                                    feilutbetalingssak i migreringsbehandlingen. Hvis bruker skal ha
-                                    en etterbetaling eller feilutbetaling, må dette behandles i en
-                                    egen revurderingsbehandling med vedtaksbrev til bruker.
-                                </StyledBeløpsgrenseAlert>
+
+                        <MigreringAlerts
+                            behandlingErEndreMigreringsdato={behandlingErEndreMigreringsdato}
+                            behandlingErMigreringMedAvvikInnenforBeløpsgrenser={
+                                behandlingErMigreringMedAvvikInnenforBeløpsgrenser
+                            }
+                            behandlingErMigreringMedAvvikUtenforBeløpsgrenser={
+                                behandlingErMigreringMedAvvikUtenforBeløpsgrenser
+                            }
+                            behandlingErMigreringMedManuellePosteringer={
+                                behandlingErMigreringMedManuellePosteringer
+                            }
+                            behandlingErMigreringFraInfotrygdMedKun0Utbetalinger={
+                                behandlingErMigreringFraInfotrygdMedKun0Utbetalinger
+                            }
+                        />
+
+                        {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
+                            forenkletTilbakekrevingsvedtak.data === null &&
+                            erAvregningOgToggleErPå && <AvregningAlert />}
+
+                        {!erLesevisning &&
+                            forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
+                            forenkletTilbakekrevingsvedtak.data !== null && (
+                                <ForenkletTilbakekrevingsvedtak
+                                    forenkletTilbakekrevingsvedtak={
+                                        forenkletTilbakekrevingsvedtak.data
+                                    }
+                                    slettForenkletTilbakekrevingsvedtak={
+                                        slettForenkletTilbakekrevingsvedtak
+                                    }
+                                    oppdaterForenkletTilbakekrevingSamtykke={
+                                        oppdaterForenkletTilbakekrevingSamtykke
+                                    }
+                                    heleBeløpetSkalKrevesTilbake={heleBeløpetSkalKrevesTilbake}
+                                    settHeleBeløpetSkalKrevesTilbake={
+                                        settHeleBeløpetSkalKrevesTilbake
+                                    }
+                                />
                             )}
 
-                        {!behandlingErEndreMigreringsdato &&
-                            behandlingErMigreringMedManuellePosteringer && (
-                                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                                    Det finnes manuelle posteringer tilknyttet tidligere behandling.
-                                    Hvis du velger å gå videre i behandlingen kreves det
-                                    to-trinnskontroll.
-                                </StyledBeløpsgrenseAlert>
+                        {erFeilutbetaling &&
+                            (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake) && (
+                                <TilbakekrevingSkjema
+                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                    åpenBehandling={åpenBehandling}
+                                />
                             )}
-                        {erAvregningOgToggleErPå && <AvregningAlert />}
-                        {erFeilutbetaling && (
-                            <TilbakekrevingSkjema
-                                søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                åpenBehandling={åpenBehandling}
-                            />
-                        )}
                     </>
                 )
             ) : (
