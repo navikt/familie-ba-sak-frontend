@@ -1803,14 +1803,13 @@
     "@navikt/familie-typer" "^8.0.2"
     "@navikt/fnrvalidator" "^2.1.5"
 
-"@navikt/familie-http@^7.0.14":
-  version "7.0.26"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/7.0.26/613f6fb6af3f298af1af9d26fe569f501af974b6#613f6fb6af3f298af1af9d26fe569f501af974b6"
-  integrity sha512-dhHFu1++xpqRJgOUx05GLmpfA8rEIJ088oRvTqw6TgO6fVyVRgnUjvTKbqmNFUN5e9kwujCKPqHKGkhpQzPuKQ==
+"@navikt/familie-http@^8.0.0":
+  version "8.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/8.0.0/d5c33e3fc580141c4f929e61ee83d0effc763862#d5c33e3fc580141c4f929e61ee83d0effc763862"
+  integrity sha512-nPc64Be5pUsk6Mqlt/apmB6EUCNdItjZ/s7BEFSUlkCIVvo2eJHbvZ5j1f2ETvzzx9WYSY5zGqpqas197T5+hQ==
   dependencies:
     "@navikt/familie-typer" "^8.0.3"
     "@sentry/core" "^8.50.0"
-    constate "^3.3.2"
 
 "@navikt/familie-ikoner@9.1.0", "@navikt/familie-ikoner@^9.0.3":
   version "9.1.0"
@@ -1833,13 +1832,13 @@
   dependencies:
     winston "^3.17.0"
 
-"@navikt/familie-skjema@8.2.7":
-  version "8.2.7"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.7/36529d4bc8f45121ba5a1c7067c8f134dca339aa#36529d4bc8f45121ba5a1c7067c8f134dca339aa"
-  integrity sha512-jMyUwaPDafd0Ih+KXyWblQh/8VB7GOAKPozgG9j426QddL3t3HpmX2A3aTD8JIa9QnN6s8segjpP0tW7wtuJtA==
+"@navikt/familie-skjema@8.2.25":
+  version "8.2.25"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.25/a57ff2d12ab770fe6519959dd9758652031ddc6a#a57ff2d12ab770fe6519959dd9758652031ddc6a"
+  integrity sha512-ICPG6kzEsGOG5A+bNwJU+c9INSkgKz3fsP+TaiXKuqSDu+cEE4+CVSgsMHn4TrETm/80rO59RdBctHhbex6vWg==
   dependencies:
-    "@navikt/familie-http" "^7.0.14"
-    "@navikt/familie-typer" "^8.0.2"
+    "@navikt/familie-http" "^8.0.0"
+    "@navikt/familie-typer" "^8.0.3"
     "@types/deep-equal" "^1.0.4"
     deep-equal "^2.2.3"
     hashids "^2.3.0"
@@ -4000,11 +3999,6 @@ connect-redis@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/connect-redis/-/connect-redis-8.0.1.tgz#83d4d829ee968b9d64da9a6f40fe1ea3046bf835"
   integrity sha512-7iOI214/r15ahvu0rqKCHhsgpMdOgyLwqlw/icSTnnAR75xFvMyfxAE+je4M87rZLjDlKzKcTc48XxQXYFsMgA==
-
-constate@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/constate/-/constate-3.3.2.tgz#a6cd2f3c203da2cb863f47d22a330b833936c449"
-  integrity sha512-ZnEWiwU6QUTil41D5EGpA7pbqAPGvnR9kBjko8DzVIxpC60mdNKrP568tT5WLJPAxAOtJqJw60+h79ot/Uz1+Q==
 
 content-disposition@^1.0.0:
   version "1.0.0"
