@@ -21,7 +21,10 @@ import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import AvregningAlert from './UlovfestetMotregning/AvregningAlert';
 import { ForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/ForenkletTilbakekrevingsvedtak';
-import { useForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
+import {
+    dagerFristForAvventerSamtykkeUlovfestetMotregning,
+    useForenkletTilbakekrevingsvedtak,
+} from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -42,7 +45,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erFeilutbetaling,
-        erAvregning,
+        avregningsperioder,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
@@ -61,11 +64,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     } = useForenkletTilbakekrevingsvedtak(åpenBehandling);
 
     const erAvregningOgToggleErPå =
-        erAvregning && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+        avregningsperioder.length > 0 &&
+        toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
     const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
         åpenBehandling.aktivSettPåVent?.årsak ===
         SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
-    const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
