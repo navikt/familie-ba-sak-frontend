@@ -79,7 +79,7 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
+    "@babel/preset-typescript": "^7.27.0",
     "@eslint/js": "^9.21.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@testing-library/jest-dom": "^6.6.3",
