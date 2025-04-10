@@ -42,7 +42,7 @@ interface IProps {
     behandling: IBehandling;
 }
 
-const dagerFristForAvventerSamtykkeUlovfestetMotregning = 5;
+const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
 export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
     lukkModal,
@@ -104,7 +104,9 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
                     )}
 
                     <StyledBodyShort>
-                        Behandlingen settes på vent i 5 dager mens vi venter på svar fra bruker.
+                        Behandlingen settes på vent i{' '}
+                        {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager mens vi venter på
+                        svar fra bruker.
                     </StyledBodyShort>
 
                     <Feltmargin>

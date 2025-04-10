@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Box } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { MigreringAlerts } from './MigreringAlerts';
@@ -11,8 +11,7 @@ import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingSteg } from '../../../../../typer/behandling';
+import { BehandlingSteg, type IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
@@ -63,6 +62,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const erAvregningOgToggleErPå =
         erAvregning && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+    const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
+        åpenBehandling.aktivSettPåVent?.årsak ===
+        SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -131,34 +133,49 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 behandlingErMigreringFraInfotrygdMedKun0Utbetalinger
                             }
                         />
+                        {erAvregningOgToggleErPå && (
+                            <Box marginBlock={'8 0'}>
+                                {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
+                                    <Alert variant="info">
+                                        Saken venter på samtykke fra bruker for ulovfestet
+                                        motregning. Hvis bruker har gitt samtykke før det har gått
+                                        14 dager, kan saken tas av vent manuelt.
+                                    </Alert>
+                                )}
 
-                        {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
-                            forenkletTilbakekrevingsvedtak.data === null &&
-                            erAvregningOgToggleErPå && (
-                                <AvregningAlert
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                />
-                            )}
+                                {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
+                                    forenkletTilbakekrevingsvedtak.data === null && (
+                                        <AvregningAlert
+                                            harÅpenTilbakekrevingRessurs={
+                                                harÅpenTilbakekrevingRessurs
+                                            }
+                                        />
+                                    )}
 
-                        {!erLesevisning &&
-                            forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
-                            forenkletTilbakekrevingsvedtak.data !== null && (
-                                <ForenkletTilbakekrevingsvedtak
-                                    forenkletTilbakekrevingsvedtak={
-                                        forenkletTilbakekrevingsvedtak.data
-                                    }
-                                    slettForenkletTilbakekrevingsvedtak={
-                                        slettForenkletTilbakekrevingsvedtak
-                                    }
-                                    oppdaterForenkletTilbakekrevingSamtykke={
-                                        oppdaterForenkletTilbakekrevingSamtykke
-                                    }
-                                    heleBeløpetSkalKrevesTilbake={heleBeløpetSkalKrevesTilbake}
-                                    settHeleBeløpetSkalKrevesTilbake={
-                                        settHeleBeløpetSkalKrevesTilbake
-                                    }
-                                />
-                            )}
+                                {!erLesevisning &&
+                                    forenkletTilbakekrevingsvedtak.status ===
+                                        RessursStatus.SUKSESS &&
+                                    forenkletTilbakekrevingsvedtak.data !== null && (
+                                        <ForenkletTilbakekrevingsvedtak
+                                            forenkletTilbakekrevingsvedtak={
+                                                forenkletTilbakekrevingsvedtak.data
+                                            }
+                                            slettForenkletTilbakekrevingsvedtak={
+                                                slettForenkletTilbakekrevingsvedtak
+                                            }
+                                            oppdaterForenkletTilbakekrevingSamtykke={
+                                                oppdaterForenkletTilbakekrevingSamtykke
+                                            }
+                                            heleBeløpetSkalKrevesTilbake={
+                                                heleBeløpetSkalKrevesTilbake
+                                            }
+                                            settHeleBeløpetSkalKrevesTilbake={
+                                                settHeleBeløpetSkalKrevesTilbake
+                                            }
+                                        />
+                                    )}
+                            </Box>
+                        )}
 
                         {erFeilutbetaling &&
                             (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake) && (
