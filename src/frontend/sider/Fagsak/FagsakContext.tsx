@@ -1,9 +1,9 @@
 import React, {
     createContext,
+    type PropsWithChildren,
     useContext,
     useEffect,
     useState,
-    type PropsWithChildren,
 } from 'react';
 
 import type { AxiosError } from 'axios';
@@ -25,8 +25,10 @@ import { useAppContext } from '../../context/AppContext';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
 import type { IKlagebehandling } from '../../typer/klage';
+import type { SettAktivBrukerIModiaContextDTO } from '../../typer/modiaContext';
 import { type IPersonInfo } from '../../typer/person';
 import type { ITilbakekrevingsbehandling } from '../../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
 import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
 import type { SkjemaBrevmottaker } from './Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -65,7 +67,7 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         useState<Ressurs<ITilbakekrevingsbehandling[]>>(byggTomRessurs());
 
     const { request } = useHttp();
-    const { skalObfuskereData } = useAppContext();
+    const { skalObfuskereData, toggles } = useAppContext();
     const { hentFagsakerForPerson } = useFagsakApi();
     const { hentKlagebehandlingerPåFagsak } = useKlageApi();
     const { hentTilbakekrevingsbehandlinger } = useTilbakekrevingApi();
@@ -89,6 +91,18 @@ export const FagsakProvider = (props: PropsWithChildren) => {
             .catch((_error: AxiosError) => {
                 settMinimalFagsakRessurs(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
             });
+    };
+
+    const settAktivBrukerIModiaContext = (personIdent: string) => {
+        if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
+            request<SettAktivBrukerIModiaContextDTO, void>({
+                url: '/familie-ba-sak/api/modia-context/sett-aktiv-bruker',
+                method: 'POST',
+                data: {
+                    personIdent: personIdent,
+                },
+            });
+        }
     };
 
     const oppdaterBrukerHvisFagsakEndres = (
@@ -122,6 +136,7 @@ export const FagsakProvider = (props: PropsWithChildren) => {
             }
             settBruker(brukerEtterTilgangssjekk);
             if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
+                settAktivBrukerIModiaContext(brukerEtterTilgangssjekk.data.personIdent);
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
                     if (fagsaker.status === RessursStatus.SUKSESS) {
                         settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
