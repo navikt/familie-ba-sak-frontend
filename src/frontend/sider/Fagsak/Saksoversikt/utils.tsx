@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
+import { differenceInMilliseconds } from 'date-fns';
+
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { HStack, Link, Tooltip } from '@navikt/ds-react';
 
@@ -16,7 +18,6 @@ import {
 } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 import {
     erKlageFeilregistrertAvKA,
     harAnkeEksistertPåKlagebehandling,
@@ -29,11 +30,34 @@ import {
     Behandlingsresultatstype,
     Tilbakekrevingsbehandlingstype,
 } from '../../../typer/tilbakekrevingsbehandling';
+import { isoStringTilDate } from '../../../utils/dato';
 
 enum Saksoversiktbehandlingstype {
     BARNETRYGD = 'BARNETRYGD',
     TILBAKEBETALING = 'TILBAKEBETALING',
     KLAGE = 'KLAGE',
+}
+
+export function filtrertOgSorterSaksoversiktbehandlinger(
+    saksoversiktbehandling: Saksoversiktsbehandling[],
+    visHenlagteBehandlinger: boolean,
+    visMånedligeValutajusteringer: boolean
+): Saksoversiktsbehandling[] {
+    return saksoversiktbehandling
+        .filter(
+            behandling =>
+                skalVisesNårHenlagtBehandlingerSkjules(behandling, visHenlagteBehandlinger) &&
+                skalVisesNårMånedligeValutajusteringerSkjules(
+                    behandling,
+                    visMånedligeValutajusteringer
+                )
+        )
+        .sort((saksoversiktbehandling1, saksoversiktbehandling2) =>
+            differenceInMilliseconds(
+                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandling2)),
+                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandling1))
+            )
+        );
 }
 
 export type Saksoversiktsbehandling =
@@ -100,29 +124,31 @@ export const hentBehandlingId = (saksoversiktsbehandling: Saksoversiktsbehandlin
 };
 
 export const hentBehandlingerTilSaksoversikten = (
-    minimalFagsak: IMinimalFagsak,
+    barnetrygdbehandlinger: VisningBehandling[],
     klagebehandlinger: IKlagebehandling[],
     tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[]
 ): Saksoversiktsbehandling[] => {
-    const barnetrygdBehandlinger: Saksoversiktsbehandling[] = minimalFagsak.behandlinger.map(
-        behandling => ({
+    const saksoversiktBarnetrygdbehandlinger: Saksoversiktsbehandling[] =
+        barnetrygdbehandlinger.map(behandling => ({
             ...behandling,
             saksoversiktbehandlingstype: Saksoversiktbehandlingstype.BARNETRYGD,
-        })
-    );
+        }));
+
     const saksoversiktTilbakekrevingsbehandlinger: Saksoversiktsbehandling[] =
         tilbakekrevingsbehandlinger.map(behandling => ({
             ...behandling,
             saksoversiktbehandlingstype: Saksoversiktbehandlingstype.TILBAKEBETALING,
         }));
+
     const saksoversiktKlagebehandlinger: Saksoversiktsbehandling[] = klagebehandlinger.map(
         behandling => ({
             ...behandling,
             saksoversiktbehandlingstype: Saksoversiktbehandlingstype.KLAGE,
         })
     );
+
     return [
-        ...barnetrygdBehandlinger,
+        ...saksoversiktBarnetrygdbehandlinger,
         ...saksoversiktTilbakekrevingsbehandlinger,
         ...saksoversiktKlagebehandlinger,
     ];
@@ -168,7 +194,7 @@ export const lagLenkePåType = (
 };
 
 export const lagLenkePåResultat = (
-    minimalFagsak: IMinimalFagsak,
+    fagsakId: number,
     behandling: Saksoversiktsbehandling
 ): ReactNode => {
     if (!behandling.resultat) {
@@ -178,7 +204,7 @@ export const lagLenkePåResultat = (
         case Saksoversiktbehandlingstype.BARNETRYGD:
             if (behandling.status === BehandlingStatus.AVSLUTTET) {
                 return (
-                    <Link href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
+                    <Link href={`/fagsak/${fagsakId}/${behandling.behandlingId}`}>
                         {behandling ? behandlingsresultater[behandling.resultat] : '-'}
                     </Link>
                 );
@@ -187,7 +213,7 @@ export const lagLenkePåResultat = (
         case Saksoversiktbehandlingstype.TILBAKEBETALING:
             return (
                 <Link
-                    href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
+                    href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
                     onMouseDown={e => e.preventDefault()}
                     target="_blank"
                 >

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { differenceInMilliseconds } from 'date-fns';
 import styled from 'styled-components';
 
 import {
@@ -9,174 +8,157 @@ import {
     Fieldset,
     Heading,
     HStack,
-    Spacer,
-    Switch,
+    Skeleton,
     Table,
     VStack,
 } from '@navikt/ds-react';
 
 import { Behandling } from './Behandling';
-import type { Saksoversiktsbehandling } from './utils';
-import {
-    hentBehandlingerTilSaksoversikten,
-    hentBehandlingId,
-    hentTidspunktforSortering,
-    skalVisesNårHenlagtBehandlingerSkjules,
-    skalVisesNårMånedligeValutajusteringerSkjules,
-} from './utils';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { isoStringTilDate } from '../../../utils/dato';
-import { ressursHarFeilet } from '../../../utils/ressursUtils';
-import { useFagsakContext } from '../FagsakContext';
+import { filtrertOgSorterSaksoversiktbehandlinger, type Saksoversiktsbehandling } from './utils';
+import { hentBehandlingerTilSaksoversikten, hentBehandlingId } from './utils';
+import { VisHenlagtBehandlingerSwitch } from './VisHenlagtBehandlingerSwitch';
+import { VisMånedligValutajuseringBehandlingerSwitch } from './VisMånedligValutajuseringBehandlingerSwitch';
+import { useHentBarnetrygdbehandlinger } from '../../../hooks/useHentBarnetrygdbehandlinger';
+import { useHentKlagebehandlinger } from '../../../hooks/useHentKlagebehandlinger';
+import { useHentTilbakekrevingsbehandlinger } from '../../../hooks/useHentTilbakekrevingsbehandlinger';
 
-const StyledSwitch = styled(Switch)`
-    margin-right: 0.275rem;
+const StyledHeaderCell = styled(Table.HeaderCell)<{ width?: string }>`
+    width ${props => props.width};
 `;
 
-const StyledFieldSet = styled(Fieldset)`
-    display: flex;
-    flex-direction: column;
-`;
-
-const StyledDiv = styled.div`
-    margin-top: auto;
-`;
-
-const StyledOpprettetKolonne = styled(Table.HeaderCell)`
-    width: 10%;
-`;
-
-const StyledResultatKolonne = styled(Table.HeaderCell)`
-    width: 22%;
-`;
-
-interface IBehandlingshistorikkProps {
-    minimalFagsak: IMinimalFagsak;
-}
-
-const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const { klagebehandlinger, klageStatus, tilbakekrevingsbehandlinger, tilbakekrevingStatus } =
-        useFagsakContext();
-
-    const behandlinger = hentBehandlingerTilSaksoversikten(
-        minimalFagsak,
-        klagebehandlinger,
-        tilbakekrevingsbehandlinger
+const TableHeader = () => {
+    return (
+        <Table.Header>
+            <Table.Row>
+                <StyledHeaderCell width={'10%'} scope={'col'}>
+                    Opprettet
+                </StyledHeaderCell>
+                <Table.HeaderCell scope={'col'}>Årsak</Table.HeaderCell>
+                <Table.HeaderCell scope={'col'}>Type</Table.HeaderCell>
+                <Table.HeaderCell scope={'col'}>Behandlingstema</Table.HeaderCell>
+                <Table.HeaderCell scope={'col'}>Status</Table.HeaderCell>
+                <Table.HeaderCell scope={'col'}>Vedtaksdato</Table.HeaderCell>
+                <StyledHeaderCell width={'22%'} scope={'col'}>
+                    Resultat
+                </StyledHeaderCell>
+            </Table.Row>
+        </Table.Header>
     );
+};
 
-    const finnesHenlagteBehandlingerSomKanFiltreresBort = behandlinger.some(
-        (behandling: Saksoversiktsbehandling) =>
-            !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
-    );
+type Props = {
+    fagsakId: number;
+};
 
-    const finnesMånedligValutajusteringerSomKanFiltreresBort = behandlinger.some(
-        (behandling: Saksoversiktsbehandling) =>
-            !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
-    );
+export function Behandlinger({ fagsakId }: Props) {
+    const {
+        data: barnetrygdbehandlinger,
+        isPending: hentBarnetrygdbehandlingerLaster,
+        error: hentBarnetrygdbehandlingerError,
+    } = useHentBarnetrygdbehandlinger(fagsakId);
+
+    const {
+        data: klagebehandlinger,
+        isPending: hentKlagebehandlingLaster,
+        error: hentKlagebehandlingError,
+    } = useHentKlagebehandlinger(fagsakId);
+
+    const {
+        data: tilbakekrevingsbehandlinger,
+        isPending: hentTilbakekrevingsbehandlingerLaster,
+        error: hentTilbakekrevingsbehandlingerError,
+    } = useHentTilbakekrevingsbehandlinger(fagsakId);
 
     const [visHenlagteBehandlinger, setVisHenlagteBehandlinger] = useState(false);
     const [visMånedligeValutajusteringer, setVisMånedligeValutajusteringer] = useState(false);
 
+    const behandlingerLaster =
+        hentKlagebehandlingLaster ||
+        hentTilbakekrevingsbehandlingerLaster ||
+        hentBarnetrygdbehandlingerLaster;
+
+    if (behandlingerLaster) {
+        return (
+            <VStack gap={'2'} marginBlock={'1 0'}>
+                <Heading level={'2'} size={'medium'} spacing={true}>
+                    Behandlinger
+                </Heading>
+                <Table size={'large'}>
+                    <TableHeader />
+                    <Table.Body />
+                </Table>
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+                <Skeleton variant={'rectangle'} width={'100%'} height={'2.5rem'} />
+            </VStack>
+        );
+    }
+
+    const saksoversiktbehandlinger = hentBehandlingerTilSaksoversikten(
+        barnetrygdbehandlinger ?? [],
+        klagebehandlinger ?? [],
+        tilbakekrevingsbehandlinger ?? []
+    );
+
     return (
-        <VStack gap="6">
-            {ressursHarFeilet(klageStatus) && (
-                <Alert variant="warning">
+        <VStack gap={'2'} marginBlock={'1 0'}>
+            {hentBarnetrygdbehandlingerError !== null && (
+                <Alert variant={'warning'}>
+                    <BodyShort>
+                        Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.
+                    </BodyShort>
+                </Alert>
+            )}
+            {hentKlagebehandlingError !== null && (
+                <Alert variant={'warning'}>
                     <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                 </Alert>
             )}
-            {ressursHarFeilet(tilbakekrevingStatus) && (
-                <Alert variant="warning">
-                    <BodyShort>Tilbakekreving er ikke tilgjengelig for øyeblikket.</BodyShort>
+            {hentTilbakekrevingsbehandlingerError !== null && (
+                <Alert variant={'warning'}>
+                    <BodyShort>
+                        Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.
+                    </BodyShort>
                 </Alert>
             )}
-            <div>
-                <HStack gap="3" wrap={false}>
-                    <Heading level="2" size={'medium'} spacing>
-                        Behandlinger
-                    </Heading>
-                    <Spacer />
-                    <StyledDiv>
-                        <StyledFieldSet legend="Filtreringer på behandlinger" hideLegend>
-                            {finnesHenlagteBehandlingerSomKanFiltreresBort && (
-                                <StyledSwitch
-                                    size="small"
-                                    position="left"
-                                    id={'vis-henlagte-behandlinger'}
-                                    checked={visHenlagteBehandlinger}
-                                    onChange={() => {
-                                        setVisHenlagteBehandlinger(!visHenlagteBehandlinger);
-                                    }}
-                                >
-                                    Vis henlagte behandlinger
-                                </StyledSwitch>
-                            )}
-                            {finnesMånedligValutajusteringerSomKanFiltreresBort && (
-                                <StyledSwitch
-                                    size="small"
-                                    position="left"
-                                    id={'vis-månedlig-valutajustering-behandlinger'}
-                                    checked={visMånedligeValutajusteringer}
-                                    onChange={() => {
-                                        setVisMånedligeValutajusteringer(
-                                            !visMånedligeValutajusteringer
-                                        );
-                                    }}
-                                >
-                                    Vis månedlige valutajusteringer
-                                </StyledSwitch>
-                            )}
-                        </StyledFieldSet>
-                    </StyledDiv>
-                </HStack>
-                {behandlinger.length > 0 ? (
-                    <Table size={'large'}>
-                        <Table.Header>
-                            <Table.Row>
-                                <StyledOpprettetKolonne scope="col">
-                                    Opprettet
-                                </StyledOpprettetKolonne>
-                                <Table.HeaderCell scope="col">Årsak</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Behandlingstema</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Vedtaksdato</Table.HeaderCell>
-                                <StyledResultatKolonne scope="col">Resultat</StyledResultatKolonne>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {behandlinger
-                                .filter(
-                                    behandling =>
-                                        skalVisesNårHenlagtBehandlingerSkjules(
-                                            behandling,
-                                            visHenlagteBehandlinger
-                                        ) &&
-                                        skalVisesNårMånedligeValutajusteringerSkjules(
-                                            behandling,
-                                            visMånedligeValutajusteringer
-                                        )
-                                )
-                                .sort((a, b) =>
-                                    differenceInMilliseconds(
-                                        isoStringTilDate(hentTidspunktforSortering(b)),
-                                        isoStringTilDate(hentTidspunktforSortering(a))
-                                    )
-                                )
-                                .map((behandling: Saksoversiktsbehandling) => (
-                                    <Behandling
-                                        key={hentBehandlingId(behandling)}
-                                        saksoversiktsbehandling={behandling}
-                                        minimalFagsak={minimalFagsak}
-                                    />
-                                ))}
-                        </Table.Body>
-                    </Table>
-                ) : (
-                    <BodyShort children={'Ingen tidligere behandlinger'} />
-                )}
-            </div>
+            <HStack gap={'3'} wrap={false} justify={'space-between'} align={'end'}>
+                <Heading level={'2'} size={'medium'} spacing={true}>
+                    Behandlinger
+                </Heading>
+                <Fieldset legend={'Filtreringer på behandlinger'} hideLegend={true}>
+                    <VisHenlagtBehandlingerSwitch
+                        saksoversiktbehandlinger={saksoversiktbehandlinger}
+                        visHenlagteBehandlinger={visHenlagteBehandlinger}
+                        setVisHenlagteBehandlinger={setVisHenlagteBehandlinger}
+                    />
+                    <VisMånedligValutajuseringBehandlingerSwitch
+                        saksoversiktbehandlinger={saksoversiktbehandlinger}
+                        visMånedligeValutajusteringer={visMånedligeValutajusteringer}
+                        setVisMånedligeValutajusteringer={setVisMånedligeValutajusteringer}
+                    />
+                </Fieldset>
+            </HStack>
+            {saksoversiktbehandlinger.length > 0 && (
+                <Table size={'large'}>
+                    <TableHeader />
+                    <Table.Body>
+                        {filtrertOgSorterSaksoversiktbehandlinger(
+                            saksoversiktbehandlinger,
+                            visHenlagteBehandlinger,
+                            visMånedligeValutajusteringer
+                        ).map((behandling: Saksoversiktsbehandling) => (
+                            <Behandling
+                                key={hentBehandlingId(behandling)}
+                                saksoversiktsbehandling={behandling}
+                                fagsakId={fagsakId}
+                            />
+                        ))}
+                    </Table.Body>
+                </Table>
+            )}
+            {saksoversiktbehandlinger.length === 0 && (
+                <BodyShort>Ingen tidligere behandlinger</BodyShort>
+            )}
         </VStack>
     );
-};
-
-export default Behandlinger;
+}
