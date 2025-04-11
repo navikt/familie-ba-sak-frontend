@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { isAfter, isBefore } from 'date-fns';
 
-import { useHttp, type FamilieRequestConfig } from '@navikt/familie-http';
+import { type FamilieRequestConfig, useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeiloppsummeringFeil, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -13,6 +13,7 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import { PersonType } from '../../../../../typer/person';
 import type {
+    IAvregningsperiode,
     ISimuleringDTO,
     ISimuleringPeriode,
     ITilbakekreving,
@@ -44,7 +45,7 @@ interface SimuleringContextValue {
     ) => void;
     hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
     erFeilutbetaling: boolean | undefined;
-    erAvregning: boolean | undefined;
+    avregningsperioder: IAvregningsperiode[];
     hentSkjemadata: () => ITilbakekreving | undefined;
     maksLengdeTekst: number;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
@@ -128,7 +129,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         0
     );
 
-    const erAvregning = simResultat && simResultat.avregningsperioder.length > 0;
+    const avregningsperioder = simResultat?.avregningsperioder ?? [];
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
@@ -292,7 +293,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
                 onSubmit,
                 hentFeilTilOppsummering,
                 erFeilutbetaling,
-                erAvregning,
+                avregningsperioder,
                 hentSkjemadata,
                 maksLengdeTekst,
                 harÅpenTilbakekrevingRessurs,

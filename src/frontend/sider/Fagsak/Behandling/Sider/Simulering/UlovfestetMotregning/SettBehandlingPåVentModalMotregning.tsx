@@ -20,6 +20,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useForenkletTilbakekrevingsvedtak';
 import {
     type IBehandling,
     type ISettPåVent,
@@ -41,8 +42,6 @@ interface IProps {
     lukkModal: () => void;
     behandling: IBehandling;
 }
-
-const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
 export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
     lukkModal,
