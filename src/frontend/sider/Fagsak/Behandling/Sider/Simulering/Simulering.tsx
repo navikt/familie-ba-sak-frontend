@@ -65,6 +65,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
         åpenBehandling.aktivSettPåVent?.årsak ===
         SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
+    const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -139,7 +140,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     <Alert variant="info">
                                         Saken venter på samtykke fra bruker for ulovfestet
                                         motregning. Hvis bruker har gitt samtykke før det har gått
-                                        14 dager, kan saken tas av vent manuelt.
+                                        {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager,
+                                        kan saken tas av vent manuelt.
                                     </Alert>
                                 )}
 
