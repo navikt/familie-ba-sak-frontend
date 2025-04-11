@@ -142,7 +142,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
                                     <Alert variant="info">
                                         Saken venter på samtykke fra bruker for ulovfestet
-                                        motregning. Hvis bruker har gitt samtykke før det har gått
+                                        motregning. Hvis bruker har gitt samtykke før det har gått{' '}
                                         {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager,
                                         kan saken tas av vent manuelt.
                                     </Alert>
