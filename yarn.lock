@@ -1926,10 +1926,10 @@
     "@navikt/familie-typer" "^8.0.2"
     classnames "^2.5.1"
 
-"@navikt/flagg-ikoner@^9.0.8":
-  version "9.0.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/9.0.8/98219b05f023ef73aba5b3b40075b9d9f2378594#98219b05f023ef73aba5b3b40075b9d9f2378594"
-  integrity sha512-nJDbdwq1QaAPPtBJGGEpWMs6KvHHk0Fm63Yu+nBqoL/+lfj0A99Pz8lRFbieUQIFhhycPKwHK5DH/oXTdYSXAA==
+"@navikt/flagg-ikoner@^9.1.6":
+  version "9.1.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/9.1.6/f1b4126078c7492efa01364794da3e674ce0e92a#f1b4126078c7492efa01364794da3e674ce0e92a"
+  integrity sha512-sAnh8+I0aqoHgJ93hZZX2m+42zbd+Juz3a4UXhxq9vagyR2ljqZSTOMyi5II0J+3NlQa5H6TH4FBGJlAo/+m7g==
   dependencies:
     svg-country-flags "^1.2.10"
     uuid "^9.0.0"
