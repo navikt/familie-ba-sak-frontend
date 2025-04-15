@@ -17,7 +17,8 @@ export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => 
             tilFormat: Datoformat.MÅNED_ÅR_NAVN,
         });
 
-        const periode = fom === tom ? fom : `perioden fra ${fom} til ${tom}`;
+        const erFomOgTomLike = fom === tom;
+        const periode = erFomOgTomLike ? fom : `perioden fra ${fom} til ${tom}`;
 
         const etterbetaling = formaterBeløpUtenValutakode(avregningsperiode.totalEtterbetaling);
         const feilutbetaling = formaterBeløpUtenValutakode(avregningsperiode.totalFeilutbetaling);
@@ -41,10 +42,12 @@ export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => 
                     tilFormat: Datoformat.MÅNED_ÅR_NAVN,
                 });
 
-                const periode = fom === tom ? fom : `${fom} til ${tom}`;
+                const erFomOgTomLike = fom === tom;
+                const periode = erFomOgTomLike ? fom : `${fom} til ${tom}`;
                 const beløp = formaterBeløpUtenValutakode(avregningsperiode[felt]);
 
-                return `\u2022 ${periode} på ${beløp} kroner`;
+                const kulepunkt = `\u2022`;
+                return `${kulepunkt} ${periode} på ${beløp} kroner`;
             });
 
         const etterbetalingsperioderFormatert = formaterPerioder('totalEtterbetaling');
