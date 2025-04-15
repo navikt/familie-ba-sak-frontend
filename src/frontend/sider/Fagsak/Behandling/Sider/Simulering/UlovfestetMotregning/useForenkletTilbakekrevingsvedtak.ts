@@ -19,6 +19,8 @@ import type {
 } from './ForenkletTilbakekrevingsvedtakDTO';
 import type { IBehandling } from '../../../../../../typer/behandling';
 
+export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
+
 export const useForenkletTilbakekrevingsvedtak = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
 

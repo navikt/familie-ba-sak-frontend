@@ -3,10 +3,13 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyLong, Button, Link, List } from '@navikt/ds-react';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { Alert, BodyLong, Button, CopyButton, Link, List } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
+import { utledTekstTilModia } from './utils';
+import type { IAvregningsperiode } from '../../../../../../typer/simulering';
 import { erProd } from '../../../../../../utils/miljø';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
@@ -20,10 +23,14 @@ const StyledLink = styled(Link)`
 `;
 
 interface AvregningAlertProps {
+    avregningsperioder: IAvregningsperiode[];
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
 }
 
-const AvregningAlert = ({ harÅpenTilbakekrevingRessurs }: AvregningAlertProps) => {
+const AvregningAlert = ({
+    avregningsperioder,
+    harÅpenTilbakekrevingRessurs,
+}: AvregningAlertProps) => {
     const [visModal, settVisModal] = useState(false);
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
@@ -50,6 +57,11 @@ const AvregningAlert = ({ harÅpenTilbakekrevingRessurs }: AvregningAlertProps) 
                     Be bruker om samtykke til å holde på etterbetalingen mens Nav vurderer t-sak
                     («ulovfestet motregning»). Hvis det ikke er åpenbart at hele beløpet skal kreves
                     tilbake, må du splitte saken.
+                    <CopyButton
+                        copyText={utledTekstTilModia(avregningsperioder)}
+                        text="Kopier standardtekst til Modia"
+                        activeText="Kopiert!"
+                    />
                 </List.Item>
             </List>
             {!erLesevisning && (
@@ -58,7 +70,12 @@ const AvregningAlert = ({ harÅpenTilbakekrevingRessurs }: AvregningAlertProps) 
                     target={'_blank'}
                     style={{ textDecoration: 'none' }}
                 >
-                    <Button variant={'secondary-neutral'} onClick={() => settVisModal(true)}>
+                    <Button
+                        variant={'secondary-neutral'}
+                        onClick={() => settVisModal(true)}
+                        icon={<ExternalLinkIcon />}
+                        iconPosition="right"
+                    >
                         Be om samtykke fra bruker
                     </Button>
                 </StyledLink>

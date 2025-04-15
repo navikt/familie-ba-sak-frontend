@@ -21,7 +21,10 @@ import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import AvregningAlert from './UlovfestetMotregning/AvregningAlert';
 import { ForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/ForenkletTilbakekrevingsvedtak';
-import { useForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
+import {
+    dagerFristForAvventerSamtykkeUlovfestetMotregning,
+    useForenkletTilbakekrevingsvedtak,
+} from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -42,7 +45,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erFeilutbetaling,
-        erAvregning,
+        avregningsperioder,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
@@ -61,11 +64,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     } = useForenkletTilbakekrevingsvedtak(åpenBehandling);
 
     const erAvregningOgToggleErPå =
-        erAvregning && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+        avregningsperioder.length > 0 &&
+        toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
     const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
         åpenBehandling.aktivSettPåVent?.årsak ===
         SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
-    const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -139,7 +142,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
                                     <Alert variant="info">
                                         Saken venter på samtykke fra bruker for ulovfestet
-                                        motregning. Hvis bruker har gitt samtykke før det har gått
+                                        motregning. Hvis bruker har gitt samtykke før det har gått{' '}
                                         {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager,
                                         kan saken tas av vent manuelt.
                                     </Alert>
@@ -148,6 +151,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
                                     forenkletTilbakekrevingsvedtak.data === null && (
                                         <AvregningAlert
+                                            avregningsperioder={avregningsperioder}
                                             harÅpenTilbakekrevingRessurs={
                                                 harÅpenTilbakekrevingRessurs
                                             }
