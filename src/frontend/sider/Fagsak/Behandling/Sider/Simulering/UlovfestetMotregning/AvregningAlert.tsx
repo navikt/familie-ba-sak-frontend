@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, CopyButton, Link, List } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -38,8 +39,6 @@ const AvregningAlert = ({
         ? 'https://modiapersonoversikt.intern.nav.no'
         : 'https://modiapersonoversikt.intern.dev.nav.no';
 
-    const tekstTilModia = utledTekstTilModia(avregningsperioder);
-
     return (
         <StyledAlert variant="warning">
             <BodyLong spacing>
@@ -59,7 +58,7 @@ const AvregningAlert = ({
                     («ulovfestet motregning»). Hvis det ikke er åpenbart at hele beløpet skal kreves
                     tilbake, må du splitte saken.
                     <CopyButton
-                        copyText={tekstTilModia}
+                        copyText={utledTekstTilModia(avregningsperioder)}
                         text="Kopier standardtekst til Modia"
                         activeText="Kopiert!"
                     />
@@ -71,7 +70,12 @@ const AvregningAlert = ({
                     target={'_blank'}
                     style={{ textDecoration: 'none' }}
                 >
-                    <Button variant={'secondary-neutral'} onClick={() => settVisModal(true)}>
+                    <Button
+                        variant={'secondary-neutral'}
+                        onClick={() => settVisModal(true)}
+                        icon={<ExternalLinkIcon />}
+                        iconPosition="right"
+                    >
                         Be om samtykke fra bruker
                     </Button>
                 </StyledLink>
