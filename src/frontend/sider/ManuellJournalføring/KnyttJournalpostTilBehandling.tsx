@@ -161,10 +161,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             ? `Du velger å journalføre uten å knytte til behandling(er).`
                             : `Du velger å journalføre uten å knytte til ny behandling.`}
                     </GenerellSakInfoStripeTittel>
-                    <div>
-                        {`Journalposten knyttes kun til person (tilsvarende "Knytt til generell
-                            sak" i Gosys)`}
-                    </div>
                 </StyledAlert>
             )}
         </KnyttDiv>
