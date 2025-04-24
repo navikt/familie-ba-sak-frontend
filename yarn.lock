@@ -1939,10 +1939,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5#e33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
   integrity sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw==
 
-"@navikt/land-verktoy@^9.0.9":
-  version "9.0.9"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/9.0.9/91d439ae2de95893895c8ad3d245ec6d5571a1c3#91d439ae2de95893895c8ad3d245ec6d5571a1c3"
-  integrity sha512-HVpV29qKoVSNy9pM1BQcA1/SvVgCrPdrcmQoRKzbVogb6IqnaT3YUrY+744zkRHgLACCaZvBYK23mgY24LLsvw==
+"@navikt/land-verktoy@^9.1.8":
+  version "9.1.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/9.1.8/932ec398628725c391f19df559e3c2a0e130b72e#932ec398628725c391f19df559e3c2a0e130b72e"
+  integrity sha512-vKcSx3GlbX7tHH25aZnTRJjpWO582W0vGxzVpfOYL+0YxfgKQdJ7+PzLEIGz3drAhAcCFGJCNhq6F44SkIddyg==
   dependencies:
     "@piotrgorecki/i18n-currency-name" "^1.3.0"
     country-data-list "^1.2.2"
