@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -7,6 +8,9 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../../context/AppContext';
+import { BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentBarnetrygdbehandlinger';
+import { KLAGEBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentKlagebehandlinger';
+import { TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentTilbakekrevingsbehandlinger';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
@@ -45,6 +49,7 @@ const useOpprettBehandling = (
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const { oppdaterKlagebehandlingerPåFagsak } = useFagsakContext();
+    const queryClient = useQueryClient();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
     const minimalFagsak =
@@ -186,6 +191,9 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
+                    queryClient.invalidateQueries({
+                        queryKey: [TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                    });
                     nullstillSkjemaStatus();
                     onOpprettTilbakekrevingSuccess();
                 }
@@ -205,6 +213,9 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
+                    queryClient.invalidateQueries({
+                        queryKey: [KLAGEBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                    });
                     oppdaterKlagebehandlingerPåFagsak();
                     lukkModal();
                     nullstillSkjema();
@@ -244,6 +255,10 @@ const useOpprettBehandling = (
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
+                    queryClient.invalidateQueries({
+                        queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                    });
+
                     hentMinimalFagsak(fagsakId, true);
 
                     lukkModal();
