@@ -51,7 +51,7 @@
     "@navikt/flagg-ikoner": "^9.0.8",
     "@navikt/fnrvalidator": "^2.1.0",
     "@navikt/land-verktoy": "^9.0.9",
-    "@navikt/landvelger": "^9.0.7",
+    "@navikt/landvelger": "^9.1.9",
     "@sentry/browser": "^9.12.0",
     "@sentry/webpack-plugin": "^3.3.1",
     "@tanstack/react-query": "^5.72.0",
