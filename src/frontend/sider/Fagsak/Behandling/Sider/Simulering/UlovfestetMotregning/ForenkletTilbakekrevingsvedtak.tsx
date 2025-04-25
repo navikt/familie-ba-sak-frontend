@@ -1,17 +1,9 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { Alert, Box, Checkbox, CheckboxGroup, Heading, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 
 import { BekreftSamtykkeOmMotregning } from './BekreftSamtykkeOmMotregning';
 import type { ForenkletTilbakekrevingsvedtakDTO } from './ForenkletTilbakekrevingsvedtakDTO';
-
-const StyledBox = styled(Box)`
-    margin-top: 2.5rem;
-    width: 90%;
-    max-width: 40rem;
-`;
 
 interface ForenkletTilbakekrevingsvedtakProps {
     forenkletTilbakekrevingsvedtak: ForenkletTilbakekrevingsvedtakDTO;
@@ -28,12 +20,8 @@ export const ForenkletTilbakekrevingsvedtak = ({
     heleBeløpetSkalKrevesTilbake,
     settHeleBeløpetSkalKrevesTilbake,
 }: ForenkletTilbakekrevingsvedtakProps) => {
-    const toggleHeleBeløpetSkalKrevesTilbake = (value: boolean[]) => {
-        settHeleBeløpetSkalKrevesTilbake(value.includes(true));
-    };
-
     return (
-        <StyledBox>
+        <Box marginBlock="10 0" width="90%" maxWidth="40rem">
             <Heading size="medium" level="2" spacing>
                 Tilbakekreving - ulovfestet motregning
             </Heading>
@@ -50,21 +38,22 @@ export const ForenkletTilbakekrevingsvedtak = ({
                         Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
                         saksbehandlingen.
                     </Alert>
-                    <CheckboxGroup
-                        legend="Hele beløpet skal kreves tilbake"
-                        size="medium"
-                        hideLegend
-                        onChange={toggleHeleBeløpetSkalKrevesTilbake}
+                    <ConfirmationPanel
+                        checked={heleBeløpetSkalKrevesTilbake}
+                        label="Hele beløpet skal kreves tilbake"
+                        onChange={() =>
+                            settHeleBeløpetSkalKrevesTilbake(!heleBeløpetSkalKrevesTilbake)
+                        }
                     >
-                        <Checkbox value={true}>Hele beløpet skal kreves tilbake</Checkbox>
-                    </CheckboxGroup>
-                    {!heleBeløpetSkalKrevesTilbake && (
-                        <Alert variant="warning">
-                            Dersom ikke hele beløpet skal kreves tilbake må du splitte saken
-                        </Alert>
-                    )}
+                        <Heading level="2" size="xsmall" spacing>
+                            Skal hele beløpet kreves tilbake?
+                        </Heading>
+                        <BodyShort>
+                            Dersom ikke hele beløpet skal kreves tilbake må du splitte saken.
+                        </BodyShort>
+                    </ConfirmationPanel>
                 </VStack>
             )}
-        </StyledBox>
+        </Box>
     );
 };
