@@ -1,17 +1,9 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { Alert, Box, Checkbox, CheckboxGroup, Heading, VStack } from '@navikt/ds-react';
 
 import { BekreftSamtykkeOmMotregning } from './BekreftSamtykkeOmMotregning';
 import type { ForenkletTilbakekrevingsvedtakDTO } from './ForenkletTilbakekrevingsvedtakDTO';
-
-const StyledBox = styled(Box)`
-    margin-top: 2.5rem;
-    width: 90%;
-    max-width: 40rem;
-`;
 
 interface ForenkletTilbakekrevingsvedtakProps {
     forenkletTilbakekrevingsvedtak: ForenkletTilbakekrevingsvedtakDTO;
@@ -33,7 +25,7 @@ export const ForenkletTilbakekrevingsvedtak = ({
     };
 
     return (
-        <StyledBox>
+        <Box marginBlock="10 0" width="90%" maxWidth="40rem">
             <Heading size="medium" level="2" spacing>
                 Tilbakekreving - ulovfestet motregning
             </Heading>
@@ -65,6 +57,6 @@ export const ForenkletTilbakekrevingsvedtak = ({
                     )}
                 </VStack>
             )}
-        </StyledBox>
+        </Box>
     );
 };
