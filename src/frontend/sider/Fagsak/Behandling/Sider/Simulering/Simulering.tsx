@@ -138,7 +138,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             }
                         />
                         {erAvregningOgToggleErPå && (
-                            <Box marginBlock={'8 0'}>
+                            <Box marginBlock="8 0" width="fit-content">
                                 {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
                                     <Alert variant="info">
                                         Saken venter på samtykke fra bruker for ulovfestet
