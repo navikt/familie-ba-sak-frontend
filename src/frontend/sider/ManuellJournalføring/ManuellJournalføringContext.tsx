@@ -62,7 +62,6 @@ import type { IPersonInfo } from '../../typer/person';
 import { Adressebeskyttelsegradering } from '../../typer/person';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../../typer/toggles';
 import { isoStringTilDate } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
@@ -113,7 +112,7 @@ const ManuellJournalføringContext = createContext<ManuellJournalføringContextV
 );
 
 export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
-    const { innloggetSaksbehandler, toggles } = useAppContext();
+    const { innloggetSaksbehandler } = useAppContext();
 
     const navigate = useNavigate();
     const { request } = useHttp();
@@ -437,7 +436,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
         );
 
         const journalføringsbehandlinger = [
-            ...(toggles[ToggleNavn.kanBehandleKlage] ? journalføringsbehandlingerKlage : []),
+            ...journalføringsbehandlingerKlage,
             ...journalføringsbehandlingerBarnetrygd,
         ];
 

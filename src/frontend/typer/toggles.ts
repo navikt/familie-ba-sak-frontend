@@ -12,7 +12,6 @@ export enum ToggleNavn {
     skalObfuskereData = 'familie-ba-sak.anonymiser-persondata',
 
     // Release
-    kanBehandleKlage = 'familie-ba-sak.klage',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
