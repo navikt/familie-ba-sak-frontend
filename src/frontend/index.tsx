@@ -9,9 +9,6 @@ import { createRoot } from 'react-dom/client';
 
 import App from './App';
 
-// eslint-disable-next-line
-const packageConfig = require('../../package.json');
-
 // Setter default locale til norsk bokmål for date-fns
 setDefaultOptions({ locale: nb });
 
