@@ -13,8 +13,7 @@ import {
 } from '@navikt/familie-typer';
 
 import type {
-    OppdaterTilbakekrevingsvedtakMotregningFritekstDTO,
-    OppdaterTilbakekrevingsvedtakMotregningSamtykkeDTO,
+    OppdaterTilbakekrevingsvedtakMotregningDTO,
     TilbakekrevingsvedtakMotregningDTO,
 } from './TilbakekrevingsvedtakMotregningDTO';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -24,7 +23,7 @@ export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
 
-    const tilbakekrevingsvedtakMotregningUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/forenklet-tilbakekrevingsvedtak`;
+    const tilbakekrevingsvedtakMotregningUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/tilbakekrevingsvedtak-motregning`;
 
     const [tilbakekrevingsvedtakMotregning, settTilbakekrevingsvedtakMotregning] =
         useState<Ressurs<TilbakekrevingsvedtakMotregningDTO | null>>(byggTomRessurs());
@@ -68,14 +67,18 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
                 );
             });
 
-    const oppdaterTilbakekrevingMotregningFritekst = (fritekst: string): Promise<void> =>
-        request<
-            OppdaterTilbakekrevingsvedtakMotregningFritekstDTO,
-            TilbakekrevingsvedtakMotregningDTO
-        >({
+    const oppdaterTilbakekrevingMotregning = (
+        tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
+    ): Promise<void> =>
+        request<OppdaterTilbakekrevingsvedtakMotregningDTO, TilbakekrevingsvedtakMotregningDTO>({
             method: 'PATCH',
-            data: { fritekst: fritekst },
-            url: `${tilbakekrevingsvedtakMotregningUrl}/fritekst`,
+            url: tilbakekrevingsvedtakMotregningUrl,
+            data: {
+                årsakTilFeilutbetaling: tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling,
+                vurderingAvSkyld: tilbakekrevingsvedtakMotregning.vurderingAvSkyld,
+                varselDato: tilbakekrevingsvedtakMotregning.varselDato,
+                samtykke: tilbakekrevingsvedtakMotregning.samtykke,
+            },
         })
             .then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
                 settTilbakekrevingsvedtakMotregning(response);
@@ -83,30 +86,13 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
             .catch((_error: AxiosError) => {
                 settTilbakekrevingsvedtakMotregning(
                     byggFeiletRessurs(
-                        'Ukjent feil, klarte ikke å oppdatere fritekst i tilbakekrevingsvedtak for motregning.'
+                        'Ukjent feil, klarte ikke å oppdatere tilbakekrevingsvedtak for motregning.'
                     )
                 );
             });
 
-    const oppdaterTilbakekrevingMotregningSamtykke = (samtykke: boolean): Promise<void> =>
-        request<
-            OppdaterTilbakekrevingsvedtakMotregningSamtykkeDTO,
-            TilbakekrevingsvedtakMotregningDTO
-        >({
-            method: 'PATCH',
-            data: { samtykke: samtykke },
-            url: `${tilbakekrevingsvedtakMotregningUrl}/samtykke`,
-        })
-            .then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
-                settTilbakekrevingsvedtakMotregning(response);
-            })
-            .catch((_error: AxiosError) => {
-                settTilbakekrevingsvedtakMotregning(
-                    byggFeiletRessurs(
-                        'Ukjent feil, klarte ikke å oppdatere samtykke i tilbakekrevingsvedtak for motregning.'
-                    )
-                );
-            });
+    const bekreftSamtykkeTilMotregning = (): Promise<void> =>
+        oppdaterTilbakekrevingMotregning({ samtykke: true });
 
     useEffect(() => {
         hentTilbakekrevingsvedtakMotregning();
@@ -115,8 +101,8 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
     return {
         tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
-        oppdaterTilbakekrevingMotregningFritekst,
-        oppdaterTilbakekrevingMotregningSamtykke,
+        oppdaterTilbakekrevingMotregning,
+        bekreftSamtykkeTilMotregning,
         heleBeløpetSkalKrevesTilbake,
         settHeleBeløpetSkalKrevesTilbake,
     };

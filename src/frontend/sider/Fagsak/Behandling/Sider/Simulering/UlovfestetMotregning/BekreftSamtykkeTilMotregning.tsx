@@ -11,12 +11,12 @@ const StyledAlert = styled(Alert)`
 
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    oppdaterTilbakekrevingMotregningSamtykke: (samtykke: boolean) => Promise<void>;
+    bekreftSamtykkeTilMotregning: () => Promise<void>;
 }
 
-export const BekreftSamtykkeOmMotregning = ({
+export const BekreftSamtykkeTilMotregning = ({
     slettTilbakekrevingsvedtakMotregning,
-    oppdaterTilbakekrevingMotregningSamtykke,
+    bekreftSamtykkeTilMotregning,
 }: IProps) => {
     const [visBekreftSlettingModal, settVisBekreftSlettingModal] = useState<boolean>(false);
     const åpneModal = () => settVisBekreftSlettingModal(true);
@@ -39,9 +39,7 @@ export const BekreftSamtykkeOmMotregning = ({
                     <Button
                         onClick={() => {
                             settOppdaterer(true);
-                            oppdaterTilbakekrevingMotregningSamtykke(true).finally(() => {
-                                settOppdaterer(false);
-                            });
+                            bekreftSamtykkeTilMotregning().finally(() => settOppdaterer(false));
                         }}
                         loading={oppdaterer}
                         disabled={oppdaterer}

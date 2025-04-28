@@ -1,12 +1,13 @@
 export interface TilbakekrevingsvedtakMotregningDTO {
-    fritekst: string;
+    årsakTilFeilutbetaling: string | null;
+    vurderingAvSkyld: string | null;
+    varselDato: string;
     samtykke: boolean;
 }
 
-export interface OppdaterTilbakekrevingsvedtakMotregningFritekstDTO {
-    fritekst: string;
-}
-
-export interface OppdaterTilbakekrevingsvedtakMotregningSamtykkeDTO {
-    samtykke: boolean;
+export interface OppdaterTilbakekrevingsvedtakMotregningDTO {
+    årsakTilFeilutbetaling?: string;
+    vurderingAvSkyld?: string;
+    varselDato?: string;
+    samtykke?: boolean;
 }

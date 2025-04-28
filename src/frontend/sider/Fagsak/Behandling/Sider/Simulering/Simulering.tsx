@@ -58,7 +58,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const {
         tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
-        oppdaterTilbakekrevingMotregningSamtykke,
+        bekreftSamtykkeTilMotregning,
         heleBeløpetSkalKrevesTilbake,
         settHeleBeløpetSkalKrevesTilbake,
     } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
@@ -169,8 +169,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                             slettTilbakekrevingsvedtakMotregning={
                                                 slettTilbakekrevingsvedtakMotregning
                                             }
-                                            oppdaterTilbakekrevingMotregningSamtykke={
-                                                oppdaterTilbakekrevingMotregningSamtykke
+                                            bekreftSamtykkeTilMotregning={
+                                                bekreftSamtykkeTilMotregning
                                             }
                                             heleBeløpetSkalKrevesTilbake={
                                                 heleBeløpetSkalKrevesTilbake

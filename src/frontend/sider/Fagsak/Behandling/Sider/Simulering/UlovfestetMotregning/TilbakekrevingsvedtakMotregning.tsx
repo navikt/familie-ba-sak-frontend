@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Alert, BodyShort, Box, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 
-import { BekreftSamtykkeOmMotregning } from './BekreftSamtykkeOmMotregning';
+import { BekreftSamtykkeTilMotregning } from './BekreftSamtykkeTilMotregning';
 import type { TilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
 
 interface TilbakekrevingsvedtakMotregningProps {
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    oppdaterTilbakekrevingMotregningSamtykke: (samtykke: boolean) => Promise<void>;
+    bekreftSamtykkeTilMotregning: () => Promise<void>;
     heleBeløpetSkalKrevesTilbake: boolean;
     settHeleBeløpetSkalKrevesTilbake: (value: boolean) => void;
 }
@@ -16,7 +16,7 @@ interface TilbakekrevingsvedtakMotregningProps {
 export const TilbakekrevingsvedtakMotregning = ({
     tilbakekrevingsvedtakMotregning,
     slettTilbakekrevingsvedtakMotregning,
-    oppdaterTilbakekrevingMotregningSamtykke,
+    bekreftSamtykkeTilMotregning,
     heleBeløpetSkalKrevesTilbake,
     settHeleBeløpetSkalKrevesTilbake,
 }: TilbakekrevingsvedtakMotregningProps) => {
@@ -26,11 +26,9 @@ export const TilbakekrevingsvedtakMotregning = ({
                 Tilbakekreving - ulovfestet motregning
             </Heading>
             {!tilbakekrevingsvedtakMotregning.samtykke ? (
-                <BekreftSamtykkeOmMotregning
+                <BekreftSamtykkeTilMotregning
                     slettTilbakekrevingsvedtakMotregning={slettTilbakekrevingsvedtakMotregning}
-                    oppdaterTilbakekrevingMotregningSamtykke={
-                        oppdaterTilbakekrevingMotregningSamtykke
-                    }
+                    bekreftSamtykkeTilMotregning={bekreftSamtykkeTilMotregning}
                 />
             ) : (
                 <VStack gap="2">
