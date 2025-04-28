@@ -10,13 +10,13 @@ const StyledAlert = styled(Alert)`
 `;
 
 interface IProps {
-    slettForenkletTilbakekrevingsvedtak: () => Promise<void>;
-    oppdaterForenkletTilbakekrevingSamtykke: (samtykke: boolean) => Promise<void>;
+    slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
+    oppdaterTilbakekrevingMotregningSamtykke: (samtykke: boolean) => Promise<void>;
 }
 
 export const BekreftSamtykkeOmMotregning = ({
-    slettForenkletTilbakekrevingsvedtak,
-    oppdaterForenkletTilbakekrevingSamtykke,
+    slettTilbakekrevingsvedtakMotregning,
+    oppdaterTilbakekrevingMotregningSamtykke,
 }: IProps) => {
     const [visBekreftSlettingModal, settVisBekreftSlettingModal] = useState<boolean>(false);
     const åpneModal = () => settVisBekreftSlettingModal(true);
@@ -39,7 +39,7 @@ export const BekreftSamtykkeOmMotregning = ({
                     <Button
                         onClick={() => {
                             settOppdaterer(true);
-                            oppdaterForenkletTilbakekrevingSamtykke(true).finally(() => {
+                            oppdaterTilbakekrevingMotregningSamtykke(true).finally(() => {
                                 settOppdaterer(false);
                             });
                         }}
@@ -54,7 +54,8 @@ export const BekreftSamtykkeOmMotregning = ({
                 open={visBekreftSlettingModal}
                 onClose={lukkModal}
                 header={{
-                    heading: 'Er du sikker på at du vil slette forenklet tilbakekrevingsvedtak?',
+                    heading:
+                        'Er du sikker på at du vil slette tilbakekrevingsvedtak for motregning?',
                     size: 'small',
                     closeButton: false,
                 }}
@@ -65,7 +66,7 @@ export const BekreftSamtykkeOmMotregning = ({
                         key={'bekreft'}
                         onClick={() => {
                             settSletter(true);
-                            slettForenkletTilbakekrevingsvedtak().finally(() => {
+                            slettTilbakekrevingsvedtakMotregning().finally(() => {
                                 settSletter(false);
                                 settVisBekreftSlettingModal(false);
                             });
