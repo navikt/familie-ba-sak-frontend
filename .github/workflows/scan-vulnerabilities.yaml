@@ -19,7 +19,5 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
-      id-token: write # nais/login
-    uses: navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@main
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@95b1f0f855f8c73015db7b815d249ee11f035906 # ratchet:navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@main
     secrets: inherit
-
