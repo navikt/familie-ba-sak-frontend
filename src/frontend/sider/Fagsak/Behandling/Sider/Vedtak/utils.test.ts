@@ -1,4 +1,8 @@
-import { antallMånederIPeriode, summerBeløpForPerioder } from './utils';
+import {
+    antallMånederIPeriode,
+    summerBeløpForPerioder,
+    summerTotalBeløpForPerioder,
+} from './utils';
 
 const REFUSJONSPERIODE_FIRE_MÅNEDER = {
     fom: '2022-06-01',
@@ -57,5 +61,38 @@ describe('Vedtakutils', () => {
         expect(antallMånederIPeriode(REFUSJONSPERIODE_FIRE_MÅNEDER)).toBe(4);
         expect(antallMånederIPeriode(REFUSJONSPERIODE_TRE_MÅNEDER)).toBe(3);
         expect(antallMånederIPeriode(REFUSJONSPERIODE_EN_MÅNED)).toBe(1);
+    });
+    test('summerTotalBeløpForPerioder skal finne totalt refusjonsbeløp for alle perioder', () => {
+        expect(
+            summerTotalBeløpForPerioder([
+                REFUSJONSPERIODE_FIRE_MÅNEDER,
+                REFUSJONSPERIODE_TRE_MÅNEDER,
+                REFUSJONSPERIODE_EN_MÅNED,
+            ])
+        ).toBe(950);
+        expect(
+            summerTotalBeløpForPerioder([
+                {
+                    fom: '2021-01-01',
+                    tom: '2021-08-31',
+                    beløp: 62,
+                },
+                {
+                    fom: '2021-09-01',
+                    tom: '2021-09-30',
+                    beløp: 81,
+                },
+                {
+                    fom: '2021-10-01',
+                    tom: '2022-04-30',
+                    beløp: 152,
+                },
+                {
+                    fom: '2022-05-01',
+                    tom: '2022-09-30',
+                    beløp: 108,
+                },
+            ])
+        ).toBe(2181);
     });
 });

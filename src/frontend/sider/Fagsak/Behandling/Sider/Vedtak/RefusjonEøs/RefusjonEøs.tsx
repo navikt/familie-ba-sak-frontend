@@ -11,7 +11,7 @@ import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { summerBeløpForPerioder } from '../utils';
+import { summerTotalBeløpForPerioder } from '../utils';
 
 interface IRefusjonEøs {
     behandlingId: number;
@@ -62,7 +62,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
         skjulRefusjonEøs();
     }
 
-    const totaltRefusjonsbeløp = summerBeløpForPerioder(
+    const totaltRefusjonsbeløp = summerTotalBeløpForPerioder(
         refusjonEøsListe.map(it => ({ fom: it.fom, tom: it.tom, beløp: it.refusjonsbeløp }))
     );
 
@@ -75,7 +75,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
                 `${isoDatoPeriodeTilFormatertString({
                     fom: refusjonEøs.fom,
                     tom: refusjonEøs.tom,
-                })} kroner ${refusjonEøs.refusjonsbeløp}`
+                })} kroner ${refusjonEøs.refusjonsbeløp} per måned`
         )
         .join('\n')}`;
 

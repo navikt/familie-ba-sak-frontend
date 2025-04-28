@@ -117,7 +117,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
             <StyledTextField
                 {...skjema.felter.refusjonsbeløp.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 size="small"
-                label="Refusjonsbeløp (kr)"
+                label="Refusjonsbeløp (kr/mnd)"
                 value={skjema.felter.refusjonsbeløp.verdi}
                 type="text"
                 inputMode="numeric"
