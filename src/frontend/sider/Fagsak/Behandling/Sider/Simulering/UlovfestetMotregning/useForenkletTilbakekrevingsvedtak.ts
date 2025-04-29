@@ -24,7 +24,7 @@ export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 export const useForenkletTilbakekrevingsvedtak = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
 
-    const forenkletTilbakekrevingsvedtakUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/forenklet-tilbakekrevingsvedtak`;
+    const forenkletTilbakekrevingsvedtakUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/tilbakekrevingsvedtak-motregning`;
 
     const [forenkletTilbakekrevingsvedtak, settForenkletTilbakekrevingsvedtak] =
         useState<Ressurs<ForenkletTilbakekrevingsvedtakDTO | null>>(byggTomRessurs());
