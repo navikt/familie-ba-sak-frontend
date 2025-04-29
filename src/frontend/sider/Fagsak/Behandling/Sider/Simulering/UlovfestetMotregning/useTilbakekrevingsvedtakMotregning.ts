@@ -16,12 +16,15 @@ import type {
     OppdaterTilbakekrevingsvedtakMotregningDTO,
     TilbakekrevingsvedtakMotregningDTO,
 } from './TilbakekrevingsvedtakMotregningDTO';
+import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 
 export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
 export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
+    const { toggles } = useAppContext();
 
     const tilbakekrevingsvedtakMotregningUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/tilbakekrevingsvedtak-motregning`;
 
@@ -95,7 +98,9 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
         oppdaterTilbakekrevingMotregning({ samtykke: true });
 
     useEffect(() => {
-        hentTilbakekrevingsvedtakMotregning();
+        if (toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning]) {
+            hentTilbakekrevingsvedtakMotregning();
+        }
     }, [åpenBehandling]);
 
     return {
