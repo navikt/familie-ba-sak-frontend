@@ -2,35 +2,33 @@ import React from 'react';
 
 import { Alert, BodyShort, Box, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 
-import { BekreftSamtykkeOmMotregning } from './BekreftSamtykkeOmMotregning';
-import type { ForenkletTilbakekrevingsvedtakDTO } from './ForenkletTilbakekrevingsvedtakDTO';
+import { BekreftSamtykkeTilMotregning } from './BekreftSamtykkeTilMotregning';
+import type { TilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
 
-interface ForenkletTilbakekrevingsvedtakProps {
-    forenkletTilbakekrevingsvedtak: ForenkletTilbakekrevingsvedtakDTO;
-    slettForenkletTilbakekrevingsvedtak: () => Promise<void>;
-    oppdaterForenkletTilbakekrevingSamtykke: (samtykke: boolean) => Promise<void>;
+interface TilbakekrevingsvedtakMotregningProps {
+    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
+    slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
+    bekreftSamtykkeTilMotregning: () => Promise<void>;
     heleBeløpetSkalKrevesTilbake: boolean;
     settHeleBeløpetSkalKrevesTilbake: (value: boolean) => void;
 }
 
-export const ForenkletTilbakekrevingsvedtak = ({
-    forenkletTilbakekrevingsvedtak,
-    slettForenkletTilbakekrevingsvedtak,
-    oppdaterForenkletTilbakekrevingSamtykke,
+export const TilbakekrevingsvedtakMotregning = ({
+    tilbakekrevingsvedtakMotregning,
+    slettTilbakekrevingsvedtakMotregning,
+    bekreftSamtykkeTilMotregning,
     heleBeløpetSkalKrevesTilbake,
     settHeleBeløpetSkalKrevesTilbake,
-}: ForenkletTilbakekrevingsvedtakProps) => {
+}: TilbakekrevingsvedtakMotregningProps) => {
     return (
         <Box marginBlock="10 0" width="90%" maxWidth="40rem">
             <Heading size="medium" level="2" spacing>
                 Tilbakekreving - ulovfestet motregning
             </Heading>
-            {!forenkletTilbakekrevingsvedtak.samtykke ? (
-                <BekreftSamtykkeOmMotregning
-                    slettForenkletTilbakekrevingsvedtak={slettForenkletTilbakekrevingsvedtak}
-                    oppdaterForenkletTilbakekrevingSamtykke={
-                        oppdaterForenkletTilbakekrevingSamtykke
-                    }
+            {!tilbakekrevingsvedtakMotregning.samtykke ? (
+                <BekreftSamtykkeTilMotregning
+                    slettTilbakekrevingsvedtakMotregning={slettTilbakekrevingsvedtakMotregning}
+                    bekreftSamtykkeTilMotregning={bekreftSamtykkeTilMotregning}
                 />
             ) : (
                 <VStack gap="2">

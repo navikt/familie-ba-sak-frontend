@@ -1,7 +1,7 @@
 import type { IAvregningsperiode } from '../../../../../../typer/simulering';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 import { formaterBeløpUtenValutakode } from '../simuleringUtil';
-import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useForenkletTilbakekrevingsvedtak';
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 
 export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => {
     if (avregningsperioder.length === 1) {

@@ -20,11 +20,11 @@ import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import AvregningAlert from './UlovfestetMotregning/AvregningAlert';
-import { ForenkletTilbakekrevingsvedtak } from './UlovfestetMotregning/ForenkletTilbakekrevingsvedtak';
+import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import {
     dagerFristForAvventerSamtykkeUlovfestetMotregning,
-    useForenkletTilbakekrevingsvedtak,
-} from './UlovfestetMotregning/useForenkletTilbakekrevingsvedtak';
+    useTilbakekrevingsvedtakMotregning,
+} from './UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -56,12 +56,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erLesevisning = vurderErLesevisning();
 
     const {
-        forenkletTilbakekrevingsvedtak,
-        slettForenkletTilbakekrevingsvedtak,
-        oppdaterForenkletTilbakekrevingSamtykke,
+        tilbakekrevingsvedtakMotregning,
+        slettTilbakekrevingsvedtakMotregning,
+        bekreftSamtykkeTilMotregning,
         heleBeløpetSkalKrevesTilbake,
         settHeleBeløpetSkalKrevesTilbake,
-    } = useForenkletTilbakekrevingsvedtak(åpenBehandling);
+    } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 &&
@@ -148,8 +148,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     </Alert>
                                 )}
 
-                                {forenkletTilbakekrevingsvedtak.status === RessursStatus.SUKSESS &&
-                                    forenkletTilbakekrevingsvedtak.data === null && (
+                                {tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
+                                    tilbakekrevingsvedtakMotregning.data === null && (
                                         <AvregningAlert
                                             avregningsperioder={avregningsperioder}
                                             harÅpenTilbakekrevingRessurs={
@@ -159,18 +159,18 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     )}
 
                                 {!erLesevisning &&
-                                    forenkletTilbakekrevingsvedtak.status ===
+                                    tilbakekrevingsvedtakMotregning.status ===
                                         RessursStatus.SUKSESS &&
-                                    forenkletTilbakekrevingsvedtak.data !== null && (
-                                        <ForenkletTilbakekrevingsvedtak
-                                            forenkletTilbakekrevingsvedtak={
-                                                forenkletTilbakekrevingsvedtak.data
+                                    tilbakekrevingsvedtakMotregning.data !== null && (
+                                        <TilbakekrevingsvedtakMotregning
+                                            tilbakekrevingsvedtakMotregning={
+                                                tilbakekrevingsvedtakMotregning.data
                                             }
-                                            slettForenkletTilbakekrevingsvedtak={
-                                                slettForenkletTilbakekrevingsvedtak
+                                            slettTilbakekrevingsvedtakMotregning={
+                                                slettTilbakekrevingsvedtakMotregning
                                             }
-                                            oppdaterForenkletTilbakekrevingSamtykke={
-                                                oppdaterForenkletTilbakekrevingSamtykke
+                                            bekreftSamtykkeTilMotregning={
+                                                bekreftSamtykkeTilMotregning
                                             }
                                             heleBeløpetSkalKrevesTilbake={
                                                 heleBeløpetSkalKrevesTilbake

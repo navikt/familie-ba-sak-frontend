@@ -20,7 +20,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useForenkletTilbakekrevingsvedtak';
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 import {
     type IBehandling,
     type ISettPåVent,
