@@ -28,7 +28,6 @@ export interface IRestJournalføring {
     datoMottatt?: string;
     journalpostTittel?: string;
     dokumenter?: IRestJournalpostDokument[];
-    knyttTilFagsak: boolean;
     tilknyttedeBehandlinger: TilknyttetBehandling[];
     opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;

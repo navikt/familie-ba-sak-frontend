@@ -503,15 +503,8 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                     : dokument.logiskeVedlegg,
                             };
                         }),
-                        knyttTilFagsak:
-                            skjema.felter.tilknyttedeBehandlinger.verdi.length > 0 ||
-                            skjema.felter.knyttTilNyBehandling.verdi,
                         tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
-                        tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlinger.verdi.map(
-                            tilknyttetBehandling => tilknyttetBehandling.behandlingId
-                        ),
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
-
                         // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
                         nyBehandlingstype:
                             nyBehandlingstype === ''
@@ -533,7 +526,6 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                       tssEksternId: skjema.felter.samhandler.verdi?.tssEksternId,
                                   }
                                 : null,
-                        fagsakId: minimalFagsak?.id,
                     },
                 },
                 (fagsakId: Ressurs<string>) => {
@@ -579,10 +571,6 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                 dataForManuellJournalføring.data.journalpost.journalpostId,
                             opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
                             tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
-                            tilknyttedeBehandlingIder:
-                                skjema.felter.tilknyttedeBehandlinger.verdi.map(
-                                    tilknyttetBehandling => tilknyttetBehandling.behandlingId
-                                ),
                             kategori: behandlingstema?.kategori ?? null,
                             underkategori: behandlingstema?.underkategori ?? null,
                             bruker: {
@@ -601,7 +589,6 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                       ? BehandlingÅrsak.SØKNAD
                                       : nyBehandlingsårsak,
                             navIdent: innloggetSaksbehandler?.navIdent ?? '',
-                            fagsakId: minimalFagsak?.id,
                         },
                     },
                     (fagsakId: Ressurs<string>) => {
