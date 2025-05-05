@@ -15,7 +15,7 @@ interface Props {
     feltnavn: string;
     tittel: string;
     beskrivelse?: string;
-    lesevisning?: boolean;
+    erLesevisning?: boolean;
     kanKunVelgeFortid?: boolean;
     minDatoAvgrensning?: Date;
     maksDatoAvgrensning?: Date;
@@ -25,7 +25,7 @@ const Datovelger = ({
     feltnavn,
     tittel,
     beskrivelse,
-    lesevisning = false,
+    erLesevisning = false,
     minDatoAvgrensning = tidligsteRelevanteDato,
     maksDatoAvgrensning = senesteRelevanteDato,
 }: Props) => {
@@ -60,7 +60,7 @@ const Datovelger = ({
                 description={beskrivelse}
                 placeholder={'DD.MM.ÅÅÅÅ'}
                 error={fieldState.error?.message}
-                readOnly={lesevisning || formState.isSubmitting}
+                readOnly={erLesevisning || formState.isSubmitting}
             />
         </DatePicker>
     );

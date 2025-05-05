@@ -10,12 +10,14 @@ interface TilbakekrevingsvedtakMotregningFritekstProps {
     feltnavn: keyof Omit<TilbakekrevingsvedtakMotregningSkjemaverdier, 'varselDato'>;
     tittel: string;
     beskrivelse?: string;
+    erLesevisning: boolean;
 }
 
 export const Tekstfelt = ({
     feltnavn,
     tittel,
     beskrivelse,
+    erLesevisning,
 }: TilbakekrevingsvedtakMotregningFritekstProps) => {
     const { field, fieldState, formState } = useController({
         name: feltnavn,
@@ -30,7 +32,7 @@ export const Tekstfelt = ({
             onBlur={field.onBlur}
             onChange={field.onChange}
             error={fieldState.error?.message}
-            readOnly={formState.isSubmitting}
+            readOnly={erLesevisning || formState.isSubmitting}
         />
     );
 };
