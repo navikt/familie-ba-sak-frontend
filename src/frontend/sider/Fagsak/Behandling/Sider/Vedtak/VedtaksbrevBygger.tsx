@@ -218,6 +218,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                 hentBrevForTilbakekrevingsvedtakMotregning
                             }
                             hentetDokument={hentetDokument}
+                            erLesevisning={erLesevisning}
                         />
                     )}
             </div>

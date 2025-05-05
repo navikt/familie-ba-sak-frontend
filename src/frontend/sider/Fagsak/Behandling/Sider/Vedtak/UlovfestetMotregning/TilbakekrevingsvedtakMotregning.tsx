@@ -27,6 +27,7 @@ interface TilbakekrevingsvedtakMotregningExpansionCardProps {
     settVisDokumentModal: (vis: boolean) => void;
     hentBrevForTilbakekrevingsvedtakMotregning: () => void;
     hentetDokument: Ressurs<string>;
+    erLesevisning: boolean;
 }
 
 export const TilbakekrevingsvedtakMotregning = ({
@@ -35,6 +36,7 @@ export const TilbakekrevingsvedtakMotregning = ({
     settVisDokumentModal,
     hentBrevForTilbakekrevingsvedtakMotregning,
     hentetDokument,
+    erLesevisning,
 }: TilbakekrevingsvedtakMotregningExpansionCardProps) => {
     const [lagrer, settLagrer] = useState(false);
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
@@ -90,29 +92,35 @@ export const TilbakekrevingsvedtakMotregning = ({
                                         feltnavn="varselDato"
                                         tittel="Varseldato"
                                         beskrivelse="Dato bruker fikk varsel om feilutbetaling."
+                                        erLesevisning={erLesevisning}
                                     />
                                     <Tekstfelt
                                         feltnavn="årsakTilFeilutbetaling"
                                         tittel="Årsak til feilutbetaling"
                                         beskrivelse="Hva var grunnen til feilutbetalingen?"
+                                        erLesevisning={erLesevisning}
                                     />
                                     <Tekstfelt
                                         feltnavn="vurderingAvSkyld"
                                         tittel="Vurdering av skyld"
                                         beskrivelse="I hvilken grad har bruker forstått at det var en feilutbetaling?"
+                                        erLesevisning={erLesevisning}
                                     />
-                                    <Box width="fit-content">
-                                        <Button
-                                            size="medium"
-                                            type="submit"
-                                            variant="secondary"
-                                            disabled={lagrer}
-                                            loading={lagrer}
-                                            icon={<FloppydiskIcon aria-hidden />}
-                                        >
-                                            Lagre
-                                        </Button>
-                                    </Box>
+
+                                    {!erLesevisning && (
+                                        <Box width="fit-content">
+                                            <Button
+                                                size="medium"
+                                                type="submit"
+                                                variant="secondary"
+                                                disabled={lagrer || erLesevisning}
+                                                loading={lagrer}
+                                                icon={<FloppydiskIcon aria-hidden />}
+                                            >
+                                                Lagre
+                                            </Button>
+                                        </Box>
+                                    )}
                                 </VStack>
                             </ExpansionCard.Content>
                         </ExpansionCard>
