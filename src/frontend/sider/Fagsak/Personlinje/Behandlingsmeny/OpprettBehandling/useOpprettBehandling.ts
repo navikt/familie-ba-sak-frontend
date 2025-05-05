@@ -286,7 +286,7 @@ const useOpprettBehandling = (
         if (kanSendeSkjema()) {
             if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
                 opprettTilbakekreving();
-            } else if (behandlingstype.verdi === Behandlingstype.KLAGE) {
+            } else if (behandlingstype.verdi === Klagebehandlingstype.KLAGE) {
                 opprettKlagebehandling();
             } else {
                 opprettBehandling(søkersIdent, fagsakType);
