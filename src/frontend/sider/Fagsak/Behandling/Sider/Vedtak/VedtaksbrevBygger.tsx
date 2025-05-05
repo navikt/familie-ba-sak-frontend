@@ -8,6 +8,7 @@ import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
+import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { BehandlingKorrigertAlert } from './Vedtak';
 import { useVedtakContext } from './VedtakContext';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
@@ -26,6 +27,7 @@ import {
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
 interface Props {
     åpenBehandling: IBehandling;
@@ -54,6 +56,9 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     } = useVedtakContext();
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
+
+    const { tilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingMotregning } =
+        useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
 
@@ -86,6 +91,28 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
         hentForhåndsvisning({
             method: httpMethod,
             url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
+        });
+    };
+
+    const hentBrevForTilbakekrevingsvedtakMotregning = () => {
+        const behandlingId = åpenBehandling.behandlingId;
+        const rolle = hentSaksbehandlerRolle();
+        const genererBrevUnderBehandling =
+            rolle !== undefined &&
+            rolle > BehandlerRolle.VEILEDER &&
+            hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+        const genererBrevUnderBeslutning =
+            rolle !== undefined &&
+            rolle === BehandlerRolle.BESLUTTER &&
+            hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+        const httpMethod =
+            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
+
+        hentForhåndsvisning({
+            method: httpMethod,
+            url: `/familie-ba-sak/api/behandling/${behandlingId}/tilbakekrevingsvedtak-motregning/pdf`,
         });
     };
 
@@ -178,6 +205,21 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                 >
                     Vis vedtaksbrev
                 </Button>
+
+                {tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
+                    tilbakekrevingsvedtakMotregning.data !== null && (
+                        <TilbakekrevingsvedtakMotregning
+                            tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning.data}
+                            oppdaterTilbakekrevingsvedtakMotregning={
+                                oppdaterTilbakekrevingMotregning
+                            }
+                            settVisDokumentModal={settVisDokumentModal}
+                            hentBrevForTilbakekrevingsvedtakMotregning={
+                                hentBrevForTilbakekrevingsvedtakMotregning
+                            }
+                            hentetDokument={hentetDokument}
+                        />
+                    )}
             </div>
         </>
     );
