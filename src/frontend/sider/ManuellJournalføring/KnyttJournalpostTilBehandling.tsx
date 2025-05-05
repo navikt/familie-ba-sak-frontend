@@ -7,14 +7,10 @@ import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { useAppContext } from '../../context/AppContext';
-import { behandlingsstatuser, BehandlingStatus, behandlingstyper } from '../../typer/behandling';
+import { behandlingsstatuser, behandlingstyper } from '../../typer/behandling';
 import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../typer/journalføringsbehandling';
-import { ToggleNavn } from '../../typer/toggles';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import { ressursHarFeilet } from '../../utils/ressursUtils';
-import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;
@@ -29,20 +25,13 @@ const StyledAlert = styled(Alert)`
 `;
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { toggles } = useAppContext();
-
     const {
         skjema,
-        minimalFagsak,
         hentSorterteJournalføringsbehandlinger,
         kanKnytteJournalpostTilBehandling,
         erLesevisning,
         klageStatus,
     } = useManuellJournalføringContext();
-
-    const åpenBehandling: VisningBehandling | undefined = minimalFagsak
-        ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
-        : undefined;
 
     const visGenerellSakInfoStripe =
         !erLesevisning() &&
@@ -50,11 +39,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         !skjema.felter.knyttTilNyBehandling.verdi;
 
     const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
-
-    const skalViseKnyttTilNyBehandling =
-        toggles[ToggleNavn.kanBehandleKlage] || // Skal alltid vises når klage er implementert
-        !åpenBehandling ||
-        åpenBehandling.status === BehandlingStatus.AVSLUTTET;
 
     return (
         <KnyttDiv>
@@ -153,7 +137,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </div>
                 </VStack>
             )}
-            {skalViseKnyttTilNyBehandling && <KnyttTilNyBehandling />}
+            <KnyttTilNyBehandling />
             {visGenerellSakInfoStripe && (
                 <StyledAlert variant="info">
                     <GenerellSakInfoStripeTittel>
