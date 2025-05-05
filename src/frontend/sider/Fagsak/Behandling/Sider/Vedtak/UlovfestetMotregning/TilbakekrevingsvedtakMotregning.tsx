@@ -89,17 +89,17 @@ export const TilbakekrevingsvedtakMotregning = ({
                                     <Datovelger
                                         feltnavn="varselDato"
                                         tittel="Varseldato"
-                                        beskrivelse="Dato for når varsel ble sendt til bruker"
+                                        beskrivelse="Dato bruker fikk varsel om feilutbetaling."
                                     />
                                     <Tekstfelt
                                         feltnavn="årsakTilFeilutbetaling"
                                         tittel="Årsak til feilutbetaling"
-                                        beskrivelse="Hva er grunnen til feilutbetalingen?"
+                                        beskrivelse="Hva var grunnen til feilutbetalingen?"
                                     />
                                     <Tekstfelt
                                         feltnavn="vurderingAvSkyld"
                                         tittel="Vurdering av skyld"
-                                        beskrivelse="Burde bruker forstått at det var en feilutbetaling?"
+                                        beskrivelse="I hvilken grad har bruker forstått at det var en feilutbetaling?"
                                     />
                                     <Box width="fit-content">
                                         <Button
