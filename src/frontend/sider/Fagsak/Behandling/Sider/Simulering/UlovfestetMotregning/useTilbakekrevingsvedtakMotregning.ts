@@ -70,7 +70,7 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
                 );
             });
 
-    const oppdaterTilbakekrevingMotregning = (
+    const oppdaterTilbakekrevingsvedtakMotregning = (
         tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
     ): Promise<void> =>
         request<OppdaterTilbakekrevingsvedtakMotregningDTO, TilbakekrevingsvedtakMotregningDTO>({
@@ -95,7 +95,7 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
             });
 
     const bekreftSamtykkeTilMotregning = (): Promise<void> =>
-        oppdaterTilbakekrevingMotregning({ samtykke: true });
+        oppdaterTilbakekrevingsvedtakMotregning({ samtykke: true });
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning]) {
@@ -106,7 +106,7 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
     return {
         tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
-        oppdaterTilbakekrevingMotregning,
+        oppdaterTilbakekrevingsvedtakMotregning,
         bekreftSamtykkeTilMotregning,
         heleBeløpetSkalKrevesTilbake,
         settHeleBeløpetSkalKrevesTilbake,
