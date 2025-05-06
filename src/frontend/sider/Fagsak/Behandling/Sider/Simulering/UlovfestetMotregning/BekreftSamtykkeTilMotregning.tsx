@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
-
-import { Alert, BodyLong, Button, HStack } from '@navikt/ds-react';
-
-const StyledAlert = styled(Alert)`
-    margin-top: 2rem;
-    width: fit-content;
-`;
+import { Alert, BodyLong, Box, Button, HStack } from '@navikt/ds-react';
 
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
@@ -22,8 +15,8 @@ export const BekreftSamtykkeTilMotregning = ({
     const [sletter, settSletter] = useState(false);
 
     return (
-        <>
-            <StyledAlert variant={'info'}>
+        <Box marginBlock="8 0" width="fit-content">
+            <Alert variant={'info'}>
                 <BodyLong spacing>
                     Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert
                     feilutbetalingen
@@ -53,7 +46,7 @@ export const BekreftSamtykkeTilMotregning = ({
                         Ja
                     </Button>
                 </HStack>
-            </StyledAlert>
-        </>
+            </Alert>
+        </Box>
     );
 };
