@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 
 import { Alert, BodyLong, Box, Button, HStack } from '@navikt/ds-react';
 
+import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
+
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    bekreftSamtykkeTilMotregning: () => Promise<void>;
+    oppdaterTilbakekrevingsvedtakMotregning: (
+        dto: OppdaterTilbakekrevingsvedtakMotregningDTO
+    ) => Promise<void>;
 }
 
 export const BekreftSamtykkeTilMotregning = ({
     slettTilbakekrevingsvedtakMotregning,
-    bekreftSamtykkeTilMotregning,
+    oppdaterTilbakekrevingsvedtakMotregning,
 }: IProps) => {
     const [oppdaterer, settOppdaterer] = useState(false);
     const [sletter, settSletter] = useState(false);
@@ -38,7 +42,9 @@ export const BekreftSamtykkeTilMotregning = ({
                     <Button
                         onClick={() => {
                             settOppdaterer(true);
-                            bekreftSamtykkeTilMotregning().finally(() => settOppdaterer(false));
+                            oppdaterTilbakekrevingsvedtakMotregning({ samtykke: true }).finally(
+                                () => settOppdaterer(false)
+                            );
                         }}
                         loading={oppdaterer}
                         disabled={oppdaterer || sletter}

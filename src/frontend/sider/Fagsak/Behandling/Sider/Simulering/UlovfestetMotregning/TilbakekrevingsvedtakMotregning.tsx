@@ -3,22 +3,23 @@ import React from 'react';
 import { Alert, BodyShort, Box, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 
 import { BekreftSamtykkeTilMotregning } from './BekreftSamtykkeTilMotregning';
-import type { TilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
+import type {
+    OppdaterTilbakekrevingsvedtakMotregningDTO,
+    TilbakekrevingsvedtakMotregningDTO,
+} from './TilbakekrevingsvedtakMotregningDTO';
 
 interface TilbakekrevingsvedtakMotregningProps {
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    bekreftSamtykkeTilMotregning: () => Promise<void>;
-    heleBeløpetSkalKrevesTilbake: boolean;
-    settHeleBeløpetSkalKrevesTilbake: (value: boolean) => void;
+    oppdaterTilbakekrevingsvedtakMotregning: (
+        dto: OppdaterTilbakekrevingsvedtakMotregningDTO
+    ) => Promise<void>;
 }
 
 export const TilbakekrevingsvedtakMotregning = ({
     tilbakekrevingsvedtakMotregning,
     slettTilbakekrevingsvedtakMotregning,
-    bekreftSamtykkeTilMotregning,
-    heleBeløpetSkalKrevesTilbake,
-    settHeleBeløpetSkalKrevesTilbake,
+    oppdaterTilbakekrevingsvedtakMotregning,
 }: TilbakekrevingsvedtakMotregningProps) => {
     return (
         <Box marginBlock="10 0" width="90%" maxWidth="40rem">
@@ -28,7 +29,9 @@ export const TilbakekrevingsvedtakMotregning = ({
             {!tilbakekrevingsvedtakMotregning.samtykke ? (
                 <BekreftSamtykkeTilMotregning
                     slettTilbakekrevingsvedtakMotregning={slettTilbakekrevingsvedtakMotregning}
-                    bekreftSamtykkeTilMotregning={bekreftSamtykkeTilMotregning}
+                    oppdaterTilbakekrevingsvedtakMotregning={
+                        oppdaterTilbakekrevingsvedtakMotregning
+                    }
                 />
             ) : (
                 <VStack gap="2">
@@ -37,10 +40,13 @@ export const TilbakekrevingsvedtakMotregning = ({
                         saksbehandlingen.
                     </Alert>
                     <ConfirmationPanel
-                        checked={heleBeløpetSkalKrevesTilbake}
+                        checked={tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake}
                         label="Hele beløpet skal kreves tilbake"
                         onChange={() =>
-                            settHeleBeløpetSkalKrevesTilbake(!heleBeløpetSkalKrevesTilbake)
+                            oppdaterTilbakekrevingsvedtakMotregning({
+                                heleBeløpetSkalKrevesTilbake:
+                                    !tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake,
+                            })
                         }
                     >
                         <Heading level="2" size="xsmall" spacing>

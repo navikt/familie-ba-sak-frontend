@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import type { AxiosError } from 'axios';
-
 import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
-    byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     type Ressurs,
@@ -31,44 +28,27 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
     const [tilbakekrevingsvedtakMotregning, settTilbakekrevingsvedtakMotregning] =
         useState<Ressurs<TilbakekrevingsvedtakMotregningDTO | null>>(byggTomRessurs());
 
-    const [heleBeløpetSkalKrevesTilbake, settHeleBeløpetSkalKrevesTilbake] =
-        useState<boolean>(false);
-
     const hentTilbakekrevingsvedtakMotregning = () => {
         settTilbakekrevingsvedtakMotregning(byggHenterRessurs());
         request<void, TilbakekrevingsvedtakMotregningDTO>({
             method: 'GET',
             url: tilbakekrevingsvedtakMotregningUrl,
-        })
-            .then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
-                settTilbakekrevingsvedtakMotregning(response);
-            })
-            .catch((_error: AxiosError) => {
-                settTilbakekrevingsvedtakMotregning(
-                    byggFeiletRessurs(
-                        'Ukjent feil, klarte ikke å hente tilbakekrevingsvedtak for motregning.'
-                    )
-                );
-            });
+            påvirkerSystemLaster: true,
+        }).then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
+            settTilbakekrevingsvedtakMotregning(response);
+        });
     };
 
     const slettTilbakekrevingsvedtakMotregning = (): Promise<void> =>
         request<void, string>({
             method: 'DELETE',
             url: tilbakekrevingsvedtakMotregningUrl,
-        })
-            .then(response => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settTilbakekrevingsvedtakMotregning(byggDataRessurs(null));
-                }
-            })
-            .catch((_error: AxiosError) => {
-                settTilbakekrevingsvedtakMotregning(
-                    byggFeiletRessurs(
-                        'Ukjent feil, klarte ikke å slette tilbakekrevingsvedtak for motregning.'
-                    )
-                );
-            });
+            påvirkerSystemLaster: true,
+        }).then(response => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settTilbakekrevingsvedtakMotregning(byggDataRessurs(null));
+            }
+        });
 
     const oppdaterTilbakekrevingsvedtakMotregning = (
         tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
@@ -76,26 +56,18 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
         request<OppdaterTilbakekrevingsvedtakMotregningDTO, TilbakekrevingsvedtakMotregningDTO>({
             method: 'PATCH',
             url: tilbakekrevingsvedtakMotregningUrl,
+            påvirkerSystemLaster: true,
             data: {
                 årsakTilFeilutbetaling: tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling,
                 vurderingAvSkyld: tilbakekrevingsvedtakMotregning.vurderingAvSkyld,
                 varselDato: tilbakekrevingsvedtakMotregning.varselDato,
                 samtykke: tilbakekrevingsvedtakMotregning.samtykke,
+                heleBeløpetSkalKrevesTilbake:
+                    tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake,
             },
-        })
-            .then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
-                settTilbakekrevingsvedtakMotregning(response);
-            })
-            .catch((_error: AxiosError) => {
-                settTilbakekrevingsvedtakMotregning(
-                    byggFeiletRessurs(
-                        'Ukjent feil, klarte ikke å oppdatere tilbakekrevingsvedtak for motregning.'
-                    )
-                );
-            });
-
-    const bekreftSamtykkeTilMotregning = (): Promise<void> =>
-        oppdaterTilbakekrevingsvedtakMotregning({ samtykke: true });
+        }).then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
+            settTilbakekrevingsvedtakMotregning(response);
+        });
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning]) {
@@ -107,8 +79,5 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
         tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
         oppdaterTilbakekrevingsvedtakMotregning,
-        bekreftSamtykkeTilMotregning,
-        heleBeløpetSkalKrevesTilbake,
-        settHeleBeløpetSkalKrevesTilbake,
     };
 };

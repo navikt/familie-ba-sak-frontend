@@ -58,9 +58,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const {
         tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
-        bekreftSamtykkeTilMotregning,
-        heleBeløpetSkalKrevesTilbake,
-        settHeleBeløpetSkalKrevesTilbake,
+        oppdaterTilbakekrevingsvedtakMotregning,
     } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erAvregningOgToggleErPå =
@@ -101,6 +99,15 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         return <div />;
     }
 
+    const heleBeløpetSkalKrevesTilbake =
+        tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
+        tilbakekrevingsvedtakMotregning.data?.heleBeløpetSkalKrevesTilbake === true;
+
+    const skalDisableNesteKnapp = erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake;
+
+    const skalViseTilbakekrevingSkjema =
+        erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
+
     return (
         <Skjemasteg
             senderInn={tilbakekrevingSkjema.submitRessurs.status === RessursStatus.HENTER}
@@ -110,7 +117,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
-            skalDisableNesteKnapp={erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake}
+            skalDisableNesteKnapp={skalDisableNesteKnapp}
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
@@ -169,28 +176,21 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                             slettTilbakekrevingsvedtakMotregning={
                                                 slettTilbakekrevingsvedtakMotregning
                                             }
-                                            bekreftSamtykkeTilMotregning={
-                                                bekreftSamtykkeTilMotregning
-                                            }
-                                            heleBeløpetSkalKrevesTilbake={
-                                                heleBeløpetSkalKrevesTilbake
-                                            }
-                                            settHeleBeløpetSkalKrevesTilbake={
-                                                settHeleBeløpetSkalKrevesTilbake
+                                            oppdaterTilbakekrevingsvedtakMotregning={
+                                                oppdaterTilbakekrevingsvedtakMotregning
                                             }
                                         />
                                     )}
                             </Box>
                         )}
 
-                        {erFeilutbetaling &&
-                            (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake) && (
-                                <TilbakekrevingSkjema
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                    åpenBehandling={åpenBehandling}
-                                />
-                            )}
+                        {skalViseTilbakekrevingSkjema && (
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                åpenBehandling={åpenBehandling}
+                            />
+                        )}
                     </>
                 )
             ) : (
