@@ -154,7 +154,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 return feil(felt, 'Feltet er påkrevd');
             }
             //Sjekker at felter er 4 karakterer langt og er numerisk
-            return felt.verdi.length == 4 && /^\d{4}$/.test(felt.verdi)
+            return /^\d{4}$/.test(felt.verdi)
                 ? ok(felt)
                 : feil(felt, 'Feltet må bestå av 4 siffer');
         },
