@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
+import { Alert, BodyLong, Box, Button, HStack } from '@navikt/ds-react';
 
-import { Alert, BodyLong, Button, HStack } from '@navikt/ds-react';
-
-const StyledAlert = styled(Alert)`
-    margin-top: 2rem;
-    width: fit-content;
-`;
+import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
 
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    bekreftSamtykkeTilMotregning: () => Promise<void>;
+    oppdaterTilbakekrevingsvedtakMotregning: (
+        dto: OppdaterTilbakekrevingsvedtakMotregningDTO
+    ) => Promise<void>;
 }
 
 export const BekreftSamtykkeTilMotregning = ({
     slettTilbakekrevingsvedtakMotregning,
-    bekreftSamtykkeTilMotregning,
+    oppdaterTilbakekrevingsvedtakMotregning,
 }: IProps) => {
     const [oppdaterer, settOppdaterer] = useState(false);
     const [sletter, settSletter] = useState(false);
 
     return (
-        <>
-            <StyledAlert variant={'info'}>
+        <Box marginBlock="8 0" width="fit-content">
+            <Alert variant={'info'}>
                 <BodyLong spacing>
                     Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert
                     feilutbetalingen
@@ -45,7 +42,9 @@ export const BekreftSamtykkeTilMotregning = ({
                     <Button
                         onClick={() => {
                             settOppdaterer(true);
-                            bekreftSamtykkeTilMotregning().finally(() => settOppdaterer(false));
+                            oppdaterTilbakekrevingsvedtakMotregning({ samtykke: true }).finally(
+                                () => settOppdaterer(false)
+                            );
                         }}
                         loading={oppdaterer}
                         disabled={oppdaterer || sletter}
@@ -53,7 +52,7 @@ export const BekreftSamtykkeTilMotregning = ({
                         Ja
                     </Button>
                 </HStack>
-            </StyledAlert>
-        </>
+            </Alert>
+        </Box>
     );
 };

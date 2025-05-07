@@ -19,7 +19,7 @@ export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     varselDato: string;
 };
 
-interface TilbakekrevingsvedtakMotregningExpansionCardProps {
+interface TilbakekrevingsvedtakMotregningProps {
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
     oppdaterTilbakekrevingsvedtakMotregning: (
         tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
@@ -37,7 +37,7 @@ export const TilbakekrevingsvedtakMotregning = ({
     hentBrevForTilbakekrevingsvedtakMotregning,
     hentetDokument,
     erLesevisning,
-}: TilbakekrevingsvedtakMotregningExpansionCardProps) => {
+}: TilbakekrevingsvedtakMotregningProps) => {
     const [lagrer, settLagrer] = useState(false);
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
 

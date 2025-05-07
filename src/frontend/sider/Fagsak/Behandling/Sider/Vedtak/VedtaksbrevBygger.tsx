@@ -57,7 +57,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const { tilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingMotregning } =
+    const { tilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingsvedtakMotregning } =
         useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
@@ -211,7 +211,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                         <TilbakekrevingsvedtakMotregning
                             tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning.data}
                             oppdaterTilbakekrevingsvedtakMotregning={
-                                oppdaterTilbakekrevingMotregning
+                                oppdaterTilbakekrevingsvedtakMotregning
                             }
                             settVisDokumentModal={settVisDokumentModal}
                             hentBrevForTilbakekrevingsvedtakMotregning={

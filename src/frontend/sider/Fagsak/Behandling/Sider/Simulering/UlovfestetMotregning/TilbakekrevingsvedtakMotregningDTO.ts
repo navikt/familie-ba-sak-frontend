@@ -3,6 +3,7 @@ export interface TilbakekrevingsvedtakMotregningDTO {
     vurderingAvSkyld: string | null;
     varselDato: string;
     samtykke: boolean;
+    heleBeløpetSkalKrevesTilbake: boolean;
 }
 
 export interface OppdaterTilbakekrevingsvedtakMotregningDTO {
@@ -10,4 +11,5 @@ export interface OppdaterTilbakekrevingsvedtakMotregningDTO {
     vurderingAvSkyld?: string;
     varselDato?: string;
     samtykke?: boolean;
+    heleBeløpetSkalKrevesTilbake?: boolean;
 }
