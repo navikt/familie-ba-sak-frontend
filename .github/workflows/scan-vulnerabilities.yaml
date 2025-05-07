@@ -19,5 +19,5 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
-    uses: navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@82a1b51d070fc79d18271521118786f545269c25 # ratchet:navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@main
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-yarn.yaml@main # ratchet:exclude
     secrets: inherit
