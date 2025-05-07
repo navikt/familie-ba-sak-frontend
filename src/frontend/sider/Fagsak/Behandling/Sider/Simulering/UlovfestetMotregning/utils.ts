@@ -25,9 +25,9 @@ export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => 
 
         return (
             `Du har rett til etterbetaling av barnetrygd for ${periode} på ${etterbetaling} kroner.\n\n` +
-            `Samtidig ser vi at du kan ha fått en feilutbetaling på ${feilutbetaling} kroner for mye barnetrygd i ${periode}. Grunnen til dette er FRITEKST.\n\n` +
-            `Er det greit at vi venter med etterbetalingen til vi har vurdert om du må betale tilbake? Hvis du gjør det, kan vi trekke feilutbetalt beløp fra etterbetalingen din.\n\n` +
-            `Svar på om du samtykker ved å logge deg inn på MinSide. I svaret kan du samtidig uttale deg om feilutbetalingen. Dette må du gjøre innen ${dagerFristForAvventerSamtykkeUlovfestetMotregning} dager.`
+            `Samtidig ser vi at du har fått en feilutbetaling på ${feilutbetaling} kroner i ${periode}.\n\n` +
+            `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell tilbakekreving fra etterbetalingen din.\n\n` +
+            `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale deg om feilutbetalingen. Dette må du gjøre innen ${dagerFristForAvventerSamtykkeUlovfestetMotregning} dager.`
         );
     } else {
         const formaterPerioder = (felt: 'totalEtterbetaling' | 'totalFeilutbetaling') =>
@@ -56,10 +56,10 @@ export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => 
         return (
             `Du har rett til etterbetaling av barnetrygd for periodene:\n` +
             etterbetalingsperioderFormatert.join('\n') +
-            `\n\nSamtidig ser vi at du kan ha fått feilutbetalinger i periodene:\n` +
+            `\n\nSamtidig ser vi at du har fått feilutbetalinger i periodene:\n` +
             feilutbetalingsperioderFormatert.join('\n') +
-            `\n\nEr det greit at vi venter med etterbetalingen til vi har vurdert om du må betale tilbake? Hvis du gjør det, kan vi trekke feilutbetalt beløp fra etterbetalingen din.\n\n` +
-            `Svar på om du samtykker ved å logge deg inn på MinSide. I svaret kan du samtidig uttale deg om feilutbetalingen. Dette må du gjøre innen ${dagerFristForAvventerSamtykkeUlovfestetMotregning} dager.`
+            `\n\nEr det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell tilbakekreving fra etterbetalingen din.\n\n` +
+            `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale deg om feilutbetalingen. Dette må du gjøre innen ${dagerFristForAvventerSamtykkeUlovfestetMotregning} dager.`
         );
     }
 };
