@@ -153,9 +153,10 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
             } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
-            return felt.verdi.length <= 10
+            //Sjekker at felter er 4 karakterer langt og er numerisk
+            return felt.verdi.length == 4 && /^\d{4}$/.test(felt.verdi)
                 ? ok(felt)
-                : feil(felt, 'Feltet kan ikke inneholde mer enn 10 tegn');
+                : feil(felt, 'Feltet må bestå av 4 siffer');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return avhengigheter?.land.verdi === 'NO';
