@@ -96,6 +96,7 @@ export const mockBehandling = ({
         brevmottakere: [],
         refusjonEøs: [],
         vurderingsstrategiForValutakurser: null,
+        tilbakekrevingsvedtakMotregning: null,
     };
 };
 

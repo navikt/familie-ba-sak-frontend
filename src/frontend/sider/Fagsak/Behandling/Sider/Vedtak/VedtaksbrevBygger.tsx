@@ -57,7 +57,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const { tilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingsvedtakMotregning } =
+    const { oppdaterTilbakekrevingsvedtakMotregning } =
         useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
@@ -206,21 +206,22 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                     Vis vedtaksbrev
                 </Button>
 
-                {tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
-                    tilbakekrevingsvedtakMotregning.data !== null && (
-                        <TilbakekrevingsvedtakMotregning
-                            tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning.data}
-                            oppdaterTilbakekrevingsvedtakMotregning={
-                                oppdaterTilbakekrevingsvedtakMotregning
-                            }
-                            settVisDokumentModal={settVisDokumentModal}
-                            hentBrevForTilbakekrevingsvedtakMotregning={
-                                hentBrevForTilbakekrevingsvedtakMotregning
-                            }
-                            hentetDokument={hentetDokument}
-                            erLesevisning={erLesevisning}
-                        />
-                    )}
+                {åpenBehandling.tilbakekrevingsvedtakMotregning !== null && (
+                    <TilbakekrevingsvedtakMotregning
+                        tilbakekrevingsvedtakMotregning={
+                            åpenBehandling.tilbakekrevingsvedtakMotregning
+                        }
+                        oppdaterTilbakekrevingsvedtakMotregning={
+                            oppdaterTilbakekrevingsvedtakMotregning
+                        }
+                        settVisDokumentModal={settVisDokumentModal}
+                        hentBrevForTilbakekrevingsvedtakMotregning={
+                            hentBrevForTilbakekrevingsvedtakMotregning
+                        }
+                        hentetDokument={hentetDokument}
+                        erLesevisning={erLesevisning}
+                    />
+                )}
             </div>
         </>
     );

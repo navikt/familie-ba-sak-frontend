@@ -1,59 +1,31 @@
-import { useEffect, useState } from 'react';
-
 import { useHttp } from '@navikt/familie-http';
-import {
-    byggDataRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    type Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
 
-import type {
-    OppdaterTilbakekrevingsvedtakMotregningDTO,
-    TilbakekrevingsvedtakMotregningDTO,
-} from './TilbakekrevingsvedtakMotregningDTO';
-import { useAppContext } from '../../../../../../context/AppContext';
+import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import { ToggleNavn } from '../../../../../../typer/toggles';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
 export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
-    const { toggles } = useAppContext();
+    const { settÅpenBehandling, hentLogg } = useBehandlingContext();
 
     const tilbakekrevingsvedtakMotregningUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/tilbakekrevingsvedtak-motregning`;
 
-    const [tilbakekrevingsvedtakMotregning, settTilbakekrevingsvedtakMotregning] =
-        useState<Ressurs<TilbakekrevingsvedtakMotregningDTO | null>>(byggTomRessurs());
-
-    const hentTilbakekrevingsvedtakMotregning = () => {
-        settTilbakekrevingsvedtakMotregning(byggHenterRessurs());
-        request<void, TilbakekrevingsvedtakMotregningDTO>({
-            method: 'GET',
-            url: tilbakekrevingsvedtakMotregningUrl,
-            påvirkerSystemLaster: true,
-        }).then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
-            settTilbakekrevingsvedtakMotregning(response);
-        });
-    };
-
     const slettTilbakekrevingsvedtakMotregning = (): Promise<void> =>
-        request<void, string>({
+        request<void, IBehandling>({
             method: 'DELETE',
             url: tilbakekrevingsvedtakMotregningUrl,
             påvirkerSystemLaster: true,
-        }).then(response => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settTilbakekrevingsvedtakMotregning(byggDataRessurs(null));
-            }
+        }).then(behandling => {
+            settÅpenBehandling(behandling);
+            hentLogg();
         });
 
     const oppdaterTilbakekrevingsvedtakMotregning = (
         tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
     ): Promise<void> =>
-        request<OppdaterTilbakekrevingsvedtakMotregningDTO, TilbakekrevingsvedtakMotregningDTO>({
+        request<OppdaterTilbakekrevingsvedtakMotregningDTO, IBehandling>({
             method: 'PATCH',
             url: tilbakekrevingsvedtakMotregningUrl,
             påvirkerSystemLaster: true,
@@ -65,18 +37,12 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
                 heleBeløpetSkalKrevesTilbake:
                     tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake,
             },
-        }).then((response: Ressurs<TilbakekrevingsvedtakMotregningDTO>) => {
-            settTilbakekrevingsvedtakMotregning(response);
+        }).then(behandling => {
+            settÅpenBehandling(behandling);
+            hentLogg();
         });
 
-    useEffect(() => {
-        if (toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning]) {
-            hentTilbakekrevingsvedtakMotregning();
-        }
-    }, [åpenBehandling]);
-
     return {
-        tilbakekrevingsvedtakMotregning,
         slettTilbakekrevingsvedtakMotregning,
         oppdaterTilbakekrevingsvedtakMotregning,
     };
