@@ -55,11 +55,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const {
-        tilbakekrevingsvedtakMotregning,
-        slettTilbakekrevingsvedtakMotregning,
-        oppdaterTilbakekrevingsvedtakMotregning,
-    } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
+    const { slettTilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingsvedtakMotregning } =
+        useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 &&
@@ -99,9 +96,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         return <div />;
     }
 
+    const tilbakekrevingsvedtakMotregning = åpenBehandling.tilbakekrevingsvedtakMotregning;
+
     const heleBeløpetSkalKrevesTilbake =
-        tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
-        tilbakekrevingsvedtakMotregning.data?.heleBeløpetSkalKrevesTilbake === true;
+        tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp = erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake;
 
@@ -155,32 +153,26 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     </Alert>
                                 )}
 
-                                {tilbakekrevingsvedtakMotregning.status === RessursStatus.SUKSESS &&
-                                    tilbakekrevingsvedtakMotregning.data === null && (
-                                        <AvregningAlert
-                                            avregningsperioder={avregningsperioder}
-                                            harÅpenTilbakekrevingRessurs={
-                                                harÅpenTilbakekrevingRessurs
-                                            }
-                                        />
-                                    )}
+                                {tilbakekrevingsvedtakMotregning === null && (
+                                    <AvregningAlert
+                                        avregningsperioder={avregningsperioder}
+                                        harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                    />
+                                )}
 
-                                {!erLesevisning &&
-                                    tilbakekrevingsvedtakMotregning.status ===
-                                        RessursStatus.SUKSESS &&
-                                    tilbakekrevingsvedtakMotregning.data !== null && (
-                                        <TilbakekrevingsvedtakMotregning
-                                            tilbakekrevingsvedtakMotregning={
-                                                tilbakekrevingsvedtakMotregning.data
-                                            }
-                                            slettTilbakekrevingsvedtakMotregning={
-                                                slettTilbakekrevingsvedtakMotregning
-                                            }
-                                            oppdaterTilbakekrevingsvedtakMotregning={
-                                                oppdaterTilbakekrevingsvedtakMotregning
-                                            }
-                                        />
-                                    )}
+                                {!erLesevisning && tilbakekrevingsvedtakMotregning !== null && (
+                                    <TilbakekrevingsvedtakMotregning
+                                        tilbakekrevingsvedtakMotregning={
+                                            tilbakekrevingsvedtakMotregning
+                                        }
+                                        slettTilbakekrevingsvedtakMotregning={
+                                            slettTilbakekrevingsvedtakMotregning
+                                        }
+                                        oppdaterTilbakekrevingsvedtakMotregning={
+                                            oppdaterTilbakekrevingsvedtakMotregning
+                                        }
+                                    />
+                                )}
                             </Box>
                         )}
 
