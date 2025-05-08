@@ -1,6 +1,15 @@
 import React from 'react';
 
-import { Alert, BodyShort, Box, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import {
+    Alert,
+    BodyShort,
+    Box,
+    Button,
+    ConfirmationPanel,
+    Heading,
+    VStack,
+} from '@navikt/ds-react';
 
 import { BekreftSamtykkeTilMotregning } from './BekreftSamtykkeTilMotregning';
 import type {
@@ -34,8 +43,8 @@ export const TilbakekrevingsvedtakMotregning = ({
                     }
                 />
             ) : (
-                <VStack gap="2">
-                    <Alert variant="info" style={{ marginBottom: '1rem' }}>
+                <VStack gap="4">
+                    <Alert variant="info">
                         Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
                         saksbehandlingen.
                     </Alert>
@@ -56,6 +65,16 @@ export const TilbakekrevingsvedtakMotregning = ({
                             Dersom ikke hele beløpet skal kreves tilbake må du splitte saken.
                         </BodyShort>
                     </ConfirmationPanel>
+                    <Box>
+                        <Button
+                            onClick={slettTilbakekrevingsvedtakMotregning}
+                            variant="secondary"
+                            size="small"
+                            icon={<ArrowUndoIcon />}
+                        >
+                            Angre bruk av ulovfestet motregning
+                        </Button>
+                    </Box>
                 </VStack>
             )}
         </Box>
