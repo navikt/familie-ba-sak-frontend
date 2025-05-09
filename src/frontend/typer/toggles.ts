@@ -15,7 +15,6 @@ export enum ToggleNavn {
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
-    innhenteOpplysningerKlageBrev = 'familie-ba-sak.innhente-opplysninger-klage-brev',
     brukReactQueryPaaSaksoversiktsiden = 'familie-ba-sak.bruk-react-query-paa-saksoversiktsiden',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
 }

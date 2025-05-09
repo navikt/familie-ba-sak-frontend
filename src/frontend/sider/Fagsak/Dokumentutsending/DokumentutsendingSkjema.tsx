@@ -11,7 +11,6 @@ import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import {
     dokumentÅrsak,
     DokumentÅrsakPerson,
-    DokumentÅrsakInstitusjon,
     useDokumentutsendingContext,
     type DokumentÅrsak,
 } from './DokumentutsendingContext';
@@ -196,10 +195,6 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                                 // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
                                 case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
                                     return toggles[ToggleNavn.selvstendigRettInfobrev];
-                                case DokumentÅrsakPerson.INNHENTE_OPPLYSNINGER_KLAGE:
-                                case DokumentÅrsakInstitusjon.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: {
-                                    return toggles[ToggleNavn.innhenteOpplysningerKlageBrev];
-                                }
                                 default:
                                     return true;
                             }
