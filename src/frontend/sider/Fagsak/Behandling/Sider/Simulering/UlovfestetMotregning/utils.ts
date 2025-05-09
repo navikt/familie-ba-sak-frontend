@@ -3,29 +3,38 @@ import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils
 import { formaterBeløpUtenValutakode } from '../simuleringUtil';
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 
-export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => {
-    const formaterPerioder = (felt: 'totalEtterbetaling' | 'totalFeilutbetaling') =>
-        avregningsperioder.map(avregningsperiode => {
-            const fom = isoStringTilFormatertString({
-                isoString: avregningsperiode.fom,
-                tilFormat: Datoformat.MÅNED_ÅR_NAVN,
-            });
-
-            const tom = isoStringTilFormatertString({
-                isoString: avregningsperiode.tom,
-                tilFormat: Datoformat.MÅNED_ÅR_NAVN,
-            });
-
-            const erFomOgTomLike = fom === tom;
-            const periode = erFomOgTomLike ? fom : `${fom} til ${tom}`;
-            const beløp = formaterBeløpUtenValutakode(avregningsperiode[felt]);
-
-            const kulepunkt = `\u2022`;
-            return `${kulepunkt} ${periode} på ${beløp} kroner`;
+const formaterPerioder = (
+    avregningsperioder: IAvregningsperiode[],
+    felt: 'totalEtterbetaling' | 'totalFeilutbetaling'
+) =>
+    avregningsperioder.map(avregningsperiode => {
+        const fom = isoStringTilFormatertString({
+            isoString: avregningsperiode.fom,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
         });
 
-    const etterbetalingsperioderFormatert = formaterPerioder('totalEtterbetaling');
-    const feilutbetalingsperioderFormatert = formaterPerioder('totalFeilutbetaling');
+        const tom = isoStringTilFormatertString({
+            isoString: avregningsperiode.tom,
+            tilFormat: Datoformat.MÅNED_ÅR_NAVN,
+        });
+
+        const erFomOgTomLike = fom === tom;
+        const periode = erFomOgTomLike ? fom : `${fom} til ${tom}`;
+        const beløp = formaterBeløpUtenValutakode(avregningsperiode[felt]);
+
+        const kulepunkt = `\u2022`;
+        return `${kulepunkt} ${periode} på ${beløp} kroner`;
+    });
+
+export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => {
+    const etterbetalingsperioderFormatert = formaterPerioder(
+        avregningsperioder,
+        'totalEtterbetaling'
+    );
+    const feilutbetalingsperioderFormatert = formaterPerioder(
+        avregningsperioder,
+        'totalFeilutbetaling'
+    );
 
     return (
         `Du har rett til etterbetaling av barnetrygd for:\n` +
