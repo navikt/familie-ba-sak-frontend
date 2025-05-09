@@ -19,15 +19,11 @@ import {
 } from '@navikt/familie-typer';
 
 import { useFagsakApi } from '../../api/useFagsakApi';
-import { useKlageApi } from '../../api/useKlageApi';
-import { useTilbakekrevingApi } from '../../api/useTilbakekrevingApi';
 import { useAppContext } from '../../context/AppContext';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
-import type { IKlagebehandling } from '../../typer/klage';
 import type { SettAktivBrukerIModiaContextDTO } from '../../typer/modiaContext';
 import { type IPersonInfo } from '../../typer/person';
-import type { ITilbakekrevingsbehandling } from '../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
 import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
@@ -41,11 +37,6 @@ interface IFagsakContext {
     minimalFagsakRessurs: Ressurs<IMinimalFagsak>;
     settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
     minimalFagsak: IMinimalFagsak | undefined;
-    klagebehandlinger: IKlagebehandling[];
-    klageStatus: RessursStatus;
-    oppdaterKlagebehandlingerPåFagsak: () => void;
-    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
-    tilbakekrevingStatus: RessursStatus;
     manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
     settManuelleBrevmottakerePåFagsak: (brevmottakere: SkjemaBrevmottaker[]) => void;
 }
@@ -62,16 +53,9 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         SkjemaBrevmottaker[]
     >([]);
 
-    const [klagebehandlinger, settKlagebehandlinger] =
-        useState<Ressurs<IKlagebehandling[]>>(byggTomRessurs());
-    const [tilbakekrevingsbehandlinger, settTilbakekrevingsbehandlinger] =
-        useState<Ressurs<ITilbakekrevingsbehandling[]>>(byggTomRessurs());
-
     const { request } = useHttp();
     const { skalObfuskereData, toggles, settToast } = useAppContext();
     const { hentFagsakerForPerson } = useFagsakApi();
-    const { hentKlagebehandlingerPåFagsak } = useKlageApi();
-    const { hentTilbakekrevingsbehandlinger } = useTilbakekrevingApi();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
@@ -161,20 +145,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         });
     };
 
-    const oppdaterKlagebehandlingerPåFagsak = () => {
-        const fagsakId = hentDataFraRessurs(minimalFagsakRessurs)?.id;
-        hentKlagebehandlingerPåFagsak(fagsakId).then(klagebehandlingerRessurs =>
-            settKlagebehandlinger(klagebehandlingerRessurs)
-        );
-    };
-
-    const oppdaterTilbakekrevingsbehandlingerPåFagsak = () => {
-        const fagsakId = hentDataFraRessurs(minimalFagsakRessurs)?.id;
-        hentTilbakekrevingsbehandlinger(fagsakId).then(tilbakekrevingsbehandlingerRessurs =>
-            settTilbakekrevingsbehandlinger(tilbakekrevingsbehandlingerRessurs)
-        );
-    };
-
     useEffect(() => {
         if (
             minimalFagsakRessurs.status !== RessursStatus.SUKSESS &&
@@ -187,8 +157,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 hentDataFraRessurs(minimalFagsakRessurs)?.søkerFødselsnummer
             );
         }
-        oppdaterKlagebehandlingerPåFagsak();
-        oppdaterTilbakekrevingsbehandlingerPåFagsak();
         settManuelleBrevmottakerePåFagsak([]);
     }, [minimalFagsakRessurs]);
 
@@ -201,11 +169,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 minimalFagsakRessurs,
                 settMinimalFagsakRessurs,
                 minimalFagsak: hentDataFraRessurs(minimalFagsakRessurs),
-                klagebehandlinger: hentDataFraRessurs(klagebehandlinger) ?? [],
-                klageStatus: klagebehandlinger.status,
-                oppdaterKlagebehandlingerPåFagsak,
-                tilbakekrevingsbehandlinger: hentDataFraRessurs(tilbakekrevingsbehandlinger) ?? [],
-                tilbakekrevingStatus: tilbakekrevingsbehandlinger.status,
                 manuelleBrevmottakerePåFagsak,
                 settManuelleBrevmottakerePåFagsak,
             }}
