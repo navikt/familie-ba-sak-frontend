@@ -7,8 +7,8 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, CopyButton, Link, List } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { utledTekstTilModia } from './modiaStandardtekst';
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
-import { utledTekstTilModia } from './utils';
 import type { IAvregningsperiode } from '../../../../../../typer/simulering';
 import { erProd } from '../../../../../../utils/miljø';
 import { useBehandlingContext } from '../../../context/BehandlingContext';

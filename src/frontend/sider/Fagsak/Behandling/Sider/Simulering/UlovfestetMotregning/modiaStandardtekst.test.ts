@@ -5,7 +5,7 @@
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
-import { utledTekstTilModia } from './utils';
+import { utledTekstTilModia } from './modiaStandardtekst';
 
 describe('utledTekstTilModia', () => {
     setDefaultOptions({ locale: nb });
