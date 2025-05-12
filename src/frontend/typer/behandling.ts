@@ -14,6 +14,7 @@ import type {
     TilbakekrevingsbehandlingResultat,
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
+import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
 import type { ITotrinnskontroll } from './totrinnskontroll';
 import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
 import type {
@@ -23,7 +24,6 @@ import type {
 } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
-import type { TilbakekrevingsvedtakMotregningDTO } from '../sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/TilbakekrevingsvedtakMotregningDTO';
 import type { IRestBrevmottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IsoDatoString } from '../utils/dato';
 

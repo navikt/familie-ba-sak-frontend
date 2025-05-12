@@ -11,7 +11,7 @@ import { Tekstfelt } from './Tekstfelt';
 import type {
     OppdaterTilbakekrevingsvedtakMotregningDTO,
     TilbakekrevingsvedtakMotregningDTO,
-} from '../../Simulering/UlovfestetMotregning/TilbakekrevingsvedtakMotregningDTO';
+} from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 
 export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     årsakTilFeilutbetaling: string;

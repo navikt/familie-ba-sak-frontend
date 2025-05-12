@@ -15,7 +15,7 @@ import { BekreftSamtykkeTilMotregning } from './BekreftSamtykkeTilMotregning';
 import type {
     OppdaterTilbakekrevingsvedtakMotregningDTO,
     TilbakekrevingsvedtakMotregningDTO,
-} from './TilbakekrevingsvedtakMotregningDTO';
+} from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 
 interface TilbakekrevingsvedtakMotregningProps {
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Alert, BodyLong, Box, Button, HStack } from '@navikt/ds-react';
 
-import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
+import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
