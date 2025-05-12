@@ -1,7 +1,7 @@
 import { useHttp } from '@navikt/familie-http';
 
-import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from './TilbakekrevingsvedtakMotregningDTO';
 import type { IBehandling } from '../../../../../../typer/behandling';
+import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
