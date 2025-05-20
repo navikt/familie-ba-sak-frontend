@@ -245,13 +245,13 @@ export const lagLenkePåResultat = (
                     {erKlageFeilregistrertAvKA(behandling) && (
                         <Tooltip
                             content={
-                                'Klagen er feilregistrert av NAV klageinstans. ' +
+                                'Klagen er feilregistrert av Nav klageinstans. ' +
                                 'Gå inn på klagebehandlingens resultatside for å se detaljer'
                             }
                         >
                             <StatusIkon
                                 status={Status.ADVARSEL}
-                                title={'Behandling feilregistrert av NAV klageinstans'}
+                                title={'Behandling feilregistrert av Nav klageinstans'}
                             />
                         </Tooltip>
                     )}
