@@ -83,7 +83,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                 onClick={() => settExpansionCardErÅpen(!expansionCardErÅpen)}
                             >
                                 <ExpansionCard.Title as="h3" size="small">
-                                    Årsak til feilutbetaling
+                                    Årsak til feilutbetaling og vurdering av skyld
                                 </ExpansionCard.Title>
                             </ExpansionCard.Header>
                             <ExpansionCard.Content>
@@ -103,7 +103,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                     <Tekstfelt
                                         feltnavn="vurderingAvSkyld"
                                         tittel="Vurdering av skyld"
-                                        beskrivelse="I hvilken grad har bruker forstått at det var en feilutbetaling?"
+                                        beskrivelse="I hvilken grad har bruker forårsaket en feilutbetaling eller forstått at det var en feilutbetaling?"
                                         erLesevisning={erLesevisning}
                                     />
 
