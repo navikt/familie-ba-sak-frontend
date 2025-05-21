@@ -28,6 +28,7 @@ describe('utledTekstTilModia', () => {
                 `• januar 2025 på 1 766 kroner\n\n` +
                 `Samtidig ser vi at du har fått feilutbetalinger for:\n` +
                 `• januar 2025 på 1 766 kroner\n\n` +
+                `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
                 `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
                 `tilbakekreving fra etterbetalingen din.\n\n` +
@@ -53,6 +54,7 @@ describe('utledTekstTilModia', () => {
                 `• januar 2025 til februar 2025 på 1 766 kroner\n\n` +
                 `Samtidig ser vi at du har fått feilutbetalinger for:\n` +
                 `• januar 2025 til februar 2025 på 1 766 kroner\n\n` +
+                `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
                 `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
                 `tilbakekreving fra etterbetalingen din.\n\n` +
@@ -86,6 +88,7 @@ describe('utledTekstTilModia', () => {
                 `Samtidig ser vi at du har fått feilutbetalinger for:\n` +
                 `• januar 2025 til februar 2025 på 1 766 kroner\n` +
                 `• april 2025 på 1 766 kroner\n\n` +
+                `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
                 `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
                 `tilbakekreving fra etterbetalingen din.\n\n` +

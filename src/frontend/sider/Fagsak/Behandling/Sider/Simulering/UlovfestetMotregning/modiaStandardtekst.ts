@@ -41,6 +41,7 @@ export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => 
         etterbetalingsperioderFormatert.join('\n') +
         `\n\nSamtidig ser vi at du har fått feilutbetalinger for:\n` +
         feilutbetalingsperioderFormatert.join('\n') +
+        `\n\nÅrsaker til feilutbetaling er [FYLL INN ÅRSAK HER]` +
         `\n\nEr det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell tilbakekreving fra etterbetalingen din.\n\n` +
         `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale deg om feilutbetalingen. Dette må du gjøre innen ${dagerFristForAvventerSamtykkeUlovfestetMotregning} dager.`
     );
