@@ -48,7 +48,6 @@ const useOpprettBehandling = (
     const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
-    const { oppdaterKlagebehandlingerPåFagsak } = useFagsakContext();
     const queryClient = useQueryClient();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
@@ -216,7 +215,6 @@ const useOpprettBehandling = (
                     queryClient.invalidateQueries({
                         queryKey: [KLAGEBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
                     });
-                    oppdaterKlagebehandlingerPåFagsak();
                     lukkModal();
                     nullstillSkjema();
                 }
