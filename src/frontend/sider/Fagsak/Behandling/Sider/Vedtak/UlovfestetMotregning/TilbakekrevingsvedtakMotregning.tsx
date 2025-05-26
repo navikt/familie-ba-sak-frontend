@@ -13,6 +13,11 @@ import type {
     TilbakekrevingsvedtakMotregningDTO,
 } from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 
+const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
+    'Årsaken til feilutbetalingen er [SETT INN HVA SOM SKJEDDE, SKILL MELLOM BRUKERS HANDLINGER KONTRA BRUKERS FORSTÅELSE AV UTBETALINGEN].';
+const PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD =
+    'Vi vurderer at [VURDER SKYLD, SETT INN KONKRET BEGRUNNELSE, OG SKILL MELLOM MOTTAKERS HANDLINGER KONTRA MOTTAKERS FORSTÅELSE.].';
+
 export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     årsakTilFeilutbetaling: string;
     vurderingAvSkyld: string;
@@ -43,8 +48,12 @@ export const TilbakekrevingsvedtakMotregning = ({
 
     const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
         defaultValues: {
-            årsakTilFeilutbetaling: tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ?? '',
-            vurderingAvSkyld: tilbakekrevingsvedtakMotregning.vurderingAvSkyld ?? '',
+            årsakTilFeilutbetaling:
+                tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ??
+                PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
+            vurderingAvSkyld:
+                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ??
+                PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
             varselDato: tilbakekrevingsvedtakMotregning.varselDato,
         },
     });
