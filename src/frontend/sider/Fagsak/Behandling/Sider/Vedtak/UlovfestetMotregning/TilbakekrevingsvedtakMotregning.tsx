@@ -11,7 +11,12 @@ import { Tekstfelt } from './Tekstfelt';
 import type {
     OppdaterTilbakekrevingsvedtakMotregningDTO,
     TilbakekrevingsvedtakMotregningDTO,
-} from '../../Simulering/UlovfestetMotregning/TilbakekrevingsvedtakMotregningDTO';
+} from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
+
+const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
+    'Årsaken til feilutbetalingen er [SETT INN HVA SOM SKJEDDE, SKILL MELLOM BRUKERS HANDLINGER KONTRA BRUKERS FORSTÅELSE AV UTBETALINGEN].';
+const PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD =
+    'Vi vurderer at [VURDER SKYLD, SETT INN KONKRET BEGRUNNELSE, OG SKILL MELLOM MOTTAKERS HANDLINGER KONTRA MOTTAKERS FORSTÅELSE.].';
 
 export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     årsakTilFeilutbetaling: string;
@@ -43,8 +48,12 @@ export const TilbakekrevingsvedtakMotregning = ({
 
     const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
         defaultValues: {
-            årsakTilFeilutbetaling: tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ?? '',
-            vurderingAvSkyld: tilbakekrevingsvedtakMotregning.vurderingAvSkyld ?? '',
+            årsakTilFeilutbetaling:
+                tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ??
+                PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
+            vurderingAvSkyld:
+                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ??
+                PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
             varselDato: tilbakekrevingsvedtakMotregning.varselDato,
         },
     });
@@ -83,7 +92,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                 onClick={() => settExpansionCardErÅpen(!expansionCardErÅpen)}
                             >
                                 <ExpansionCard.Title as="h3" size="small">
-                                    Årsak til feilutbetaling
+                                    Årsak til feilutbetaling og vurdering av skyld
                                 </ExpansionCard.Title>
                             </ExpansionCard.Header>
                             <ExpansionCard.Content>
@@ -103,7 +112,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                     <Tekstfelt
                                         feltnavn="vurderingAvSkyld"
                                         tittel="Vurdering av skyld"
-                                        beskrivelse="I hvilken grad har bruker forstått at det var en feilutbetaling?"
+                                        beskrivelse="I hvilken grad har bruker forårsaket en feilutbetaling eller forstått at det var en feilutbetaling?"
                                         erLesevisning={erLesevisning}
                                     />
 

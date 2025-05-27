@@ -102,7 +102,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
                 <StyledAlert variant="info">
-                    Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
+                    Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra Nav
                 </StyledAlert>
             ) : (
                 <>

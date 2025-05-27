@@ -5,7 +5,9 @@ Frontend app for barnetrygd sak.
 
 # Kom i gang med utvikling
 
-* Logg deg på naisdevice og gcloud, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler
+* Logg deg på naisdevice og gcloud, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler. 
+* Installer [NVM] (https://github.com/nvm-sh/nvm).
+* Kjør `nvm use`
 * Installere avhengigheter `yarn`
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
@@ -66,7 +68,7 @@ Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere 
 
 Ved spørsmål knyttet til koden eller prosjektet opprett en issue.
 
-## For NAV-ansatte
+## For Nav-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #team-familie.
 

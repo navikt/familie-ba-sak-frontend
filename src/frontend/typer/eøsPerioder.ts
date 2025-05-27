@@ -37,7 +37,7 @@ export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
     ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON: 'Arbeider ved utenlandsk utenriksstasjon',
     MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar utbetaling fra NAV under opphold i utlandet',
+        'Mottar utbetaling fra Nav under opphold i utlandet',
     MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
         'Mottar uføretrygd fra Norge under opphold i utlandet',
     MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:

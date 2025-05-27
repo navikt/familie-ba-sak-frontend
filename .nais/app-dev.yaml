@@ -60,6 +60,10 @@ spec:
     - instance: lookup
       access: read
   observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
     autoInstrumentation:
       enabled: true
       runtime: nodejs
