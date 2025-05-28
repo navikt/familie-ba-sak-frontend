@@ -5681,13 +5681,14 @@ express-session@^1.18.1:
     safe-buffer "5.2.1"
     uid-safe "~2.1.5"
 
-express-static-gzip@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/express-static-gzip/-/express-static-gzip-2.2.0.tgz#7c3f7dd89da68e51c591edf02e6de6169c017f5f"
-  integrity sha512-4ZQ0pHX0CAauxmzry2/8XFLM6aZA4NBvg9QezSlsEO1zLnl7vMFa48/WIcjzdfOiEUS4S1npPPKP2NHHYAp6qg==
+express-static-gzip@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/express-static-gzip/-/express-static-gzip-3.0.0.tgz#4a872941a77db2ae4564d7f92d655cc622ae38f7"
+  integrity sha512-36O10S0asHl3QojOBQQ0ZjXNtElmhgPS6erSUCCZymXkB/CK1mnGqOj4BTJN+FYRDIzVFnzo3wLFCZJvAk6rQQ==
   dependencies:
+    mime-types "^3.0.1"
     parseurl "^1.3.3"
-    serve-static "^1.16.2"
+    serve-static "^2.2.0"
 
 express@^4.21.2:
   version "4.21.2"
@@ -9803,7 +9804,7 @@ serve-index@^1.9.1:
     mime-types "~2.1.17"
     parseurl "~1.3.2"
 
-serve-static@1.16.2, serve-static@^1.16.2:
+serve-static@1.16.2:
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.16.2.tgz#b6a5343da47f6bdd2673848bf45754941e803296"
   integrity sha512-VqpjJZKadQB/PEbEwvFdO43Ax5dFBZ2UECszz8bQ7pi7wt//PWe1P6MN7eCnjsatYtBT6EuiClbjSWP2WrIoTw==
