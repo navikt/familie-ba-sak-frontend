@@ -1826,13 +1826,13 @@
     classnames "^2.5.1"
     react-select "5.9.0"
 
-"@navikt/familie-header@15.0.0":
-  version "15.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/15.0.0/fc59270c3027ac3996c38720031d52b9dc41d98e#fc59270c3027ac3996c38720031d52b9dc41d98e"
-  integrity sha512-pwTbuecJEQv5WvfDOwgyuaIWRsvuB/eNmS1YCmdtzxvLBKXD8+gtxFApZHsDYP8rD5BeyZA4vhooYokQRtPsmQ==
+"@navikt/familie-header@16.0.2":
+  version "16.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/16.0.2/a36fa50db13145db1c549d9943afe27329a46296#a36fa50db13145db1c549d9943afe27329a46296"
+  integrity sha512-3XVLq9UDIMdMVDN7pDnqVRiWq9pLD0rzY30P1r3fZwF9D9ZdN4gBQovW+UM/CNJ0HgCCkdRzQOYjdhQ3nU6jbQ==
   dependencies:
-    "@navikt/familie-ikoner" "^9.0.3"
-    "@navikt/familie-typer" "^8.0.2"
+    "@navikt/familie-ikoner" "^9.1.1"
+    "@navikt/familie-typer" "^8.0.3"
     "@navikt/fnrvalidator" "^2.1.5"
 
 "@navikt/familie-http@^8.0.0":
@@ -1843,12 +1843,19 @@
     "@navikt/familie-typer" "^8.0.3"
     "@sentry/core" "^8.50.0"
 
-"@navikt/familie-ikoner@9.1.0", "@navikt/familie-ikoner@^9.0.3":
+"@navikt/familie-ikoner@9.1.0":
   version "9.1.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.0/115a0d9b71f60b2692af64cb9681371137a7cf82#115a0d9b71f60b2692af64cb9681371137a7cf82"
   integrity sha512-pd0YiRNZTJQFAXVDnUSV4zQWe+OKHfgWxwYqh3HwRBcldWgwa0lxhiEW/7jumVoodag6E2x2POcMRzAfSKVRyQ==
   dependencies:
     "@navikt/familie-typer" "^8.0.2"
+
+"@navikt/familie-ikoner@^9.0.3", "@navikt/familie-ikoner@^9.1.1":
+  version "9.1.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.1/f8066f4bfbbfddac297deb3e211a972e396b0b1b#f8066f4bfbbfddac297deb3e211a972e396b0b1b"
+  integrity sha512-ysoU7jFPTcwwDbWCqSigm4YfN6LG/FX+N2/z1r258k953fm/5wQlnY2RAOB2U7h5HN4u3DUaHwbKioy6O11pHA==
+  dependencies:
+    "@navikt/familie-typer" "^8.0.3"
 
 "@navikt/familie-logging@7.0.0":
   version "7.0.0"
