@@ -24,6 +24,11 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({
                     href: `${window.origin}/redirect/drek`,
                     isExternal: true,
                 },
+                {
+                    name: 'nEESSI',
+                    href: `${window.origin}/redirect/neessi`,
+                    isExternal: true,
+                },
             ]}
         >
             <FagsakDeltagerSøk />
