@@ -12,7 +12,7 @@ const Environment = () => {
             familieTilbakeUrl: 'http://localhost:8000',
             familieKlageUrl: 'http://localhost:8000',
             endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
-            neessiUrl: 'https://neessi.intern.nav.no/',
+            neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'lokalt-mot-preprod') {
         return {
@@ -22,7 +22,7 @@ const Environment = () => {
             familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
-            neessiUrl: 'https://neessi.intern.nav.no/',
+            neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
         return {
@@ -32,7 +32,7 @@ const Environment = () => {
             familieTilbakeUrl: 'http://tilbakekreving:8000',
             familieKlageUrl: '',
             endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
-            neessiUrl: 'https://neessi.intern.nav.no/',
+            neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
@@ -42,7 +42,7 @@ const Environment = () => {
             familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
             endringsloggProxyUrl: 'http://familie-endringslogg',
-            neessiUrl: 'https://neessi.intern.nav.no/',
+            neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     }
 
