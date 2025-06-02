@@ -1897,10 +1897,10 @@
     "@navikt/familie-typer" "^8.0.2"
     classnames "^2.5.1"
 
-"@navikt/flagg-ikoner@^9.1.7":
-  version "9.1.7"
-  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/9.1.7/792087b608040b389cb4cf4b6c939b75ae5edd2a#792087b608040b389cb4cf4b6c939b75ae5edd2a"
-  integrity sha512-N33hIo3qk9lW3apoVGQaPNqdhh6C6ezhqWQf67hB7Zs2PYSEaRQR5RtL+suVXZpfMDKRtqVJ1tqF8LT36tnt3Q==
+"@navikt/flagg-ikoner@^10.0.0":
+  version "10.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/10.0.0/7b14281f02976161f8837b36bd7bf9f85da8ab1b#7b14281f02976161f8837b36bd7bf9f85da8ab1b"
+  integrity sha512-IgQ43nvbKwAVd4/93EwG0KiAF0xRFXPYyEf0Mj7TB/zgOP+wZaqJ0laM19ogdS2sBRaJznWhgnquuVkbkkEZBA==
   dependencies:
     svg-country-flags "^1.2.10"
     uuid "^9.0.0"
@@ -1919,10 +1919,10 @@
     country-data-list "^1.2.2"
     i18n-iso-countries "^7.5.0"
 
-"@navikt/landvelger@^9.1.9":
-  version "9.1.9"
-  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/9.1.9/f7ac2c6c5599c8e4b54ea0a04849bc85bb8a11e0#f7ac2c6c5599c8e4b54ea0a04849bc85bb8a11e0"
-  integrity sha512-UAFwwnHM407ZsPEYllynvWrPI4vZJNyjqqlhinTUxqU3/wIsjuGsB8YREbbP0yH343hY39dQkWAiAZNBthieEA==
+"@navikt/landvelger@^10.0.0":
+  version "10.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/landvelger/10.0.0/be0965113024c3c8e76651dd7fe6faee996dc2d5#be0965113024c3c8e76651dd7fe6faee996dc2d5"
+  integrity sha512-rp4OAfNuT8Vh7+WV9Ttc9rwYVlpwWuVBuLv5wtOcjWue6hAQ1AJ2YRu6dHt/dXPvZ5MiqBHtZHCJ3abhsPP3IA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
