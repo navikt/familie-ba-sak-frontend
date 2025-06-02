@@ -14,8 +14,7 @@ import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { FagsakType } from '../../../typer/fagsak';
+import { FagsakType, type IMinimalFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 
 interface IFagsakTypeLabel {
@@ -84,6 +83,8 @@ const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
             return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
             return <StyledAlert variant={'info'}>Dette er en enslig mindreårig-sak</StyledAlert>;
+        case FagsakType.SKJERMET_BARN:
+            return <StyledAlert variant={'info'}>Dette er en skjermet barn-sak</StyledAlert>;
         default:
             return null;
     }
