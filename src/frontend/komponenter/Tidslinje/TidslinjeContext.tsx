@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type PropsWithChildren } from 'react';
+import React, { createContext, type PropsWithChildren, useContext, useState } from 'react';
 
 import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
@@ -122,6 +122,7 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
 
     const ytelserSomMåSplittes = (fagsakType?: FagsakType): YtelseSplittForTidslinje => {
         switch (fagsakType) {
+            case FagsakType.SKJERMET_BARN:
             case FagsakType.NORMAL:
                 return {
                     ytelseSomSkalSplittesOpp: YtelseType.UTVIDET_BARNETRYGD,

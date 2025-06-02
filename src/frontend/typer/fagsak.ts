@@ -16,6 +16,7 @@ export enum FagsakType {
     NORMAL = 'NORMAL',
     BARN_ENSLIG_MINDREÅRIG = 'BARN_ENSLIG_MINDREÅRIG',
     INSTITUSJON = 'INSTITUSJON',
+    SKJERMET_BARN = 'SKJERMET_BARN',
 }
 
 // Interface
