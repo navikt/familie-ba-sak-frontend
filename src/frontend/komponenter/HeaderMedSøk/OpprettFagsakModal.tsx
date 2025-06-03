@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, Modal, ReadMore, Select, TextField } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    HStack,
+    Modal,
+    ReadMore,
+    Select,
+    TextField,
+    VStack,
+} from '@navikt/ds-react';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -19,37 +28,33 @@ import { formaterIdent, formaterNavnAlderOgIdent } from '../../utils/formatter';
 import { SamhandlerTabell } from '../Samhandler/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../Samhandler/useSamhandler';
 
-interface IOpprettFagsakModal {
+const kulepunkt = `\u2022` + '   ';
+
+function utledHeading(harNormalFagsak: undefined | boolean) {
+    return harNormalFagsak
+        ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+        : 'Opprett fagsak';
+}
+
+function utledUndertittel(harFagsak: boolean) {
+    let text = '';
+    if (harFagsak) {
+        text += 'Personen har allerede en tilknyttet fagsak. ';
+    }
+    text += `Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`;
+    return text;
+}
+
+function formaterSøkeresultat(søkeresultat: ISøkeresultat | undefined): string {
+    return (søkeresultat?.navn || '') + formaterIdent(søkeresultat?.ident || '');
+}
+
+interface Props {
     lukkModal: () => void;
     søkeresultat?: ISøkeresultat | undefined;
     personInfo?: IPersonInfo;
     fagsakerPåBruker?: IBaseFagsak[];
 }
-
-const StyledDiv = styled.div`
-    margin-top: 2rem;
-    display: flex;
-`;
-
-const StyledButton = styled(Button)`
-    align-self: end;
-    margin-left: 1rem;
-`;
-
-const StyledFagsakOptionsDiv = styled.div`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    width: fit-content;
-    min-width: 20rem;
-`;
-
-const StyledReadMore = styled(ReadMore)`
-    margin-top: 2rem;
-`;
-
-const StyledBodyShort = styled(BodyShort)`
-    margin-bottom: 2rem;
-`;
 
 const fagsakTypeOptions = [
     {
@@ -66,12 +71,12 @@ const fagsakTypeOptions = [
     },
 ];
 
-const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
+export function OpprettFagsakModal({
     lukkModal,
     søkeresultat,
     personInfo,
     fagsakerPåBruker,
-}) => {
+}: Props) {
     const navigate = useNavigate();
 
     const {
@@ -140,49 +145,53 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     }, [samhandlerSkjema.submitRessurs.status]);
 
     const valgAvFagsakType = () => (
-        <>
-            <StyledFagsakOptionsDiv>
-                <Select
-                    label={'Fagsaktype'}
-                    onChange={(event): void => {
-                        settFagsakType(
-                            Object.values(FagsakType).find(type => type === event.target.value) ||
-                                FagsakType.NORMAL
-                        );
-                    }}
-                    children={fagsakTypeOptions
-                        .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
-                        .map(option => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    value={fagsakTypeOptions.find(option => option.value === fagsakType)?.value}
-                    size={'small'}
-                />
-                {fagsakType === FagsakType.INSTITUSJON && (
-                    <StyledDiv>
-                        <TextField
-                            {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                                samhandlerSkjema.visFeilmeldinger
-                            )}
-                            id={'hent-samhandler'}
-                            label={'Organisasjonsnummer'}
-                            onChange={event =>
-                                samhandlerSkjema.felter.orgnr.validerOgSettFelt(
-                                    event.target.value.replaceAll(' ', '')
-                                )
+        <VStack gap={'4'}>
+            <Select
+                label={'Fagsaktype'}
+                size={'small'}
+                value={fagsakTypeOptions.find(option => option.value === fagsakType)?.value}
+                onChange={event => {
+                    settFagsakType(
+                        Object.values(FagsakType).find(type => type === event.target.value) ||
+                            FagsakType.NORMAL
+                    );
+                }}
+            >
+                {fagsakTypeOptions
+                    .filter(valg => (harNormalFagsak ? valg.value !== FagsakType.NORMAL : true))
+                    .map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+            </Select>
+            {fagsakType === FagsakType.INSTITUSJON && (
+                <HStack gap={'4'} paddingBlock={'space-16'} align={'end'}>
+                    <TextField
+                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
+                            samhandlerSkjema.visFeilmeldinger
+                        )}
+                        id={'hent-samhandler'}
+                        label={'Organisasjonsnummer'}
+                        size={'small'}
+                        onChange={event =>
+                            samhandlerSkjema.felter.orgnr.validerOgSettFelt(
+                                event.target.value.replaceAll(' ', '')
+                            )
+                        }
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                onSubmitWrapper();
                             }
-                            onKeyDown={event => {
-                                if (event.key === 'Enter') {
-                                    event.preventDefault();
-                                    onSubmitWrapper();
-                                }
-                            }}
+                        }}
+                    />
+                    <div>
+                        <Button
+                            children={'Hent institusjon'}
                             size={'small'}
-                        />
-
-                        <StyledButton
+                            variant={'secondary'}
+                            loading={spinner}
                             onClick={() => {
                                 if (
                                     samhandlerSkjema.felter.orgnr.valideringsstatus !==
@@ -192,76 +201,59 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                                 }
                                 onSubmitWrapper();
                             }}
-                            children={'Hent institusjon'}
-                            size={'small'}
-                            variant={'secondary'}
-                            loading={spinner}
                         />
-                    </StyledDiv>
-                )}
-            </StyledFagsakOptionsDiv>
+                    </div>
+                </HStack>
+            )}
             {fagsakType === FagsakType.INSTITUSJON && valgtSamhandler !== undefined && (
                 <SamhandlerTabell samhandler={valgtSamhandler} />
             )}
-        </>
+        </VStack>
     );
+
     return (
         <Modal
-            open
+            open={true}
             onClose={onClose}
-            header={{
-                heading: harNormalFagsak
-                    ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-                    : 'Opprett fagsak',
-                size: 'medium',
-            }}
-            portal
+            header={{ heading: utledHeading(harNormalFagsak), size: 'medium' }}
+            portal={true}
             width={'35rem'}
         >
             <Modal.Body>
-                <StyledBodyShort>
-                    {`${harFagsak ? 'Personen har allerede en tilknyttet fagsak. ' : ''}
-                        Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`}
-                </StyledBodyShort>
-                {bruker ? (
-                    <BodyShort>
-                        &ensp;&bull;&ensp;{formaterNavnAlderOgIdent({ ...bruker })}
-                    </BodyShort>
-                ) : (
-                    <BodyShort>
-                        &ensp;&bull;&ensp;
-                        {`${søkeresultat?.navn || ''} (${formaterIdent(
-                            søkeresultat?.ident || ''
-                        )})`}
-                    </BodyShort>
-                )}
-                {harNormalFagsak ? (
-                    valgAvFagsakType()
-                ) : (
-                    <StyledReadMore
-                        header={'Søker er en institusjon eller enslig mindreårig'}
-                        defaultOpen={false}
-                        onClick={() => {
-                            if (fagsakType !== FagsakType.NORMAL) {
-                                settFagsakType(FagsakType.NORMAL);
-                            }
-                        }}
-                    >
-                        {valgAvFagsakType()}
-                    </StyledReadMore>
-                )}
-                {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
-                {isOpprettFagsakError && (
-                    <Alert variant={'error'}>{opprettFagsakError.message}</Alert>
-                )}
+                <VStack gap={'4'}>
+                    <BodyShort>{utledUndertittel(harFagsak)}</BodyShort>
+                    {bruker ? (
+                        <BodyShort>{kulepunkt + formaterNavnAlderOgIdent(bruker)}</BodyShort>
+                    ) : (
+                        <BodyShort>{kulepunkt + formaterSøkeresultat(søkeresultat)}</BodyShort>
+                    )}
+                    {harNormalFagsak ? (
+                        valgAvFagsakType()
+                    ) : (
+                        <ReadMore
+                            header={'Søker er en institusjon eller enslig mindreårig'}
+                            defaultOpen={false}
+                            onClick={() => {
+                                if (fagsakType !== FagsakType.NORMAL) {
+                                    settFagsakType(FagsakType.NORMAL);
+                                }
+                            }}
+                        >
+                            {valgAvFagsakType()}
+                        </ReadMore>
+                    )}
+                    {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+                    {isOpprettFagsakError && (
+                        <Alert variant={'error'}>{opprettFagsakError.message}</Alert>
+                    )}
+                </VStack>
             </Modal.Body>
             <Modal.Footer>
                 <Button
                     key={'Bekreft'}
                     variant={'primary'}
-                    onClick={async () => {
+                    onClick={() => {
                         const personIdent = søkeresultat?.ident || personInfo?.personIdent;
-
                         if (personIdent) {
                             opprettFagsak({
                                 personIdent: personIdent,
@@ -286,6 +278,4 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
             </Modal.Footer>
         </Modal>
     );
-};
-
-export default OpprettFagsakModal;
+}
