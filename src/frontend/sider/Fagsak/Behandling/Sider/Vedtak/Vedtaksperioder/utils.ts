@@ -38,7 +38,8 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
                 VedtakBegrunnelseType.INSTITUSJON_INNVILGET,
                 VedtakBegrunnelseType.INSTITUSJON_REDUKSJON,
                 VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET,
-                Vedtaksperiodetype.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
             ];
         case Vedtaksperiodetype.FORTSATT_INNVILGET:
             return [
@@ -55,7 +56,8 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
                 VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                 VedtakBegrunnelseType.INSTITUSJON_INNVILGET,
                 VedtakBegrunnelseType.INSTITUSJON_REDUKSJON,
-                Vedtaksperiodetype.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
             ];
         case Vedtaksperiodetype.OPPHØR:
             return [
@@ -63,10 +65,14 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
                 VedtakBegrunnelseType.EØS_OPPHØR,
                 VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                 VedtakBegrunnelseType.INSTITUSJON_OPPHØR,
-                Vedtaksperiodetype.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
             ];
         case Vedtaksperiodetype.ENDRET_UTBETALING:
-            return [VedtakBegrunnelseType.ENDRET_UTBETALING];
+            return [
+                VedtakBegrunnelseType.ENDRET_UTBETALING,
+                VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
+            ];
         default:
             return [];
     }

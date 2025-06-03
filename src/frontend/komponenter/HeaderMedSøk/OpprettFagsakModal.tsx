@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import {
-    BodyShort,
-    Button,
-    ErrorMessage,
-    Modal,
-    ReadMore,
-    Select,
-    TextField,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Modal, ReadMore, Select, TextField } from '@navikt/ds-react';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useOpprettFagsak from './useOpprettFagsak';
 import { useAppContext } from '../../context/AppContext';
+import { useOpprettFagsak } from '../../hooks/useOpprettFagsak';
 import type { IBaseFagsak } from '../../typer/fagsak';
 import { FagsakType } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import { formaterIdent, formaterNavnAlderOgIdent } from '../../utils/formatter';
 import { SamhandlerTabell } from '../Samhandler/SamhandlerTabell';
 import { useSamhandlerSkjema } from '../Samhandler/useSamhandler';
@@ -78,9 +72,26 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     personInfo,
     fagsakerPåBruker,
 }) => {
+    const navigate = useNavigate();
+
+    const {
+        mutate: opprettFagsak,
+        isPending: isOpprettFagsakPending,
+        isError: isOpprettFagsakError,
+        error: opprettFagsakError,
+    } = useOpprettFagsak({
+        onSuccess: data => {
+            onClose();
+            const aktivBehandling = hentAktivBehandlingPåMinimalFagsak(data);
+            if (aktivBehandling) {
+                navigate(`/fagsak/${data.id}/${aktivBehandling.behandlingId}`);
+            } else {
+                navigate(`/fagsak/${data.id}/saksoversikt`);
+            }
+        },
+    });
+
     const [bruker, settBruker] = useState(personInfo);
-    const { opprettFagsak, feilmelding, settFeilmelding, senderInn, settSenderInn } =
-        useOpprettFagsak();
     const { hentPerson } = useAppContext();
     const harFagsak = (fagsakerPåBruker?.length || 0) > 0;
     const harNormalFagsak = fagsakerPåBruker?.some(
@@ -89,25 +100,24 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     const [fagsakType, settFagsakType] = useState<FagsakType>(
         harNormalFagsak ? FagsakType.INSTITUSJON : FagsakType.NORMAL
     );
-    const [visFeilmelding, settVisFeilmelding] = useState(false);
+
+    const [feilmelding, settFeilmelding] = useState('');
     const [valgtSamhandler, settValgtSamhandler] = useState<ISamhandlerInfo | undefined>(undefined);
     const [spinner, settSpinner] = useState(false);
     const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema(
         () => {
-            settSpinner(false);
             settFeilmelding('');
-            settVisFeilmelding(false);
+            settSpinner(false);
         },
         error => {
             settFeilmelding(error);
-            settVisFeilmelding(true);
             settSpinner(false);
         }
     );
 
     const onClose = () => {
         settFagsakType(FagsakType.NORMAL);
-        settVisFeilmelding(false);
+        settFeilmelding('');
         settValgtSamhandler(undefined);
         lukkModal();
     };
@@ -125,7 +135,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
     useEffect(() => {
         if (samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS) {
             settValgtSamhandler(samhandlerSkjema.submitRessurs.data);
-            settVisFeilmelding(false);
+            settFeilmelding('');
         }
     }, [samhandlerSkjema.submitRessurs.status]);
 
@@ -240,38 +250,33 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({
                         {valgAvFagsakType()}
                     </StyledReadMore>
                 )}
-
-                {!!feilmelding && visFeilmelding && <ErrorMessage children={feilmelding} />}
+                {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+                {isOpprettFagsakError && (
+                    <Alert variant={'error'}>{opprettFagsakError.message}</Alert>
+                )}
             </Modal.Body>
             <Modal.Footer>
                 <Button
                     key={'Bekreft'}
                     variant={'primary'}
                     onClick={async () => {
-                        settSenderInn(true);
                         const personIdent = søkeresultat?.ident || personInfo?.personIdent;
 
                         if (personIdent) {
-                            opprettFagsak(
-                                {
-                                    personIdent: personIdent,
-                                    fagsakType: fagsakType,
-                                    institusjon: valgtSamhandler
-                                        ? {
-                                              orgNummer: valgtSamhandler.orgNummer,
-                                              tssEksternId: valgtSamhandler.tssEksternId,
-                                          }
-                                        : null,
-                                },
-                                onClose
-                            );
-                        } else {
-                            settSenderInn(false);
+                            opprettFagsak({
+                                personIdent: personIdent,
+                                fagsakType: fagsakType,
+                                institusjon: valgtSamhandler
+                                    ? {
+                                          orgNummer: valgtSamhandler.orgNummer,
+                                          tssEksternId: valgtSamhandler.tssEksternId,
+                                      }
+                                    : null,
+                            });
                         }
-                        settVisFeilmelding(true);
                     }}
-                    disabled={senderInn}
-                    loading={senderInn}
+                    disabled={isOpprettFagsakPending}
+                    loading={isOpprettFagsakPending}
                 >
                     Opprett fagsak
                 </Button>

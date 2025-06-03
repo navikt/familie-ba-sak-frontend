@@ -8,7 +8,6 @@ import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Behandlinger } from './Behandlinger';
-import BehandlingerOld from './BehandlingerOld';
 import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
@@ -194,11 +193,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                                 {løpendeMånedligUtbetaling()}
                             </>
                         )}
-                        {toggles[ToggleNavn.brukReactQueryPaaSaksoversiktsiden] ? (
-                            <Behandlinger fagsakId={minimalFagsak.id} />
-                        ) : (
-                            <BehandlingerOld minimalFagsak={minimalFagsak} />
-                        )}
+                        <Behandlinger fagsakId={minimalFagsak.id} />
                     </VStack>
                 </SaksoversiktWrapper>{' '}
             </Tabs.Panel>
