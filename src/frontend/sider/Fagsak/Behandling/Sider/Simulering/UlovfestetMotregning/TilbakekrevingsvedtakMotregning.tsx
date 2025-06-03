@@ -23,12 +23,14 @@ interface TilbakekrevingsvedtakMotregningProps {
     oppdaterTilbakekrevingsvedtakMotregning: (
         dto: OppdaterTilbakekrevingsvedtakMotregningDTO
     ) => Promise<void>;
+    erLesevisning: boolean;
 }
 
 export const TilbakekrevingsvedtakMotregning = ({
     tilbakekrevingsvedtakMotregning,
     slettTilbakekrevingsvedtakMotregning,
     oppdaterTilbakekrevingsvedtakMotregning,
+    erLesevisning,
 }: TilbakekrevingsvedtakMotregningProps) => {
     return (
         <Box marginBlock="10 0" width="90%" maxWidth="40rem">
@@ -51,6 +53,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                     <ConfirmationPanel
                         checked={tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake}
                         label="Hele beløpet skal kreves tilbake"
+                        disabled={erLesevisning}
                         onChange={() =>
                             oppdaterTilbakekrevingsvedtakMotregning({
                                 heleBeløpetSkalKrevesTilbake:
@@ -65,16 +68,18 @@ export const TilbakekrevingsvedtakMotregning = ({
                             Dersom ikke hele beløpet skal kreves tilbake må du splitte saken.
                         </BodyShort>
                     </ConfirmationPanel>
-                    <Box>
-                        <Button
-                            onClick={slettTilbakekrevingsvedtakMotregning}
-                            variant="secondary"
-                            size="small"
-                            icon={<ArrowUndoIcon />}
-                        >
-                            Angre bruk av ulovfestet motregning
-                        </Button>
-                    </Box>
+                    {!erLesevisning && (
+                        <Box>
+                            <Button
+                                onClick={slettTilbakekrevingsvedtakMotregning}
+                                variant="secondary"
+                                size="small"
+                                icon={<ArrowUndoIcon />}
+                            >
+                                Angre bruk av ulovfestet motregning
+                            </Button>
+                        </Box>
+                    )}
                 </VStack>
             )}
         </Box>
