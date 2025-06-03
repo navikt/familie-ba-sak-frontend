@@ -160,7 +160,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     />
                                 )}
 
-                                {!erLesevisning && tilbakekrevingsvedtakMotregning !== null && (
+                                {tilbakekrevingsvedtakMotregning !== null && (
                                     <TilbakekrevingsvedtakMotregning
                                         tilbakekrevingsvedtakMotregning={
                                             tilbakekrevingsvedtakMotregning
@@ -171,6 +171,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         oppdaterTilbakekrevingsvedtakMotregning={
                                             oppdaterTilbakekrevingsvedtakMotregning
                                         }
+                                        erLesevisning={erLesevisning}
                                     />
                                 )}
                             </Box>
