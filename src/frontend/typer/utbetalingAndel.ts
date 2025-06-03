@@ -2,7 +2,7 @@ import type { IsoDatoString, IsoMånedString } from '../utils/dato';
 
 export interface IRestEndretUtbetalingAndel {
     id?: number;
-    personIdent?: string;
+    personIdenter: string[];
     prosent?: number;
     fom?: IsoMånedString;
     tom?: IsoMånedString;

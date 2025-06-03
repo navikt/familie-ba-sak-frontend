@@ -16,6 +16,7 @@ export enum ToggleNavn {
     kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
+    flerePersonerEndretUtbetaling = 'familie-ba-sak.flere-personer-endret-utbetaling',
 }
 
 export const alleTogglerAv = (): IToggles => {

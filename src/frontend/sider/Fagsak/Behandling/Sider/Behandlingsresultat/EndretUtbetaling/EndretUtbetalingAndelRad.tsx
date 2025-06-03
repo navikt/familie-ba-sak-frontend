@@ -31,7 +31,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     åpenBehandling,
 }) => {
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
-        lagretEndretUtbetalingAndel.personIdent === null
+        lagretEndretUtbetalingAndel.personIdenter.length === 0
     );
 
     const {
@@ -104,11 +104,12 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                         }
                     />
                     <BodyShort size={'small'}>
-                        {lagretEndretUtbetalingAndel.personIdent
-                            ? lagPersonLabel(
-                                  lagretEndretUtbetalingAndel.personIdent,
-                                  åpenBehandling.personer
-                              )
+                        {lagretEndretUtbetalingAndel.personIdenter.length > 0
+                            ? lagretEndretUtbetalingAndel.personIdenter.map(person => (
+                                  <BodyShort size="small" key={person}>
+                                      {lagPersonLabel(person, åpenBehandling.personer)}
+                                  </BodyShort>
+                              ))
                             : 'Ikke satt'}
                     </BodyShort>
                 </PersonCelle>
