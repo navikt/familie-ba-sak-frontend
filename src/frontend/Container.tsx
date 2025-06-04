@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useAppContext } from './context/AppContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
+import { OpprettFagsakModalNy } from './komponenter/Modal/fagsak/OpprettFagsakModalNy';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
 import { TidslinjeProvider } from './komponenter/Tidslinje/TidslinjeContext';
@@ -38,6 +39,7 @@ const Container: React.FC = () => {
 
     return (
         <Router>
+            <OpprettFagsakModalNy />
             {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 erTogglesHentet && (

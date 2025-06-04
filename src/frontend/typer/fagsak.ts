@@ -33,6 +33,10 @@ export interface IBaseFagsak {
     institusjon?: IInstitusjon;
 }
 
+export function sjekkHarNormalFagsak(fagsaker: IBaseFagsak[] | undefined): boolean {
+    return (fagsaker ?? []).some(fagsak => fagsak.fagsakType === FagsakType.NORMAL);
+}
+
 export interface IMinimalFagsak extends IBaseFagsak {
     migreringsdato?: string;
     behandlinger: VisningBehandling[];

@@ -10,6 +10,7 @@ import { hentInnloggetBruker } from './api/saksbehandler';
 import Container from './Container';
 import { AppProvider } from './context/AppContext';
 import { AuthOgHttpProvider } from './context/AuthContext';
+import { ModalProvider } from './context/ModalContext';
 import { useStartUmami } from './hooks/useStartUmami';
 import ErrorBoundary from './komponenter/ErrorBoundary/ErrorBoundary';
 import { initGrafanaFaro } from './utils/grafanaFaro';
@@ -40,7 +41,9 @@ const App: React.FC = () => {
             <AuthOgHttpProvider autentisertSaksbehandler={autentisertSaksbehandler}>
                 <QueryClientProvider client={queryClient}>
                     <AppProvider>
-                        <Container />
+                        <ModalProvider>
+                            <Container />
+                        </ModalProvider>
                     </AppProvider>
                 </QueryClientProvider>
             </AuthOgHttpProvider>
