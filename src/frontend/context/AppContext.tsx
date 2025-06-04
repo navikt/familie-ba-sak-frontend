@@ -1,4 +1,4 @@
-import React, { createContext, type PropsWithChildren, useEffect, useState } from 'react';
+import React, { createContext, type PropsWithChildren, useEffect, useState, type JSX } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 

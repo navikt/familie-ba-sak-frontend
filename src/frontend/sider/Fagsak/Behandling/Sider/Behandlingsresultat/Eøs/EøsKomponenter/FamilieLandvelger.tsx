@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { type JSX } from 'react';
 
 import classNames from 'classnames';
 import styled from 'styled-components';
