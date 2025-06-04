@@ -17,7 +17,7 @@ import {
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 
-import OpprettFagsakModal from './OpprettFagsakModal';
+import { OpprettFagsakModal } from './OpprettFagsakModal';
 import { useAppContext } from '../../context/AppContext';
 import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
 import StatusIkon, { Status } from '../../ikoner/StatusIkon';
