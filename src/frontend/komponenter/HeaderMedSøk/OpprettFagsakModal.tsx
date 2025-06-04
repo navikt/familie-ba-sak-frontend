@@ -37,12 +37,11 @@ function utledHeading(harNormalFagsak: undefined | boolean) {
 }
 
 function utledUndertittel(harFagsak: boolean) {
-    let text = '';
     if (harFagsak) {
-        text += 'Personen har allerede en tilknyttet fagsak. ';
+        return 'Personen har allerede en tilknyttet fagsak. Ønsker du å opprette ny fagsak for denne personen?';
+    } else {
+        return 'Ønsker du å opprette fagsak for denne personen?';
     }
-    text += `Ønsker du å opprette ${harFagsak ? 'ny' : ''} fagsak for denne personen?`;
-    return text;
 }
 
 function formaterSøkeresultat(søkeresultat: ISøkeresultat | undefined): string {
