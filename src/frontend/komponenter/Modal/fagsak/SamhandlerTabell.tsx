@@ -9,9 +9,10 @@ import { formaterIdent, formaterTekstStorForbokstav } from '../../../utils/forma
 interface Props {
     samhandler: ISamhandlerInfo;
     slettSamhandler: () => void;
+    readOnly: boolean;
 }
 
-export function SamhandlerTabell({ samhandler, slettSamhandler }: Props) {
+export function SamhandlerTabell({ samhandler, slettSamhandler, readOnly }: Props) {
     const { navn, orgNummer, tssEksternId, adresser } = samhandler;
     return (
         <Table size={'small'}>
@@ -26,6 +27,7 @@ export function SamhandlerTabell({ samhandler, slettSamhandler }: Props) {
                                     size={'small'}
                                     icon={<TrashFillIcon />}
                                     onClick={slettSamhandler}
+                                    disabled={readOnly}
                                 >
                                     Fjern institusjon
                                 </Button>

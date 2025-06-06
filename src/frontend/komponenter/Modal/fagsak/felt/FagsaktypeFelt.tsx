@@ -23,7 +23,11 @@ const fagsakTypeOptions = [
     },
 ];
 
-export function FagsaktypeFelt() {
+interface Props {
+    readOnly: boolean;
+}
+
+export function FagsaktypeFelt({ readOnly }: Props) {
     const { control, setValue } = useFormContext<OpprettFagsakFormValues>();
 
     const { field, fieldState, formState } = useController({
@@ -56,7 +60,7 @@ export function FagsaktypeFelt() {
                 field.onChange(value);
             }}
             error={fieldState.error?.message}
-            readOnly={formState.isSubmitting}
+            readOnly={formState.isSubmitting || readOnly}
         >
             <option value={''}>-- Velg fagsaktype --</option>
             {options.map(option => (

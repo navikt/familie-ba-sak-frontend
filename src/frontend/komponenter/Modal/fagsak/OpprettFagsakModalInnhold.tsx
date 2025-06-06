@@ -122,6 +122,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     <OpprettFagsakForm
                         form={opprettFagsakForm}
                         onSubmit={onSubmitOpprettFagsakForm}
+                        readOnly={samhandlerForm.formState.isSubmitting}
                     />
                     {fagsaktype === FagsakType.INSTITUSJON && samhandler === null && (
                         <SamhandlerForm form={samhandlerForm} onSubmit={onSubmitSamhandlerForm} />
@@ -132,6 +133,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                             slettSamhandler={() =>
                                 opprettFagsakForm.setValue(OpprettFagsakFeltnavn.SAMHANDLER, null)
                             }
+                            readOnly={opprettFagsakForm.formState.isSubmitting}
                         />
                     )}
                     {onSubmitFeilmelding && (
@@ -154,7 +156,10 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     type={'submit'}
                     variant={'primary'}
                     form={OPPRETT_FAGSAK_FORM}
-                    disabled={opprettFagsakForm.formState.isSubmitting}
+                    disabled={
+                        opprettFagsakForm.formState.isSubmitting ||
+                        samhandlerForm.formState.isSubmitting
+                    }
                     loading={opprettFagsakForm.formState.isSubmitting}
                 >
                     Opprett fagsak
