@@ -34,14 +34,15 @@ const FagsakDeltagerSøk: React.FC = () => {
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const { skalObfuskereData, toggles } = useAppContext();
-    const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
+
+    const [fagsakDeltagere, settFagsakDeltagere] =
+        React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
 
     const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
         ISøkeresultat | undefined
     >(undefined);
 
-    const [fagsakDeltagere, settFagsakDeltagere] =
-        React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
+    const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
     const fnrValidator = (verdi: string): boolean => {
         return idnr(verdi).status === 'valid';
