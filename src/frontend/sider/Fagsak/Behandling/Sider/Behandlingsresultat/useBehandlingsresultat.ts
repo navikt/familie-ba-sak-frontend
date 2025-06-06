@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../../../../../typer/utbetalingAndel';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
@@ -18,11 +17,10 @@ export const useBehandlingsresultat = (åpenBehandling: IBehandling) => {
         useState<string[]>([]);
 
     const opprettEndretUtbetaling = () => {
-        request<IRestEndretUtbetalingAndel, IBehandling>({
+        request<null, IBehandling>({
             method: 'POST',
             url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}`,
             påvirkerSystemLaster: true,
-            data: {},
         }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 settVisFeilmeldinger(false);

@@ -4,20 +4,33 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea } from '@navikt/ds-react';
+import {
+    Button,
+    Fieldset,
+    Label,
+    Radio,
+    RadioGroup,
+    Select,
+    Textarea,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
+import { useAppContext } from '../../../../../../context/AppContext';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { onOptionSelected } from '../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../Utbetaling';
 
@@ -71,6 +84,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
+    const { toggles } = useAppContext();
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
@@ -103,6 +117,21 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         }
     }, [skjema.submitRessurs]);
 
+    const tilgjengeligePersoner: ComboboxOption[] = åpenBehandling.personer
+        .filter(person =>
+            åpenBehandling.personerMedAndelerTilkjentYtelse
+                .map(personMedAndeler => personMedAndeler.personIdent)
+                .includes(person.personIdent)
+        )
+        .map(person => ({
+            value: person.personIdent,
+            label: lagPersonLabel(person.personIdent, åpenBehandling.personer),
+        }));
+
+    const onPersonSelected = (optionValue: string, isSelected: boolean) => {
+        onOptionSelected(optionValue, isSelected, skjema.felter.personer, tilgjengeligePersoner);
+    };
+
     return (
         <>
             <StyledFieldset
@@ -111,31 +140,44 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 hideLegend
             >
                 <Feltmargin>
-                    <StyledSelectPersonvelger
-                        {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<Label>Velg hvem det gjelder</Label>}
-                        value={skjema.felter.person.verdi ?? ''}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                            skjema.felter.person.validerOgSettFelt(event.target.value);
-                        }}
-                        readOnly={erLesevisning}
-                    >
-                        <option value={undefined}>Velg person</option>
-                        {åpenBehandling.personer
-                            .filter(person =>
-                                åpenBehandling.personerMedAndelerTilkjentYtelse
-                                    .map(personMedAndeler => personMedAndeler.personIdent)
-                                    .includes(person.personIdent)
-                            )
-                            .map((person, index) => (
-                                <option
-                                    value={person.personIdent}
-                                    key={`${index}_${person.fødselsdato}`}
-                                >
-                                    {lagPersonLabel(person.personIdent, åpenBehandling.personer)}
+                    {toggles[ToggleNavn.flerePersonerEndretUtbetaling] ? (
+                        <UNSAFE_Combobox
+                            isMultiSelect
+                            label={'Velg hvem det gjelder'}
+                            options={tilgjengeligePersoner}
+                            selectedOptions={skjema.felter.personer.verdi}
+                            onToggleSelected={onPersonSelected}
+                            readOnly={erLesevisning}
+                            error={
+                                skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger)
+                                    .error
+                            }
+                        />
+                    ) : (
+                        <StyledSelectPersonvelger
+                            {...skjema.felter.personer.hentNavBaseSkjemaProps(
+                                skjema.visFeilmeldinger
+                            )}
+                            label={<Label>Velg hvem det gjelder</Label>}
+                            value={skjema.felter.personer.verdi[0]?.value ?? ''}
+                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                                skjema.felter.personer.validerOgSettFelt([
+                                    {
+                                        value: event.target.value,
+                                        label: event.target.value,
+                                    },
+                                ]);
+                            }}
+                            readOnly={erLesevisning}
+                        >
+                            <option value={undefined}>Velg person</option>
+                            {tilgjengeligePersoner.map((person, index) => (
+                                <option value={person.value} key={`${index}_${person.value}`}>
+                                    {lagPersonLabel(person.value, åpenBehandling.personer)}
                                 </option>
                             ))}
-                    </StyledSelectPersonvelger>
+                        </StyledSelectPersonvelger>
+                    )}
                 </Feltmargin>
 
                 <Feltmargin>
