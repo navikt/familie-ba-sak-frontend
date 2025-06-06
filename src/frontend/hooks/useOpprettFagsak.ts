@@ -10,7 +10,7 @@ type Options = Omit<
     'mutationFn'
 >;
 
-export function useOpprettFagsak(options: Options) {
+export function useOpprettFagsak(options?: Options) {
     const { request } = useHttp();
     return useMutation({
         mutationFn: (fagsakData: OpprettFagsakPayload) => opprettFagsak(request, fagsakData),
