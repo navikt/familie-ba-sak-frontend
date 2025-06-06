@@ -1,14 +1,14 @@
 import React, { createContext, type PropsWithChildren, useContext, useReducer } from 'react';
 
 interface ModalContext {
-    hentTittel: <T extends keyof Args>(type: T) => string;
-    settTittel: <T extends keyof Args>(type: T, tittel: string) => void;
+    hentTittel: (type: ModalType) => string;
+    settTittel: (type: ModalType, tittel: string) => void;
     åpneModal: <T extends keyof Args>(type: T, args: Args[T]) => void;
     lukkModal: (type: ModalType) => void;
     erModalÅpen: (type: ModalType) => boolean;
     hentArgs: <T extends keyof Args>(type: T) => Args[T] | undefined;
-    hentBredde: <T extends keyof Args>(type: T) => `${number}${string}`;
-    settBredde: <T extends keyof Args>(type: T, bredde: `${number}${string}`) => void;
+    hentBredde: (type: ModalType) => `${number}${string}`;
+    settBredde: (type: ModalType, bredde: `${number}${string}`) => void;
 }
 
 export enum ModalType {
@@ -133,11 +133,11 @@ const ModalContext = createContext<ModalContext | undefined>(undefined);
 export function ModalProvider({ children }: PropsWithChildren) {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    function hentTittel<T extends keyof Args>(type: T) {
+    function hentTittel(type: ModalType) {
         return state[type].tittel;
     }
 
-    function settTittel<T extends keyof Args>(type: T, tittel: string) {
+    function settTittel(type: ModalType, tittel: string) {
         dispatch({ type: ActionType.SETT_TITTEL, payload: { type, tittel } });
     }
 
@@ -157,11 +157,11 @@ export function ModalProvider({ children }: PropsWithChildren) {
         return state[type].args as Args[T];
     }
 
-    function hentBredde<T extends keyof Args>(type: T) {
+    function hentBredde(type: ModalType) {
         return state[type].bredde;
     }
 
-    function settBredde<T extends keyof Args>(type: T, bredde: `${number}${string}`) {
+    function settBredde(type: ModalType, bredde: `${number}${string}`) {
         dispatch({ type: ActionType.SETT_BREDDE, payload: { type, bredde } });
     }
 
