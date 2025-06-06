@@ -63,7 +63,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         },
     });
 
-    const fagsakType = opprettFagsakForm.watch(OpprettFagsakFeltnavn.FAGSAKTYPE);
+    const fagsaktype = opprettFagsakForm.watch(OpprettFagsakFeltnavn.FAGSAKTYPE);
     const samhandler = opprettFagsakForm.watch(OpprettFagsakFeltnavn.SAMHANDLER);
 
     const onSubmitFeilmelding = OpprettFagsakServerErrors.onSubmitError.lookup(
@@ -123,10 +123,10 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                         form={opprettFagsakForm}
                         onSubmit={onSubmitOpprettFagsakForm}
                     />
-                    {fagsakType === FagsakType.INSTITUSJON && samhandler === null && (
+                    {fagsaktype === FagsakType.INSTITUSJON && samhandler === null && (
                         <SamhandlerForm form={samhandlerForm} onSubmit={onSubmitSamhandlerForm} />
                     )}
-                    {fagsakType === FagsakType.INSTITUSJON && samhandler && (
+                    {fagsaktype === FagsakType.INSTITUSJON && samhandler && (
                         <SamhandlerTabell
                             samhandler={samhandler}
                             slettSamhandler={() =>
