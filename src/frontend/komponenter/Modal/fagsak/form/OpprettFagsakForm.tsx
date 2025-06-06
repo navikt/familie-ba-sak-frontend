@@ -39,15 +39,16 @@ export const OPPRETT_FAGSAK_FORM = 'OPPRETT_FAGSAK_FORM_ID';
 interface Props {
     form: UseFormReturn<OpprettFagsakFormValues>;
     onSubmit: SubmitHandler<OpprettFagsakFormValues>;
+    readOnly: boolean;
 }
 
-export function OpprettFagsakForm({ form, onSubmit }: Props) {
+export function OpprettFagsakForm({ form, onSubmit, readOnly }: Props) {
     const { handleSubmit } = form;
 
     return (
         <FormProvider {...form}>
             <form id={OPPRETT_FAGSAK_FORM} onSubmit={handleSubmit(onSubmit)}>
-                <FagsaktypeFelt />
+                <FagsaktypeFelt readOnly={readOnly} />
             </form>
         </FormProvider>
     );
