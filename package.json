@@ -124,7 +124,7 @@
     "style-loader": "^4.0.0",
     "ts-jest": "^29.3.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0",
+    "typescript-eslint": "^8.34.0",
     "webpack": "^5.99.6",
     "webpack-cli": "^6.0.1",
     "webpack-dev-middleware": "^7.4.2",
