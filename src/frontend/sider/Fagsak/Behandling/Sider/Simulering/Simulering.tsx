@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, Box } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { MigreringAlerts } from './MigreringAlerts';
@@ -11,7 +11,7 @@ import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg, type IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
@@ -19,12 +19,7 @@ import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
-import AvregningAlert from './UlovfestetMotregning/AvregningAlert';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
-import {
-    dagerFristForAvventerSamtykkeUlovfestetMotregning,
-    useTilbakekrevingsvedtakMotregning,
-} from './UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -55,15 +50,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const { slettTilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingsvedtakMotregning } =
-        useTilbakekrevingsvedtakMotregning(åpenBehandling);
-
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 &&
         toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
-    const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
-        åpenBehandling.aktivSettPåVent?.årsak ===
-        SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -142,38 +131,14 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 behandlingErMigreringFraInfotrygdMedKun0Utbetalinger
                             }
                         />
+
                         {erAvregningOgToggleErPå && (
-                            <Box marginBlock="8 0" width="fit-content">
-                                {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
-                                    <Alert variant="info">
-                                        Saken venter på samtykke fra bruker for ulovfestet
-                                        motregning. Hvis bruker har gitt samtykke før det har gått{' '}
-                                        {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager,
-                                        kan saken tas av vent manuelt.
-                                    </Alert>
-                                )}
-
-                                {tilbakekrevingsvedtakMotregning === null && (
-                                    <AvregningAlert
-                                        avregningsperioder={avregningsperioder}
-                                        harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                    />
-                                )}
-
-                                {!erLesevisning && tilbakekrevingsvedtakMotregning !== null && (
-                                    <TilbakekrevingsvedtakMotregning
-                                        tilbakekrevingsvedtakMotregning={
-                                            tilbakekrevingsvedtakMotregning
-                                        }
-                                        slettTilbakekrevingsvedtakMotregning={
-                                            slettTilbakekrevingsvedtakMotregning
-                                        }
-                                        oppdaterTilbakekrevingsvedtakMotregning={
-                                            oppdaterTilbakekrevingsvedtakMotregning
-                                        }
-                                    />
-                                )}
-                            </Box>
+                            <TilbakekrevingsvedtakMotregning
+                                åpenBehandling={åpenBehandling}
+                                tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning}
+                                avregningsperioder={avregningsperioder}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                            />
                         )}
 
                         {skalViseTilbakekrevingSkjema && (

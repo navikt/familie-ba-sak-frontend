@@ -14,7 +14,6 @@ import { erProd } from '../../../../../../utils/miljø';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const StyledAlert = styled(Alert)`
-    margin-top: 2rem;
     width: fit-content;
 `;
 
