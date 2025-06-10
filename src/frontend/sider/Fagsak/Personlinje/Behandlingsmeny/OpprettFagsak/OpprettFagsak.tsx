@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Dropdown } from '@navikt/ds-react';
 
-import OpprettFagsakModal from '../../../../../komponenter/HeaderMedSøk/OpprettFagsakModal';
+import { OpprettFagsakModal } from '../../../../../komponenter/HeaderMedSøk/OpprettFagsakModal';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { useFagsakContext } from '../../../FagsakContext';
 
