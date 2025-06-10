@@ -16,7 +16,10 @@ const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
 
     const { samhandlerOrgnr } = useBehandlingContext();
 
-    if (minimalFagsak?.fagsakType === FagsakType.NORMAL) {
+    if (
+        minimalFagsak?.fagsakType === FagsakType.NORMAL ||
+        minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN
+    ) {
         return <VilkårsvurderingSkjemaNormal visFeilmeldinger={visFeilmeldinger} />;
     }
     if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && samhandlerOrgnr) {
