@@ -33,9 +33,7 @@ export function FagsaktypeFelt({ readOnly }: Props) {
     const { field, fieldState, formState } = useController({
         name: OpprettFagsakFeltnavn.FAGSAKTYPE,
         control,
-        rules: {
-            required: `Fagsaktype er påkrevd.`,
-        },
+        rules: { required: `Fagsaktype er påkrevd.` },
     });
 
     const { harNormalFagsak } = useFagsakerContext();

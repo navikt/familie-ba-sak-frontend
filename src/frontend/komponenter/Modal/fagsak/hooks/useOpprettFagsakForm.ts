@@ -26,6 +26,8 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
     const harNormalFagsak = sjekkHarNormalFagsak(fagsaker);
 
     const form = useForm<OpprettFagsakFormValues>({
+        mode: 'onSubmit',
+        reValidateMode: 'onSubmit',
         values: {
             [OpprettFagsakFeltnavn.FAGSAKTYPE]: harNormalFagsak
                 ? FagsakType.INSTITUSJON
