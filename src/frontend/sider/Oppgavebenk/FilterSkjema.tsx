@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React from 'react';
 
 import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -22,7 +22,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         validerSkjema,
     } = useOppgavebenkContext();
 
-    const tilOppgaveFeltKomponent = (oppgaveFelt: IOppgaveFelt): ReactElement | null => {
+    function tilOppgaveFeltKomponent(oppgaveFelt: IOppgaveFelt) {
         switch (oppgaveFelt.filter?.type) {
             case 'dato':
                 return (
@@ -81,7 +81,7 @@ const FilterSkjema: React.FunctionComponent = () => {
             default:
                 return null;
         }
-    };
+    }
 
     return (
         <Fieldset legend="Oppgavebenken filterskjema" hideLegend>
