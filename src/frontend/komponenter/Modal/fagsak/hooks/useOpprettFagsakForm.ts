@@ -33,6 +33,7 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
                 ? FagsakType.INSTITUSJON
                 : FagsakType.NORMAL,
             [OpprettFagsakFeltnavn.SAMHANDLER]: null,
+            [OpprettFagsakFeltnavn.SKJERMET_BARN_SØKER]: '',
         },
     });
 
@@ -43,7 +44,7 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
     const { mutateAsync } = useOpprettFagsak();
 
     async function onSubmit(values: OpprettFagsakFormValues) {
-        const { fagsaktype, samhandler } = values;
+        const { fagsaktype, samhandler, skjermetBarnSøker } = values;
         const errorId = OpprettFagsakServerErrors.onSubmitError.id;
         if (personIdent === undefined) {
             setError(errorId, { message: 'Forventer en definert person ident her.' });
@@ -64,6 +65,11 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
                 ? {
                       orgNummer: samhandler.orgNummer,
                       tssEksternId: samhandler.tssEksternId,
+                  }
+                : null,
+            skjermetBarnSøker: skjermetBarnSøker
+                ? {
+                      søkersIdent: skjermetBarnSøker,
                   }
                 : null,
         };

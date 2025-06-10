@@ -7,9 +7,12 @@ import {
     type UseFormReturn,
 } from 'react-hook-form';
 
-import type { FagsakType } from '../../../../typer/fagsak';
+import { VStack } from '@navikt/ds-react';
+
+import { FagsakType } from '../../../../typer/fagsak';
 import type { ISamhandlerInfo } from '../../../../typer/samhandler';
 import { FagsaktypeFelt } from '../felt/FagsaktypeFelt';
+import { SkjermetBarnSøkerFelt } from '../felt/SkjermetBarnSøkerFelt';
 
 export const OpprettFagsakServerErrors: Record<
     'onSubmitError',
@@ -27,11 +30,13 @@ export const OpprettFagsakServerErrors: Record<
 export interface OpprettFagsakFormValues {
     [OpprettFagsakFeltnavn.FAGSAKTYPE]: FagsakType | null;
     [OpprettFagsakFeltnavn.SAMHANDLER]: ISamhandlerInfo | null;
+    [OpprettFagsakFeltnavn.SKJERMET_BARN_SØKER]: string;
 }
 
 export enum OpprettFagsakFeltnavn {
     FAGSAKTYPE = 'fagsaktype',
     SAMHANDLER = 'samhandler',
+    SKJERMET_BARN_SØKER = 'skjermetBarnSøker',
 }
 
 export const OPPRETT_FAGSAK_FORM = 'OPPRETT_FAGSAK_FORM_ID';
@@ -43,12 +48,17 @@ interface Props {
 }
 
 export function OpprettFagsakForm({ form, onSubmit, readOnly }: Props) {
-    const { handleSubmit } = form;
+    const { handleSubmit, watch } = form;
+
+    const fagsaktype = watch(OpprettFagsakFeltnavn.FAGSAKTYPE);
 
     return (
         <FormProvider {...form}>
             <form id={OPPRETT_FAGSAK_FORM} onSubmit={handleSubmit(onSubmit)}>
-                <FagsaktypeFelt readOnly={readOnly} />
+                <VStack gap={'4'}>
+                    <FagsaktypeFelt readOnly={readOnly} />
+                    {fagsaktype === FagsakType.SKJERMET_BARN && <SkjermetBarnSøkerFelt />}
+                </VStack>
             </form>
         </FormProvider>
     );

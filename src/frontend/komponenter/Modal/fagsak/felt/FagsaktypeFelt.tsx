@@ -4,6 +4,8 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
+import { ToggleNavn } from '../../../../../../backend/frontend/typer/toggles';
+import { useAppContext } from '../../../../context/AppContext';
 import { FagsakType } from '../../../../typer/fagsak';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
@@ -21,6 +23,10 @@ const fagsakTypeOptions = [
         value: FagsakType.BARN_ENSLIG_MINDREÅRIG,
         label: 'Enslig mindreårig',
     },
+    {
+        value: FagsakType.SKJERMET_BARN,
+        label: 'Skjermet barn',
+    },
 ];
 
 interface Props {
@@ -28,7 +34,7 @@ interface Props {
 }
 
 export function FagsaktypeFelt({ readOnly }: Props) {
-    const { control, setValue } = useFormContext<OpprettFagsakFormValues>();
+    const { control, setValue, resetField } = useFormContext<OpprettFagsakFormValues>();
 
     const { field, fieldState, formState } = useController({
         name: OpprettFagsakFeltnavn.FAGSAKTYPE,
@@ -38,9 +44,16 @@ export function FagsaktypeFelt({ readOnly }: Props) {
 
     const { harNormalFagsak } = useFagsakerContext();
 
-    const options = fagsakTypeOptions.filter(valg =>
-        harNormalFagsak ? valg.value !== FagsakType.NORMAL : true
-    );
+    const { toggles } = useAppContext();
+
+    const options = fagsakTypeOptions
+        .filter(option => {
+            if (option.value === FagsakType.SKJERMET_BARN) {
+                return toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
+            }
+            return true;
+        })
+        .filter(option => (harNormalFagsak ? option.value !== FagsakType.NORMAL : true));
 
     return (
         <Select
@@ -54,6 +67,9 @@ export function FagsaktypeFelt({ readOnly }: Props) {
                 const value = event.target.value;
                 if (value !== FagsakType.INSTITUSJON) {
                     setValue(OpprettFagsakFeltnavn.SAMHANDLER, null);
+                }
+                if (value !== FagsakType.SKJERMET_BARN) {
+                    resetField(OpprettFagsakFeltnavn.SKJERMET_BARN_SØKER);
                 }
                 field.onChange(value);
             }}

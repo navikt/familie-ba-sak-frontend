@@ -18,6 +18,7 @@ export enum ToggleNavn {
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
     flerePersonerEndretUtbetaling = 'familie-ba-sak.flere-personer-endret-utbetaling',
     brukNyOpprettFagsakModal = 'familie-ba-sak.bruk.ny.opprett.fagsak.modal',
+    tillattBehandlingAvSkjermetBarn = 'familie-ba-sak.tillatt-behandling-av-kode6-kode19',
 }
 
 export const alleTogglerAv = (): IToggles => {
