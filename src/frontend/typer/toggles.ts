@@ -17,6 +17,7 @@ export enum ToggleNavn {
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
     flerePersonerEndretUtbetaling = 'familie-ba-sak.flere-personer-endret-utbetaling',
+    brukNyOpprettFagsakModal = 'familie-ba-sak.bruk.ny.opprett.fagsak.modal',
 }
 
 export const alleTogglerAv = (): IToggles => {
