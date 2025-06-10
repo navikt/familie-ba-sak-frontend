@@ -37,6 +37,7 @@ const baseConfig = {
             eslintPath: require.resolve('eslint'),
             extensions: ['ts', 'tsx'],
             configType: 'flat',
+            failOnError: process.env.NODE_ENV === 'production',
         }),
     ],
     devtool: 'inline-source-map',
