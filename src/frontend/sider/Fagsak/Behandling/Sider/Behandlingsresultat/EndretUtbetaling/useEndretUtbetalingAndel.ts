@@ -5,9 +5,10 @@ import deepEqual from 'deep-equal';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
+import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
+import type { OptionType } from '../../../../../../typer/common';
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import type { IsoDatoString } from '../../../../../../utils/dato';
@@ -16,12 +17,13 @@ import {
     erIsoStringGyldig,
     validerGyldigDato,
 } from '../../../../../../utils/dato';
+import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
 import type { Utbetaling } from '../Utbetaling';
+import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
 
 export interface IEndretUtbetalingAndelSkjema {
-    person: string | undefined;
+    personer: OptionType[];
     fom: IsoDatoString | undefined;
     tom: IsoDatoString | undefined;
     utbetaling: Utbetaling | undefined;
@@ -58,10 +60,10 @@ export const useEndretUtbetalingAndel = (
         IBehandling
     >({
         felter: {
-            person: useFelt<string | undefined>({
-                verdi: undefined,
+            personer: useFelt<OptionType[]>({
+                verdi: [],
                 valideringsfunksjon: felt =>
-                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
+                    felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må velge minst én person'),
             }),
             fom: useFelt<IsoDatoString | undefined>({
                 verdi: undefined,
@@ -96,8 +98,13 @@ export const useEndretUtbetalingAndel = (
         skjemanavn: 'Endre utbetalingsperiode',
     });
 
+    const personer = lagretEndretUtbetalingAndel.personIdenter.map(ident => ({
+        value: ident,
+        label: lagPersonLabel(ident, åpenBehandling.personer),
+    }));
+
     const settFelterTilLagredeVerdier = () => {
-        skjema.felter.person.validerOgSettFelt(lagretEndretUtbetalingAndel.personIdent);
+        skjema.felter.personer.validerOgSettFelt(personer);
         skjema.felter.fom.validerOgSettFelt(lagretEndretUtbetalingAndel.fom);
         skjema.felter.tom.validerOgSettFelt(lagretEndretUtbetalingAndel.tom);
         skjema.felter.utbetaling.validerOgSettFelt(
@@ -129,7 +136,7 @@ export const useEndretUtbetalingAndel = (
 
     const hentSkjemaData = () => {
         const {
-            person,
+            personer,
             fom,
             tom,
             årsak,
@@ -139,7 +146,7 @@ export const useEndretUtbetalingAndel = (
         } = skjema.felter;
         return {
             id: lagretEndretUtbetalingAndel.id,
-            personIdent: person && person.verdi,
+            personIdenter: personer.verdi.map(person => person.value),
             prosent: utbetalingTilProsent(skjema.felter.utbetaling.verdi),
             fom: fom && fom.verdi,
             tom: tom && tom.verdi,
