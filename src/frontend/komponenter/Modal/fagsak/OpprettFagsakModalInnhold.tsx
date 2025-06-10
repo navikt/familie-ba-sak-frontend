@@ -40,17 +40,14 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         isPending: erFagsakerPending,
         isError: erFagsakerError,
         error: fagsakerError,
-        isSuccess: isFagsakerSuccess,
     } = useHentFagsaker({ personIdent });
 
     useEffect(() => {
-        if (isFagsakerSuccess) {
-            const nyTittel = sjekkHarNormalFagsak(fagsaker)
-                ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-                : 'Opprett fagsak';
-            settTittel(nyTittel);
-        }
-    }, [settTittel, isFagsakerSuccess]);
+        const nyTittel = sjekkHarNormalFagsak(fagsaker)
+            ? 'Opprett fagsak for institusjon eller enslig mindreårig'
+            : 'Opprett fagsak';
+        settTittel(nyTittel);
+    }, [fagsaker, settTittel]);
 
     const { form: opprettFagsakForm, onSubmit: onSubmitOpprettFagsakForm } = useOpprettFagsakForm({
         personIdent: bruker?.personIdent,

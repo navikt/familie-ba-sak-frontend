@@ -1,4 +1,10 @@
-import React, { createContext, type PropsWithChildren, useContext, useReducer } from 'react';
+import React, {
+    createContext,
+    type PropsWithChildren,
+    useCallback,
+    useContext,
+    useReducer,
+} from 'react';
 
 interface ModalContext {
     hentTittel: (type: ModalType) => string;
@@ -133,37 +139,61 @@ const ModalContext = createContext<ModalContext | undefined>(undefined);
 export function ModalProvider({ children }: PropsWithChildren) {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    function hentTittel(type: ModalType) {
-        return state[type].tittel;
-    }
+    const hentTittel = useCallback(
+        (type: ModalType) => {
+            return state[type].tittel;
+        },
+        [state]
+    );
 
-    function settTittel(type: ModalType, tittel: string) {
-        dispatch({ type: ActionType.SETT_TITTEL, payload: { type, tittel } });
-    }
+    const settTittel = useCallback(
+        (type: ModalType, tittel: string) => {
+            dispatch({ type: ActionType.SETT_TITTEL, payload: { type, tittel } });
+        },
+        [dispatch]
+    );
 
-    function åpneModal<T extends keyof Args>(type: ModalType, args: Args[T]) {
-        dispatch({ type: ActionType.ÅPNE_MODAL, payload: { type, args } });
-    }
+    const åpneModal = useCallback(
+        <T extends keyof Args>(type: ModalType, args: Args[T]) => {
+            dispatch({ type: ActionType.ÅPNE_MODAL, payload: { type, args } });
+        },
+        [dispatch]
+    );
 
-    function lukkModal(type: ModalType) {
-        dispatch({ type: ActionType.LUKK_MODAL, payload: { type } });
-    }
+    const lukkModal = useCallback(
+        (type: ModalType) => {
+            dispatch({ type: ActionType.LUKK_MODAL, payload: { type } });
+        },
+        [dispatch]
+    );
 
-    function erModalÅpen(type: ModalType): boolean {
-        return state[type].åpen;
-    }
+    const erModalÅpen = useCallback(
+        (type: ModalType) => {
+            return state[type].åpen;
+        },
+        [state]
+    );
 
-    function hentArgs<T extends keyof Args>(type: T) {
-        return state[type].args as Args[T];
-    }
+    const hentArgs = useCallback(
+        <T extends keyof Args>(type: T) => {
+            return state[type].args as Args[T];
+        },
+        [state]
+    );
 
-    function hentBredde(type: ModalType) {
-        return state[type].bredde;
-    }
+    const hentBredde = useCallback(
+        (type: ModalType) => {
+            return state[type].bredde;
+        },
+        [state]
+    );
 
-    function settBredde(type: ModalType, bredde: `${number}${string}`) {
-        dispatch({ type: ActionType.SETT_BREDDE, payload: { type, bredde } });
-    }
+    const settBredde = useCallback(
+        (type: ModalType, bredde: `${number}${string}`) => {
+            dispatch({ type: ActionType.SETT_BREDDE, payload: { type, bredde } });
+        },
+        [dispatch]
+    );
 
     return (
         <ModalContext.Provider
