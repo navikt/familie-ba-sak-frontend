@@ -6,7 +6,6 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import TypeScriptTypeChecker from 'fork-ts-checker-webpack-plugin';
 import { createRequire } from 'module';
-import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 
 const require = createRequire(import.meta.url);
 
@@ -32,12 +31,6 @@ const baseConfig = {
             typescript: {
                 configFile: path.join(process.cwd(), 'src/frontend/tsconfig.json'),
             },
-        }),
-        new ESLintWebpackPlugin({
-            eslintPath: require.resolve('eslint'),
-            extensions: ['ts', 'tsx'],
-            configType: 'flat',
-            failOnError: process.env.NODE_ENV === 'production',
         }),
     ],
     devtool: 'inline-source-map',
