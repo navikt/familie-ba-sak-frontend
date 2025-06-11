@@ -11,7 +11,7 @@ import { ToggleNavn } from '../../../../typer/toggles';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 
-const SKJERMET_BARN_GRUPPE = 'abcd'; // TODO : Legg til riktig gruppe
+const SKJERMET_BARN_GRUPPE = 'ad7b87a6-9180-467c-affc-20a566b0fec0';
 
 const fagsakTypeOptions = [
     {
