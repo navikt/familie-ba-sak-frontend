@@ -26,8 +26,6 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
     const harNormalFagsak = sjekkHarNormalFagsak(fagsaker);
 
     const form = useForm<OpprettFagsakFormValues>({
-        mode: 'onSubmit',
-        reValidateMode: 'onSubmit',
         values: {
             [OpprettFagsakFeltnavn.FAGSAKTYPE]: harNormalFagsak
                 ? FagsakType.INSTITUSJON
@@ -50,7 +48,7 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
             setError(errorId, { message: 'Forventer en definert person ident her.' });
             return;
         }
-        if (fagsaktype === null) {
+        if (fagsaktype === '') {
             setError(errorId, { message: 'Fagsaktype er påkrevd.' });
             return;
         }

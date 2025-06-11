@@ -3,7 +3,7 @@ import React from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Box, TextField } from '@navikt/ds-react';
-import { idnr } from '@navikt/fnrvalidator';
+import { dnr, fnr } from '@navikt/fnrvalidator';
 
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 
@@ -16,8 +16,10 @@ export function SkjermetBarnSøkerFelt() {
         rules: {
             required: 'Skjermet barn søker er påkrevd.',
             validate: verdi => {
-                if (idnr(verdi).status === 'invalid') {
-                    return 'Ugyldig ident.';
+                const ugyldigFnr = fnr(verdi).status === 'invalid';
+                const ugyldigDnr = dnr(verdi).status === 'invalid';
+                if (ugyldigFnr && ugyldigDnr) {
+                    return 'Ugyldig fødselsnummer eller d-nummer.';
                 }
             },
         },

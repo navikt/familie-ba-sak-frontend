@@ -21,8 +21,6 @@ export function useSamhandlerForm({ settSamhandler }: Props) {
     const { request } = useHttp();
 
     const form = useForm<SamhandlerFormValues>({
-        mode: 'onSubmit',
-        reValidateMode: 'onSubmit',
         defaultValues: {
             [SamhandlerFeltnavn.ORGNR]: '',
         },

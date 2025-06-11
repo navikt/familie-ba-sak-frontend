@@ -4,11 +4,14 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { ToggleNavn } from '../../../../../../backend/frontend/typer/toggles';
 import { useAppContext } from '../../../../context/AppContext';
+import { useAuthContext } from '../../../../context/AuthContext';
 import { FagsakType } from '../../../../typer/fagsak';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
+
+const SKJERMET_BARN_GRUPPE = 'abcd'; // TODO : Legg til riktig gruppe
 
 const fagsakTypeOptions = [
     {
@@ -34,6 +37,9 @@ interface Props {
 }
 
 export function FagsaktypeFelt({ readOnly }: Props) {
+    const { innloggetSaksbehandler } = useAuthContext();
+    const { toggles } = useAppContext();
+
     const { control, setValue, resetField } = useFormContext<OpprettFagsakFormValues>();
 
     const { field, fieldState, formState } = useController({
@@ -42,25 +48,30 @@ export function FagsaktypeFelt({ readOnly }: Props) {
         rules: { required: `Fagsaktype er påkrevd.` },
     });
 
-    const { harNormalFagsak } = useFagsakerContext();
-
-    const { toggles } = useAppContext();
+    const { harNormalFagsak, harBarnEnsligMindreårigFagsak } = useFagsakerContext();
 
     const options = fagsakTypeOptions
         .filter(option => {
             if (option.value === FagsakType.SKJERMET_BARN) {
-                return toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
+                const groups = innloggetSaksbehandler?.groups ?? [];
+                const harTilgang = groups.some(group => group === SKJERMET_BARN_GRUPPE);
+                return harTilgang && toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
             }
             return true;
         })
-        .filter(option => (harNormalFagsak ? option.value !== FagsakType.NORMAL : true));
+        .filter(option => (harNormalFagsak ? option.value !== FagsakType.NORMAL : true))
+        .filter(option =>
+            harBarnEnsligMindreårigFagsak
+                ? option.value !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                : true
+        );
 
     return (
         <Select
             label={'Fagsaktype'}
             size={'small'}
             name={field.name}
-            value={field.value ?? ''}
+            value={field.value}
             ref={field.ref}
             onBlur={field.onBlur}
             onChange={event => {

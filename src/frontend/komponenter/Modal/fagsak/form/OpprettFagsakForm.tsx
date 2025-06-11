@@ -28,7 +28,7 @@ export const OpprettFagsakServerErrors: Record<
 };
 
 export interface OpprettFagsakFormValues {
-    [OpprettFagsakFeltnavn.FAGSAKTYPE]: FagsakType | null;
+    [OpprettFagsakFeltnavn.FAGSAKTYPE]: FagsakType | '';
     [OpprettFagsakFeltnavn.SAMHANDLER]: ISamhandlerInfo | null;
     [OpprettFagsakFeltnavn.SKJERMET_BARN_SØKER]: string;
 }

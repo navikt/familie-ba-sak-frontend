@@ -37,6 +37,10 @@ export function sjekkHarNormalFagsak(fagsaker: IBaseFagsak[] | undefined): boole
     return (fagsaker ?? []).some(fagsak => fagsak.fagsakType === FagsakType.NORMAL);
 }
 
+export function sjekkHarBarnEnsligMindreårigFagsak(fagsaker: IBaseFagsak[] | undefined): boolean {
+    return (fagsaker ?? []).some(fagsak => fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG);
+}
+
 export interface IMinimalFagsak extends IBaseFagsak {
     migreringsdato?: string;
     behandlinger: VisningBehandling[];
