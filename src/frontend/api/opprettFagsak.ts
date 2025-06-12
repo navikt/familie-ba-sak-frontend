@@ -4,10 +4,15 @@ import type { FagsakType, IMinimalFagsak } from '../typer/fagsak';
 import type { IInstitusjon } from '../typer/institusjon';
 import { RessursResolver } from '../utils/ressursResolver';
 
+interface SkjermetBarnSøker {
+    søkersIdent: string;
+}
+
 export interface OpprettFagsakPayload {
     personIdent: string;
     fagsakType: FagsakType;
     institusjon: IInstitusjon | null;
+    skjermetBarnSøker: SkjermetBarnSøker | null;
 }
 
 export async function opprettFagsak(request: FamilieRequest, payload: OpprettFagsakPayload) {

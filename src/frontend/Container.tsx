@@ -39,15 +39,14 @@ const Container: React.FC = () => {
 
     return (
         <Router>
-            <OpprettFagsakModalNy />
             {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 erTogglesHentet && (
                     <>
                         {systemetLaster() && <SystemetLaster />}
                         <Toasts />
-
                         <Main $systemetLaster={systemetLaster()}>
+                            <OpprettFagsakModalNy />
                             <HeaderMedSøk
                                 brukerNavn={innloggetSaksbehandler?.displayName}
                                 brukerEnhet={innloggetSaksbehandler?.enhet}

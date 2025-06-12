@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Alert, Button, Modal, Skeleton, VStack } from '@navikt/ds-react';
 
@@ -19,14 +19,14 @@ import { ModalType } from '../../../context/ModalContext';
 import { useHentFagsaker } from '../../../hooks/useHentFagsaker';
 import { useHentPerson } from '../../../hooks/useHentPerson';
 import { useModal } from '../../../hooks/useModal';
-import { FagsakType, sjekkHarNormalFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 
 interface Props {
     personIdent: string;
 }
 
 export function OpprettFagsakModalInnhold({ personIdent }: Props) {
-    const { lukkModal, settTittel } = useModal(ModalType.OPPRETT_FAGSAK);
+    const { lukkModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
     const {
         data: bruker,
@@ -41,13 +41,6 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         isError: erFagsakerError,
         error: fagsakerError,
     } = useHentFagsaker({ personIdent });
-
-    useEffect(() => {
-        const nyTittel = sjekkHarNormalFagsak(fagsaker)
-            ? 'Opprett fagsak for institusjon eller enslig mindreårig'
-            : 'Opprett fagsak';
-        settTittel(nyTittel);
-    }, [fagsaker, settTittel]);
 
     const { form: opprettFagsakForm, onSubmit: onSubmitOpprettFagsakForm } = useOpprettFagsakForm({
         personIdent: bruker?.personIdent,

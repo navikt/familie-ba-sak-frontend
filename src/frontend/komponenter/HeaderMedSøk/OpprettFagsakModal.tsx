@@ -263,6 +263,7 @@ export function OpprettFagsakModal({
                                           tssEksternId: valgtSamhandler.tssEksternId,
                                       }
                                     : null,
+                                skjermetBarnSøker: null,
                             });
                         }
                     }}
