@@ -225,6 +225,7 @@ export enum BehandlingResultat {
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     HENLAGT_AUTOMATISK_FØDSELSHENDELSE = 'HENLAGT_AUTOMATISK_FØDSELSHENDELSE',
+    HENLAGT_AUTOMATISK_SMÅBARNSTILLEGG = 'HENLAGT_AUTOMATISK_SMÅBARNSTILLEGG',
     HENLAGT_TEKNISK_VEDLIKEHOLD = 'HENLAGT_TEKNISK_VEDLIKEHOLD',
 
     IKKE_VURDERT = 'IKKE_VURDERT',
@@ -250,6 +251,7 @@ export const erBehandlingHenlagt = (behandlingsresultat?: BehandlingResultat) =>
         behandlingsresultat === BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET ||
         behandlingsresultat === BehandlingResultat.HENLAGT_SØKNAD_TRUKKET ||
         behandlingsresultat === BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_AUTOMATISK_SMÅBARNSTILLEGG ||
         behandlingsresultat === BehandlingResultat.HENLAGT_TEKNISK_VEDLIKEHOLD
     );
 };
@@ -398,6 +400,7 @@ export const behandlingsresultater: Record<
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
+    HENLAGT_AUTOMATISK_SMÅBARNSTILLEGG: 'Henlagt automatisk småbarnstillegg',
     HENLAGT_TEKNISK_VEDLIKEHOLD: 'Henlagt teknisk vedlikehold',
     IKKE_VURDERT: 'Ikke vurdert',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
