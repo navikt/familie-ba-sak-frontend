@@ -20,15 +20,14 @@ import {
 
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useAppContext } from '../../context/AppContext';
+import { useSettAktivBrukerIModiaContext } from '../../hooks/useSettAktivBrukerIModiaContext';
 import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
 import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
-import type { SettAktivBrukerIModiaContextDTO } from '../../typer/modiaContext';
 import { type IPersonInfo } from '../../typer/person';
 import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
 import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
 import type { SkjemaBrevmottaker } from './Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 
 interface IFagsakContext {
     bruker: Ressurs<IPersonInfo>;
@@ -54,8 +53,9 @@ export const FagsakProvider = (props: PropsWithChildren) => {
     >([]);
 
     const { request } = useHttp();
-    const { skalObfuskereData, toggles, settToast } = useAppContext();
+    const { skalObfuskereData, toggles } = useAppContext();
     const { hentFagsakerForPerson } = useFagsakApi();
+    const { mutate: settAktivBrukerIModiaContext } = useSettAktivBrukerIModiaContext();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
         if (påvirkerSystemLaster) {
@@ -76,32 +76,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
             .catch((_error: AxiosError) => {
                 settMinimalFagsakRessurs(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
             });
-    };
-
-    const settAktivBrukerIModiaContext = (personIdent: string) => {
-        if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
-            request<SettAktivBrukerIModiaContextDTO, void>({
-                url: '/familie-ba-sak/api/modia-context/sett-aktiv-bruker',
-                method: 'POST',
-                data: {
-                    personIdent: personIdent,
-                },
-            })
-                .then(ressurs => {
-                    if (ressurs.status !== 'SUKSESS') {
-                        settToast(ToastTyper.KLARTE_IKKE_OPPDATERE_MODIA_KONTEKST, {
-                            alertType: AlertType.WARNING,
-                            tekst: 'Klarte ikke å oppdatere bruker i Modia',
-                        });
-                    }
-                })
-                .catch(_ => {
-                    settToast(ToastTyper.KLARTE_IKKE_OPPDATERE_MODIA_KONTEKST, {
-                        alertType: AlertType.WARNING,
-                        tekst: 'Klarte ikke å oppdatere bruker i Modia',
-                    });
-                });
-        }
     };
 
     const oppdaterBrukerHvisFagsakEndres = (
@@ -135,7 +109,9 @@ export const FagsakProvider = (props: PropsWithChildren) => {
             }
             settBruker(brukerEtterTilgangssjekk);
             if (brukerEtterTilgangssjekk.status === RessursStatus.SUKSESS) {
-                settAktivBrukerIModiaContext(brukerEtterTilgangssjekk.data.personIdent);
+                if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
+                    settAktivBrukerIModiaContext(brukerEtterTilgangssjekk.data.personIdent);
+                }
                 hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
                     if (fagsaker.status === RessursStatus.SUKSESS) {
                         settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
