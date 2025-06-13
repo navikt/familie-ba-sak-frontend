@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AInntekt } from './AInntekt/AInntekt';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
@@ -48,6 +49,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                         erLesevisning={erLesevisning}
                     />
                 )}
+            <AInntekt minimalFagsak={minimalFagsak} />
         </>
     );
 };
