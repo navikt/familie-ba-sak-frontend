@@ -6,7 +6,7 @@ import { OpprettFagsakModalInnhold } from './OpprettFagsakModalInnhold';
 import { ModalType } from '../../../context/ModalContext';
 import { useModal } from '../../../hooks/useModal';
 
-export function OpprettFagsakModalNy() {
+export function OpprettFagsakModal() {
     const { tittel, erModalÅpen, lukkModal, args, bredde } = useModal(ModalType.OPPRETT_FAGSAK);
 
     return (

@@ -16,7 +16,6 @@ export enum ToggleNavn {
     kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
-    brukNyOpprettFagsakModal = 'familie-ba-sak.bruk.ny.opprett.fagsak.modal',
     tillattBehandlingAvSkjermetBarn = 'familie-ba-sak.tillatt-behandling-av-kode6-kode19',
     skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
     bosattSvalbard = 'familie-ba-sak.bosatt-svalbard',
