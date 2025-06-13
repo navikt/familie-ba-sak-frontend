@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Alert, Button, Modal, Skeleton, VStack } from '@navikt/ds-react';
 
-import { BrukerDetaljer } from './BrukerDetaljer';
 import { FagsakerProvider } from './context/FagsakerContext';
 import {
     OPPRETT_FAGSAK_FORM,
@@ -13,11 +12,12 @@ import {
 import { SamhandlerForm } from './form/SamhandlerForm';
 import { useOpprettFagsakForm } from './hooks/useOpprettFagsakForm';
 import { useSamhandlerForm } from './hooks/useSamhandlerForm';
+import { PersonDetaljer } from './PersonDetaljer';
 import { SamhandlerTabell } from './SamhandlerTabell';
 import { Undertittel } from './Undertittel';
 import { ModalType } from '../../../context/ModalContext';
 import { useHentFagsaker } from '../../../hooks/useHentFagsaker';
-import { useHentPerson } from '../../../hooks/useHentPerson';
+import { useHentPersonEnkel } from '../../../hooks/useHentPersonEnkel';
 import { useModal } from '../../../hooks/useModal';
 import { FagsakType } from '../../../typer/fagsak';
 
@@ -29,11 +29,11 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     const { lukkModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
     const {
-        data: bruker,
-        isPending: erBrukerPending,
-        isError: erBrukerError,
-        error: brukerError,
-    } = useHentPerson({ personIdent });
+        data: person,
+        isPending: erPersonPending,
+        isError: erPersonError,
+        error: personError,
+    } = useHentPersonEnkel({ personIdent });
 
     const {
         data: fagsaker,
@@ -43,7 +43,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     } = useHentFagsaker({ personIdent });
 
     const { form: opprettFagsakForm, onSubmit: onSubmitOpprettFagsakForm } = useOpprettFagsakForm({
-        personIdent: bruker?.personIdent,
+        personIdent: person?.personIdent,
         fagsaker: fagsaker,
     });
 
@@ -60,7 +60,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         opprettFagsakForm.formState.errors
     );
 
-    if (erBrukerPending || erFagsakerPending) {
+    if (erPersonPending || erFagsakerPending) {
         return (
             <>
                 <Modal.Body>
@@ -82,12 +82,12 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         );
     }
 
-    if (erBrukerError || erFagsakerError) {
+    if (erPersonError || erFagsakerError) {
         return (
             <>
                 <Modal.Body>
                     <VStack gap={'4'}>
-                        {brukerError && <Alert variant={'error'}>{brukerError.message}</Alert>}
+                        {personError && <Alert variant={'error'}>{personError.message}</Alert>}
                         {fagsakerError && <Alert variant={'error'}>{fagsakerError.message}</Alert>}
                     </VStack>
                 </Modal.Body>
@@ -108,7 +108,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
             <Modal.Body>
                 <VStack gap={'4'}>
                     <Undertittel fagsaker={fagsaker} />
-                    <BrukerDetaljer bruker={bruker} />
+                    <PersonDetaljer person={person} />
                     <OpprettFagsakForm
                         form={opprettFagsakForm}
                         onSubmit={onSubmitOpprettFagsakForm}
