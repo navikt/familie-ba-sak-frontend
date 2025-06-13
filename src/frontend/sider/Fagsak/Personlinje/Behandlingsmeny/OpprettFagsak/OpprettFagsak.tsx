@@ -2,46 +2,22 @@ import React from 'react';
 
 import { Dropdown } from '@navikt/ds-react';
 
-import { useAppContext } from '../../../../../context/AppContext';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
-import { OpprettFagsakModal } from '../../../../../komponenter/HeaderMedSøk/OpprettFagsakModal';
 import type { IPersonInfo } from '../../../../../typer/person';
-import { ToggleNavn } from '../../../../../typer/toggles';
-import { useFagsakContext } from '../../../FagsakContext';
 
 interface IProps {
     personInfo: IPersonInfo;
 }
 
 const OpprettFagsak: React.FC<IProps> = ({ personInfo }) => {
-    const [visModal, settVisModal] = React.useState(false);
-    const { fagsakerPåBruker } = useFagsakContext();
-    const { toggles } = useAppContext();
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
     return (
         <>
-            <Dropdown.Menu.List.Item
-                onClick={() => {
-                    if (toggles[ToggleNavn.brukNyOpprettFagsakModal]) {
-                        åpneModal({ ident: personInfo.personIdent });
-                    } else {
-                        settVisModal(true);
-                    }
-                }}
-            >
+            <Dropdown.Menu.List.Item onClick={() => åpneModal({ ident: personInfo.personIdent })}>
                 Opprett ny fagsak
             </Dropdown.Menu.List.Item>
-            {visModal && (
-                <OpprettFagsakModal
-                    personInfo={personInfo}
-                    fagsakerPåBruker={fagsakerPåBruker}
-                    lukkModal={() => {
-                        settVisModal(false);
-                    }}
-                />
-            )}
         </>
     );
 };
