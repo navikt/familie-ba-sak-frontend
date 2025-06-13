@@ -124,7 +124,10 @@ const FagsakDeltagerSøk: React.FC = () => {
                 placeholder={'Fødsels- eller D-nummer (11 siffer)'}
                 nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
                 søkeresultater={mapTilSøkeresultater()}
-                søkeresultatOnClick={(søkeresultat: ISøkeresultat) => {
+                søkeresultatOnClick={søkeresultat => {
+                    if (!søkeresultat) {
+                        return;
+                    }
                     if (toggles[ToggleNavn.brukNyOpprettFagsakModal]) {
                         if (søkeresultat.fagsakId) {
                             navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
