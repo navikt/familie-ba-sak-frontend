@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
+import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { ikoner, Søk } from '@navikt/familie-header';
@@ -28,6 +29,19 @@ import type { IFagsakDeltager, ISøkParam } from '../../typer/fagsakdeltager';
 import { fagsakdeltagerRoller } from '../../typer/fagsakdeltager';
 import { ToggleNavn } from '../../typer/toggles';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
+
+function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
+    if (!fagsakDeltager.harTilgang) {
+        return <StatusIkon status={Status.FEIL} />;
+    }
+    if (fagsakDeltager.fagsakType === FagsakType.INSTITUSJON) {
+        return <KontorIkonGrønn height={'32'} width={'32'} />;
+    }
+    if (fagsakDeltager.fagsakType === FagsakType.SKJERMET_BARN) {
+        return <PersonCircleFillIcon color={'var(--a-icon-alt-1)'} height={'35'} width={'35'} />;
+    }
+    return ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`];
+}
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
@@ -98,15 +112,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                           harTilgang: fagsakDeltager.harTilgang,
                           navn: fagsakDeltager.navn,
                           ident: fagsakDeltager.ident,
-                          ikon: fagsakDeltager.harTilgang ? (
-                              fagsakDeltager.fagsakType !== FagsakType.INSTITUSJON ? (
-                                  ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
-                              ) : (
-                                  <KontorIkonGrønn height={'32'} width={'32'} />
-                              )
-                          ) : (
-                              <StatusIkon status={Status.FEIL} />
-                          ),
+                          ikon: mapFagsakDeltagerTilIkon(fagsakDeltager),
                           rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
                               fagsakDeltager.kjønn ?? kjønnType.UKJENT
                           ],
