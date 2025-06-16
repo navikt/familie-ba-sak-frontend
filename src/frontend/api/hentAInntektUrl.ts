@@ -6,9 +6,7 @@ export async function hentAInntektUrl(request: FamilieRequest, ident: string): P
     const ressurs = await request<{ ident: string }, string>({
         method: 'POST',
         url: 'familie-ba-sak/api/a-inntekt/hent-url',
-        data: {
-            ident: ident,
-        },
+        data: { ident },
     });
     return RessursResolver.resolveToPromise(ressurs);
 }

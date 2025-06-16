@@ -4,7 +4,7 @@ import { useHttp } from '@navikt/familie-http';
 
 import { hentAInntektUrl } from '../api/hentAInntektUrl';
 
-export const A_INNTEKT_URL_QUERY_KEY_PREFIX = 'aInntektUrl';
+const A_INNTEKT_URL_QUERY_KEY_PREFIX = 'aInntektUrl';
 
 export function useHentAInntektUrl(ident: string) {
     const { request } = useHttp();
