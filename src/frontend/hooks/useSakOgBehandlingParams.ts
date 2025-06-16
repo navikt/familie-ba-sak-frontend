@@ -1,5 +1,8 @@
 import { useMatch } from 'react-router';
 
+/**
+ * @Deprecated - Bruk {@link useFagsakId} eller {@link useBehandlingId}.
+ */
 const useSakOgBehandlingParams = (): { fagsakId?: string; behandlingId?: string } => {
     const matchFagsakIdOgBehandlingId = useMatch('/fagsak/:fagsakId/:behandlingId/*');
     const matchBareFagsakId = useMatch('/fagsak/:fagsakId/*');
