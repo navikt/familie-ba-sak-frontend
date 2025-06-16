@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 
@@ -7,11 +8,11 @@ import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
+import { FAGSAK_QUERY_KEY_PREFIX } from '../../../../hooks/useHentFagsak';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { obfuskerBehandling } from '../../../../utils/obfuskerData';
-import { useFagsakContext } from '../../FagsakContext';
 
 interface Props extends React.PropsWithChildren {
     fagsak: IMinimalFagsak;
@@ -29,7 +30,7 @@ const HentOgSettBehandlingContext = createContext<HentOgSettBehandlingContextVal
 export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
     const { request } = useHttp();
     const { behandlingId } = useSakOgBehandlingParams();
-    const { hentMinimalFagsak } = useFagsakContext();
+    const queryClient = useQueryClient();
     const [behandlingRessurs, privatSettBehandlingRessurs] =
         useState<Ressurs<IBehandling>>(byggTomRessurs());
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
     }
 
     const settBehandlingRessurs = (behandling: Ressurs<IBehandling>) => {
-        hentMinimalFagsak(fagsak.id, false);
+        queryClient.invalidateQueries({ queryKey: [FAGSAK_QUERY_KEY_PREFIX, fagsak.id] });
         if (skalObfuskereData) {
             obfuskerBehandling(behandling);
         }

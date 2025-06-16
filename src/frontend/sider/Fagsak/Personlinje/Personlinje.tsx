@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link as ReactRouterLink } from 'react-router';
+
 import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
@@ -59,10 +61,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
                                 variant={'info'}
                             />
                         )}
-                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
+                    <Link as={ReactRouterLink} to={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
                         <BodyShort>Saksoversikt</BodyShort>
                     </Link>
-                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
+                    <Link as={ReactRouterLink} to={`/fagsak/${minimalFagsak.id}/dokumenter`}>
                         <BodyShort>Dokumenter</BodyShort>
                     </Link>
                     {harInnloggetSaksbehandlerSkrivetilgang() && (

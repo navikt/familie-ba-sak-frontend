@@ -12,6 +12,7 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 
 import Informasjonsbolk from './Informasjonsbolk';
+import { useFagsakContext } from '../../../../context/FagsakContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,
@@ -22,7 +23,6 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import { useFagsakContext } from '../../FagsakContext';
 import { sakstype } from '../../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
@@ -76,8 +76,8 @@ const StyledHeading = styled(Heading)`
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
-    const { minimalFagsak } = useFagsakContext();
-    const behandlinger = minimalFagsak?.behandlinger ?? [];
+    const { fagsak } = useFagsakContext();
+    const behandlinger = fagsak.behandlinger;
 
     const antallBehandlinger = behandlinger.length;
     const åpenBehandlingIndex =
