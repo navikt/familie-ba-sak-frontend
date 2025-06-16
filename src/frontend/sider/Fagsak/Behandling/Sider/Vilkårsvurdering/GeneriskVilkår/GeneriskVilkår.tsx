@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { LightBulbFillIcon } from '@navikt/aksel-icons';
 import { Fieldset, Button, Heading } from '@navikt/ds-react';
 import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -111,6 +112,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
         );
     };
 
+    const skalViseManueltLagtTilISøknadLightbulb = () => {
+        return person.erManueltLagtTilISøknad ?? false;
+    };
+
     return (
         <Container>
             <Fieldset
@@ -119,6 +124,13 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 hideLegend
             >
                 <Heading size="medium" level="3">
+                    {skalViseManueltLagtTilISøknadLightbulb() && (
+                        <LightBulbFillIcon
+                            title="a11y-title"
+                            fontSize="1.5rem"
+                            color="var(--a-icon-warning)"
+                        />
+                    )}
                     {vilkårFraConfig.tittel}
                 </Heading>
                 <VilkårTabell
