@@ -38,7 +38,7 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
         return <KontorIkonGrønn height={'32'} width={'32'} />;
     }
     if (fagsakDeltager.fagsakType === FagsakType.SKJERMET_BARN) {
-        return <PersonCircleFillIcon color={'var(--a-icon-alt-1)'} height={'35'} width={'35'} />;
+        return <PersonCircleFillIcon color={'var(--a-orange-600)'} height={'35'} width={'35'} />;
     }
     return ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`];
 }
