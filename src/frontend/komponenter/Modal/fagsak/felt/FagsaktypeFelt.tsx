@@ -6,9 +6,9 @@ import { Select } from '@navikt/ds-react';
 
 import { useAppContext } from '../../../../context/AppContext';
 import { useAuthContext } from '../../../../context/AuthContext';
-import { Env, useEnvironment } from '../../../../hooks/useEnvironment';
 import { FagsakType } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
+import { erProd } from '../../../../utils/miljø';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 
@@ -53,13 +53,11 @@ export function FagsaktypeFelt({ readOnly }: Props) {
         rules: { required: `Fagsaktype er påkrevd.` },
     });
 
-    const { isEnvironment } = useEnvironment();
-
     const options = fagsakTypeOptions
         .filter(option => {
             if (option.value === FagsakType.SKJERMET_BARN) {
                 const groups = innloggetSaksbehandler?.groups ?? [];
-                const aktuellGruppe = isEnvironment(Env.PRODUCTION)
+                const aktuellGruppe = erProd()
                     ? SKJERMET_BARN_GRUPPE.PROD
                     : SKJERMET_BARN_GRUPPE.DEV;
                 const harTilgang = groups.some(group => group === aktuellGruppe);
