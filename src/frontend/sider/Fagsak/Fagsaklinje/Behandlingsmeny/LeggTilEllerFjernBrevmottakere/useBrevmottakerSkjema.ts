@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
+import { useBrukerContext } from '../../../../../context/BrukerContext';
 import type { IBehandling } from '../../../../../typer/behandling';
-import { useFagsakContext } from '../../../FagsakContext';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<
     ILeggTilFjernBrevmottakerSkjemaFelter,
@@ -63,8 +62,7 @@ const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string)
 };
 
 export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
-    const { bruker } = useFagsakContext();
-    const søker = hentDataFraRessurs(bruker);
+    const { bruker } = useBrukerContext();
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',
@@ -190,8 +188,8 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     useEffect(() => {
         if (skalNavnVærePreutfylt || skalNavnVærePreutfylt !== navnErPreutfylt) {
             navn.validerOgSettFelt(
-                skalNavnVærePreutfylt && søker?.navn
-                    ? preutfyltNavnFixed(mottaker.verdi, land.verdi, søker.navn)
+                skalNavnVærePreutfylt && bruker.navn
+                    ? preutfyltNavnFixed(mottaker.verdi, land.verdi, bruker.navn)
                     : ''
             );
         }

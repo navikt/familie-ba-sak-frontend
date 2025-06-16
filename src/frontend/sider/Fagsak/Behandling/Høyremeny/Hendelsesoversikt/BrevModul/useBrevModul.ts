@@ -5,6 +5,7 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
+import { useFagsakContext } from '../../../../../../context/FagsakContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../../typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
@@ -27,12 +28,11 @@ import {
     genererIdBasertPåAndreFritekstKulepunkter,
     lagInitiellFritekst,
 } from '../../../../../../utils/fritekstfelter';
-import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export const useBrevModul = () => {
     const { behandling } = useBehandlingContext();
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
@@ -44,13 +44,13 @@ export const useBrevModul = () => {
 
     const personer = behandling?.personer ?? [];
     const brevmottakere = behandling?.brevmottakere ?? [];
-    const institusjon = minimalFagsak?.institusjon;
+    const institusjon = fagsak.institusjon;
 
     const velgMottaker = (): string | undefined => {
-        if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && institusjon) {
+        if (fagsak.fagsakType === FagsakType.INSTITUSJON && institusjon) {
             return institusjon.orgNummer;
         }
-        if (minimalFagsak?.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
+        if (fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
             return personer[0].personIdent;
         }
         return personer.find(person => person.type === PersonType.SØKER)?.personIdent;

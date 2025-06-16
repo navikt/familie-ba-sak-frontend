@@ -26,7 +26,7 @@ export function MenyvalgFagsak({ bruker, minimalFagsak }: Props) {
 
     return (
         <>
-            <OpprettBehandling minimalFagsak={minimalFagsak} />
+            <OpprettBehandling minimalFagsak={minimalFagsak} bruker={bruker} />
             {!!bruker && <OpprettFagsak fagsak={minimalFagsak} bruker={bruker} />}
             {erPåDokumentutsending && <LeggTilEllerFjernBrevmottakerePåFagsak />}
             {!erPåDokumentutsending && erSaksbehandlerEllerHøyere && (

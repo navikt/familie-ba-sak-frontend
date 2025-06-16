@@ -21,7 +21,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
@@ -34,7 +34,6 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -64,8 +63,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     åpenBehandling,
 }) => {
     const navigate = useNavigate();
-    const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const {
         opprettEndretUtbetaling,
@@ -143,11 +141,11 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
             forrigeOnClick={() =>
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)
+                navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)
             }
             nesteOnClick={() => {
                 if (erLesevisning) {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
+                    navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {
@@ -174,7 +172,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
-                fagsakType={minimalFagsak?.fagsakType}
+                fagsakType={fagsak.fagsakType}
             />
             {!erLesevisning && (
                 <EndretUtbetalingAndel>

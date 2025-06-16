@@ -5,17 +5,20 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import useEndreBehandlingstema from './useEndreBehandlingstema';
 import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
+import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
-import { useFagsakContext } from '../../../FagsakContext';
 
-const EndreBehandlingstema: React.FC = () => {
+interface Props {
+    fagsak: IMinimalFagsak;
+}
+
+const EndreBehandlingstema = ({ fagsak }: Props) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
-    const { minimalFagsak } = useFagsakContext();
 
     const lukkEndreBehandlingModal = () => {
         nullstillSkjema();
@@ -46,7 +49,7 @@ const EndreBehandlingstema: React.FC = () => {
                         >
                             <BehandlingstemaSelect
                                 behandlingstema={skjema.felter.behandlingstema}
-                                fagsakType={minimalFagsak?.fagsakType}
+                                fagsakType={fagsak.fagsakType}
                                 erLesevisning={vurderErLesevisning()}
                             />
                         </Fieldset>

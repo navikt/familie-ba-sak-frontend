@@ -16,17 +16,12 @@ const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;
 `;
 
-const StyledAlert = styled(Alert)`
-    margin: 2rem;
-`;
-
 interface IProps {
     åpenBehandling: IBehandling;
 }
 
 const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
-    const { institusjon, fagsakFeilmelding, onSubmitMottaker, submitFeilmelding } =
-        useInstitusjon(åpenBehandling);
+    const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
@@ -37,26 +32,23 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
 
     return (
         <>
-            {!fagsakFeilmelding && (
-                <StyledSkjemasteg
-                    className={'mottaker'}
-                    tittel={'Registrer institusjon'}
-                    nesteOnClick={onSubmitMottaker}
-                    nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-                    senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-                    steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
-                >
-                    {samhandlerRessurs.status === RessursStatus.SUKSESS && (
-                        <SamhandlerTabell samhandler={samhandlerRessurs.data} />
-                    )}
-                    {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                        samhandlerRessurs.status === RessursStatus.FEILET) && (
-                        <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
-                    )}
-                    {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
-                </StyledSkjemasteg>
-            )}
-            {fagsakFeilmelding && <StyledAlert variant="info" children={fagsakFeilmelding} />}
+            <StyledSkjemasteg
+                className={'mottaker'}
+                tittel={'Registrer institusjon'}
+                nesteOnClick={onSubmitMottaker}
+                nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
+                senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+                steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
+            >
+                {samhandlerRessurs.status === RessursStatus.SUKSESS && (
+                    <SamhandlerTabell samhandler={samhandlerRessurs.data} />
+                )}
+                {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    samhandlerRessurs.status === RessursStatus.FEILET) && (
+                    <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
+                )}
+                {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
+            </StyledSkjemasteg>
         </>
     );
 };

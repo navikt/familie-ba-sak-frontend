@@ -7,6 +7,8 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { hentEnkeltInformasjonsbrevRequest } from './Informasjonsbrev/enkeltInformasjonsbrevUtils';
+import { useBrukerContext } from '../../../context/BrukerContext';
+import { useFagsakContext } from '../../../context/FagsakContext';
 import useDokument from '../../../hooks/useDokument';
 import type { IManueltBrevRequestPåFagsak } from '../../../typer/dokument';
 import { Distribusjonskanal } from '../../../typer/dokument';
@@ -24,7 +26,6 @@ import {
     Informasjonsbrev,
     opplysningsdokumenter,
 } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import { useFagsakContext } from '../FagsakContext';
 import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 
@@ -113,7 +114,8 @@ const DokumentutsendingContext = createContext<DokumentutsendingContextValue | u
 );
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
-    const { bruker, minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
@@ -124,7 +126,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         IManueltBrevRequestPåFagsak | undefined
     >(undefined);
 
-    const erInstitusjon = minimalFagsak?.fagsakType === FagsakType.INSTITUSJON;
+    const erInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const dokumentÅrsaker = erInstitusjon
         ? Object.values(DokumentÅrsakInstitusjon)
         : Object.values(DokumentÅrsakPerson);
@@ -266,7 +268,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     useEffect(() => {
         nullstillSkjemaUtenomÅrsak();
-    }, [årsak.verdi, bruker.status]);
+    }, [årsak.verdi, bruker]);
 
     const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
         const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
@@ -341,7 +343,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
         const dokumentÅrsak = skjema.felter.årsak.verdi;
-        if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
+        if (dokumentÅrsak) {
             switch (dokumentÅrsak) {
                 case DokumentÅrsakPerson.DELT_BOSTED:
                     return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);

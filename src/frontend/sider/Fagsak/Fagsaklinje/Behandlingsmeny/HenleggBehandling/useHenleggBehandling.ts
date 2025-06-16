@@ -6,17 +6,15 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import type { HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import { useFagsakContext } from '../../../FagsakContext';
 
-const useHenleggBehandling = (lukkModal: () => void) => {
+const useHenleggBehandling = (fagsak: IMinimalFagsak, lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandlingContext();
-
-    const { minimalFagsak } = useFagsakContext();
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
@@ -66,7 +64,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
-    const institusjon = minimalFagsak?.institusjon;
+    const institusjon = fagsak.institusjon;
 
     const brevmalSomSkalBrukes = institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON

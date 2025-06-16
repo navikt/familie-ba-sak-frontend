@@ -7,6 +7,8 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useBrukerContext } from '../../../../../context/BrukerContext';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -20,7 +22,6 @@ import type {
     Målform,
 } from '../../../../../typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface Props extends React.PropsWithChildren {
@@ -56,13 +57,11 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     } = useBehandlingContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
-    const { bruker, minimalFagsakRessurs } = useFagsakContext();
+    const { bruker } = useBrukerContext();
+    const { fagsak } = useFagsakContext();
     const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
-    const barnMedLøpendeUtbetaling =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS
-            ? hentBarnMedLøpendeUtbetaling(minimalFagsakRessurs.data)
-            : new Set<string>();
+    const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         SøknadSkjema,
@@ -100,46 +99,44 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
     const tilbakestillSøknad = () => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            nullstillSkjema();
-            let barnaMedOpplysninger: IBarnMedOpplysninger[];
-            if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
-                barnaMedOpplysninger = [
-                    {
-                        merket: true,
-                        ident: bruker.data.personIdent,
-                        navn: bruker.data.navn,
-                        fødselsdato: bruker.data.fødselsdato,
-                        manueltRegistrert: false,
-                        erFolkeregistrert: true,
-                    },
-                ];
-            } else {
-                barnaMedOpplysninger =
-                    bruker.data.forelderBarnRelasjon
-                        .filter(
-                            (relasjon: IForelderBarnRelasjon) =>
-                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        )
-                        .map(
-                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
-                                ident: relasjon.personIdent,
-                                navn: relasjon.navn,
-                                fødselsdato: relasjon.fødselsdato,
-                                manueltRegistrert: false,
-                                erFolkeregistrert: true,
-                            })
-                        ) ?? [];
-            }
-            skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
+        nullstillSkjema();
+        let barnaMedOpplysninger: IBarnMedOpplysninger[];
+        if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
+            barnaMedOpplysninger = [
+                {
+                    merket: true,
+                    ident: bruker.personIdent,
+                    navn: bruker.navn,
+                    fødselsdato: bruker.fødselsdato,
+                    manueltRegistrert: false,
+                    erFolkeregistrert: true,
+                },
+            ];
+        } else {
+            barnaMedOpplysninger =
+                bruker.forelderBarnRelasjon
+                    .filter(
+                        (relasjon: IForelderBarnRelasjon) =>
+                            relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                    )
+                    .map(
+                        (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                            merket: false,
+                            ident: relasjon.personIdent,
+                            navn: relasjon.navn,
+                            fødselsdato: relasjon.fødselsdato,
+                            manueltRegistrert: false,
+                            erFolkeregistrert: true,
+                        })
+                    ) ?? [];
         }
+        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
         settSøknadErLastetFraBackend(false);
     };
 
     React.useEffect(() => {
         tilbakestillSøknad();
-    }, [bruker.status]);
+    }, [bruker]);
 
     useDeepEffect(() => {
         if (åpenBehandling.søknadsgrunnlag) {
@@ -169,54 +166,49 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     }, [åpenBehandling.behandlingId, åpenBehandling.søknadsgrunnlag]);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            if (vurderErLesevisning()) {
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
-            } else {
-                const søkerIdent =
-                    minimalFagsakRessurs.status === RessursStatus.SUKSESS
-                        ? minimalFagsakRessurs.data.søkerFødselsnummer
-                        : bruker.data.personIdent;
+        if (vurderErLesevisning()) {
+            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+        } else {
+            const søkerIdent = fagsak ? fagsak.søkerFødselsnummer : bruker.personIdent;
 
-                onSubmit<IRestRegistrerSøknad>(
-                    {
-                        method: 'POST',
-                        data: {
-                            søknad: {
-                                underkategori: skjema.felter.underkategori.verdi,
-                                søkerMedOpplysninger: {
-                                    ident: søkerIdent,
-                                    målform: skjema.felter.målform.verdi,
-                                },
-                                barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
-                                    (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
-                                        ...barn,
-                                        inkludertISøknaden: barn.merket,
-                                    })
-                                ),
-                                endringAvOpplysningerBegrunnelse:
-                                    skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
-                                erAutomatiskRegistrert: false,
+            onSubmit<IRestRegistrerSøknad>(
+                {
+                    method: 'POST',
+                    data: {
+                        søknad: {
+                            underkategori: skjema.felter.underkategori.verdi,
+                            søkerMedOpplysninger: {
+                                ident: søkerIdent,
+                                målform: skjema.felter.målform.verdi,
                             },
-                            bekreftEndringerViaFrontend,
+                            barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
+                                (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
+                                    ...barn,
+                                    inkludertISøknaden: barn.merket,
+                                })
+                            ),
+                            endringAvOpplysningerBegrunnelse:
+                                skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                            erAutomatiskRegistrert: false,
                         },
-                        url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
+                        bekreftEndringerViaFrontend,
                     },
-                    (response: Ressurs<IBehandling>) => {
-                        if (response.status === RessursStatus.SUKSESS) {
-                            settÅpenBehandling(response);
-                            navigate(
-                                `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                            );
-                        }
-                    },
-                    (errorResponse: Ressurs<IBehandling>) => {
-                        if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
-                            settVisBekreftModal(true);
-                        }
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
+                },
+                (response: Ressurs<IBehandling>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settÅpenBehandling(response);
+                        navigate(
+                            `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                        );
                     }
-                );
-            }
+                },
+                (errorResponse: Ressurs<IBehandling>) => {
+                    if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
+                        settVisBekreftModal(true);
+                    }
+                }
+            );
         }
     };
 
