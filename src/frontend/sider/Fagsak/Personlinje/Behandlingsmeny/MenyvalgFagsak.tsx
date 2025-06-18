@@ -6,18 +6,18 @@ import { Dropdown } from '@navikt/ds-react';
 
 import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåFagsak';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
-import OpprettFagsak from './OpprettFagsak/OpprettFagsak';
+import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { useAppContext } from '../../../../context/AppContext';
 import { BehandlerRolle } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../typer/person';
 
-interface IProps {
+interface Props {
     bruker?: IPersonInfo;
     minimalFagsak: IMinimalFagsak;
 }
 
-const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
+export function MenyvalgFagsak({ bruker, minimalFagsak }: Props) {
     const navigate = useNavigate();
     const { hentSaksbehandlerRolle } = useAppContext();
 
@@ -27,7 +27,7 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
     return (
         <>
             <OpprettBehandling minimalFagsak={minimalFagsak} />
-            {!!bruker && <OpprettFagsak personInfo={bruker} />}
+            {!!bruker && <OpprettFagsak fagsak={minimalFagsak} bruker={bruker} />}
             {erPåDokumentutsending && <LeggTilEllerFjernBrevmottakerePåFagsak />}
             {!erPåDokumentutsending && erSaksbehandlerEllerHøyere && (
                 <Dropdown.Menu.List.Item
@@ -38,6 +38,4 @@ const MenyvalgFagsak = ({ bruker, minimalFagsak }: IProps) => {
             )}
         </>
     );
-};
-
-export default MenyvalgFagsak;
+}

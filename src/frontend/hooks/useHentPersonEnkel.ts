@@ -10,7 +10,7 @@ interface Props {
 export function useHentPersonEnkel({ personIdent }: Props) {
     const { hentPerson } = useAppContext();
     return useQuery({
-        queryKey: ['person', personIdent],
+        queryKey: ['person_enkel', personIdent],
         queryFn: async () => {
             // TODO : Flytt "hentPerson" metoden fra AppContext til api mappen og omdøp den til "hentPersonEnkel",
             //  men må skrive om hvordan "AppInfoModal" fungerer først

@@ -3,13 +3,13 @@
  */
 
 import { mockVisningBehandling } from './behandling/behandling.mock';
-import { mockMinimalFagsak } from './minimalFagsak/minimalFagsak.mock';
+import { FagsakTestdata } from '../../testdata/fagsakTestdata';
 import { BehandlingResultat } from '../../typer/behandling';
 import { hentSisteIkkeHenlagteBehandling } from '../fagsak';
 
 describe('fagsak utils tester', () => {
     test('hent siste ikke-henlagte behandling', () => {
-        const minimalFagsak = mockMinimalFagsak({
+        const fagsak = FagsakTestdata.lagFagsak({
             behandlinger: [
                 mockVisningBehandling({
                     behandlingId: 1,
@@ -26,6 +26,6 @@ describe('fagsak utils tester', () => {
                 }),
             ],
         });
-        expect(hentSisteIkkeHenlagteBehandling(minimalFagsak)?.behandlingId).toBe(2);
+        expect(hentSisteIkkeHenlagteBehandling(fagsak)?.behandlingId).toBe(2);
     });
 });
