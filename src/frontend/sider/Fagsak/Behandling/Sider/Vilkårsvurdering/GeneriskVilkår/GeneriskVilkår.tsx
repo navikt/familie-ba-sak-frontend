@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { LightBulbFillIcon } from '@navikt/aksel-icons';
-import { Fieldset, Button, Heading } from '@navikt/ds-react';
-import { ASpacing5, ASpacing8, ASpacing16 } from '@navikt/ds-tokens/dist/tokens';
+import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
+import { ASpacing16, ASpacing5, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
@@ -30,6 +29,7 @@ interface IProps {
 
 const Container = styled.div`
     margin-top: ${ASpacing16};
+
     &:last-child {
         margin-bottom: ${ASpacing8};
     }
@@ -112,10 +112,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
         );
     };
 
-    const skalViseManueltLagtTilISøknadLightbulb = () => {
-        return person.erManueltLagtTilISøknad ?? false;
-    };
-
     return (
         <Container>
             <Fieldset
@@ -123,16 +119,14 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 legend={vilkårFraConfig.tittel}
                 hideLegend
             >
-                <Heading size="medium" level="3">
-                    {skalViseManueltLagtTilISøknadLightbulb() && (
-                        <LightBulbFillIcon
-                            title="a11y-title"
-                            fontSize="1.5rem"
-                            color="var(--a-icon-warning)"
-                        />
+                <HStack>
+                    {(person.erManueltLagtTilISøknad ?? false) && (
+                        <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
                     )}
-                    {vilkårFraConfig.tittel}
-                </Heading>
+                    <Heading size="medium" level="3">
+                        {vilkårFraConfig.tittel}
+                    </Heading>
+                </HStack>
                 <VilkårTabell
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
