@@ -120,7 +120,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 hideLegend
             >
                 <HStack>
-                    {(person.erManueltLagtTilISøknad ?? false) && (
+                    {person.erManueltLagtTilISøknad && (
                         <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
                     )}
                     <Heading size="medium" level="3">
