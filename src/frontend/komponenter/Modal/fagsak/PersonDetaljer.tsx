@@ -5,12 +5,12 @@ import { BodyShort } from '@navikt/ds-react';
 import type { IPersonInfo } from '../../../typer/person';
 import { formaterNavnAlderOgIdent } from '../../../utils/formatter';
 
-const kulepunkt = `\u2022` + '   ';
+const kulepunkt = `\u2022`;
 
 interface Props {
-    bruker: IPersonInfo;
+    person: IPersonInfo;
 }
 
-export function BrukerDetaljer({ bruker }: Props) {
-    return <BodyShort>{kulepunkt + formaterNavnAlderOgIdent(bruker)}</BodyShort>;
+export function PersonDetaljer({ person }: Props) {
+    return <BodyShort>{kulepunkt + ' ' + formaterNavnAlderOgIdent(person)}</BodyShort>;
 }

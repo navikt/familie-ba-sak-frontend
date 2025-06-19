@@ -40,6 +40,7 @@ spec:
           - id: "9cd89ac3-5587-46ba-b571-a625f2af481d"  # MEDLEM: 4833 NAV Familie- og pensjonsytelser Oslo 1
           - id: "7af5f216-6a5e-4228-9c99-687658c5b957"  # MEDLEM: 4842 NAV Familie- og pensjonsytelser Stord
           - id: "0feaea21-ada1-48c0-9300-3f6aec36b993"  # MEDLEM: 4817 NAV Familie- og pensjonsytelser Steinkjer
+          - id: "ad7b87a6-9180-467c-affc-20a566b0fec0"  # 0000-GA-Strengt_Fortrolig_Adresse
   resources:
     limits:
       cpu: 2000m

@@ -6,7 +6,7 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 
 import MenyvalgBehandling from './MenyvalgBehandling';
-import MenyvalgFagsak from './MenyvalgFagsak';
+import { MenyvalgFagsak } from './MenyvalgFagsak';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';

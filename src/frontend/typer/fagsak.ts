@@ -22,6 +22,7 @@ export enum FagsakType {
 // Interface
 export interface IBaseFagsak {
     id: number;
+    fagsakeier: string;
     opprettetTidspunkt: string;
     saksnummer: string;
     status: FagsakStatus;
@@ -49,6 +50,7 @@ export interface IMinimalFagsak extends IBaseFagsak {
 
 export const mapMinimalFagsakTilBaseFagsak = (it: IMinimalFagsak): IBaseFagsak => ({
     id: it.id,
+    fagsakeier: it.fagsakeier,
     opprettetTidspunkt: it.opprettetTidspunkt,
     saksnummer: it.saksnummer,
     status: it.status,

@@ -8,10 +8,14 @@ import { useAppContext } from '../../../../context/AppContext';
 import { useAuthContext } from '../../../../context/AuthContext';
 import { FagsakType } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
+import { erProd } from '../../../../utils/miljø';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 
-const SKJERMET_BARN_GRUPPE = 'ad7b87a6-9180-467c-affc-20a566b0fec0';
+const SKJERMET_BARN_GRUPPE = {
+    PROD: 'ad7b87a6-9180-467c-affc-20a566b0fec0',
+    DEV: '5ef775f2-61f8-4283-bf3d-8d03f428aa14',
+};
 
 const fagsakTypeOptions = [
     {
@@ -39,6 +43,7 @@ interface Props {
 export function FagsaktypeFelt({ readOnly }: Props) {
     const { innloggetSaksbehandler } = useAuthContext();
     const { toggles } = useAppContext();
+    const { harNormalFagsak, harBarnEnsligMindreårigFagsak } = useFagsakerContext();
 
     const { control, setValue, resetField } = useFormContext<OpprettFagsakFormValues>();
 
@@ -48,13 +53,14 @@ export function FagsaktypeFelt({ readOnly }: Props) {
         rules: { required: `Fagsaktype er påkrevd.` },
     });
 
-    const { harNormalFagsak, harBarnEnsligMindreårigFagsak } = useFagsakerContext();
-
     const options = fagsakTypeOptions
         .filter(option => {
             if (option.value === FagsakType.SKJERMET_BARN) {
                 const groups = innloggetSaksbehandler?.groups ?? [];
-                const harTilgang = groups.some(group => group === SKJERMET_BARN_GRUPPE);
+                const aktuellGruppe = erProd()
+                    ? SKJERMET_BARN_GRUPPE.PROD
+                    : SKJERMET_BARN_GRUPPE.DEV;
+                const harTilgang = groups.some(group => group === aktuellGruppe);
                 return harTilgang && toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
             }
             return true;
