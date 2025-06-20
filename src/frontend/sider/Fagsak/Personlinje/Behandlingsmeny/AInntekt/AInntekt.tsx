@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, Dropdown, Loader } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Dropdown, Link, Loader } from '@navikt/ds-react';
 
 import { useHentAInntektUrl } from '../../../../../hooks/useHentAInntektUrl';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
@@ -15,18 +15,28 @@ export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
     if (isPending) {
         return (
             <Dropdown.Menu.List.Item disabled>
-                Henter A-Inntekt <Loader size="xsmall" />
+                Henter A-Inntekt <Loader size="small" />
             </Dropdown.Menu.List.Item>
         );
     }
 
     if (error) {
         return (
-            <Dropdown.Menu.List.Item disabled>
-                <Alert variant="error" inline>
-                    A-Inntekt er ikke tilgjengelig
+            <Box as="li" marginInline="4" marginBlock="1">
+                <Alert variant="error" size="small" style={{ padding: '0.5rem' }}>
+                    <BodyShort size="small" spacing>
+                        Beklager, det har oppstått en teknisk feil. Vi får ikke hentet informasjon
+                        fra A-inntekt akkurat nå.
+                    </BodyShort>
+                    <BodyShort size="small">
+                        Du kan prøve å slå opp direkte i{' '}
+                        <Link href="https://arbeid-og-inntekt.dev.adeo.no/" target="_blank">
+                            A-inntekt
+                        </Link>{' '}
+                        eller prøve igjen senere.
+                    </BodyShort>
                 </Alert>
-            </Dropdown.Menu.List.Item>
+            </Box>
         );
     }
 
