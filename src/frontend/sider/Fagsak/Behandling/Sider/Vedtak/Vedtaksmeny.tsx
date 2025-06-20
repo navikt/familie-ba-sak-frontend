@@ -16,11 +16,11 @@ import EndreEndringstidspunkt from './endringstidspunkt/EndreEndringstidspunkt';
 import KorrigerEtterbetaling from './KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from './KorrigerVedtakModal/KorrigerVedtak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
+import { useFagsakContext } from '../../../../../context/FagsakContext';
 import { Behandlingstype, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingKategori } from '../../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../../typer/fagsak';
 import { vedtakHarFortsattUtbetaling } from '../../../../../utils/vedtakUtils';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface IVedtakmenyProps {
@@ -44,7 +44,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const {
         erSammensattKontrollsak,
@@ -58,7 +58,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 
     const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
-    const fagsakType = minimalFagsak?.fagsakType;
+    const fagsakType = fagsak.fagsakType;
 
     return (
         <Dropdown>

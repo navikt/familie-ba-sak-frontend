@@ -9,6 +9,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useAppContext } from '../../../../../context/AppContext';
 import { BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentBarnetrygdbehandlinger';
+import { FAGSAK_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentFagsak';
 import { KLAGEBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentKlagebehandlinger';
 import { TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentTilbakekrevingsbehandlinger';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
@@ -16,7 +17,7 @@ import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../.
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { behandlingstemaer } from '../../../../../typer/behandlingstema';
 import type { OptionType } from '../../../../../typer/common';
-import { FagsakType } from '../../../../../typer/fagsak';
+import { FagsakType, type IMinimalFagsak } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { IsoDatoString } from '../../../../../utils/dato';
@@ -25,7 +26,6 @@ import {
     dateTilIsoDatoStringEllerUndefined,
     validerGyldigDato,
 } from '../../../../../utils/dato';
-import { useFagsakContext } from '../../../FagsakContext';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -41,20 +41,13 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
 }
 
 const useOpprettBehandling = (
-    fagsakId: number,
+    fagsak: IMinimalFagsak,
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-
-    const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
-    const minimalFagsak =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS
-            ? minimalFagsakRessurs.data
-            : undefined;
 
     const behandlingstype = useFelt<
         Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''
@@ -86,14 +79,14 @@ const useOpprettBehandling = (
 
     const behandlingstema = useFelt<IBehandlingstema | undefined>({
         verdi:
-            minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+            fagsak.fagsakType === FagsakType.INSTITUSJON
                 ? behandlingstemaer.NASJONAL_INSTITUSJON
                 : undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
-            if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) return false;
+            if (fagsak.fagsakType === FagsakType.INSTITUSJON) return false;
 
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
@@ -186,12 +179,12 @@ const useOpprettBehandling = (
         onSubmit<void>(
             {
                 method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opprett-tilbakekreving`,
             },
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: [TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX, fagsak.id],
                     });
                     nullstillSkjemaStatus();
                     onOpprettTilbakekrevingSuccess();
@@ -204,7 +197,7 @@ const useOpprettBehandling = (
         onSubmit<{ klageMottattDato: IsoDatoString }>(
             {
                 method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opprett-klagebehandling`,
                 data: {
                     klageMottattDato: dateTilIsoDatoString(klageMottattDato.verdi),
                 },
@@ -213,7 +206,7 @@ const useOpprettBehandling = (
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [KLAGEBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: [KLAGEBEHANDLINGER_QUERY_KEY_PREFIX, fagsak.id],
                     });
                     lukkModal();
                     nullstillSkjema();
@@ -246,7 +239,7 @@ const useOpprettBehandling = (
                         ? valgteBarn.verdi.map(option => option.value)
                         : undefined,
                     fagsakType: fagsakType,
-                    fagsakId: fagsakId,
+                    fagsakId: fagsak.id,
                 },
                 method: 'POST',
                 url: '/familie-ba-sak/api/behandlinger',
@@ -254,10 +247,12 @@ const useOpprettBehandling = (
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsak.id],
                     });
 
-                    hentMinimalFagsak(fagsakId, true);
+                    queryClient.invalidateQueries({
+                        queryKey: [FAGSAK_QUERY_KEY_PREFIX, fagsak.id],
+                    });
 
                     lukkModal();
                     nullstillSkjema();
@@ -267,12 +262,12 @@ const useOpprettBehandling = (
                     if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
                         navigate(
                             behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
-                                ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
-                                : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                                ? `/fagsak/${fagsak.id}/${behandling?.behandlingId}/registrer-mottaker`
+                                : `/fagsak/${fagsak.id}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
                         navigate(
-                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
+                            `/fagsak/${fagsak.id}/${behandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
                 }
@@ -303,7 +298,6 @@ const useOpprettBehandling = (
         onBekreft,
         opprettBehandlingSkjema: skjema,
         nullstillSkjemaStatus,
-        bruker,
         maksdatoForMigrering: MAKSDATO_FOR_MIGRERING,
         valideringErOk,
     };
