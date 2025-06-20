@@ -30,8 +30,8 @@ describe('utledTekstTilModia', () => {
                 `• januar 2025 på 1 766 kroner\n\n` +
                 `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
-                `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
-                `tilbakekreving fra etterbetalingen din.\n\n` +
+                `tilbake det feilutbetalte beløpet? Hvis du samtykker/godkjenner dette, ` +
+                `kan vi trekke det feilutbetalte beløpet fra etterbetalingen din.\n\n` +
                 `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale ` +
                 `deg om feilutbetalingen. Dette må du gjøre innen 14 dager.`
         );
@@ -56,8 +56,8 @@ describe('utledTekstTilModia', () => {
                 `• januar 2025 til februar 2025 på 1 766 kroner\n\n` +
                 `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
-                `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
-                `tilbakekreving fra etterbetalingen din.\n\n` +
+                `tilbake det feilutbetalte beløpet? Hvis du samtykker/godkjenner dette, ` +
+                `kan vi trekke det feilutbetalte beløpet fra etterbetalingen din.\n\n` +
                 `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale ` +
                 `deg om feilutbetalingen. Dette må du gjøre innen 14 dager.`
         );
@@ -90,8 +90,8 @@ describe('utledTekstTilModia', () => {
                 `• april 2025 på 1 766 kroner\n\n` +
                 `Årsaker til feilutbetaling er [FYLL INN ÅRSAK HER]\n\n` +
                 `Er det greit at vi venter med etterbetaling til vi har vurdert om vi skal kreve ` +
-                `tilbake feilutbetalt beløp? Hvis du samtykker, kan vi trekke eventuell ` +
-                `tilbakekreving fra etterbetalingen din.\n\n` +
+                `tilbake det feilutbetalte beløpet? Hvis du samtykker/godkjenner dette, ` +
+                `kan vi trekke det feilutbetalte beløpet fra etterbetalingen din.\n\n` +
                 `Gi samtykke ved å svare JA på denne meldingen. I svaret kan du samtidig uttale ` +
                 `deg om feilutbetalingen. Dette må du gjøre innen 14 dager.`
         );
