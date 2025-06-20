@@ -48,6 +48,7 @@ export interface IGrunnlagPerson {
     type: PersonType;
     målform: Målform;
     dødsfallDato?: string;
+    erManueltLagtTilISøknad?: boolean;
 }
 
 export interface IPersonInfo {
