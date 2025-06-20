@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Alert, BodyShort, Box, Dropdown, Loader } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useHentAInntektUrl } from '../../../../../hooks/useHentAInntektUrl';
+import { BodyShort, Dropdown, Loader } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+
+import { hentAInntektUrl } from '../../../../../api/hentAInntektUrl';
+import { ModalType } from '../../../../../context/ModalContext';
+import { useModal } from '../../../../../hooks/useModal';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 
 interface IProps {
@@ -10,35 +15,38 @@ interface IProps {
 }
 
 export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
-    const { data, isPending, error } = useHentAInntektUrl(minimalFagsak.søkerFødselsnummer);
+    const { request } = useHttp();
+    const queryClient = useQueryClient();
+    const { åpneModal } = useModal(ModalType.FEILMELDING_MODAL);
 
-    if (isPending) {
-        return (
-            <Dropdown.Menu.List.Item disabled>
-                A-Inntekt <Loader size="small" />
-            </Dropdown.Menu.List.Item>
-        );
-    }
+    const [laster, setLaster] = useState(false);
 
-    if (error) {
-        return (
-            <Box as="li" marginInline="4" marginBlock="1">
-                <Alert variant="error" size="small" style={{ padding: '0.5rem' }}>
-                    <BodyShort size="small" spacing>
-                        Beklager, det har oppstått en teknisk feil. Vi får ikke hentet informasjon
-                        fra A-inntekt akkurat nå.
-                    </BodyShort>
-                    <BodyShort size="small">
-                        Du kan prøve å slå opp direkte i A-inntekt eller prøve igjen senere.
-                    </BodyShort>
-                </Alert>
-            </Box>
-        );
-    }
+    const handleClick = () => {
+        setLaster(true);
+        queryClient
+            .fetchQuery({
+                queryKey: ['aInntektUrl', minimalFagsak.søkerFødselsnummer],
+                queryFn: () => hentAInntektUrl(request, minimalFagsak.søkerFødselsnummer),
+            })
+            .then(data => window.open(data, '_blank'))
+            .catch(error => {
+                åpneModal({
+                    feilmelding: (
+                        <>
+                            <BodyShort spacing>
+                                Vi får ikke hentet informasjon fra A-inntekt akkurat nå.
+                            </BodyShort>
+                            <BodyShort>Feilmelding: {error.message}</BodyShort>
+                        </>
+                    ),
+                });
+            })
+            .finally(() => setLaster(false));
+    };
 
     return (
-        <Dropdown.Menu.List.Item onClick={() => window.open(data, '_blank')}>
-            A-Inntekt
+        <Dropdown.Menu.List.Item onClick={handleClick} disabled={laster}>
+            A-Inntekt {laster && <Loader size="small" />}
         </Dropdown.Menu.List.Item>
     );
 };

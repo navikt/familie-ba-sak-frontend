@@ -20,11 +20,13 @@ interface ModalContext {
 export enum ModalType {
     OPPRETT_FAGSAK = 'OPPRETT_FAGSAK',
     EXAMPLE_MODAL = 'EXAMPLE_MODAL',
+    FEILMELDING_MODAL = 'FEILMELDING_MODAL',
 }
 
 export interface Args {
     [ModalType.OPPRETT_FAGSAK]: { ident: string };
     [ModalType.EXAMPLE_MODAL]: { fagsak: string };
+    [ModalType.FEILMELDING_MODAL]: { feilmelding: string | React.ReactNode };
 }
 
 interface BaseState {
@@ -40,6 +42,9 @@ interface State {
     [ModalType.EXAMPLE_MODAL]: BaseState & {
         args: Args[ModalType.EXAMPLE_MODAL] | undefined;
     };
+    [ModalType.FEILMELDING_MODAL]: BaseState & {
+        args: Args[ModalType.FEILMELDING_MODAL] | undefined;
+    };
 }
 
 const initialState: { [key in ModalType]: State[key] } = {
@@ -53,6 +58,12 @@ const initialState: { [key in ModalType]: State[key] } = {
         tittel: 'Example modal',
         åpen: false,
         bredde: '80rem',
+        args: undefined,
+    },
+    [ModalType.FEILMELDING_MODAL]: {
+        tittel: 'Beklager, det har oppstått en teknisk feil',
+        åpen: false,
+        bredde: '50rem',
         args: undefined,
     },
 };
