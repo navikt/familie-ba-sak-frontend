@@ -11,9 +11,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
+import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -46,6 +48,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
     generiskVilkårKey,
 }) => {
+    const { toggles } = useAppContext();
     const { vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } =
         useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
@@ -120,9 +123,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 hideLegend
             >
                 <HStack>
-                    {person.erManueltLagtTilISøknad && (
-                        <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
-                    )}
+                    {toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
+                        person.erManueltLagtTilISøknad && (
+                            <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
+                        )}
                     <Heading size="medium" level="3">
                         {vilkårFraConfig.tittel}
                     </Heading>

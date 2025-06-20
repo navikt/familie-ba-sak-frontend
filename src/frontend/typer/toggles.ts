@@ -19,6 +19,7 @@ export enum ToggleNavn {
     flerePersonerEndretUtbetaling = 'familie-ba-sak.flere-personer-endret-utbetaling',
     brukNyOpprettFagsakModal = 'familie-ba-sak.bruk.ny.opprett.fagsak.modal',
     tillattBehandlingAvSkjermetBarn = 'familie-ba-sak.tillatt-behandling-av-kode6-kode19',
+    skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
 }
 
 export const alleTogglerAv = (): IToggles => {
