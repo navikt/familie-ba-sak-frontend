@@ -15,7 +15,7 @@ export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
     if (isPending) {
         return (
             <Dropdown.Menu.List.Item disabled>
-                Henter A-Inntekt <Loader size="small" />
+                A-Inntekt <Loader size="small" />
             </Dropdown.Menu.List.Item>
         );
     }
