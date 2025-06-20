@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, BodyShort, Box, Dropdown, Link, Loader } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Dropdown, Loader } from '@navikt/ds-react';
 
 import { useHentAInntektUrl } from '../../../../../hooks/useHentAInntektUrl';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
@@ -29,11 +29,7 @@ export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
                         fra A-inntekt akkurat nå.
                     </BodyShort>
                     <BodyShort size="small">
-                        Du kan prøve å slå opp direkte i{' '}
-                        <Link href="https://arbeid-og-inntekt.dev.adeo.no/" target="_blank">
-                            A-inntekt
-                        </Link>{' '}
-                        eller prøve igjen senere.
+                        Du kan prøve å slå opp direkte i A-inntekt eller prøve igjen senere.
                     </BodyShort>
                 </Alert>
             </Box>
