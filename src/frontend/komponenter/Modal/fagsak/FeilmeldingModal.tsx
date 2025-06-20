@@ -6,7 +6,7 @@ import { ModalType } from '../../../context/ModalContext';
 import { useModal } from '../../../hooks/useModal';
 
 export function FeilmeldingModal() {
-    const { tittel, erModalÅpen, lukkModal, args, bredde } = useModal(ModalType.FEILMELDING_MODAL);
+    const { tittel, erModalÅpen, lukkModal, args, bredde } = useModal(ModalType.FEILMELDING);
 
     const feilmelding = args?.feilmelding ?? 'Feil oppstod ved innhenting av argumenter for modal.';
 

@@ -17,7 +17,7 @@ interface IProps {
 export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
     const { request } = useHttp();
     const queryClient = useQueryClient();
-    const { åpneModal } = useModal(ModalType.FEILMELDING_MODAL);
+    const { åpneModal } = useModal(ModalType.FEILMELDING);
 
     const [laster, setLaster] = useState(false);
 
