@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useAppContext } from './context/AppContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
+import { FeilmeldingModal } from './komponenter/Modal/fagsak/FeilmeldingModal';
 import { OpprettFagsakModalNy } from './komponenter/Modal/fagsak/OpprettFagsakModalNy';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
@@ -47,6 +48,7 @@ const Container: React.FC = () => {
                         <Toasts />
                         <Main $systemetLaster={systemetLaster()}>
                             <OpprettFagsakModalNy />
+                            <FeilmeldingModal />
                             <HeaderMedSøk
                                 brukerNavn={innloggetSaksbehandler?.displayName}
                                 brukerEnhet={innloggetSaksbehandler?.enhet}
