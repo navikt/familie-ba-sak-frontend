@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { BodyShort, Dropdown, Loader } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 
-import { hentAInntektUrl } from '../../../../../api/hentAInntektUrl';
+import { hentAInntektUrl } from './hentAInntektUrl';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
