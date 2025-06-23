@@ -1,52 +1,38 @@
-import React, { useState } from 'react';
-
-import { useQueryClient } from '@tanstack/react-query';
+import React from 'react';
 
 import { BodyShort, Dropdown, Loader } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
 
-import { hentAInntektUrl } from './hentAInntektUrl';
+import { useHentAInntektUrl } from './useHentAInntektUrl';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
 
-interface IProps {
+function Feilmelding({ error }: { error: Error }) {
+    return (
+        <>
+            <BodyShort spacing>Vi får ikke hentet informasjon fra A-inntekt akkurat nå.</BodyShort>
+            <BodyShort>Feilmelding: {error.message}</BodyShort>
+        </>
+    );
+}
+
+interface Props {
     minimalFagsak: IMinimalFagsak;
 }
 
-export const AInntekt: React.FC<IProps> = ({ minimalFagsak }) => {
-    const { request } = useHttp();
-    const queryClient = useQueryClient();
+export function AInntekt({ minimalFagsak }: Props) {
     const { åpneModal } = useModal(ModalType.FEILMELDING);
 
-    const [laster, setLaster] = useState(false);
-
-    const handleClick = () => {
-        setLaster(true);
-        queryClient
-            .fetchQuery({
-                queryKey: ['aInntektUrl', minimalFagsak.søkerFødselsnummer],
-                queryFn: () => hentAInntektUrl(request, minimalFagsak.søkerFødselsnummer),
-            })
-            .then(data => window.open(data, '_blank'))
-            .catch(error => {
-                åpneModal({
-                    feilmelding: (
-                        <>
-                            <BodyShort spacing>
-                                Vi får ikke hentet informasjon fra A-inntekt akkurat nå.
-                            </BodyShort>
-                            <BodyShort>Feilmelding: {error.message}</BodyShort>
-                        </>
-                    ),
-                });
-            })
-            .finally(() => setLaster(false));
-    };
+    const { isFetching, refetch } = useHentAInntektUrl({
+        søkerFødselsnummer: minimalFagsak.søkerFødselsnummer,
+        onSuccess: url => window.open(url, '_blank'),
+        onError: error => åpneModal({ feilmelding: <Feilmelding error={error} /> }),
+        enabled: false,
+    });
 
     return (
-        <Dropdown.Menu.List.Item onClick={handleClick} disabled={laster}>
-            A-Inntekt {laster && <Loader size="small" />}
+        <Dropdown.Menu.List.Item onClick={() => refetch()} disabled={isFetching}>
+            A-Inntekt {isFetching && <Loader size="small" />}
         </Dropdown.Menu.List.Item>
     );
-};
+}

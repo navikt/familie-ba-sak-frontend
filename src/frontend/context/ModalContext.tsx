@@ -61,7 +61,7 @@ const initialState: { [key in ModalType]: State[key] } = {
         args: undefined,
     },
     [ModalType.FEILMELDING]: {
-        tittel: 'Det har oppstått en teknisk feil',
+        tittel: 'Det har oppstått en feil',
         åpen: false,
         bredde: '50rem',
         args: undefined,
