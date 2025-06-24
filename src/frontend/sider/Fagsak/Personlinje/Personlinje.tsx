@@ -1,11 +1,13 @@
 import React from 'react';
 
+import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 import { useAppContext } from '../../../context/AppContext';
+import { useHentPerson } from '../../../hooks/useHentPerson';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
 import type { IBehandling } from '../../../typer/behandling';
@@ -21,19 +23,35 @@ interface IProps {
     behandling?: IBehandling;
 }
 
+const ikonForFagsakType = (fagsakType?: FagsakType) => {
+    switch (fagsakType) {
+        case FagsakType.INSTITUSJON:
+            return <KontorIkonGrønn height={'24'} width={'24'} />;
+        case FagsakType.SKJERMET_BARN:
+            return (
+                <PersonCircleFillIcon color={'var(--a-icon-alt-1)'} height={'28'} width={'28'} /> // Hvorfor er størrelse ulik?
+            );
+        default:
+            return undefined; // Bruker default-verdier i visittkort
+    }
+};
+
 const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+
+    const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
+    const søker = useHentPerson(minimalFagsak?.søkerFødselsnummer);
+
+    console.log('fagsakEier: ', fagsakEier.data);
+    console.log('søker', søker.data);
+
     return (
         <Visittkort
             navn={bruker?.navn ?? 'Ukjent'}
             ident={formaterIdent(bruker?.personIdent ?? '')}
             alder={hentAlder(bruker?.fødselsdato ?? '')}
             kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
-            ikon={
-                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? (
-                    <KontorIkonGrønn height={'24'} width={'24'} />
-                ) : undefined
-            }
+            ikon={ikonForFagsakType(minimalFagsak?.fagsakType)}
             dempetKantlinje
             padding
         >
