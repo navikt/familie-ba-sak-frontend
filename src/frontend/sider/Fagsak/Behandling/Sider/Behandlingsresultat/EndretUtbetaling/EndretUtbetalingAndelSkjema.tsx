@@ -19,12 +19,10 @@ import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
-import { useAppContext } from '../../../../../../context/AppContext';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../../../../utils/dato';
@@ -46,11 +44,6 @@ const StyledFieldset = styled(Fieldset)`
     margin-right: 2rem;
     border-left: 0.0625rem solid ${ABorderAction};
     max-width: 30rem;
-`;
-
-const StyledSelectPersonvelger = styled(Select)`
-    min-width: 20rem;
-    z-index: 1000;
 `;
 
 const Feltmargin = styled.div`
@@ -84,7 +77,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
-    const { toggles } = useAppContext();
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
@@ -140,44 +132,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 hideLegend
             >
                 <Feltmargin>
-                    {toggles[ToggleNavn.flerePersonerEndretUtbetaling] ? (
-                        <UNSAFE_Combobox
-                            isMultiSelect
-                            label={'Velg hvem det gjelder'}
-                            options={tilgjengeligePersoner}
-                            selectedOptions={skjema.felter.personer.verdi}
-                            onToggleSelected={onPersonSelected}
-                            readOnly={erLesevisning}
-                            error={
-                                skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger)
-                                    .error
-                            }
-                        />
-                    ) : (
-                        <StyledSelectPersonvelger
-                            {...skjema.felter.personer.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            label={<Label>Velg hvem det gjelder</Label>}
-                            value={skjema.felter.personer.verdi[0]?.value ?? ''}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                                skjema.felter.personer.validerOgSettFelt([
-                                    {
-                                        value: event.target.value,
-                                        label: event.target.value,
-                                    },
-                                ]);
-                            }}
-                            readOnly={erLesevisning}
-                        >
-                            <option value={undefined}>Velg person</option>
-                            {tilgjengeligePersoner.map((person, index) => (
-                                <option value={person.value} key={`${index}_${person.value}`}>
-                                    {lagPersonLabel(person.value, åpenBehandling.personer)}
-                                </option>
-                            ))}
-                        </StyledSelectPersonvelger>
-                    )}
+                    <UNSAFE_Combobox
+                        isMultiSelect
+                        label={'Velg hvem det gjelder'}
+                        options={tilgjengeligePersoner}
+                        selectedOptions={skjema.felter.personer.verdi}
+                        onToggleSelected={onPersonSelected}
+                        readOnly={erLesevisning}
+                        error={
+                            skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger).error
+                        }
+                    />
                 </Feltmargin>
 
                 <Feltmargin>
