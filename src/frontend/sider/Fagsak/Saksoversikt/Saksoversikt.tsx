@@ -4,7 +4,7 @@ import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import styled from 'styled-components';
 
 import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, HStack, Link, Spacer, Tabs, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Behandlinger } from './Behandlinger';
@@ -22,14 +22,17 @@ import {
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
+import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
+import Behandlingsmeny from '../Personlinje/Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
+    bruker: IPersonInfo;
     minimalFagsak: IMinimalFagsak;
 }
 
@@ -45,7 +48,7 @@ const StyledAlert = styled(Alert)`
     width: ${SaksoversiktPanelBredde};
 `;
 
-const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
+const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak, bruker }) => {
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
     const { toggles } = useAppContext();
 
@@ -173,7 +176,19 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                     label={infotrygdTab.label}
                     icon={<MagnifyingGlassIcon />}
                 />
+                <Spacer />
+                <HStack paddingBlock={'2'} paddingInline={'4'} gap={'4'}>
+                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
+                        <BodyShort>Saksoversikt</BodyShort>
+                    </Link>
+
+                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
+                        <BodyShort>Dokumenter</BodyShort>
+                    </Link>
+                    <Behandlingsmeny bruker={bruker} minimalFagsak={minimalFagsak} />
+                </HStack>
             </Tabs.List>
+
             <Tabs.Panel value={basakTab.key}>
                 <SaksoversiktWrapper>
                     <Heading size={'large'} level={'1'} children={'Saksoversikt'} />

@@ -57,6 +57,7 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                             <Saksoversikt
+                                                bruker={brukerRessurs.data}
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                         </>
