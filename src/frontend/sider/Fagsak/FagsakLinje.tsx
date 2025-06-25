@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useLocation } from 'react-router';
+
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Spacer } from '@navikt/ds-react';
 
@@ -13,6 +15,13 @@ interface FagsaklinjeProps {
     minimalFagsak: IMinimalFagsak;
     behandling?: IBehandling;
 }
+
+const aktivFaneStyle = (fanenavn: string) => {
+    const location = useLocation();
+    const urlSplit = location.pathname.split('/');
+    const sluttenPåUrl = urlSplit[urlSplit.length - 1];
+    return sluttenPåUrl === fanenavn ? { textDecoration: 'underline' } : {};
+};
 
 const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
     minimalFagsak,
@@ -28,6 +37,7 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
                     variant={'tertiary'}
                     icon={<HouseIcon />}
                     href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
+                    style={aktivFaneStyle('saksoversikt')}
                 >
                     Saksoversikt
                 </Button>
@@ -37,6 +47,7 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
                     variant={'tertiary'}
                     icon={<MagnifyingGlassIcon />}
                     href={'infotrygd'}
+                    style={aktivFaneStyle('infotrygd')}
                 >
                     Infotrygd
                 </Button>
@@ -46,6 +57,7 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
                     variant={'tertiary'}
                     icon={<FileTextIcon />}
                     href={`/fagsak/${minimalFagsak.id}/dokumenter`}
+                    style={aktivFaneStyle('dokumenter')}
                 >
                     Dokumenter
                 </Button>
