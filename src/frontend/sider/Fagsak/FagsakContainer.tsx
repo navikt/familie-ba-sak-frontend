@@ -53,7 +53,6 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                 bruker={brukerRessurs.data}
                                 minimalFagsak={minimalFagsakRessurs.data}
                             />
-
                             <Routes>
                                 <Route
                                     path="/saksoversikt"
