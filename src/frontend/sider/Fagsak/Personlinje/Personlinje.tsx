@@ -1,12 +1,10 @@
 import React from 'react';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
+import { BodyShort, Spacer, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
-import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
-import { useAppContext } from '../../../context/AppContext';
 import { useHentPerson } from '../../../hooks/useHentPerson';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
@@ -36,9 +34,7 @@ const ikonForFagsakType = (fagsakType?: FagsakType) => {
     }
 };
 
-const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
-
+const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
     const søker = useHentPerson(minimalFagsak?.søkerFødselsnummer);
 
@@ -77,19 +73,6 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) =>
                                 variant={'info'}
                             />
                         )}
-                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
-                        <BodyShort>Saksoversikt</BodyShort>
-                    </Link>
-                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
-                        <BodyShort>Dokumenter</BodyShort>
-                    </Link>
-                    {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny
-                            bruker={bruker}
-                            minimalFagsak={minimalFagsak}
-                            behandling={behandling}
-                        />
-                    )}
                 </>
             )}
         </Visittkort>
