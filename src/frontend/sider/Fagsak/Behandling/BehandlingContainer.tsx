@@ -7,13 +7,13 @@ import { ABorderDivider } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingRouter from './BehandlingRouter';
+import FagsakLinje from '../FagsakLinje';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import Personlinje from '../Personlinje/Personlinje';
 
 interface Props {
     bruker: IPersonInfo;
@@ -49,7 +49,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
         case RessursStatus.SUKSESS:
             return (
                 <BehandlingProvider behandling={behandlingRessurs.data}>
-                    <Personlinje
+                    <FagsakLinje
                         bruker={bruker}
                         minimalFagsak={fagsak}
                         behandling={behandlingRessurs.data}

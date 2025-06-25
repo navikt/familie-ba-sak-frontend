@@ -82,6 +82,7 @@ const hentInfotrygdsakerRequestConfig = (
         method: 'POST',
         data: { ident },
         url: '/familie-ba-sak/api/infotrygd/hent-infotrygdsaker-for-soker',
+        påvirkerSystemLaster: true,
     };
 };
 
