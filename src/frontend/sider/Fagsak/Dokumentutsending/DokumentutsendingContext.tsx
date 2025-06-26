@@ -25,6 +25,7 @@ import {
     opplysningsdokumenter,
 } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../FagsakContext';
+import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 import { Mottaker } from '../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 export enum DokumentÅrsakPerson {
@@ -112,12 +113,9 @@ const DokumentutsendingContext = createContext<DokumentutsendingContextValue | u
 );
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
-    const {
-        bruker,
-        manuelleBrevmottakerePåFagsak,
-        settManuelleBrevmottakerePåFagsak,
-        minimalFagsak,
-    } = useFagsakContext();
+    const { bruker, minimalFagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
+        useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
     const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
         useDokument();
