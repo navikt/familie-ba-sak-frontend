@@ -33,32 +33,23 @@ interface IkonForFagsakTypeProps {
     alder: number;
 }
 
-const IkonForFagsakType: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
-    switch (fagsakType) {
-        case FagsakType.INSTITUSJON:
-            return <KontorIkonGrønn height={'24'} width={'24'} />;
-        case FagsakType.SKJERMET_BARN:
-            return (
-                <PersonCircleFillIcon color={'var(--a-orange-600)'} height={'28'} width={'28'} /> // Hvorfor er størrelse ulik?
-            );
-        default:
-            switch (kjønn) {
-                case kjønnType.KVINNE:
-                    if (alder < 18) {
-                        return <JenteIkon heigth={24} width={24} />;
-                    } else {
-                        return <KvinneIkon heigth={24} width={24} />;
-                    }
-                case kjønnType.MANN:
-                    if (alder < 18) {
-                        return <GuttIkon heigth={24} width={24} />;
-                    } else {
-                        return <MannIkon heigth={24} width={24} />;
-                    }
-                default:
-                    return <NøytralPersonIkon heigth={24} width={24} />;
-            }
+const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
+    if (fagsakType === FagsakType.INSTITUSJON) {
+        return <KontorIkonGrønn height={'24'} width={'24'} />;
     }
+    if (fagsakType === FagsakType.SKJERMET_BARN) {
+        return <PersonCircleFillIcon color="var(--a-orange-600)" height={28} width={28} />;
+    }
+
+    const ikonProps = { height: 24, width: 24 };
+
+    if (kjønn === kjønnType.KVINNE) {
+        return alder < 18 ? <JenteIkon {...ikonProps} /> : <KvinneIkon {...ikonProps} />;
+    }
+    if (kjønn === kjønnType.MANN) {
+        return alder < 18 ? <GuttIkon {...ikonProps} /> : <MannIkon {...ikonProps} />;
+    }
+    return <NøytralPersonIkon {...ikonProps} />;
 };
 
 const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
@@ -87,7 +78,7 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
         >
             <HStack align="center" gap="4">
                 <HStack align="center" gap="4">
-                    <IkonForFagsakType
+                    <PersonlinjeIkon
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakEierKjønn}
                         alder={fagsakEierAlder}
