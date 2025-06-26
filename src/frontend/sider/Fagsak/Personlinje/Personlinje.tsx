@@ -64,11 +64,6 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
     const fagsakEierAlder = hentAlder(fagsakEier.data?.fødselsdato ?? '');
     const fagsakEierKjønn = fagsakEier.data?.kjønn ?? kjønnType.UKJENT;
 
-    console.log('fagsakEier: ', fagsakEier.data);
-
-    const migreringsdato = '2024-10-05T14:48:00.000Z';
-    const dødsfallDato = '2011-10-05T14:48:00.000Z';
-
     return (
         <Box
             borderWidth={'0 0 1 0'}
@@ -108,14 +103,14 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                         <CopyButton copyText={søkerIdent.replace(' ', '')} size={'small'} />
                     </HStack>
                 </HStack>
-                {dødsfallDato?.length && (
+                {søker?.dødsfallDato?.length && (
                     <>
                         <div>|</div>
-                        <DødsfallTag dødsfallDato={dødsfallDato} />
+                        <DødsfallTag dødsfallDato={søker.dødsfallDato} />
                     </>
                 )}
-                {migreringsdato !== undefined &&
-                    sjekkOmMigreringsdatoErEldreEnn3År(migreringsdato) && (
+                {minimalFagsak?.migreringsdato &&
+                    sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                         <>
                             <div>|</div>
                             <Tag
