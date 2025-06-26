@@ -50,7 +50,7 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                     return (
                         <HovedInnhold>
                             <Personlinje
-                                bruker={brukerRessurs.data}
+                                søker={brukerRessurs.data}
                                 minimalFagsak={minimalFagsakRessurs.data}
                             />
                             <Routes>

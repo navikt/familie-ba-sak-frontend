@@ -1,9 +1,15 @@
 import React from 'react';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Spacer, Tag } from '@navikt/ds-react';
+import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
+import {
+    GuttIkon,
+    JenteIkon,
+    KvinneIkon,
+    MannIkon,
+    NøytralPersonIkon,
+} from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
-import Visittkort from '@navikt/familie-visittkort';
 
 import { useHentPerson } from '../../../hooks/useHentPerson';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
@@ -16,54 +22,111 @@ import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 
 interface IProps {
-    bruker?: IPersonInfo;
+    søker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
     behandling?: IBehandling;
 }
 
-const ikonForFagsakType = (fagsakType?: FagsakType) => {
+interface IkonForFagsakTypeProps {
+    fagsakType?: FagsakType;
+    kjønn: string;
+    alder: number;
+}
+
+const IkonForFagsakType: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
     switch (fagsakType) {
         case FagsakType.INSTITUSJON:
             return <KontorIkonGrønn height={'24'} width={'24'} />;
         case FagsakType.SKJERMET_BARN:
             return (
-                <PersonCircleFillIcon color={'var(--a-icon-alt-1)'} height={'28'} width={'28'} /> // Hvorfor er størrelse ulik?
+                <PersonCircleFillIcon color={'var(--a-orange-600)'} height={'28'} width={'28'} /> // Hvorfor er størrelse ulik?
             );
         default:
-            return undefined; // Bruker default-verdier i visittkort
+            switch (kjønn) {
+                case kjønnType.KVINNE:
+                    if (alder < 18) {
+                        return <JenteIkon heigth={24} width={24} />;
+                    } else {
+                        return <KvinneIkon heigth={24} width={24} />;
+                    }
+                case kjønnType.MANN:
+                    if (alder < 18) {
+                        return <GuttIkon heigth={24} width={24} />;
+                    } else {
+                        return <MannIkon heigth={24} width={24} />;
+                    }
+                default:
+                    return <NøytralPersonIkon heigth={24} width={24} />;
+            }
     }
 };
 
-const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
+const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
     const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
-    const søker = useHentPerson(minimalFagsak?.søkerFødselsnummer);
+
+    const søkerNavn = søker?.navn ?? 'Ukjent';
+    const søkerIdent = formaterIdent(søker?.personIdent ?? '');
+    const søkerAlder = hentAlder(søker?.fødselsdato ?? '');
+
+    const fagsakEierNavn = fagsakEier.data?.navn ?? 'Ukjent';
+    const fagsakEierIdent = formaterIdent(fagsakEier.data?.personIdent ?? '');
+    const fagsakEierAlder = hentAlder(fagsakEier.data?.fødselsdato ?? '');
+    const fagsakEierKjønn = fagsakEier.data?.kjønn ?? kjønnType.UKJENT;
 
     console.log('fagsakEier: ', fagsakEier.data);
-    console.log('søker', søker.data);
+
+    const migreringsdato = '2024-10-05T14:48:00.000Z';
+    const dødsfallDato = '2011-10-05T14:48:00.000Z';
 
     return (
-        <Visittkort
-            navn={bruker?.navn ?? 'Ukjent'}
-            ident={formaterIdent(bruker?.personIdent ?? '')}
-            alder={hentAlder(bruker?.fødselsdato ?? '')}
-            kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
-            ikon={ikonForFagsakType(minimalFagsak?.fagsakType)}
-            dempetKantlinje
-            padding
+        <Box
+            borderWidth={'0 0 1 0'}
+            borderColor="border-subtle"
+            paddingInline={'4'}
+            paddingBlock={'2'}
         >
-            <div>|</div>
-            <BodyShort>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
-            {bruker?.dødsfallDato?.length && (
-                <>
+            <HStack align="center" gap="4">
+                <HStack align="center" gap="4">
+                    <IkonForFagsakType
+                        fagsakType={minimalFagsak?.fagsakType}
+                        kjønn={fagsakEierKjønn}
+                        alder={fagsakEierAlder}
+                    />
+                    <BodyShort as={'span'} weight={'semibold'}>
+                        {fagsakEierNavn} ({fagsakEierAlder} år)
+                    </BodyShort>
                     <div>|</div>
-                    <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
-                </>
-            )}
-            <Spacer />
-            {minimalFagsak !== undefined && (
-                <>
-                    {minimalFagsak?.migreringsdato !== undefined &&
-                        sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
+                    <HStack align="center" gap="1">
+                        {fagsakEierIdent}
+                        <CopyButton copyText={fagsakEierIdent.replace(' ', '')} size={'small'} />
+                    </HStack>
+                </HStack>
+                <div>|</div>
+                <BodyShort>{`Kommunenr: ${søker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
+                <div>|</div>
+                <HStack align="center" gap="4">
+                    <span>
+                        <BodyShort as={'span'} weight={'semibold'}>
+                            Søker:{' '}
+                        </BodyShort>
+                        {søkerNavn} ({søkerAlder} år)
+                    </span>
+                    <div>|</div>
+                    <HStack align="center" gap="1">
+                        {søkerIdent}
+                        <CopyButton copyText={søkerIdent.replace(' ', '')} size={'small'} />
+                    </HStack>
+                </HStack>
+                {dødsfallDato?.length && (
+                    <>
+                        <div>|</div>
+                        <DødsfallTag dødsfallDato={dødsfallDato} />
+                    </>
+                )}
+                {migreringsdato !== undefined &&
+                    sjekkOmMigreringsdatoErEldreEnn3År(migreringsdato) && (
+                        <>
+                            <div>|</div>
                             <Tag
                                 size="small"
                                 children={`Migrert ${isoStringTilFormatertString({
@@ -72,10 +135,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
                                 })}`}
                                 variant={'info'}
                             />
-                        )}
-                </>
-            )}
-        </Visittkort>
+                        </>
+                    )}
+            </HStack>
+        </Box>
     );
 };
 
