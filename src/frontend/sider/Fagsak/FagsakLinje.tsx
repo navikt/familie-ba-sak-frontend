@@ -30,38 +30,39 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
 }) => {
     return (
         <Box borderWidth={'0 0 1 0'} borderColor="border-subtle">
-            <HStack paddingInline={'2 4'} paddingBlock={'2'}>
-                <Button
-                    as="a"
-                    size={'small'}
-                    variant={'tertiary'}
-                    icon={<HouseIcon />}
-                    href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
-                    style={aktivFaneStyle('saksoversikt')}
-                >
-                    Saksoversikt
-                </Button>
-                <Button
-                    as="a"
-                    size={'small'}
-                    variant={'tertiary'}
-                    icon={<MagnifyingGlassIcon />}
-                    href={'infotrygd'}
-                    style={aktivFaneStyle('infotrygd')}
-                >
-                    Infotrygd
-                </Button>
-                <Button
-                    as="a"
-                    size={'small'}
-                    variant={'tertiary'}
-                    icon={<FileTextIcon />}
-                    href={`/fagsak/${minimalFagsak.id}/dokumenter`}
-                    style={aktivFaneStyle('dokumenter')}
-                >
-                    Dokumenter
-                </Button>
-                <Spacer />
+            <HStack paddingInline={'2 4'} paddingBlock={'2'} justify={'space-between'}>
+                <HStack>
+                    <Button
+                        as="a"
+                        size={'small'}
+                        variant={'tertiary'}
+                        icon={<HouseIcon />}
+                        href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
+                        style={aktivFaneStyle('saksoversikt')}
+                    >
+                        Saksoversikt
+                    </Button>
+                    <Button
+                        as="a"
+                        size={'small'}
+                        variant={'tertiary'}
+                        icon={<MagnifyingGlassIcon />}
+                        href={'infotrygd'}
+                        style={aktivFaneStyle('infotrygd')}
+                    >
+                        Infotrygd
+                    </Button>
+                    <Button
+                        as="a"
+                        size={'small'}
+                        variant={'tertiary'}
+                        icon={<FileTextIcon />}
+                        href={`/fagsak/${minimalFagsak.id}/dokumenter`}
+                        style={aktivFaneStyle('dokumenter')}
+                    >
+                        Dokumenter
+                    </Button>
+                </HStack>
                 <Behandlingsmeny
                     minimalFagsak={minimalFagsak}
                     bruker={bruker}
