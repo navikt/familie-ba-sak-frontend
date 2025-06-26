@@ -34,6 +34,7 @@ interface IkonForFagsakTypeProps {
 }
 
 const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
+    // TODO: Bedre håndtering av ikoner. Nå er det tre forskjellige implementasjon og prop-typer. Kan alle være Aksel?
     if (fagsakType === FagsakType.INSTITUSJON) {
         return <KontorIkonGrønn height={'24'} width={'24'} />;
     }
@@ -53,8 +54,10 @@ const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn,
 };
 
 const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
+    // TODO: Bedre bruk av hook. Error state, loading, etc.
     const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
 
+    // TODO: Rydd opp dette. Gjør dette inline, eller flytt til hjelpefunksjon/komponent.
     const søkerNavn = søker?.navn ?? 'Ukjent';
     const søkerIdent = formaterIdent(søker?.personIdent ?? '');
     const søkerAlder = hentAlder(søker?.fødselsdato ?? '');
@@ -90,6 +93,7 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                 <div>|</div>
                 <BodyShort>{`Kommunenr: ${søker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
                 <div>|</div>
+                {/* TODO: Skal kun vises hvis det er institusjon/skjermet barn*/}
                 <HStack align="center" gap="4">
                     <span>
                         <BodyShort as={'span'} weight={'semibold'}>
