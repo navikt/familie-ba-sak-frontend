@@ -36,7 +36,7 @@ interface IkonForFagsakTypeProps {
 const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
     // TODO: Bedre håndtering av ikoner. Nå er det tre forskjellige implementasjon og prop-typer. Kan alle være Aksel?
     if (fagsakType === FagsakType.INSTITUSJON) {
-        return <KontorIkonGrønn height={'24'} width={'24'} />;
+        return <KontorIkonGrønn height="24" width="24" />;
     }
     if (fagsakType === FagsakType.SKJERMET_BARN) {
         return <PersonCircleFillIcon color="var(--a-orange-600)" height={28} width={28} />;
@@ -79,12 +79,7 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
     };
 
     return (
-        <Box
-            borderWidth={'0 0 1 0'}
-            borderColor="border-subtle"
-            paddingInline={'4'}
-            paddingBlock={'2'}
-        >
+        <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
             <HStack align="center" gap="4">
                 <HStack align="center" gap="4">
                     <PersonlinjeIkon
@@ -92,16 +87,13 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                         kjønn={fagsakEierInfo.kjønn}
                         alder={fagsakEierInfo.alder}
                     />
-                    <BodyShort as={'span'} weight={'semibold'}>
+                    <BodyShort as="span" weight="semibold">
                         {fagsakEierInfo.navn} ({fagsakEierInfo.alder} år)
                     </BodyShort>
                     <Divider />
                     <HStack align="center" gap="1">
                         {fagsakEierInfo.ident}
-                        <CopyButton
-                            copyText={fagsakEierInfo.ident.replace(' ', '')}
-                            size={'small'}
-                        />
+                        <CopyButton copyText={fagsakEierInfo.ident.replace(' ', '')} size="small" />
                     </HStack>
                 </HStack>
                 <Divider />
@@ -111,7 +103,7 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                         <Divider />
                         <HStack align="center" gap="4">
                             <span>
-                                <BodyShort as={'span'} weight={'semibold'}>
+                                <BodyShort as="span" weight="semibold">
                                     Søker:{' '}
                                 </BodyShort>
                                 {søkerInfo.navn} ({søkerInfo.alder} år)
@@ -121,7 +113,7 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                                 {søkerInfo.ident}
                                 <CopyButton
                                     copyText={søkerInfo.ident.replace(' ', '')}
-                                    size={'small'}
+                                    size="small"
                                 />
                             </HStack>
                         </HStack>
@@ -137,14 +129,13 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                     sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                         <>
                             <Divider />
-                            <Tag
-                                size="small"
-                                children={`Migrert ${isoStringTilFormatertString({
+                            <Tag variant="info" size="small">
+                                Migrert{' '}
+                                {isoStringTilFormatertString({
                                     isoString: minimalFagsak?.migreringsdato,
                                     tilFormat: Datoformat.DATO,
-                                })}`}
-                                variant={'info'}
-                            />
+                                })}
+                            </Tag>
                         </>
                     )}
             </HStack>
