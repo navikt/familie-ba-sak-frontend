@@ -115,6 +115,14 @@ const GeneriskVilkår: React.FC<IProps> = ({
         );
     };
 
+    const skalViseLyspære =
+        toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
+        vilkårResultater.some(
+            vilkårResultat =>
+                vilkårResultat.verdi.erAutomatiskVurdert &&
+                vilkårResultat.verdi.begrunnelse.verdi.includes('Oppgitt i søknad')
+        );
+
     return (
         <Container>
             <Fieldset
@@ -122,11 +130,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 legend={vilkårFraConfig.tittel}
                 hideLegend
             >
-                <HStack>
-                    {toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
-                        person.erManueltLagtTilISøknad && (
-                            <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
-                        )}
+                <HStack gap="4" align="center">
+                    {skalViseLyspære && (
+                        <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
+                    )}
                     <Heading size="medium" level="3">
                         {vilkårFraConfig.tittel}
                     </Heading>
