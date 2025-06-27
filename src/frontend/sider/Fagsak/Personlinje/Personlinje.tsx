@@ -21,19 +21,19 @@ import type { IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 
-interface IProps {
+interface PersonlinjeProps {
     søker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
     behandling?: IBehandling;
 }
 
-interface IkonForFagsakTypeProps {
+interface PersonlinjeIkonProps {
     fagsakType?: FagsakType;
     kjønn: string;
     alder: number;
 }
 
-const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn, alder }) => {
+const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, alder }) => {
     // TODO: Bedre håndtering av ikoner. Nå er det tre forskjellige implementasjon og prop-typer. Kan alle være Aksel?
     if (fagsakType === FagsakType.INSTITUSJON) {
         return <KontorIkonGrønn height="24" width="24" />;
@@ -57,7 +57,7 @@ const Divider: React.FC = () => {
     return <div>|</div>;
 };
 
-const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
+const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
     // TODO: Bedre bruk av hook. Error state, loading, etc.
     const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
 
