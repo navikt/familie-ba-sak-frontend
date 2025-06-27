@@ -53,19 +53,30 @@ const PersonlinjeIkon: React.FC<IkonForFagsakTypeProps> = ({ fagsakType, kjønn,
     return <NøytralPersonIkon {...ikonProps} />;
 };
 
+const Divider: React.FC = () => {
+    return <div>|</div>;
+};
+
 const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
     // TODO: Bedre bruk av hook. Error state, loading, etc.
     const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
 
-    // TODO: Rydd opp dette. Gjør dette inline, eller flytt til hjelpefunksjon/komponent.
-    const søkerNavn = søker?.navn ?? 'Ukjent';
-    const søkerIdent = formaterIdent(søker?.personIdent ?? '');
-    const søkerAlder = hentAlder(søker?.fødselsdato ?? '');
+    const fagsakEierInfo = {
+        navn: fagsakEier.data?.navn ?? 'Ukjent',
+        ident: formaterIdent(fagsakEier.data?.personIdent ?? ''),
+        alder: hentAlder(fagsakEier.data?.fødselsdato ?? ''),
+        kjønn: fagsakEier.data?.kjønn ?? kjønnType.UKJENT,
+    };
 
-    const fagsakEierNavn = fagsakEier.data?.navn ?? 'Ukjent';
-    const fagsakEierIdent = formaterIdent(fagsakEier.data?.personIdent ?? '');
-    const fagsakEierAlder = hentAlder(fagsakEier.data?.fødselsdato ?? '');
-    const fagsakEierKjønn = fagsakEier.data?.kjønn ?? kjønnType.UKJENT;
+    const visSøkerInfo =
+        minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ||
+        minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN;
+
+    const søkerInfo = {
+        navn: søker?.navn ?? 'Ukjent',
+        ident: formaterIdent(søker?.personIdent ?? ''),
+        alder: hentAlder(søker?.fødselsdato ?? ''),
+    };
 
     return (
         <Box
@@ -78,45 +89,54 @@ const Personlinje: React.FC<IProps> = ({ søker, minimalFagsak }) => {
                 <HStack align="center" gap="4">
                     <PersonlinjeIkon
                         fagsakType={minimalFagsak?.fagsakType}
-                        kjønn={fagsakEierKjønn}
-                        alder={fagsakEierAlder}
+                        kjønn={fagsakEierInfo.kjønn}
+                        alder={fagsakEierInfo.alder}
                     />
                     <BodyShort as={'span'} weight={'semibold'}>
-                        {fagsakEierNavn} ({fagsakEierAlder} år)
+                        {fagsakEierInfo.navn} ({fagsakEierInfo.alder} år)
                     </BodyShort>
-                    <div>|</div>
+                    <Divider />
                     <HStack align="center" gap="1">
-                        {fagsakEierIdent}
-                        <CopyButton copyText={fagsakEierIdent.replace(' ', '')} size={'small'} />
+                        {fagsakEierInfo.ident}
+                        <CopyButton
+                            copyText={fagsakEierInfo.ident.replace(' ', '')}
+                            size={'small'}
+                        />
                     </HStack>
                 </HStack>
-                <div>|</div>
+                <Divider />
                 <BodyShort>{`Kommunenr: ${søker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
-                <div>|</div>
-                {/* TODO: Skal kun vises hvis det er institusjon/skjermet barn*/}
-                <HStack align="center" gap="4">
-                    <span>
-                        <BodyShort as={'span'} weight={'semibold'}>
-                            Søker:{' '}
-                        </BodyShort>
-                        {søkerNavn} ({søkerAlder} år)
-                    </span>
-                    <div>|</div>
-                    <HStack align="center" gap="1">
-                        {søkerIdent}
-                        <CopyButton copyText={søkerIdent.replace(' ', '')} size={'small'} />
-                    </HStack>
-                </HStack>
+                {visSøkerInfo && (
+                    <>
+                        <Divider />
+                        <HStack align="center" gap="4">
+                            <span>
+                                <BodyShort as={'span'} weight={'semibold'}>
+                                    Søker:{' '}
+                                </BodyShort>
+                                {søkerInfo.navn} ({søkerInfo.alder} år)
+                            </span>
+                            <Divider />
+                            <HStack align="center" gap="1">
+                                {søkerInfo.ident}
+                                <CopyButton
+                                    copyText={søkerInfo.ident.replace(' ', '')}
+                                    size={'small'}
+                                />
+                            </HStack>
+                        </HStack>
+                    </>
+                )}
                 {søker?.dødsfallDato?.length && (
                     <>
-                        <div>|</div>
+                        <Divider />
                         <DødsfallTag dødsfallDato={søker.dødsfallDato} />
                     </>
                 )}
                 {minimalFagsak?.migreringsdato &&
                     sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
                         <>
-                            <div>|</div>
+                            <Divider />
                             <Tag
                                 size="small"
                                 children={`Migrert ${isoStringTilFormatertString({
