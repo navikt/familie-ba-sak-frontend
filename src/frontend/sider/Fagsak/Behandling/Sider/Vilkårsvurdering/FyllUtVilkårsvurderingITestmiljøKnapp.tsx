@@ -11,6 +11,7 @@ import { erProd } from '../../../../../utils/miljø';
 
 const StyledButton = styled(Button)`
     margin-top: 2rem;
+    margin-bottom: 2rem;
 `;
 
 interface IProps {
