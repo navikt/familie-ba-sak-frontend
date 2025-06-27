@@ -1,18 +1,19 @@
 import { differenceInMilliseconds } from 'date-fns';
 
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
+import type { IBehandling } from '../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../typer/person';
 import { PersonTypeVisningsRangering } from '../../../../../typer/person';
-import type {
-    IPersonResultat,
-    IRestPersonResultat,
-    IRestVilkårResultat,
-    IVilkårResultat,
+import {
+    type IPersonResultat,
+    type IRestPersonResultat,
+    type IRestVilkårResultat,
+    type IVilkårResultat,
+    Resultat,
 } from '../../../../../typer/vilkår';
-import { Resultat } from '../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../utils/dato';
 import {
     isoStringTilDate,
@@ -172,3 +173,30 @@ export const mapFraRestPersonResultatTilPersonResultat = (
             );
         });
 };
+
+export const utledVilkårSomMåKontrolleresPerPerson = (
+    behandling: IBehandling,
+    vilkårsvurdering: IPersonResultat[]
+): Record<string, string[]> =>
+    vilkårsvurdering.reduce((acc: Record<string, string[]>, personResultat) => {
+        const navn = personResultat.person.navn;
+
+        if (
+            behandling.søknadsgrunnlag?.erAutomatiskRegistrert &&
+            personResultat.person.erManueltLagtTilISøknad
+        ) {
+            acc[navn] = acc[navn] || [];
+            acc[navn].push(`Har ikke relasjon til søker i PDL.`);
+        }
+
+        const vilkårSomMåKontrolleres = personResultat.vilkårResultater
+            .map(v => v.verdi.begrunnelseForManuellKontroll)
+            .filter(bfmk => bfmk !== null);
+
+        if (vilkårSomMåKontrolleres.length > 0) {
+            acc[navn] = acc[navn] || [];
+            acc[navn].push(...vilkårSomMåKontrolleres);
+        }
+
+        return acc;
+    }, {});
