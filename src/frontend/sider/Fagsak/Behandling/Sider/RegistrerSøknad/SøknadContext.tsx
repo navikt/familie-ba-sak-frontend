@@ -186,6 +186,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                                 ),
                                 endringAvOpplysningerBegrunnelse:
                                     skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                                erAutomatiskRegistrert: false,
                             },
                             bekreftEndringerViaFrontend,
                         },

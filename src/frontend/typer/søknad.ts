@@ -11,6 +11,7 @@ export interface ISøknadDTO {
     søkerMedOpplysninger: ISøkerMedOpplysninger;
     barnaMedOpplysninger: IBarnMedOpplysningerBackend[];
     endringAvOpplysningerBegrunnelse: string;
+    erAutomatiskRegistrert?: boolean;
 }
 
 export interface ISøkerMedOpplysninger {
