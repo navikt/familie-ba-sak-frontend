@@ -10,10 +10,12 @@ import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useAppContext } from '../../../../../../context/AppContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../typer/person';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 import type {
     IPersonResultat,
     IVilkårConfig,
@@ -62,6 +64,7 @@ const VilkårDiv = styled.div`
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
+    const { toggles } = useAppContext();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const {
         vurderErLesevisning,
@@ -121,6 +124,10 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                     vilkårResultat =>
                         vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
+                const skalViseLyspære =
+                    toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
+                    personResultat.person.erManueltLagtTilISøknad &&
+                    behandling.søknadsgrunnlag?.erAutomatiskRegistrert;
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}
@@ -131,6 +138,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 person={personResultat.person}
                                 somOverskrift
                                 erLesevisning={erLesevisning}
+                                skalViseLyspære={skalViseLyspære}
                             />
 
                             {!erLesevisning &&

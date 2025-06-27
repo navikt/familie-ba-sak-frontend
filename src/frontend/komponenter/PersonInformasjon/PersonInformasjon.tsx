@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
+import { LightBulbFillIcon, MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, CopyButton, Dropdown, Heading, HStack } from '@navikt/ds-react';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
@@ -17,6 +17,7 @@ interface IProps {
     somOverskrift?: boolean;
     width?: string;
     erLesevisning: boolean;
+    skalViseLyspære?: boolean;
 }
 
 const StyledDropdownMeny = styled(Dropdown.Menu)`
@@ -44,6 +45,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     person,
     somOverskrift = false,
     erLesevisning,
+    skalViseLyspære = false,
 }) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
@@ -57,6 +59,9 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
                         {navnOgAlder}
                     </HeadingUtenOverflow>
+                    {skalViseLyspære && (
+                        <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
+                    )}
                     <Skillelinje erHeading />
                     <HStack gap="1" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
