@@ -80,8 +80,8 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
 
     return (
         <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
-            <HStack align="center" gap="4">
-                <HStack align="center" gap="4">
+            <HStack align="center" gap="3 4">
+                <HStack align="center" gap="3 4">
                     <PersonlinjeIkon
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakEierInfo.kjønn}
@@ -101,7 +101,7 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
                 {visSøkerInfo && (
                     <>
                         <Divider />
-                        <HStack align="center" gap="4">
+                        <HStack align="center" gap="3 4">
                             <span>
                                 <BodyShort as="span" weight="semibold">
                                     Søker:{' '}
