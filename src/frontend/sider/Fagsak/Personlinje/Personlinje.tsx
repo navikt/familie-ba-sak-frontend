@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import {
     GuttIkon,
     JenteIkon,
@@ -53,19 +53,42 @@ const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, a
     return <NøytralPersonIkon {...ikonProps} />;
 };
 
+const InnholdWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
+    return (
+        <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
+            {children}
+        </Box>
+    );
+};
+
 const Divider: React.FC = () => {
     return <div>|</div>;
 };
 
 const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
-    // TODO: Bedre bruk av hook. Error state, loading, etc.
-    const fagsakEier = useHentPerson(minimalFagsak?.fagsakeier);
+    const { data: fagsakEier, isPending, error } = useHentPerson(minimalFagsak?.fagsakeier);
+
+    if (isPending) {
+        return (
+            <InnholdWrapper>
+                <BodyShort>Henter persondata...</BodyShort>
+            </InnholdWrapper>
+        );
+    }
+
+    if (error) {
+        return (
+            <Alert variant="error" fullWidth>
+                Kunne ikke hente persondata
+            </Alert>
+        );
+    }
 
     const fagsakEierInfo = {
-        navn: fagsakEier.data?.navn ?? 'Ukjent',
-        ident: formaterIdent(fagsakEier.data?.personIdent ?? ''),
-        alder: hentAlder(fagsakEier.data?.fødselsdato ?? ''),
-        kjønn: fagsakEier.data?.kjønn ?? kjønnType.UKJENT,
+        navn: fagsakEier.navn,
+        ident: formaterIdent(fagsakEier.personIdent),
+        alder: hentAlder(fagsakEier.fødselsdato),
+        kjønn: fagsakEier.kjønn,
     };
 
     const visSøkerInfo =
@@ -79,7 +102,7 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
     };
 
     return (
-        <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
+        <InnholdWrapper>
             <HStack align="center" gap="3 4">
                 <HStack align="center" gap="3 4">
                     <PersonlinjeIkon
@@ -139,7 +162,7 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
                         </>
                     )}
             </HStack>
-        </Box>
+        </InnholdWrapper>
     );
 };
 
