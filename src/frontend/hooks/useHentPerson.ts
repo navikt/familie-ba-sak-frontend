@@ -17,21 +17,26 @@ function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGru
     return 0;
 }
 
-// TODO : Refactor so it does not mutate person object, but return a new object instead
-function obfuskerPersonInfo(personInfo: IPersonInfo) {
-    personInfo.navn = 'Søker Søkersen';
-    personInfo.bostedsadresse = {
-        adresse: 'Adresseveien 1',
-        postnummer: '0001',
-    };
+function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     let indeks = 1;
-    personInfo.forelderBarnRelasjon?.sort(sammenlignFødselsdato).forEach(person => {
-        if (person.relasjonRolle === ForelderBarnRelasjonRolle.BARN) {
-            person.navn = '[' + indeks++ + '] Barn Barnesen';
-        } else {
-            person.navn = 'Søker Søkersen';
-        }
-    });
+    return {
+        ...personInfo,
+        navn: 'Søker Søkersen',
+        bostedsadresse: {
+            adresse: 'Adresseveien 1',
+            postnummer: '0001',
+        },
+        forelderBarnRelasjon: personInfo.forelderBarnRelasjon
+            ?.slice()
+            .sort(sammenlignFødselsdato)
+            .map(person => ({
+                ...person,
+                navn:
+                    person.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                        ? `[${indeks++}] Barn Barnesen`
+                        : 'Søker Søkersen',
+            })),
+    };
 }
 
 export const PERSON_QUERY_KEY_PREFIX = 'person';
