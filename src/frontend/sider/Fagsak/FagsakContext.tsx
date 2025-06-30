@@ -21,8 +21,12 @@ import {
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useAppContext } from '../../context/AppContext';
 import { useSettAktivBrukerIModiaContext } from '../../hooks/useSettAktivBrukerIModiaContext';
-import type { IBaseFagsak, IMinimalFagsak } from '../../typer/fagsak';
-import { mapMinimalFagsakTilBaseFagsak } from '../../typer/fagsak';
+import {
+    FagsakType,
+    type IBaseFagsak,
+    type IMinimalFagsak,
+    mapMinimalFagsakTilBaseFagsak,
+} from '../../typer/fagsak';
 import { type IPersonInfo } from '../../typer/person';
 import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
@@ -80,17 +84,14 @@ export const FagsakProvider = (props: PropsWithChildren) => {
 
     const oppdaterBrukerHvisFagsakEndres = (
         bruker: Ressurs<IPersonInfo>,
-        søkerFødselsnummer?: string
+        fødselsnummer?: string
     ): void => {
-        if (søkerFødselsnummer === undefined) {
+        if (fødselsnummer === undefined) {
             return;
         }
 
-        if (
-            bruker.status !== RessursStatus.SUKSESS ||
-            søkerFødselsnummer !== bruker.data.personIdent
-        ) {
-            hentBruker(søkerFødselsnummer);
+        if (bruker.status !== RessursStatus.SUKSESS || fødselsnummer !== bruker.data.personIdent) {
+            hentBruker(fødselsnummer);
         }
     };
 
@@ -128,10 +129,14 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         ) {
             settBruker(byggTomRessurs());
         } else {
-            oppdaterBrukerHvisFagsakEndres(
-                bruker,
-                hentDataFraRessurs(minimalFagsakRessurs)?.søkerFødselsnummer
-            );
+            const minimalFagsak = hentDataFraRessurs(minimalFagsakRessurs);
+
+            const brukerFødselsnummer =
+                minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN
+                    ? minimalFagsak?.fagsakeier
+                    : minimalFagsak?.søkerFødselsnummer;
+
+            oppdaterBrukerHvisFagsakEndres(bruker, brukerFødselsnummer);
         }
         settManuelleBrevmottakerePåFagsak([]);
     }, [minimalFagsakRessurs]);
