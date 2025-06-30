@@ -34,7 +34,6 @@ interface PersonlinjeIkonProps {
 }
 
 const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, alder }) => {
-    // TODO: Bedre håndtering av ikoner. Nå er det tre forskjellige implementasjon og prop-typer. Kan alle være Aksel?
     if (fagsakType === FagsakType.INSTITUSJON) {
         return <KontorIkonGrønn height="24" width="24" />;
     }
