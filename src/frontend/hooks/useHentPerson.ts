@@ -18,24 +18,31 @@ function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGru
 }
 
 function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
-    let indeks = 1;
+    let barnIndeks = 1;
+
+    const obfuskertNavn = 'Søker Søkersen';
+
+    const obfuskertAdresse = {
+        adresse: 'Adresseveien 1',
+        postnummer: '0001',
+    };
+
+    const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
+        ?.slice()
+        .sort(sammenlignFødselsdato)
+        .map(relasjon => ({
+            ...relasjon,
+            navn:
+                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                    ? `[${barnIndeks++}] Barn Barnesen`
+                    : obfuskertNavn,
+        }));
+
     return {
         ...personInfo,
-        navn: 'Søker Søkersen',
-        bostedsadresse: {
-            adresse: 'Adresseveien 1',
-            postnummer: '0001',
-        },
-        forelderBarnRelasjon: personInfo.forelderBarnRelasjon
-            ?.slice()
-            .sort(sammenlignFødselsdato)
-            .map(person => ({
-                ...person,
-                navn:
-                    person.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        ? `[${indeks++}] Barn Barnesen`
-                        : 'Søker Søkersen',
-            })),
+        navn: obfuskertNavn,
+        bostedsadresse: obfuskertAdresse,
+        forelderBarnRelasjon: obfuskerteRelasjoner,
     };
 }
 
