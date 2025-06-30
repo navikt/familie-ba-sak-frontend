@@ -16,7 +16,6 @@ export default [
         plugins: {
             '@typescript-eslint': tseslint.plugin,
             prettier: prettier,
-            import: importPlugin,
         },
 
         languageOptions: {
