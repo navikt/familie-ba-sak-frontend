@@ -1,18 +1,9 @@
 import { useState } from 'react';
 
-import type { AxiosError } from 'axios';
-
 import type { FamilieRequestConfig } from '@navikt/familie-http';
-import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggFunksjonellFeilRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFunksjonellFeilRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';
@@ -48,30 +39,6 @@ export const useInfotrygdSkjema = () => {
         ident,
         onSubmitWrapper,
         skjema,
-    };
-};
-
-export const useInfotrygdRequest = () => {
-    const { request } = useHttp();
-    const [infotrygdsakerRessurs, settInfotrygdsakerRessurs] =
-        useState<Ressurs<IInfotrygdsaker>>(byggTomRessurs());
-
-    const hentInfotrygdsaker = (ident: string) => {
-        settInfotrygdsakerRessurs(byggHenterRessurs<IInfotrygdsaker>());
-        request<IInfotrygdsakerRequest, IInfotrygdsaker>(hentInfotrygdsakerRequestConfig(ident))
-            .then((ressurs: Ressurs<IInfotrygdsaker>) => {
-                settInfotrygdsakerRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs));
-            })
-            .catch((_error: AxiosError) => {
-                settInfotrygdsakerRessurs(
-                    byggFeiletRessurs('Ukjent feil ved innhenting av infotrygdsaker')
-                );
-            });
-    };
-
-    return {
-        hentInfotrygdsaker,
-        infotrygdsakerRessurs,
     };
 };
 
