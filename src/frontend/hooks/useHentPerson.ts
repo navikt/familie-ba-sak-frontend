@@ -18,8 +18,6 @@ function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGru
 }
 
 function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
-    let barnIndeks = 1;
-
     const obfuskertNavn = 'Søker Søkersen';
 
     const obfuskertAdresse = {
@@ -27,6 +25,7 @@ function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
         postnummer: '0001',
     };
 
+    let barnIndeks = 1;
     const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
         ?.slice()
         .sort(sammenlignFødselsdato)

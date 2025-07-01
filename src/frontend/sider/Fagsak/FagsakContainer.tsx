@@ -69,7 +69,6 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         </>
                                     }
                                 />
-
                                 <Route
                                     path="/dokumentutsending"
                                     element={
@@ -86,7 +85,6 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         </>
                                     }
                                 />
-
                                 <Route
                                     path="/dokumenter"
                                     element={
@@ -113,7 +111,6 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         </>
                                     }
                                 />
-
                                 <Route
                                     path="/:behandlingId/*"
                                     element={
