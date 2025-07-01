@@ -44,7 +44,7 @@ const FagsakLinje = ({ minimalFagsak, bruker, behandling }: FagsaklinjeProps) =>
                         size="small"
                         variant="tertiary"
                         icon={<MagnifyingGlassIcon />}
-                        to="infotrygd"
+                        to={`/fagsak/${minimalFagsak.id}/infotrygd`}
                         style={aktivFaneStyle('infotrygd', pathname)}
                     >
                         Infotrygd
