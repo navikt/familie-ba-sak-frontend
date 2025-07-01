@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, CopyButton, HStack, Loader, Tag } from '@navikt/ds-react';
 import {
     GuttIkon,
     JenteIkon,
@@ -52,7 +52,7 @@ const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, a
     return <NøytralPersonIkon {...ikonProps} />;
 };
 
-const InnholdWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
+const InnholdContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
             {children}
@@ -69,9 +69,12 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
 
     if (isPending) {
         return (
-            <InnholdWrapper>
-                <BodyShort>Henter persondata...</BodyShort>
-            </InnholdWrapper>
+            <InnholdContainer>
+                <HStack align="center" gap="2">
+                    <BodyShort>Henter persondata</BodyShort>
+                    <Loader size="small" />
+                </HStack>
+            </InnholdContainer>
         );
     }
 
@@ -101,7 +104,7 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
     };
 
     return (
-        <InnholdWrapper>
+        <InnholdContainer>
             <HStack align="center" gap="3 4">
                 <HStack align="center" gap="3 4">
                     <PersonlinjeIkon
@@ -161,7 +164,7 @@ const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
                         </>
                     )}
             </HStack>
-        </InnholdWrapper>
+        </InnholdContainer>
     );
 };
 
