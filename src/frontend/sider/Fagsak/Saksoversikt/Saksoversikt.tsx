@@ -130,8 +130,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     };
 
     return (
-        <Box maxWidth={'70rem'} marginBlock={'10'} marginInline={'16'}>
-            <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
+        <Box maxWidth="70rem" marginBlock="10" marginInline="16">
+            <Heading size="large" level="1" children="Saksoversikt" />
 
             {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
                 minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
@@ -142,7 +142,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                 <FagsakLenkepanel minimalFagsak={minimalFagsak} />
                 {minimalFagsak.status === FagsakStatus.LØPENDE && (
                     <>
-                        <Heading size={'medium'} level={'2'} spacing>
+                        <Heading size="medium" level="2" spacing>
                             Løpende månedlig utbetaling
                         </Heading>
                         {løpendeMånedligUtbetaling()}

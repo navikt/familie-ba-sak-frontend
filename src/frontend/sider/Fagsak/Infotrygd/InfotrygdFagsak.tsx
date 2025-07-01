@@ -21,8 +21,8 @@ const InfotrygdFagsak: React.FunctionComponent<InfotrygdFagsakProps> = ({ minima
     switch (infotrygdsakerRessurs.status) {
         case RessursStatus.SUKSESS:
             return (
-                <Box maxWidth={'70rem'} marginBlock={'10'} marginInline={'16'}>
-                    <Heading size={'large'} level={'1'} children={'Infotrygd'} />
+                <Box maxWidth="70rem" marginBlock="10" marginInline="16">
+                    <Heading size="large" level="1" children="Infotrygd" />
                     <Infotrygdtabeller
                         ident={minimalFagsak.søkerFødselsnummer}
                         saker={infotrygdsakerRessurs.data.saker}

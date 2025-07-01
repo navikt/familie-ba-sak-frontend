@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Spacer } from '@navikt/ds-react';
+import { Box, Button, HStack } from '@navikt/ds-react';
 
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
@@ -29,13 +29,13 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
     behandling,
 }) => {
     return (
-        <Box borderWidth={'0 0 1 0'} borderColor="border-subtle">
-            <HStack paddingInline={'2 4'} paddingBlock={'2'} justify={'space-between'}>
+        <Box borderWidth="0 0 1 0" borderColor="border-subtle">
+            <HStack paddingInline="2 4" paddingBlock="2" justify="space-between">
                 <HStack>
                     <Button
                         as="a"
-                        size={'small'}
-                        variant={'tertiary'}
+                        size="small"
+                        variant="tertiary"
                         icon={<HouseIcon />}
                         href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
                         style={aktivFaneStyle('saksoversikt')}
@@ -44,18 +44,18 @@ const FagsakLinje: React.FunctionComponent<FagsaklinjeProps> = ({
                     </Button>
                     <Button
                         as="a"
-                        size={'small'}
-                        variant={'tertiary'}
+                        size="small"
+                        variant="tertiary"
                         icon={<MagnifyingGlassIcon />}
-                        href={'infotrygd'}
+                        href="infotrygd"
                         style={aktivFaneStyle('infotrygd')}
                     >
                         Infotrygd
                     </Button>
                     <Button
                         as="a"
-                        size={'small'}
-                        variant={'tertiary'}
+                        size="small"
+                        variant="tertiary"
                         icon={<FileTextIcon />}
                         href={`/fagsak/${minimalFagsak.id}/dokumenter`}
                         style={aktivFaneStyle('dokumenter')}
