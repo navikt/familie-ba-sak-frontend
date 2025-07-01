@@ -101,24 +101,45 @@ export function Behandlinger({ fagsakId }: Props) {
     );
 
     return (
-        <VStack gap={'2'} marginBlock={'1 0'}>
+        <VStack gap={'4'} marginBlock={'1 0'}>
             {hentBarnetrygdbehandlingerError !== null && (
                 <Alert variant={'warning'}>
-                    <BodyShort>
-                        Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.
-                    </BodyShort>
+                    <VStack gap={'4'}>
+                        <BodyShort>
+                            Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.
+                        </BodyShort>
+                        {hentBarnetrygdbehandlingerError.message && (
+                            <BodyShort>
+                                Feilmelding: {hentBarnetrygdbehandlingerError.message}
+                            </BodyShort>
+                        )}
+                    </VStack>
                 </Alert>
             )}
             {hentKlagebehandlingError !== null && (
                 <Alert variant={'warning'}>
-                    <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
+                    <VStack gap={'4'}>
+                        <BodyShort>
+                            Klagebehandlinger er ikke tilgjengelig for øyeblikket.
+                        </BodyShort>
+                        {hentKlagebehandlingError.message && (
+                            <BodyShort>Feilmelding: {hentKlagebehandlingError.message}</BodyShort>
+                        )}
+                    </VStack>
                 </Alert>
             )}
             {hentTilbakekrevingsbehandlingerError !== null && (
                 <Alert variant={'warning'}>
-                    <BodyShort>
-                        Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.
-                    </BodyShort>
+                    <VStack gap={'4'}>
+                        <BodyShort>
+                            Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.
+                        </BodyShort>
+                        {hentTilbakekrevingsbehandlingerError.message && (
+                            <BodyShort>
+                                Feilmelding: {hentTilbakekrevingsbehandlingerError.message}
+                            </BodyShort>
+                        )}
+                    </VStack>
                 </Alert>
             )}
             <HStack gap={'3'} wrap={false} justify={'space-between'} align={'end'}>
