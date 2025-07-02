@@ -46,6 +46,7 @@ const mockRestVilkårResultat = ({
     vurderesEtter: erIkkeGenereltVilkår(vilkårType) ? vurderesEtter : null,
     utdypendeVilkårsvurderinger: [],
     resultatBegrunnelse: null,
+    begrunnelseForManuellKontroll: null,
 });
 
 export const mockRestPersonResultat = ({

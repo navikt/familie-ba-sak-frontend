@@ -118,6 +118,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         vilkårResultat.utdypendeVilkårsvurderinger,
                                         erUtdypendeVilkårsvurderingerGyldig
                                     ),
+                                    begrunnelseForManuellKontroll:
+                                        vilkårResultat.begrunnelseForManuellKontroll,
                                 },
                                 validerVilkår
                             )
