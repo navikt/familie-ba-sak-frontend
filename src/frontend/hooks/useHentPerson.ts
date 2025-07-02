@@ -25,15 +25,13 @@ function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
         postnummer: '0001',
     };
 
-    let barnIndeks = 1;
-    const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
-        ?.slice()
-        .sort(sammenlignFødselsdato)
-        .map(relasjon => ({
+const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
+        ?.toSorted(sammenlignFødselsdato)
+        .map((relasjon, index) => ({
             ...relasjon,
             navn:
                 relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                    ? `[${barnIndeks++}] Barn Barnesen`
+                    ? `[${index + 1}] Barn Barnesen`
                     : obfuskertNavn,
         }));
 
