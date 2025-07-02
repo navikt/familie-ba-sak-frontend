@@ -2,9 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
-import { hentFagsakeier } from '../api/hentFagsakeier';
+import { hentPerson } from '../api/hentPerson';
 import { useAppContext } from '../context/AppContext';
-import type { IMinimalFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo } from '../typer/person';
 
 function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(
@@ -42,18 +41,18 @@ function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     };
 }
 
-export const FAGSAKEIER_QUERY_KEY_PREFIX = 'fagsakeier';
+export const PERSON_QUERY_KEY_PREFIX = 'person';
 
-export function useHentFagsakeier(minimalFagsak: IMinimalFagsak | undefined) {
+export function useHentPerson(ident: string | undefined) {
     const { request } = useHttp();
     const { skalObfuskereData } = useAppContext();
     return useQuery({
-        queryKey: [FAGSAKEIER_QUERY_KEY_PREFIX, minimalFagsak?.fagsakeier],
+        queryKey: [PERSON_QUERY_KEY_PREFIX, ident],
         queryFn: async () => {
-            if (minimalFagsak?.fagsakeier === undefined) {
+            if (ident === undefined) {
                 return Promise.reject(new Error('Kan ikke hente person uten ident.'));
             }
-            const person = await hentFagsakeier(request, minimalFagsak.fagsakeier);
+            const person = await hentPerson(request, ident);
             return Promise.resolve(person);
         },
         select: person => {
@@ -62,6 +61,6 @@ export function useHentFagsakeier(minimalFagsak: IMinimalFagsak | undefined) {
             }
             return person;
         },
-        enabled: minimalFagsak?.fagsakeier !== undefined,
+        enabled: ident !== undefined,
     });
 }

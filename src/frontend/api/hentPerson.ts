@@ -8,7 +8,7 @@ interface RequestParams {
     ident: string;
 }
 
-export async function hentFagsakeier(request: FamilieRequest, ident: string) {
+export async function hentPerson(request: FamilieRequest, ident: string) {
     const ressurs = await request<RequestParams, IPersonInfo>({
         method: 'POST',
         url: '/familie-ba-sak/api/person',
@@ -17,7 +17,7 @@ export async function hentFagsakeier(request: FamilieRequest, ident: string) {
     if (ressurs.status === RessursStatus.SUKSESS && ressurs.data.harTilgang === false) {
         return Promise.reject(
             new Error(
-                `Du har ikke tilgang til eieren av fagsaken. Fagsakeieren har diskresjonskode ${adressebeskyttelsestyper[ressurs.data.adressebeskyttelseGradering]}.`
+                `Du har ikke tilgang til denne personen. Personen har diskresjonskode ${adressebeskyttelsestyper[ressurs.data.adressebeskyttelseGradering]}.`
             )
         );
     }

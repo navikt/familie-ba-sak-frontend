@@ -35,7 +35,10 @@ const ManuellJournalføringContent: React.FC = () => {
                 Journalstatus.MOTTATT;
             return (
                 <>
-                    <Personlinje søker={skjema.felter.bruker.verdi} minimalFagsak={minimalFagsak} />
+                    <Personlinje
+                        bruker={skjema.felter.bruker.verdi}
+                        minimalFagsak={minimalFagsak}
+                    />
 
                     {dataForManuellJournalføring.data.journalpost.journalstatus !==
                         Journalstatus.MOTTATT && (

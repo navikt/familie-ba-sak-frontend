@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, CopyButton, HStack, Loader, Tag } from '@navikt/ds-react';
+import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import {
     GuttIkon,
     JenteIkon,
@@ -11,7 +11,7 @@ import {
 } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
-import { useHentFagsakeier } from '../../../hooks/useHentFagsakeier';
+import { useHentPerson } from '../../../hooks/useHentPerson';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
 import type { IBehandling } from '../../../typer/behandling';
@@ -22,7 +22,7 @@ import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 
 interface PersonlinjeProps {
-    søker?: IPersonInfo;
+    bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
     behandling?: IBehandling;
 }
@@ -64,48 +64,28 @@ const Divider = () => {
     return <div>|</div>;
 };
 
-export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
-    const {
-        data: fagsakeier,
-        isPending: fagsakeierIsPending,
-        error: fagsakeierError,
-    } = useHentFagsakeier(minimalFagsak);
+export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
+    const { data: søker } = useHentPerson(minimalFagsak?.søkerFødselsnummer);
 
-    if (fagsakeierIsPending) {
-        return (
-            <InnholdContainer>
-                <HStack align="center" gap="2">
-                    <BodyShort>Henter persondata</BodyShort>
-                    <Loader size="small" />
-                </HStack>
-            </InnholdContainer>
-        );
-    }
+    // TODO: Skriv TODOs
+    const fagsakeierInfo = {
+        navn: bruker?.navn || 'Ukjent',
+        ident: formaterIdent(bruker?.personIdent ?? ''),
+        alder: hentAlder(bruker?.fødselsdato ?? ''),
+        kjønn: bruker?.kjønn ?? kjønnType.UKJENT,
+        kommunenummer: bruker?.kommunenummer ?? 'ukjent',
+    };
 
-    if (fagsakeierError) {
-        return (
-            <Alert variant="error" fullWidth>
-                {fagsakeierError.message}
-            </Alert>
-        );
-    }
-
-    const fagsakEierInfo = {
-        navn: fagsakeier.navn,
-        ident: formaterIdent(fagsakeier.personIdent),
-        alder: hentAlder(fagsakeier.fødselsdato),
-        kjønn: fagsakeier.kjønn,
+    const søkerInfo = {
+        navn: søker?.navn || 'Ukjent',
+        ident: formaterIdent(søker?.personIdent ?? ''),
+        alder: hentAlder(søker?.fødselsdato ?? ''),
+        dødsfallDato: søker?.dødsfallDato,
     };
 
     const visSøkerInfo =
         minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ||
         minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN;
-
-    const søkerInfo = {
-        navn: søker?.navn ?? 'Ukjent',
-        ident: formaterIdent(søker?.personIdent ?? ''),
-        alder: hentAlder(søker?.fødselsdato ?? ''),
-    };
 
     return (
         <InnholdContainer>
@@ -113,20 +93,20 @@ export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
                 <HStack align="center" gap="3 4">
                     <PersonlinjeIkon
                         fagsakType={minimalFagsak?.fagsakType}
-                        kjønn={fagsakEierInfo.kjønn}
-                        alder={fagsakEierInfo.alder}
+                        kjønn={fagsakeierInfo.kjønn}
+                        alder={fagsakeierInfo.alder}
                     />
                     <BodyShort as="span" weight="semibold">
-                        {fagsakEierInfo.navn} ({fagsakEierInfo.alder} år)
+                        {fagsakeierInfo.navn} ({fagsakeierInfo.alder} år)
                     </BodyShort>
                     <Divider />
                     <HStack align="center" gap="1">
-                        {fagsakEierInfo.ident}
-                        <CopyButton copyText={fagsakEierInfo.ident.replace(' ', '')} size="small" />
+                        {fagsakeierInfo.ident}
+                        <CopyButton copyText={fagsakeierInfo.ident.replace(' ', '')} size="small" />
                     </HStack>
                 </HStack>
                 <Divider />
-                <BodyShort>{`Kommunenr: ${søker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
+                <BodyShort>{`Kommunenr: ${fagsakeierInfo.kommunenummer}`}</BodyShort>
                 {visSøkerInfo && (
                     <>
                         <Divider />
@@ -148,10 +128,10 @@ export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
                         </HStack>
                     </>
                 )}
-                {søker?.dødsfallDato?.length && (
+                {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
                     <>
                         <Divider />
-                        <DødsfallTag dødsfallDato={søker.dødsfallDato} />
+                        <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
                     </>
                 )}
                 {minimalFagsak?.migreringsdato &&
