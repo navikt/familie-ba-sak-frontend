@@ -16,7 +16,7 @@ const InnholdContainer = ({ children }: { children: React.ReactNode }) => (
     </Box>
 );
 
-const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
+export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
     const { data, isPending, error } = useHentInfotrygdSaker(minimalFagsak.søkerFødselsnummer);
 
     if (isPending) {
@@ -49,5 +49,3 @@ const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
         </InnholdContainer>
     );
 };
-
-export default InfotrygdFagsak;
