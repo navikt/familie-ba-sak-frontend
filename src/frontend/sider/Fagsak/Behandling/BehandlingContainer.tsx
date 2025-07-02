@@ -7,13 +7,13 @@ import { ABorderDivider } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingRouter from './BehandlingRouter';
-import FagsakLinje from '../FagsakLinje';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
+import { FagsakLinje } from '../FagsakLinje';
 
 interface Props {
     bruker: IPersonInfo;
