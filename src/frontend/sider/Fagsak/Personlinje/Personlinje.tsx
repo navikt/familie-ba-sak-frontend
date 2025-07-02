@@ -33,7 +33,7 @@ interface PersonlinjeIkonProps {
     alder: number;
 }
 
-const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, alder }) => {
+const PersonlinjeIkon = ({ fagsakType, kjønn, alder }: PersonlinjeIkonProps) => {
     if (fagsakType === FagsakType.INSTITUSJON) {
         return <KontorIkonGrønn height="24" width="24" />;
     }
@@ -52,7 +52,7 @@ const PersonlinjeIkon: React.FC<PersonlinjeIkonProps> = ({ fagsakType, kjønn, a
     return <NøytralPersonIkon {...ikonProps} />;
 };
 
-const InnholdContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
+const InnholdContainer = ({ children }: React.PropsWithChildren) => {
     return (
         <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
             {children}
@@ -60,11 +60,11 @@ const InnholdContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
     );
 };
 
-const Divider: React.FC = () => {
+const Divider = () => {
     return <div>|</div>;
 };
 
-const Personlinje: React.FC<PersonlinjeProps> = ({ søker, minimalFagsak }) => {
+export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
     const { data: fagsakEier, isPending, error } = useHentPerson(minimalFagsak?.fagsakeier);
 
     if (isPending) {
@@ -174,5 +174,3 @@ const sjekkOmMigreringsdatoErEldreEnn3År = (migreringsdatoIString: string) => {
     const difference = dato.getTime() - migreringsdato.getTime();
     return Math.floor(Math.abs(difference) / millisekunderIEttÅr) < 3;
 };
-
-export default Personlinje;
