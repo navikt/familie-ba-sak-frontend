@@ -2,11 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
-import { useSettAktivBrukerIModiaContext } from './useSettAktivBrukerIModiaContext';
-import { hentPerson } from '../api/hentPerson';
+import { hentFagsakeier } from '../api/hentFagsakeier';
 import { useAppContext } from '../context/AppContext';
+import type { IMinimalFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo } from '../typer/person';
-import { ToggleNavn } from '../typer/toggles';
 
 function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(
     a: T,
@@ -43,22 +42,18 @@ function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     };
 }
 
-export const PERSON_QUERY_KEY_PREFIX = 'person';
+export const FAGSAKEIER_QUERY_KEY_PREFIX = 'fagsakeier';
 
-export function useHentPerson(ident: string | undefined) {
+export function useHentFagsakeier(minimalFagsak: IMinimalFagsak | undefined) {
     const { request } = useHttp();
-    const { skalObfuskereData, toggles } = useAppContext();
-    const { mutate: settAktivBrukerIModiaContext } = useSettAktivBrukerIModiaContext();
+    const { skalObfuskereData } = useAppContext();
     return useQuery({
-        queryKey: [PERSON_QUERY_KEY_PREFIX, ident],
+        queryKey: [FAGSAKEIER_QUERY_KEY_PREFIX, minimalFagsak?.fagsakeier],
         queryFn: async () => {
-            if (ident === undefined) {
+            if (minimalFagsak?.fagsakeier === undefined) {
                 return Promise.reject(new Error('Kan ikke hente person uten ident.'));
             }
-            const person = await hentPerson(request, ident);
-            if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
-                settAktivBrukerIModiaContext(person.personIdent);
-            }
+            const person = await hentFagsakeier(request, minimalFagsak.fagsakeier);
             return Promise.resolve(person);
         },
         select: person => {
@@ -67,6 +62,6 @@ export function useHentPerson(ident: string | undefined) {
             }
             return person;
         },
-        enabled: ident !== undefined,
+        enabled: minimalFagsak?.fagsakeier !== undefined,
     });
 }

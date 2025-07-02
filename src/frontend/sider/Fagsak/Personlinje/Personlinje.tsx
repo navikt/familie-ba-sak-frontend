@@ -11,7 +11,7 @@ import {
 } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
-import { useHentPerson } from '../../../hooks/useHentPerson';
+import { useHentFagsakeier } from '../../../hooks/useHentFagsakeier';
 import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
 import type { IBehandling } from '../../../typer/behandling';
@@ -65,9 +65,13 @@ const Divider = () => {
 };
 
 export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
-    const { data: fagsakEier, isPending, error } = useHentPerson(minimalFagsak?.fagsakeier);
+    const {
+        data: fagsakeier,
+        isPending: fagsakeierIsPending,
+        error: fagsakeierError,
+    } = useHentFagsakeier(minimalFagsak);
 
-    if (isPending) {
+    if (fagsakeierIsPending) {
         return (
             <InnholdContainer>
                 <HStack align="center" gap="2">
@@ -78,19 +82,19 @@ export const Personlinje = ({ søker, minimalFagsak }: PersonlinjeProps) => {
         );
     }
 
-    if (error) {
+    if (fagsakeierError) {
         return (
             <Alert variant="error" fullWidth>
-                Kunne ikke hente persondata
+                {fagsakeierError.message}
             </Alert>
         );
     }
 
     const fagsakEierInfo = {
-        navn: fagsakEier.navn,
-        ident: formaterIdent(fagsakEier.personIdent),
-        alder: hentAlder(fagsakEier.fødselsdato),
-        kjønn: fagsakEier.kjønn,
+        navn: fagsakeier.navn,
+        ident: formaterIdent(fagsakeier.personIdent),
+        alder: hentAlder(fagsakeier.fødselsdato),
+        kjønn: fagsakeier.kjønn,
     };
 
     const visSøkerInfo =
