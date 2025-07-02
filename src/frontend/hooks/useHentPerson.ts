@@ -17,7 +17,7 @@ function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGru
     return 0;
 }
 
-function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
+function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     const obfuskertNavn = 'Søker Søkersen';
 
     const obfuskertAdresse = {
@@ -25,7 +25,7 @@ function obfuskerPersonInfo(personInfo: IPersonInfo): IPersonInfo {
         postnummer: '0001',
     };
 
-const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
+    const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
         ?.toSorted(sammenlignFødselsdato)
         .map((relasjon, index) => ({
             ...relasjon,
@@ -63,7 +63,7 @@ export function useHentPerson(ident: string | undefined) {
         },
         select: person => {
             if (skalObfuskereData) {
-                obfuskerPersonInfo(person);
+                return obfuskertPersonInfo(person);
             }
             return person;
         },
