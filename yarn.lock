@@ -1845,13 +1845,13 @@
     classnames "^2.5.1"
     react-select "5.9.0"
 
-"@navikt/familie-header@16.0.2":
-  version "16.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/16.0.2/a36fa50db13145db1c549d9943afe27329a46296#a36fa50db13145db1c549d9943afe27329a46296"
-  integrity sha512-3XVLq9UDIMdMVDN7pDnqVRiWq9pLD0rzY30P1r3fZwF9D9ZdN4gBQovW+UM/CNJ0HgCCkdRzQOYjdhQ3nU6jbQ==
+"@navikt/familie-header@16.1.1":
+  version "16.1.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/16.1.1/2a012488eadff3d0f51a7fc39911ceecac602473#2a012488eadff3d0f51a7fc39911ceecac602473"
+  integrity sha512-y9BAKRoX2f0nTsx4/Boj9U+lqXHGs6ngFbP1X6BOqHYxAfzyClfJvQEF9kuDQWGvqdQmORF56tAhFjKiz/bRPA==
   dependencies:
-    "@navikt/familie-ikoner" "^9.1.1"
-    "@navikt/familie-typer" "^8.0.3"
+    "@navikt/familie-ikoner" "^9.1.2"
+    "@navikt/familie-typer" "^8.0.4"
     "@navikt/fnrvalidator" "^2.1.5"
 
 "@navikt/familie-http@^8.0.0":
@@ -1869,12 +1869,12 @@
   dependencies:
     "@navikt/familie-typer" "^8.0.2"
 
-"@navikt/familie-ikoner@^9.0.3", "@navikt/familie-ikoner@^9.1.1":
-  version "9.1.1"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.1/f8066f4bfbbfddac297deb3e211a972e396b0b1b#f8066f4bfbbfddac297deb3e211a972e396b0b1b"
-  integrity sha512-ysoU7jFPTcwwDbWCqSigm4YfN6LG/FX+N2/z1r258k953fm/5wQlnY2RAOB2U7h5HN4u3DUaHwbKioy6O11pHA==
+"@navikt/familie-ikoner@^9.0.3", "@navikt/familie-ikoner@^9.1.2":
+  version "9.1.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.2/370074c1cd79fd1893d9565c1392fa354e50ac42#370074c1cd79fd1893d9565c1392fa354e50ac42"
+  integrity sha512-FM1+Bt/0BMLxFomxBYtXM5WfCqF2H3DYopzTPaVB051SQha/5lnB40yLvqAGPpBWT5k0yRrra4vx0nEiZm42+A==
   dependencies:
-    "@navikt/familie-typer" "^8.0.3"
+    "@navikt/familie-typer" "^8.0.4"
 
 "@navikt/familie-logging@7.0.0":
   version "7.0.0"
@@ -1909,10 +1909,15 @@
     classnames "^2.5.1"
     nanoid "^5.0.9"
 
-"@navikt/familie-typer@8.0.3", "@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3":
+"@navikt/familie-typer@8.0.3":
   version "8.0.3"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.3/af354ab37c1b52c9f09ce690c72ace25f00131df#af354ab37c1b52c9f09ce690c72ace25f00131df"
   integrity sha512-DoTtJolQm9SvDt7/VkhqiQ0WXbj9584V+gN1GhouPQtecHK8RF7dxkuep4We1mOhfSCxC5mGrHxu2nveCN1AqA==
+
+"@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3", "@navikt/familie-typer@^8.0.4":
+  version "8.0.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.4/52b1173d1b3432fb0d13adf542b1a1876eda6fce#52b1173d1b3432fb0d13adf542b1a1876eda6fce"
+  integrity sha512-aVXlGDl196Ebp6tEdgw+F57fHtsFw5aCgJUugk2z10xxDc9y7MtpYSDMwFdIS5ATTNiHS9y5YUDpBz+JdRcDxQ==
 
 "@navikt/familie-visittkort@^15.1.3":
   version "15.1.3"
