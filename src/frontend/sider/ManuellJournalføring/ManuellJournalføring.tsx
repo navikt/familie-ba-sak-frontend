@@ -13,7 +13,7 @@ import {
 } from './ManuellJournalføringContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import { FagsakProvider } from '../Fagsak/FagsakContext';
-import Personlinje from '../Fagsak/Personlinje/Personlinje';
+import { Personlinje } from '../Fagsak/Personlinje/Personlinje';
 
 const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
     display: grid;

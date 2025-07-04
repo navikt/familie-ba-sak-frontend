@@ -11,8 +11,10 @@ import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBeh
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider, useFagsakContext } from './FagsakContext';
+import { FagsakLinje } from './FagsakLinje';
+import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
-import Personlinje from './Personlinje/Personlinje';
+import { Personlinje } from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
@@ -47,27 +49,31 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                 case RessursStatus.SUKSESS:
                     return (
                         <HovedInnhold>
+                            <Personlinje
+                                bruker={brukerRessurs.data}
+                                minimalFagsak={minimalFagsakRessurs.data}
+                            />
                             <Routes>
                                 <Route
                                     path="/saksoversikt"
                                     element={
                                         <>
-                                            <Personlinje
+                                            <FagsakLinje
                                                 bruker={brukerRessurs.data}
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                             <Saksoversikt
+                                                bruker={brukerRessurs.data}
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
                                         </>
                                     }
                                 />
-
                                 <Route
                                     path="/dokumentutsending"
                                     element={
                                         <>
-                                            <Personlinje
+                                            <FagsakLinje
                                                 bruker={brukerRessurs.data}
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
@@ -79,12 +85,11 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         </>
                                     }
                                 />
-
                                 <Route
                                     path="/dokumenter"
                                     element={
                                         <>
-                                            <Personlinje
+                                            <FagsakLinje
                                                 bruker={brukerRessurs.data}
                                                 minimalFagsak={minimalFagsakRessurs.data}
                                             />
@@ -92,7 +97,20 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                         </>
                                     }
                                 />
-
+                                <Route
+                                    path="/infotrygd"
+                                    element={
+                                        <>
+                                            <FagsakLinje
+                                                bruker={brukerRessurs.data}
+                                                minimalFagsak={minimalFagsakRessurs.data}
+                                            />
+                                            <InfotrygdFagsak
+                                                minimalFagsak={minimalFagsakRessurs.data}
+                                            />
+                                        </>
+                                    }
+                                />
                                 <Route
                                     path="/:behandlingId/*"
                                     element={
@@ -110,10 +128,6 @@ const FagsakContainerInnhold: React.FunctionComponent = () => {
                                     path="/"
                                     element={
                                         <>
-                                            <Personlinje
-                                                bruker={brukerRessurs.data}
-                                                minimalFagsak={minimalFagsakRessurs.data}
-                                            />
                                             <Navigate to={`/fagsak/${fagsakId}/saksoversikt`} />
                                         </>
                                     }
