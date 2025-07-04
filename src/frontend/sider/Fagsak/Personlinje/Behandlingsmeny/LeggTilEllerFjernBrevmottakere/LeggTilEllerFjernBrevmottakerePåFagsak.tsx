@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { LeggTilBrevmottakerModalFagsak } from './LeggTilBrevmottakerModalFagsak';
-import { useFagsakContext } from '../../../FagsakContext';
+import { useManuelleBrevmottakerePåFagsakContext } from '../../../ManuelleBrevmottakerePåFagsakContext';
 
 const utledMenyinnslag = (antallMottakere: number) => {
     if (antallMottakere === 0) {
@@ -18,7 +18,7 @@ const utledMenyinnslag = (antallMottakere: number) => {
 export function LeggTilEllerFjernBrevmottakerePåFagsak() {
     const [visModal, settVisModal] = useState(false);
 
-    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
 
     const menyinnslag = utledMenyinnslag(manuelleBrevmottakerePåFagsak.length);
 

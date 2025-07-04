@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    type PropsWithChildren,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import React, { createContext, type PropsWithChildren, useContext, useEffect } from 'react';
 
 import type { AxiosError } from 'axios';
 
@@ -31,7 +25,6 @@ import { type IPersonInfo } from '../../typer/person';
 import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
 import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
-import type { SkjemaBrevmottaker } from './Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IFagsakContext {
     bruker: Ressurs<IPersonInfo>;
@@ -40,8 +33,6 @@ interface IFagsakContext {
     minimalFagsakRessurs: Ressurs<IMinimalFagsak>;
     settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
     minimalFagsak: IMinimalFagsak | undefined;
-    manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
-    settManuelleBrevmottakerePåFagsak: (brevmottakere: SkjemaBrevmottaker[]) => void;
 }
 
 const FagsakContext = createContext<IFagsakContext | undefined>(undefined);
@@ -52,9 +43,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
-    const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<
-        SkjemaBrevmottaker[]
-    >([]);
 
     const { request } = useHttp();
     const { skalObfuskereData, toggles } = useAppContext();
@@ -138,7 +126,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
 
             oppdaterBrukerHvisFagsakEndres(bruker, brukerFødselsnummer);
         }
-        settManuelleBrevmottakerePåFagsak([]);
     }, [minimalFagsakRessurs]);
 
     return (
@@ -150,8 +137,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 minimalFagsakRessurs,
                 settMinimalFagsakRessurs,
                 minimalFagsak: hentDataFraRessurs(minimalFagsakRessurs),
-                manuelleBrevmottakerePåFagsak,
-                settManuelleBrevmottakerePåFagsak,
             }}
         >
             {props.children}
