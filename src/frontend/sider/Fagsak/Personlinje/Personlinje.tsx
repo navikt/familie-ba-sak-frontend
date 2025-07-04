@@ -77,12 +77,19 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
         kommunenummer: bruker?.kommunenummer ?? 'ukjent',
     };
 
-    const søkerInfo = {
-        navn: søker?.navn || 'Ukjent',
-        ident: formaterIdent(søker?.personIdent ?? ''),
-        alder: hentAlder(søker?.fødselsdato ?? ''),
-        dødsfallDato: søker?.dødsfallDato,
-    };
+    // TODO: Forbedre logikken for dette. Det er mulig visSøkerInfo kan fjernes og at vi heller kan sette søkerInfo til undefined dersom det ikke er relevant å vise søker-informasjon.
+    const søkerInfo =
+        minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+            ? {
+                  navn: minimalFagsak.institusjon?.navn || 'Ukjent',
+                  ident: formaterIdent(minimalFagsak.institusjon?.orgNummer ?? ''),
+              }
+            : {
+                  navn: søker?.navn || 'Ukjent',
+                  ident: formaterIdent(søker?.personIdent ?? ''),
+                  alder: hentAlder(søker?.fødselsdato ?? ''),
+                  dødsfallDato: søker?.dødsfallDato,
+              };
 
     const visSøkerInfo =
         minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ||
@@ -116,7 +123,8 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                                 <BodyShort as="span" weight="semibold">
                                     Søker:{' '}
                                 </BodyShort>
-                                {søkerInfo.navn} ({søkerInfo.alder} år)
+                                {søkerInfo.navn}
+                                {søkerInfo.alder && <> ({søkerInfo.alder} år)</>}
                             </span>
                             <Divider />
                             <HStack align="center" gap="1">
