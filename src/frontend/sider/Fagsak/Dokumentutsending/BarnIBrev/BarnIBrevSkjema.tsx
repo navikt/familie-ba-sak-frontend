@@ -7,10 +7,10 @@ import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
 import { useAppContext } from '../../../../context/AppContext';
+import { useManuelleBrevmottakerePåFagsakContext } from '../../../../context/BrevmottakerFagsakContext';
 import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
-import { useFagsakContext } from '../../FagsakContext';
 
 interface IProps {
     barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const BarnIBrevSkjema = (props: IProps) => {
-    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
     const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 

@@ -15,14 +15,14 @@ import {
     type DokumentÅrsak,
 } from './DokumentutsendingContext';
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { useAppContext } from '../../../context/AppContext';
+import { useManuelleBrevmottakerePåFagsakContext } from '../../../context/BrevmottakerFagsakContext';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
-import { useFagsakContext } from '../FagsakContext';
-import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 
 interface Props {
     bruker: IPersonInfo;
@@ -85,7 +85,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
     } = useDokumentutsendingContext();
     const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useAppContext();
 
-    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
 
     const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
         switch (årsak) {
