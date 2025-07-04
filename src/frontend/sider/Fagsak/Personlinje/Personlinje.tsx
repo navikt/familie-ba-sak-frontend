@@ -77,23 +77,21 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
         kommunenummer: bruker?.kommunenummer ?? 'ukjent',
     };
 
-    // TODO: Forbedre logikken for dette. Det er mulig visSøkerInfo kan fjernes og at vi heller kan sette søkerInfo til undefined dersom det ikke er relevant å vise søker-informasjon.
-    const søkerInfo =
-        minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
-            ? {
-                  navn: minimalFagsak.institusjon?.navn || 'Ukjent',
-                  ident: formaterIdent(minimalFagsak.institusjon?.orgNummer ?? ''),
-              }
-            : {
-                  navn: søker?.navn || 'Ukjent',
-                  ident: formaterIdent(søker?.personIdent ?? ''),
-                  alder: hentAlder(søker?.fødselsdato ?? ''),
-                  dødsfallDato: søker?.dødsfallDato,
-              };
+    let søkerInfo = null;
 
-    const visSøkerInfo =
-        minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ||
-        minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN;
+    if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) {
+        søkerInfo = {
+            navn: minimalFagsak.institusjon?.navn || 'Ukjent',
+            ident: formaterIdent(minimalFagsak.institusjon?.orgNummer ?? ''),
+        };
+    } else if (minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN) {
+        søkerInfo = {
+            navn: søker?.navn || 'Ukjent',
+            ident: formaterIdent(søker?.personIdent ?? ''),
+            alder: hentAlder(søker?.fødselsdato ?? ''),
+            dødsfallDato: søker?.dødsfallDato,
+        };
+    }
 
     return (
         <InnholdContainer>
@@ -115,7 +113,7 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                 </HStack>
                 <Divider />
                 <BodyShort>{`Kommunenr: ${fagsakeierInfo.kommunenummer}`}</BodyShort>
-                {visSøkerInfo && (
+                {søkerInfo && (
                     <>
                         <Divider />
                         <HStack align="center" gap="3 4">
@@ -137,8 +135,9 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                         </HStack>
                     </>
                 )}
-                {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
+                {søkerInfo && søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
                     <>
+                        {/* TODO: Test dette. Skal dødsfall vises basert på fagsakeier eller søker? */}
                         <Divider />
                         <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
                     </>
