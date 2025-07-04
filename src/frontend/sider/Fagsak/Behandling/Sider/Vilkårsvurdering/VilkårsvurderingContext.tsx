@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { useHttp } from '@navikt/familie-http';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import { mapFraRestVilkårsvurderingTilUi } from './utils';
@@ -106,6 +106,8 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
                         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
                         utdypendeVilkårsvurderinger:
                             redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                        begrunnelseForManuellKontroll:
+                            redigerbartVilkår.verdi.begrunnelseForManuellKontroll,
                     },
                 ],
                 andreVurderinger: [],

@@ -87,6 +87,7 @@ export interface IVilkårResultat {
     vurderesEtter: Regelverk | null;
     utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
     resultatBegrunnelse: ResultatBegrunnelse | null;
+    begrunnelseForManuellKontroll: string | null;
 }
 
 // Vilkårsvurdering typer for api
@@ -118,6 +119,7 @@ export interface IRestVilkårResultat {
     vilkårType: VilkårType;
     vurderesEtter: Regelverk | null;
     utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[];
+    begrunnelseForManuellKontroll: string | null;
 }
 
 export interface IRestAnnenVurdering {

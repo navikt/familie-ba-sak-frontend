@@ -4,16 +4,18 @@ import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, List } from '@navikt/ds-react';
 import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useAppContext } from '../../../../../../context/AppContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../typer/person';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 import type {
     IPersonResultat,
     IVilkårConfig,
@@ -29,6 +31,7 @@ import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
+import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IVilkårsvurderingSkjemaNormal {
@@ -62,6 +65,7 @@ const VilkårDiv = styled.div`
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
+    const { toggles } = useAppContext();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const {
         vurderErLesevisning,
@@ -113,8 +117,33 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         });
     };
 
+    const vilkårSomMåKontrolleresPerPerson = Object.entries(
+        toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn]
+            ? utledVilkårSomMåKontrolleresPerPerson(behandling, vilkårsvurdering)
+            : {}
+    );
+
     return (
         <>
+            {vilkårSomMåKontrolleresPerPerson.length > 0 && (
+                <Alert variant="warning" contentMaxWidth={false} style={{ width: 'fit-content' }}>
+                    <BodyShort>Vær oppmerksom:</BodyShort>
+                    <List as="ul">
+                        {vilkårSomMåKontrolleresPerPerson.map(([navn, avvik]) => (
+                            <List.Item key={navn}>
+                                {navn}
+                                <List as="ul" size="small">
+                                    {avvik.map(avvik => (
+                                        <List.Item key={avvik}>
+                                            <BodyShort size="small">{avvik}</BodyShort>
+                                        </List.Item>
+                                    ))}
+                                </List>
+                            </List.Item>
+                        ))}
+                    </List>
+                </Alert>
+            )}
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 const andreVurderinger = personResultat.andreVurderinger;
                 const harUtvidet = personResultat.vilkårResultater.find(
