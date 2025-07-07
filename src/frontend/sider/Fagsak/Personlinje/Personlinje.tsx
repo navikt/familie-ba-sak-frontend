@@ -133,13 +133,12 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                                 />
                             </HStack>
                         </HStack>
-                    </>
-                )}
-                {søkerInfo && søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
-                    <>
-                        {/* TODO: Test dette. Skal dødsfall vises basert på fagsakeier eller søker? */}
-                        <Divider />
-                        <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
+                        {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
+                            <>
+                                <Divider />
+                                <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
+                            </>
+                        )}
                     </>
                 )}
                 {minimalFagsak?.migreringsdato &&
