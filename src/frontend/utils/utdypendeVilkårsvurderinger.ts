@@ -69,7 +69,10 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
     return [
         UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
         ...(vilkårType === VilkårType.BOSATT_I_RIKET
-            ? [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]
+            ? [
+                  UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
+                  UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD,
+              ]
             : []),
         ...(vilkårType === VilkårType.BOR_MED_SØKER
             ? [
