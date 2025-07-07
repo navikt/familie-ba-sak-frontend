@@ -132,13 +132,13 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                                     size="small"
                                 />
                             </HStack>
+                            {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
+                                <>
+                                    <Divider />
+                                    <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
+                                </>
+                            )}
                         </HStack>
-                        {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
-                            <>
-                                <Divider />
-                                <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
-                            </>
-                        )}
                     </>
                 )}
                 {minimalFagsak?.migreringsdato &&
