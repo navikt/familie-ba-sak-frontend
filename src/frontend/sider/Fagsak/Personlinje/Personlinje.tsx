@@ -67,9 +67,9 @@ const Divider = () => {
 export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
     // TODO: Dersom bruker også er søker, som ofte er tilfelle, gjør vi et unødvendig kall for å hente person-information om søker (useHentPerson) selv om vi allerede får denne informasjonen fra `bruker`. Dett bør fikses i en senere PR ved å endre til bruk av context for å få global tilgang til bruker og søker fra context, fremfor å passere bruker som prop her, og i tillegg gjøre et kall for å hente søker.
 
-    const { data: søker } = useHentPerson(minimalFagsak?.søkerFødselsnummer);
+    const { data: søkerData } = useHentPerson(minimalFagsak?.søkerFødselsnummer);
 
-    const fagsakeierInfo = {
+    const fagsakeier = {
         navn: bruker?.navn || 'Ukjent',
         ident: formaterIdent(bruker?.personIdent ?? ''),
         alder: hentAlder(bruker?.fødselsdato ?? ''),
@@ -77,19 +77,19 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
         kommunenummer: bruker?.kommunenummer ?? 'ukjent',
     };
 
-    let søkerInfo = null;
+    let søker = null;
 
     if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) {
-        søkerInfo = {
+        søker = {
             navn: minimalFagsak.institusjon?.navn || 'Ukjent',
             ident: formaterIdent(minimalFagsak.institusjon?.orgNummer ?? ''),
         };
     } else if (minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN) {
-        søkerInfo = {
-            navn: søker?.navn || 'Ukjent',
-            ident: formaterIdent(søker?.personIdent ?? ''),
-            alder: hentAlder(søker?.fødselsdato ?? ''),
-            dødsfallDato: søker?.dødsfallDato,
+        søker = {
+            navn: søkerData?.navn || 'Ukjent',
+            ident: formaterIdent(søkerData?.personIdent ?? ''),
+            alder: hentAlder(søkerData?.fødselsdato ?? ''),
+            dødsfallDato: søkerData?.dødsfallDato,
         };
     }
 
@@ -99,21 +99,21 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                 <HStack align="center" gap="3 4">
                     <PersonlinjeIkon
                         fagsakType={minimalFagsak?.fagsakType}
-                        kjønn={fagsakeierInfo.kjønn}
-                        alder={fagsakeierInfo.alder}
+                        kjønn={fagsakeier.kjønn}
+                        alder={fagsakeier.alder}
                     />
                     <BodyShort as="span" weight="semibold">
-                        {fagsakeierInfo.navn} ({fagsakeierInfo.alder} år)
+                        {fagsakeier.navn} ({fagsakeier.alder} år)
                     </BodyShort>
                     <Divider />
                     <HStack align="center" gap="1">
-                        {fagsakeierInfo.ident}
-                        <CopyButton copyText={fagsakeierInfo.ident.replace(' ', '')} size="small" />
+                        {fagsakeier.ident}
+                        <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size="small" />
                     </HStack>
                 </HStack>
                 <Divider />
-                <BodyShort>{`Kommunenr: ${fagsakeierInfo.kommunenummer}`}</BodyShort>
-                {søkerInfo && (
+                <BodyShort>{`Kommunenr: ${fagsakeier.kommunenummer}`}</BodyShort>
+                {søker && (
                     <>
                         <Divider />
                         <HStack align="center" gap="3 4">
@@ -121,24 +121,21 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                                 <BodyShort as="span" weight="semibold">
                                     Søker:{' '}
                                 </BodyShort>
-                                {søkerInfo.navn}
-                                {søkerInfo.alder && <> ({søkerInfo.alder} år)</>}
+                                {søker.navn}
+                                {søker.alder && <> ({søker.alder} år)</>}
                             </span>
                             <Divider />
                             <HStack align="center" gap="1">
-                                {søkerInfo.ident}
-                                <CopyButton
-                                    copyText={søkerInfo.ident.replace(' ', '')}
-                                    size="small"
-                                />
+                                {søker.ident}
+                                <CopyButton copyText={søker.ident.replace(' ', '')} size="small" />
                             </HStack>
-                            {søkerInfo.dødsfallDato && søkerInfo.dødsfallDato.length > 0 && (
-                                <>
-                                    <Divider />
-                                    <DødsfallTag dødsfallDato={søkerInfo.dødsfallDato} />
-                                </>
-                            )}
                         </HStack>
+                    </>
+                )}
+                {søkerData && søkerData.dødsfallDato && søkerData.dødsfallDato.length > 0 && (
+                    <>
+                        <Divider />
+                        <DødsfallTag dødsfallDato={søkerData.dødsfallDato} />
                     </>
                 )}
                 {minimalFagsak?.migreringsdato &&
