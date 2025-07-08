@@ -10,7 +10,7 @@ import { useAppContext } from '../../../../context/AppContext';
 import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../utils/dato';
-import { useFagsakContext } from '../../FagsakContext';
+import { useManuelleBrevmottakerePåFagsakContext } from '../../ManuelleBrevmottakerePåFagsakContext';
 
 interface IProps {
     barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const BarnIBrevSkjema = (props: IProps) => {
-    const { manuelleBrevmottakerePåFagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
     const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
