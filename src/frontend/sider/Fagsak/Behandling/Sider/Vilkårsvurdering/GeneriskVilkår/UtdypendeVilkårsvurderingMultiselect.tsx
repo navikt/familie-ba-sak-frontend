@@ -36,6 +36,8 @@ interface Props {
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
     [UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
     [UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD]: 'Bosatt på Svalbard',
+    [UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS]:
+        'Bosatt i Finnmark/Nord Troms',
     [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
     [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED]: 'Delt bosted: skal deles',
     [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES]:
@@ -108,14 +110,22 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     };
 
     const bosattPåSvalbardToggleErPå = toggles[ToggleNavn.bosattSvalbard];
+    const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
 
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
         utdypendeVilkårsvurderingAvhengigheter
-    ).filter(
-        utdypendeVilkårsvurdering =>
-            bosattPåSvalbardToggleErPå ||
-            utdypendeVilkårsvurdering !== UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD
-    );
+    )
+        .filter(
+            utdypendeVilkårsvurdering =>
+                bosattPåSvalbardToggleErPå ||
+                utdypendeVilkårsvurdering !== UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD
+        )
+        .filter(
+            utdypendeVilkårsvurdering =>
+                bosattFinnmarkNordtromsToggleErPå ||
+                utdypendeVilkårsvurdering !==
+                    UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
+        );
 
     const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(
         mapUtdypendeVilkårsvurderingTilOption

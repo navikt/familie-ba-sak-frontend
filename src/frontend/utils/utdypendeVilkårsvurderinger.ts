@@ -72,6 +72,7 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
             ? [
                   UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
                   UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD,
+                  UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
               ]
             : []),
         ...(vilkårType === VilkårType.BOR_MED_SØKER
