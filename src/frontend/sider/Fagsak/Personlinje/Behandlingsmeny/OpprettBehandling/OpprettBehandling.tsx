@@ -11,11 +11,13 @@ import useOpprettBehandling from './useOpprettBehandling';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
 import { Behandlingstype } from '../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../typer/fagsak';
+import type { IPersonInfo } from '../../../../../typer/person';
 import { dagensDato } from '../../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 interface IProps {
     minimalFagsak: IMinimalFagsak;
+    bruker: IPersonInfo | undefined;
 }
 
 const StyledAlert = styled(Alert)`
@@ -28,7 +30,7 @@ const StyledFieldset = styled(Fieldset)`
     }
 `;
 
-const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
+const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak, bruker }) => {
     const [visOpprettNyBehandlingModal, settVisOpprettNyBehandlingModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
@@ -37,11 +39,10 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
         onBekreft,
         opprettBehandlingSkjema,
         nullstillSkjemaStatus,
-        bruker,
         maksdatoForMigrering,
         valideringErOk,
     } = useOpprettBehandling(
-        minimalFagsak.id,
+        minimalFagsak,
         () => settVisOpprettNyBehandlingModal(false),
         () => {
             settVisOpprettNyBehandlingModal(false);
