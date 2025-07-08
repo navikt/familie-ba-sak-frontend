@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 
@@ -18,30 +16,22 @@ interface IProps {
     behandling?: IBehandling;
 }
 
-const PosisjonertMenyknapp = styled(Button)`
-    margin-left: 3rem;
-`;
-
-const StyletDropdownMenu = styled(Dropdown.Menu)`
-    width: 30ch;
-`;
-
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
     const skalViseMenyvalgForBehandling =
         behandling && behandling.status !== BehandlingStatus.AVSLUTTET;
 
     return (
         <Dropdown>
-            <PosisjonertMenyknapp
+            <Button
                 variant="secondary"
                 size="small"
                 icon={<ChevronDownIcon />}
                 iconPosition={'right'}
-                forwardedAs={Dropdown.Toggle}
+                as={Dropdown.Toggle}
             >
                 Meny
-            </PosisjonertMenyknapp>
-            <StyletDropdownMenu>
+            </Button>
+            <Dropdown.Menu>
                 <Dropdown.Menu.List>
                     <MenyvalgFagsak minimalFagsak={minimalFagsak} bruker={bruker} />
                     {skalViseMenyvalgForBehandling && <Dropdown.Menu.Divider />}
@@ -52,7 +42,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }
                         />
                     )}
                 </Dropdown.Menu.List>
-            </StyletDropdownMenu>
+            </Dropdown.Menu>
         </Dropdown>
     );
 };
