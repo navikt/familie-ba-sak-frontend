@@ -61,7 +61,7 @@
     "classnames": "^2.5.1",
     "date-fns": "4.1.0",
     "deep-equal": "^2.2.0",
-    "dotenv": "^17.1.0",
+    "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "http-proxy-middleware": "3.0.5",
     "quill-delta": "^5.1.0",
