@@ -80,12 +80,19 @@ export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
     )}) | ${formaterIdent(barn.ident)}`;
 };
 
-export const sorterPåDato = (datoStringA: string, datoStringB: string) => {
-    const datoA = new Date(datoStringA);
-    const datoB = new Date(datoStringB);
+export const sorterPåDato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
+    if (personA.fødselsdato === personB.fødselsdato) {
+        return sorterPåFødselsnummer(personA, personB);
+    }
+
+    const datoA = new Date(personA.fødselsdato);
+    const datoB = new Date(personB.fødselsdato);
 
     return isBefore(datoA, datoB) ? 1 : -1;
 };
+
+export const sorterPåFødselsnummer = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) =>
+    Number(personA.personIdent) - Number(personB.personIdent);
 
 export const sorterPersonTypeOgFødselsdato = (
     personA: IGrunnlagPerson,
@@ -93,7 +100,7 @@ export const sorterPersonTypeOgFødselsdato = (
 ) => {
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
-    else return sorterPåDato(personA.fødselsdato, personB.fødselsdato);
+    else return sorterPåDato(personA, personB);
 };
 
 export const sorterUtbetaling = (
@@ -104,11 +111,7 @@ export const sorterUtbetaling = (
     else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return 1;
     else if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.SMÅBARNSTILLEGG) return -1;
     else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.SMÅBARNSTILLEGG) return 1;
-    else
-        return sorterPåDato(
-            utbetalingsperiodeDetaljA.person.fødselsdato,
-            utbetalingsperiodeDetaljB.person.fødselsdato
-        );
+    else return sorterPåDato(utbetalingsperiodeDetaljA.person, utbetalingsperiodeDetaljB.person);
 };
 
 export const slåSammenListeTilStreng = (liste: string[]) => {
