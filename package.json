@@ -55,7 +55,7 @@
     "@sentry/browser": "^9.37.0",
     "@sentry/webpack-plugin": "^3.5.0",
     "@tanstack/react-query": "^5.82.0",
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "babel-loader": "^10.0.0",
     "body-parser": "^2.2.0",
     "classnames": "^2.5.1",
