@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Modal, Loader, Alert, Heading } from '@navikt/ds-react';
+import { Modal, Loader, Alert, Heading, VStack, HStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
@@ -59,10 +59,12 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
     switch (pdfdata.status) {
         case RessursStatus.HENTER:
             return (
-                <div className={'pdfvisning-modal__spinner'}>
-                    <Heading size={'small'} level={'2'} children={'Innhenter dokument'} />
-                    <Loader size="xlarge" title="Innhenter dokument" />
-                </div>
+                <HStack justify={'center'} height={'100%'} align={'center'}>
+                    <VStack align={'center'}>
+                        <Heading size={'small'} level={'2'} children={'Innhenter dokument'} />
+                        <Loader size="xlarge" title="Innhenter dokument" />
+                    </VStack>
+                </HStack>
             );
         case RessursStatus.SUKSESS:
             return <IframePdfVisning title={'Dokument'} src={pdfdata.data} tabIndex={0} />;
