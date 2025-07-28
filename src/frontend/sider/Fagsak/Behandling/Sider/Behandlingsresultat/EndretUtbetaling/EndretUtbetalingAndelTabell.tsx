@@ -5,7 +5,10 @@ import styled from 'styled-components';
 import { Heading, Table } from '@navikt/ds-react';
 
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
+import EndretUtbetalingAndelRadRHF from './EndretUtbetalingAndelRadRHF';
+import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;
@@ -18,6 +21,8 @@ const EndredePerioderContainer = styled.div`
 const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
     åpenBehandling,
 }) => {
+    const { toggles } = useAppContext();
+
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;
 
     return (
@@ -36,13 +41,21 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
-                        <EndretUtbetalingAndelRad
-                            lagretEndretUtbetalingAndel={endretUtbetalingAndel}
-                            åpenBehandling={åpenBehandling}
-                            key={endretUtbetalingAndel.id}
-                        />
-                    ))}
+                    {endretUtbetalingAndeler.map(endretUtbetalingAndel =>
+                        toggles[ToggleNavn.skalBrukeNyttSkjemaForEndretUtbetalingAndel] ? (
+                            <EndretUtbetalingAndelRadRHF
+                                lagretEndretUtbetalingAndel={endretUtbetalingAndel}
+                                åpenBehandling={åpenBehandling}
+                                key={endretUtbetalingAndel.id}
+                            />
+                        ) : (
+                            <EndretUtbetalingAndelRad
+                                lagretEndretUtbetalingAndel={endretUtbetalingAndel}
+                                åpenBehandling={åpenBehandling}
+                                key={endretUtbetalingAndel.id}
+                            />
+                        )
+                    )}
                 </Table.Body>
             </Table>
         </EndredePerioderContainer>
