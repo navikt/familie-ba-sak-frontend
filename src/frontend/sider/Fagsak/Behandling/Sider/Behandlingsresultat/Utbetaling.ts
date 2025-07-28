@@ -81,3 +81,21 @@ export function erUtbetalingTillattForÅrsak({
             throw new Error(`Ukjent utbetalingstype`);
     }
 }
+
+export function erUtbetalingTillattForÅrsakRHF(årsak: IEndretUtbetalingAndelÅrsak | '', utbetaling: Utbetaling) {
+    if (!årsak) return true;
+
+    switch (utbetaling) {
+        case Utbetaling.FULL_UTBETALING:
+            return årsak === IEndretUtbetalingAndelÅrsak.DELT_BOSTED;
+        case Utbetaling.DELT_UTBETALING:
+            return (
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR ||
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND
+            );
+        case Utbetaling.INGEN_UTBETALING:
+            return true;
+        default:
+            throw new Error(`Ukjent utbetalingstype`);
+    }
+}
