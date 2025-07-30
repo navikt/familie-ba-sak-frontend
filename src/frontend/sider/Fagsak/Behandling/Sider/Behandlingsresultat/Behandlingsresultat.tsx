@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggDataRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
@@ -21,7 +21,8 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
+import { useOpprettEndretUtbetalingAndel } from '../../../../../hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
@@ -62,17 +63,25 @@ interface IBehandlingsresultatProps {
 
 const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
     const navigate = useNavigate();
-    const { fagsakId } = useSakOgBehandlingParams();
+    const fagsakId = useFagsakId();
     const { fagsak } = useFagsakContext();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const {
-        opprettEndretUtbetaling,
-        opprettEndretUtbetalingFeilmelding,
         visFeilmeldinger,
         settVisFeilmeldinger,
         hentPersonerMedUgyldigEtterbetalingsperiode,
         personerMedUgyldigEtterbetalingsperiode,
     } = useBehandlingsresultat(åpenBehandling);
+
+    const {
+        mutate: opprettEndretUtbetalingAndel,
+        isPending: isOpprettEndretUtbetalingAndelPending,
+        isError: isOpprettEndretUtbetalingAndelError,
+        error: opprettEndretUtbetalingAndelError,
+    } = useOpprettEndretUtbetalingAndel({
+        onSuccess: (behandling: IBehandling) => settÅpenBehandling(byggDataRessurs(behandling)),
+    });
 
     const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =
         useTidslinjeContext();
@@ -169,11 +178,18 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             />
             {!erLesevisning && (
                 <EndretUtbetalingAndel>
-                    <Button variant="tertiary" size="small" onClick={opprettEndretUtbetaling} icon={<StyledEditIkon />}>
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        onClick={() => opprettEndretUtbetalingAndel()}
+                        icon={<StyledEditIkon />}
+                        disabled={isOpprettEndretUtbetalingAndelPending}
+                        loading={isOpprettEndretUtbetalingAndelPending}
+                    >
                         <Label>Endre utbetalingsperiode</Label>
                     </Button>
-                    {visFeilmeldinger && opprettEndretUtbetalingFeilmelding !== '' && (
-                        <ErrorMessage>{opprettEndretUtbetalingFeilmelding}</ErrorMessage>
+                    {isOpprettEndretUtbetalingAndelError && (
+                        <ErrorMessage>{opprettEndretUtbetalingAndelError.message}</ErrorMessage>
                     )}
                 </EndretUtbetalingAndel>
             )}
