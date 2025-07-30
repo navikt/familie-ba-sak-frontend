@@ -21,6 +21,8 @@ import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurde
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
+import { lagAdresseBeskyttelseRecord } from './VilkårsvurderingSkjemaNormal';
+import { useFagsakContext } from '../../../../FagsakContext';
 
 const AktørLinje = styled.div`
     display: flex;
@@ -51,8 +53,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     orgNummer,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const { bruker: brukerRessurs } = useFagsakContext();
+
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const adresseBeskyttelseRecord = lagAdresseBeskyttelseRecord(brukerRessurs, vilkårsvurdering);
 
     if (samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
         hentOgSettSamhandler(orgNummer);
@@ -100,6 +105,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                     person={personResultat.person}
                     somOverskrift
                     erLesevisning={vurderErLesevisning()}
+                    adresseBeskyttelse={adresseBeskyttelseRecord[personResultat.personIdent]}
                 />
             </AktørLinje>
 
