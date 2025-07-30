@@ -29,12 +29,19 @@ const StyledJenteIkon = styled(JenteIkon)<{ $adresseBeskyttet: boolean }>`
 
 const StyledKvinneIkon = styled(KvinneIkon)<{ $adresseBeskyttet: boolean }>`
     ${props => {
-        if (props.$adresseBeskyttet)
+        if (props.$adresseBeskyttet) {
             return `
             g {
                 fill: var(--a-orange-600);
             }
         `;
+        } else {
+            return `
+            g {
+                fill: var(--a-red-400);
+            }
+        `;
+        }
     }};
 `;
 
