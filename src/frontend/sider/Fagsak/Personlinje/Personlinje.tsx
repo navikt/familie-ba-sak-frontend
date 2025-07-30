@@ -9,7 +9,7 @@ import { PersonIkon } from '../../../komponenter/PersonIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
-import { type IPersonInfo } from '../../../typer/person';
+import { Adressebeskyttelsegradering, type IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
 
@@ -68,7 +68,11 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
                         erBarn={fagsakeier.alder < 18}
-                        adresseBeskyttelse={søkerData?.adressebeskyttelseGradering}
+                        adresseBeskyttelse={
+                            søkerData?.adressebeskyttelseGradering !== null &&
+                            søkerData?.adressebeskyttelseGradering !==
+                                Adressebeskyttelsegradering.UGRADERT
+                        }
                     />
                     <BodyShort as="span" weight="semibold">
                         {fagsakeier.navn} ({fagsakeier.alder} år)

@@ -150,6 +150,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                     vilkårResultat =>
                         vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
+
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}

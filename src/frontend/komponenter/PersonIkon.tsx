@@ -14,7 +14,6 @@ import { kjønnType } from '@navikt/familie-typer';
 import KontorIkonGrønn from '../ikoner/KontorIkonGrønn';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import { FagsakType } from '../typer/fagsak';
-import { Adressebeskyttelsegradering } from '../typer/person';
 
 const StyledJenteIkon = styled(JenteIkon)<{ $adresseBeskyttet: boolean }>`
     ${props => {
@@ -83,7 +82,7 @@ interface PersonIkonProps {
     kjønn: kjønnType;
     erBarn: boolean;
     størrelse?: 's' | 'm';
-    adresseBeskyttelse?: Adressebeskyttelsegradering;
+    adresseBeskyttelse?: boolean;
     harTilgang?: boolean;
 }
 
@@ -92,14 +91,12 @@ export const PersonIkon = ({
     kjønn,
     erBarn,
     størrelse = 's',
-    adresseBeskyttelse,
+    adresseBeskyttelse = false,
     harTilgang = true,
 }: PersonIkonProps) => {
     if (!harTilgang) {
         return <StatusIkon status={Status.FEIL} />;
     }
-    const erBeskyttet =
-        adresseBeskyttelse !== null && adresseBeskyttelse !== Adressebeskyttelsegradering.UGRADERT;
 
     if (fagsakType === FagsakType.INSTITUSJON) {
         if (størrelse === 'm') {
@@ -120,17 +117,17 @@ export const PersonIkon = ({
     const ikonProps = størrelse === 's' ? { height: 24, width: 24 } : { height: 32, width: 32 };
     if (kjønn === kjønnType.KVINNE) {
         return erBarn ? (
-            <StyledJenteIkon $adresseBeskyttet={erBeskyttet} {...ikonProps} />
+            <StyledJenteIkon $adresseBeskyttet={adresseBeskyttelse} {...ikonProps} />
         ) : (
-            <StyledKvinneIkon $adresseBeskyttet={erBeskyttet} {...ikonProps} />
+            <StyledKvinneIkon $adresseBeskyttet={adresseBeskyttelse} {...ikonProps} />
         );
     }
     if (kjønn === kjønnType.MANN) {
         return erBarn ? (
-            <StyledGuttIkon $adresseBeskyttet={erBeskyttet} {...ikonProps} />
+            <StyledGuttIkon $adresseBeskyttet={adresseBeskyttelse} {...ikonProps} />
         ) : (
-            <StyledMannIkon $adresseBeskyttet={erBeskyttet} {...ikonProps} />
+            <StyledMannIkon $adresseBeskyttet={adresseBeskyttelse} {...ikonProps} />
         );
     }
-    return <StyledNøytralIkon $adresseBeskyttet={erBeskyttet} {...ikonProps} />;
+    return <StyledNøytralIkon $adresseBeskyttet={adresseBeskyttelse} {...ikonProps} />;
 };
