@@ -1,10 +1,11 @@
 import { isEqual } from 'date-fns';
 import { type FieldErrors, type SubmitHandler, useForm } from 'react-hook-form';
 
-import { useHttp } from '@navikt/familie-http';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggDataRessurs } from '@navikt/familie-typer';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
+import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
+import { useSlettEndretUtbetalingAndel } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
@@ -62,7 +63,6 @@ export const useEndretUtbetalingAndelRHF = (
     åpenBehandling: IBehandling,
     lukkSkjema: () => void
 ) => {
-    const { request } = useHttp();
     const { settÅpenBehandling } = useBehandlingContext();
 
     const personer = lagretEndretUtbetalingAndel.personIdenter.map(ident => ({
@@ -87,9 +87,32 @@ export const useEndretUtbetalingAndelRHF = (
         },
     });
 
-    const { control, reset, watch } = form;
+    const { control, reset, watch, setError } = form;
 
     useOnFormSubmitSuccessful(control, () => reset());
+
+    const onSuccess = (behandling: IBehandling) => {
+        lukkSkjema();
+        settÅpenBehandling(byggDataRessurs(behandling));
+    };
+
+    const onError = (error: Error) => {
+        setError(EndretUtbetalingAndelServerErrors.onSubmitError.id, {
+            message: error.message ?? 'Ukjent feil oppstod.',
+        });
+    };
+
+    const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
+        onSuccess,
+        onError,
+    });
+
+    const { mutate: slettLagretEndretUtbetalingAndel } = useSlettEndretUtbetalingAndel({
+        onSuccess,
+        onError,
+    });
+
+    const slettEndretUtbetalingAndel = () => slettLagretEndretUtbetalingAndel(lagretEndretUtbetalingAndel);
 
     const skjemaHarEndringerSomIkkeErLagret = (): boolean => {
         const formValues = watch();
@@ -133,27 +156,6 @@ export const useEndretUtbetalingAndelRHF = (
             avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(values.avtaletidspunktDeltBosted),
             erTilknyttetAndeler: lagretEndretUtbetalingAndel.erTilknyttetAndeler,
         });
-
-    const oppdaterEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbetalingAndel) =>
-        request<IRestEndretUtbetalingAndel, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
-            påvirkerSystemLaster: true,
-            data: endretUtbetalingAndel,
-        }).then((behandling: Ressurs<IBehandling>) => {
-            if (behandling.status === RessursStatus.SUKSESS) {
-                lukkSkjema();
-                settÅpenBehandling(behandling);
-            }
-        });
-
-    const slettEndretUtbetalingAndel = () => {
-        request<null, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${lagretEndretUtbetalingAndel.id}`,
-            påvirkerSystemLaster: true,
-        }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
-    };
 
     return {
         form,
