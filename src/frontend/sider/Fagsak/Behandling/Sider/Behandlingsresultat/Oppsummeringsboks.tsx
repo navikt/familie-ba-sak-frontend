@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, HGrid, Heading, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { ASpacing10, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -48,7 +48,7 @@ const UtbetalingsbeløpStack = styled(VStack)`
 `;
 
 const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <HGrid columns="1fr 5rem 5rem" gap={'4'}>
+    <HGrid columns="1fr 8rem 5rem" gap={'2'}>
         {children}
     </HGrid>
 );
