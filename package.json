@@ -52,7 +52,7 @@
     "@navikt/fnrvalidator": "^2.1.0",
     "@navikt/land-verktoy": "^9.1.8",
     "@navikt/landvelger": "^10.0.0",
-    "@sentry/browser": "^9.37.0",
+    "@sentry/browser": "^10.0.0",
     "@sentry/webpack-plugin": "^3.5.0",
     "@tanstack/react-query": "^5.82.0",
     "axios": "^1.11.0",
