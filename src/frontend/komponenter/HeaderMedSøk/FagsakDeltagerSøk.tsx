@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
-import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
-import { ikoner, Søk } from '@navikt/familie-header';
+import { Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
 import {
+    Adressebeskyttelsegradering,
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     kjønnType,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
@@ -22,25 +22,30 @@ import { OpprettFagsakModal } from './OpprettFagsakModal';
 import { useAppContext } from '../../context/AppContext';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
-import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
-import StatusIkon, { Status } from '../../ikoner/StatusIkon';
-import { FagsakType } from '../../typer/fagsak';
-import type { IFagsakDeltager, ISøkParam } from '../../typer/fagsakdeltager';
-import { fagsakdeltagerRoller } from '../../typer/fagsakdeltager';
+import {
+    FagsakDeltagerRolle,
+    fagsakdeltagerRoller,
+    type IFagsakDeltager,
+    type ISøkParam,
+} from '../../typer/fagsakdeltager';
 import { ToggleNavn } from '../../typer/toggles';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
+import { PersonIkon } from '../PersonIkon';
 
 function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
-    if (!fagsakDeltager.harTilgang) {
-        return <StatusIkon status={Status.FEIL} />;
-    }
-    if (fagsakDeltager.fagsakType === FagsakType.INSTITUSJON) {
-        return <KontorIkonGrønn height={'32'} width={'32'} />;
-    }
-    if (fagsakDeltager.fagsakType === FagsakType.SKJERMET_BARN) {
-        return <PersonCircleFillIcon color={'var(--a-orange-600)'} height={'35'} width={'35'} />;
-    }
-    return ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`];
+    return (
+        <PersonIkon
+            fagsakType={fagsakDeltager.fagsakType}
+            kjønn={fagsakDeltager.kjønn || kjønnType.UKJENT}
+            erBarn={fagsakDeltager.rolle === FagsakDeltagerRolle.Barn}
+            adresseBeskyttelse={
+                fagsakDeltager.adressebeskyttelseGradering !== null &&
+                fagsakDeltager.adressebeskyttelseGradering !== Adressebeskyttelsegradering.UGRADERT
+            }
+            harTilgang={fagsakDeltager.harTilgang}
+            størrelse={'m'}
+        />
+    );
 }
 
 const FagsakDeltagerSøk: React.FC = () => {
@@ -126,7 +131,7 @@ const FagsakDeltagerSøk: React.FC = () => {
         <>
             <Søk
                 søk={søk}
-                label={'Søkefelt. Fødsels- eller D-nummer (11 siffer)'}
+                label={'Søkefelt. ´Fødsels- eller D-nummer (11 siffer)'}
                 placeholder={'Fødsels- eller D-nummer (11 siffer)'}
                 nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
                 søkeresultater={mapTilSøkeresultater()}

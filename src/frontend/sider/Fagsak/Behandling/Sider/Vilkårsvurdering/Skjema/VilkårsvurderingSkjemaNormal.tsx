@@ -14,7 +14,11 @@ import { useAppContext } from '../../../../../../context/AppContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
-import { PersonType } from '../../../../../../typer/person';
+import {
+    Adressebeskyttelsegradering,
+    type IPersonInfo,
+    PersonType,
+} from '../../../../../../typer/person';
 import { ToggleNavn } from '../../../../../../typer/toggles';
 import type {
     IPersonResultat,
@@ -27,6 +31,7 @@ import {
     vilkårConfig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
+import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -62,9 +67,50 @@ const VilkårDiv = styled.div`
     }
 `;
 
+export const lagAdresseBeskyttelseRecord = (
+    brukerRessurs: Ressurs<IPersonInfo>,
+    personResultat: IPersonResultat[]
+): Record<string, boolean> => {
+    const adresseBeskyttelseRecord: Record<string, boolean> = {};
+
+    if (brukerRessurs.status === RessursStatus.SUKSESS) {
+        const bruker = brukerRessurs.data;
+        const forelderBarnRelasjoner = brukerRessurs.data.forelderBarnRelasjon;
+        const forelderBarnRelasjonerMaskert = brukerRessurs.data.forelderBarnRelasjonMaskert;
+
+        personResultat.forEach(person => {
+            const forelderBarnRelasjon = forelderBarnRelasjoner.find(
+                rel => rel.personIdent === person.personIdent
+            );
+            const forelderBarnRelasjonMaskert = forelderBarnRelasjonerMaskert.find(
+                rel => rel.adressebeskyttelseGradering
+            );
+            {
+                if (bruker.personIdent === person.personIdent) {
+                    adresseBeskyttelseRecord[person.personIdent] =
+                        bruker.adressebeskyttelseGradering !== null &&
+                        bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.UGRADERT;
+                } else if (forelderBarnRelasjon?.personIdent === person.personIdent) {
+                    adresseBeskyttelseRecord[person.personIdent] =
+                        forelderBarnRelasjon.adressebeskyttelseGradering !== null &&
+                        forelderBarnRelasjon.adressebeskyttelseGradering !==
+                            Adressebeskyttelsegradering.UGRADERT;
+                } else if (forelderBarnRelasjonMaskert?.adressebeskyttelseGradering !== undefined) {
+                    adresseBeskyttelseRecord[person.personIdent] =
+                        forelderBarnRelasjonMaskert.adressebeskyttelseGradering !== null &&
+                        forelderBarnRelasjonMaskert.adressebeskyttelseGradering !==
+                            Adressebeskyttelsegradering.UGRADERT;
+                }
+            }
+        });
+    }
+    return adresseBeskyttelseRecord;
+};
+
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
     visFeilmeldinger,
 }) => {
+    const { bruker: brukerRessurs } = useFagsakContext();
     const { toggles } = useAppContext();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const {
@@ -75,6 +121,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         behandling,
     } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
+    const adresseBeskyttelseRecord = lagAdresseBeskyttelseRecord(brukerRessurs, vilkårsvurdering);
 
     const kanLeggeTilUtvidetVilkår =
         erMigreringsbehandling ||
@@ -150,6 +197,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                     vilkårResultat =>
                         vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
+
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}
@@ -160,6 +208,9 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 person={personResultat.person}
                                 somOverskrift
                                 erLesevisning={erLesevisning}
+                                adresseBeskyttelse={
+                                    adresseBeskyttelseRecord[personResultat.personIdent]
+                                }
                             />
 
                             {!erLesevisning &&

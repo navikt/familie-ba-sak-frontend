@@ -2,7 +2,11 @@ import React from 'react';
 
 import { Alert } from '@navikt/ds-react';
 
-import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
+import {
+    IndentertInnhold,
+    lagAdresseBeskyttelseRecord,
+    PersonHeader,
+} from './VilkårsvurderingSkjemaNormal';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
@@ -12,6 +16,7 @@ import {
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
+import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -25,10 +30,13 @@ interface IProps {
 const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
+    const { bruker: brukerRessurs } = useFagsakContext();
 
     const personResultat = vilkårsvurdering.find(
         (value: IPersonResultat) => value.person.type === PersonType.BARN
     );
+    const adresseBeskyttelseRecord = lagAdresseBeskyttelseRecord(brukerRessurs, vilkårsvurdering);
+
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
@@ -39,6 +47,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                     person={personResultat.person}
                     somOverskrift
                     erLesevisning={vurderErLesevisning()}
+                    adresseBeskyttelse={adresseBeskyttelseRecord[personResultat.personIdent]}
                 />
             </PersonHeader>
 
