@@ -173,6 +173,11 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
             if (vurderErLesevisning()) {
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
             } else {
+                const søkerIdent =
+                    minimalFagsakRessurs.status === RessursStatus.SUKSESS
+                        ? minimalFagsakRessurs.data.søkerFødselsnummer
+                        : bruker.data.personIdent;
+
                 onSubmit<IRestRegistrerSøknad>(
                     {
                         method: 'POST',
@@ -180,7 +185,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                             søknad: {
                                 underkategori: skjema.felter.underkategori.verdi,
                                 søkerMedOpplysninger: {
-                                    ident: bruker.data.personIdent,
+                                    ident: søkerIdent,
                                     målform: skjema.felter.målform.verdi,
                                 },
                                 barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
