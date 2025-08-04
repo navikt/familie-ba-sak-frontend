@@ -165,14 +165,14 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
         if (bruker.status === RessursStatus.SUKSESS) {
-            const søkerIdent =
-                minimalFagsakRessurs.status === RessursStatus.SUKSESS
-                    ? minimalFagsakRessurs.data.søkerFødselsnummer
-                    : bruker.data.personIdent;
-
             if (vurderErLesevisning()) {
                 navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
             } else {
+                const søkerIdent =
+                    minimalFagsakRessurs.status === RessursStatus.SUKSESS
+                        ? minimalFagsakRessurs.data.søkerFødselsnummer
+                        : bruker.data.personIdent;
+
                 onSubmit<IRestRegistrerSøknad>(
                     {
                         method: 'POST',
