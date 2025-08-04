@@ -11,7 +11,7 @@ import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBeh
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider, useFagsakContext } from './FagsakContext';
-import { FagsakLinje } from './FagsakLinje';
+import { FagsakLinje } from './Fagsaklinje/FagsakLinje';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';

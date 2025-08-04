@@ -5,10 +5,10 @@ import { useLocation, Link as ReactRouterLink } from 'react-router';
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 
-import type { IMinimalFagsak } from '../../typer/fagsak';
-import type { IPersonInfo } from '../../typer/person';
-import Behandlingsmeny from './Personlinje/Behandlingsmeny/Behandlingsmeny';
-import type { IBehandling } from '../../typer/behandling';
+import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
+import type { IBehandling } from '../../../typer/behandling';
+import type { IMinimalFagsak } from '../../../typer/fagsak';
+import type { IPersonInfo } from '../../../typer/person';
 
 interface FagsaklinjeProps {
     bruker: IPersonInfo;

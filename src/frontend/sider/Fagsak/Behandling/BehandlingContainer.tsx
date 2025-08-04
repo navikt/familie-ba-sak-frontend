@@ -13,7 +13,7 @@ import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import { FagsakLinje } from '../FagsakLinje';
+import { FagsakLinje } from '../Fagsaklinje/FagsakLinje';
 
 interface Props {
     bruker: IPersonInfo;
