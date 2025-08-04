@@ -47,8 +47,13 @@ interface SøknadContextValue {
 const SøknadContext = createContext<SøknadContextValue | undefined>(undefined);
 
 export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
-    const { vurderErLesevisning, settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig } =
-        useBehandlingContext();
+    const {
+        vurderErLesevisning,
+        settÅpenBehandling,
+        gjelderInstitusjon,
+        gjelderEnsligMindreårig,
+        gjelderSkjermetBarn,
+    } = useBehandlingContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const { bruker, minimalFagsakRessurs } = useFagsakContext();
@@ -98,7 +103,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         if (bruker.status === RessursStatus.SUKSESS) {
             nullstillSkjema();
             let barnaMedOpplysninger: IBarnMedOpplysninger[];
-            if (gjelderInstitusjon || gjelderEnsligMindreårig) {
+            if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
                 barnaMedOpplysninger = [
                     {
                         merket: true,

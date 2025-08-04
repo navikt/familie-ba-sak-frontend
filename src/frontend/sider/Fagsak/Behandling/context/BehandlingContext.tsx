@@ -82,6 +82,7 @@ interface BehandlingContextValue {
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
     gjelderEnsligMindreårig: boolean;
+    gjelderSkjermetBarn: boolean;
     settÅpenBehandling: (behandling: Ressurs<IBehandling>) => void;
 }
 
@@ -254,6 +255,10 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
         minimalFagsakRessurs.data.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 
+    const gjelderSkjermetBarn =
+        minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
+        minimalFagsakRessurs.data.fagsakType === FagsakType.SKJERMET_BARN;
+
     const samhandlerOrgnr = gjelderInstitusjon
         ? minimalFagsakRessurs.data.institusjon?.orgNummer
         : undefined;
@@ -288,6 +293,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 gjelderInstitusjon,
                 samhandlerOrgnr,
                 gjelderEnsligMindreårig,
+                gjelderSkjermetBarn,
                 settÅpenBehandling: settBehandlingRessurs,
             }}
         >
