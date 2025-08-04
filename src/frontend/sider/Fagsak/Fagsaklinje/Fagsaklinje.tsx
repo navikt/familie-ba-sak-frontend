@@ -22,7 +22,7 @@ const aktivFaneStyle = (fanenavn: string, pathname: string) => {
     return sluttenPåUrl === fanenavn ? { textDecoration: 'underline' } : {};
 };
 
-export const FagsakLinje = ({ minimalFagsak, bruker, behandling }: FagsaklinjeProps) => {
+export const Fagsaklinje = ({ minimalFagsak, bruker, behandling }: FagsaklinjeProps) => {
     const { pathname } = useLocation();
 
     return (
