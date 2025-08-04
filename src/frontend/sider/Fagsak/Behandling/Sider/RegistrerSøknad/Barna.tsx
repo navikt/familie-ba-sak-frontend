@@ -30,8 +30,13 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 `;
 
 const Barna: React.FunctionComponent = () => {
-    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, behandling } =
-        useBehandlingContext();
+    const {
+        vurderErLesevisning,
+        gjelderInstitusjon,
+        gjelderEnsligMindreårig,
+        gjelderSkjermetBarn,
+        behandling,
+    } = useBehandlingContext();
     const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useFagsakContext();
@@ -103,7 +108,10 @@ const Barna: React.FunctionComponent = () => {
                     skjema.visFeilmeldinger
                 )}
                 legend={
-                    !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig ? (
+                    !lesevisning &&
+                    !gjelderInstitusjon &&
+                    !gjelderEnsligMindreårig &&
+                    !gjelderSkjermetBarn ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>
@@ -130,13 +138,16 @@ const Barna: React.FunctionComponent = () => {
                     />
                 )}
 
-                {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && (
-                    <LeggTilBarn
-                        barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
-                        manuelleBrevmottakere={brevmottakere}
-                        vurderErLesevisning={vurderErLesevisning}
-                    />
-                )}
+                {!lesevisning &&
+                    !gjelderInstitusjon &&
+                    !gjelderEnsligMindreårig &&
+                    !gjelderSkjermetBarn && (
+                        <LeggTilBarn
+                            barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
+                            manuelleBrevmottakere={brevmottakere}
+                            vurderErLesevisning={vurderErLesevisning}
+                        />
+                    )}
             </StyledCheckboxGroup>
         </BarnaWrapper>
     );
