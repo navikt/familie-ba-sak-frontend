@@ -13,7 +13,7 @@ import { isoStringTilDate } from '../../../../utils/dato';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
-} from '../../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;

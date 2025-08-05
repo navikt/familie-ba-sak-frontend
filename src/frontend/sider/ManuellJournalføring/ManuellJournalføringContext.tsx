@@ -64,7 +64,7 @@ import type { ISamhandlerInfo } from '../../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
 import { isoStringTilDate } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
+import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Fagsaklinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {

@@ -13,7 +13,7 @@ import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import { FagsakLinje } from '../FagsakLinje';
+import { Fagsaklinje } from '../Fagsaklinje/Fagsaklinje';
 
 interface Props {
     bruker: IPersonInfo;
@@ -49,7 +49,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
         case RessursStatus.SUKSESS:
             return (
                 <BehandlingProvider behandling={behandlingRessurs.data}>
-                    <FagsakLinje
+                    <Fagsaklinje
                         bruker={bruker}
                         minimalFagsak={fagsak}
                         behandling={behandlingRessurs.data}
