@@ -7,7 +7,6 @@ import type { ISøkeresultat } from '@navikt/familie-header';
 import { Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
 import {
-    Adressebeskyttelsegradering,
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
@@ -28,6 +27,7 @@ import {
     type ISøkParam,
 } from '../../typer/fagsakdeltager';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
+import { erAdresseBeskyttet } from '../../utils/validators';
 import { PersonIkon } from '../PersonIkon';
 
 function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
@@ -36,10 +36,7 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
             fagsakType={fagsakDeltager.fagsakType}
             kjønn={fagsakDeltager.kjønn || kjønnType.UKJENT}
             erBarn={fagsakDeltager.rolle === FagsakDeltagerRolle.Barn}
-            adresseBeskyttelse={
-                fagsakDeltager.adressebeskyttelseGradering !== null &&
-                fagsakDeltager.adressebeskyttelseGradering !== Adressebeskyttelsegradering.UGRADERT
-            }
+            erAdresseBeskyttet={erAdresseBeskyttet(fagsakDeltager.adressebeskyttelseGradering)}
             harTilgang={fagsakDeltager.harTilgang}
             størrelse={'m'}
         />

@@ -1,17 +1,16 @@
 import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid, parseISO } from 'date-fns';
 
-import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
+import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { idnr } from '@navikt/fnrvalidator';
 
 import type { IIsoDatoPeriode } from './dato';
 import { dagensDato, isoStringTilDate } from './dato';
 import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
-import type { IGrunnlagPerson } from '../typer/person';
-import { PersonType } from '../typer/person';
+import { Adressebeskyttelsegradering, type IGrunnlagPerson, PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
-import { Regelverk, Resultat, VilkårType, ResultatBegrunnelse } from '../typer/vilkår';
+import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../typer/vilkår';
 
 const harFyltInnIdent = (felt: FeltState<string>): FeltState<string> => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
@@ -241,4 +240,14 @@ export const erLik0 = (string: string) => {
     const tall = Number(string);
 
     return Number.isInteger(tall) && tall === 0;
+};
+
+export const erAdresseBeskyttet = (
+    adresseBeskyttelsesGradering: Adressebeskyttelsegradering | undefined
+) => {
+    return (
+        adresseBeskyttelsesGradering !== undefined &&
+        adresseBeskyttelsesGradering !== null &&
+        adresseBeskyttelsesGradering !== Adressebeskyttelsegradering.UGRADERT
+    );
 };

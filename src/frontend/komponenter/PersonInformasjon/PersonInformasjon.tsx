@@ -8,13 +8,9 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import RegistrerDødsfallDato from './RegistrerDødsfallDato';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
-import {
-    Adressebeskyttelsegradering,
-    type IGrunnlagPerson,
-    type IPersonInfo,
-    personTypeMap,
-} from '../../typer/person';
+import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '../../typer/person';
 import { formaterIdent, hentAlder } from '../../utils/formatter';
+import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { PersonIkon } from '../PersonIkon';
 
@@ -47,16 +43,9 @@ const hentAdresseBeskyttelseGradering = (
             rel => rel.personIdent === personIdent
         );
         if (bruker.personIdent === personIdent) {
-            return (
-                bruker.adressebeskyttelseGradering !== null &&
-                bruker.adressebeskyttelseGradering !== Adressebeskyttelsegradering.UGRADERT
-            );
+            return erAdresseBeskyttet(bruker.adressebeskyttelseGradering);
         } else if (forelderBarnRelasjon?.personIdent === personIdent) {
-            return (
-                forelderBarnRelasjon.adressebeskyttelseGradering !== null &&
-                forelderBarnRelasjon.adressebeskyttelseGradering !==
-                    Adressebeskyttelsegradering.UGRADERT
-            );
+            return erAdresseBeskyttet(forelderBarnRelasjon.adressebeskyttelseGradering);
         }
     }
 };
@@ -84,10 +73,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
 
     const { bruker: brukerRessurs } = useFagsakContext();
 
-    const adresseBeskyttelseGradering = hentAdresseBeskyttelseGradering(
-        brukerRessurs,
-        person.personIdent
-    );
+    const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(brukerRessurs, person.personIdent);
 
     if (somOverskrift) {
         return (
@@ -97,7 +83,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     kjønn={person.kjønn}
                     erBarn={alder < 18}
                     størrelse={'m'}
-                    adresseBeskyttelse={adresseBeskyttelseGradering}
+                    erAdresseBeskyttet={erAdresseBeskyttet}
                 />
                 <HStack gap="4" align="center" wrap={false}>
                     <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
@@ -147,7 +133,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                 kjønn={person.kjønn}
                 erBarn={alder < 18}
                 størrelse={'m'}
-                adresseBeskyttelse={adresseBeskyttelseGradering}
+                erAdresseBeskyttet={erAdresseBeskyttet}
             />
             <BodyShort className={'navn'} title={navnOgAlder}>
                 {navnOgAlder}
