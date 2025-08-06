@@ -42,7 +42,6 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING,
-                UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD,
                 UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
             ];
         }
@@ -51,7 +50,6 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE,
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS,
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA,
-                UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD,
                 UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
             ];
         }
