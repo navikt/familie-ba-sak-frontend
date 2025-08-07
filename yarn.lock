@@ -1909,12 +1909,7 @@
     classnames "^2.5.1"
     nanoid "^5.0.9"
 
-"@navikt/familie-typer@8.0.3":
-  version "8.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.3/af354ab37c1b52c9f09ce690c72ace25f00131df#af354ab37c1b52c9f09ce690c72ace25f00131df"
-  integrity sha512-DoTtJolQm9SvDt7/VkhqiQ0WXbj9584V+gN1GhouPQtecHK8RF7dxkuep4We1mOhfSCxC5mGrHxu2nveCN1AqA==
-
-"@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3", "@navikt/familie-typer@^8.0.4":
+"@navikt/familie-typer@8.0.4", "@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3", "@navikt/familie-typer@^8.0.4":
   version "8.0.4"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.4/52b1173d1b3432fb0d13adf542b1a1876eda6fce#52b1173d1b3432fb0d13adf542b1a1876eda6fce"
   integrity sha512-aVXlGDl196Ebp6tEdgw+F57fHtsFw5aCgJUugk2z10xxDc9y7MtpYSDMwFdIS5ATTNiHS9y5YUDpBz+JdRcDxQ==
