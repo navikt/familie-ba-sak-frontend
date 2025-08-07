@@ -29,6 +29,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     const personResultat = vilkårsvurdering.find(
         (value: IPersonResultat) => value.person.type === PersonType.BARN
     );
+
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );

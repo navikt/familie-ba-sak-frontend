@@ -9,15 +9,17 @@ interface IKontorIkonGrønn {
     className?: string;
     height?: '32' | '24';
     width?: '32' | '24';
+    color?: string;
 }
 
 const IkonSirkel = styled.span<{
     $height: IKontorIkonGrønn['height'];
     $width: IKontorIkonGrønn['width'];
+    $color: IKontorIkonGrønn['color'];
 }>`
-    border-color: ${AGreen600};
+    border-color: ${props => props.$color};
     border-radius: 50%;
-    background-color: ${AGreen600};
+    background-color: ${props => props.$color};
     display: inline-grid;
     place-items: center;
     height: ${props => props.$height}px;
@@ -29,9 +31,10 @@ const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
     className,
     height = '24',
     width = '24',
+    color = AGreen600,
 }) => {
     return (
-        <IkonSirkel $height={height} $width={width}>
+        <IkonSirkel $height={height} $width={width} $color={color}>
             <Buildings3Icon
                 height={height === '24' ? 20 : 28}
                 width={width === '24' ? 20 : 28}

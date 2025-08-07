@@ -1,56 +1,24 @@
 import React from 'react';
 
-import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
-import {
-    GuttIkon,
-    JenteIkon,
-    KvinneIkon,
-    MannIkon,
-    NøytralPersonIkon,
-} from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
 import { useHentPerson } from '../../../hooks/useHentPerson';
-import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
+import { PersonIkon } from '../../../komponenter/PersonIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
+import { type IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
+import { erAdresseBeskyttet } from '../../../utils/validators';
 
 interface PersonlinjeProps {
     bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
     behandling?: IBehandling;
 }
-
-interface PersonlinjeIkonProps {
-    fagsakType?: FagsakType;
-    kjønn: string;
-    alder: number;
-}
-
-const PersonlinjeIkon = ({ fagsakType, kjønn, alder }: PersonlinjeIkonProps) => {
-    if (fagsakType === FagsakType.INSTITUSJON) {
-        return <KontorIkonGrønn height="24" width="24" />;
-    }
-    if (fagsakType === FagsakType.SKJERMET_BARN) {
-        return <PersonCircleFillIcon color="var(--a-orange-600)" height={28} width={28} />;
-    }
-
-    const ikonProps = { height: 24, width: 24 };
-
-    if (kjønn === kjønnType.KVINNE) {
-        return alder < 18 ? <JenteIkon {...ikonProps} /> : <KvinneIkon {...ikonProps} />;
-    }
-    if (kjønn === kjønnType.MANN) {
-        return alder < 18 ? <GuttIkon {...ikonProps} /> : <MannIkon {...ikonProps} />;
-    }
-    return <NøytralPersonIkon {...ikonProps} />;
-};
 
 const InnholdContainer = ({ children }: React.PropsWithChildren) => {
     return (
@@ -97,10 +65,13 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
         <InnholdContainer>
             <HStack align="center" gap="3 4">
                 <HStack align="center" gap="3 4">
-                    <PersonlinjeIkon
+                    <PersonIkon
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
-                        alder={fagsakeier.alder}
+                        erBarn={fagsakeier.alder < 18}
+                        erAdresseBeskyttet={erAdresseBeskyttet(
+                            søkerData?.adressebeskyttelseGradering
+                        )}
                     />
                     <BodyShort as="span" weight="semibold">
                         {fagsakeier.navn} ({fagsakeier.alder} år)
