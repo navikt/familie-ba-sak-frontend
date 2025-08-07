@@ -69,9 +69,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
-    const { minimalFagsak } = useFagsakContext();
-
-    const { bruker: brukerRessurs } = useFagsakContext();
+    const { fagsak, bruker: brukerRessurs } = useFagsakContext();
 
     const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(brukerRessurs, person.personIdent);
 
@@ -79,7 +77,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
         return (
             <HStack gap="6" wrap={false} align="center">
                 <PersonIkon
-                    fagsakType={minimalFagsak?.fagsakType}
+                    fagsakType={fagsak.fagsakType}
                     kjønn={person.kjønn}
                     erBarn={alder < 18}
                     størrelse={'m'}
@@ -129,7 +127,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     return (
         <HStack gap="2" align="center" wrap={false}>
             <PersonIkon
-                fagsakType={minimalFagsak?.fagsakType}
+                fagsakType={fagsak.fagsakType}
                 kjønn={person.kjønn}
                 erBarn={alder < 18}
                 størrelse={'m'}

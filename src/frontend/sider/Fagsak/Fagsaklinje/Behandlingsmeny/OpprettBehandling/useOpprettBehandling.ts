@@ -9,6 +9,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useAppContext } from '../../../../../context/AppContext';
 import { BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentBarnetrygdbehandlinger';
+import { HentFagsakQueryKeyFactory } from '../../../../../hooks/useHentFagsak';
 import { KLAGEBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentKlagebehandlinger';
 import { TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentTilbakekrevingsbehandlinger';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
@@ -45,16 +46,12 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { bruker: brukerRessurs, minimalFagsakRessurs, hentMinimalFagsak } = useFagsakContext();
+    const { bruker: brukerRessurs, fagsak } = useFagsakContext();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
-    const minimalFagsak =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS
-            ? minimalFagsakRessurs.data
-            : undefined;
 
     const behandlingstype = useFelt<
         Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''
@@ -86,14 +83,14 @@ const useOpprettBehandling = (
 
     const behandlingstema = useFelt<IBehandlingstema | undefined>({
         verdi:
-            minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
+            fagsak.fagsakType === FagsakType.INSTITUSJON
                 ? behandlingstemaer.NASJONAL_INSTITUSJON
                 : undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
-            if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) return false;
+            if (fagsak.fagsakType === FagsakType.INSTITUSJON) return false;
 
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
@@ -257,7 +254,9 @@ const useOpprettBehandling = (
                         queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
                     });
 
-                    hentMinimalFagsak(fagsakId, true);
+                    queryClient.invalidateQueries({
+                        queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId),
+                    });
 
                     lukkModal();
                     nullstillSkjema();
