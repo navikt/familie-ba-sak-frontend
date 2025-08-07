@@ -12,7 +12,6 @@
     "build": "yarn build:prod",
     "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",
     "test": "vitest",
-    "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
     "prettier": "prettier --check './src/**/*.{js,jsx,ts,tsx,json,css}'",
@@ -91,7 +90,6 @@
     "@types/deep-equal": "^1.0.1",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/express": "^5.0.1",
-    "@types/jest": "^29.5.8",
     "@types/node": "^20.14.2",
     "@types/react": "^19.0.0",
     "@types/react-collapse": "^5.0.1",
@@ -116,13 +114,10 @@
     "globals": "^16.3.0",
     "html-webpack-plugin": "^5.6.0",
     "husky": "^9.1.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^16.1.0",
     "prettier": "^3.6.1",
     "react-refresh": "^0.17.0",
     "style-loader": "^4.0.0",
-    "ts-jest": "^29.4.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.0",
     "vitest": "^3.2.4",
@@ -132,25 +127,5 @@
     "webpack-dev-server": "^5.2.1",
     "webpack-hot-middleware": "^2.26.1",
     "webpack-merge": "^6.0.1"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "<rootDir>/src/frontend/tsconfig.json"
-      }
-    },
-    "setupFiles": [
-      "./jest-setup.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|svg)$": "<rootDir>/src/mockFile.js"
-    },
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(@navikt)/)"
-    ],
-    "transform": {
-      "\\.[jt]sx?$": "babel-jest"
-    }
   }
 }
