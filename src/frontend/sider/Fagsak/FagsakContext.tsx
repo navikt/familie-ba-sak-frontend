@@ -12,15 +12,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakApi } from '../../api/useFagsakApi';
 import { useAppContext } from '../../context/AppContext';
 import { useSettAktivBrukerIModiaContext } from '../../hooks/useSettAktivBrukerIModiaContext';
-import {
-    FagsakType,
-    type IBaseFagsak,
-    type IMinimalFagsak,
-    mapMinimalFagsakTilBaseFagsak,
-} from '../../typer/fagsak';
+import { FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
 import { type IPersonInfo } from '../../typer/person';
 import { ToggleNavn } from '../../typer/toggles';
 import { sjekkTilgangTilPerson } from '../../utils/commons';
@@ -28,7 +22,6 @@ import { obfuskerFagsak, obfuskerPersonInfo } from '../../utils/obfuskerData';
 
 interface IFagsakContext {
     bruker: Ressurs<IPersonInfo>;
-    fagsakerPåBruker: IBaseFagsak[] | undefined;
     hentMinimalFagsak: (fagsakId: string | number, påvirkerSystemLaster?: boolean) => void;
     minimalFagsakRessurs: Ressurs<IMinimalFagsak>;
     settMinimalFagsakRessurs: (fagsak: Ressurs<IMinimalFagsak>) => void;
@@ -42,11 +35,9 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         React.useState<Ressurs<IMinimalFagsak>>(byggTomRessurs());
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
-    const [fagsakerPåBruker, settFagsakerPåBruker] = React.useState<IBaseFagsak[]>();
 
     const { request } = useHttp();
     const { skalObfuskereData, toggles } = useAppContext();
-    const { hentFagsakerForPerson } = useFagsakApi();
     const { mutate: settAktivBrukerIModiaContext } = useSettAktivBrukerIModiaContext();
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
@@ -101,11 +92,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
                 if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
                     settAktivBrukerIModiaContext(brukerEtterTilgangssjekk.data.personIdent);
                 }
-                hentFagsakerForPerson(personIdent).then((fagsaker: Ressurs<IMinimalFagsak[]>) => {
-                    if (fagsaker.status === RessursStatus.SUKSESS) {
-                        settFagsakerPåBruker(fagsaker.data.map(mapMinimalFagsakTilBaseFagsak));
-                    }
-                });
             }
         });
     };
@@ -132,7 +118,6 @@ export const FagsakProvider = (props: PropsWithChildren) => {
         <FagsakContext.Provider
             value={{
                 bruker,
-                fagsakerPåBruker,
                 hentMinimalFagsak,
                 minimalFagsakRessurs,
                 settMinimalFagsakRessurs,
