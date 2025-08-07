@@ -1088,11 +1088,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@colors/colors@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
-  integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
-
 "@colors/colors@1.6.0", "@colors/colors@^1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.6.0.tgz#ec6cd237440700bc23ca23087f513c75508958b0"
@@ -1937,19 +1932,19 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.26.0/b1382b0c82cf8e2ad0cda7c348d4df6fbac233f3#b1382b0c82cf8e2ad0cda7c348d4df6fbac233f3"
   integrity sha512-kyJHMBMlWCT3bqz8gkRvLHGK2rGGC1ts9OIBqlkbhFlv6dpiTd8UtokuyXGT1+HGyqU6S/GwT1bj4bL5Kvf9Zg==
 
-"@navikt/familie-backend@^10.1.6":
-  version "10.1.6"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/10.1.6/9fee288bdba5be0070240c8d3c86c2d75f24942e#9fee288bdba5be0070240c8d3c86c2d75f24942e"
-  integrity sha512-NKmnUPG3J5y6My2eVF5mlSMMy84S+kFCPEooL4iXJeau+dStG0AC4VV8OhwTv8WFegVwnKya4sE+J/dY4QH++A==
+"@navikt/familie-backend@^10.1.9":
+  version "10.1.9"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-backend/10.1.9/f55283ce4c0ca5bf85ca887ee26273da5920caa6#f55283ce4c0ca5bf85ca887ee26273da5920caa6"
+  integrity sha512-qjiQXGSGCh/+0RsC7RzDHplAmcONwhTHw2NXkT4jPNPDj7TfYWZiyaml3LgKYi1ms+txurINGxdMmuR2V0wE8A==
   dependencies:
-    "@navikt/familie-logging" "^7.0.3"
+    "@navikt/familie-logging" "^7.0.4"
     "@types/cookie-parser" "^1.4.8"
-    "@types/express" "^5.0.0"
+    "@types/express" "^5.0.3"
     "@types/express-session" "^1.18.1"
     "@types/passport" "^1.0.17"
     connect-redis "^8.0.1"
     cookie-parser "^1.4.7"
-    express "^5.0.1"
+    express "^5.1.0"
     express-http-proxy "^2.1.1"
     express-session "^1.18.1"
     https-proxy-agent "^7.0.6"
@@ -1959,21 +1954,21 @@
     prom-client "^15.1.3"
     redis "^4.7.0"
 
-"@navikt/familie-endringslogg@14.0.0":
-  version "14.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/14.0.0/3eb12f4597568cf7c8d2bb0726b3dd05d66f07c0#3eb12f4597568cf7c8d2bb0726b3dd05d66f07c0"
-  integrity sha512-Ba563ehbGy3nHX6S5dJ9dnCgV07T+8l1hOte/7Uvc1jOH4zrDIjQhB95xh6+VOjuTNYoqZUsEs2dPu14M+xDvQ==
+"@navikt/familie-endringslogg@14.0.2":
+  version "14.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/14.0.2/39d9a6a1768508b5d8b029c23abb93097572edf9#39d9a6a1768508b5d8b029c23abb93097572edf9"
+  integrity sha512-J8a/YtWnMau3vHqWZOi71iMIRg025Ip7Skq0InlutCMbidirovUFAfuD+PjpuiZrycnsV+cwnB1rPw4FQNu1wg==
   dependencies:
     "@portabletext/react" "^3.2.0"
     classnames "^2.5.1"
 
-"@navikt/familie-form-elements@21.0.4":
-  version "21.0.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/21.0.4/cfbd3541081b539804664c4a02018cfe7b4e114b#cfbd3541081b539804664c4a02018cfe7b4e114b"
-  integrity sha512-stYA0FyjxvatWA4SEbBRkjN9vaoFCwFKInRSMKQLnLzZkK1MZnh7R95OAKS3e3I4+8uCWKjWP7D/kxkDbQ2u4g==
+"@navikt/familie-form-elements@21.0.7":
+  version "21.0.7"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/21.0.7/bd36ecbdc77cb059fb1593bf29cde9078e863ce4#bd36ecbdc77cb059fb1593bf29cde9078e863ce4"
+  integrity sha512-tIFGcPkydqzEsyKavyV9g3/0q9iRJX5UCStlVQZzKEhnJkGHr7YrIHtW4k0FhuvVW3z7L02PaF8acy+nt9la/w==
   dependencies:
     classnames "^2.5.1"
-    react-select "5.9.0"
+    react-select "5.10.2"
 
 "@navikt/familie-header@16.1.2":
   version "16.1.2"
@@ -1984,73 +1979,59 @@
     "@navikt/familie-typer" "^8.0.4"
     "@navikt/fnrvalidator" "^2.1.5"
 
-"@navikt/familie-http@^8.0.0":
-  version "8.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/8.0.0/d5c33e3fc580141c4f929e61ee83d0effc763862#d5c33e3fc580141c4f929e61ee83d0effc763862"
-  integrity sha512-nPc64Be5pUsk6Mqlt/apmB6EUCNdItjZ/s7BEFSUlkCIVvo2eJHbvZ5j1f2ETvzzx9WYSY5zGqpqas197T5+hQ==
+"@navikt/familie-http@^8.0.2":
+  version "8.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/8.0.2/5bcbdf5497ebba39d50d940267704ba36ea3d529#5bcbdf5497ebba39d50d940267704ba36ea3d529"
+  integrity sha512-qXxXK/4Ts1cFWgroQ7OH4/MNhXRhFA52Fa1Bu/W6jSvHtJxLXoOzj15DX0CjzAehSO69ybCNPaFQVXcd98k+eg==
   dependencies:
-    "@navikt/familie-typer" "^8.0.3"
+    "@navikt/familie-typer" "^8.0.4"
     "@sentry/core" "^8.50.0"
 
-"@navikt/familie-ikoner@9.1.0":
-  version "9.1.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.0/115a0d9b71f60b2692af64cb9681371137a7cf82#115a0d9b71f60b2692af64cb9681371137a7cf82"
-  integrity sha512-pd0YiRNZTJQFAXVDnUSV4zQWe+OKHfgWxwYqh3HwRBcldWgwa0lxhiEW/7jumVoodag6E2x2POcMRzAfSKVRyQ==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.2"
-
-"@navikt/familie-ikoner@^9.0.3", "@navikt/familie-ikoner@^9.1.3":
+"@navikt/familie-ikoner@9.1.3", "@navikt/familie-ikoner@^9.1.3":
   version "9.1.3"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.3/1c623007f01fd157dc9c9d946831e79f82181f61#1c623007f01fd157dc9c9d946831e79f82181f61"
   integrity sha512-12Aon/KludBUbZdWDaz7WW1ZsqIr2CyHJ2fXpr2bF4ACnIR4fdjUDDfkiFKBmsTPouNlu9djfxYf55VdCLYzUA==
   dependencies:
     "@navikt/familie-typer" "^8.0.4"
 
-"@navikt/familie-logging@7.0.0":
-  version "7.0.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.0/04cf21c20ff7617168fa6cac2e7bab884f33e660#04cf21c20ff7617168fa6cac2e7bab884f33e660"
-  integrity sha512-GbQT+UyhUA0vj1SmDhZobk0bXBaoIl7QaFvTzAAaD6fSkudqp5CGstOha4U0v4+idUHORBJg16FArwx1Odf/qA==
-  dependencies:
-    winston "^3.11.0"
-
-"@navikt/familie-logging@^7.0.3":
-  version "7.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.3/64e03ec40585d30ab00c193d373f69dfa855def8#64e03ec40585d30ab00c193d373f69dfa855def8"
-  integrity sha512-rhAz7p+9kRqvTJLFmFTSGfs80w+vsEwdZMhWXKeKlaegetHB3RHQMYqkxJRNKUUzZh2tzlWlHug3Du2Ue8pyMw==
+"@navikt/familie-logging@7.0.4", "@navikt/familie-logging@^7.0.4":
+  version "7.0.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.4/e171c64a7d3d3cfcb131fdfde45d69361815cb97#e171c64a7d3d3cfcb131fdfde45d69361815cb97"
+  integrity sha512-h44fDF6i3wxoYMm81zKRlgEcrV9NAJZ1NCGYuCUkK2Af7qlzCj1A2jBbwR+P5Xq07GUlejEOF8Y7AZeE4iwHYQ==
   dependencies:
     winston "^3.17.0"
 
-"@navikt/familie-skjema@8.2.25":
-  version "8.2.25"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.25/a57ff2d12ab770fe6519959dd9758652031ddc6a#a57ff2d12ab770fe6519959dd9758652031ddc6a"
-  integrity sha512-ICPG6kzEsGOG5A+bNwJU+c9INSkgKz3fsP+TaiXKuqSDu+cEE4+CVSgsMHn4TrETm/80rO59RdBctHhbex6vWg==
+"@navikt/familie-skjema@8.2.28":
+  version "8.2.28"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.28/a713736503cb80d24dd374cbc545093c18faa721#a713736503cb80d24dd374cbc545093c18faa721"
+  integrity sha512-/gb138RdwC/j5b6JkHBG+b+vSU8pAe90yrY6zpINFGz1LP486VwulJGRX5YL5BbWyd5waC6MhM/B1R7FBNUUYg==
   dependencies:
-    "@navikt/familie-http" "^8.0.0"
-    "@navikt/familie-typer" "^8.0.3"
+    "@navikt/familie-http" "^8.0.2"
+    "@navikt/familie-typer" "^8.0.4"
     "@types/deep-equal" "^1.0.4"
     deep-equal "^2.2.3"
     hashids "^2.3.0"
 
-"@navikt/familie-tidslinje@^10.0.5":
-  version "10.0.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.5/029ef6a413df10a6fa4181ce66ecd2c1a1a5e919#029ef6a413df10a6fa4181ce66ecd2c1a1a5e919"
-  integrity sha512-QXBGcw/jUyEMy2zY7FRHXdA0Pld0Ya+2TLUXzo640SwHp0FJPrJmDIYVubrgq9uqQ+0e2GfFKIiGzIHTr28kyQ==
+"@navikt/familie-tidslinje@^10.0.8":
+  version "10.0.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.8/8a5842ca500542e74a19b0a99d6dbb2eda3d2ced#8a5842ca500542e74a19b0a99d6dbb2eda3d2ced"
+  integrity sha512-hnxjaYxfUGB8RY4pT0NG2KriTslX438G0CrXu6U773qOopm1DZVKz4zlAiZMDozVusouTDZmNooKGqkK8nZDyw==
   dependencies:
     classnames "^2.5.1"
-    nanoid "^5.0.9"
+    nanoid "^5.1.5"
 
-"@navikt/familie-typer@8.0.4", "@navikt/familie-typer@^8.0.2", "@navikt/familie-typer@^8.0.3", "@navikt/familie-typer@^8.0.4":
+"@navikt/familie-typer@8.0.4", "@navikt/familie-typer@^8.0.4":
   version "8.0.4"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.4/52b1173d1b3432fb0d13adf542b1a1876eda6fce#52b1173d1b3432fb0d13adf542b1a1876eda6fce"
   integrity sha512-aVXlGDl196Ebp6tEdgw+F57fHtsFw5aCgJUugk2z10xxDc9y7MtpYSDMwFdIS5ATTNiHS9y5YUDpBz+JdRcDxQ==
 
-"@navikt/familie-visittkort@^15.1.3":
-  version "15.1.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/15.1.3/99d2923c1f09930d80453912d49bd9d0b8ea5f56#99d2923c1f09930d80453912d49bd9d0b8ea5f56"
-  integrity sha512-IGLpJjmBxUfo9LHpjA/9Hc93F6/HUWjiTJtdK/mPCYFkHYa6/U5Xw05gcN0tdfZ+inCOTlMgDIRSjjf9xBliwQ==
+"@navikt/familie-visittkort@^15.1.7":
+  version "15.1.7"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-visittkort/15.1.7/a0971bbdc48b9e76cff42f60e0424dd899b80b03#a0971bbdc48b9e76cff42f60e0424dd899b80b03"
+  integrity sha512-+bEqYVzXWyWkrXdog4WqI+Dhi5Y1vZkrq1FxaVBilt+X/gLOk17cXS/1edxNhiUs2KsvJPuSx6zbgvhd7Ka3Uw==
   dependencies:
-    "@navikt/familie-ikoner" "^9.0.3"
-    "@navikt/familie-typer" "^8.0.2"
+    "@navikt/familie-ikoner" "^9.1.3"
+    "@navikt/familie-typer" "^8.0.4"
     classnames "^2.5.1"
 
 "@navikt/flagg-ikoner@^10.0.0":
@@ -2797,7 +2778,7 @@
   dependencies:
     "@types/express" "*"
 
-"@types/express@*", "@types/express@^5.0.0", "@types/express@^5.0.1":
+"@types/express@*", "@types/express@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-5.0.1.tgz#138d741c6e5db8cc273bec5285cd6e9d0779fc9f"
   integrity sha512-UZUw8vjpWFXuDnjFTh7/5c2TWDlQqeXHi6hcN7F2XSVT5P+WmUnnbFS3KA6Jnc6IsEqI2qCVu2bK0R0J4A8ZQQ==
@@ -2814,6 +2795,15 @@
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "^4.17.33"
     "@types/qs" "*"
+    "@types/serve-static" "*"
+
+"@types/express@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-5.0.3.tgz#6c4bc6acddc2e2a587142e1d8be0bce20757e956"
+  integrity sha512-wGA0NX93b19/dZC1J18tKWVIYWyyF2ZjT9vin/NRu0qzzvfVzWjs04iq2rQ3H65vCTQYlRqs3YHfY7zjdV+9Kw==
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "^5.0.0"
     "@types/serve-static" "*"
 
 "@types/graceful-fs@^4.1.3":
@@ -6294,7 +6284,7 @@ express@^4.21.2:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-express@^5.0.1, express@^5.1.0:
+express@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/express/-/express-5.1.0.tgz#d31beaf715a0016f0d53f47d3b4d7acf28c75cc9"
   integrity sha512-DT9ck5YIRU+8GYzzU5kT3eHGA5iL+1Zd0EutOmTE9Dtk+Tvuzd23VBU+ec7HPNSTxXYO55gPV/hq4pSBJDjFpA==
@@ -8749,17 +8739,6 @@ log-update@^6.1.0:
     strip-ansi "^7.1.0"
     wrap-ansi "^9.0.0"
 
-logform@^2.3.2, logform@^2.4.0:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/logform/-/logform-2.4.2.tgz#a617983ac0334d0c3b942c34945380062795b47c"
-  integrity sha512-W4c9himeAwXEdZ05dQNerhFz2XG80P9Oj0loPUMV23VC2it0orMHQhJm4hdnnor3rd1HsGf6a2lPwBM1zeXHGw==
-  dependencies:
-    "@colors/colors" "1.5.0"
-    fecha "^4.2.0"
-    ms "^2.1.1"
-    safe-stable-stringify "^2.3.1"
-    triple-beam "^1.3.0"
-
 logform@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/logform/-/logform-2.7.0.tgz#cfca97528ef290f2e125a08396805002b2d060d1"
@@ -9056,10 +9035,10 @@ nanoid@^3.3.7:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
   integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
 
-nanoid@^5.0.9:
-  version "5.0.9"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.9.tgz#977dcbaac055430ce7b1e19cf0130cea91a20e50"
-  integrity sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==
+nanoid@^5.1.5:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.5.tgz#f7597f9d9054eb4da9548cdd53ca70f1790e87de"
+  integrity sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -10163,10 +10142,10 @@ react-router@^7.6.0:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
 
-react-select@5.9.0:
-  version "5.9.0"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.9.0.tgz#41325b7bfe8452a8d401b82fc4fb7d44a03e29c5"
-  integrity sha512-nwRKGanVHGjdccsnzhFte/PULziueZxGD8LL2WojON78Mvnq7LdAMEtu2frrwld1fr3geixg3iiMBIc/LLAZpw==
+react-select@5.10.2:
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.10.2.tgz#8dffc69dfd7d74684d9613e6eb27204e3b99e127"
+  integrity sha512-Z33nHdEFWq9tfnfVXaiM12rbJmk+QjFEztWLtmXqQhz6Al4UZZ9xc0wiatmGtUOCCnHN0WizL3tCMYRENX4rVQ==
   dependencies:
     "@babel/runtime" "^7.12.0"
     "@emotion/cache" "^11.4.0"
@@ -10215,7 +10194,7 @@ readable-stream@^3.0.6, readable-stream@^3.6.2:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-readable-stream@^3.4.0, readable-stream@^3.6.0:
+readable-stream@^3.4.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
   integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
@@ -12461,15 +12440,6 @@ wildcard@^2.0.1:
   resolved "https://registry.yarnpkg.com/wildcard/-/wildcard-2.0.1.tgz#5ab10d02487198954836b6349f74fff961e10f67"
   integrity sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==
 
-winston-transport@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.5.0.tgz#6e7b0dd04d393171ed5e4e4905db265f7ab384fa"
-  integrity sha512-YpZzcUzBedhlTAfJg6vJDlyEai/IFMIVcaEZZyl3UXIl4gmqRpU7AE89AHLkbzLUsv0NVmw7ts+iztqKxxPW1Q==
-  dependencies:
-    logform "^2.3.2"
-    readable-stream "^3.6.0"
-    triple-beam "^1.3.0"
-
 winston-transport@^4.9.0:
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.9.0.tgz#3bba345de10297654ea6f33519424560003b3bf9"
@@ -12478,23 +12448,6 @@ winston-transport@^4.9.0:
     logform "^2.7.0"
     readable-stream "^3.6.2"
     triple-beam "^1.3.0"
-
-winston@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/winston/-/winston-3.11.0.tgz#2d50b0a695a2758bb1c95279f0a88e858163ed91"
-  integrity sha512-L3yR6/MzZAOl0DsysUXHVjOwv8mKZ71TrA/41EIduGpOOV5LQVodqN+QdQ6BS6PJ/RdIshZhq84P/fStEZkk7g==
-  dependencies:
-    "@colors/colors" "^1.6.0"
-    "@dabh/diagnostics" "^2.0.2"
-    async "^3.2.3"
-    is-stream "^2.0.0"
-    logform "^2.4.0"
-    one-time "^1.0.0"
-    readable-stream "^3.4.0"
-    safe-stable-stringify "^2.3.1"
-    stack-trace "0.0.x"
-    triple-beam "^1.3.0"
-    winston-transport "^4.5.0"
 
 winston@^3.17.0:
   version "3.17.0"
