@@ -32,7 +32,7 @@ import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export const useBrevModul = () => {
     const { behandling } = useBehandlingContext();
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
@@ -44,13 +44,13 @@ export const useBrevModul = () => {
 
     const personer = behandling?.personer ?? [];
     const brevmottakere = behandling?.brevmottakere ?? [];
-    const institusjon = minimalFagsak?.institusjon;
+    const institusjon = fagsak.institusjon;
 
     const velgMottaker = (): string | undefined => {
-        if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON && institusjon) {
+        if (fagsak.fagsakType === FagsakType.INSTITUSJON && institusjon) {
             return institusjon.orgNummer;
         }
-        if (minimalFagsak?.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
+        if (fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
             return personer[0].personIdent;
         }
         return personer.find(person => person.type === PersonType.SØKER)?.personIdent;

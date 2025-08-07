@@ -44,7 +44,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
     visFeilutbetaltValuta,
     visRefusjonEøs,
 }) => {
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const {
         erSammensattKontrollsak,
@@ -58,7 +58,7 @@ const Vedtaksmeny: React.FunctionComponent<IVedtakmenyProps> = ({
 
     const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
-    const fagsakType = minimalFagsak?.fagsakType;
+    const fagsakType = fagsak.fagsakType;
 
     return (
         <Dropdown>

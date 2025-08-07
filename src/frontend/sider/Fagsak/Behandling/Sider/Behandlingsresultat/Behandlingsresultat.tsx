@@ -65,7 +65,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const {
         opprettEndretUtbetaling,
@@ -174,7 +174,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
-                fagsakType={minimalFagsak?.fagsakType}
+                fagsakType={fagsak.fagsakType}
             />
             {!erLesevisning && (
                 <EndretUtbetalingAndel>
