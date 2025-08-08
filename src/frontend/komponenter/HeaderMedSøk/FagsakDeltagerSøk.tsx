@@ -22,7 +22,6 @@ import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
 import {
     FagsakDeltagerRolle,
-    fagsakdeltagerRoller,
     type IFagsakDeltager,
     type ISøkParam,
 } from '../../typer/fagsakdeltager';
@@ -109,9 +108,6 @@ const FagsakDeltagerSøk: React.FC = () => {
                           navn: fagsakDeltager.navn,
                           ident: fagsakDeltager.ident,
                           ikon: mapFagsakDeltagerTilIkon(fagsakDeltager),
-                          rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
-                              fagsakDeltager.kjønn ?? kjønnType.UKJENT
-                          ],
                       };
                   }),
               }
