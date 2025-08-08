@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
+import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
@@ -75,7 +76,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         return (
             aktivBehandling && (
                 <Link
-                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
+                    as={ReactRouterLink}
+                    to={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
                 >
                     Se detaljer
                 </Link>
