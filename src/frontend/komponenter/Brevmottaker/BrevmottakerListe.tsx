@@ -13,9 +13,9 @@ interface IProps {
 }
 
 const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
-    const { minimalFagsak } = useFagsakContext();
-    const institusjon = minimalFagsak?.institusjon;
-    const fagsakType = minimalFagsak?.fagsakType;
+    const { fagsak } = useFagsakContext();
+    const institusjon = fagsak.institusjon;
+    const fagsakType = fagsak.fagsakType;
 
     const skalViseInstitusjon = !!institusjon;
     const harUtenlandskAdresse = brevmottakere.some(

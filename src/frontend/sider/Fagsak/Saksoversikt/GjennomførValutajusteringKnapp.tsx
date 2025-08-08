@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
+import { HentFagsakQueryKeyFactory } from '../../../hooks/useHentFagsak';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
-import { useFagsakContext } from '../FagsakContext';
 
 interface Props {
     fagsakId: number;
@@ -19,7 +20,7 @@ const StyledButton = styled(Button)`
 
 export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = ({ fagsakId }) => {
     const { request } = useHttp();
-    const { settMinimalFagsakRessurs } = useFagsakContext();
+    const queryClient = useQueryClient();
     const [visFeilmelidng, settVisFeilmelding] = useState(false);
 
     const gjenomførValutajustering = () => {
@@ -31,7 +32,8 @@ export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = (
             påvirkerSystemLaster: true,
         }).then(response => {
             if (response.status === RessursStatus.SUKSESS) {
-                settMinimalFagsakRessurs(response);
+                const fagsak = response.data;
+                queryClient.setQueryData(HentFagsakQueryKeyFactory.fagsak(fagsakId), fagsak);
             } else {
                 settVisFeilmelding(true);
             }

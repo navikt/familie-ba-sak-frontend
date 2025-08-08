@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 
-export function useFagsakId() {
+export function useFagsakId(): number | undefined {
     const { fagsakId } = useParams();
     const erTall = fagsakId !== undefined && !isNaN(Number(fagsakId));
-    return erTall ? fagsakId : undefined;
+    return erTall ? Number(fagsakId) : undefined;
 }

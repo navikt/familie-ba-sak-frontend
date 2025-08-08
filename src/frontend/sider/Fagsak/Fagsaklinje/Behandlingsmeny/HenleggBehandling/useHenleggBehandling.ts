@@ -16,7 +16,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [årsak, settÅrsak] = useState('');
     const { settÅpenBehandling } = useBehandlingContext();
 
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
@@ -66,7 +66,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
-    const institusjon = minimalFagsak?.institusjon;
+    const institusjon = fagsak.institusjon;
 
     const brevmalSomSkalBrukes = institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON

@@ -15,7 +15,7 @@ const EndreBehandlingstema: React.FC = () => {
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
     );
-    const { minimalFagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
 
     const lukkEndreBehandlingModal = () => {
         nullstillSkjema();
@@ -46,7 +46,7 @@ const EndreBehandlingstema: React.FC = () => {
                         >
                             <BehandlingstemaSelect
                                 behandlingstema={skjema.felter.behandlingstema}
-                                fagsakType={minimalFagsak?.fagsakType}
+                                fagsakType={fagsak.fagsakType}
                                 erLesevisning={vurderErLesevisning()}
                             />
                         </Fieldset>
