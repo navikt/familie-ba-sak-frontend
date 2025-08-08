@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { Brevmal } from '../../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';

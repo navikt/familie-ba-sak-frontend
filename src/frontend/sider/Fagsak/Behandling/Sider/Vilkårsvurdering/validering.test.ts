@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './utils';

@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import React, { type PropsWithChildren } from 'react';
 
 import { act, renderHook } from '@testing-library/react';

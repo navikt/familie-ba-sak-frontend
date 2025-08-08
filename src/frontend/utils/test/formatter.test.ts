@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { addDays, setDefaultOptions, subDays, subYears } from 'date-fns';
 import { nb } from 'date-fns/locale';
 

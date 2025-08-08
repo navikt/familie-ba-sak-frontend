@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';

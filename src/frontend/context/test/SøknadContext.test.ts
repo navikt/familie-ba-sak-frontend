@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { addYears } from 'date-fns';
 
 import { kjønnType } from '@navikt/familie-typer';

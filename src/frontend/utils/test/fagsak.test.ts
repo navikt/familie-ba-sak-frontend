@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { mockVisningBehandling } from './behandling/behandling.mock';
 import { FagsakTestdata } from '../../testdata/fagsakTestdata';
 import { BehandlingResultat } from '../../typer/behandling';
