@@ -227,7 +227,9 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 erViPåUlovligSteg(location.pathname, sideForSteg)) &&
             sideForSteg
         ) {
-            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`);
+            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`, {
+                replace: true,
+            });
         }
     };
 
