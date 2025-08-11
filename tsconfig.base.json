@@ -20,5 +20,9 @@
       "esModuleInterop": true,
       "isolatedModules": true,
       "verbatimModuleSyntax": true,
+      "types": [
+        "vitest/globals",
+        "@testing-library/jest-dom"
+      ],
     }
   }

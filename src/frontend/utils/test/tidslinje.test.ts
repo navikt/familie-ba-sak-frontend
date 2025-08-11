@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import type { Periode } from '@navikt/familie-tidslinje';

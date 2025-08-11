@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
