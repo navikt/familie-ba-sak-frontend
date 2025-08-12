@@ -17,20 +17,12 @@ import { useBehandlingContext } from '../../context/BehandlingContext';
 export const useInstitusjon = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
-    const { minimalFagsakRessurs } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const [submitFeilmelding, settSubmitFeilmelding] = useState<string | undefined>('');
 
-    const fagsak =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS
-            ? minimalFagsakRessurs.data
-            : undefined;
-    const fagsakFeilmelding =
-        minimalFagsakRessurs.status !== RessursStatus.SUKSESS
-            ? hentFrontendFeilmelding(minimalFagsakRessurs) || 'Ukjent feil ved henting av fagsak'
-            : '';
-    const institusjon = fagsak?.institusjon;
+    const institusjon = fagsak.institusjon;
 
     const onSubmitMottaker = () => {
         if (
@@ -61,7 +53,6 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
     };
 
     return {
-        fagsakFeilmelding,
         onSubmitMottaker,
         institusjon,
         submitFeilmelding,

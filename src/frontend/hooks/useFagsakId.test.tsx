@@ -22,11 +22,11 @@ function Router(entry: string) {
 
 describe('useFagsakId', () => {
     it('skal returnere fagsakId for gyldig URL sti', () => {
-        const fagsakId = '1234';
+        const fagsakId = 1234;
         const { result } = renderHook(() => useFagsakId(), {
             wrapper: Router(`/fagsak/${fagsakId}`),
         });
-        expect(result.current).toEqual('1234');
+        expect(result.current).toEqual(1234);
     });
 
     it('skal returnere undefined of fagsakId er undefined', () => {
