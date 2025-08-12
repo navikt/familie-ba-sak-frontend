@@ -78,6 +78,7 @@ export enum BehandlingÅrsak {
     SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID = 'SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID',
     MÅNEDLIG_VALUTAJUSTERING = 'MÅNEDLIG_VALUTAJUSTERING',
     IVERKSETTE_KA_VEDTAK = 'IVERKSETTE_KA_VEDTAK',
+    FINNMARKSTILLEGG = 'FINNMARKSTILLEGG',
 }
 
 export const behandlingÅrsak: Record<
@@ -111,6 +112,7 @@ export const behandlingÅrsak: Record<
         'Feilutbetalt beløp helt eller delvis bortfalt',
     MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
     IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
+    FINNMARKSTILLEGG: 'Finnmarkstillegg',
 
     /** Klage: **/
     ANNET: 'Annet',

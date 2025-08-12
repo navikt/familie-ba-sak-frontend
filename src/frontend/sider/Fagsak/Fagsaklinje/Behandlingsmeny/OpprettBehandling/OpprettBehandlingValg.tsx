@@ -81,7 +81,8 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
                   (årsak !== BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
                       kanOppretteRevurderingMedÅrsakIverksetteKAVedtak) &&
-                  årsak !== BehandlingÅrsak.KLAGE
+                  årsak !== BehandlingÅrsak.KLAGE &&
+                  årsak !== BehandlingÅrsak.FINNMARKSTILLEGG
           );
 
 interface IProps {
