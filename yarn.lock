@@ -2288,10 +2288,10 @@
   dependencies:
     "@tanstack/query-devtools" "5.84.0"
 
-"@tanstack/react-query@^5.84.1":
-  version "5.84.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.84.1.tgz#de36a13a07d3c38abfef20e215f7c97c66a03947"
-  integrity sha512-zo7EUygcWJMQfFNWDSG7CBhy8irje/XY0RDVKKV4IQJAysb+ZJkkJPcnQi+KboyGUgT+SQebRFoTqLuTtfoDLw==
+"@tanstack/react-query@^5.85.0":
+  version "5.85.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.85.0.tgz#4f60315b3809228c0396b67c9cd3651896172542"
+  integrity sha512-t1HMfToVMGfwEJRya6GG7gbK0luZJd+9IySFNePL1BforU1F3LqQ3tBC2Rpvr88bOrlU6PXyMLgJD0Yzn4ztUw==
   dependencies:
     "@tanstack/query-core" "5.83.1"
 
