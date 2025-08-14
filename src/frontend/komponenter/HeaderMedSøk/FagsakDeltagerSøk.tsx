@@ -38,6 +38,7 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
             erAdresseBeskyttet={erAdresseBeskyttet(fagsakDeltager.adressebeskyttelseGradering)}
             harTilgang={fagsakDeltager.harTilgang}
             størrelse={'m'}
+            erEgenAnsatt={fagsakDeltager.erEgenAnsatt}
         />
     );
 }

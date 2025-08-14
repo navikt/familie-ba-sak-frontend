@@ -14,6 +14,7 @@ import {
 import { kjønnType } from '@navikt/familie-typer';
 
 import KontorIkonGrønn from '../ikoner/KontorIkonGrønn';
+import NavLogo from '../ikoner/NavLogo';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import { FagsakType } from '../typer/fagsak';
 
@@ -119,6 +120,61 @@ const StyledEnsligMindreårigIkon = styled(PersonCircleFillIcon)<{ $adresseBesky
     }};
 `;
 
+const StyledNavIkon = styled(NavLogo)`
+    path {
+        fill: var(--a-white);
+    }
+
+    margin: auto;
+    height: 100%;
+    width: 100%;
+`;
+
+const StyledNavIkonContaier = styled.div<{
+    $adresseBeskyttet: boolean;
+    $kjønn: string;
+    $størrelse: string;
+}>`
+    border-radius: 100%;
+    padding: 3px;
+    place-content: center;
+
+    min-height: 24px;
+    min-width: 24px;
+    max-height: 24px;
+    max-width: 24px;
+
+    background-color: var(--a-blue-400);
+
+    ${props => {
+        if (props.$størrelse === 'm') {
+            return `
+                min-height: 32px;
+                min-width: 32px;
+                max-height: 32px;
+                max-width: 32px;
+            `;
+        }
+    }}
+
+    ${props => {
+        if (props.$kjønn === 'KVINNE') {
+            return `
+                background-color: var(--a-purple-400);
+            `;
+        }
+    }}
+
+    ${props => {
+        if (props.$adresseBeskyttet) {
+            return `
+                background-color: var(--a-orange-600);
+                
+            `;
+        }
+    }};
+`;
+
 interface PersonIkonProps {
     fagsakType?: FagsakType;
     kjønn: kjønnType;
@@ -126,6 +182,7 @@ interface PersonIkonProps {
     størrelse?: 's' | 'm';
     erAdresseBeskyttet?: boolean;
     harTilgang?: boolean;
+    erEgenAnsatt?: boolean;
 }
 
 export const PersonIkon = ({
@@ -135,9 +192,22 @@ export const PersonIkon = ({
     størrelse = 's',
     erAdresseBeskyttet = false,
     harTilgang = true,
+    erEgenAnsatt = false,
 }: PersonIkonProps) => {
     if (!harTilgang) {
         return <StatusIkon status={Status.FEIL} />;
+    }
+
+    if (erEgenAnsatt) {
+        return (
+            <StyledNavIkonContaier
+                $adresseBeskyttet={erAdresseBeskyttet}
+                $kjønn={kjønn}
+                $størrelse={størrelse}
+            >
+                <StyledNavIkon />
+            </StyledNavIkonContaier>
+        );
     }
 
     if (fagsakType === FagsakType.INSTITUSJON) {

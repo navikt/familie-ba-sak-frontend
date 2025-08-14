@@ -43,6 +43,7 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
         alder: hentAlder(bruker?.fødselsdato ?? ''),
         kjønn: bruker?.kjønn ?? kjønnType.UKJENT,
         kommunenummer: bruker?.kommunenummer ?? 'ukjent',
+        erEgenAnsatt: søkerData?.erEgenAnsatt || bruker?.erEgenAnsatt || false,
     };
 
     let søker = null;
@@ -64,7 +65,7 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
     return (
         <InnholdContainer>
             <HStack align="center" gap="3 4">
-                <HStack align="center" gap="3 4">
+                <HStack gap="3 4">
                     <PersonIkon
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
@@ -72,14 +73,17 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                         erAdresseBeskyttet={erAdresseBeskyttet(
                             søkerData?.adressebeskyttelseGradering
                         )}
+                        erEgenAnsatt={fagsakeier.erEgenAnsatt}
                     />
-                    <BodyShort as="span" weight="semibold">
-                        {fagsakeier.navn} ({fagsakeier.alder} år)
-                    </BodyShort>
-                    <Divider />
-                    <HStack align="center" gap="1">
-                        {fagsakeier.ident}
-                        <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size="small" />
+                    <HStack align="center" gap="3 4">
+                        <BodyShort as="span" weight="semibold">
+                            {fagsakeier.navn} ({fagsakeier.alder} år)
+                        </BodyShort>
+                        <Divider />
+                        <HStack align="center" gap="1">
+                            {fagsakeier.ident}
+                            <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size="small" />
+                        </HStack>
                     </HStack>
                 </HStack>
                 <Divider />
