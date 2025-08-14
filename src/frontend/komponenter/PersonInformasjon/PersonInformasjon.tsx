@@ -72,7 +72,8 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     const { fagsak, bruker: brukerRessurs } = useFagsakContext();
 
     const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(brukerRessurs, person.personIdent);
-
+    const erEgenAnsatt =
+        brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data.erEgenAnsatt : false;
     if (somOverskrift) {
         return (
             <HStack gap="6" wrap={false} align="center">
@@ -82,6 +83,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     erBarn={alder < 18}
                     størrelse={'m'}
                     erAdresseBeskyttet={erAdresseBeskyttet}
+                    erEgenAnsatt={erEgenAnsatt}
                 />
                 <HStack gap="4" align="center" wrap={false}>
                     <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
