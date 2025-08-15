@@ -1,54 +1,107 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, HStack, Loader } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import BehandlingContainer from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
+import { BrukerProvider } from './BrukerContext';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
-import { FagsakProvider, useFagsakContext } from './FagsakContext';
+import { FagsakProvider } from './FagsakContext';
 import { Fagsaklinje } from './Fagsaklinje/Fagsaklinje';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
 import { Personlinje } from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { useAppContext } from '../../context/AppContext';
 import { useFagsakId } from '../../hooks/useFagsakId';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
+import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
-import type { IMinimalFagsak } from '../../typer/fagsak';
+import { useSettAktivBrukerIModiaContext } from '../../hooks/useSettAktivBrukerIModiaContext';
+import { FagsakType } from '../../typer/fagsak';
+import { ToggleNavn } from '../../typer/toggles';
 
 const HovedInnhold = styled.div`
     height: calc(100vh - 3rem);
     overflow: auto;
 `;
 
-function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
-    const { bruker: brukerRessurs } = useFagsakContext();
+export function FagsakContainer() {
+    const fagsakId = useFagsakId();
+    const { toggles } = useAppContext();
+    const { mutate: settAktivBrukerIModiaContext } = useSettAktivBrukerIModiaContext();
+    const modiaPersonIdent = useRef<string | undefined>(undefined);
 
-    switch (brukerRessurs.status) {
-        case RessursStatus.SUKSESS:
-            return (
+    useScrollTilAnker();
+
+    const {
+        data: fagsak,
+        isPending: isPendingFagsak,
+        error: fagsakError,
+    } = useHentFagsak(fagsakId);
+
+    const {
+        data: bruker,
+        isPending: isPendingBruker,
+        error: brukerError,
+    } = useHentPerson({
+        ident:
+            fagsak?.fagsakType === FagsakType.SKJERMET_BARN
+                ? fagsak?.fagsakeier
+                : fagsak?.søkerFødselsnummer,
+        onSuccess: person => {
+            if (modiaPersonIdent.current === person.personIdent) {
+                return;
+            }
+            if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
+                settAktivBrukerIModiaContext(person.personIdent);
+                modiaPersonIdent.current = person.personIdent;
+            }
+        },
+    });
+
+    if (isPendingFagsak || isPendingBruker) {
+        return (
+            <HStack gap={'4'} margin={'space-16'}>
+                <Loader size={'small'} />
+                Laster innhold...
+            </HStack>
+        );
+    }
+
+    if (fagsakError || brukerError) {
+        return (
+            <Alert variant={'error'}>
+                <HStack gap={'4'}>
+                    {fagsakError && (
+                        <div>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</div>
+                    )}
+                    {brukerError && (
+                        <div>Feil oppstod ved innlasting av bruker: {brukerError.message}</div>
+                    )}
+                </HStack>
+            </Alert>
+        );
+    }
+
+    return (
+        <FagsakProvider fagsak={fagsak}>
+            <BrukerProvider bruker={bruker}>
                 <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
                     <HovedInnhold>
-                        <Personlinje bruker={brukerRessurs.data} minimalFagsak={fagsak} />
+                        <Personlinje bruker={bruker} minimalFagsak={fagsak} />
                         <Routes>
                             <Route
                                 path="/saksoversikt"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
-                                        <Saksoversikt
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        <Saksoversikt bruker={bruker} minimalFagsak={fagsak} />
                                     </>
                                 }
                             />
@@ -56,12 +109,9 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/dokumentutsending"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
                                         <DokumentutsendingProvider fagsakId={fagsak.id}>
-                                            <Dokumentutsending bruker={brukerRessurs.data} />
+                                            <Dokumentutsending bruker={bruker} />
                                         </DokumentutsendingProvider>
                                     </>
                                 }
@@ -70,11 +120,8 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/dokumenter"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
-                                        <JournalpostListe bruker={brukerRessurs.data} />
+                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        <JournalpostListe bruker={bruker} />
                                     </>
                                 }
                             />
@@ -82,10 +129,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/infotrygd"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
                                         <InfotrygdFagsak minimalFagsak={fagsak} />
                                     </>
                                 }
@@ -94,10 +138,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/:behandlingId/*"
                                 element={
                                     <HentOgSettBehandlingProvider fagsak={fagsak}>
-                                        <BehandlingContainer
-                                            bruker={brukerRessurs.data}
-                                            fagsak={fagsak}
-                                        />
+                                        <BehandlingContainer bruker={bruker} fagsak={fagsak} />
                                     </HentOgSettBehandlingProvider>
                                 }
                             />
@@ -112,47 +153,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                         </Routes>
                     </HovedInnhold>
                 </ManuelleBrevmottakerePåFagsakProvider>
-            );
-        case RessursStatus.FEILET:
-        case RessursStatus.FUNKSJONELL_FEIL:
-        case RessursStatus.IKKE_TILGANG:
-            return <Alert children={brukerRessurs.frontendFeilmelding} variant="error" />;
-        default:
-            return <div />;
-    }
-}
-
-export function FagsakContainer() {
-    const fagsakId = useFagsakId();
-
-    useScrollTilAnker();
-
-    const {
-        data: fagsak,
-        isPending: isPendingFagsak,
-        error: fagsakError,
-    } = useHentFagsak(fagsakId);
-
-    if (isPendingFagsak) {
-        return (
-            <HStack gap={'4'} margin={'space-16'}>
-                <Loader size={'small'} />
-                Laster fagsak...
-            </HStack>
-        );
-    }
-
-    if (fagsakError) {
-        return (
-            <Alert variant={'error'}>
-                Feil oppstod ved innlasting av fagsak: {fagsakError.message}
-            </Alert>
-        );
-    }
-
-    return (
-        <FagsakProvider fagsak={fagsak}>
-            <FagsakContainerInnhold fagsak={fagsak} />
+            </BrukerProvider>
         </FagsakProvider>
     );
 }
