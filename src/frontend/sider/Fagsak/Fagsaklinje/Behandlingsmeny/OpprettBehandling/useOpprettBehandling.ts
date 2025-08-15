@@ -26,6 +26,7 @@ import {
     dateTilIsoDatoStringEllerUndefined,
     validerGyldigDato,
 } from '../../../../../utils/dato';
+import { useBrukerContext } from '../../../BrukerContext';
 import { useFagsakContext } from '../../../FagsakContext';
 
 export interface IOpprettBehandlingSkjemaBase {
@@ -46,12 +47,11 @@ const useOpprettBehandling = (
     lukkModal: () => void,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
-    const { bruker: brukerRessurs, fagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-
-    const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
     const behandlingstype = useFelt<
         Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''

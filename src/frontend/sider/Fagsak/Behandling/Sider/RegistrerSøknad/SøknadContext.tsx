@@ -8,10 +8,11 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
+import { usePrevious } from '../../../../../hooks/usePrevious';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
-import type { IForelderBarnRelasjon } from '../../../../../typer/person';
+import { erBrukerLike, type IForelderBarnRelasjon } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type {
     IBarnMedOpplysninger,
@@ -20,6 +21,7 @@ import type {
     Målform,
 } from '../../../../../typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
+import { useBrukerContext } from '../../../BrukerContext';
 import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
@@ -56,7 +58,9 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     } = useBehandlingContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
-    const { bruker, fagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
+    const forrigeBruker = usePrevious(bruker);
     const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
@@ -97,46 +101,49 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
     const tilbakestillSøknad = () => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            nullstillSkjema();
-            let barnaMedOpplysninger: IBarnMedOpplysninger[];
-            if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
-                barnaMedOpplysninger = [
-                    {
-                        merket: true,
-                        ident: bruker.data.personIdent,
-                        navn: bruker.data.navn,
-                        fødselsdato: bruker.data.fødselsdato,
+        nullstillSkjema();
+        let barnaMedOpplysninger: IBarnMedOpplysninger[];
+        if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
+            barnaMedOpplysninger = [
+                {
+                    merket: true,
+                    ident: bruker.personIdent,
+                    navn: bruker.navn,
+                    fødselsdato: bruker.fødselsdato,
+                    manueltRegistrert: false,
+                    erFolkeregistrert: true,
+                },
+            ];
+        } else {
+            barnaMedOpplysninger = bruker.forelderBarnRelasjon
+                .filter(
+                    (relasjon: IForelderBarnRelasjon) =>
+                        relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                )
+                .map(
+                    (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                        merket: false,
+                        ident: relasjon.personIdent,
+                        navn: relasjon.navn,
+                        fødselsdato: relasjon.fødselsdato,
                         manueltRegistrert: false,
                         erFolkeregistrert: true,
-                    },
-                ];
-            } else {
-                barnaMedOpplysninger =
-                    bruker.data.forelderBarnRelasjon
-                        .filter(
-                            (relasjon: IForelderBarnRelasjon) =>
-                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                        )
-                        .map(
-                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
-                                ident: relasjon.personIdent,
-                                navn: relasjon.navn,
-                                fødselsdato: relasjon.fødselsdato,
-                                manueltRegistrert: false,
-                                erFolkeregistrert: true,
-                            })
-                        ) ?? [];
-            }
-            skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
+                    })
+                );
         }
+        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
         settSøknadErLastetFraBackend(false);
     };
 
     React.useEffect(() => {
-        tilbakestillSøknad();
-    }, [bruker.status]);
+        // TODO : Fjern dette når man går over til react-hook-form. Bruk heller "values", se https://react-hook-form.com/docs/useform#values
+        if (forrigeBruker === undefined) {
+            return;
+        }
+        if (!erBrukerLike(forrigeBruker, bruker)) {
+            tilbakestillSøknad();
+        }
+    }, [forrigeBruker, bruker]);
 
     useDeepEffect(() => {
         if (åpenBehandling.søknadsgrunnlag) {
@@ -166,49 +173,47 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     }, [åpenBehandling.behandlingId, åpenBehandling.søknadsgrunnlag]);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            if (vurderErLesevisning()) {
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
-            } else {
-                onSubmit<IRestRegistrerSøknad>(
-                    {
-                        method: 'POST',
-                        data: {
-                            søknad: {
-                                underkategori: skjema.felter.underkategori.verdi,
-                                søkerMedOpplysninger: {
-                                    ident: fagsak.søkerFødselsnummer,
-                                    målform: skjema.felter.målform.verdi,
-                                },
-                                barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
-                                    (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
-                                        ...barn,
-                                        inkludertISøknaden: barn.merket,
-                                    })
-                                ),
-                                endringAvOpplysningerBegrunnelse:
-                                    skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
-                                erAutomatiskRegistrert: false,
+        if (vurderErLesevisning()) {
+            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+        } else {
+            onSubmit<IRestRegistrerSøknad>(
+                {
+                    method: 'POST',
+                    data: {
+                        søknad: {
+                            underkategori: skjema.felter.underkategori.verdi,
+                            søkerMedOpplysninger: {
+                                ident: fagsak.søkerFødselsnummer,
+                                målform: skjema.felter.målform.verdi,
                             },
-                            bekreftEndringerViaFrontend,
+                            barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
+                                (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
+                                    ...barn,
+                                    inkludertISøknaden: barn.merket,
+                                })
+                            ),
+                            endringAvOpplysningerBegrunnelse:
+                                skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                            erAutomatiskRegistrert: false,
                         },
-                        url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
+                        bekreftEndringerViaFrontend,
                     },
-                    (response: Ressurs<IBehandling>) => {
-                        if (response.status === RessursStatus.SUKSESS) {
-                            settÅpenBehandling(response);
-                            navigate(
-                                `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                            );
-                        }
-                    },
-                    (errorResponse: Ressurs<IBehandling>) => {
-                        if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
-                            settVisBekreftModal(true);
-                        }
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
+                },
+                (response: Ressurs<IBehandling>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settÅpenBehandling(response);
+                        navigate(
+                            `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                        );
                     }
-                );
-            }
+                },
+                (errorResponse: Ressurs<IBehandling>) => {
+                    if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
+                        settVisBekreftModal(true);
+                    }
+                }
+            );
         }
     };
 

@@ -13,6 +13,7 @@ export async function hentPerson(request: FamilieRequest, ident: string) {
         method: 'POST',
         url: '/familie-ba-sak/api/person',
         data: { ident },
+        påvirkerSystemLaster: true,
     });
     if (ressurs.status === RessursStatus.SUKSESS && ressurs.data.harTilgang === false) {
         return Promise.reject(
