@@ -8,9 +8,11 @@ import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { hentEnkeltInformasjonsbrevRequest } from './Informasjonsbrev/enkeltInformasjonsbrevUtils';
 import useDokument from '../../../hooks/useDokument';
+import { usePrevious } from '../../../hooks/usePrevious';
 import type { IManueltBrevRequestPåFagsak } from '../../../typer/dokument';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import { FagsakType } from '../../../typer/fagsak';
+import { erBrukerLike } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { Målform } from '../../../typer/søknad';
 import { useBarnIBrevFelter } from '../../../utils/barnIBrevFelter';
@@ -24,6 +26,7 @@ import {
     Informasjonsbrev,
     opplysningsdokumenter,
 } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useBrukerContext } from '../BrukerContext';
 import { useFagsakContext } from '../FagsakContext';
 import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
@@ -113,7 +116,9 @@ const DokumentutsendingContext = createContext<DokumentutsendingContextValue | u
 );
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
-    const { bruker, fagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
+    const forrigeBruker = usePrevious(bruker);
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
@@ -266,7 +271,17 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     useEffect(() => {
         nullstillSkjemaUtenomÅrsak();
-    }, [årsak.verdi, bruker.status]);
+    }, [årsak.verdi]);
+
+    useEffect(() => {
+        // TODO : Fjern dette når man går over til react-hook-form. Bruk heller "values", se https://react-hook-form.com/docs/useform#values
+        if (forrigeBruker === undefined) {
+            return;
+        }
+        if (!erBrukerLike(forrigeBruker, bruker)) {
+            nullstillSkjemaUtenomÅrsak();
+        }
+    }, [forrigeBruker, bruker]);
 
     const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
         const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
@@ -341,7 +356,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
         const dokumentÅrsak = skjema.felter.årsak.verdi;
-        if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
+        if (dokumentÅrsak) {
             switch (dokumentÅrsak) {
                 case DokumentÅrsakPerson.DELT_BOSTED:
                     return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);
