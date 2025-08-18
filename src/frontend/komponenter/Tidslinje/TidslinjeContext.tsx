@@ -140,8 +140,18 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                         ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
                         ytelseSomSplitterOpp: YtelseType.UTVIDET_BARNETRYGD,
                     },
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                        ytelseSomSplitterOpp: YtelseType.FINNMARKSTILLEGG,
+                    },
                 ];
             case FagsakType.INSTITUSJON:
+                return [
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                        ytelseSomSplitterOpp: YtelseType.FINNMARKSTILLEGG,
+                    },
+                ];
             case undefined:
                 return [];
         }
