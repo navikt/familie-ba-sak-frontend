@@ -141,11 +141,8 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                 return [
                     {
                         ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
-                        ytelserSomSplitterOpp: [YtelseType.UTVIDET_BARNETRYGD],
-                    },
-                    {
-                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
                         ytelserSomSplitterOpp: [
+                            YtelseType.UTVIDET_BARNETRYGD,
                             YtelseType.FINNMARKSTILLEGG,
                             YtelseType.SVALBARDTILLEGG,
                         ],
