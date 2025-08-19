@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { NavLink } from 'react-router';
+import { NavLink, Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -104,6 +104,7 @@ const Venstremeny: React.FunctionComponent = () => {
                         return (
                             <VStack key={sideId}>
                                 <MenyLenke
+                                    as={ReactRouterLink}
                                     id={sideId}
                                     to={tilPath}
                                     $erLenkenAktiv={sidenErAktiv}
