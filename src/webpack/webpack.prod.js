@@ -8,6 +8,7 @@ import merge from 'webpack-merge';
 
 import baseConfig from './webpack.common.js';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const prodConfig = merge.mergeWithRules({
     module: {
@@ -48,6 +49,7 @@ const prodConfig = merge.mergeWithRules({
         maxAssetSize: 800000,
     },
     plugins: [
+        new MiniCssExtractPlugin(),
         new CompressionPlugin({
             algorithm: 'gzip',
             test: /\.js$|\.css$|\.html$/,
@@ -71,6 +73,41 @@ const prodConfig = merge.mergeWithRules({
             },
         }),
     ],
+    module: {
+        rules: [
+            {
+                test: /\.module\.css$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                namedExport: false,
+                            },
+                            importLoaders: 1,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.css$/,
+                exclude: /\.module\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                mode: 'icss',
+                            },
+                            importLoaders: 2,
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 });
 
 export default prodConfig;

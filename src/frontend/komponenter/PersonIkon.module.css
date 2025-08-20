@@ -1,0 +1,55 @@
+.mindreIkon {
+    height: 24px;
+    width: 24px;
+}
+
+.litenIkon {
+    height: 28px;
+    width: 28px;
+}
+
+.storIkon {
+    height: 32px;
+    width: 32px;
+}
+
+.størreIkon {
+    height: 36px;
+    width: 36px;
+}
+
+.kvinnelig {
+    g {
+        fill: var(--a-purple-400);
+    }
+}
+
+.mannlig {
+    g {
+        fill: var(--a-blue-400);
+    }
+}
+
+.adresseBeskyttet {
+    g {
+        fill: var(--a-orange-600);
+    }
+}
+
+.nøytralAdresseBeskyttet {
+    path:first-of-type {
+        fill: var(--a-orange-600);
+    }
+}
+
+.enslig {
+    path {
+        fill: var(--a-limegreen-700);
+    }
+}
+
+.ensligAdresseBeskyttet {
+    path {
+        fill: var(--a-orange-600);
+    }
+}
