@@ -10,6 +10,9 @@ import { useBehandlingContext } from '../../../Behandling/context/BehandlingCont
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../../../FagsakContext';
 
+/**
+ * @Deprecated - Erstattes av {@link HenleggBehandlingNy} og {@link useHenleggBehandlingForm}.
+ */
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');

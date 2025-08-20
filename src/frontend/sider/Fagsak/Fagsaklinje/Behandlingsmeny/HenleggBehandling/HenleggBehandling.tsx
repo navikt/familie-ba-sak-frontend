@@ -32,6 +32,9 @@ const StyledLenke = styled(Link)`
     margin-right: auto;
 `;
 
+/**
+ * @Deprecated - Erstattes av {@link HenleggBehandlingNy}.
+ */
 const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
