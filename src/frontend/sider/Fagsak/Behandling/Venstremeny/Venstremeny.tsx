@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { NavLink } from 'react-router';
+import { NavLink, Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -36,10 +36,6 @@ const ToggleVisningVenstremeny = styled(Button)<{ $åpenvenstremeny: boolean }>`
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
-`;
-
-const Meny = styled(VStack)`
-    padding: ${ASpacing8} 0;
 `;
 
 const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
@@ -95,7 +91,7 @@ const Venstremeny: React.FunctionComponent = () => {
     return (
         <HStack justify="start">
             {åpenVenstremeny && (
-                <Meny as="nav">
+                <Box as="nav" paddingBlock="space-8">
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
 
@@ -108,6 +104,7 @@ const Venstremeny: React.FunctionComponent = () => {
                         return (
                             <VStack key={sideId}>
                                 <MenyLenke
+                                    as={ReactRouterLink}
                                     id={sideId}
                                     to={tilPath}
                                     $erLenkenAktiv={sidenErAktiv}
@@ -148,7 +145,7 @@ const Venstremeny: React.FunctionComponent = () => {
                             </VStack>
                         );
                     })}
-                </Meny>
+                </Box>
             )}
             <div>
                 <ToggleVisningVenstremeny
