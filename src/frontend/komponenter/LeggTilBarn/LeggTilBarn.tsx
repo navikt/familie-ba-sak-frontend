@@ -1,10 +1,18 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import styled from 'styled-components';
-
 import { ExternalLinkIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Fieldset, Heading, Link, Modal, TextField } from '@navikt/ds-react';
+import {
+    BodyLong,
+    Box,
+    Button,
+    Fieldset,
+    Heading,
+    HStack,
+    Link,
+    Modal,
+    TextField,
+} from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, Felt } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -27,19 +35,6 @@ import type { IBarnMedOpplysninger } from '../../typer/søknad';
 import { dateTilIsoDatoStringEllerUndefined } from '../../utils/dato';
 import { identValidator } from '../../utils/validators';
 import HelpText from '../HelpText';
-
-const StyledHeading = styled(Heading)`
-    display: flex;
-    gap: 0.5rem;
-`;
-
-const StyledHelpText = styled(HelpText)`
-    margin-top: 0.2rem;
-`;
-
-const DrekLenkeContainer = styled.div`
-    margin-top: 1.25rem;
-`;
 
 export interface IRegistrerBarnSkjema {
     ident: string;
@@ -259,9 +254,11 @@ const LeggTilBarn: React.FC<IProps> = ({
             {visModal && (
                 <Modal open onClose={onAvbryt} width={'35rem'} aria-label={'Legg til barn'}>
                     <Modal.Header>
-                        <StyledHeading level="2" size="medium" spacing>
-                            Legg til barn
-                            <StyledHelpText placement="top">
+                        <HStack gap="2" align="center">
+                            <Heading level="2" size="medium">
+                                Legg til barn
+                            </Heading>
+                            <HelpText placement="top">
                                 <Heading level="3" size="xsmall">
                                     Nasjonale saker:
                                 </Heading>
@@ -282,8 +279,8 @@ const LeggTilBarn: React.FC<IProps> = ({
                                     Dersom Folkeregisteret ikke har registrerte barn tilknyttet
                                     denne søkeren kan du registrere D-nummer i DREK.
                                 </BodyLong>
-                            </StyledHelpText>
-                        </StyledHeading>
+                            </HelpText>
+                        </HStack>
                     </Modal.Header>
                     <Modal.Body>
                         <Fieldset
@@ -314,23 +311,25 @@ const LeggTilBarn: React.FC<IProps> = ({
                                 placeholder={'11 siffer'}
                                 ref={fnrInputRef}
                             />
-                            <DrekLenkeContainer>
-                                <Link
-                                    href="#"
-                                    target="_blank"
-                                    onClick={(e: React.UIEvent) => {
-                                        e.preventDefault();
-                                        fnrInputNode?.focus();
-                                        window.open('/redirect/drek', '_new');
-                                    }}
-                                >
-                                    Rekvirer D-nummer i DREK
-                                    <ExternalLinkIcon
-                                        title="Rekvirer D-nummer i DREK"
-                                        fontSize={'1.5rem'}
-                                    />
-                                </Link>
-                            </DrekLenkeContainer>
+                            <div>
+                                <Box marginBlock="5 0">
+                                    <Link
+                                        href="#"
+                                        target="_blank"
+                                        onClick={(e: React.UIEvent) => {
+                                            e.preventDefault();
+                                            fnrInputNode?.focus();
+                                            window.open('/redirect/drek', '_new');
+                                        }}
+                                    >
+                                        Rekvirer D-nummer i DREK
+                                        <ExternalLinkIcon
+                                            title="Rekvirer D-nummer i DREK"
+                                            fontSize={'1.5rem'}
+                                        />
+                                    </Link>
+                                </Box>
+                            </div>
                             {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
                                 <LeggTilUregistrertBarn
                                     registrerBarnSkjema={registrerBarnSkjema}
