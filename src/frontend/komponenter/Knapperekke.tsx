@@ -5,7 +5,7 @@ import { HStack } from '@navikt/ds-react';
 
 const Knapperekke: React.FC<PropsWithChildren> = ({ children }) => {
     return (
-        <HStack marginBlock="4 0" justify="space-between">
+        <HStack marginBlock="space-16 0" justify="space-between">
             {children}
         </HStack>
     );

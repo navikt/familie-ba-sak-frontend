@@ -91,7 +91,7 @@ const Venstremeny: React.FunctionComponent = () => {
     return (
         <HStack justify="start">
             {åpenVenstremeny && (
-                <Box as="nav" paddingBlock="8">
+                <Box as="nav" paddingBlock="space-8">
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
 

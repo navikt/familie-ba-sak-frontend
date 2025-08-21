@@ -20,14 +20,14 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
     return (
         <HStack align="center" justify="space-between" wrap={false}>
             |
-            <Box paddingInline="4">
+            <Box paddingInline="space-16">
                 Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
                 {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
                 {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
                 oppgaver)
             </Box>
             |
-            <Box paddingInline="4 0">
+            <Box paddingInline="space-16 0">
                 <Pagination size="small" page={side} count={antallSider} onPageChange={settSide} />
             </Box>
         </HStack>

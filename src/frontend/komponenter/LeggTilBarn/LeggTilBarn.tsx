@@ -254,7 +254,7 @@ const LeggTilBarn: React.FC<IProps> = ({
             {visModal && (
                 <Modal open onClose={onAvbryt} width={'35rem'} aria-label={'Legg til barn'}>
                     <Modal.Header>
-                        <HStack gap="2" align="center">
+                        <HStack gap="space-8" align="center">
                             <Heading level="2" size="medium">
                                 Legg til barn
                             </Heading>
@@ -312,7 +312,7 @@ const LeggTilBarn: React.FC<IProps> = ({
                                 ref={fnrInputRef}
                             />
                             <div>
-                                <Box marginBlock="5 0">
+                                <Box marginBlock="space-20 0">
                                     <Link
                                         href="#"
                                         target="_blank"
