@@ -4,12 +4,14 @@ import { useHttp } from '@navikt/familie-http';
 
 import { hentBarnetrygdbehandlinger } from '../api/hentBarnetrygdbehandlinger';
 
-export const BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX = 'barnetrygdbehandlinger';
+export const HentBarnetrygdbehandlingerQueryKeyFactory = {
+    fagsak: (fagsakId: number) => ['barnetrygdbehandlinger', fagsakId],
+};
 
 export function useHentBarnetrygdbehandlinger(fagsakId: number) {
     const { request } = useHttp();
     return useQuery({
-        queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+        queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
         queryFn: () => hentBarnetrygdbehandlinger(request, fagsakId),
     });
 }
