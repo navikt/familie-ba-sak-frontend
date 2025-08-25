@@ -8,10 +8,10 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../../context/AppContext';
-import { BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentBarnetrygdbehandlinger';
+import { HentBarnetrygdbehandlingerQueryKeyFactory } from '../../../../../hooks/useHentBarnetrygdbehandlinger';
 import { HentFagsakQueryKeyFactory } from '../../../../../hooks/useHentFagsak';
-import { KLAGEBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentKlagebehandlinger';
-import { TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX } from '../../../../../hooks/useHentTilbakekrevingsbehandlinger';
+import { HentKlagebehandlingerQueryKeyFactory } from '../../../../../hooks/useHentKlagebehandlinger';
+import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '../../../../../hooks/useHentTilbakekrevingsbehandlinger';
 import type { IBehandling, IRestNyBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import type { IBehandlingstema } from '../../../../../typer/behandlingstema';
@@ -188,7 +188,7 @@ const useOpprettBehandling = (
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [TILBAKEKREVINGSBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
                     });
                     nullstillSkjemaStatus();
                     onOpprettTilbakekrevingSuccess();
@@ -210,7 +210,7 @@ const useOpprettBehandling = (
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [KLAGEBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId),
                     });
                     lukkModal();
                     nullstillSkjema();
@@ -251,7 +251,7 @@ const useOpprettBehandling = (
             response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     queryClient.invalidateQueries({
-                        queryKey: [BARNETRYGDBEHANDLINGER_QUERY_KEY_PREFIX, fagsakId],
+                        queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
                     });
 
                     queryClient.invalidateQueries({
