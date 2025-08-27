@@ -20,6 +20,7 @@ export enum ToggleNavn {
     skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
     bosattSvalbard = 'familie-ba-sak.bosatt-svalbard',
     bosattFinnmarkNordtroms = 'familie-ba-sak.bosatt-finnmark-nord-troms',
+    skalViseOppholdsadresse = 'familie-ba-sak.skal-vise-oppholdsadresse',
 }
 
 export const alleTogglerAv = (): IToggles => {
