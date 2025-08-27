@@ -29,12 +29,14 @@ export enum ModalType {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     OPPRETT_FAGSAK = 'OPPRETT_FAGSAK',
     FEILMELDING = 'FEILMELDING',
+    FORHÅNDSVIS_PDF = 'FORHÅNDSVIS_PDF',
 }
 
 export interface Args {
     [ModalType.HENLEGG_BEHANDLING_VEIVALG]: { årsak: HenleggÅrsak };
     [ModalType.OPPRETT_FAGSAK]: { ident: string };
     [ModalType.FEILMELDING]: { feilmelding: string | React.ReactNode };
+    [ModalType.FORHÅNDSVIS_PDF]: { blob: Blob };
 }
 
 interface BaseState {
@@ -71,6 +73,12 @@ const initialState: State = {
         tittel: 'Det har oppstått en feil',
         åpen: false,
         bredde: '50rem',
+        args: undefined,
+    },
+    [ModalType.FORHÅNDSVIS_PDF]: {
+        tittel: 'Forhåndsvisning av PDF',
+        åpen: false,
+        bredde: '100rem',
         args: undefined,
     },
 };

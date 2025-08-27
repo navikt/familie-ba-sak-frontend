@@ -1,39 +1,48 @@
 import React from 'react';
 
-import { Link } from '@navikt/ds-react';
+import { Link, Loader } from '@navikt/ds-react';
 
-import type { FamilieAxiosRequestConfig } from '../../../../../context/AppContext';
+import { ModalType } from '../../../../../context/ModalContext';
+import { useHentForhåndsvisBehandlingBrev } from '../../../../../hooks/useHentForhåndsvisBehandlingBrev';
+import { useModal } from '../../../../../hooks/useModal';
+import { type IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../../../FagsakContext';
 
-interface Props {
-    hentForhåndsvisning: <T>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<T>) => void;
+function lagRequestPayload(brevmal: Brevmal): IManueltBrevRequestPåBehandling {
+    return {
+        multiselectVerdier: [],
+        brevmal: brevmal,
+        barnIBrev: [],
+    };
 }
 
-export function ForhåndsvisBrevLenke({ hentForhåndsvisning }: Props) {
+export function ForhåndsvisBrevLenke() {
     const { fagsak } = useFagsakContext();
     const { behandling } = useBehandlingContext();
+    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
+    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
 
-    const brevmalSomSkalBrukes = fagsak.institusjon
+    const brevmal = fagsak.institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
-    function onClick() {
-        hentForhåndsvisning({
-            method: 'POST',
-            data: {
-                multiselectVerdier: [],
-                brevmal: brevmalSomSkalBrukes,
-                barnIBrev: [],
-            },
-            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandling.behandlingId}`,
-        });
+    const { refetch, isFetching } = useHentForhåndsvisBehandlingBrev({
+        behandlingId: behandling.behandlingId,
+        payload: lagRequestPayload(brevmal),
+        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
+        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
+        enabled: false,
+    });
+
+    function forhåndsvisBrev() {
+        if (!isFetching) {
+            refetch();
+        }
     }
 
     return (
-        <Link href={'#'} onClick={onClick}>
-            Forhåndsvis
-        </Link>
+        <Link onClick={forhåndsvisBrev}>Forhåndsvis {isFetching && <Loader size={'small'} />}</Link>
     );
 }
