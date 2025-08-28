@@ -14,7 +14,6 @@ import {
     HStack,
     Label,
     Link,
-    Loader,
     Radio,
     RadioGroup,
     Spacer,
@@ -25,12 +24,11 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
-import { useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf } from '../../../../../hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
+import useDokument from '../../../../../hooks/useDokument';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../../komponenter/HelpText';
+import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
@@ -90,7 +88,11 @@ const StyledBrevmottakereAlert = styled(BrevmottakereAlert)<BrevmottakereAlertBe
     margin: 1rem 0 3rem 2rem;
 `;
 
-const TilbakekrevingSkjema: React.FC<{
+interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
+    fritekst: string;
+}
+
+const TilbakekrevingSkjemaGammel: React.FC<{
     søkerMålform: Målform;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
     åpenBehandling: IBehandling;
@@ -98,18 +100,8 @@ const TilbakekrevingSkjema: React.FC<{
     const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } =
         useSimuleringContext();
-
-    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
-    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
-
-    const {
-        mutate: opprettTilbakekrevingVarselBrevPdf,
-        isPending: isOpprettTilbakekrevingVarselBrevPdfPending,
-    } = useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf({
-        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
-    });
-
+    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
+        useDokument();
     const { bruker: brukerRessurs } = useFagsakContext();
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
@@ -166,6 +158,13 @@ const TilbakekrevingSkjema: React.FC<{
 
     return (
         <>
+            {visDokumentModal && (
+                <PdfVisningModal
+                    onRequestClose={() => settVisDokumentModal(false)}
+                    pdfdata={hentetDokument}
+                />
+            )}
+
             <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
                 <HeadingMedEkstraLuft level="2" size="medium">
                     Tilbakekreving
@@ -370,24 +369,24 @@ const TilbakekrevingSkjema: React.FC<{
                                             <Button
                                                 variant={'tertiary'}
                                                 id={'forhandsvis-varsel'}
-                                                onClick={() => {
-                                                    opprettTilbakekrevingVarselBrevPdf({
-                                                        behandlingId: åpenBehandling.behandlingId,
-                                                        payload: { fritekst: fritekstVarsel.verdi },
-                                                    });
-                                                }}
+                                                onClick={() =>
+                                                    hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
+                                                        {
+                                                            method: 'POST',
+                                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.behandlingId}/forhandsvis-varselbrev`,
+                                                            data: {
+                                                                fritekst: fritekstVarsel.verdi,
+                                                            },
+                                                        }
+                                                    )
+                                                }
+                                                loading={
+                                                    hentetDokument.status === RessursStatus.HENTER
+                                                }
                                                 size={'small'}
                                                 icon={<FileTextIcon />}
-                                                disabled={
-                                                    isOpprettTilbakekrevingVarselBrevPdfPending
-                                                }
                                             >
-                                                <HStack gap={'space-8'}>
-                                                    Forhåndsvis varsel
-                                                    {isOpprettTilbakekrevingVarselBrevPdfPending && (
-                                                        <Loader size={'small'} />
-                                                    )}
-                                                </HStack>
+                                                {'Forhåndsvis varsel'}
                                             </Button>
                                         </ForhåndsvisVarselKnappContainer>
                                     </FritekstVarsel>
@@ -431,4 +430,4 @@ const TilbakekrevingSkjema: React.FC<{
         </>
     );
 };
-export default TilbakekrevingSkjema;
+export default TilbakekrevingSkjemaGammel;
