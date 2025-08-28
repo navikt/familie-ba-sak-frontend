@@ -16,15 +16,14 @@ type Parameters = Omit<
     onError?: (error: Error) => void;
 };
 
-export const HentForhåndsvisBrevBehandlingBrevQueryKeyFactory = {
-    forhåndsvisBrev: (behandlingId: number, payload: IManueltBrevRequestPåBehandling) => [
-        'forhaandsvis_brev',
-        behandlingId,
-        payload,
-    ],
+export const HentForhåndsvisbarBehandlingBrevPdfQueryKeyFactory = {
+    forhåndsvisbarBehandlingBrevPdf: (
+        behandlingId: number,
+        payload: IManueltBrevRequestPåBehandling
+    ) => ['forhaandsvisbar_behandling_brev_pdf', behandlingId, payload],
 };
 
-export function useHentForhåndsvisBehandlingBrev({
+export function useHentForhåndsvisbarBehandlingBrevPdf({
     behandlingId,
     payload,
     onSuccess,
@@ -33,10 +32,11 @@ export function useHentForhåndsvisBehandlingBrev({
 }: Parameters) {
     const { request } = useHttp();
     return useQuery({
-        queryKey: HentForhåndsvisBrevBehandlingBrevQueryKeyFactory.forhåndsvisBrev(
-            behandlingId,
-            payload
-        ),
+        queryKey:
+            HentForhåndsvisbarBehandlingBrevPdfQueryKeyFactory.forhåndsvisbarBehandlingBrevPdf(
+                behandlingId,
+                payload
+            ),
         queryFn: async () => {
             try {
                 const bytes = await hentForhåndsvisBehandlingBrev(request, behandlingId, payload);
