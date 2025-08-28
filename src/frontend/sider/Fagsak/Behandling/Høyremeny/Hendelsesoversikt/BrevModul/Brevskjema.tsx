@@ -6,6 +6,7 @@ import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     Button,
     Fieldset,
+    HStack,
     Label,
     Loader,
     Select,
@@ -32,8 +33,8 @@ import {
 } from './typer';
 import { useBrevModul } from './useBrevModul';
 import { ModalType } from '../../../../../../context/ModalContext';
-import { useHentForhåndsvisbarBehandlingBrevPdf } from '../../../../../../hooks/useHentForhåndsvisbarBehandlingBrevPdf';
 import { useModal } from '../../../../../../hooks/useModal';
+import { useOpprettForhåndsvisbarBehandlingBrevPdf } from '../../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
@@ -123,20 +124,20 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
     const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
 
-    const { refetch: hentForhåndsvisbarBrevPdf, isFetching: isHentForhåndsvisbarBrevPdfFetching } =
-        useHentForhåndsvisbarBehandlingBrevPdf({
-            behandlingId: behandling.behandlingId,
-            payload: hentSkjemaData(),
-            onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-            onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
-            enabled: false,
-        });
+    const {
+        mutate: opprettForhåndsvisbarBrevPdf,
+        isPending: isOpprettForhåndsvisbarBrevPdfPending,
+    } = useOpprettForhåndsvisbarBehandlingBrevPdf({
+        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
+        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
+    });
 
     const erLesevisning = vurderErLesevisning();
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst =
-        skjema.submitRessurs.status === RessursStatus.HENTER || isHentForhåndsvisbarBrevPdfFetching;
+        skjema.submitRessurs.status === RessursStatus.HENTER ||
+        isOpprettForhåndsvisbarBrevPdfPending;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
@@ -476,16 +477,21 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         variant={'tertiary'}
                         id={'forhandsvis-vedtaksbrev'}
                         size={'medium'}
-                        disabled={skjemaErLåst || isHentForhåndsvisbarBrevPdfFetching}
+                        disabled={skjemaErLåst || isOpprettForhåndsvisbarBrevPdfPending}
                         onClick={() => {
                             if (kanSendeSkjema()) {
-                                hentForhåndsvisbarBrevPdf();
+                                opprettForhåndsvisbarBrevPdf({
+                                    behandlingId: behandling.behandlingId,
+                                    payload: hentSkjemaData(),
+                                });
                             }
                         }}
                         icon={<FileTextIcon />}
                     >
-                        Forhåndsvis
-                        {isHentForhåndsvisbarBrevPdfFetching && <Loader size={'small'} />}
+                        <HStack gap={'space-8'}>
+                            Forhåndsvis
+                            {isOpprettForhåndsvisbarBrevPdfPending && <Loader size={'small'} />}
+                        </HStack>
                     </Button>
                 )}
                 <Button

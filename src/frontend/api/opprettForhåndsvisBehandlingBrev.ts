@@ -3,7 +3,7 @@ import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import { RessursResolver } from '../utils/ressursResolver';
 
-export async function hentForhåndsvisBehandlingBrev(
+export async function opprettForhåndsvisBehandlingBrev(
     request: FamilieRequest,
     behandlingId: number,
     payload: IManueltBrevRequestPåBehandling

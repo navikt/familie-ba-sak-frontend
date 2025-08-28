@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Link, Loader } from '@navikt/ds-react';
+import { HStack, Link, Loader } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../context/ModalContext';
-import { useHentForhåndsvisbarBehandlingBrevPdf } from '../../../../../hooks/useHentForhåndsvisbarBehandlingBrevPdf';
 import { useModal } from '../../../../../hooks/useModal';
+import { useOpprettForhåndsvisbarBehandlingBrevPdf } from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import { type IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
@@ -28,21 +28,23 @@ export function ForhåndsvisBrevLenke() {
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
-    const { refetch, isFetching } = useHentForhåndsvisbarBehandlingBrevPdf({
-        behandlingId: behandling.behandlingId,
-        payload: lagRequestPayload(brevmal),
+    const { mutate, isPending } = useOpprettForhåndsvisbarBehandlingBrevPdf({
         onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
         onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
-        enabled: false,
     });
 
     function forhåndsvisBrev() {
-        if (!isFetching) {
-            refetch();
+        if (!isPending) {
+            mutate({ behandlingId: behandling.behandlingId, payload: lagRequestPayload(brevmal) });
         }
     }
 
     return (
-        <Link onClick={forhåndsvisBrev}>Forhåndsvis {isFetching && <Loader size={'small'} />}</Link>
+        <Link onClick={forhåndsvisBrev}>
+            <HStack gap={'space-8'}>
+                Forhåndsvis
+                {isPending && <Loader size={'small'} />}
+            </HStack>
+        </Link>
     );
 }
