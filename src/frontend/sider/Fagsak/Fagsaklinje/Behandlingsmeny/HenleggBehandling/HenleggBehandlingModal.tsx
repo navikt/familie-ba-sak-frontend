@@ -3,7 +3,6 @@ import React from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { Alert, BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
-import { type Ressurs } from '@navikt/familie-typer';
 
 import { BegrunnelseFelt } from './BegrunnelseFelt';
 import { ForhåndsvisBrevLenke } from './ForhåndsvisBrevLenke';
@@ -14,57 +13,27 @@ import {
     useHenleggBehandlingForm,
 } from './useHenleggBehandlingForm';
 import { ÅrsakFelt } from './ÅrsakFelt';
-import { type FamilieAxiosRequestConfig } from '../../../../../context/AppContext';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
 import { HenleggÅrsak } from '../../../../../typer/behandling';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
-interface Props {
-    hentetDokument: Ressurs<string>;
-    nullstillDokument: () => void;
-    hentForhåndsvisning: <T>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<T>) => void;
-}
-
-// TODO : Flytt instansieringen av denne til BehandlingContainer når man kan fjerne props avhengigheten til dokument.
-export function HenleggBehandlingModal({
-    hentetDokument,
-    nullstillDokument,
-    hentForhåndsvisning,
-}: Props) {
+export function HenleggBehandlingModal() {
     const { erModalÅpen, tittel, lukkModal, bredde } = useModal(ModalType.HENLEGG_BEHANDLING);
-
-    function onClose() {
-        nullstillDokument();
-        lukkModal();
-    }
-
     return (
         <Modal
             open={erModalÅpen}
             width={bredde}
-            onClose={onClose}
+            onClose={lukkModal}
             header={{ heading: tittel, size: 'medium' }}
             portal={true}
         >
-            {erModalÅpen && (
-                <Innhold
-                    hentetDokument={hentetDokument}
-                    hentForhåndsvisning={hentForhåndsvisning}
-                />
-            )}
+            {erModalÅpen && <Innhold />}
         </Modal>
     );
 }
 
-interface InnholdProps {
-    hentetDokument: Ressurs<string>;
-    hentForhåndsvisning: <T>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<T>) => void;
-}
-
-function Innhold({ hentetDokument, hentForhåndsvisning }: InnholdProps) {
+function Innhold() {
     const { lukkModal } = useModal(ModalType.HENLEGG_BEHANDLING);
-
     const { form, onSubmit } = useHenleggBehandlingForm();
 
     const {
@@ -75,7 +44,6 @@ function Innhold({ hentetDokument, hentForhåndsvisning }: InnholdProps) {
 
     const valgtÅrsak = watch(HenleggBehandlingFormFields.ÅRSAK);
 
-    const dokumentError = hentFrontendFeilmelding(hentetDokument);
     const submitError = HenleggBehandlingServerErrors.onSubmitError.lookup(errors);
 
     return (
@@ -94,7 +62,7 @@ function Innhold({ hentetDokument, hentForhåndsvisning }: InnholdProps) {
                             <Fieldset
                                 legend={'Henlegg behandling'}
                                 hideLegend={true}
-                                error={dokumentError || submitError}
+                                error={submitError}
                             >
                                 <VStack gap={'4'}>
                                     <ÅrsakFelt />
@@ -121,9 +89,7 @@ function Innhold({ hentetDokument, hentForhåndsvisning }: InnholdProps) {
                 <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
                     Avbryt
                 </Button>
-                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && (
-                    <ForhåndsvisBrevLenke hentForhåndsvisning={hentForhåndsvisning} />
-                )}
+                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && <ForhåndsvisBrevLenke />}
             </Modal.Footer>
         </>
     );
