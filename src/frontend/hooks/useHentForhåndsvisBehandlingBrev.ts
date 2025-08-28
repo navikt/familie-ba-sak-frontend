@@ -24,9 +24,14 @@ export const HentForhåndsvisBrevBehandlingBrevQueryKeyFactory = {
     ],
 };
 
-export function useHentForhåndsvisBehandlingBrev(parameters: Parameters) {
+export function useHentForhåndsvisBehandlingBrev({
+    behandlingId,
+    payload,
+    onSuccess,
+    onError,
+    ...rest
+}: Parameters) {
     const { request } = useHttp();
-    const { behandlingId, payload, onSuccess, onError, ...rest } = parameters;
     return useQuery({
         queryKey: HentForhåndsvisBrevBehandlingBrevQueryKeyFactory.forhåndsvisBrev(
             behandlingId,
