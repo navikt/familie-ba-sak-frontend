@@ -4,16 +4,7 @@ import { useHttp } from '@navikt/familie-http';
 
 import { hentForhåndsvisBehandlingBrev } from '../api/hentForhåndsvisBehandlingBrev';
 import type { IManueltBrevRequestPåBehandling } from '../typer/dokument';
-
-function base64ToArrayBuffer(base64: string) {
-    const binaryString = window.atob(base64);
-    const binaryLen = binaryString.length;
-    const bytes = new Uint8Array(binaryLen);
-    for (let i = 0; i < binaryLen; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes;
-}
+import { opprettPdfBlob } from '../utils/blob';
 
 type Parameters = Omit<
     UseQueryOptions<Blob, DefaultError, IManueltBrevRequestPåBehandling>,
@@ -25,7 +16,7 @@ type Parameters = Omit<
     onError?: (error: Error) => void;
 };
 
-export const HentBrevQueryKeyFactory = {
+export const HentForhåndsvisBrevBehandlingBrevQueryKeyFactory = {
     forhåndsvisBrev: (behandlingId: number, payload: IManueltBrevRequestPåBehandling) => [
         'forhaandsvis_brev',
         behandlingId,
@@ -37,11 +28,14 @@ export function useHentForhåndsvisBehandlingBrev(parameters: Parameters) {
     const { request } = useHttp();
     const { behandlingId, payload, onSuccess, onError, ...rest } = parameters;
     return useQuery({
-        queryKey: HentBrevQueryKeyFactory.forhåndsvisBrev(behandlingId, payload),
+        queryKey: HentForhåndsvisBrevBehandlingBrevQueryKeyFactory.forhåndsvisBrev(
+            behandlingId,
+            payload
+        ),
         queryFn: async () => {
             try {
                 const bytes = await hentForhåndsvisBehandlingBrev(request, behandlingId, payload);
-                const blob = new Blob([base64ToArrayBuffer(bytes)], { type: 'application/pdf' });
+                const blob = opprettPdfBlob(bytes);
                 onSuccess?.(blob);
                 return Promise.resolve(blob);
             } catch (e) {
