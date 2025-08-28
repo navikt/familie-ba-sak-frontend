@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, Loader } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../context/ModalContext';
-import { useHentForhåndsvisBehandlingBrev } from '../../../../../hooks/useHentForhåndsvisBehandlingBrev';
+import { useHentForhåndsvisbarBehandlingBrevPdf } from '../../../../../hooks/useHentForhåndsvisbarBehandlingBrevPdf';
 import { useModal } from '../../../../../hooks/useModal';
 import { type IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
@@ -28,7 +28,7 @@ export function ForhåndsvisBrevLenke() {
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
-    const { refetch, isFetching } = useHentForhåndsvisBehandlingBrev({
+    const { refetch, isFetching } = useHentForhåndsvisbarBehandlingBrevPdf({
         behandlingId: behandling.behandlingId,
         payload: lagRequestPayload(brevmal),
         onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
