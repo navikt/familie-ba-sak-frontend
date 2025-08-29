@@ -12,6 +12,8 @@ import {
     type SamhandlerFormValues,
 } from '../form/SamhandlerForm';
 
+const påvirkerSystemLaster = false;
+
 interface Props {
     settSamhandler: (samhandler: ISamhandlerInfo) => void;
 }
@@ -34,7 +36,8 @@ export function useSamhandlerForm({ settSamhandler }: Props) {
         return await queryClient
             .fetchQuery({
                 queryKey: ['samhandler', values.orgnr],
-                queryFn: () => hentSamhandler(request, values.orgnr),
+                queryFn: () => hentSamhandler(request, values.orgnr, påvirkerSystemLaster),
+                gcTime: 0, // deaktiver cache da "påvirkerSystemLaster" er false.
             })
             .then(samhandler => settSamhandler(samhandler))
             .catch(error => {
