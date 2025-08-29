@@ -1,29 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
+import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
 import { hentFagsaker } from '../api/hentFagsaker';
-import { mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
+import {
+    type IBaseFagsak,
+    type IMinimalFagsak,
+    mapMinimalFagsakTilBaseFagsak,
+} from '../typer/fagsak';
 
-export const FAGSAKER_QUERY_KEY_PREFIX = 'fagsaker';
+export const HentFagsakerQueryKeyFactory = {
+    fagsaker: (personIdent: string) => ['fagsaker', personIdent],
+};
 
-interface Props {
-    personIdent: string | undefined;
-}
+type Parameters = Omit<
+    UseQueryOptions<IMinimalFagsak[], DefaultError, IBaseFagsak[]>,
+    'queryKey' | 'queryFn' | 'select'
+> & {
+    personIdent: string;
+    påvirkerSystemLaster?: boolean;
+};
 
-export function useHentFagsaker({ personIdent }: Props) {
+export function useHentFagsaker({
+    personIdent,
+    påvirkerSystemLaster = false,
+    ...rest
+}: Parameters) {
     const { request } = useHttp();
     return useQuery({
-        queryKey: [FAGSAKER_QUERY_KEY_PREFIX, personIdent],
-        queryFn: () => {
-            if (personIdent === undefined) {
-                return Promise.reject(
-                    new Error('Kan ikke hente fagsaker når personens ident ikke er satt.')
-                );
-            }
-            return hentFagsaker(request, personIdent);
-        },
+        queryKey: HentFagsakerQueryKeyFactory.fagsaker(personIdent),
+        queryFn: () => hentFagsaker(request, personIdent, påvirkerSystemLaster),
         select: fagsaker => fagsaker.map(mapMinimalFagsakTilBaseFagsak),
-        enabled: personIdent !== undefined,
+        gcTime: 0, // deaktiver cache da "påvirkerSystemLaster" er false (kan overskrives).
+        ...rest,
     });
 }
