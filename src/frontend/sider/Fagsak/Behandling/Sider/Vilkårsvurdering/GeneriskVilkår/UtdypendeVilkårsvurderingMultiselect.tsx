@@ -109,23 +109,16 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
     };
 
-    const bosattPåSvalbardToggleErPå = toggles[ToggleNavn.bosattSvalbard];
     const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
 
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
         utdypendeVilkårsvurderingAvhengigheter
-    )
-        .filter(
-            utdypendeVilkårsvurdering =>
-                bosattPåSvalbardToggleErPå ||
-                utdypendeVilkårsvurdering !== UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD
-        )
-        .filter(
-            utdypendeVilkårsvurdering =>
-                bosattFinnmarkNordtromsToggleErPå ||
-                utdypendeVilkårsvurdering !==
-                    UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
-        );
+    ).filter(
+        utdypendeVilkårsvurdering =>
+            bosattFinnmarkNordtromsToggleErPå ||
+            utdypendeVilkårsvurdering !==
+                UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
+    );
 
     const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(
         mapUtdypendeVilkårsvurderingTilOption
