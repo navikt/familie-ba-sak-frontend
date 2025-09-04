@@ -30,6 +30,7 @@ export enum ModalType {
     OPPRETT_FAGSAK = 'OPPRETT_FAGSAK',
     FEILMELDING = 'FEILMELDING',
     FORHÅNDSVIS_PDF = 'FORHÅNDSVIS_PDF',
+    KORRIGER_ETTERBETALING = 'KORRIGER_ETTERBETALING',
 }
 
 export interface Args {
@@ -80,6 +81,11 @@ const initialState: State = {
         åpen: false,
         bredde: '100rem',
         args: undefined,
+    },
+    [ModalType.KORRIGER_ETTERBETALING]: {
+        tittel: 'Korriger etterbetaling',
+        åpen: false,
+        bredde: '50rem',
     },
 };
 

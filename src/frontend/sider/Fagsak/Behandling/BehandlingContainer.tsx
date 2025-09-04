@@ -16,6 +16,7 @@ import type { IPersonInfo } from '../../../typer/person';
 import { HenleggBehandlingModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingVeivalgModal';
 import { Fagsaklinje } from '../Fagsaklinje/Fagsaklinje';
+import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 
 interface Props {
     bruker: IPersonInfo;
@@ -53,6 +54,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                 <BehandlingProvider behandling={behandlingRessurs.data}>
                     <HenleggBehandlingModal />
                     <HenleggBehandlingVeivalgModal />
+                    <KorrigerEtterbetalingModal />
                     <Fagsaklinje
                         bruker={bruker}
                         minimalFagsak={fagsak}
