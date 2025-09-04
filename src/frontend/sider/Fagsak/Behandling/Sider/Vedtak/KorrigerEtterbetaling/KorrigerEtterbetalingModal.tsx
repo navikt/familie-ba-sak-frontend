@@ -35,6 +35,7 @@ export function KorrigerEtterbetalingModal() {
             open={erModalÅpen}
             onClose={lukkModal}
             header={{ heading: 'Korriger etterbetaling' }}
+            width={'35rem'}
             portal
         >
             <form onSubmit={form.handleSubmit(korrigerEtterbetaling)}>
