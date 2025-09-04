@@ -22,8 +22,13 @@ import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export function KorrigerEtterbetalingModal() {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const { form, korrigerEtterbetaling, angreKorrigertEtterbetaling, isPending } =
-        useKorrigerEtterbetalingForm();
+    const {
+        form,
+        korrigerEtterbetaling,
+        angreKorrigertEtterbetaling,
+        korrigerEtterbetalingPending,
+        angreKorrigertEtterbetalingPending,
+    } = useKorrigerEtterbetalingForm();
 
     const { lukkModal, erModalÅpen, bredde, tittel } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
@@ -99,12 +104,13 @@ export function KorrigerEtterbetalingModal() {
                             <HStack>
                                 {korrigertEtterbetaling && (
                                     <Button
+                                        type={'button'}
                                         id={'angre-korrigering'}
                                         size={'small'}
-                                        onClick={form.handleSubmit(angreKorrigertEtterbetaling)}
+                                        onClick={angreKorrigertEtterbetaling}
                                         variant={'tertiary'}
-                                        loading={isPending}
-                                        disabled={isPending}
+                                        loading={angreKorrigertEtterbetalingPending}
+                                        disabled={korrigerEtterbetalingPending}
                                         icon={<ArrowUndoIcon />}
                                     >
                                         Angre korrigering
@@ -119,8 +125,8 @@ export function KorrigerEtterbetalingModal() {
                                 <Button
                                     type={'submit'}
                                     variant={form.formState.errors ? 'primary' : 'secondary'}
-                                    loading={isPending}
-                                    disabled={isPending}
+                                    loading={korrigerEtterbetalingPending}
+                                    disabled={angreKorrigertEtterbetalingPending}
                                 >
                                     {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
                                 </Button>
