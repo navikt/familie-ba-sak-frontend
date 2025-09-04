@@ -30,10 +30,15 @@ export function KorrigerEtterbetalingModal() {
     const korrigertEtterbetaling = behandling.korrigertEtterbetaling;
     const erLesevisning = vurderErLesevisning();
 
+    function handleLukkModal() {
+        form.reset();
+        lukkModal();
+    }
+
     return (
         <Modal
             open={erModalÅpen}
-            onClose={lukkModal}
+            onClose={handleLukkModal}
             header={{ heading: 'Korriger etterbetaling' }}
             width={'35rem'}
             portal
@@ -108,7 +113,7 @@ export function KorrigerEtterbetalingModal() {
                             </HStack>
                             <Spacer />
                             <HStack gap={'space-8'}>
-                                <Button onClick={lukkModal} variant={'tertiary'}>
+                                <Button onClick={handleLukkModal} variant={'tertiary'}>
                                     Avbryt
                                 </Button>
                                 <Button
