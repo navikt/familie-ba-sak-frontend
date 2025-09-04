@@ -15,7 +15,7 @@ interface MutationParameters {
 
 type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationFn'>;
 
-export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options: Options) {
+export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options?: Options) {
     const { request } = useHttp();
     return useMutation({
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {

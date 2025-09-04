@@ -13,7 +13,7 @@ interface MutationParameters {
 
 type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationFn'>;
 
-export function useOpprettForhåndsvisbarBehandlingBrevPdf(options: Options) {
+export function useOpprettForhåndsvisbarBehandlingBrevPdf(options?: Options) {
     const { request } = useHttp();
     return useMutation({
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {

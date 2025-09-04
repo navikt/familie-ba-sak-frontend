@@ -2,10 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Modal } from '@navikt/ds-react';
-
-import { ModalType } from '../../context/ModalContext';
-import { useModal } from '../../hooks/useModal';
+import { Alert, Heading, HStack, Loader, Modal, VStack } from '@navikt/ds-react';
 
 const StyledModal = styled(Modal)`
     width: 80%;
@@ -19,35 +16,63 @@ const StyledModal = styled(Modal)`
     }
 `;
 
-export function ForhåndsvisPdfModal() {
-    const { args, erModalÅpen, lukkModal, tittel, bredde } = useModal(ModalType.FORHÅNDSVIS_PDF);
+interface Props {
+    pdf?: Blob;
+    laster?: boolean;
+    error?: Error | null;
+    lukk: () => void;
+}
+
+export function ForhåndsvisPdfModal({ pdf, laster, error, lukk }: Props) {
+    if (laster) {
+        return (
+            <StyledModal
+                open={true}
+                onClose={lukk}
+                header={{ heading: 'Forhåndsvis PDF', closeButton: true }}
+                width={'1000rem'}
+                portal={true}
+            >
+                <HStack justify={'center'} height={'100%'} align={'center'}>
+                    <VStack align={'center'}>
+                        <Heading size={'small'} level={'2'}>
+                            Innhenter dokument
+                        </Heading>
+                        <Loader size={'xlarge'} title={'Innhenter dokument'} />
+                    </VStack>
+                </HStack>
+            </StyledModal>
+        );
+    }
+
+    if (error || pdf === undefined) {
+        return (
+            <StyledModal
+                open={true}
+                onClose={lukk}
+                header={{ heading: 'Forhåndsvis PDF', closeButton: true }}
+                width={'1000rem'}
+                portal={true}
+            >
+                <Alert variant={'error'}>{error?.message ?? 'En ukjent feil oppstod.'}</Alert>
+            </StyledModal>
+        );
+    }
+
     return (
         <StyledModal
-            open={erModalÅpen}
-            onClose={lukkModal}
-            header={{ heading: tittel, closeButton: true }}
-            width={bredde}
+            open={true}
+            onClose={lukk}
+            header={{ heading: 'Forhåndsvis PDF', closeButton: true }}
+            width={'1000rem'}
             portal={true}
         >
-            {erModalÅpen && (
-                <>
-                    {args === undefined && (
-                        <Modal.Body>
-                            <Alert variant={'error'}>
-                                En feil oppstod ved innlasting av modal.
-                            </Alert>
-                        </Modal.Body>
-                    )}
-                    {args !== undefined && (
-                        <iframe
-                            title={'Dokument'}
-                            height={'100%'}
-                            width={'100%'}
-                            src={window.URL.createObjectURL(args.blob)}
-                        />
-                    )}
-                </>
-            )}
+            <iframe
+                title={'Dokument'}
+                height={'100%'}
+                width={'100%'}
+                src={window.URL.createObjectURL(pdf)}
+            />
         </StyledModal>
     );
 }

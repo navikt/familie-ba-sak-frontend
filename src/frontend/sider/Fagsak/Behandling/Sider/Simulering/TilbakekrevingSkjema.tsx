@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -14,7 +15,6 @@ import {
     HStack,
     Label,
     Link,
-    Loader,
     Radio,
     RadioGroup,
     Spacer,
@@ -25,12 +25,11 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
 import { useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf } from '../../../../../hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../../komponenter/HelpText';
+import { ForhåndsvisPdfModal } from '../../../../../komponenter/PdfVisningModal/ForhåndsvisPdfModal';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
@@ -99,16 +98,14 @@ const TilbakekrevingSkjema: React.FC<{
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } =
         useSimuleringContext();
 
-    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
-    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
+    const [visForhåndsvisPdfModal, settVisForhåndsvisPdfModal] = useState(false);
 
     const {
-        mutate: opprettTilbakekrevingVarselBrevPdf,
-        isPending: isOpprettTilbakekrevingVarselBrevPdfPending,
-    } = useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf({
-        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
-    });
+        mutate: opprettPdf,
+        data: pdf,
+        isPending: isOpprettPdfPending,
+        error: opprettPdfError,
+    } = useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf();
 
     const { bruker: brukerRessurs } = useFagsakContext();
 
@@ -166,6 +163,14 @@ const TilbakekrevingSkjema: React.FC<{
 
     return (
         <>
+            {visForhåndsvisPdfModal && (
+                <ForhåndsvisPdfModal
+                    pdf={pdf}
+                    laster={isOpprettPdfPending}
+                    error={opprettPdfError}
+                    lukk={() => settVisForhåndsvisPdfModal(false)}
+                />
+            )}
             <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
                 <HeadingMedEkstraLuft level="2" size="medium">
                     Tilbakekreving
@@ -371,23 +376,16 @@ const TilbakekrevingSkjema: React.FC<{
                                                 variant={'tertiary'}
                                                 id={'forhandsvis-varsel'}
                                                 onClick={() => {
-                                                    opprettTilbakekrevingVarselBrevPdf({
+                                                    settVisForhåndsvisPdfModal(true);
+                                                    opprettPdf({
                                                         behandlingId: åpenBehandling.behandlingId,
                                                         payload: { fritekst: fritekstVarsel.verdi },
                                                     });
                                                 }}
                                                 size={'small'}
                                                 icon={<FileTextIcon />}
-                                                disabled={
-                                                    isOpprettTilbakekrevingVarselBrevPdfPending
-                                                }
                                             >
-                                                <HStack gap={'space-8'}>
-                                                    Forhåndsvis varsel
-                                                    {isOpprettTilbakekrevingVarselBrevPdfPending && (
-                                                        <Loader size={'small'} />
-                                                    )}
-                                                </HStack>
+                                                Forhåndsvis varsel
                                             </Button>
                                         </ForhåndsvisVarselKnappContainer>
                                     </FritekstVarsel>

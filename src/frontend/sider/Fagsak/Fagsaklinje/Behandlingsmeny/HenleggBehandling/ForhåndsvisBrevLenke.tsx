@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { HStack, Link, Loader } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
 import { useOpprettForhåndsvisbarBehandlingBrevPdf } from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import { ForhåndsvisPdfModal } from '../../../../../komponenter/PdfVisningModal/ForhåndsvisPdfModal';
 import { type IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
@@ -21,30 +20,41 @@ function lagRequestPayload(brevmal: Brevmal): IManueltBrevRequestPåBehandling {
 export function ForhåndsvisBrevLenke() {
     const { fagsak } = useFagsakContext();
     const { behandling } = useBehandlingContext();
-    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
-    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
 
     const brevmal = fagsak.institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
-    const { mutate, isPending } = useOpprettForhåndsvisbarBehandlingBrevPdf({
-        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
-    });
+    const [visForhåndsvisPdfModal, settVisForhåndsvisPdfModal] = useState(false);
+
+    const {
+        mutate: opprettPdf,
+        data: pdf,
+        isPending: isOpprettPdfPending,
+        error: opprettPdfError,
+    } = useOpprettForhåndsvisbarBehandlingBrevPdf();
 
     function forhåndsvisBrev() {
-        if (!isPending) {
-            mutate({ behandlingId: behandling.behandlingId, payload: lagRequestPayload(brevmal) });
+        if (!isOpprettPdfPending) {
+            settVisForhåndsvisPdfModal(true);
+            opprettPdf({
+                behandlingId: behandling.behandlingId,
+                payload: lagRequestPayload(brevmal),
+            });
         }
     }
 
     return (
-        <Link onClick={forhåndsvisBrev}>
-            <HStack gap={'space-8'}>
-                Forhåndsvis
-                {isPending && <Loader size={'small'} />}
-            </HStack>
-        </Link>
+        <>
+            {visForhåndsvisPdfModal && (
+                <ForhåndsvisPdfModal
+                    pdf={pdf}
+                    laster={isOpprettPdfPending}
+                    error={opprettPdfError}
+                    lukk={() => settVisForhåndsvisPdfModal(false)}
+                />
+            )}
+            <Link onClick={forhåndsvisBrev}>Forhåndsvis</Link>
+        </>
     );
 }
