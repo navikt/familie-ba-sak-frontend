@@ -34,7 +34,7 @@ const VenstremenyContainer = styled.div`
 `;
 
 const HovedinnholdContainer = styled.div`
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 146px);
     flex: 1;
     overflow: auto;
 `;
@@ -43,6 +43,7 @@ const HøyremenyContainer = styled.div`
     border-left: 1px solid ${ABorderDivider};
     overflow-x: hidden;
     overflow-y: scroll;
+    height: calc(100vh - 146px);
 `;
 
 const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
