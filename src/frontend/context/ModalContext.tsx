@@ -85,7 +85,7 @@ const initialState: State = {
     [ModalType.KORRIGER_ETTERBETALING]: {
         tittel: 'Korriger etterbetaling',
         åpen: false,
-        bredde: '50rem',
+        bredde: '35rem',
     },
 };
 

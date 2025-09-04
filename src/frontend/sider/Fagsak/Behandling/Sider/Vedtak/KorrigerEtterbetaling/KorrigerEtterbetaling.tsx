@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { isPending } from 'fork-ts-checker-webpack-plugin/lib/utils/async/is-pending';
-
 import { DocPencilIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
 
@@ -17,8 +15,6 @@ interface IKorrigerEtterbetaling {
 
 const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({ korrigertEtterbetaling }) => {
     const { åpneModal } = useModal(ModalType.KORRIGER_ETTERBETALING);
-
-    console.log(isPending);
 
     return (
         <Dropdown.Menu.List.Item

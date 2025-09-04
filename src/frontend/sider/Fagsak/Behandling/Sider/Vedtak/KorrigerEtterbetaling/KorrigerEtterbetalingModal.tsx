@@ -25,7 +25,7 @@ export function KorrigerEtterbetalingModal() {
     const { form, korrigerEtterbetaling, angreKorrigertEtterbetaling, isPending } =
         useKorrigerEtterbetalingForm();
 
-    const { lukkModal, erModalÅpen } = useModal(ModalType.KORRIGER_ETTERBETALING);
+    const { lukkModal, erModalÅpen, bredde, tittel } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
     const korrigertEtterbetaling = behandling.korrigertEtterbetaling;
     const erLesevisning = vurderErLesevisning();
@@ -39,8 +39,8 @@ export function KorrigerEtterbetalingModal() {
         <Modal
             open={erModalÅpen}
             onClose={handleLukkModal}
-            header={{ heading: 'Korriger etterbetaling' }}
-            width={'35rem'}
+            header={{ heading: tittel }}
+            width={bredde}
             portal
         >
             <form onSubmit={form.handleSubmit(korrigerEtterbetaling)}>
