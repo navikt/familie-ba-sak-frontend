@@ -2,7 +2,7 @@ import { type DefaultError, useMutation, type UseMutationOptions } from '@tansta
 
 import { useHttp } from '@navikt/familie-http';
 
-import { angreKorrigertEtterbetalingAsync } from '../api/korrigerEtterbetaling';
+import { angreKorrigertEtterbetaling } from '../api/angreKorrigertEtterbetaling';
 import type { IBehandling } from '../typer/behandling';
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, number>, 'mutationFn'>;
@@ -12,7 +12,7 @@ export function useAngreKorrigertEtterbetaling(options?: Options) {
 
     return useMutation<IBehandling, Error, number>({
         mutationFn: (behandlingId: number): Promise<IBehandling> => {
-            return angreKorrigertEtterbetalingAsync(request, behandlingId);
+            return angreKorrigertEtterbetaling(request, behandlingId);
         },
         ...options,
     });

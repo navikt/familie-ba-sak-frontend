@@ -3,7 +3,7 @@ import { type DefaultError, useMutation, type UseMutationOptions } from '@tansta
 import { useHttp } from '@navikt/familie-http';
 
 import {
-    korrigerEtterbetalingAsync,
+    korrigerEtterbetaling,
     type KorrigerEtterbetalingPayload,
 } from '../api/korrigerEtterbetaling';
 import type { IBehandling } from '../typer/behandling';
@@ -24,7 +24,7 @@ export function useKorrigerEtterbetaling(options?: Options) {
         mutationFn: (parameters: KorrigerEtterbetalingParameters): Promise<IBehandling> => {
             const { årsak, beløp, begrunnelse, behandlingId } = parameters;
             const payload = { årsak, beløp, begrunnelse };
-            return korrigerEtterbetalingAsync(request, payload, behandlingId);
+            return korrigerEtterbetaling(request, payload, behandlingId);
         },
         ...options,
     });

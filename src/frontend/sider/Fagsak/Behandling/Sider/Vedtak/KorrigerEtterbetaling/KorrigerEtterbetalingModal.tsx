@@ -105,7 +105,6 @@ export function KorrigerEtterbetalingModal() {
                                 {korrigertEtterbetaling && (
                                     <Button
                                         type={'button'}
-                                        id={'angre-korrigering'}
                                         size={'small'}
                                         onClick={angreKorrigertEtterbetaling}
                                         variant={'tertiary'}
