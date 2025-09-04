@@ -6,7 +6,7 @@ import {
     angreKorrigertEtterbetalingAsync,
     korrigerEtterbetalingAsync,
     type KorrigerEtterbetalingPayload,
-} from '../api/korrigerEtterbetalingAsync';
+} from '../api/korrigerEtterbetaling';
 import type { IBehandling } from '../typer/behandling';
 
 interface KorrigerEtterbetalingParameters extends KorrigerEtterbetalingPayload {
