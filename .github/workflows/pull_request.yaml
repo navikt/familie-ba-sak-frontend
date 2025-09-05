@@ -1,0 +1,20 @@
+name: Pull request
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [ opened, synchronize, reopened, ready_for_review ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  pull-request:
+    name: Build, test, validate
+    permissions:
+      contents: read
+      actions: write
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-yarn.yaml@pull-request # ratchet:exclude
+    with:
+      skip-cypress: false
+    secrets: inherit
