@@ -6,9 +6,7 @@ import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     Button,
     Fieldset,
-    HStack,
     Label,
-    Loader,
     Select,
     Tag,
     Textarea,
@@ -34,7 +32,10 @@ import {
 import { useBrevModul } from './useBrevModul';
 import { ModalType } from '../../../../../../context/ModalContext';
 import { useModal } from '../../../../../../hooks/useModal';
-import { useOpprettForhåndsvisbarBehandlingBrevPdf } from '../../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarBehandlingBrevPdf,
+} from '../../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
@@ -121,15 +122,15 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         settVisFritekstAvsnittTekstboks,
     } = useBrevModul();
 
-    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
-    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
+    const { åpneModal: åpneForhåndsvisOpprettingAvPdfModal } = useModal(
+        ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF
+    );
 
     const {
         mutate: opprettForhåndsvisbarBrevPdf,
         isPending: isOpprettForhåndsvisbarBrevPdfPending,
     } = useOpprettForhåndsvisbarBehandlingBrevPdf({
-        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
+        onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
     });
 
     const erLesevisning = vurderErLesevisning();
@@ -477,7 +478,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         variant={'tertiary'}
                         id={'forhandsvis-vedtaksbrev'}
                         size={'medium'}
-                        disabled={skjemaErLåst || isOpprettForhåndsvisbarBrevPdfPending}
+                        disabled={skjemaErLåst}
                         onClick={() => {
                             if (kanSendeSkjema()) {
                                 opprettForhåndsvisbarBrevPdf({
@@ -488,10 +489,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         }}
                         icon={<FileTextIcon />}
                     >
-                        <HStack gap={'space-8'}>
-                            Forhåndsvis
-                            {isOpprettForhåndsvisbarBrevPdfPending && <Loader size={'small'} />}
-                        </HStack>
+                        Forhåndsvis
                     </Button>
                 )}
                 <Button

@@ -13,11 +13,17 @@ interface MutationParameters {
     payload: OpprettForhåndsvisTilbakekrevingVarselbrevRequest;
 }
 
-type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationFn'>;
+type Options = Omit<
+    UseMutationOptions<Blob, DefaultError, MutationParameters>,
+    'mutationKey' | 'mutationFn'
+>;
 
-export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options: Options) {
+export const mutationKey = ['opprett_forhaandsvisbar_tilbakekreving_varsel_brev_pdf'];
+
+export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options?: Options) {
     const { request } = useHttp();
     return useMutation({
+        mutationKey,
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {
             try {
                 const bytes = await opprettForhåndsvisbarTilbakekrevingVarselbrev(

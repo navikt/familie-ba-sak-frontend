@@ -1,10 +1,13 @@
 import React from 'react';
 
-import { HStack, Link, Loader } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
-import { useOpprettForhåndsvisbarBehandlingBrevPdf } from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarBehandlingBrevPdf,
+} from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import { type IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { Brevmal } from '../../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
@@ -21,16 +24,14 @@ function lagRequestPayload(brevmal: Brevmal): IManueltBrevRequestPåBehandling {
 export function ForhåndsvisBrevLenke() {
     const { fagsak } = useFagsakContext();
     const { behandling } = useBehandlingContext();
-    const { åpneModal: åpneForhåndsvisPdfModal } = useModal(ModalType.FORHÅNDSVIS_PDF);
-    const { åpneModal: åpneFeilmeldingModal } = useModal(ModalType.FEILMELDING);
+    const { åpneModal } = useModal(ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF);
 
     const brevmal = fagsak.institusjon
         ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
         : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
     const { mutate, isPending } = useOpprettForhåndsvisbarBehandlingBrevPdf({
-        onSuccess: blob => åpneForhåndsvisPdfModal({ blob }),
-        onError: error => åpneFeilmeldingModal({ feilmelding: error.message }),
+        onMutate: () => åpneModal({ mutationKey }),
     });
 
     function forhåndsvisBrev() {
@@ -39,12 +40,5 @@ export function ForhåndsvisBrevLenke() {
         }
     }
 
-    return (
-        <Link onClick={forhåndsvisBrev}>
-            <HStack gap={'space-8'}>
-                Forhåndsvis
-                {isPending && <Loader size={'small'} />}
-            </HStack>
-        </Link>
-    );
+    return <Link onClick={forhåndsvisBrev}>Forhåndsvis</Link>;
 }
