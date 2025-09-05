@@ -97,6 +97,7 @@ export const mockBehandling = ({
         refusjonEøs: [],
         vurderingsstrategiForValutakurser: null,
         tilbakekrevingsvedtakMotregning: null,
+        manglendeSvalbardmerking: [],
     };
 };
 

@@ -19,13 +19,18 @@ import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
-import type { IAnnenVurdering, IVilkårResultat } from '../../../../../typer/vilkår';
-import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    type IAnnenVurdering,
+    type IVilkårResultat,
+    vilkårConfig,
+} from '../../../../../typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
+import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -213,6 +218,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
                 <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
             )}
+            <ManglendeSvalbardmerkingVarsel />
         </Skjemasteg>
     );
 };
