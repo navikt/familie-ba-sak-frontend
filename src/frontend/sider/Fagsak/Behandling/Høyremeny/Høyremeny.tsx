@@ -34,7 +34,6 @@ const ToggleVisningHøyremeny = styled(Button)<{ $åpenhøyremeny: boolean }>`
 
 const Container = styled.div<{ $erÅpen: boolean }>`
     width: ${props => props.$erÅpen && '25rem'};
-    height: ${props => props.$erÅpen && `calc(100vh - 8rem)`};
 `;
 
 const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
