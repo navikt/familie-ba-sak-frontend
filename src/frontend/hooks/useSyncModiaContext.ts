@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { useSettAktivBrukerIModiaContext } from './useSettAktivBrukerIModiaContext';
 import { useAppContext } from '../context/AppContext';
@@ -9,15 +9,14 @@ export function useSyncModiaContext(bruker: IPersonInfo | undefined) {
     const { toggles } = useAppContext();
     const { mutate } = useSettAktivBrukerIModiaContext();
 
-    const sattPersonIdent = useRef<string | undefined>(undefined);
+    const personIdent = bruker?.personIdent;
 
     useEffect(() => {
-        if (bruker === undefined || sattPersonIdent.current === bruker.personIdent) {
+        if (personIdent === undefined) {
             return;
         }
         if (toggles[ToggleNavn.oppdaterModiaKontekst]) {
-            mutate(bruker.personIdent);
-            sattPersonIdent.current = bruker.personIdent;
+            mutate(personIdent);
         }
-    }, [bruker]);
+    }, [personIdent]);
 }
