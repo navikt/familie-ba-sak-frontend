@@ -8,11 +8,10 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
-import { usePrevious } from '../../../../../hooks/usePrevious';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
-import { erBrukerLike, type IForelderBarnRelasjon } from '../../../../../typer/person';
+import { type IForelderBarnRelasjon } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type {
     IBarnMedOpplysninger,
@@ -60,7 +59,6 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     const navigate = useNavigate();
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
-    const forrigeBruker = usePrevious(bruker);
     const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
@@ -136,14 +134,8 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     };
 
     React.useEffect(() => {
-        // TODO : Fjern dette når man går over til react-hook-form. Bruk heller "values", se https://react-hook-form.com/docs/useform#values
-        if (forrigeBruker === undefined) {
-            return;
-        }
-        if (!erBrukerLike(forrigeBruker, bruker)) {
-            tilbakestillSøknad();
-        }
-    }, [forrigeBruker, bruker]);
+        tilbakestillSøknad();
+    }, [bruker]);
 
     useDeepEffect(() => {
         if (åpenBehandling.søknadsgrunnlag) {

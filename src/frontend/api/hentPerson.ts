@@ -8,12 +8,16 @@ interface RequestParams {
     ident: string;
 }
 
-export async function hentPerson(request: FamilieRequest, ident: string) {
+export async function hentPerson(
+    request: FamilieRequest,
+    ident: string,
+    påvirkerSystemLaster: boolean = true
+) {
     const ressurs = await request<RequestParams, IPersonInfo>({
         method: 'POST',
         url: '/familie-ba-sak/api/person',
         data: { ident },
-        påvirkerSystemLaster: true,
+        påvirkerSystemLaster,
     });
     if (ressurs.status === RessursStatus.SUKSESS && ressurs.data.harTilgang === false) {
         return Promise.reject(

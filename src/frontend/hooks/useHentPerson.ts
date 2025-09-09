@@ -56,10 +56,15 @@ export function useHentPerson({ ident, ...rest }: Parameters) {
             return Promise.resolve(person);
         },
         select: person => {
-            if (skalObfuskereData) {
-                return obfuskertPersonInfo(person);
-            }
-            return person;
+            const nyPerson = skalObfuskereData ? obfuskertPersonInfo(person) : person;
+            // TODO: Fjern sorteringen av objektet når "Bruker" objektet ikke lenger brukes i useEffect dependency
+            //  array. Nå må vi gjøre det slik for å unngå at useEffect hookene kjører for ofte og f.eks.
+            //  tilbakestiller enkelte skjemaer. Dette sørger for at "Bruker" objektet er mer stabilt.
+            return {
+                ...nyPerson,
+                forelderBarnRelasjon: nyPerson.forelderBarnRelasjon.toSorted(),
+                forelderBarnRelasjonMaskert: nyPerson.forelderBarnRelasjonMaskert.toSorted(),
+            };
         },
         enabled: ident !== undefined,
         ...rest,
