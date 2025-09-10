@@ -1,19 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
 import { hentPerson } from '../api/hentPerson';
 import { useAppContext } from '../context/AppContext';
-import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo } from '../typer/person';
-
-function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(
-    a: T,
-    b: T
-) {
-    if (a.person && b.person) return b.person.fødselsdato.localeCompare(a.person.fødselsdato);
-    if (a.fødselsdato && b.fødselsdato) return b.fødselsdato.localeCompare(a.fødselsdato);
-    return 0;
-}
+import { ForelderBarnRelasjonRolle, type IPersonInfo } from '../typer/person';
 
 function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     const obfuskertNavn = 'Søker Søkersen';
@@ -24,7 +15,7 @@ function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     };
 
     const obfuskerteRelasjoner = personInfo.forelderBarnRelasjon
-        ?.toSorted(sammenlignFødselsdato)
+        ?.toSorted((a, b) => b.fødselsdato.localeCompare(a.fødselsdato))
         .map((relasjon, index) => ({
             ...relasjon,
             navn:
@@ -41,13 +32,22 @@ function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     };
 }
 
-export const PERSON_QUERY_KEY_PREFIX = 'person';
+export const HentPersonQueryKeyFactory = {
+    person: (ident: string | undefined) => ['person', ident],
+};
 
-export function useHentPerson(ident: string | undefined) {
+type Parameters = Omit<
+    UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>,
+    'queryKey' | 'queryFn' | 'select' | 'enabled'
+> & {
+    ident: string | undefined;
+};
+
+export function useHentPerson({ ident, ...rest }: Parameters) {
     const { request } = useHttp();
     const { skalObfuskereData } = useAppContext();
     return useQuery({
-        queryKey: [PERSON_QUERY_KEY_PREFIX, ident],
+        queryKey: HentPersonQueryKeyFactory.person(ident),
         queryFn: async () => {
             if (ident === undefined) {
                 return Promise.reject(new Error('Kan ikke hente person uten ident.'));
@@ -56,11 +56,17 @@ export function useHentPerson(ident: string | undefined) {
             return Promise.resolve(person);
         },
         select: person => {
-            if (skalObfuskereData) {
-                return obfuskertPersonInfo(person);
-            }
-            return person;
+            const nyPerson = skalObfuskereData ? obfuskertPersonInfo(person) : person;
+            // TODO: Fjern sorteringen av objektet når "Bruker" objektet ikke lenger brukes i useEffect dependency
+            //  array. Nå må vi gjøre det slik for å unngå at useEffect hookene kjører for ofte og f.eks.
+            //  tilbakestiller enkelte skjemaer. Dette sørger for at "Bruker" objektet er mer stabilt.
+            return {
+                ...nyPerson,
+                forelderBarnRelasjon: nyPerson.forelderBarnRelasjon.toSorted(),
+                forelderBarnRelasjonMaskert: nyPerson.forelderBarnRelasjonMaskert.toSorted(),
+            };
         },
         enabled: ident !== undefined,
+        ...rest,
     });
 }

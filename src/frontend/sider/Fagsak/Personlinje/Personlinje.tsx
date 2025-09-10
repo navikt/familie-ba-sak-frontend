@@ -35,7 +35,7 @@ const Divider = () => {
 export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
     // TODO: Dersom bruker også er søker, som ofte er tilfelle, gjør vi et unødvendig kall for å hente person-information om søker (useHentPerson) selv om vi allerede får denne informasjonen fra `bruker`. Dett bør fikses i en senere PR ved å endre til bruk av context for å få global tilgang til bruker og søker fra context, fremfor å passere bruker som prop her, og i tillegg gjøre et kall for å hente søker.
 
-    const { data: søkerData } = useHentPerson(minimalFagsak?.søkerFødselsnummer);
+    const { data: søkerData } = useHentPerson({ ident: minimalFagsak?.søkerFødselsnummer });
 
     const fagsakeier = {
         navn: bruker?.navn || 'Ukjent',
