@@ -1644,33 +1644,33 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz#4fc56c15c580b9adb7dc3c333a134e540b44bfb1"
   integrity sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==
 
-"@navikt/aksel-icons@7.29.0", "@navikt/aksel-icons@^7.29.0":
-  version "7.29.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.29.0/1e7bb0845b5399758f391e7fbadad8c43e480ce9#1e7bb0845b5399758f391e7fbadad8c43e480ce9"
-  integrity sha512-SBz8MVwp7e8MzAQLw0TTcn2o1my3eJI/cVRDtZE2pEopN7ykQBCfzZFj7cfW+5pn2tlgftW990d3GZ6vQoGzyw==
+"@navikt/aksel-icons@7.30.0", "@navikt/aksel-icons@^7.30.0":
+  version "7.30.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.30.0/faa1fea915e30637ea93d3310f1005a1a81b0cc1#faa1fea915e30637ea93d3310f1005a1a81b0cc1"
+  integrity sha512-YRLqZsEZry4LXOyt06HYKwB3ot7WquYDSmzMSEgXS65xNeJF2sy4kvtciXE+R6ygg7zNwivk5MxFhfws4Haruw==
 
-"@navikt/ds-css@7.29.0":
-  version "7.29.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/7.29.0/b03f4d9b52a045310952029ad82c169daf5055ea#b03f4d9b52a045310952029ad82c169daf5055ea"
-  integrity sha512-uis0yT2lajq47tNiv9XQdTbp7MLuRg8J5YFncpWChuwblVkBUxCb2b6GWxjShrwcVflX9WRdXl2PZ/XuGK7B/Q==
+"@navikt/ds-css@7.30.0":
+  version "7.30.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/7.30.0/98fe72fd93a17d6bb7ae48520ecfe325f0c336d3#98fe72fd93a17d6bb7ae48520ecfe325f0c336d3"
+  integrity sha512-A1G3Nc0PQV/8hXDCMnfsHfykLc+TSFOJfOspC0bsM7wSf1ZC6pVHkqWCJ40Bp1td8/4xNvpkoiIS43+Qa7gJMg==
 
-"@navikt/ds-react@7.29.0":
-  version "7.29.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/7.29.0/2d35665e0ff5f86c27f12443b6b339bb4df23c51#2d35665e0ff5f86c27f12443b6b339bb4df23c51"
-  integrity sha512-jFwPjXgTsv6g/RXkMMYaTGK72eP/+VG7ByWHvKmcxN6npFlxpVAGVzt8QxFM0BCq2ANL4d8NYrbdAoseY6ldAA==
+"@navikt/ds-react@7.30.0":
+  version "7.30.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/7.30.0/41e6d373355892c640ca6f9bb8491cf4bc9decf8#41e6d373355892c640ca6f9bb8491cf4bc9decf8"
+  integrity sha512-IPMwbs+RP5P69aiiwosrATeYhTJ5S0Blvp9fSv9rdqUQeQgRkguzfQc4zjPrAuuIEULcu10kL8Za51g5YBaiOA==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.0.9"
-    "@navikt/aksel-icons" "^7.29.0"
-    "@navikt/ds-tokens" "^7.29.0"
+    "@navikt/aksel-icons" "^7.30.0"
+    "@navikt/ds-tokens" "^7.30.0"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tokens@7.29.0", "@navikt/ds-tokens@^7.29.0":
-  version "7.29.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.29.0/44e04355e17d650feec6450d433cc2b45ae3f90e#44e04355e17d650feec6450d433cc2b45ae3f90e"
-  integrity sha512-WhJH6F8bD6qTPCIQiUTo3ZF/NjoBJWCMgYGJUXxRPSB2xFS9LLJktzq5lhZGrX7rTfTSJz5crEmERAF/UzkcfA==
+"@navikt/ds-tokens@7.30.0", "@navikt/ds-tokens@^7.30.0":
+  version "7.30.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.30.0/c00e201ceaac27b28367703dbeb77fab7b956413#c00e201ceaac27b28367703dbeb77fab7b956413"
+  integrity sha512-zOez+NAEniTKJ6qIWRjF+FZkAysjKvlm4b9QFpq4CUUHsXWyoCm1UQ7ubBYT+KiB18pD2jrOEdLc70Tv3GlYBA==
 
 "@navikt/familie-backend@^10.1.9":
   version "10.1.9"
