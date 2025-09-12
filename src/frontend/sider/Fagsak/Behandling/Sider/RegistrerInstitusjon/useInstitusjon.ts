@@ -6,9 +6,8 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingSteg } from '../../../../../typer/behandling';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
+import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../typer/behandling';
 import type { IRegistrerInstitusjon } from '../../../../../typer/institusjon';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useFagsakContext } from '../../../FagsakContext';
@@ -18,7 +17,7 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const { fagsak } = useFagsakContext();
-    const { fagsakId } = useSakOgBehandlingParams();
+    const fagsakId = useFagsakId();
     const navigate = useNavigate();
     const [submitFeilmelding, settSubmitFeilmelding] = useState<string | undefined>('');
 
@@ -40,7 +39,9 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(ressurs);
                         navigate(
-                            `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
+                            åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
+                                ? `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
+                                : `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
                         );
                     } else {
                         settSubmitFeilmelding(hentFrontendFeilmelding(ressurs));

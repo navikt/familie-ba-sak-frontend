@@ -33,7 +33,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     return (
         <StyledSkjemasteg
             className={'mottaker'}
-            tittel={'Registrer institusjon'}
+            tittel={'Info om institusjon'}
             nesteOnClick={onSubmitMottaker}
             nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
