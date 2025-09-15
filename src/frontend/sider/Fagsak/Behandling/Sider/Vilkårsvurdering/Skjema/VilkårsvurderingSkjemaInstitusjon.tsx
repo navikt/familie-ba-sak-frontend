@@ -50,12 +50,12 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     visFeilmeldinger,
     orgNummer,
 }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     if (samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentOgSettSamhandler(orgNummer);
+        hentOgSettSamhandler(behandling.behandlingId);
     }
 
     const personResultat = vilkårsvurdering.find(
