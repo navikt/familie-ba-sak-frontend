@@ -49,7 +49,7 @@ export enum SideId {
 export const sider: Record<SideId, ISide> = {
     REGISTRER_INSTITUSJON: {
         href: 'registrer-institusjon',
-        navn: 'Registrer institusjon',
+        navn: 'Info om institusjon',
         steg: BehandlingSteg.REGISTRERE_INSTITUSJON,
         visSide: (åpenBehandling: IBehandling) => {
             return (
