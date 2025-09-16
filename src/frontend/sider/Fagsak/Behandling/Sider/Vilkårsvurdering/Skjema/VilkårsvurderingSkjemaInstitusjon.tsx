@@ -43,12 +43,10 @@ const IndentertInnhold = styled.div`
 
 interface IProps {
     visFeilmeldinger: boolean;
-    orgNummer: string;
 }
 
 const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
     visFeilmeldinger,
-    orgNummer,
 }) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
@@ -84,7 +82,6 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                     </AktørLinje>
                     <IndentertInnhold className={'samhandler-innhold'}>
                         <GeneriskAnnenVurdering
-                            key={`${orgNummer}_${AnnenVurderingType.OPPLYSNINGSPLIKT}`}
                             person={personResultat.person}
                             andreVurderinger={personResultat.andreVurderinger}
                             annenVurderingConfig={
