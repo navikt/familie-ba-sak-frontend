@@ -27,7 +27,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     const erLesevisning = vurderErLesevisning();
 
     if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentOgSettSamhandler(institusjon.orgNummer);
+        hentOgSettSamhandler(åpenBehandling.behandlingId);
     }
 
     return (

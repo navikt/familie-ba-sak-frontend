@@ -153,7 +153,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     if (institusjon) {
         skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
         if (!institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-            hentOgSettSamhandler(institusjon.orgNummer);
+            hentOgSettSamhandler(behandling.behandlingId);
         }
         institusjon.navn =
             samhandlerRessurs.status === RessursStatus.SUKSESS
