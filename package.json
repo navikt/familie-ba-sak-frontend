@@ -121,7 +121,7 @@
     "react-refresh": "^0.17.0",
     "style-loader": "^4.0.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.43.0",
+    "typescript-eslint": "^8.44.0",
     "vitest": "^3.2.4",
     "webpack": "^5.101.2",
     "webpack-cli": "^6.0.1",
