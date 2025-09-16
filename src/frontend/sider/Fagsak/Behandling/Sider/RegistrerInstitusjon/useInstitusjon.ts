@@ -28,7 +28,11 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
             vurderErLesevisning() ||
             åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON
         ) {
-            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`);
+            navigate(
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
+                    ? `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`
+                    : `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+            );
         } else {
             request<IRegistrerInstitusjon | undefined, IBehandling>({
                 data: institusjon,
