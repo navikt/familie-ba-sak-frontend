@@ -22,6 +22,7 @@ export enum ToggleNavn {
     skalViseOppholdsadresse = 'familie-ba-sak.skal-vise-oppholdsadresse',
     brukNyHenleggModal = 'familie-ba-sak.bruk-ny-henlegg-modal',
     brukNyPdfModal = 'familie-ba-sak.bruk-ny-pdf-modal',
+    visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
 }
 
 export const alleTogglerAv = (): IToggles => {

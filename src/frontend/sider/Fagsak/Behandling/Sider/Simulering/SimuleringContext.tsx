@@ -14,6 +14,7 @@ import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandli
 import { PersonType } from '../../../../../typer/person';
 import type {
     IAvregningsperiode,
+    IOverlappendePeriodeMedAndreFagsaker,
     ISimuleringDTO,
     ISimuleringPeriode,
     ITilbakekreving,
@@ -46,6 +47,7 @@ interface SimuleringContextValue {
     hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
     erFeilutbetaling: boolean | undefined;
     avregningsperioder: IAvregningsperiode[];
+    overlappendePerioderMedAndreFagsaker: IOverlappendePeriodeMedAndreFagsaker[];
     hentSkjemadata: () => ITilbakekreving | undefined;
     maksLengdeTekst: number;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
@@ -130,6 +132,8 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     );
 
     const avregningsperioder = simResultat?.avregningsperioder ?? [];
+    const overlappendePerioderMedAndreFagsaker =
+        simResultat?.overlappendePerioderMedAndreFagsaker ?? [];
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
@@ -294,6 +298,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
                 hentFeilTilOppsummering,
                 erFeilutbetaling,
                 avregningsperioder,
+                overlappendePerioderMedAndreFagsaker,
                 hentSkjemadata,
                 maksLengdeTekst,
                 harÅpenTilbakekrevingRessurs,

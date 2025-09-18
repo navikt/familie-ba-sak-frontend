@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, List } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { MigreringAlerts } from './MigreringAlerts';
@@ -21,6 +21,7 @@ import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -42,6 +43,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         harÅpenTilbakekrevingRessurs,
         erFeilutbetaling,
         avregningsperioder,
+        overlappendePerioderMedAndreFagsaker,
         behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
         behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
         behandlingErMigreringMedManuellePosteringer,
@@ -54,6 +56,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 &&
         toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+
+    const harOverlappendePerioderMedAndreFagsaker =
+        overlappendePerioderMedAndreFagsaker.length > 0 &&
+        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -132,6 +138,38 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 behandlingErMigreringFraInfotrygdMedKun0Utbetalinger
                             }
                         />
+
+                        {harOverlappendePerioderMedAndreFagsaker && (
+                            <Box marginBlock="10 0" maxWidth="40rem">
+                                <Alert variant="warning">
+                                    <BodyShort spacing>
+                                        En annen fagsak tilknyttet personen, inneholder en
+                                        feilutbetaling for samme periode som det skal etterbetales i
+                                        denne behandlingen. Feilutbetalingen i den andre fagsaken må
+                                        behandles ferdig før du fullfører denne behandlingen. Det er
+                                        for å hindre at beløpene motregnes.
+                                    </BodyShort>
+                                    <BodyShort spacing>
+                                        Fagsak med feilutbetaling:{' '}
+                                        {overlappendePerioderMedAndreFagsaker[0].fagsaker[0]}
+                                    </BodyShort>
+                                    <BodyShort>Perioder med overlapp:</BodyShort>
+                                    <List as="ul">
+                                        {overlappendePerioderMedAndreFagsaker.map(periode => (
+                                            <List.Item>
+                                                {`${isoStringTilFormatertString({
+                                                    isoString: periode.fom,
+                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                })} - ${isoStringTilFormatertString({
+                                                    isoString: periode.tom,
+                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                })}`}
+                                            </List.Item>
+                                        ))}
+                                    </List>
+                                </Alert>
+                            </Box>
+                        )}
 
                         {erAvregningOgToggleErPå && (
                             <TilbakekrevingsvedtakMotregning
