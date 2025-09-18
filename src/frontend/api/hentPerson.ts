@@ -1,7 +1,7 @@
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { IPersonInfo } from '../typer/person';
+import { adressebeskyttelsestyper, type IPersonInfo } from '../typer/person';
 import { RessursResolver } from '../utils/ressursResolver';
 
 interface RequestParams {
@@ -15,7 +15,11 @@ export async function hentPerson(request: FamilieRequest, ident: string) {
         data: { ident },
     });
     if (ressurs.status === RessursStatus.SUKSESS && ressurs.data.harTilgang === false) {
-        return Promise.reject(new Error('Du har ikke tilgang til person.'));
+        return Promise.reject(
+            new Error(
+                `Du har ikke tilgang til denne personen. Personen har diskresjonskode ${adressebeskyttelsestyper[ressurs.data.adressebeskyttelseGradering]}.`
+            )
+        );
     }
     return RessursResolver.resolveToPromise(ressurs);
 }

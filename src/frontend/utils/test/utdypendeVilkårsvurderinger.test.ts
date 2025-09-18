@@ -88,7 +88,9 @@ describe('Utdypende Vilkårsvurderinger', () => {
             ],
             { ...avhengigheter, vurderesEtter: Regelverk.EØS_FORORDNINGEN }
         );
-        expect(actualForMangeValg).toBe('Du kan kun velge ett alternativ');
+        expect(actualForMangeValg).toBe(
+            'Du kan kun velge ett av disse alternativene: OMFATTET_AV_NORSK_LOVGIVNING,OMFATTET_AV_NORSK_LOVGIVNING_UTLAND'
+        );
     });
 
     it('EØS - Lovlig opphold - Skal ikke fylles ut', () => {

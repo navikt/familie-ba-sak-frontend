@@ -1,80 +1,133 @@
 import React from 'react';
 
-import { BodyShort, Link, Spacer, Tag } from '@navikt/ds-react';
+import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
-import Visittkort from '@navikt/familie-visittkort';
 
-import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
-import { useAppContext } from '../../../context/AppContext';
-import KontorIkonGrønn from '../../../ikoner/KontorIkonGrønn';
+import { useHentPerson } from '../../../hooks/useHentPerson';
 import DødsfallTag from '../../../komponenter/DødsfallTag';
+import { PersonIkon } from '../../../komponenter/PersonIkon';
 import type { IBehandling } from '../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakType } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
+import { type IPersonInfo } from '../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../../utils/formatter';
+import { erAdresseBeskyttet } from '../../../utils/validators';
 
-interface IProps {
+interface PersonlinjeProps {
     bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
     behandling?: IBehandling;
 }
 
-const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+const InnholdContainer = ({ children }: React.PropsWithChildren) => {
     return (
-        <Visittkort
-            navn={bruker?.navn ?? 'Ukjent'}
-            ident={formaterIdent(bruker?.personIdent ?? '')}
-            alder={hentAlder(bruker?.fødselsdato ?? '')}
-            kjønn={bruker?.kjønn ?? kjønnType.UKJENT}
-            ikon={
-                minimalFagsak?.fagsakType === FagsakType.INSTITUSJON ? (
-                    <KontorIkonGrønn height={'24'} width={'24'} />
-                ) : undefined
-            }
-            dempetKantlinje
-            padding
-        >
-            <div>|</div>
-            <BodyShort>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</BodyShort>
-            {bruker?.dødsfallDato?.length && (
-                <>
-                    <div>|</div>
-                    <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
-                </>
-            )}
-            <Spacer />
-            {minimalFagsak !== undefined && (
-                <>
-                    {minimalFagsak?.migreringsdato !== undefined &&
-                        sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
-                            <Tag
-                                size="small"
-                                children={`Migrert ${isoStringTilFormatertString({
+        <Box borderWidth="0 0 1 0" borderColor="border-subtle" paddingInline="4" paddingBlock="2">
+            {children}
+        </Box>
+    );
+};
+
+const Divider = () => {
+    return <div>|</div>;
+};
+
+export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
+    // TODO: Dersom bruker også er søker, som ofte er tilfelle, gjør vi et unødvendig kall for å hente person-information om søker (useHentPerson) selv om vi allerede får denne informasjonen fra `bruker`. Dett bør fikses i en senere PR ved å endre til bruk av context for å få global tilgang til bruker og søker fra context, fremfor å passere bruker som prop her, og i tillegg gjøre et kall for å hente søker.
+
+    const { data: søkerData } = useHentPerson(minimalFagsak?.søkerFødselsnummer);
+
+    const fagsakeier = {
+        navn: bruker?.navn || 'Ukjent',
+        ident: formaterIdent(bruker?.personIdent ?? ''),
+        alder: hentAlder(bruker?.fødselsdato ?? ''),
+        kjønn: bruker?.kjønn ?? kjønnType.UKJENT,
+        kommunenummer: bruker?.kommunenummer ?? 'ukjent',
+        erEgenAnsatt: søkerData?.erEgenAnsatt || bruker?.erEgenAnsatt || false,
+    };
+
+    let søker = null;
+
+    if (minimalFagsak?.fagsakType === FagsakType.INSTITUSJON) {
+        søker = {
+            navn: minimalFagsak.institusjon?.navn || 'Ukjent',
+            ident: formaterIdent(minimalFagsak.institusjon?.orgNummer ?? ''),
+        };
+    } else if (minimalFagsak?.fagsakType === FagsakType.SKJERMET_BARN) {
+        søker = {
+            navn: søkerData?.navn || 'Ukjent',
+            ident: formaterIdent(søkerData?.personIdent ?? ''),
+            alder: hentAlder(søkerData?.fødselsdato ?? ''),
+            dødsfallDato: søkerData?.dødsfallDato,
+        };
+    }
+
+    return (
+        <InnholdContainer>
+            <HStack align="center" gap="3 4">
+                <HStack gap="3 4">
+                    <PersonIkon
+                        fagsakType={minimalFagsak?.fagsakType}
+                        kjønn={fagsakeier.kjønn}
+                        erBarn={fagsakeier.alder < 18}
+                        erAdresseBeskyttet={erAdresseBeskyttet(
+                            søkerData?.adressebeskyttelseGradering
+                        )}
+                        erEgenAnsatt={fagsakeier.erEgenAnsatt}
+                    />
+                    <HStack align="center" gap="3 4">
+                        <BodyShort as="span" weight="semibold">
+                            {fagsakeier.navn} ({fagsakeier.alder} år)
+                        </BodyShort>
+                        <Divider />
+                        <HStack align="center" gap="1">
+                            {fagsakeier.ident}
+                            <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size="small" />
+                        </HStack>
+                    </HStack>
+                </HStack>
+                <Divider />
+                <BodyShort>{`Kommunenr: ${fagsakeier.kommunenummer}`}</BodyShort>
+                {søker && (
+                    <>
+                        <Divider />
+                        <HStack align="center" gap="3 4">
+                            <span>
+                                <BodyShort as="span" weight="semibold">
+                                    Søker:{' '}
+                                </BodyShort>
+                                {søker.navn}
+                                {søker.alder && <> ({søker.alder} år)</>}
+                            </span>
+                            <Divider />
+                            <HStack align="center" gap="1">
+                                {søker.ident}
+                                <CopyButton copyText={søker.ident.replace(' ', '')} size="small" />
+                            </HStack>
+                        </HStack>
+                    </>
+                )}
+                {søkerData && søkerData.dødsfallDato && søkerData.dødsfallDato.length > 0 && (
+                    <>
+                        <Divider />
+                        <DødsfallTag dødsfallDato={søkerData.dødsfallDato} />
+                    </>
+                )}
+                {minimalFagsak?.migreringsdato &&
+                    sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
+                        <>
+                            <Divider />
+                            <Tag variant="info" size="small">
+                                Migrert{' '}
+                                {isoStringTilFormatertString({
                                     isoString: minimalFagsak?.migreringsdato,
                                     tilFormat: Datoformat.DATO,
-                                })}`}
-                                variant={'info'}
-                            />
-                        )}
-                    <Link href={`/fagsak/${minimalFagsak.id}/saksoversikt`}>
-                        <BodyShort>Saksoversikt</BodyShort>
-                    </Link>
-                    <Link href={`/fagsak/${minimalFagsak.id}/dokumenter`}>
-                        <BodyShort>Dokumenter</BodyShort>
-                    </Link>
-                    {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny
-                            bruker={bruker}
-                            minimalFagsak={minimalFagsak}
-                            behandling={behandling}
-                        />
+                                })}
+                            </Tag>
+                        </>
                     )}
-                </>
-            )}
-        </Visittkort>
+            </HStack>
+        </InnholdContainer>
     );
 };
 
@@ -84,5 +137,3 @@ const sjekkOmMigreringsdatoErEldreEnn3År = (migreringsdatoIString: string) => {
     const difference = dato.getTime() - migreringsdato.getTime();
     return Math.floor(Math.abs(difference) / millisekunderIEttÅr) < 3;
 };
-
-export default Personlinje;

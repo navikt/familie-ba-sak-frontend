@@ -24,11 +24,14 @@ import webpackDevConfig from '../webpack/webpack.dev';
 const port = 8000;
 
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
-    let middleware;
-
     if (process.env.NODE_ENV === 'development') {
         const compiler = webpack(webpackDevConfig);
-        middleware = webpackDevMiddleware(compiler, {
+
+        if (!compiler) {
+            throw new Error('Webpack compileren feilet');
+        }
+
+        const middleware = webpackDevMiddleware(compiler, {
             // eslint-disable-next-line
             // @ts-ignore
             publicPath: webpackDevConfig.output.publicPath,

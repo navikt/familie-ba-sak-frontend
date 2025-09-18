@@ -47,17 +47,19 @@ interface SøknadContextValue {
 const SøknadContext = createContext<SøknadContextValue | undefined>(undefined);
 
 export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
-    const { vurderErLesevisning, settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig } =
-        useBehandlingContext();
+    const {
+        vurderErLesevisning,
+        settÅpenBehandling,
+        gjelderInstitusjon,
+        gjelderEnsligMindreårig,
+        gjelderSkjermetBarn,
+    } = useBehandlingContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
-    const { bruker, minimalFagsakRessurs } = useFagsakContext();
+    const { bruker, fagsak } = useFagsakContext();
     const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
-    const barnMedLøpendeUtbetaling =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS
-            ? hentBarnMedLøpendeUtbetaling(minimalFagsakRessurs.data)
-            : new Set<string>();
+    const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         SøknadSkjema,
@@ -98,7 +100,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         if (bruker.status === RessursStatus.SUKSESS) {
             nullstillSkjema();
             let barnaMedOpplysninger: IBarnMedOpplysninger[];
-            if (gjelderInstitusjon || gjelderEnsligMindreårig) {
+            if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
                 barnaMedOpplysninger = [
                     {
                         merket: true,
@@ -175,7 +177,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                             søknad: {
                                 underkategori: skjema.felter.underkategori.verdi,
                                 søkerMedOpplysninger: {
-                                    ident: bruker.data.personIdent,
+                                    ident: fagsak.søkerFødselsnummer,
                                     målform: skjema.felter.målform.verdi,
                                 },
                                 barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(

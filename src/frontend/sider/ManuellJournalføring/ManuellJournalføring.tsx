@@ -12,8 +12,7 @@ import {
     useManuellJournalføringContext,
 } from './ManuellJournalføringContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
-import { FagsakProvider } from '../Fagsak/FagsakContext';
-import Personlinje from '../Fagsak/Personlinje/Personlinje';
+import { Personlinje } from '../Fagsak/Personlinje/Personlinje';
 
 const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
     display: grid;
@@ -78,11 +77,9 @@ const ManuellJournalføringContent: React.FC = () => {
 
 const ManuellJournalføring: React.FC = () => {
     return (
-        <FagsakProvider>
-            <ManuellJournalføringProvider>
-                <ManuellJournalføringContent />
-            </ManuellJournalføringProvider>
-        </FagsakProvider>
+        <ManuellJournalføringProvider>
+            <ManuellJournalføringContent />
+        </ManuellJournalføringProvider>
     );
 };
 

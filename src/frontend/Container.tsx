@@ -7,12 +7,13 @@ import { useAppContext } from './context/AppContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import { FeilmeldingModal } from './komponenter/Modal/fagsak/FeilmeldingModal';
-import { OpprettFagsakModalNy } from './komponenter/Modal/fagsak/OpprettFagsakModalNy';
+import { OpprettFagsakModal } from './komponenter/Modal/fagsak/OpprettFagsakModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
+import { ForhåndsvisOpprettingAvPdfModal } from './komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
 import { TidslinjeProvider } from './komponenter/Tidslinje/TidslinjeContext';
 import Toasts from './komponenter/Toast/Toasts';
-import FagsakContainer from './sider/Fagsak/FagsakContainer';
+import { FagsakContainer } from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
@@ -47,8 +48,9 @@ const Container: React.FC = () => {
                         {systemetLaster() && <SystemetLaster />}
                         <Toasts />
                         <Main $systemetLaster={systemetLaster()}>
-                            <OpprettFagsakModalNy />
+                            <OpprettFagsakModal />
                             <FeilmeldingModal />
+                            <ForhåndsvisOpprettingAvPdfModal />
                             <HeaderMedSøk
                                 brukerNavn={innloggetSaksbehandler?.displayName}
                                 brukerEnhet={innloggetSaksbehandler?.enhet}

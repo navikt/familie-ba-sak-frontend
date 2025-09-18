@@ -25,7 +25,8 @@ import {
     opplysningsdokumenter,
 } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../FagsakContext';
-import { Mottaker } from '../Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 
 export enum DokumentÅrsakPerson {
     DELT_BOSTED = 'DELT_BOSTED',
@@ -112,12 +113,9 @@ const DokumentutsendingContext = createContext<DokumentutsendingContextValue | u
 );
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
-    const {
-        bruker,
-        manuelleBrevmottakerePåFagsak,
-        settManuelleBrevmottakerePåFagsak,
-        minimalFagsak,
-    } = useFagsakContext();
+    const { bruker, fagsak } = useFagsakContext();
+    const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
+        useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
     const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
         useDokument();
@@ -126,7 +124,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         IManueltBrevRequestPåFagsak | undefined
     >(undefined);
 
-    const erInstitusjon = minimalFagsak?.fagsakType === FagsakType.INSTITUSJON;
+    const erInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const dokumentÅrsaker = erInstitusjon
         ? Object.values(DokumentÅrsakInstitusjon)
         : Object.values(DokumentÅrsakPerson);

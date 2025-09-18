@@ -1,60 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useNavigate } from 'react-router';
 
-import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
-import { ikoner, Søk } from '@navikt/familie-header';
+import { Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     kjønnType,
+    type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 
-import { OpprettFagsakModal } from './OpprettFagsakModal';
 import { useAppContext } from '../../context/AppContext';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
-import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
-import StatusIkon, { Status } from '../../ikoner/StatusIkon';
-import { FagsakType } from '../../typer/fagsak';
-import type { IFagsakDeltager, ISøkParam } from '../../typer/fagsakdeltager';
-import { fagsakdeltagerRoller } from '../../typer/fagsakdeltager';
-import { ToggleNavn } from '../../typer/toggles';
+import {
+    FagsakDeltagerRolle,
+    type IFagsakDeltager,
+    type ISøkParam,
+} from '../../typer/fagsakdeltager';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
+import { erAdresseBeskyttet } from '../../utils/validators';
+import { PersonIkon } from '../PersonIkon';
 
 function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
-    if (!fagsakDeltager.harTilgang) {
-        return <StatusIkon status={Status.FEIL} />;
-    }
-    if (fagsakDeltager.fagsakType === FagsakType.INSTITUSJON) {
-        return <KontorIkonGrønn height={'32'} width={'32'} />;
-    }
-    if (fagsakDeltager.fagsakType === FagsakType.SKJERMET_BARN) {
-        return <PersonCircleFillIcon color={'var(--a-orange-600)'} height={'35'} width={'35'} />;
-    }
-    return ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`];
+    return (
+        <PersonIkon
+            fagsakType={fagsakDeltager.fagsakType}
+            kjønn={fagsakDeltager.kjønn || kjønnType.UKJENT}
+            erBarn={fagsakDeltager.rolle === FagsakDeltagerRolle.Barn}
+            erAdresseBeskyttet={erAdresseBeskyttet(fagsakDeltager.adressebeskyttelseGradering)}
+            harTilgang={fagsakDeltager.harTilgang}
+            størrelse={'m'}
+            erEgenAnsatt={fagsakDeltager.erEgenAnsatt}
+        />
+    );
 }
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
-    const { skalObfuskereData, toggles } = useAppContext();
+    const { skalObfuskereData } = useAppContext();
 
     const [fagsakDeltagere, settFagsakDeltagere] =
         React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
-
-    const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
-        ISøkeresultat | undefined
-    >(undefined);
 
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
@@ -113,9 +109,6 @@ const FagsakDeltagerSøk: React.FC = () => {
                           navn: fagsakDeltager.navn,
                           ident: fagsakDeltager.ident,
                           ikon: mapFagsakDeltagerTilIkon(fagsakDeltager),
-                          rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
-                              fagsakDeltager.kjønn ?? kjønnType.UKJENT
-                          ],
                       };
                   }),
               }
@@ -134,27 +127,15 @@ const FagsakDeltagerSøk: React.FC = () => {
                     if (!søkeresultat) {
                         return;
                     }
-                    if (toggles[ToggleNavn.brukNyOpprettFagsakModal]) {
-                        if (søkeresultat.fagsakId) {
-                            navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
-                            return;
-                        }
-                        if (søkeresultat.harTilgang) {
-                            åpneModal({ ident: søkeresultat.ident });
-                            return;
-                        }
-                        return;
-                    } else {
-                        if (søkeresultat.fagsakId) {
-                            navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
-                            return;
-                        }
-                        if (søkeresultat.harTilgang) {
-                            settDeltagerForOpprettFagsak(søkeresultat);
-                            return;
-                        }
+                    if (søkeresultat.fagsakId) {
+                        navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
                         return;
                     }
+                    if (søkeresultat.harTilgang) {
+                        åpneModal({ ident: søkeresultat.ident });
+                        return;
+                    }
+                    return;
                 }}
             />
 
@@ -169,12 +150,6 @@ const FagsakDeltagerSøk: React.FC = () => {
                     appName={'Barnetrygd'}
                     alignLeft={true}
                     stil={'lys'}
-                />
-            )}
-            {deltagerForOpprettFagsak && (
-                <OpprettFagsakModal
-                    søkeresultat={deltagerForOpprettFagsak}
-                    lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
                 />
             )}
         </>

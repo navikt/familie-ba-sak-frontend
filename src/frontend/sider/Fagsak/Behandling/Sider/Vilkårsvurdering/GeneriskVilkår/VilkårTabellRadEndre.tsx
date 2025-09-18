@@ -28,10 +28,12 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
+import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
+import { ToggleNavn } from '../../../../../../typer/toggles';
 import type {
     IPersonResultat,
     IVilkårConfig,
@@ -95,6 +97,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settFokusPåKnapp,
     lesevisning,
 }) => {
+    const { toggles } = useAppContext();
+    const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
+
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurderingContext();
 
@@ -321,7 +326,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             </Radio>
                         )}
                 </RadioGroup>
-                {!gjelderInstitusjon && (
+                {(!gjelderInstitusjon || bosattFinnmarkNordtromsToggleErPå) && (
                     <UtdypendeVilkårsvurderingMultiselect
                         redigerbartVilkår={redigerbartVilkår}
                         validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}

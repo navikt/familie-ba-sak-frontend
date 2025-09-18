@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router';
 
-import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
+import { type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingApi from './useBehandlingApi';
@@ -82,6 +82,7 @@ interface BehandlingContextValue {
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
     gjelderEnsligMindreårig: boolean;
+    gjelderSkjermetBarn: boolean;
     settÅpenBehandling: (behandling: Ressurs<IBehandling>) => void;
 }
 
@@ -89,7 +90,7 @@ const BehandlingContext = createContext<BehandlingContextValue | undefined>(unde
 
 export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { minimalFagsakRessurs } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
     const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
     const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
@@ -226,7 +227,9 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 erViPåUlovligSteg(location.pathname, sideForSteg)) &&
             sideForSteg
         ) {
-            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`);
+            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`, {
+                replace: true,
+            });
         }
     };
 
@@ -246,17 +249,11 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
     const erBehandlingAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;
 
-    const gjelderInstitusjon =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
-        minimalFagsakRessurs.data.fagsakType === FagsakType.INSTITUSJON;
+    const gjelderInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
+    const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+    const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
 
-    const gjelderEnsligMindreårig =
-        minimalFagsakRessurs.status === RessursStatus.SUKSESS &&
-        minimalFagsakRessurs.data.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
-
-    const samhandlerOrgnr = gjelderInstitusjon
-        ? minimalFagsakRessurs.data.institusjon?.orgNummer
-        : undefined;
+    const samhandlerOrgnr = gjelderInstitusjon ? fagsak.institusjon?.orgNummer : undefined;
 
     return (
         <BehandlingContext.Provider
@@ -288,6 +285,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 gjelderInstitusjon,
                 samhandlerOrgnr,
                 gjelderEnsligMindreårig,
+                gjelderSkjermetBarn,
                 settÅpenBehandling: settBehandlingRessurs,
             }}
         >

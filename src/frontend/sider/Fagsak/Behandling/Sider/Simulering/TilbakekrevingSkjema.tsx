@@ -24,11 +24,15 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
-import useDokument from '../../../../../hooks/useDokument';
+import { ModalType } from '../../../../../context/ModalContext';
+import { useModal } from '../../../../../hooks/useModal';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf,
+} from '../../../../../hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
 import type { BrevmottakereAlertBehandlingProps } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import HelpText from '../../../../../komponenter/HelpText';
-import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
@@ -88,10 +92,6 @@ const StyledBrevmottakereAlert = styled(BrevmottakereAlert)<BrevmottakereAlertBe
     margin: 1rem 0 3rem 2rem;
 `;
 
-interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
-    fritekst: string;
-}
-
 const TilbakekrevingSkjema: React.FC<{
     søkerMålform: Målform;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
@@ -100,8 +100,18 @@ const TilbakekrevingSkjema: React.FC<{
     const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } =
         useSimuleringContext();
-    const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } =
-        useDokument();
+
+    const { åpneModal: åpneForhåndsvisOpprettingAvPdfModal } = useModal(
+        ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF
+    );
+
+    const {
+        mutate: opprettTilbakekrevingVarselBrevPdf,
+        isPending: isOpprettTilbakekrevingVarselBrevPdfPending,
+    } = useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf({
+        onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
+    });
+
     const { bruker: brukerRessurs } = useFagsakContext();
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
@@ -158,13 +168,6 @@ const TilbakekrevingSkjema: React.FC<{
 
     return (
         <>
-            {visDokumentModal && (
-                <PdfVisningModal
-                    onRequestClose={() => settVisDokumentModal(false)}
-                    pdfdata={hentetDokument}
-                />
-            )}
-
             <TilbakekrevingFieldset legend="Tilbakekreving" hideLegend>
                 <HeadingMedEkstraLuft level="2" size="medium">
                     Tilbakekreving
@@ -369,24 +372,19 @@ const TilbakekrevingSkjema: React.FC<{
                                             <Button
                                                 variant={'tertiary'}
                                                 id={'forhandsvis-varsel'}
-                                                onClick={() =>
-                                                    hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
-                                                        {
-                                                            method: 'POST',
-                                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.behandlingId}/forhandsvis-varselbrev`,
-                                                            data: {
-                                                                fritekst: fritekstVarsel.verdi,
-                                                            },
-                                                        }
-                                                    )
-                                                }
-                                                loading={
-                                                    hentetDokument.status === RessursStatus.HENTER
-                                                }
+                                                onClick={() => {
+                                                    opprettTilbakekrevingVarselBrevPdf({
+                                                        behandlingId: åpenBehandling.behandlingId,
+                                                        payload: { fritekst: fritekstVarsel.verdi },
+                                                    });
+                                                }}
                                                 size={'small'}
                                                 icon={<FileTextIcon />}
+                                                disabled={
+                                                    isOpprettTilbakekrevingVarselBrevPdfPending
+                                                }
                                             >
-                                                {'Forhåndsvis varsel'}
+                                                Forhåndsvis varsel
                                             </Button>
                                         </ForhåndsvisVarselKnappContainer>
                                     </FritekstVarsel>

@@ -38,10 +38,6 @@ const ToggleVisningVenstremeny = styled(Button)<{ $åpenvenstremeny: boolean }>`
     background-color: ${ASurfaceDefault};
 `;
 
-const Meny = styled(VStack)`
-    padding: ${ASpacing8} 0;
-`;
-
 const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
     text-decoration: none;
     color: ${props => (props.$erLenkenAktiv ? ATextDefault : AGrayalpha500)};
@@ -95,7 +91,7 @@ const Venstremeny: React.FunctionComponent = () => {
     return (
         <HStack justify="start">
             {åpenVenstremeny && (
-                <Meny as="nav">
+                <Box as="nav" paddingBlock="space-8">
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
 
@@ -148,7 +144,7 @@ const Venstremeny: React.FunctionComponent = () => {
                             </VStack>
                         );
                     })}
-                </Meny>
+                </Box>
             )}
             <div>
                 <ToggleVisningVenstremeny

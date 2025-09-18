@@ -1,11 +1,10 @@
 import React from 'react';
 
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
+import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
-import { HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Link, Tabs, VStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
 
 import { Behandlinger } from './Behandlinger';
 import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
@@ -22,31 +21,22 @@ import {
 } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
+import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
-import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 
 interface IProps {
+    bruker: IPersonInfo;
     minimalFagsak: IMinimalFagsak;
 }
-
-const basakTab = { label: 'Saksoversikt', key: 'basak' };
-const infotrygdTab = { label: 'Infotrygd', key: 'infotrygd' };
-
-const SaksoversiktWrapper = styled.div`
-    max-width: 70rem;
-    margin: 2.5rem 4rem;
-`;
 
 const StyledAlert = styled(Alert)`
     width: ${SaksoversiktPanelBredde};
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
     const { toggles } = useAppContext();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
@@ -86,7 +76,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         return (
             aktivBehandling && (
                 <Link
-                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
+                    as={ReactRouterLink}
+                    to={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
                 >
                     Se detaljer
                 </Link>
@@ -140,70 +131,28 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         }
     };
 
-    const visTabell = () => {
-        if (infotrygdsakerRessurs.status === RessursStatus.SUKSESS) {
-            return (
-                <Infotrygdtabeller
-                    ident={minimalFagsak.søkerFødselsnummer}
-                    saker={infotrygdsakerRessurs.data.saker}
-                    minimalFagsak={minimalFagsak}
-                />
-            );
-        } else if (
-            infotrygdsakerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-            infotrygdsakerRessurs.status === RessursStatus.FEILET
-        ) {
-            return <Alert children={infotrygdsakerRessurs.frontendFeilmelding} variant="error" />;
-        }
-    };
-
     return (
-        <Tabs
-            defaultValue={basakTab.key}
-            onChange={value => {
-                if (value === infotrygdTab.key) {
-                    hentInfotrygdsaker(minimalFagsak.søkerFødselsnummer);
-                }
-            }}
-        >
-            <Tabs.List>
-                <Tabs.Tab value={basakTab.key} label={basakTab.label} icon={<HouseIcon />} />
-                <Tabs.Tab
-                    value={infotrygdTab.key}
-                    label={infotrygdTab.label}
-                    icon={<MagnifyingGlassIcon />}
-                />
-            </Tabs.List>
-            <Tabs.Panel value={basakTab.key}>
-                <SaksoversiktWrapper>
-                    <Heading size={'large'} level={'1'} children={'Saksoversikt'} />
+        <Box maxWidth="70rem" marginBlock="10" marginInline="16">
+            <Heading size="large" level="1" children="Saksoversikt" />
 
-                    {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
-                        minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
-                            <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
-                        )}
+            {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
+                minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
+                    <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
+                )}
 
-                    <VStack gap="14">
-                        <FagsakLenkepanel minimalFagsak={minimalFagsak} />
-                        {minimalFagsak.status === FagsakStatus.LØPENDE && (
-                            <>
-                                <Heading size={'medium'} level={'2'} spacing>
-                                    Løpende månedlig utbetaling
-                                </Heading>
-                                {løpendeMånedligUtbetaling()}
-                            </>
-                        )}
-                        <Behandlinger fagsakId={minimalFagsak.id} />
-                    </VStack>
-                </SaksoversiktWrapper>{' '}
-            </Tabs.Panel>
-            <Tabs.Panel value={infotrygdTab.key}>
-                <SaksoversiktWrapper>
-                    <Heading size={'large'} level={'1'} children={'Infotrygd'} />
-                    {visTabell()}
-                </SaksoversiktWrapper>
-            </Tabs.Panel>
-        </Tabs>
+            <VStack gap="14">
+                <FagsakLenkepanel minimalFagsak={minimalFagsak} />
+                {minimalFagsak.status === FagsakStatus.LØPENDE && (
+                    <>
+                        <Heading size="medium" level="2" spacing>
+                            Løpende månedlig utbetaling
+                        </Heading>
+                        {løpendeMånedligUtbetaling()}
+                    </>
+                )}
+                <Behandlinger fagsakId={minimalFagsak.id} />
+            </VStack>
+        </Box>
     );
 };
 

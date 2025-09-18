@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -31,11 +30,15 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import useDokument from '../../../../../../hooks/useDokument';
+import { ModalType } from '../../../../../../context/ModalContext';
+import { useModal } from '../../../../../../hooks/useModal';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarBehandlingBrevPdf,
+} from '../../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import PdfVisningModal from '../../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
@@ -98,7 +101,6 @@ const StyledCombobox = styled(UNSAFE_Combobox)`
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } =
         useBehandlingContext();
-    const { hentForhåndsvisning, hentetDokument } = useDokument();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
 
     const {
@@ -120,26 +122,23 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         settVisFritekstAvsnittTekstboks,
     } = useBrevModul();
 
-    const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
+    const { åpneModal: åpneForhåndsvisOpprettingAvPdfModal } = useModal(
+        ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF
+    );
 
-    useEffect(() => {
-        if (hentetDokument.status === RessursStatus.SUKSESS) {
-            settForhåndsviningModal(true);
-        }
-    }, [hentetDokument]);
-
-    useEffect(() => {
-        settForhåndsviningModal(false);
-    }, []);
+    const {
+        mutate: opprettForhåndsvisbarBrevPdf,
+        isPending: isOpprettForhåndsvisbarBrevPdfPending,
+    } = useOpprettForhåndsvisbarBehandlingBrevPdf({
+        onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
+    });
 
     const erLesevisning = vurderErLesevisning();
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
-        hentetDokument.status === RessursStatus.HENTER;
-
-    const behandlingId = behandling.behandlingId;
+        isOpprettForhåndsvisbarBrevPdfPending;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
@@ -154,7 +153,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     if (institusjon) {
         skjema.felter.mottakerIdent.validerOgSettFelt(institusjon.orgNummer);
         if (!institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-            hentOgSettSamhandler(institusjon.orgNummer);
+            hentOgSettSamhandler(behandling.behandlingId);
         }
         institusjon.navn =
             samhandlerRessurs.status === RessursStatus.SUKSESS
@@ -188,17 +187,8 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     return (
         <div>
-            {visForhåndsvisningModal && (
-                <PdfVisningModal
-                    onRequestClose={() => settForhåndsviningModal(false)}
-                    pdfdata={hentetDokument}
-                />
-            )}
             <Fieldset
-                error={
-                    (skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)) ||
-                    hentFrontendFeilmelding(hentetDokument)
-                }
+                error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
                 legend="Send brev"
                 hideLegend
             >
@@ -488,20 +478,18 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         variant={'tertiary'}
                         id={'forhandsvis-vedtaksbrev'}
                         size={'medium'}
-                        loading={hentetDokument.status === RessursStatus.HENTER}
                         disabled={skjemaErLåst}
                         onClick={() => {
                             if (kanSendeSkjema()) {
-                                hentForhåndsvisning<IManueltBrevRequestPåBehandling>({
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                opprettForhåndsvisbarBrevPdf({
+                                    behandlingId: behandling.behandlingId,
+                                    payload: hentSkjemaData(),
                                 });
                             }
                         }}
                         icon={<FileTextIcon />}
                     >
-                        {'Forhåndsvis'}
+                        Forhåndsvis
                     </Button>
                 )}
                 <Button

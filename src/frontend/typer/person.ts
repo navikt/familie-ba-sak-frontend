@@ -64,6 +64,7 @@ export interface IPersonInfo {
     type: PersonType;
     dødsfallDato?: string;
     bostedsadresse?: IBostedsadresse;
+    erEgenAnsatt: boolean;
 }
 
 export interface IForelderBarnRelasjon {
@@ -95,6 +96,7 @@ export interface IRestRegisterhistorikk {
     oppholdstillatelse: IRestRegisteropplysning[];
     statsborgerskap: IRestRegisteropplysning[];
     bostedsadresse: IRestRegisteropplysning[];
+    oppholdsadresse: IRestRegisteropplysning[];
     dødsboadresse: IRestRegisteropplysning[];
 }
 

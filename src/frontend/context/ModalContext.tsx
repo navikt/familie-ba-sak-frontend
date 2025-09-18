@@ -6,27 +6,40 @@ import React, {
     useReducer,
 } from 'react';
 
+import type { MutationKey } from '@tanstack/react-query';
+
+import type { HenleggÅrsak } from '../typer/behandling';
+
 interface ModalContext {
     hentTittel: (type: ModalType) => string;
     settTittel: (type: ModalType, tittel: string) => void;
-    åpneModal: <T extends keyof Args>(type: T, args: Args[T]) => void;
+    åpneModal: <T extends keyof typeof ModalType>(
+        type: T,
+        args: T extends keyof Args ? Args[T] : void
+    ) => void;
     lukkModal: (type: ModalType) => void;
     erModalÅpen: (type: ModalType) => boolean;
-    hentArgs: <T extends keyof Args>(type: T) => Args[T] | undefined;
+    hentArgs: <T extends keyof typeof ModalType>(
+        type: T
+    ) => T extends keyof Args ? Args[T] : undefined;
     hentBredde: (type: ModalType) => `${number}${string}`;
     settBredde: (type: ModalType, bredde: `${number}${string}`) => void;
 }
 
 export enum ModalType {
+    HENLEGG_BEHANDLING_VEIVALG = 'HENLEGG_BEHANDLING_VEIVALG',
+    HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     OPPRETT_FAGSAK = 'OPPRETT_FAGSAK',
-    EXAMPLE_MODAL = 'EXAMPLE_MODAL',
     FEILMELDING = 'FEILMELDING',
+    KORRIGER_ETTERBETALING = 'KORRIGER_ETTERBETALING',
+    FORHÅNDSVIS_OPPRETTING_AV_PDF = 'FORHÅNDSVIS_OPPRETTING_AV_PDF',
 }
 
 export interface Args {
+    [ModalType.HENLEGG_BEHANDLING_VEIVALG]: { årsak: HenleggÅrsak };
     [ModalType.OPPRETT_FAGSAK]: { ident: string };
-    [ModalType.EXAMPLE_MODAL]: { fagsak: string };
     [ModalType.FEILMELDING]: { feilmelding: string | React.ReactNode };
+    [ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF]: { mutationKey: MutationKey };
 }
 
 interface BaseState {
@@ -35,29 +48,28 @@ interface BaseState {
     bredde: `${number}${string}`;
 }
 
-interface State {
-    [ModalType.OPPRETT_FAGSAK]: BaseState & {
-        args: Args[ModalType.OPPRETT_FAGSAK] | undefined;
-    };
-    [ModalType.EXAMPLE_MODAL]: BaseState & {
-        args: Args[ModalType.EXAMPLE_MODAL] | undefined;
-    };
-    [ModalType.FEILMELDING]: BaseState & {
-        args: Args[ModalType.FEILMELDING] | undefined;
-    };
-}
+type State = {
+    [key in ModalType]: key extends keyof Args
+        ? BaseState & { args: Args[key] | undefined }
+        : BaseState;
+};
 
-const initialState: { [key in ModalType]: State[key] } = {
+const initialState: State = {
+    [ModalType.HENLEGG_BEHANDLING_VEIVALG]: {
+        tittel: 'Behandling henlagt',
+        åpen: false,
+        bredde: '35rem',
+        args: undefined,
+    },
+    [ModalType.HENLEGG_BEHANDLING]: {
+        tittel: 'Henlegg behandling',
+        åpen: false,
+        bredde: '37rem',
+    },
     [ModalType.OPPRETT_FAGSAK]: {
         tittel: 'Opprett fagsak',
         åpen: false,
         bredde: '50rem',
-        args: undefined,
-    },
-    [ModalType.EXAMPLE_MODAL]: {
-        tittel: 'Example modal',
-        åpen: false,
-        bredde: '80rem',
         args: undefined,
     },
     [ModalType.FEILMELDING]: {
@@ -65,6 +77,17 @@ const initialState: { [key in ModalType]: State[key] } = {
         åpen: false,
         bredde: '50rem',
         args: undefined,
+    },
+    [ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF]: {
+        tittel: 'Forhåndsvisning av PDF',
+        åpen: false,
+        bredde: '100rem',
+        args: undefined,
+    },
+    [ModalType.KORRIGER_ETTERBETALING]: {
+        tittel: 'Korriger etterbetaling',
+        åpen: false,
+        bredde: '35rem',
     },
 };
 
@@ -80,9 +103,9 @@ interface SettTittelAction {
     payload: { type: ModalType; tittel: string };
 }
 
-interface ÅpneModalAction<T extends keyof Args> {
+interface ÅpneModalAction<T extends keyof typeof ModalType> {
     type: ActionType.ÅPNE_MODAL;
-    payload: { type: ModalType; args: Args[T] };
+    payload: { type: T; args: T extends keyof Args ? Args[T] : void };
 }
 
 interface LukkModalAction {
@@ -95,20 +118,20 @@ interface SettBreddeAction {
     payload: { type: ModalType; bredde: `${number}${string}` };
 }
 
-type Action<T extends keyof Args> =
+type Action<T extends keyof typeof ModalType> =
     | ÅpneModalAction<T>
     | LukkModalAction
     | SettBreddeAction
     | SettTittelAction;
 
-function reducer<T extends keyof Args>(state: State, action: Action<T>) {
+function reducer<T extends keyof typeof ModalType>(state: State, action: Action<T>) {
     const { type, payload } = action;
     switch (type) {
         case ActionType.ÅPNE_MODAL:
             return {
                 ...state,
                 [payload.type]: {
-                    ...state[payload.type],
+                    ...state[ModalType[payload.type]],
                     åpen: true,
                     args: payload.args,
                 },
@@ -165,7 +188,10 @@ export function ModalProvider({ children }: PropsWithChildren) {
     );
 
     const åpneModal = useCallback(
-        <T extends keyof Args>(type: ModalType, args: Args[T]) => {
+        <T extends keyof typeof ModalType>(
+            type: T,
+            args: T extends keyof Args ? Args[T] : void
+        ) => {
             dispatch({ type: ActionType.ÅPNE_MODAL, payload: { type, args } });
         },
         [dispatch]
@@ -186,8 +212,10 @@ export function ModalProvider({ children }: PropsWithChildren) {
     );
 
     const hentArgs = useCallback(
-        <T extends keyof Args>(type: T) => {
-            return state[type].args as Args[T];
+        <T extends keyof typeof ModalType>(type: T) => {
+            const stateFromType = state[ModalType[type]];
+            const value = 'args' in stateFromType ? stateFromType.args : undefined;
+            return value as T extends keyof Args ? Args[T] : undefined;
         },
         [state]
     );

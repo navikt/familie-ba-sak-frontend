@@ -12,8 +12,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../../../context/AppContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { BehandlingÅrsak } from '../../../../../../typer/behandling';
+import {
+    BehandlingSteg,
+    BehandlingÅrsak,
+    type IBehandling,
+} from '../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../typer/person';
 import { ToggleNavn } from '../../../../../../typer/toggles';
 import type {
@@ -118,16 +121,24 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
     };
 
     const vilkårSomMåKontrolleresPerPerson = Object.entries(
-        toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn]
-            ? utledVilkårSomMåKontrolleresPerPerson(behandling, vilkårsvurdering)
-            : {}
+        utledVilkårSomMåKontrolleresPerPerson(behandling, vilkårsvurdering)
     );
+
+    const skalViseVarselboksForVilkårSomMåKontrolleres =
+        toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
+        vilkårSomMåKontrolleresPerPerson.length > 0 &&
+        (behandling.steg == BehandlingSteg.VILKÅRSVURDERING ||
+            behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
 
     return (
         <>
-            {vilkårSomMåKontrolleresPerPerson.length > 0 && (
+            {skalViseVarselboksForVilkårSomMåKontrolleres && (
                 <Alert variant="warning" contentMaxWidth={false} style={{ width: 'fit-content' }}>
-                    <BodyShort>Vær oppmerksom:</BodyShort>
+                    <BodyShort>
+                        {behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
+                            ? 'Automatisk utfylte vilkår som saksbehandler 1 ikke har gjort endringer på:'
+                            : 'Vær oppmerksom:'}
+                    </BodyShort>
                     <List as="ul">
                         {vilkårSomMåKontrolleresPerPerson.map(([navn, avvik]) => (
                             <List.Item key={navn}>
@@ -150,6 +161,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                     vilkårResultat =>
                         vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
+
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}

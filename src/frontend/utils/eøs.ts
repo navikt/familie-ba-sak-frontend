@@ -30,13 +30,13 @@ const sorterPåBarnsFødselsdato = (
     const barnIPeriodeA: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeA, personer);
     const barnIPeriodeB: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeB, personer);
     const yngsteBarnPeriodeA = barnIPeriodeA.sort((personA, personB) =>
-        sorterPåDato(personA.fødselsdato, personB.fødselsdato)
+        sorterPåDato(personA, personB)
     )[0];
     const yngsteBarnPeriodeB = barnIPeriodeB.sort((personA, personB) =>
-        sorterPåDato(personA.fødselsdato, personB.fødselsdato)
+        sorterPåDato(personA, personB)
     )[0];
 
-    return sorterPåDato(yngsteBarnPeriodeA.fødselsdato, yngsteBarnPeriodeB.fødselsdato);
+    return sorterPåDato(yngsteBarnPeriodeA, yngsteBarnPeriodeB);
 };
 
 export const sorterEøsPerioder = (

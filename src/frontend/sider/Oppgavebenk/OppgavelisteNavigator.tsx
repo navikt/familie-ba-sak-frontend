@@ -1,20 +1,10 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { HStack, Pagination } from '@navikt/ds-react';
+import { Box, HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgave } from '../../typer/oppgave';
-
-const StyledSpan = styled.span`
-    padding: 0 1rem 0 1rem;
-`;
-
-const StyledPagination = styled(Pagination)`
-    padding-left: 1rem;
-`;
 
 const beregnAntallSider = (oppgaver: IOppgave[]): number =>
     Math.ceil(oppgaver.length / oppgaveSideLimit);
@@ -30,19 +20,16 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
     return (
         <HStack align="center" justify="space-between" wrap={false}>
             |
-            <StyledSpan>
+            <Box paddingInline="space-16">
                 Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
                 {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
                 {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
                 oppgaver)
-            </StyledSpan>
+            </Box>
             |
-            <StyledPagination
-                size="small"
-                page={side}
-                count={antallSider}
-                onPageChange={settSide}
-            />
+            <Box paddingInline="space-16 0">
+                <Pagination size="small" page={side} count={antallSider} onPageChange={settSide} />
+            </Box>
         </HStack>
     );
 };

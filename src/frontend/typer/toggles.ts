@@ -16,9 +16,12 @@ export enum ToggleNavn {
     kanOppretteRevurderingMedAarsakIverksetteKaVedtak = 'familie-ba-sak.kan-opprette-revurdering-med-aarsak-iverksette-ka-vedtak',
     brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
-    brukNyOpprettFagsakModal = 'familie-ba-sak.bruk.ny.opprett.fagsak.modal',
     tillattBehandlingAvSkjermetBarn = 'familie-ba-sak.tillatt-behandling-av-kode6-kode19',
     skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
+    bosattFinnmarkNordtroms = 'familie-ba-sak.bosatt-finnmark-nord-troms',
+    skalViseOppholdsadresse = 'familie-ba-sak.skal-vise-oppholdsadresse',
+    brukNyHenleggModal = 'familie-ba-sak.bruk-ny-henlegg-modal',
+    brukNyPdfModal = 'familie-ba-sak.bruk-ny-pdf-modal',
     visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
 }
 

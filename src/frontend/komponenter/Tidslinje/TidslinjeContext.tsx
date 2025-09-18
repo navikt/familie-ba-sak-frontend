@@ -117,28 +117,49 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
 
     interface YtelseSplittForTidslinje {
         ytelseSomSkalSplittesOpp?: YtelseType;
-        ytelseSomSplitterOpp?: YtelseType;
+        ytelserSomSplitterOpp: YtelseType[];
     }
 
-    const ytelserSomMåSplittes = (fagsakType?: FagsakType): YtelseSplittForTidslinje => {
+    const finnYtelserSomMåSplittes = (fagsakType?: FagsakType): YtelseSplittForTidslinje[] => {
         switch (fagsakType) {
             case FagsakType.SKJERMET_BARN:
             case FagsakType.NORMAL:
-                return {
-                    ytelseSomSkalSplittesOpp: YtelseType.UTVIDET_BARNETRYGD,
-                    ytelseSomSplitterOpp: YtelseType.SMÅBARNSTILLEGG,
-                };
+                return [
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.UTVIDET_BARNETRYGD,
+                        ytelserSomSplitterOpp: [YtelseType.SMÅBARNSTILLEGG],
+                    },
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                        ytelserSomSplitterOpp: [
+                            YtelseType.FINNMARKSTILLEGG,
+                            YtelseType.SVALBARDTILLEGG,
+                        ],
+                    },
+                ];
             case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-                return {
-                    ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
-                    ytelseSomSplitterOpp: YtelseType.UTVIDET_BARNETRYGD,
-                };
+                return [
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                        ytelserSomSplitterOpp: [
+                            YtelseType.UTVIDET_BARNETRYGD,
+                            YtelseType.FINNMARKSTILLEGG,
+                            YtelseType.SVALBARDTILLEGG,
+                        ],
+                    },
+                ];
             case FagsakType.INSTITUSJON:
+                return [
+                    {
+                        ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
+                        ytelserSomSplitterOpp: [
+                            YtelseType.FINNMARKSTILLEGG,
+                            YtelseType.SVALBARDTILLEGG,
+                        ],
+                    },
+                ];
             case undefined:
-                return {
-                    ytelseSomSkalSplittesOpp: undefined,
-                    ytelseSomSplitterOpp: undefined,
-                };
+                return [];
         }
     };
 
@@ -146,7 +167,7 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
         fagsakType?: FagsakType,
         personerMedAndelerTilkjentYtelse?: IPersonMedAndelerTilkjentYtelse[]
     ): Periode[][] => {
-        const ytelseSomMåSplittes = ytelserSomMåSplittes(fagsakType);
+        const ytelserSomMåSplittes = finnYtelserSomMåSplittes(fagsakType);
         return personerMedAndelerTilkjentYtelse
             ? personerMedAndelerTilkjentYtelse.map(
                   (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
@@ -162,15 +183,22 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                                   status: ytelsePeriode.skalUtbetales ? 'suksess' : 'feil',
                               };
 
+                              const ytelseSomMåSplittes = ytelserSomMåSplittes.find(
+                                  ytelse =>
+                                      ytelse.ytelseSomSkalSplittesOpp === ytelsePeriode.ytelseType
+                              );
+
                               if (
+                                  ytelseSomMåSplittes &&
                                   ytelsePeriode.ytelseType ===
-                                  ytelseSomMåSplittes.ytelseSomSkalSplittesOpp
+                                      ytelseSomMåSplittes.ytelseSomSkalSplittesOpp
                               ) {
                                   const andelerSomSkalSplitteOpp =
                                       personMedAndelerTilkjentYtelse.ytelsePerioder.filter(
                                           ytelsePeriodeFilter =>
-                                              ytelsePeriodeFilter.ytelseType ===
-                                              ytelseSomMåSplittes.ytelseSomSplitterOpp
+                                              ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(
+                                                  ytelsePeriodeFilter.ytelseType
+                                              )
                                       );
 
                                   return [
@@ -182,8 +210,10 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                                       ),
                                   ];
                               } else if (
-                                  ytelsePeriode.ytelseType !==
-                                  ytelseSomMåSplittes.ytelseSomSplitterOpp
+                                  ytelseSomMåSplittes &&
+                                  !ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(
+                                      ytelsePeriode.ytelseType
+                                  )
                               ) {
                                   return [...acc, periode];
                               } else {

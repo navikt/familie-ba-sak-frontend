@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Box, HStack, LinkPanel } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, HStack, Link, LinkCard, VStack } from '@navikt/ds-react';
 import {
     AFontSizeHeadingMedium,
     AFontSizeXlarge,
@@ -38,12 +39,6 @@ const HeaderTekst = styled(BodyShort)`
 
 const BodyTekst = styled(BodyShort)`
     font-size: ${AFontSizeHeadingMedium};
-`;
-
-const FagsakPanelMedAktivBehandling = styled(LinkPanel)`
-    width: ${SaksoversiktPanelBredde};
-    margin-top: ${ASpacing8};
-    padding: ${ASpacing8};
 `;
 
 const FagsakPanel = styled(Box)`
@@ -103,14 +98,25 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
     return (
         <>
             {aktivBehandling ? (
-                <FagsakPanelMedAktivBehandling
-                    title={genererHoverTekst(aktivBehandling)}
-                    href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
-                >
-                    <LinkPanel.Description>
-                        <Innholdstabell minimalFagsak={minimalFagsak} />
-                    </LinkPanel.Description>
-                </FagsakPanelMedAktivBehandling>
+                <Box width={SaksoversiktPanelBredde} marginBlock={'8 0'}>
+                    <LinkCard>
+                        <LinkCard.Title>
+                            <LinkCard.Anchor asChild={true}>
+                                <Link
+                                    as={ReactRouterLink}
+                                    to={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
+                                >
+                                    {genererHoverTekst(aktivBehandling)}
+                                </Link>
+                            </LinkCard.Anchor>
+                        </LinkCard.Title>
+                        <LinkCard.Description>
+                            <VStack paddingBlock={'4 0'}>
+                                <Innholdstabell minimalFagsak={minimalFagsak} />
+                            </VStack>
+                        </LinkCard.Description>
+                    </LinkCard>
+                </Box>
             ) : (
                 <FagsakPanel
                     borderColor="border-strong"

@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { mockSimuleringPeriode } from './simulering.mock';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../simulering';
 

@@ -5,6 +5,7 @@ import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
+import type { ManglendeSvalbardmerking } from './ManglendeSvalbardmerkingPeriode';
 import type { IGrunnlagPerson } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
@@ -24,7 +25,7 @@ import type {
 } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
-import type { IRestBrevmottaker } from '../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { IRestBrevmottaker } from '../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestNyBehandling {
@@ -78,6 +79,7 @@ export enum BehandlingÅrsak {
     SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID = 'SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID',
     MÅNEDLIG_VALUTAJUSTERING = 'MÅNEDLIG_VALUTAJUSTERING',
     IVERKSETTE_KA_VEDTAK = 'IVERKSETTE_KA_VEDTAK',
+    FINNMARKSTILLEGG = 'FINNMARKSTILLEGG',
 }
 
 export const behandlingÅrsak: Record<
@@ -111,6 +113,7 @@ export const behandlingÅrsak: Record<
         'Feilutbetalt beløp helt eller delvis bortfalt',
     MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
     IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
+    FINNMARKSTILLEGG: 'Finnmarkstillegg',
 
     /** Klage: **/
     ANNET: 'Annet',
@@ -139,6 +142,17 @@ export enum BehandlingSteg {
     DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
     FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
     BEHANDLING_AVSLUTTET = 'BEHANDLING_AVSLUTTET',
+}
+
+export function erPåHenleggbartSteg(steg: BehandlingSteg) {
+    return [
+        BehandlingSteg.REGISTRERE_SØKNAD,
+        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+        BehandlingSteg.VILKÅRSVURDERING,
+        BehandlingSteg.BEHANDLINGSRESULTAT,
+        BehandlingSteg.VURDER_TILBAKEKREVING,
+        BehandlingSteg.SEND_TIL_BESLUTTER,
+    ].includes(steg);
 }
 
 export enum BehandlingStegStatus {
@@ -301,6 +315,7 @@ export interface IBehandling {
     brevmottakere: IRestBrevmottaker[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
+    manglendeSvalbardmerking: ManglendeSvalbardmerking[];
 }
 
 export enum VurderingsstrategiForValutakurser {

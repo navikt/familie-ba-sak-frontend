@@ -42,6 +42,7 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND,
                 UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING,
+                UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
             ];
         }
         if (vilkårType === VilkårType.BOSATT_I_RIKET && personType === PersonType.BARN) {
@@ -49,6 +50,7 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE,
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS,
                 UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA,
+                UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
             ];
         }
         if (vilkårType === VilkårType.BOR_MED_SØKER) {
@@ -69,7 +71,11 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
     return [
         UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
         ...(vilkårType === VilkårType.BOSATT_I_RIKET
-            ? [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]
+            ? [
+                  UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP,
+                  UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD,
+                  UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS,
+              ]
             : []),
         ...(vilkårType === VilkårType.BOR_MED_SØKER
             ? [
@@ -107,11 +113,20 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
 
     if (avhengigheter.vurderesEtter === Regelverk.EØS_FORORDNINGEN) {
         if (avhengigheter.vilkårType === VilkårType.BOSATT_I_RIKET) {
-            if (utdypendeVilkårsvurderinger.length === 0) {
+            const antallValgteEøsAlternativerForBosattIRiket = utdypendeVilkårsvurderinger.filter(
+                item =>
+                    item in UtdypendeVilkårsvurderingEøsSøkerBosattIRiket ||
+                    item in UtdypendeVilkårsvurderingEøsBarnBosattIRiket
+            );
+
+            if (antallValgteEøsAlternativerForBosattIRiket.length === 0) {
                 return 'Du må velge ett alternativ';
             }
-            if (utdypendeVilkårsvurderinger.length > 1) {
-                return 'Du kan kun velge ett alternativ';
+            if (antallValgteEøsAlternativerForBosattIRiket.length > 1) {
+                return (
+                    'Du kan kun velge ett av disse alternativene: ' +
+                    antallValgteEøsAlternativerForBosattIRiket
+                );
             }
         }
         if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {

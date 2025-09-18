@@ -4,7 +4,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
-import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../typer/person';
 import { PersonTypeVisningsRangering } from '../../../../../typer/person';
 import {
@@ -182,6 +182,7 @@ export const utledVilkårSomMåKontrolleresPerPerson = (
         const navn = personResultat.person.navn;
 
         if (
+            behandling.steg === BehandlingSteg.VILKÅRSVURDERING &&
             behandling.søknadsgrunnlag?.erAutomatiskRegistrert &&
             personResultat.person.erManueltLagtTilISøknad
         ) {

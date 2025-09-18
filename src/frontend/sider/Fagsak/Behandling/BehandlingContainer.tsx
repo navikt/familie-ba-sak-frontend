@@ -13,7 +13,10 @@ import Høyremeny from './Høyremeny/Høyremeny';
 import Venstremeny from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import Personlinje from '../Personlinje/Personlinje';
+import { HenleggBehandlingModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingModal';
+import { HenleggBehandlingVeivalgModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingVeivalgModal';
+import { Fagsaklinje } from '../Fagsaklinje/Fagsaklinje';
+import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 
 interface Props {
     bruker: IPersonInfo;
@@ -31,7 +34,7 @@ const VenstremenyContainer = styled.div`
 `;
 
 const HovedinnholdContainer = styled.div`
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 146px);
     flex: 1;
     overflow: auto;
 `;
@@ -40,6 +43,7 @@ const HøyremenyContainer = styled.div`
     border-left: 1px solid ${ABorderDivider};
     overflow-x: hidden;
     overflow-y: scroll;
+    height: calc(100vh - 146px);
 `;
 
 const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
@@ -49,7 +53,10 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
         case RessursStatus.SUKSESS:
             return (
                 <BehandlingProvider behandling={behandlingRessurs.data}>
-                    <Personlinje
+                    <HenleggBehandlingModal />
+                    <HenleggBehandlingVeivalgModal />
+                    <KorrigerEtterbetalingModal />
+                    <Fagsaklinje
                         bruker={bruker}
                         minimalFagsak={fagsak}
                         behandling={behandlingRessurs.data}

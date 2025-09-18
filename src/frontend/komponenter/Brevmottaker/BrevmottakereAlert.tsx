@@ -9,12 +9,12 @@ import { Alert, Button } from '@navikt/ds-react';
 
 import BrevmottakerListe from './BrevmottakerListe';
 import { sider } from '../../sider/Fagsak/Behandling/Sider/sider';
-import { LeggTilBrevmottakerModalBehandling } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-import { LeggTilBrevmottakerModalFagsak } from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
+import { LeggTilBrevmottakerModalBehandling } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { LeggTilBrevmottakerModalFagsak } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
-} from '../../sider/Fagsak/Personlinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IBehandling } from '../../typer/behandling';
 import type { IPersonInfo } from '../../typer/person';
 import { hentSideHref } from '../../utils/miljø';
