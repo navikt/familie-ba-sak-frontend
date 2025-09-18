@@ -33,7 +33,7 @@ export const ManglendeSvalbardmerkingVarsel: React.FC = () => {
                         </Table.Header>
                         <Table.Body>
                             {behandling.manglendeSvalbardmerking.map(manglendeSvalbardmerking => {
-                                return manglendeSvalbardmerking.manglendeSvalbardmerkingPerioder.map(
+                                return manglendeSvalbardmerking.manglendeFinnmarkSvalbardMerkingPerioder.map(
                                     (manglendeSvalbardmerkingPeriode, i) => {
                                         return (
                                             <Table.Row

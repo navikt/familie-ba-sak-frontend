@@ -5,7 +5,7 @@ import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
-import type { ManglendeSvalbardmerking } from './ManglendeSvalbardmerkingPeriode';
+import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import type { IGrunnlagPerson } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
@@ -315,7 +315,8 @@ export interface IBehandling {
     brevmottakere: IRestBrevmottaker[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
-    manglendeSvalbardmerking: ManglendeSvalbardmerking[];
+    manglendeSvalbardmerking: ManglendeFinnmarkSvalbardMerking[];
+    manglendeFinnmarkmerking?: ManglendeFinnmarkSvalbardMerking;
 }
 
 export enum VurderingsstrategiForValutakurser {
