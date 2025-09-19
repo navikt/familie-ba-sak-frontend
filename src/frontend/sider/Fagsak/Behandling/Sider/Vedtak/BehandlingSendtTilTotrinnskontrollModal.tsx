@@ -10,18 +10,12 @@ interface Props {
     settVisModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Props> = ({
-    settVisModal,
-}) => {
+export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Props> = ({ settVisModal }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
 
     return (
-        <Modal
-            open
-            onClose={() => settVisModal(false)}
-            header={{ heading: 'Totrinnskontroll', size: 'medium' }}
-        >
+        <Modal open onClose={() => settVisModal(false)} header={{ heading: 'Totrinnskontroll', size: 'medium' }}>
             <Modal.Body>
                 <BodyShort>Behandlingen er nå sendt til totrinnskontroll</BodyShort>
             </Modal.Body>

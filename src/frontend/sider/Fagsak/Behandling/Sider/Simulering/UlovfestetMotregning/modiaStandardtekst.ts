@@ -27,14 +27,8 @@ const formaterPerioder = (
     });
 
 export const utledTekstTilModia = (avregningsperioder: IAvregningsperiode[]) => {
-    const etterbetalingsperioderFormatert = formaterPerioder(
-        avregningsperioder,
-        'totalEtterbetaling'
-    );
-    const feilutbetalingsperioderFormatert = formaterPerioder(
-        avregningsperioder,
-        'totalFeilutbetaling'
-    );
+    const etterbetalingsperioderFormatert = formaterPerioder(avregningsperioder, 'totalEtterbetaling');
+    const feilutbetalingsperioderFormatert = formaterPerioder(avregningsperioder, 'totalFeilutbetaling');
 
     return (
         `Du har rett til etterbetaling av barnetrygd for:\n` +

@@ -20,11 +20,7 @@ import type {
     ITilbakekreving,
 } from '../../../../../typer/simulering';
 import { Tilbakekrevingsvalg } from '../../../../../typer/simulering';
-import {
-    isoStringTilDate,
-    isoStringTilDateMedFallback,
-    tidenesMorgen,
-} from '../../../../../utils/dato';
+import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../utils/dato';
 
 interface IProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
@@ -69,9 +65,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
-    const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
-        Ressurs<boolean>
-    >({
+    const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<Ressurs<boolean>>({
         status: RessursStatus.HENTER,
     });
     const maksLengdeTekst = 1500;
@@ -114,26 +108,20 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     }, [fagsakId, simuleringsresultat]);
 
     const harÅpenTilbakekreving: boolean =
-        harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
-        harÅpenTilbakekrevingRessurs.data;
+        harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS && harÅpenTilbakekrevingRessurs.data;
 
-    const simResultat =
-        simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
+    const simResultat = simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
     const simPerioderFørMars2023 =
-        simResultat?.perioder.filter(periode =>
-            isBefore(isoStringTilDate(periode.fom), isoStringTilDate(mars2023))
-        ) || [];
-    const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(
-        periode => periode.resultat || 0
-    );
+        simResultat?.perioder.filter(periode => isBefore(isoStringTilDate(periode.fom), isoStringTilDate(mars2023))) ||
+        [];
+    const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(periode => periode.resultat || 0);
     const totalEtterbetalingFørMars2023 = simPerioderFørMars2023.reduce(
         (acc, periode) => acc + (periode.etterbetaling || 0),
         0
     );
 
     const avregningsperioder = simResultat?.avregningsperioder ?? [];
-    const overlappendePerioderMedAndreFagsaker =
-        simResultat?.overlappendePerioderMedAndreFagsaker ?? [];
+    const overlappendePerioderMedAndreFagsaker = simResultat?.overlappendePerioderMedAndreFagsaker ?? [];
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
@@ -141,8 +129,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
 
     const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterutbetaling;
 
-    const erMigreringFraInfotrygdMedAvvik =
-        erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
+    const erMigreringFraInfotrygdMedAvvik = erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
 
     const behandlingHarManuellePosteringer = simResultat?.perioder.some(
         periode => periode.manuellPostering && periode.manuellPostering > 0
@@ -155,9 +142,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         );
 
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
-        const antallBarn = åpenBehandling.personer.filter(
-            person => person.type === PersonType.BARN
-        ).length;
+        const antallBarn = åpenBehandling.personer.filter(person => person.type === PersonType.BARN).length;
         return perioderesultater.every(beløp => Math.abs(beløp) <= antallBarn);
     };
 
@@ -174,11 +159,9 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     const behandlingErMigreringMedAvvikUtenforBeløpsgrenser =
         erMigreringFraInfotrygdMedAvvik && !behandlingErMigreringMedAvvikInnenforBeløpsgrenser;
 
-    const behandlingErMigreringMedManuellePosteringer =
-        erMigreringFraInfotrygd && behandlingHarManuellePosteringer;
+    const behandlingErMigreringMedManuellePosteringer = erMigreringFraInfotrygd && behandlingHarManuellePosteringer;
 
-    const behandlingErEndreMigreringsdato =
-        åpenBehandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+    const behandlingErEndreMigreringsdato = åpenBehandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
@@ -187,8 +170,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
             erFeilutbetaling,
             harÅpenTilbakekreving,
         },
-        skalFeltetVises: avhengigheter =>
-            avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
+        skalFeltetVises: avhengigheter => avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: felt =>
             felt.verdi === undefined
                 ? feil(
@@ -206,20 +188,15 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         },
         valideringsfunksjon: (felt, avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi ===
-                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
+            avhengigheter?.tilbakekreving?.verdi === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
                 : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
-                  ? feil(
-                        felt,
-                        `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`
-                    )
+                  ? feil(felt, `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`)
                   : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi ===
-                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
+            avhengigheter?.tilbakekreving?.verdi === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
     });
     const begrunnelse = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
@@ -228,16 +205,12 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
             maksLengdeTekst: maksLengdeTekst,
             harÅpenTilbakekreving,
         },
-        skalFeltetVises: avhengigheter =>
-            avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
+        skalFeltetVises: avhengigheter => avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
                 : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
-                  ? feil(
-                        felt,
-                        `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`
-                    )
+                  ? feil(felt, `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`)
                   : ok(felt),
     });
 

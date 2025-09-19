@@ -15,9 +15,7 @@ const mapBarnIdenterTilPerson = (barnIdenter: string[], personer: IGrunnlagPerso
     return barnIdenter.map<IGrunnlagPerson>(barnIdent => {
         const person = personer.find(person => person.personIdent === barnIdent);
         if (person === undefined)
-            throw Error(
-                'Barn ikke funnet. Skal ikke kunne være mulig, siden sjekken er gjort annen plass i koden'
-            );
+            throw Error('Barn ikke funnet. Skal ikke kunne være mulig, siden sjekken er gjort annen plass i koden');
         return person;
     });
 };
@@ -29,12 +27,8 @@ const sorterPåBarnsFødselsdato = (
 ) => {
     const barnIPeriodeA: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeA, personer);
     const barnIPeriodeB: IGrunnlagPerson[] = mapBarnIdenterTilPerson(barnIdenterPeriodeB, personer);
-    const yngsteBarnPeriodeA = barnIPeriodeA.sort((personA, personB) =>
-        sorterPåDato(personA, personB)
-    )[0];
-    const yngsteBarnPeriodeB = barnIPeriodeB.sort((personA, personB) =>
-        sorterPåDato(personA, personB)
-    )[0];
+    const yngsteBarnPeriodeA = barnIPeriodeA.sort((personA, personB) => sorterPåDato(personA, personB))[0];
+    const yngsteBarnPeriodeB = barnIPeriodeB.sort((personA, personB) => sorterPåDato(personA, personB))[0];
 
     return sorterPåDato(yngsteBarnPeriodeA, yngsteBarnPeriodeB);
 };

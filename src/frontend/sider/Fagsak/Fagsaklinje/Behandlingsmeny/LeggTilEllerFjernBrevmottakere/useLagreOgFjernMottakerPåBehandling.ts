@@ -29,10 +29,7 @@ export const useLagreEllerFjernMottakerPåBehandling = ({ behandlingId }: Props)
                         type: felter.mottaker.verdi,
                         navn: felter.navn.verdi,
                         adresselinje1: felter.adresselinje1.verdi,
-                        adresselinje2:
-                            felter.adresselinje2.verdi !== ''
-                                ? felter.adresselinje2.verdi
-                                : undefined,
+                        adresselinje2: felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
                         postnummer: felter.postnummer.verdi,
                         poststed: felter.poststed.verdi,
                         landkode: felter.land.verdi,

@@ -31,9 +31,7 @@ const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) =
                 .sort(sorterUtbetaling)
                 .map((detalj: IUtbetalingsperiodeDetalj, index: number) => (
                     <UtbetalingsperiodeDetalj key={`${index}_${detalj.person.fødselsdato}`}>
-                        <BodyShort title={detalj.person.navn}>
-                            {formaterIdent(detalj.person.personIdent)}
-                        </BodyShort>
+                        <BodyShort title={detalj.person.navn}>{formaterIdent(detalj.person.personIdent)}</BodyShort>
 
                         <BodyShort>{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
                     </UtbetalingsperiodeDetalj>

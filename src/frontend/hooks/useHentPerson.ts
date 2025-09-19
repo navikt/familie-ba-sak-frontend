@@ -6,10 +6,7 @@ import { hentPerson } from '../api/hentPerson';
 import { useAppContext } from '../context/AppContext';
 import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo } from '../typer/person';
 
-function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(
-    a: T,
-    b: T
-) {
+function sammenlignFødselsdato<T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(a: T, b: T) {
     if (a.person && b.person) return b.person.fødselsdato.localeCompare(a.person.fødselsdato);
     if (a.fødselsdato && b.fødselsdato) return b.fødselsdato.localeCompare(a.fødselsdato);
     return 0;

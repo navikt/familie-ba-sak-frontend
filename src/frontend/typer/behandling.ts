@@ -18,11 +18,7 @@ import type {
 import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
 import type { ITotrinnskontroll } from './totrinnskontroll';
 import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
-import type {
-    IRestKorrigertEtterbetaling,
-    IRestKorrigertVedtak,
-    IVedtakForBehandling,
-} from './vedtak';
+import type { IRestKorrigertEtterbetaling, IRestKorrigertVedtak, IVedtakForBehandling } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import type { IRestBrevmottaker } from '../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -53,8 +49,7 @@ export enum HenleggÅrsak {
 export const henleggÅrsak: Record<HenleggÅrsak, string> = {
     SØKNAD_TRUKKET: 'Søknaden er trukket',
     FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
-    FØDSELSHENDELSE_UGYLDIG_UTFALL:
-        'Automatisk henlagt på grunn av ugyldig utfall fra fødselshendelse',
+    FØDSELSHENDELSE_UGYLDIG_UTFALL: 'Automatisk henlagt på grunn av ugyldig utfall fra fødselshendelse',
     TEKNISK_VEDLIKEHOLD: 'Teknisk vedlikehold',
 };
 
@@ -82,10 +77,7 @@ export enum BehandlingÅrsak {
     FINNMARKSTILLEGG = 'FINNMARKSTILLEGG',
 }
 
-export const behandlingÅrsak: Record<
-    BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak,
-    string
-> = {
+export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak, string> = {
     SØKNAD: 'Søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
@@ -109,8 +101,7 @@ export const behandlingÅrsak: Record<
     REVURDERING_KLAGE_KA: 'Klage omgjort av KA',
     REVURDERING_OPPLYSNINGER_OM_VILKÅR: 'Nye opplysninger',
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
-    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
-        'Feilutbetalt beløp helt eller delvis bortfalt',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT: 'Feilutbetalt beløp helt eller delvis bortfalt',
     MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
     IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
     FINNMARKSTILLEGG: 'Finnmarkstillegg',
@@ -254,9 +245,7 @@ export const erBehandlingAvslått = (behandlingsResultat?: BehandlingResultat): 
     ].some(resultat => resultat === behandlingsResultat);
 };
 
-export const erBehandlingFortsattInnvilget = (
-    behandlingsResultat?: BehandlingResultat
-): boolean => {
+export const erBehandlingFortsattInnvilget = (behandlingsResultat?: BehandlingResultat): boolean => {
     return behandlingsResultat === BehandlingResultat.FORTSATT_INNVILGET;
 };
 
@@ -433,10 +422,7 @@ export const behandlingsresultater: Record<
     MEDHOLD: 'Medhold',
 };
 
-export const behandlingsstatuser: Record<
-    BehandlingStatus | Behandlingsstatus | KlageStatus,
-    string
-> = {
+export const behandlingsstatuser: Record<BehandlingStatus | Behandlingsstatus | KlageStatus, string> = {
     UTREDES: 'Utredes',
     SATT_PÅ_VENT: 'Satt på vent',
     SATT_PÅ_MASKINELL_VENT: 'Satt på maskinell vent',
@@ -462,6 +448,5 @@ export enum SettPåVentÅrsak {
 
 export const settPåVentÅrsaker: Record<SettPåVentÅrsak, string> = {
     AVVENTER_DOKUMENTASJON: 'Avventer dokumentasjon',
-    AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING:
-        'Avventer samtykke om ulovfestet motregning etter unntaksregel',
+    AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING: 'Avventer samtykke om ulovfestet motregning etter unntaksregel',
 };

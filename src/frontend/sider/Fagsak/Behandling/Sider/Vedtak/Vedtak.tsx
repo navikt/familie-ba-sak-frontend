@@ -39,8 +39,7 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 
 const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandlingContext();
+    const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const {
@@ -78,9 +77,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     return (
         <StyledSkjemaSteg
             tittel="Vedtak"
-            forrigeOnClick={() =>
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
-            }
+            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)}
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={
                 erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser

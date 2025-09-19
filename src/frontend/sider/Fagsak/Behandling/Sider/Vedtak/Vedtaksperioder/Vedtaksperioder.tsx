@@ -29,21 +29,14 @@ interface VedtaksperioderProps {
     vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
-const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({
-    åpenBehandling,
-    vedtaksperioderMedBegrunnelserRessurs,
-}) => {
+const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling, vedtaksperioderMedBegrunnelserRessurs }) => {
     const { alleBegrunnelserRessurs } = useVedtakContext();
 
     if (
         alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
         alleBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
     ) {
-        return (
-            <StyledAlert variant="error">
-                Klarte ikke å hente inn begrunnelser for vedtak.
-            </StyledAlert>
-        );
+        return <StyledAlert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</StyledAlert>;
     }
 
     if (
@@ -64,9 +57,7 @@ const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({
 
     const avslagOgResterende = partition(
         vedtaksperiode =>
-            vedtaksperiode.type === Vedtaksperiodetype.AVSLAG &&
-            !vedtaksperiode.fom &&
-            !vedtaksperiode.tom,
+            vedtaksperiode.type === Vedtaksperiodetype.AVSLAG && !vedtaksperiode.fom && !vedtaksperiode.tom,
         vedtaksperioderSomSkalvises
     );
 
@@ -102,19 +93,15 @@ const GrupperteVedtaksperioder: React.FC<{
             <StyledHeading level="2" size="small" spacing>
                 {overskrift}
             </StyledHeading>
-            {vedtaksperioderMedBegrunnelser.map(
-                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                    <VedtaksperiodeProvider
-                        key={vedtaksperiodeMedBegrunnelser.id}
-                        åpenBehandling={åpenBehandling}
-                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                    >
-                        <Vedtaksperiode
-                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                        />
-                    </VedtaksperiodeProvider>
-                )
-            )}
+            {vedtaksperioderMedBegrunnelser.map((vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
+                <VedtaksperiodeProvider
+                    key={vedtaksperiodeMedBegrunnelser.id}
+                    åpenBehandling={åpenBehandling}
+                    vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                >
+                    <Vedtaksperiode vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser} />
+                </VedtaksperiodeProvider>
+            ))}
         </>
     );
 };

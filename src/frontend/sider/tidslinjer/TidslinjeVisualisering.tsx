@@ -95,11 +95,9 @@ const TidslinjeVisualisering: React.FC = () => {
     const matchBehandlingId = useMatch('/tidslinjer/:behandlingId');
     const behandlingId = matchBehandlingId?.params.behandlingId;
 
-    const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } =
-        useTidslinjeContext();
+    const { genererFormatertÅrstall, aktivEtikett, aktivtTidslinjeVindu, naviger } = useTidslinjeContext();
 
-    const [tidslinjerRessurs, settTidslinjerRessurs] =
-        useState<Ressurs<ITidslinjer>>(byggTomRessurs());
+    const [tidslinjerRessurs, settTidslinjerRessurs] = useState<Ressurs<ITidslinjer>>(byggTomRessurs());
     const { request } = useHttp();
 
     useEffect(() => {
@@ -113,9 +111,7 @@ const TidslinjeVisualisering: React.FC = () => {
         }
     }, []);
 
-    const mapResultatTilStatus = (
-        resultat: Resultat
-    ): 'suksess' | 'feil' | 'advarsel' | 'ukjent' => {
+    const mapResultatTilStatus = (resultat: Resultat): 'suksess' | 'feil' | 'advarsel' | 'ukjent' => {
         switch (resultat) {
             case Resultat.OPPFYLT:
                 return 'suksess';
@@ -153,9 +149,7 @@ const TidslinjeVisualisering: React.FC = () => {
         }, []);
     };
 
-    const genererRaderResultatTidslinje = (
-        resultatTidslinje: IRestTidslinjePeriode<Resultat>[]
-    ): Periode[] => {
+    const genererRaderResultatTidslinje = (resultatTidslinje: IRestTidslinjePeriode<Resultat>[]): Periode[] => {
         return resultatTidslinje.map(resultatPeriode => ({
             fom: isoStringTilDate(resultatPeriode.fraOgMed),
             tom: isoStringTilDate(resultatPeriode.tilOgMed),
@@ -173,10 +167,7 @@ const TidslinjeVisualisering: React.FC = () => {
                 fom: isoStringTilDate(regelverkPeriode.fraOgMed),
                 tom: isoStringTilDate(regelverkPeriode.tilOgMed),
                 id: `${regelverkPeriode.fraOgMed}_${regelverkPeriode.tilOgMed}`,
-                status:
-                    regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER
-                        ? 'suksess'
-                        : 'advarsel',
+                status: regelverkPeriode.innhold === Regelverk.NASJONALE_REGLER ? 'suksess' : 'advarsel',
                 children:
                     regelverkPeriode.innhold === Regelverk.EØS_FORORDNINGEN ? (
                         <Eu width={24} height={24} />
@@ -198,10 +189,9 @@ const TidslinjeVisualisering: React.FC = () => {
             søkersTidslinjer.vilkårTidslinjer
         );
 
-        const barnetsOppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: Periode[] =
-            genererRaderResultatTidslinje(
-                barnetsTidslinjer.oppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje
-            );
+        const barnetsOppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje: Periode[] = genererRaderResultatTidslinje(
+            barnetsTidslinjer.oppfyllerEgneVilkårIKombinasjonMedSøkerTidslinje
+        );
 
         const barnetsRegelverkTidslinje: Periode[] = genererRaderRegelverkTidslinje(
             barnetsTidslinjer.regelverkTidslinje
@@ -253,9 +243,7 @@ const TidslinjeVisualisering: React.FC = () => {
                                         tidslinjerRessurs.data.søkersTidslinjer,
                                         tidslinjerRessurs.data.barnasTidslinjer[barn]
                                     )}
-                                    etikettRender={(etikett: Etikett) => (
-                                        <TidslinjeEtikett etikett={etikett} />
-                                    )}
+                                    etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}
                                     startDato={aktivtTidslinjeVindu.startDato}
                                     sluttDato={aktivtTidslinjeVindu.sluttDato}
                                     aktivtUtsnitt={

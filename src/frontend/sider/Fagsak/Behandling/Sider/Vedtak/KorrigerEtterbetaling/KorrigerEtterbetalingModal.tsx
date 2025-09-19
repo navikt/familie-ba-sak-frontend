@@ -1,18 +1,7 @@
 import React from 'react';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import {
-    Alert,
-    Button,
-    Fieldset,
-    HStack,
-    Modal,
-    Select,
-    Spacer,
-    Textarea,
-    TextField,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, Button, Fieldset, HStack, Modal, Select, Spacer, Textarea, TextField, VStack } from '@navikt/ds-react';
 
 import { useKorrigerEtterbetalingForm, årsaker } from './useKorrigerEtterbetalingForm';
 import { erEtterbetalingsbeløpGyldig, erÅrsakForKorrigeringGyldig } from './validering';
@@ -41,13 +30,7 @@ export function KorrigerEtterbetalingModal() {
     }
 
     return (
-        <Modal
-            open={erModalÅpen}
-            onClose={handleLukkModal}
-            header={{ heading: tittel }}
-            width={bredde}
-            portal
-        >
+        <Modal open={erModalÅpen} onClose={handleLukkModal} header={{ heading: tittel }} width={bredde} portal>
             <form onSubmit={form.handleSubmit(korrigerEtterbetaling)}>
                 <Modal.Body>
                     <Fieldset error={false} legend="Korriger etterbetaling" hideLegend>

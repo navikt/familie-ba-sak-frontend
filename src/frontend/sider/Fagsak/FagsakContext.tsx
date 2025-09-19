@@ -31,9 +31,7 @@ export function FagsakProvider({ fagsak, children }: Props) {
     const { mutate: settAktivBrukerIModiaContext } = useSettAktivBrukerIModiaContext();
 
     const brukerFødselsnummer =
-        fagsak.fagsakType === FagsakType.SKJERMET_BARN
-            ? fagsak.fagsakeier
-            : fagsak.søkerFødselsnummer;
+        fagsak.fagsakType === FagsakType.SKJERMET_BARN ? fagsak.fagsakeier : fagsak.søkerFødselsnummer;
 
     const hentBruker = (personIdent: string): void => {
         settBruker(byggHenterRessurs());

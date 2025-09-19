@@ -8,10 +8,7 @@ import { hentDataFraRessurs } from '@navikt/familie-typer';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { useFagsakContext } from '../../../FagsakContext';
 
-export type BrevmottakerUseSkjema = UseSkjemaVerdi<
-    ILeggTilFjernBrevmottakerSkjemaFelter,
-    IBehandling
->;
+export type BrevmottakerUseSkjema = UseSkjemaVerdi<ILeggTilFjernBrevmottakerSkjemaFelter, IBehandling>;
 
 interface Props {
     eksisterendeMottakere: SkjemaBrevmottaker[];
@@ -79,10 +76,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 if (felt.verdi === eksisterendeBrevmottakerType) {
                     return feil(felt, `${mottakerVisningsnavn[felt.verdi]} er allerede lagt til`);
                 }
-                if (
-                    felt.verdi === Mottaker.DØDSBO ||
-                    eksisterendeBrevmottakerType === Mottaker.DØDSBO
-                ) {
+                if (felt.verdi === Mottaker.DØDSBO || eksisterendeBrevmottakerType === Mottaker.DØDSBO) {
                     return feil(felt, 'Dødsbo kan ikke kombineres med andre brevmottakere');
                 }
                 if (
@@ -107,17 +101,14 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
             if (felt.verdi === '') {
                 return feil(felt, 'Navn på person eller organisasjon er påkrevd');
             }
-            return felt.verdi.length <= 80
-                ? ok(felt)
-                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+            return felt.verdi.length <= 80 ? ok(felt) : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
         },
     });
     const land = useFelt<string>({
         verdi: '',
         valideringsfunksjon: (felt, avhengigheter) => {
             const norgeErUlovligValgt =
-                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE &&
-                felt.verdi === 'NO';
+                avhengigheter?.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE && felt.verdi === 'NO';
             if (norgeErUlovligValgt) {
                 return feil(felt, 'Norge kan ikke være satt for bruker med utenlandsk adresse');
             }
@@ -133,17 +124,13 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
             if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
-            return felt.verdi.length <= 80
-                ? ok(felt)
-                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
+            return felt.verdi.length <= 80 ? ok(felt) : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn');
         },
     });
     const adresselinje2 = useFelt<string>({
         verdi: '',
         valideringsfunksjon: felt =>
-            felt.verdi.length <= 80
-                ? ok(felt)
-                : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn'),
+            felt.verdi.length <= 80 ? ok(felt) : feil(felt, 'Feltet kan ikke inneholde mer enn 80 tegn'),
     });
     const postnummer = useFelt<string>({
         verdi: '',
@@ -154,9 +141,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
                 return feil(felt, 'Feltet er påkrevd');
             }
             //Sjekker at felter er 4 karakterer langt og er numerisk
-            return /^\d{4}$/.test(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Feltet må bestå av 4 siffer');
+            return /^\d{4}$/.test(felt.verdi) ? ok(felt) : feil(felt, 'Feltet må bestå av 4 siffer');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return avhengigheter?.land.verdi === 'NO';
@@ -171,9 +156,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
             } else if (felt.verdi === '') {
                 return feil(felt, 'Feltet er påkrevd');
             }
-            return felt.verdi.length <= 50
-                ? ok(felt)
-                : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
+            return felt.verdi.length <= 50 ? ok(felt) : feil(felt, 'Feltet kan ikke inneholde mer enn 50 tegn');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return avhengigheter?.land.verdi === 'NO';
@@ -184,15 +167,12 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
     const [navnErPreutfylt, settNavnErPreutfylt] = useState(false);
 
     const skalNavnVærePreutfylt =
-        mottaker.verdi === Mottaker.DØDSBO ||
-        mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
+        mottaker.verdi === Mottaker.DØDSBO || mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE;
 
     useEffect(() => {
         if (skalNavnVærePreutfylt || skalNavnVærePreutfylt !== navnErPreutfylt) {
             navn.validerOgSettFelt(
-                skalNavnVærePreutfylt && søker?.navn
-                    ? preutfyltNavnFixed(mottaker.verdi, land.verdi, søker.navn)
-                    : ''
+                skalNavnVærePreutfylt && søker?.navn ? preutfyltNavnFixed(mottaker.verdi, land.verdi, søker.navn) : ''
             );
         }
         settNavnErPreutfylt(skalNavnVærePreutfylt);
@@ -207,10 +187,7 @@ export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
         poststed.nullstill();
     }
 
-    const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<
-        ILeggTilFjernBrevmottakerSkjemaFelter,
-        IBehandling
-    >({
+    const verdierFraUseSkjema: BrevmottakerUseSkjema = useSkjema<ILeggTilFjernBrevmottakerSkjemaFelter, IBehandling>({
         felter: {
             mottaker,
             navn,
@@ -234,8 +211,7 @@ export const felterTilSkjemaBrevmottaker = (
             type: felter.mottaker.verdi,
             navn: felter.navn.verdi,
             adresselinje1: felter.adresselinje1.verdi,
-            adresselinje2:
-                felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
+            adresselinje2: felter.adresselinje2.verdi !== '' ? felter.adresselinje2.verdi : undefined,
             postnummer: felter.postnummer.verdi,
             poststed: felter.poststed.verdi,
             landkode: felter.land.verdi,

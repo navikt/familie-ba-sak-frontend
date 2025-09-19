@@ -43,11 +43,10 @@ export const validerVilkår = (
         }
     );
 
-    const nyeAvslagbegrunnelser: FeltState<VedtakBegrunnelse[]> =
-        nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
-            nyttVilkårResultat.verdi.avslagBegrunnelser,
-            { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
-        );
+    const nyeAvslagbegrunnelser: FeltState<VedtakBegrunnelse[]> = nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
+        nyttVilkårResultat.verdi.avslagBegrunnelser,
+        { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
+    );
 
     const nyUtdypendeVilkårsvurdering: FeltState<UtdypendeVilkårsvurdering[]> =
         nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.valider(
@@ -81,9 +80,7 @@ export const validerVilkår = (
         : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
 };
 
-export const validerAnnenVurdering = (
-    nyttAnnenVurdering: FeltState<IAnnenVurdering>
-): FeltState<IAnnenVurdering> => {
+export const validerAnnenVurdering = (nyttAnnenVurdering: FeltState<IAnnenVurdering>): FeltState<IAnnenVurdering> => {
     const nyBegrunnelse: FeltState<string> = nyttAnnenVurdering.verdi.begrunnelse.valider(
         nyttAnnenVurdering.verdi.begrunnelse
     );

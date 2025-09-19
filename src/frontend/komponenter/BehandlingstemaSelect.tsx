@@ -27,28 +27,19 @@ export const BehandlingstemaSelect = ({
             value={verdi !== undefined ? verdi.id : ''}
             label={'Velg behandlingstema'}
             onChange={evt => {
-                behandlingstema.validerOgSettFelt(
-                    behandlingstemaer[evt.target.value as Behandlingstema]
-                );
+                behandlingstema.validerOgSettFelt(behandlingstemaer[evt.target.value as Behandlingstema]);
             }}
             readOnly={erLesevisning}
         >
             {verdi === undefined && (
-                <option
-                    disabled
-                    key={'behandlingstema-select-disabled'}
-                    value={''}
-                    aria-selected={true}
-                >
+                <option disabled key={'behandlingstema-select-disabled'} value={''} aria-selected={true}>
                     Velg behandlingstema
                 </option>
             )}
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
-                    it =>
-                        it.kategori !== BehandlingKategori.EØS ||
-                        fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                    it => it.kategori !== BehandlingKategori.EØS || fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
                 )
                 .map(tema => {
                     return (

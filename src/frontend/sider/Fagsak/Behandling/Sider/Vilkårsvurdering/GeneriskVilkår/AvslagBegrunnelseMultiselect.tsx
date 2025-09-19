@@ -31,27 +31,24 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
-    vilkårType,
-    begrunnelser,
-    onChange,
-    regelverk,
-}) => {
+const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange, regelverk }) => {
     const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { vilkårSubmit } = useVilkårsvurderingContext();
 
-    const { avslagsbegrunnelserForGjeldendeVilkår, begrunnelserStatus } =
-        useAvslagBegrunnelseMultiselect(vilkårType, regelverk, gjelderInstitusjon);
+    const { avslagsbegrunnelserForGjeldendeVilkår, begrunnelserStatus } = useAvslagBegrunnelseMultiselect(
+        vilkårType,
+        regelverk,
+        gjelderInstitusjon
+    );
 
     const valgteBegrunnelser = begrunnelser
         ? begrunnelser.map((valgtBegrunnelse: VedtakBegrunnelse) => ({
               value: valgtBegrunnelse?.toString() ?? '',
               label:
                   avslagsbegrunnelserForGjeldendeVilkår.find(
-                      (
-                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                      ) => restVedtakBegrunnelseTilknyttetVilkår.id === valgtBegrunnelse
+                      (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                          restVedtakBegrunnelseTilknyttetVilkår.id === valgtBegrunnelse
                   )?.navn ?? '',
           }))
         : [];

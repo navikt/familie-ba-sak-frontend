@@ -24,24 +24,19 @@ const BarnIBrevSkjema = (props: IProps) => {
     const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
-    const sorterteBarn = barnIBrevFelt.verdi.sort(
-        (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            if (!a.fødselsdato) {
-                return 1;
-            }
-
-            if (!b.fødselsdato) {
-                return -1;
-            }
-
-            return !a.ident
-                ? 1
-                : differenceInMilliseconds(
-                      isoStringTilDate(b.fødselsdato),
-                      isoStringTilDate(a.fødselsdato)
-                  );
+    const sorterteBarn = barnIBrevFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+        if (!a.fødselsdato) {
+            return 1;
         }
-    );
+
+        if (!b.fødselsdato) {
+            return -1;
+        }
+
+        return !a.ident
+            ? 1
+            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
+    });
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         barnIBrevFelt.validerOgSettFelt(
@@ -65,11 +60,7 @@ const BarnIBrevSkjema = (props: IProps) => {
             }}
         >
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
-                <BarnCheckbox
-                    key={barnMedOpplysninger.ident}
-                    barn={barnMedOpplysninger}
-                    {...props}
-                />
+                <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} {...props} />
             ))}
 
             <LeggTilBarn

@@ -43,20 +43,14 @@ export function lagIkkeFeilregistrertKlageinstansEventTyper(): KlageinstansEvent
 }
 
 export function lagAlleKlageinstansUtfall(): KlageinstansUtfall[] {
-    return Object.keys(KlageinstansUtfall).map(
-        utfall => KlageinstansUtfall[utfall as keyof typeof KlageinstansUtfall]
-    );
+    return Object.keys(KlageinstansUtfall).map(utfall => KlageinstansUtfall[utfall as keyof typeof KlageinstansUtfall]);
 }
 
 export function lagAlleKlageResultat(): KlageResultat[] {
-    return Object.keys(KlageResultat).map(
-        resultat => KlageResultat[resultat as keyof typeof KlageResultat]
-    );
+    return Object.keys(KlageResultat).map(resultat => KlageResultat[resultat as keyof typeof KlageResultat]);
 }
 
-export function lagKlageinstansResultat(
-    klageinstansResultat: Partial<KlageinstansResultat>
-): KlageinstansResultat {
+export function lagKlageinstansResultat(klageinstansResultat: Partial<KlageinstansResultat>): KlageinstansResultat {
     return {
         type: KlageinstansEventType.KLAGEBEHANDLING_AVSLUTTET,
         utfall: KlageinstansUtfall.STADFESTELSE,

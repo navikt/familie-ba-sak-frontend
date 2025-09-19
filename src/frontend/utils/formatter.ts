@@ -11,10 +11,7 @@ export const millisekunderIEttÅr = 3.15576e10;
 
 export const hentAlder = (fødselsdato: string): number => {
     return fødselsdato !== ''
-        ? Math.floor(
-              differenceInMilliseconds(dagensDato, isoStringTilDate(fødselsdato)) /
-                  millisekunderIEttÅr
-          )
+        ? Math.floor(differenceInMilliseconds(dagensDato, isoStringTilDate(fødselsdato)) / millisekunderIEttÅr)
         : 0;
 };
 
@@ -57,9 +54,7 @@ export const formaterNavnAlderOgIdent = (person: {
     navn: string;
     fødselsdato: string;
 }): string => {
-    return `${person.navn} (${hentAlder(person.fødselsdato)} år) ${formaterIdent(
-        person.personIdent
-    )}`;
+    return `${person.navn} (${hentAlder(person.fødselsdato)} år) ${formaterIdent(person.personIdent)}`;
 };
 
 export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): string => {
@@ -75,9 +70,7 @@ export const lagBrukerLabel = (bruker: IPersonInfo): string =>
     `${bruker.navn} (${hentAlder(bruker.fødselsdato)} år) ${formaterIdent(bruker.personIdent)}`;
 
 export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
-    return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
-        barn.fødselsdato
-    )}) | ${formaterIdent(barn.ident)}`;
+    return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(barn.fødselsdato)}) | ${formaterIdent(barn.ident)}`;
 };
 
 export const sorterPåDato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
@@ -94,10 +87,7 @@ export const sorterPåDato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson
 export const sorterPåFødselsnummer = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) =>
     Number(personA.personIdent) - Number(personB.personIdent);
 
-export const sorterPersonTypeOgFødselsdato = (
-    personA: IGrunnlagPerson,
-    personB: IGrunnlagPerson
-) => {
+export const sorterPersonTypeOgFødselsdato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
     else return sorterPåDato(personA, personB);

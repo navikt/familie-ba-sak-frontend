@@ -23,9 +23,7 @@ class ErrorBoundary extends React.Component<IProps> {
                 username: this.props.autentisertSaksbehandler
                     ? this.props.autentisertSaksbehandler.displayName
                     : 'Ukjent bruker',
-                email: this.props.autentisertSaksbehandler
-                    ? this.props.autentisertSaksbehandler.email
-                    : 'Ukjent email',
+                email: this.props.autentisertSaksbehandler ? this.props.autentisertSaksbehandler.email : 'Ukjent email',
             });
 
             Sentry.withScope(scope => {
@@ -38,8 +36,7 @@ class ErrorBoundary extends React.Component<IProps> {
             Sentry.showReportDialog({
                 title: 'En feil har oppstått i vedtaksløsningen',
                 subtitle: '',
-                subtitle2:
-                    'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
+                subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
                 user: {
                     name: this.props.autentisertSaksbehandler?.displayName,
                     email: this.props.autentisertSaksbehandler?.email,

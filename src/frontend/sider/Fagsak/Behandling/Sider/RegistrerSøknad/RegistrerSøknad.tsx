@@ -78,9 +78,7 @@ const RegistrerSøknad: React.FC = () => {
             {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                 <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
                     {hentFeilTilOppsummering().map(item => (
-                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
-                            {item.feilmelding}
-                        </ErrorSummary.Item>
+                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
                     ))}
                 </ErrorSummary>
             )}

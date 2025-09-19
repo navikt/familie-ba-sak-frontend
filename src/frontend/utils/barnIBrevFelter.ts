@@ -32,8 +32,7 @@ export const useBarnIBrevFelter = ({ avhengigheter, skalFeltetVises }: IProps) =
             return (
                 brukerRessurs.data.forelderBarnRelasjon
                     .filter(
-                        (relasjon: IForelderBarnRelasjon) =>
-                            relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
+                        (relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
                     )
                     .map(
                         (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({

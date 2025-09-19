@@ -48,26 +48,28 @@ const useRefusjonEøs = ({ refusjonEøs, settFeilmelding, behandlingId }: IProps
             felt.verdi !== undefined ? ok(felt) : feil(felt, 'Du må oppgi om refusjon er avklart'),
     });
 
-    const { skjema, kanSendeSkjema, onSubmit, valideringErOk, validerAlleSynligeFelter } =
-        useSkjema<IRefusjonEøsSkjemaFelter, IBehandling>({
-            felter: {
-                fom: fomFelt,
-                tom: useFelt<Date | undefined>({
-                    verdi: undefined,
-                    avhengigheter: {
-                        fom: fomFelt,
-                    },
-                    valideringsfunksjon: validerGyldigDato,
-                }),
-                refusjonsbeløp: useFelt<string>({
-                    verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
-                    valideringsfunksjon: validerFeilutbetaltBeløp,
-                }),
-                land,
-                refusjonAvklart,
-            },
-            skjemanavn: 'Refusjon EØS',
-        });
+    const { skjema, kanSendeSkjema, onSubmit, valideringErOk, validerAlleSynligeFelter } = useSkjema<
+        IRefusjonEøsSkjemaFelter,
+        IBehandling
+    >({
+        felter: {
+            fom: fomFelt,
+            tom: useFelt<Date | undefined>({
+                verdi: undefined,
+                avhengigheter: {
+                    fom: fomFelt,
+                },
+                valideringsfunksjon: validerGyldigDato,
+            }),
+            refusjonsbeløp: useFelt<string>({
+                verdi: refusjonEøs?.refusjonsbeløp.toString() ?? '',
+                valideringsfunksjon: validerFeilutbetaltBeløp,
+            }),
+            land,
+            refusjonAvklart,
+        },
+        skjemanavn: 'Refusjon EØS',
+    });
 
     const tilbakestillSkjemafelterTilDefault = () => {
         if (refusjonEøs !== undefined) {

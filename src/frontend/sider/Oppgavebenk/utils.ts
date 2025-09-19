@@ -1,12 +1,7 @@
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import type { IPar } from '../../typer/common';
-import type {
-    BehandlingstypeFilter,
-    EnhetFilter,
-    IOppgave,
-    IOppgaveIdent,
-} from '../../typer/oppgave';
+import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '../../typer/oppgave';
 import { behandlingstypeFilter, enhetFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
@@ -30,11 +25,7 @@ export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs' | 'idente
     handlinger: IOppgave;
 }
 
-export const sorterEtterNøkkel = (
-    a: IOppgaveRad,
-    b: IOppgaveRad,
-    sorteringsnøkkel: Sorteringsnøkkel
-): number => {
+export const sorterEtterNøkkel = (a: IOppgaveRad, b: IOppgaveRad, sorteringsnøkkel: Sorteringsnøkkel): number => {
     let aVerdi;
     let bVerdi;
     if (sorteringsnøkkel === Sorteringsnøkkel.IDENT) {
@@ -68,8 +59,7 @@ export const mapIOppgaverTilOppgaveRad = (
             ident: oppg.identer,
             behandlingstema: oppg.behandlingstema,
             behandlingstype: oppg.behandlingstype
-                ? (behandlingstypeFilter[oppg.behandlingstype as BehandlingstypeFilter]?.navn ??
-                  oppg.behandlingstype)
+                ? (behandlingstypeFilter[oppg.behandlingstype as BehandlingstypeFilter]?.navn ?? oppg.behandlingstype)
                 : 'Ikke satt',
             fristFerdigstillelse: oppg.fristFerdigstillelse,
             oppgavetype: oppg.oppgavetype,

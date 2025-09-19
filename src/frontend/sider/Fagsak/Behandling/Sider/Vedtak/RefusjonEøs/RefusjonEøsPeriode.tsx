@@ -76,18 +76,12 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                         <FlexRowDiv>
                             <Button
                                 size="small"
-                                onClick={() =>
-                                    oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
-                                }
+                                onClick={() => oppdaterEksisterendePeriode(() => settErRadEkspandert(false))}
                                 variant={valideringErOk() ? 'primary' : 'secondary'}
                             >
                                 Lagre periode
                             </Button>
-                            <Button
-                                size="small"
-                                variant="tertiary"
-                                onClick={tilbakestillOgLukkSkjema}
-                            >
+                            <Button size="small" variant="tertiary" onClick={tilbakestillOgLukkSkjema}>
                                 Avbryt
                             </Button>
                         </FlexRowDiv>

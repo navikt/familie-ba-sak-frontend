@@ -1,15 +1,7 @@
 import React from 'react';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import {
-    Alert,
-    BodyShort,
-    Box,
-    Button,
-    ConfirmationPanel,
-    Heading,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import AvregningAlert from './AvregningAlert';
@@ -44,8 +36,7 @@ export const TilbakekrevingsvedtakMotregning = ({
     const erLesevisning = vurderErLesevisning();
 
     const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
-        åpenBehandling.aktivSettPåVent?.årsak ===
-        SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
+        åpenBehandling.aktivSettPåVent?.årsak === SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
 
     return (
         <VStack marginBlock="10 0" width="90%" maxWidth="40rem" gap="4">
@@ -64,35 +55,28 @@ export const TilbakekrevingsvedtakMotregning = ({
 
                     {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
                         <Alert variant="info">
-                            Saken venter på samtykke fra bruker for ulovfestet motregning. Hvis
-                            bruker har gitt samtykke før det har gått{' '}
-                            {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager, kan saken tas
-                            av vent manuelt.
+                            Saken venter på samtykke fra bruker for ulovfestet motregning. Hvis bruker har gitt samtykke
+                            før det har gått {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager, kan saken tas av
+                            vent manuelt.
                         </Alert>
                     )}
 
                     {!tilbakekrevingsvedtakMotregning.samtykke && !erLesevisning && (
                         <BekreftSamtykkeTilMotregning
-                            slettTilbakekrevingsvedtakMotregning={
-                                slettTilbakekrevingsvedtakMotregning
-                            }
-                            oppdaterTilbakekrevingsvedtakMotregning={
-                                oppdaterTilbakekrevingsvedtakMotregning
-                            }
+                            slettTilbakekrevingsvedtakMotregning={slettTilbakekrevingsvedtakMotregning}
+                            oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
                         />
                     )}
 
                     {tilbakekrevingsvedtakMotregning.samtykke && (
                         <VStack gap="4">
                             <Alert variant="info">
-                                Du må ha kjennskap til regelverk for tilbakekreving for å kunne
-                                fortsette saksbehandlingen.
+                                Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
+                                saksbehandlingen.
                             </Alert>
 
                             <ConfirmationPanel
-                                checked={
-                                    tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake
-                                }
+                                checked={tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake}
                                 label="Hele beløpet skal kreves tilbake"
                                 disabled={erLesevisning}
                                 onChange={() =>
@@ -105,10 +89,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                 <Heading level="2" size="xsmall" spacing>
                                     Skal hele beløpet kreves tilbake?
                                 </Heading>
-                                <BodyShort>
-                                    Dersom ikke hele beløpet skal kreves tilbake må du splitte
-                                    saken.
-                                </BodyShort>
+                                <BodyShort>Dersom ikke hele beløpet skal kreves tilbake må du splitte saken.</BodyShort>
                             </ConfirmationPanel>
 
                             {!erLesevisning && (

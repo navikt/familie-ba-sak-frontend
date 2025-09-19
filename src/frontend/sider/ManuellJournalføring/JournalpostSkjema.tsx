@@ -42,10 +42,7 @@ export const JournalpostSkjema: React.FC = () => {
     const [valideringsfeilmelding, settValideringsfeilmelding] = useState<string>('');
 
     const validerOgJournalfør = (): void => {
-        if (
-            skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON &&
-            skjema.felter.samhandler.verdi === undefined
-        ) {
+        if (skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON && skjema.felter.samhandler.verdi === undefined) {
             settValideringsfeilmelding(
                 'Det er registrert at søker er institusjon. For å journalføre, må fagsak av typen institusjon først opprettes i saksbehandlingsløsningen. Deretter kan fagsaken velges i nedtrekkslisten i bruker/søker-panelet over.'
             );
@@ -60,8 +57,7 @@ export const JournalpostSkjema: React.FC = () => {
                 <Heading spacing size="medium" level="2">
                     {
                         oppgaveTypeFilter[
-                            dataForManuellJournalføring.data.oppgave
-                                .oppgavetype as keyof typeof OppgavetypeFilter
+                            dataForManuellJournalføring.data.oppgave.oppgavetype as keyof typeof OppgavetypeFilter
                         ].navn
                     }
                 </Heading>
@@ -89,9 +85,7 @@ export const JournalpostSkjema: React.FC = () => {
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">
                         {hentFeilTilOppsummering().map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
-                                {item.feilmelding}
-                            </ErrorSummary.Item>
+                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
                         ))}
                     </ErrorSummary>
                 )}

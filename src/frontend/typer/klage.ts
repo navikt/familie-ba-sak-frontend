@@ -99,12 +99,9 @@ export function erKlageFeilregistrertAvKA(behandling: IKlagebehandling) {
     );
 }
 
-function finnAvsluttetKlagebehandlingUtfall(
-    behandling: IKlagebehandling
-): KlageinstansUtfall | undefined {
+function finnAvsluttetKlagebehandlingUtfall(behandling: IKlagebehandling): KlageinstansUtfall | undefined {
     return behandling.klageinstansResultat.find(
-        resultat =>
-            resultat.utfall && resultat.type === KlageinstansEventType.KLAGEBEHANDLING_AVSLUTTET
+        resultat => resultat.utfall && resultat.type === KlageinstansEventType.KLAGEBEHANDLING_AVSLUTTET
     )?.utfall;
 }
 

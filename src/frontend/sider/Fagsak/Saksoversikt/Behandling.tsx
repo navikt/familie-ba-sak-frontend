@@ -19,10 +19,7 @@ interface IBehandlingshistorikkProps {
     saksoversiktsbehandling: Saksoversiktsbehandling;
 }
 
-export const Behandling: React.FC<IBehandlingshistorikkProps> = ({
-    fagsakId,
-    saksoversiktsbehandling,
-}) => (
+export const Behandling: React.FC<IBehandlingshistorikkProps> = ({ fagsakId, saksoversiktsbehandling }) => (
     <Table.Row key={hentBehandlingId(saksoversiktsbehandling)}>
         <Table.DataCell
             children={`${isoStringTilFormatertString({

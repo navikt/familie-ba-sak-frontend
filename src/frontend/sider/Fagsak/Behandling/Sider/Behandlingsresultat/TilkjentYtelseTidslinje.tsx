@@ -63,11 +63,7 @@ interface IProps {
     fagsakType?: FagsakType;
 }
 
-const TilkjentYtelseTidslinje: React.FC<IProps> = ({
-    grunnlagPersoner,
-    tidslinjePersoner,
-    fagsakType,
-}) => {
+const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinjePersoner, fagsakType }) => {
     const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
         useTidslinjeContext();
     const tidslinjeRader = genererRader(fagsakType, tidslinjePersoner);

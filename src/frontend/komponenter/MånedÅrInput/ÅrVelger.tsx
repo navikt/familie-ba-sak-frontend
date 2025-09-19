@@ -11,8 +11,7 @@ interface ÅrProps {
     feil?: boolean;
 }
 
-const range = (start: number, end: number): number[] =>
-    Array.from({ length: end - start }, (_, k) => k + start);
+const range = (start: number, end: number): number[] => Array.from({ length: end - start }, (_, k) => k + start);
 
 const lagÅrOptions = (år: number | undefined, antallÅrFrem: number, antallÅrTilbake: number) => {
     const gjeldendeÅr = new Date().getFullYear();

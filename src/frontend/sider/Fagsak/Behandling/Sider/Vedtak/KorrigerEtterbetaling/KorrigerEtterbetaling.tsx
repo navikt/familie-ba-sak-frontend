@@ -23,11 +23,7 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({ korrigertEtte
             }}
         >
             <DocPencilIcon fontSize={'1.4rem'} />
-            {korrigertEtterbetaling ? (
-                <>Vis korrigert etterbetaling</>
-            ) : (
-                <>Korriger etterbetaling</>
-            )}
+            {korrigertEtterbetaling ? <>Vis korrigert etterbetaling</> : <>Korriger etterbetaling</>}
         </Dropdown.Menu.List.Item>
     );
 };

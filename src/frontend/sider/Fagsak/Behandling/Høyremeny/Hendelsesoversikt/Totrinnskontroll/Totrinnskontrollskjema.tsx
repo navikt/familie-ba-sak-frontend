@@ -31,19 +31,11 @@ import { KontrollertStatus } from '../../../Sider/sider';
 
 interface IProps {
     innsendtVedtak: Ressurs<IBehandling>;
-    sendInnVedtak: (
-        beslutning: TotrinnskontrollBeslutning,
-        begrunnelse: string,
-        egetVedtak: boolean
-    ) => void;
+    sendInnVedtak: (beslutning: TotrinnskontrollBeslutning, begrunnelse: string, egetVedtak: boolean) => void;
     åpenBehandling: IBehandling;
 }
 
-const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
-    innsendtVedtak,
-    sendInnVedtak,
-    åpenBehandling,
-}) => {
+const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({ innsendtVedtak, sendInnVedtak, åpenBehandling }) => {
     const { trinnPåBehandling } = useBehandlingContext();
     const { innloggetSaksbehandler } = useAppContext();
 
@@ -70,9 +62,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         Totrinnskontroll
                     </Heading>
                 ) : (
-                    <BodyShort>
-                        Kontrollér opplysninger og faglige vurderinger som er gjort
-                    </BodyShort>
+                    <BodyShort>Kontrollér opplysninger og faglige vurderinger som er gjort</BodyShort>
                 )
             }
         >
@@ -186,17 +176,11 @@ const TrinnStatus: React.FC<{
 }> = ({ kontrollertStatus, navn }) => {
     return (
         <Trinn>
-            {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && (
-                <ØyeGrå height={24} width={24} />
-            )}
+            {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && <ØyeGrå height={24} width={24} />}
 
-            {kontrollertStatus === KontrollertStatus.KONTROLLERT && (
-                <ØyeGrønn height={24} width={24} />
-            )}
+            {kontrollertStatus === KontrollertStatus.KONTROLLERT && <ØyeGrønn height={24} width={24} />}
 
-            {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && (
-                <ØyeRød height={24} width={24} />
-            )}
+            {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && <ØyeRød height={24} width={24} />}
             <BodyShort>{navn}</BodyShort>
         </Trinn>
     );

@@ -12,21 +12,12 @@ import { FagsakType } from '../../../../../../typer/fagsak';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
 import type { IBarnMedOpplysninger, Målform } from '../../../../../../typer/søknad';
-import {
-    hentMuligeBrevmalerImplementering,
-    mottakersMålformImplementering,
-} from '../../../../../../utils/brevmal';
+import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '../../../../../../utils/brevmal';
 import type { IsoDatoString } from '../../../../../../utils/dato';
-import {
-    dateTilIsoDatoStringEllerUndefined,
-    validerGyldigDato,
-} from '../../../../../../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../../../../../../utils/dato';
 import { useDeltBostedFelter } from '../../../../../../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import {
-    genererIdBasertPåAndreFritekstKulepunkter,
-    lagInitiellFritekst,
-} from '../../../../../../utils/fritekstfelter';
+import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
 import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
@@ -71,9 +62,7 @@ export const useBrevModul = () => {
         verdi: [],
         valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
             return felt.verdi.some(
-                fritekst =>
-                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                    fritekst.verdi.tekst.length === 0
+                fritekst => fritekst.valideringsstatus === Valideringsstatus.FEIL || fritekst.verdi.tekst.length === 0
             )
                 ? feil(felt, '')
                 : ok(felt);
@@ -102,10 +91,7 @@ export const useBrevModul = () => {
             }
 
             if (fritekst.verdi.trim() === '') {
-                return feil(
-                    fritekst,
-                    'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
-                );
+                return feil(fritekst, 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.');
             }
 
             if (fritekst.verdi.length > maksLengdeFritekstAvsnitt) {
@@ -151,10 +137,9 @@ export const useBrevModul = () => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [
-                    Brevmal.FORLENGET_SVARTIDSBREV,
-                    Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
-                ].includes(avhengigheter.brevmal.verdi)
+                [Brevmal.FORLENGET_SVARTIDSBREV, Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON].includes(
+                    avhengigheter.brevmal.verdi
+                )
             );
         },
         avhengigheter: { brevmal },
@@ -174,10 +159,7 @@ export const useBrevModul = () => {
 
     const dokumenter = useFelt({
         verdi: [],
-        valideringsfunksjon: (
-            felt: FeltState<ISelectOptionMedBrevtekst[]>,
-            avhengigheter?: Avhengigheter
-        ) => {
+        valideringsfunksjon: (felt: FeltState<ISelectOptionMedBrevtekst[]>, avhengigheter?: Avhengigheter) => {
             if (
                 felt.verdi.length === 0 &&
                 avhengigheter?.fritekstKulepunkter.verdi.length === 0 &&
@@ -229,9 +211,7 @@ export const useBrevModul = () => {
     const mottakerlandSed = useFelt<string[]>({
         verdi: [],
         valideringsfunksjon: (felt: FeltState<string[]>) => {
-            return felt.verdi.length
-                ? ok(felt)
-                : feil(felt, 'Velg land SED er sendt/skal sendes til');
+            return felt.verdi.length ? ok(felt) : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return [
@@ -324,8 +304,7 @@ export const useBrevModul = () => {
             skjema.felter.mottakerIdent.verdi
         );
 
-    const hentMuligeBrevMaler = (): Brevmal[] =>
-        hentMuligeBrevmalerImplementering(behandling, !!institusjon);
+    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(behandling, !!institusjon);
 
     const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
         skjema.felter.fritekstKulepunkter.validerOgSettFelt([
@@ -358,8 +337,7 @@ export const useBrevModul = () => {
             fritekstKulepunkter.verdi.length === 0 &&
             erBrevmalMedObligatoriskFritekstKulepunkt(brevmal.verdi as Brevmal)
         ) {
-            const valideringsmelding =
-                'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
+            const valideringsmelding = 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
             leggTilFritekstKulepunkt(valideringsmelding);
         }
     }, [brevmal, fritekstKulepunkter]);
@@ -382,9 +360,7 @@ export const useBrevModul = () => {
                 ...skjema.felter.fritekstKulepunkter.verdi.map(f => f.verdi.tekst),
             ];
 
-            const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(
-                barn => barn.merket
-            );
+            const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(barn => barn.merket);
 
             return {
                 multiselectVerdier: multiselectVerdier,

@@ -25,11 +25,7 @@ import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingPar
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
-import type {
-    IRestKompetanse,
-    IRestUtenlandskPeriodeBeløp,
-    IRestValutakurs,
-} from '../../../../../typer/eøsPerioder';
+import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '../../../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
@@ -60,9 +56,7 @@ interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
 
-const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({
-    åpenBehandling,
-}) => {
+const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
     const navigate = useNavigate();
     const { fagsakId } = useSakOgBehandlingParams();
     const { fagsak } = useFagsakContext();
@@ -76,11 +70,8 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
         personerMedUgyldigEtterbetalingsperiode,
     } = useBehandlingsresultat(åpenBehandling);
 
-    const {
-        aktivEtikett,
-        filterOgSorterAndelPersonerIGrunnlag,
-        filterOgSorterGrunnlagPersonerMedAndeler,
-    } = useTidslinjeContext();
+    const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =
+        useTidslinjeContext();
 
     useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 
@@ -142,9 +133,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
-            forrigeOnClick={() =>
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)
-            }
+            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
             nesteOnClick={() => {
                 if (erLesevisning) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
@@ -167,9 +156,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                     .
                 </StyledAlert>
             )}
-            {erMigreringFraInfotrygd && (
-                <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />
-            )}
+            {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />}
 
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
@@ -178,12 +165,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             />
             {!erLesevisning && (
                 <EndretUtbetalingAndel>
-                    <Button
-                        variant="tertiary"
-                        size="small"
-                        onClick={opprettEndretUtbetaling}
-                        icon={<StyledEditIkon />}
-                    >
+                    <Button variant="tertiary" size="small" onClick={opprettEndretUtbetaling} icon={<StyledEditIkon />}>
                         <Label>Endre utbetalingsperiode</Label>
                     </Button>
                     {visFeilmeldinger && opprettEndretUtbetalingFeilmelding !== '' && (
@@ -193,9 +175,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(
-                        åpenBehandling.utbetalingsperioder
-                    )}
+                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(åpenBehandling.utbetalingsperioder)}
                     aktivEtikett={aktivEtikett}
                     kompetanser={kompetanser}
                     utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
@@ -238,8 +218,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                         ...hentUtbetaltAnnetLandBeløpMedFeil().map(
                             (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp) => ({
                                 feilmelding: `Utenlandsk beløp barn: ${utenlandskPeriodeBeløp.barnIdenter}, f.o.m.: ${utenlandskPeriodeBeløp.fom} er ikke fullstendig.`,
-                                skjemaelementId:
-                                    utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
+                                skjemaelementId: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
                             })
                         ),
                         ...hentValutakurserMedFeil().map((valutakurs: IRestValutakurs) => ({
@@ -247,9 +226,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                             skjemaelementId: valutakursFeilmeldingId(valutakurs),
                         })),
                     ].map(item => (
-                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
-                            {item.feilmelding}
-                        </ErrorSummary.Item>
+                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
                     ))}
                 </StyledErrorSummary>
             )}

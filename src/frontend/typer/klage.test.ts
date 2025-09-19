@@ -58,21 +58,18 @@ describe('Klage', () => {
             expect(erFeilregistrert).toBe(true);
         });
 
-        test.each(ikkeFeilregistrertTyper)(
-            'skal returnere false om klage ikke er feilregistrert',
-            type => {
-                // Arrange
-                const klagebehandling = KlageTestdata.lagKlagebehandling({
-                    klageinstansResultat: [KlageTestdata.lagKlageinstansResultat({ type })],
-                });
+        test.each(ikkeFeilregistrertTyper)('skal returnere false om klage ikke er feilregistrert', type => {
+            // Arrange
+            const klagebehandling = KlageTestdata.lagKlagebehandling({
+                klageinstansResultat: [KlageTestdata.lagKlageinstansResultat({ type })],
+            });
 
-                // Act
-                const erFeilregistrert = erKlageFeilregistrertAvKA(klagebehandling);
+            // Act
+            const erFeilregistrert = erKlageFeilregistrertAvKA(klagebehandling);
 
-                // Expect
-                expect(erFeilregistrert).toBe(false);
-            }
-        );
+            // Expect
+            expect(erFeilregistrert).toBe(false);
+        });
     });
 
     describe('UtledKlagebehandlingResultattekst', () => {

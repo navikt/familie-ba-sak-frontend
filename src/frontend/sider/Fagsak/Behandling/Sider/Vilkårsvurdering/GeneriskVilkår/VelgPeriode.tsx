@@ -37,11 +37,7 @@ const FlexDiv = styled.div`
     gap: 1.125rem;
 `;
 
-const VelgPeriode: React.FC<IProps> = ({
-    redigerbartVilkår,
-    validerOgSettRedigerbartVilkår,
-    visFeilmeldinger,
-}) => {
+const VelgPeriode: React.FC<IProps> = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
@@ -49,8 +45,7 @@ const VelgPeriode: React.FC<IProps> = ({
         <Fieldset
             errorId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
             error={
-                redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
-                visFeilmeldinger
+                redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL && visFeilmeldinger
                     ? redigerbartVilkår.verdi.periode.feilmelding
                     : ''
             }
@@ -61,9 +56,8 @@ const VelgPeriode: React.FC<IProps> = ({
                 <StyledLegend>
                     <StyledLabel>Velg periode</StyledLabel>
                     <HelpText title="Hvordan fastsette periode">
-                        Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt.
-                        Virkningstidspunktet vil bli beregnet ut fra dette. Dersom vurderingen
-                        gjelder et avslag er ikke periode påkrevd.
+                        Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli
+                        beregnet ut fra dette. Dersom vurderingen gjelder et avslag er ikke periode påkrevd.
                     </HelpText>
                 </StyledLegend>
             )}
@@ -84,10 +78,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyIsoDatoPeriode(
-                                        dato,
-                                        redigerbartVilkår.verdi.periode.verdi.tom
-                                    ),
+                                    verdi: nyIsoDatoPeriode(dato, redigerbartVilkår.verdi.periode.verdi.tom),
                                 },
                             },
                         });
@@ -106,10 +97,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 ...redigerbartVilkår.verdi,
                                 periode: {
                                     ...redigerbartVilkår.verdi.periode,
-                                    verdi: nyIsoDatoPeriode(
-                                        redigerbartVilkår.verdi.periode.verdi.fom,
-                                        dato
-                                    ),
+                                    verdi: nyIsoDatoPeriode(redigerbartVilkår.verdi.periode.verdi.fom, dato),
                                 },
                             },
                         });

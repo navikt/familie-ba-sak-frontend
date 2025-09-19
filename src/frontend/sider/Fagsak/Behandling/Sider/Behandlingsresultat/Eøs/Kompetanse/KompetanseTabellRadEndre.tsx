@@ -72,11 +72,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <Fieldset
-            error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
-            legend="Kompetanseskjema"
-            hideLegend
-        >
+        <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend="Kompetanseskjema" hideLegend>
             <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
                 <UNSAFE_Combobox
                     isMultiSelect
@@ -85,9 +81,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
                     readOnly={lesevisning}
-                    error={
-                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
-                    }
+                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
@@ -98,8 +92,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
                     <Alert variant="info" inline>
-                        Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett
-                        i perioden
+                        Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett i perioden
                     </Alert>
                 )}
                 <Select
@@ -108,21 +101,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-                        skjema.felter.søkersAktivitet.validerOgSettFelt(
-                            event.target.value as KompetanseAktivitet
-                        )
+                        skjema.felter.søkersAktivitet.validerOgSettFelt(event.target.value as KompetanseAktivitet)
                     }
                 >
                     <option value={''}>Velg</option>
-                    {Object.values(
-                        erAnnenForelderOmfattetAvNorskLovgivning
-                            ? AnnenForelderAktivitet
-                            : SøkersAktivitet
-                    )
-                        .filter(
-                            (aktivitet: KompetanseAktivitet) =>
-                                aktivitet !== AnnenForelderAktivitet.IKKE_AKTUELT
-                        )
+                    {Object.values(erAnnenForelderOmfattetAvNorskLovgivning ? AnnenForelderAktivitet : SøkersAktivitet)
+                        .filter((aktivitet: KompetanseAktivitet) => aktivitet !== AnnenForelderAktivitet.IKKE_AKTUELT)
                         .map((aktivitet: KompetanseAktivitet) => {
                             return (
                                 <option key={aktivitet} value={aktivitet}>
@@ -133,9 +117,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 </Select>
                 <Select
                     className="unset-margin-bottom"
-                    {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(
-                        skjema.visFeilmeldinger
-                    )}
+                    {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
                     readOnly={lesevisning}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
@@ -147,9 +129,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                 >
                     <option value={''}>Velg</option>
                     {Object.values(
-                        erAnnenForelderOmfattetAvNorskLovgivning
-                            ? SøkersAktivitet
-                            : AnnenForelderAktivitet
+                        erAnnenForelderOmfattetAvNorskLovgivning ? SøkersAktivitet : AnnenForelderAktivitet
                     ).map((aktivitet: KompetanseAktivitet) => {
                         return (
                             <option key={aktivitet} value={aktivitet}>
@@ -158,8 +138,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         );
                     })}
                 </Select>
-                {skjema.felter.annenForeldersAktivitet.verdi ===
-                    AnnenForelderAktivitet.IKKE_AKTUELT && (
+                {skjema.felter.annenForeldersAktivitet.verdi === AnnenForelderAktivitet.IKKE_AKTUELT && (
                     <Alert variant="info" size="small" inline>
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
                     </Alert>
@@ -179,8 +158,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }}
                     feil={
                         skjema.visFeilmeldinger &&
-                        skjema.felter.søkersAktivitetsland.valideringsstatus ===
-                            Valideringsstatus.FEIL
+                        skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
@@ -201,8 +179,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }}
                     feil={
                         skjema.visFeilmeldinger &&
-                        skjema.felter.annenForeldersAktivitetsland.valideringsstatus ===
-                            Valideringsstatus.FEIL
+                        skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
@@ -223,8 +200,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     }}
                     feil={
                         skjema.visFeilmeldinger &&
-                        skjema.felter.barnetsBostedsland.valideringsstatus ===
-                            Valideringsstatus.FEIL
+                        skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.barnetsBostedsland?.feilmelding?.toString()
                             : ''
                     }
@@ -236,16 +212,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     label={'Kompetanse'}
                     value={skjema.felter.resultat.verdi || ''}
                     onChange={event => {
-                        skjema.felter.resultat.validerOgSettFelt(
-                            event.target.value as KompetanseResultat
-                        );
+                        skjema.felter.resultat.validerOgSettFelt(event.target.value as KompetanseResultat);
                     }}
                 >
                     <option value={''}>Velg</option>
-                    <option
-                        key={KompetanseResultat.NORGE_ER_PRIMÆRLAND}
-                        value={KompetanseResultat.NORGE_ER_PRIMÆRLAND}
-                    >
+                    <option key={KompetanseResultat.NORGE_ER_PRIMÆRLAND} value={KompetanseResultat.NORGE_ER_PRIMÆRLAND}>
                         {kompetanseResultater[KompetanseResultat.NORGE_ER_PRIMÆRLAND]}
                     </option>
                     <option
@@ -254,10 +225,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     >
                         {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
                     </option>
-                    <option
-                        key={KompetanseResultat.TO_PRIMÆRLAND}
-                        value={KompetanseResultat.TO_PRIMÆRLAND}
-                    >
+                    <option key={KompetanseResultat.TO_PRIMÆRLAND} value={KompetanseResultat.TO_PRIMÆRLAND}>
                         {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
                     </option>
                 </Select>

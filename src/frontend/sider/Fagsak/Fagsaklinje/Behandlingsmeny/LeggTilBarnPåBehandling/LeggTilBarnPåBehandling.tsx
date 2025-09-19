@@ -2,25 +2,11 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-    Alert,
-    Button,
-    Dropdown,
-    Fieldset,
-    Heading,
-    HelpText,
-    Modal,
-    TextField,
-} from '@navikt/ds-react';
+import { Alert, Button, Dropdown, Fieldset, Heading, HelpText, Modal, TextField } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../../../../../typer/person';
@@ -82,9 +68,7 @@ const LeggTilBarnPåBehandling: React.FC = () => {
                                 leggTilRespons.status === RessursStatus.FUNKSJONELL_FEIL ||
                                 leggTilRespons.status === RessursStatus.IKKE_TILGANG
                             ) {
-                                settSubmitRessurs(
-                                    byggFeiletRessurs(leggTilRespons.frontendFeilmelding)
-                                );
+                                settSubmitRessurs(byggFeiletRessurs(leggTilRespons.frontendFeilmelding));
                             } else {
                                 settÅpenBehandling(leggTilRespons);
                                 settVisModal(false);
@@ -94,19 +78,15 @@ const LeggTilBarnPåBehandling: React.FC = () => {
                         settSubmitRessurs(
                             byggFeiletRessurs(
                                 `Barnet kan ikke legges til på grunn av diskresjonskode ${
-                                    adressebeskyttelsestyper[
-                                        ressurs.data.adressebeskyttelsegradering
-                                    ] ?? 'ukjent'
+                                    adressebeskyttelsestyper[ressurs.data.adressebeskyttelsegradering] ?? 'ukjent'
                                 }`
                             )
                         );
                     }
                 } else if (
-                    [
-                        RessursStatus.FEILET,
-                        RessursStatus.FUNKSJONELL_FEIL,
-                        RessursStatus.IKKE_TILGANG,
-                    ].includes(ressurs.status)
+                    [RessursStatus.FEILET, RessursStatus.FUNKSJONELL_FEIL, RessursStatus.IKKE_TILGANG].includes(
+                        ressurs.status
+                    )
                 ) {
                     settSubmitRessurs(ressurs);
                 }
@@ -116,9 +96,7 @@ const LeggTilBarnPåBehandling: React.FC = () => {
 
     return (
         <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                Legg til barn
-            </Dropdown.Menu.List.Item>
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>Legg til barn</Dropdown.Menu.List.Item>
             {visModal && (
                 <Modal open onClose={onAvbryt} aria-label={'Legg til barn'} width={'35rem'} portal>
                     <Modal.Header>
@@ -126,9 +104,8 @@ const LeggTilBarnPåBehandling: React.FC = () => {
                             <LeggTilBarnLegend>
                                 Legg til barn
                                 <HelpText style={{ marginLeft: '0.5rem' }}>
-                                    Her kan du, ved klage eller ettersendt dokumentasjon, legge til
-                                    barn som ikke lenger ligger på behandlingen fordi vi tidligere
-                                    har avslått eller opphørt.
+                                    Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger
+                                    ligger på behandlingen fordi vi tidligere har avslått eller opphørt.
                                 </HelpText>
                             </LeggTilBarnLegend>
                         </Heading>
@@ -146,8 +123,8 @@ const LeggTilBarnPåBehandling: React.FC = () => {
                                 placeholder={'11 siffer'}
                             />
                             <Alert variant="info" inline={true}>
-                                Du er i ferd med å legge til et barn på behandlingen. Handlingen kan
-                                ikke reverseres uten å henlegge.
+                                Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke reverseres
+                                uten å henlegge.
                             </Alert>
                         </Fieldset>
                     </Modal.Body>
@@ -161,13 +138,7 @@ const LeggTilBarnPåBehandling: React.FC = () => {
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         />
-                        <Button
-                            key={'Avbryt'}
-                            variant="tertiary"
-                            size="small"
-                            onClick={onAvbryt}
-                            children={'Avbryt'}
-                        />
+                        <Button key={'Avbryt'} variant="tertiary" size="small" onClick={onAvbryt} children={'Avbryt'} />
                     </Modal.Footer>
                 </Modal>
             )}

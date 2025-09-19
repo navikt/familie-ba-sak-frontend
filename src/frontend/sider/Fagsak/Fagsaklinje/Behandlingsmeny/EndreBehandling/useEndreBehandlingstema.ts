@@ -7,10 +7,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
-import type {
-    IBehandlingstema,
-    IRestEndreBehandlingUnderkategori,
-} from '../../../../../typer/behandlingstema';
+import type { IBehandlingstema, IRestEndreBehandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../../../typer/behandlingstema';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
